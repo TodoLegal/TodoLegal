@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Titles</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Position</th>
+      <th>Name</th>
+      <th>Number</th>
+      <th>Law</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @titles.each do |title| %>
+      <tr>
+        <td><%= title.position %></td>
+        <td><%= title.name %></td>
+        <td><%= title.number %></td>
+        <td><%= title.law_id %></td>
+        <td><%= link_to 'Show', title %></td>
+        <td><%= link_to 'Edit', edit_title_path(title) %></td>
+        <td><%= link_to 'Destroy', title, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Title', new_title_path %>

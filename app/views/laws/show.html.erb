@@ -1,0 +1,346 @@
+<div data-spy="scroll" data-target="#myScrollspy">
+  <nav id="myScrollspy" class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <% if !@highlight_enabled %>
+      <button type="button" id="sidebarCollapse" class="btn btn-info">
+        <i class="fas fa-align-left"></i>
+        <span>Índice</span>
+      </button>
+      <a href="/"><img src="/img/logo_navbar.png" height="70" style="max-height:inherit"></a>
+    <% end %>
+    
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+        </li>
+      </ul>
+      <ul class="navbar-nav" style="margin-inline-end: 5px;">
+        <span style="font-size: 25px"><%= @law.name %></span>
+      </ul>
+      <ul class="mr-auto" style="margin-bottom: 0px;">
+        <span style="font-size: 15px;"><%= @articles_count %> artículos</span>
+      </ul>
+      <form class="form-inline my-2 my-lg-0" action="/laws/1" method="get">
+        <input id="query-input" class="form-control mr-sm-2" name="query" type="search" placeholder="Buscar" value="<%= @query %>" aria-label="Buscar">
+        <div style="padding-right: 15px">
+          <% if @highlight_enabled %>
+            <span id="result-count">2/5</span>
+            <a onclick="browseHighlightedUp()">
+              <i class='fas fa-angle-up' style='font-size:24px'></i>
+            </a>
+            <a onclick="browseHighlightedDown()">
+              <i class='fas fa-angle-down' style='font-size:24px'></i>
+            </a>
+            <button onclick="document.getElementById('query-input').value = '';" type="submit" style="padding: 0;border: none;background: none;">
+              <i class="fas fa-times" style='font-size:24px'></i>
+            </button>
+          <% end %>
+        </div>
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+      </form>
+    </div>
+  </nav>
+
+  <div class="container-fluid" style="padding-top:50px">
+      
+    <p id="notice"><%= notice %></p>
+    <h1>
+      <%= @law.name %>
+    </h1>
+
+    <ul class="navbar-nav mr-auto">
+      <p><%= @articles_count %> artículos en total</p>
+    </ul>
+
+    <% article_iterator = 0 %>
+    <% bigger_section_iterator = 0 %>
+    <% @stream.each do |stream| %>
+      <% if stream.instance_of? Title %>
+        <div id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
+          <h2 style="padding-top:100px;" id="title_<%= stream.position %>">Título <%= stream.number %> <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_title_path(stream) %></h1>
+          <h3><%= stream.name %></h2>
+        </div>
+        <% bigger_section_iterator += 1 %>
+      <% end %>
+      <% if stream.instance_of? Chapter %>
+        <div id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
+          <h3 style="padding-top:100px;" id="chapter_<%= stream.position %>">Capítulo <%= stream.number %> <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_chapter_path(stream) %></h2>
+          <h4><%= stream.name %></h3>
+        </div>
+        <% bigger_section_iterator += 1 %>
+      <% end %>
+      <% if stream.instance_of? Article %>
+        <p class="article" article_id="<%= article_iterator %>" last_bigger_section="<%= bigger_section_iterator - 1 %>" next_bigger_section="<%= bigger_section_iterator %>" id="article_count_<%= article_iterator %>">
+          <b>Artículo: <%= stream.number %> <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_article_path(stream) %></b>
+          <% if @highlight_enabled %>
+            <%= stream.pg_search_highlight.html_safe %>
+          <% else %>
+            <%= stream.body %>
+          <% end %>
+        </p>
+        <% article_iterator += 1 %>
+      <% end %>
+    <% end %>
+
+
+
+    <div class="wrapper">
+    <!-- Sidebar  -->
+    <nav id="sidebar">
+      <div id="dismiss">
+        <i class="fas fa-arrow-left"></i>
+      </div>
+
+      <div class="sidebar-header">
+        <h3>Índice</h3>
+      </div>
+
+      <ul class="list-unstyled components" id="sidebar_index">
+        <input id="query_input" onkeyup="filterIndice()" class="form-control mr-sm-2" name="query" type="search" placeholder="Buscar título o capítulo" value="<%= @query %>" aria-label="Buscar">
+        <% @index_items.each do |index_items|%>  
+          <% if index_items.instance_of? Title %>
+            <li>
+              <a href="#title_<%= index_items.position %>" onclick="return colapseIndice();">
+                <b>Titulo <%= index_items.number %></b></br>
+                <%= index_items.name %>
+              </a>
+            </li>
+          <% end %>
+          <% if index_items.instance_of? Chapter %>
+            <li>
+              <a href="#chapter_<%= index_items.position %>" onclick="return colapseIndice();">
+                <b>Capítulo <%= index_items.number %></b></br>
+                <%= index_items.name %>
+              </a>
+            </li>
+          <% end %>
+        <% end %>
+      </ul>
+    </nav>
+
+    </div>
+    </div>
+
+    <%= link_to 'Edit', edit_law_path(@law) %> |
+    <%= link_to 'Back', laws_path %>
+  </div>
+</div>
+
+<script>
+function colapseIndice() {
+  $('#sidebar').removeClass('active');
+  $('.overlay').removeClass('active');
+}
+
+/* Indice filter */
+
+function filterIndice() {
+  var input, filter, list, i, txtValue;
+  input = document.getElementById("query_input");
+  filter = input.value.toUpperCase();
+  list = document.getElementById("sidebar_index");
+  li = list.getElementsByTagName("li");
+  for (i = 0; i < li.length; i++) {
+    txtValue = li[i].textContent || li[i].innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      li[i].style.display = "";
+    } else {
+      li[i].style.display = "none";
+    }
+  }
+}
+
+/* Search browser */
+
+var currrent_highlighted = 0;
+var highlighted_count = document.getElementsByClassName('highlighted').length;
+
+if(highlighted_count > 0)
+  updateHighlightedView()
+
+function updateHighlightedView()
+{
+  document.getElementById("result-count").innerText = (currrent_highlighted + 1) +"/"+highlighted_count
+  element_highlighted = document.getElementsByClassName('highlighted')[currrent_highlighted]
+  element_highlighted.scrollIntoView({block: 'center'})
+  element_highlighted.style.color="blue"
+}
+
+function browseHighlightedUp()
+{
+  last_element_highlighted = document.getElementsByClassName('highlighted')[currrent_highlighted]
+  if(last_element_highlighted)
+    last_element_highlighted.style.color = "red";
+  currrent_highlighted -= 1;
+  if(currrent_highlighted < 0)
+    currrent_highlighted = highlighted_count - 1;
+  updateHighlightedView()
+}
+
+function browseHighlightedDown()
+{
+  last_element_highlighted = document.getElementsByClassName('highlighted')[currrent_highlighted]
+  if(last_element_highlighted)
+    last_element_highlighted.style.color = "red"
+  currrent_highlighted += 1;
+  if(currrent_highlighted >= highlighted_count)
+    currrent_highlighted = 0;
+  updateHighlightedView()
+}
+
+/* Article navigation */
+
+var current_article = 0;
+var article_focused = null;
+
+var articles_element = document.getElementsByClassName('article')
+for(var article_iterator=0; article_iterator<articles_element.length; article_iterator++)
+{
+  article_element = articles_element[article_iterator]
+  article_element.onmousedown = function (event) {
+    if(article_focused)
+    {
+      article_focused.style['background-color'] = "#fff"
+    }
+    current_article = parseInt(event.srcElement.getAttribute("article_id"))
+    article_focused = document.getElementById('article_count_' + current_article)
+    article_focused.style['background-color'] = "#222"
+    return true;
+  };
+}
+
+function focusPreviousArticle()
+{
+  if (bigger_section_focused)
+  {
+    current_article = parseInt(bigger_section_focused.getAttribute("last_article"))
+    bigger_section_focused.style['background-color'] = "#fff"
+    bigger_section_focused = null
+  } else if(article_focused)
+  {
+    article_focused.style['background-color'] = "#fff"
+    current_article -= 1
+  } else
+  {
+    current_article -= 1
+  }
+  
+  article_focused = document.getElementById('article_count_' + current_article)
+  article_focused.scrollIntoView({block: 'center'})
+  article_focused.style['background-color'] = "#222"
+}
+
+function focusNextArticle()
+{
+  if (bigger_section_focused)
+  {
+    current_article = parseInt(bigger_section_focused.getAttribute("next_article"))
+    bigger_section_focused.style['background-color'] = "#fff"
+    bigger_section_focused = null
+  } else if(article_focused)
+  {
+    article_focused.style['background-color'] = "#fff"
+    current_article += 1
+  } else
+  {
+    current_article += 1
+  }
+
+  article_focused = document.getElementById('article_count_' + current_article)
+  article_focused.scrollIntoView({block: 'center'})
+  article_focused.style['background-color'] = "#222"
+}
+
+/* Bigger section navigation */
+
+var current_bigger_section = 0;
+var bigger_section_focused = null;
+
+function focusPreviousBiggerSection()
+{
+  if(article_focused)
+  {
+    current_bigger_section = parseInt(article_focused.getAttribute("last_bigger_section"))
+    article_focused.style['background-color'] = "#fff"
+    article_focused = null
+  } else if(bigger_section_focused)
+  {
+    bigger_section_focused.style['background-color'] = "#fff"
+    current_bigger_section -= 1
+  }
+
+  bigger_section_focused = document.getElementById('bigger_section_' + current_bigger_section)
+  bigger_section_focused.scrollIntoView({block: 'center'})
+  bigger_section_focused.style['background-color'] = "#666"
+}
+
+function focusNextBiggerSection()
+{
+  if(article_focused)
+  {
+    current_bigger_section = parseInt(article_focused.getAttribute("next_bigger_section"))
+    article_focused.style['background-color'] = "#fff"
+    article_focused = null
+  } else if(bigger_section_focused)
+  {
+    bigger_section_focused.style['background-color'] = "#fff"
+    current_bigger_section += 1
+  }
+console.log('bigger_section_' + current_bigger_section)
+  bigger_section_focused = document.getElementById('bigger_section_' + current_bigger_section)
+  bigger_section_focused.scrollIntoView({block: 'center'})
+  bigger_section_focused.style['background-color'] = "#666"
+}
+
+var onkeydown = (function (ev) {
+  var key;
+  var isShift;
+  var isCtrl;
+  if (window.event) {
+    key = window.event.keyCode;
+    isShift = !!window.event.shiftKey; // typecast to boolean
+    isCtrl = !!window.event.ctrlKey; // typecast to boolean
+  } else {
+    key = ev.which;
+    isShift = !!ev.shiftKey;
+    isCtrl = !!ev.shiftCtrl;
+  }
+  if ( isShift ) {
+    switch (key) {
+      case 16: // ignore shift key
+        break;
+      case 37:
+        focusPreviousArticle()
+        break;
+      case 39:
+        focusNextArticle()
+        break;
+      default:
+        // alert(key);
+        // do stuff here?
+        break;
+    }
+  }
+  if ( isCtrl ) {
+    switch (key) {
+      case 17: // ignore ctrl key
+        break;
+      case 37:
+        focusPreviousBiggerSection()
+        break;
+      case 39:
+        focusNextBiggerSection()
+        break;
+      default:
+        // alert(key);
+        // do stuff here?
+        break;
+    }
+  }
+});
+      
+</script>

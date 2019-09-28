@@ -1,0 +1,19 @@
+<div class="jumbotron">
+<h1 class="display-4"><strong><%= @tag.tag_type.name %>:</strong> <%= @tag.name %></h1>
+</div>
+
+<div class="container">
+<p id="notice"><%= notice %></p>
+
+<div class="row">
+  <% @tag.laws.each do |law| %>
+    <div class="col-4 py-2">
+      <div class="card card-body h-100" >
+        <h5 class="card-title"><%= law.name %></h5>
+        <%= link_to 'Ver ley', law, class: 'card-link' %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+</div>

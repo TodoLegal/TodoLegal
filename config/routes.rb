@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :users
   resources :law_tags
   resources :tags
   resources :tag_types

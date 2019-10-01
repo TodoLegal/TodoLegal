@@ -5,6 +5,7 @@
 #   git config --global core.excludesfile '~/.gitignore_global'
 
 Gemfile.lock
+/config/credentials.yml.enc
 
 # Ignore bundler config.
 /.bundle

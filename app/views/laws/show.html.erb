@@ -50,6 +50,9 @@
     <p id="notice"><%= notice %></p>
     <h1>
       <%= @law.name %>
+      <% if user_signed_in? %>
+        <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_law_path(@law) %>
+      <% end %>
     </h1>
 
     <ul class="navbar-nav mr-auto">

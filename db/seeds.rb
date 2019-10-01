@@ -6,7 +6,12 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+# Tip de tags
+
 tag_type_materia = TagType.create({ name: 'materia' })
+tag_type_creacion = TagType.create({ name: 'creacion' })
+
+# Tags de Materias
 
 tag_constitucional = Tag.create({ name: 'constitucional', tag_type_id: tag_type_materia.id })
 tag_penal = Tag.create({ name: 'penal', tag_type_id: tag_type_materia.id })
@@ -15,7 +20,7 @@ tag_laboral = Tag.create({ name: 'laboral', tag_type_id: tag_type_materia.id })
 tag_especiales_y_otras = Tag.create({ name: 'especiales y otras', tag_type_id: tag_type_materia.id })
 tag_internacional_publico = Tag.create({ name: 'internacional publico', tag_type_id: tag_type_materia.id })
 tag_civil = Tag.create({ name: 'civil', tag_type_id: tag_type_materia.id })
-tag_comercial = Tag.create({ name: 'comercial', tag_type_id: tag_type_materia.id })
+tag_mercantil = Tag.create({ name: 'tag_mercantil', tag_type_id: tag_type_materia.id })
 tag_bancario = Tag.create({ name: 'bancario', tag_type_id: tag_type_materia.id })
 tag_monetario = Tag.create({ name: 'monetario', tag_type_id: tag_type_materia.id })
 tag_administrativo = Tag.create({ name: 'administrativo', tag_type_id: tag_type_materia.id })
@@ -24,6 +29,16 @@ tag_militar = Tag.create({ name: 'militar', tag_type_id: tag_type_materia.id })
 tag_judicial = Tag.create({ name: 'judicial', tag_type_id: tag_type_materia.id })
 tag_familia = Tag.create({ name: 'familia', tag_type_id: tag_type_materia.id })
 
+# Tags de Creacion
+
+tag_acuerdo_ejecutivo = Tag.create({ name: 'acuerdo ejecutivo', tag_type_id: tag_type_creacion.id })
+tag_decreto_legislativo = Tag.create({ name: 'decreto legislativo', tag_type_id: tag_type_creacion.id })
+tag_decreto_junta_militar = Tag.create({ name: 'decreto junta militar', tag_type_id: tag_type_creacion.id })
+tag_tratado_internacional = Tag.create({ name: 'tratado internacional', tag_type_id: tag_type_creacion.id })
+tag_asamblea_constituyente = Tag.create({ name: 'asamblea constituyente', tag_type_id: tag_type_creacion.id })
+
+# Leyes
+
 ley_codigo_civil = Law.create({ name: 'Codigo Civil' })
 ley_codigo_del_comercio = Law.create({ name: 'Codigo del Comercio' })
 ley_codigo_del_trabajo = Law.create({ name: 'Codigo del Trabajo' })
@@ -31,11 +46,47 @@ ley_codigo_penal = Law.create({ name: 'Codigo Penal' })
 ley_codigo_procesal_penal = Law.create({ name: 'Codigo Procesal Penal' })
 ley_constitucion_politica = Law.create({ name: 'Constitucion Politica' })
 ley_sobre_justicia = Law.create({ name: 'Sobre Justica' })
+ley_forestal_areas_protegidas_y_vida_silvestre = Law.create({ name: 'Ley forestal, areas protegidas y vida silvestre' })
+ley_de_creditos_usurarios = Law.create({ name: 'Ley de creditos usurarios' })
+ley_de_instituciones_de_seguros_y_reaseguros = Law.create({ name: 'Ley de instituciones de seguros y reaseguros' })
+ley_del_banco_hondureño_del_cafe = Law.create({ name: 'Ley del banco hondureño del cafe' })
+ley_de_inversiones = Law.create({ name: 'Ley de inversiones' })
+ley_de_propiedad_industrial = Law.create({ name: 'Ley de propiedad industrial' })
+ley_del_impuesto_activo_neto = Law.create({ name: 'Ley del impuesto activo neto' })
+ley_sobre_el_impuesto_sobre_ventas = Law.create({ name: 'Ley del impuesto sobre ventas' })
+
+# Tags de Materia de Leyes
 
 LawTag.create({law_id: ley_codigo_civil.id, tag_id: tag_civil.id})
-LawTag.create({law_id: ley_codigo_del_comercio.id, tag_id: tag_comercial.id})
+LawTag.create({law_id: ley_codigo_del_comercio.id, tag_id: tag_mercantil.id})
 LawTag.create({law_id: ley_codigo_del_trabajo.id, tag_id: tag_laboral.id})
 LawTag.create({law_id: ley_codigo_penal.id, tag_id: tag_penal.id})
 LawTag.create({law_id: ley_codigo_procesal_penal.id, tag_id: tag_penal.id})
 LawTag.create({law_id: ley_constitucion_politica.id, tag_id: tag_constitucional.id})
 LawTag.create({law_id: ley_sobre_justicia.id, tag_id: tag_constitucional.id})
+LawTag.create({law_id: ley_forestal_areas_protegidas_y_vida_silvestre.id, tag_id: tag_ambiental.id})
+LawTag.create({law_id: ley_de_creditos_usurarios.id, tag_id: tag_bancario.id})
+LawTag.create({law_id: ley_de_instituciones_de_seguros_y_reaseguros.id, tag_id: tag_bancario.id})
+LawTag.create({law_id: ley_del_banco_hondureño_del_cafe.id, tag_id: tag_bancario.id})
+LawTag.create({law_id: ley_de_inversiones.id, tag_id: tag_mercantil.id})
+LawTag.create({law_id: ley_de_propiedad_industrial.id, tag_id: tag_mercantil.id})
+LawTag.create({law_id: ley_del_impuesto_activo_neto.id, tag_id: tag_tributario.id})
+LawTag.create({law_id: ley_sobre_el_impuesto_sobre_ventas.id, tag_id: tag_tributario.id})
+
+# Tags de Creacion de Leyes
+
+LawTag.create({law_id: ley_codigo_civil.id, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_codigo_del_comercio.id, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_codigo_del_trabajo.id, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_codigo_penal.id, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_codigo_procesal_penal.id, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_constitucion_politica.id, tag_id: tag_asamblea_constituyente.id})
+LawTag.create({law_id: ley_sobre_justicia.id, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_forestal_areas_protegidas_y_vida_silvestre.id, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_de_creditos_usurarios.id, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_de_instituciones_de_seguros_y_reaseguros.id, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_del_banco_hondureño_del_cafe.id, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_de_inversiones.id, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_de_propiedad_industrial.id, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_del_impuesto_activo_neto.id, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_sobre_el_impuesto_sobre_ventas.id, tag_id: tag_acuerdo_ejecutivo.id})

@@ -28,8 +28,8 @@ class LawTagsController < ApplicationController
 
     respond_to do |format|
       if @law_tag.save
-        format.html { redirect_to @law_tag, notice: 'Law tag was successfully created.' }
-        format.json { render :show, status: :created, location: @law_tag }
+        format.html { redirect_to edit_law_path(@law_tag.law), notice: 'Law tag was successfully created.' }
+        format.json { render :show, status: :created, location: @law_tag.law }
       else
         format.html { render :new }
         format.json { render json: @law_tag.errors, status: :unprocessable_entity }
@@ -54,9 +54,10 @@ class LawTagsController < ApplicationController
   # DELETE /law_tags/1
   # DELETE /law_tags/1.json
   def destroy
+    law = @law_tag.law
     @law_tag.destroy
     respond_to do |format|
-      format.html { redirect_to law_tags_url, notice: 'Law tag was successfully destroyed.' }
+      format.html { redirect_to edit_law_path(law), notice: 'Law tag was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

@@ -1,66 +1,66 @@
-<h1>Editing Law</h1>
+<div class="container">
 
-<%= render 'form', law: @law %>
+  <h1>Editing Law</h1>
 
-<h2>Materias</h2>
+  <%= render 'form', law: @law %>
 
-<ul>
-  <% @law_materias.each do |materia| %>
-    <li>
-      <%= materia.tag.name %> <%= button_to 'Destroy', materia, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-secondary" %>
-    </li>
-  <% end %>
-</ul>
+  <h2>Materias</h2>
 
-<% law_tag = LawTag.new %>
-<%= form_with(model: law_tag, local: true) do |form| %>
-  <% if law_tag.errors.any? %>
-    <div id="error_explanation">
-    <h2><%= pluralize(law_tag.errors.count, "error") %> prohibited this law_tag from being saved:</h2>  
-      <ul>
-        <% law_tag.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+  <% law_tag = LawTag.new %>
+  <%= form_with(model: law_tag, local: true) do |form| %>
+    <% if law_tag.errors.any? %>
+      <div id="error_explanation">
+      <h2><%= pluralize(law_tag.errors.count, "error") %> prohibited this law_tag from being saved:</h2>  
+        <ul>
+          <% law_tag.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <%= form.hidden_field :law_id, value: @law.id %>
+    <%= form.collection_select(:tag_id, @all_materias, :id, :name, {:prompt=>true}, {:class=>'form-control'}) %>
+    
+    <div class="actions">
+      <%= form.submit "Agregar materia", class: 'btn btn-primary' %>
     </div>
   <% end %>
-  <%= form.hidden_field :law_id, value: @law.id %>
-  <%= form.collection_select(:tag_id, @all_materias, :id, :name, {:prompt=>true}, {:class=>'my-custom-class'}) %>
-  
-  <div class="actions">
-    <%= form.submit "Agregar materia" %>
-  </div>
-<% end %>
 
-<h2>Creacion</h2>
+  <ul class="list-group">
+    <% @law_materias.each do |materia| %>
+      <li class="list-group-item">
+        <%= materia.tag.name %> <%= button_to 'Destroy', materia, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-secondary" %>
+      </li>
+    <% end %>
+  </ul>
 
-<ul>
-  <% @law_creacions.each do |creacion| %>
-    <li>
-      <%= creacion.tag.name %> <%= button_to 'Destroy', creacion, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-secondary" %>
-    </li>
-  <% end %>
-</ul>
+  <h2>Tipo de Creación</h2>
 
-<% law_tag = LawTag.new %>
-<%= form_with(model: law_tag, local: true) do |form| %>
-  <% if law_tag.errors.any? %>
-    <div id="error_explanation">
-    <h2><%= pluralize(law_tag.errors.count, "error") %> prohibited this law_tag from being saved:</h2>  
-      <ul>
-        <% law_tag.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+  <% law_tag = LawTag.new %>
+  <%= form_with(model: law_tag, local: true) do |form| %>
+    <% if law_tag.errors.any? %>
+      <div id="error_explanation">
+      <h2><%= pluralize(law_tag.errors.count, "error") %> prohibited this law_tag from being saved:</h2>  
+        <ul>
+          <% law_tag.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <%= form.hidden_field :law_id, value: @law.id %>
+    <%= form.collection_select(:tag_id, @all_creacions, :id, :name, {:prompt=>true}, {:class=>'form-control'}) %>
+    
+    <div class="actions">
+      <%= form.submit "Agregar creacion", class: 'btn btn-primary' %>
     </div>
   <% end %>
-  <%= form.hidden_field :law_id, value: @law.id %>
-  <%= form.collection_select(:tag_id, @all_creacions, :id, :name, {:prompt=>true}, {:class=>'my-custom-class'}) %>
-  
-  <div class="actions">
-    <%= form.submit "Agregar creacion" %>
-  </div>
-<% end %>
 
-<%= link_to 'Show', @law %> |
-<%= link_to 'Back', laws_path %>
+  <ul class="list-group">
+    <% @law_creacions.each do |creacion| %>
+      <li class="list-group-item">
+        <%= creacion.tag.name %> <%= button_to 'Destroy', creacion, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-secondary" %>
+      </li>
+    <% end %>
+  </ul>
+</div>

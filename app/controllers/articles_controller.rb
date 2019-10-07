@@ -19,6 +19,9 @@ class ArticlesController < ApplicationController
 
   # GET /articles/1/edit
   def edit
+    if !current_user
+      redirect_to "/"
+    end
   end
 
   # POST /articles
@@ -40,9 +43,12 @@ class ArticlesController < ApplicationController
   # PATCH/PUT /articles/1
   # PATCH/PUT /articles/1.json
   def update
+    if !current_user
+      redirect_to "/"
+    end
     respond_to do |format|
       if @article.update(article_params)
-        format.html { redirect_to @article, notice: 'Article was successfully updated.' }
+        format.html { redirect_to @article.law, notice: 'Article was successfully updated.' }
         format.json { render :show, status: :ok, location: @article }
       else
         format.html { render :edit }

@@ -54,10 +54,15 @@
         <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_law_path(@law) %>
       <% end %>
     </h1>
-
-    <ul class="navbar-nav mr-auto">
+    
+    <% if @law.modifications && @law.modifications != "" %>
+      <p>
+        <p>Modificaciones: <%= @law.modifications %></p>
+      </p>
+    <% end %>
+    <p>
       <p><%= @articles_count %> artículos en total</p>
-    </ul>
+    </p>
 
     <% article_iterator = 0 %>
     <% bigger_section_iterator = 0 %>
@@ -141,9 +146,6 @@
 
     </div>
     </div>
-
-    <%= link_to 'Edit', edit_law_path(@law) %> |
-    <%= link_to 'Back', laws_path %>
   </div>
 </div>
 

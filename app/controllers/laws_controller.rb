@@ -1,5 +1,6 @@
 class LawsController < ApplicationController
   before_action :set_law, only: [:show, :edit, :update, :destroy]
+  layout 'law'
 
   # GET /laws
   # GET /laws.json

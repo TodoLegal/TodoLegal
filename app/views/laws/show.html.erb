@@ -318,48 +318,41 @@ console.log('bigger_section_' + current_bigger_section)
 var onkeydown = (function (ev) {
   var key;
   var isShift;
-  var isCtrl;
   if (window.event) {
     key = window.event.keyCode;
     isShift = !!window.event.shiftKey; // typecast to boolean
-    isCtrl = !!window.event.ctrlKey; // typecast to boolean
   } else {
     key = ev.which;
     isShift = !!ev.shiftKey;
-    isCtrl = !!ev.shiftCtrl;
   }
-  if ( isShift ) {
-    switch (key) {
-      case 16: // ignore shift key
-        break;
-      case 37:
-        focusPreviousArticle()
-        break;
-      case 39:
-        focusNextArticle()
-        break;
-      default:
-        // alert(key);
-        // do stuff here?
-        break;
-    }
-  }
-  if ( isCtrl ) {
-    switch (key) {
-      case 17: // ignore ctrl key
-        break;
-      case 37:
+  switch (key) {
+    case 17: // ignore ctrl key
+      break;
+    case 37:
+      if ( isShift ) {
         focusPreviousBiggerSection()
-        break;
-      case 39:
+      }else
+      {
+        focusPreviousArticle()       
+      }
+      break;
+    case 39:
+      if ( isShift ) {
         focusNextBiggerSection()
-        break;
-      default:
-        // alert(key);
-        // do stuff here?
-        break;
-    }
+      }else
+      {
+        focusNextArticle()
+      }
+      break;
+    default:
+      // alert(key);
+      // do stuff here?
+      break;
   }
+});
+
+$(document).ready(function () {
+  
 });
       
 </script>

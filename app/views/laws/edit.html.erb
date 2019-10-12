@@ -1,6 +1,6 @@
 <div class="container">
 
-  <h1>Editing Law</h1>
+  <h1>Editando ley</h1>
 
   <%= render 'form', law: @law %>
 
@@ -29,7 +29,7 @@
   <ul class="list-group">
     <% @law_materias.each do |materia| %>
       <li class="list-group-item">
-        <%= materia.tag.name %> <%= button_to 'Destroy', materia, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-secondary" %>
+        <%= materia.tag.name %> <%= button_to 'Eliminar', materia, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-secondary" %>
       </li>
     <% end %>
   </ul>
@@ -59,7 +59,7 @@
   <ul class="list-group">
     <% @law_creacions.each do |creacion| %>
       <li class="list-group-item">
-        <%= creacion.tag.name %> <%= button_to 'Destroy', creacion, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-secondary" %>
+        <%= creacion.tag.name %> <%= button_to 'Eliminar', creacion, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-secondary" %>
       </li>
     <% end %>
   </ul>

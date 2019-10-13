@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :chapters
   resources :articles
 
-  root :to => "tags#index"
+  root :to => "home#index"
+  get '/search_law', to: 'home#search_law'
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

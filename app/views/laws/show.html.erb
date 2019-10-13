@@ -54,6 +54,12 @@
         <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_law_path(@law) %>
       <% end %>
     </h1>
+
+    <% if @law.creation_number && @law.creation_number != "" %>
+      <p>
+        <p>Número de creación: <%= @law.creation_number %></p>
+      </p>
+    <% end %>
     
     <% if @law.modifications && @law.modifications != "" %>
       <p>

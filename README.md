@@ -94,7 +94,7 @@ EDITOR="nano" rails credentials:edit
 ```
 nano ~/.bashrc
 # add the following at the end of the file
-# export TodoLegalDB_Password=MYDBPASS
+# export TodoLegalDB_Password=MyPassword
 # export RAILS_SERVE_STATIC_FILES=yes
 source ~/.bashrc
 . ~/.bashrc

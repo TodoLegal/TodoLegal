@@ -5,6 +5,10 @@ class LawsController < ApplicationController
   # GET /laws
   # GET /laws.json
   def index
+    if !current_user
+      redirect_to "/"
+    end
+
     @laws = Law.all
   end
 
@@ -54,11 +58,19 @@ class LawsController < ApplicationController
 
   # GET /laws/new
   def new
+    if !current_user
+      redirect_to "/"
+    end
+
     @law = Law.new
   end
 
   # GET /laws/1/edit
   def edit
+    if !current_user
+      redirect_to "/"
+    end
+
     @law_materias = []
     materia_tag_type = TagType.find_by_name("materia")
     @all_materias = Tag.where(tag_type: materia_tag_type)
@@ -72,6 +84,10 @@ class LawsController < ApplicationController
   # POST /laws
   # POST /laws.json
   def create
+    if !current_user
+      redirect_to "/"
+    end
+
     @law = Law.new(law_params)
 
     respond_to do |format|
@@ -88,6 +104,10 @@ class LawsController < ApplicationController
   # PATCH/PUT /laws/1
   # PATCH/PUT /laws/1.json
   def update
+    if !current_user
+      redirect_to "/"
+    end
+
     respond_to do |format|
       if @law.update(law_params)
         format.html { redirect_to @law, notice: 'Law was successfully updated.' }
@@ -102,6 +122,10 @@ class LawsController < ApplicationController
   # DELETE /laws/1
   # DELETE /laws/1.json
   def destroy
+    if !current_user
+      redirect_to "/"
+    end
+    
     @law.destroy
     respond_to do |format|
       format.html { redirect_to laws_url, notice: 'Law was successfully destroyed.' }

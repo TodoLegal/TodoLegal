@@ -4,26 +4,44 @@ class TitlesController < ApplicationController
   # GET /titles
   # GET /titles.json
   def index
+    if !current_user
+      redirect_to "/"
+    end
+
     @titles = Title.all
   end
 
   # GET /titles/1
   # GET /titles/1.json
   def show
+    if !current_user
+      redirect_to "/"
+    end
   end
 
   # GET /titles/new
   def new
+    if !current_user
+      redirect_to "/"
+    end
+
     @title = Title.new
   end
 
   # GET /titles/1/edit
   def edit
+    if !current_user
+      redirect_to "/"
+    end
   end
 
   # POST /titles
   # POST /titles.json
   def create
+    if !current_user
+      redirect_to "/"
+    end
+
     @title = Title.new(title_params)
 
     respond_to do |format|
@@ -40,6 +58,10 @@ class TitlesController < ApplicationController
   # PATCH/PUT /titles/1
   # PATCH/PUT /titles/1.json
   def update
+    if !current_user
+      redirect_to "/"
+    end
+
     respond_to do |format|
       if @title.update(title_params)
         format.html { redirect_to @title, notice: 'Title was successfully updated.' }
@@ -54,6 +76,10 @@ class TitlesController < ApplicationController
   # DELETE /titles/1
   # DELETE /titles/1.json
   def destroy
+    if !current_user
+      redirect_to "/"
+    end
+    
     @title.destroy
     respond_to do |format|
       format.html { redirect_to titles_url, notice: 'Title was successfully destroyed.' }

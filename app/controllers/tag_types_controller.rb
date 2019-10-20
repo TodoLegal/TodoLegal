@@ -4,26 +4,44 @@ class TagTypesController < ApplicationController
   # GET /tag_types
   # GET /tag_types.json
   def index
+    if !current_user
+      redirect_to "/"
+    end
+
     @tag_types = TagType.all
   end
 
   # GET /tag_types/1
   # GET /tag_types/1.json
   def show
+    if !current_user
+      redirect_to "/"
+    end
   end
 
   # GET /tag_types/new
   def new
+    if !current_user
+      redirect_to "/"
+    end
+
     @tag_type = TagType.new
   end
 
   # GET /tag_types/1/edit
   def edit
+    if !current_user
+      redirect_to "/"
+    end
   end
 
   # POST /tag_types
   # POST /tag_types.json
   def create
+    if !current_user
+      redirect_to "/"
+    end
+
     @tag_type = TagType.new(tag_type_params)
 
     respond_to do |format|
@@ -40,6 +58,10 @@ class TagTypesController < ApplicationController
   # PATCH/PUT /tag_types/1
   # PATCH/PUT /tag_types/1.json
   def update
+    if !current_user
+      redirect_to "/"
+    end
+
     respond_to do |format|
       if @tag_type.update(tag_type_params)
         format.html { redirect_to @tag_type, notice: 'Tag type was successfully updated.' }
@@ -54,6 +76,10 @@ class TagTypesController < ApplicationController
   # DELETE /tag_types/1
   # DELETE /tag_types/1.json
   def destroy
+    if !current_user
+      redirect_to "/"
+    end
+    
     @tag_type.destroy
     respond_to do |format|
       format.html { redirect_to tag_types_url, notice: 'Tag type was successfully destroyed.' }

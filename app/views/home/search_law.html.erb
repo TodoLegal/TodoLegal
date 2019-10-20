@@ -18,6 +18,20 @@
   <% end %>
 </div>
 
+<%= @articles_count %>
+
+<div class="row">
+  <% @grouped_laws.each do |grouped_law| %>
+    <div class="col-4 py-2">
+      <div class="card card-body h-100" >
+        <h5 class="card-title"><%= grouped_law[:law].name %></h5>
+        <h5 class="card-title"><%= grouped_law[:count] %></h5>
+        <%= link_to 'Ver ley', '/laws/'+grouped_law[:law].id.to_s+'?query='+@query, class: 'card-link' %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
 <%= link_to 'Ir a inicio', root_path %>
 
 </div>

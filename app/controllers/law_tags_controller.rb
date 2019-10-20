@@ -4,16 +4,27 @@ class LawTagsController < ApplicationController
   # GET /law_tags
   # GET /law_tags.json
   def index
+    if !current_user
+      redirect_to "/"
+    end
+
     @law_tags = LawTag.all
   end
 
   # GET /law_tags/1
   # GET /law_tags/1.json
   def show
+    if !current_user
+      redirect_to "/"
+    end
   end
 
   # GET /law_tags/new
   def new
+    if !current_user
+      redirect_to "/"
+    end
+
     @law_tag = LawTag.new
   end
 
@@ -24,6 +35,10 @@ class LawTagsController < ApplicationController
   # POST /law_tags
   # POST /law_tags.json
   def create
+    if !current_user
+      redirect_to "/"
+    end
+
     @law_tag = LawTag.new(law_tag_params)
 
     respond_to do |format|
@@ -40,6 +55,10 @@ class LawTagsController < ApplicationController
   # PATCH/PUT /law_tags/1
   # PATCH/PUT /law_tags/1.json
   def update
+    if !current_user
+      redirect_to "/"
+    end
+
     respond_to do |format|
       if @law_tag.update(law_tag_params)
         format.html { redirect_to @law_tag, notice: 'Law tag was successfully updated.' }
@@ -54,6 +73,10 @@ class LawTagsController < ApplicationController
   # DELETE /law_tags/1
   # DELETE /law_tags/1.json
   def destroy
+    if !current_user
+      redirect_to "/"
+    end
+    
     law = @law_tag.law
     @law_tag.destroy
     respond_to do |format|

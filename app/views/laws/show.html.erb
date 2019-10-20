@@ -24,7 +24,7 @@
       <ul class="mr-auto" style="margin-bottom: 0px;">
         <span style="font-size: 15px;"><%= @articles_count %> artículos</span>
       </ul>
-      <form class="form-inline my-2 my-lg-0" action="/laws/1" method="get">
+      <form class="form-inline my-2 my-lg-0" action="/laws/<%= @law.id %>" method="get">
         <input id="query-input" class="form-control mr-sm-2" name="query" type="search" placeholder="Buscar" value="<%= @query %>" aria-label="Buscar">
         <div style="padding-right: 15px">
           <% if @highlight_enabled %>

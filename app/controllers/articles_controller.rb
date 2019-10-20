@@ -4,16 +4,25 @@ class ArticlesController < ApplicationController
   # GET /articles
   # GET /articles.json
   def index
+    if !current_user
+      redirect_to "/"
+    end
     @articles = Article.all
   end
 
   # GET /articles/1
   # GET /articles/1.json
   def show
+    if !current_user
+      redirect_to "/"
+    end
   end
 
   # GET /articles/new
   def new
+    if !current_user
+      redirect_to "/"
+    end
     @article = Article.new
   end
 
@@ -27,6 +36,9 @@ class ArticlesController < ApplicationController
   # POST /articles
   # POST /articles.json
   def create
+    if !current_user
+      redirect_to "/"
+    end
     @article = Article.new(article_params)
 
     respond_to do |format|
@@ -46,6 +58,7 @@ class ArticlesController < ApplicationController
     if !current_user
       redirect_to "/"
     end
+
     respond_to do |format|
       if @article.update(article_params)
         format.html { redirect_to @article.law, notice: 'Article was successfully updated.' }
@@ -60,6 +73,10 @@ class ArticlesController < ApplicationController
   # DELETE /articles/1
   # DELETE /articles/1.json
   def destroy
+    if !current_user
+      redirect_to "/"
+    end
+    
     @article.destroy
     respond_to do |format|
       format.html { redirect_to articles_url, notice: 'Article was successfully destroyed.' }

@@ -18,14 +18,21 @@
   <% end %>
 </div>
 
-<%= @articles_count %>
+<p>Busqueda realizada en <%= Article.count %> artículos</p>
 
 <div class="row">
   <% @grouped_laws.each do |grouped_law| %>
     <div class="col-4 py-2">
       <div class="card card-body h-100" >
         <h5 class="card-title"><%= grouped_law[:law].name %></h5>
-        <h5 class="card-title"><%= grouped_law[:count] %></h5>
+        <p>
+          <%= grouped_law[:count] %>
+          <% if grouped_law[:count] == 1 %>
+            artículo relacionado
+          <% else %>
+            artículos relacionados
+          <% end %>
+        </p>
         <%= link_to 'Ver ley', '/laws/'+grouped_law[:law].id.to_s+'?query='+@query, class: 'card-link' %>
       </div>
     </div>

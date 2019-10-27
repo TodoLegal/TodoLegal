@@ -23,7 +23,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="mr-auto">
       </ul>
-      <form class="form-inline" action="/laws/<%= @law.id %>" method="get">
+      <form class="form-inline" action="<%= law_path(@law) %>" method="get">
         <input id="query-input" class="form-control mr-sm-2" name="query" type="search" placeholder="Buscar" value="<%= @query %>" aria-label="Buscar">
         <div style="padding-right: 15px">
           <% if @highlight_enabled %>

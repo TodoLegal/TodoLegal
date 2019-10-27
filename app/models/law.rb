@@ -8,7 +8,7 @@ class Law < ApplicationRecord
   has_many :tags, through: :law_tags
 
   pg_search_scope :search_by_name,
-                  against: :name,
+                  against: [:name, :creation_number],
                   using: {
                     tsearch: {
                       dictionary: "spanish",
@@ -24,4 +24,8 @@ class Law < ApplicationRecord
                       }
                     }
                   }
+
+  def to_param
+    [id, name.parameterize].join("-")
+  end
 end

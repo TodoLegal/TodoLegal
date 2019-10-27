@@ -8,9 +8,11 @@
 <div class="row">
   <% @tag.laws.each do |law| %>
     <div class="col-4 py-2">
-      <div class="card card-body h-100" >
-        <h5 class="card-title"><%= law.name %></h5>
-        <%= link_to 'Ver ley', law, class: 'card-link' %>
+      <div class="card card-body h-100" style="padding:0px">
+        <a href="<%= law_path(law) %>" style="padding:20px">
+          <h5 class="card-title"><%= law.name %></h5>
+          <p>Número de creación <%= law.creation_number %></p>
+        </a>
       </div>
     </div>
   <% end %>

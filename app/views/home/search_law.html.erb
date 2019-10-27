@@ -7,33 +7,39 @@
 
 <%= render 'search_law_input' %>
 
+<p>Busqueda realizada en <%= Article.count %> artículos</p>
+
 <div class="row">
   <% @laws.each do |law| %>
     <div class="col-4 py-2">
-      <div class="card card-body h-100" >
-        <h5 class="card-title"><%= law.name %></h5>
-        <%= link_to 'Ver ley', law, class: 'card-link' %>
+      <div class="card card-body h-100" style="padding:0px">
+        <a href="<%= law_path(law) %>" style="padding:20px">
+          <h5 class="card-title"><%= law.name %></h5>
+          <p>Nnúmero de creación <%= law.creation_number %></p>
+        </a>
       </div>
     </div>
   <% end %>
 </div>
 
-<p>Busqueda realizada en <%= Article.count %> artículos</p>
+<hr>
 
 <div class="row">
   <% @grouped_laws.each do |grouped_law| %>
     <div class="col-4 py-2">
-      <div class="card card-body h-100" >
-        <h5 class="card-title"><%= grouped_law[:law].name %></h5>
-        <p>
-          <%= grouped_law[:count] %>
-          <% if grouped_law[:count] == 1 %>
-            artículo relacionado
-          <% else %>
-            artículos relacionados
-          <% end %>
-        </p>
-        <%= link_to 'Ver ley', '/laws/'+grouped_law[:law].id.to_s+'?query='+@query, class: 'card-link' %>
+      <div class="card card-body h-100" style="padding:0px">
+        <a href="<%= law_path(grouped_law[:law]) + '?query='+@query %>" style="padding:20px">
+          <h5 class="card-title"><%= grouped_law[:law].name %></h5>
+          <p>Número de creación <%= grouped_law[:law].creation_number %></p>
+          <p>
+            <%= grouped_law[:count] %>
+            <% if grouped_law[:count] == 1 %>
+              artículo relacionado
+            <% else %>
+              artículos relacionados
+            <% end %>
+          </p>
+        </a>
       </div>
     </div>
   <% end %>

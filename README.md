@@ -69,7 +69,7 @@ postgres=# alter user postgres with encrypted password 'MyPassword';
 #### In development mode
 
 ```
-rails db:setup
+rails db:create
 rails db:migrate
 # optional: rails db:seed
 ```

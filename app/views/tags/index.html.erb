@@ -15,9 +15,11 @@
   <div class="row">
     <% @tags.each do |tag| %>
       <div class="col-4 py-2">
-        <div class="card card-body h-100" >
-          <h5 class="card-title"><%= tag.name %></h5>
-          <%= link_to 'Ver ' + tag.laws.count.to_s + ' leyes', tag, class: 'card-link' %>
+        <div class="card card-body h-100" style="padding:0px">
+          <a href="/tags/<%= tag.id %>" style="padding:20px">
+            <h5 class="card-title"><%= tag.name %></h5>
+            <%= link_to 'Ver ' + tag.laws.count.to_s + ' leyes', tag, class: 'card-link' %>
+          </a>
         </div>
       </div>
     <% end %>

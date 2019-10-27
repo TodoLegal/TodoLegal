@@ -12,6 +12,36 @@ gpg2 --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A170
 source /usr/local/rvm/scripts/rvm
 ```
 
+## 2. Setup the repo
+
+```
+mkdir TodoLegal
+cd TodoLegal/
+git init
+git remote add origin https://github.com/TodoLegal/TodoLegal.git
+git pull origin master
+bundle install
+```
+
+### Production only configuration
+
+#### a. Setup the credentials
+
+```
+EDITOR="nano" rails credentials:edit
+```
+
+#### b. Setup config some environment variables needed
+
+```
+nano ~/.bashrc
+# add the following at the end of the file
+# export TodoLegalDB_Password=MyPassword
+# export RAILS_SERVE_STATIC_FILES=yes
+source ~/.bashrc
+. ~/.bashrc
+```
+
 ## 2. Create and setup the database
 
 ### Create the postgre database
@@ -39,7 +69,7 @@ postgres=# alter user postgres with encrypted password 'MyPassword';
 #### In development mode
 
 ```
-rails db:setup
+rails db:create
 rails db:migrate
 # optional: rails db:seed
 ```
@@ -50,17 +80,6 @@ rails db:migrate
 RAILS_ENV=production rails db:create
 RAILS_ENV=production rails db:migrate
 # optional: RAILS_ENV=production rails db:seed
-```
-
-## 3. Download the repo
-
-```
-mkdir TodoLegal
-cd TodoLegal/
-git init
-git remote add origin https://github.com/TodoLegal/TodoLegal.git
-git pull origin master
-bundle install
 ```
 
 ## 4. Launch the server
@@ -78,24 +97,4 @@ Stop the server with `Ctrl + C`.
 ```
 thin start -C config/thin.yml
 thin stop -C config/thin.yml
-```
-
-
-## Production only configuration
-
-### a. Setup the credentials
-
-```
-EDITOR="nano" rails credentials:edit
-```
-
-### b. Setup config some environment variables needed
-
-```
-nano ~/.bashrc
-# add the following at the end of the file
-# export TodoLegalDB_Password=MyPassword
-# export RAILS_SERVE_STATIC_FILES=yes
-source ~/.bashrc
-. ~/.bashrc
 ```

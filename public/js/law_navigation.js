@@ -34,14 +34,14 @@ function updateHighlightedView()
   document.getElementById("result-count").innerText = (currrent_highlighted + 1) +"/"+highlighted_count
   element_highlighted = document.getElementsByClassName('highlighted')[currrent_highlighted]
   element_highlighted.scrollIntoView({block: 'center'})
-  element_highlighted.style.color="blue"
+  element_highlighted.style.color="var(--c-selected-highlight)"
 }
 
 function browseHighlightedUp()
 {
   last_element_highlighted = document.getElementsByClassName('highlighted')[currrent_highlighted]
   if(last_element_highlighted)
-    last_element_highlighted.style.color = "red";
+    last_element_highlighted.style.color = "var(--c-highlight)";
   currrent_highlighted -= 1;
   if(currrent_highlighted < 0)
     currrent_highlighted = highlighted_count - 1;
@@ -52,7 +52,7 @@ function browseHighlightedDown()
 {
   last_element_highlighted = document.getElementsByClassName('highlighted')[currrent_highlighted]
   if(last_element_highlighted)
-    last_element_highlighted.style.color = "red"
+    last_element_highlighted.style.color = "var(--c-highlight)"
   currrent_highlighted += 1;
   if(currrent_highlighted >= highlighted_count)
     currrent_highlighted = 0;
@@ -71,11 +71,13 @@ for(var article_iterator=0; article_iterator<articles_element.length; article_it
   article_element.onmousedown = function (event) {
     if(article_focused)
     {
-      article_focused.style['background-color'] = "#fff"
+      article_focused.style['background-color'] = "var(--c-original-background)"
+      article_focused.style['color'] = "var(--c-original-text)"
     }
     current_article = parseInt(event.srcElement.getAttribute("article_id"))
     article_focused = document.getElementById('article_count_' + current_article)
-    article_focused.style['background-color'] = "#222"
+    article_focused.style['background-color'] = "var(--c-selected-article-background)"
+    article_focused.style['color'] = "var(--c-selected-article-text)"
     return true;
   };
 }
@@ -85,11 +87,13 @@ function focusPreviousArticle()
   if (bigger_section_focused)
   {
     current_article = parseInt(bigger_section_focused.getAttribute("last_article"))
-    bigger_section_focused.style['background-color'] = "#fff"
+    bigger_section_focused.style['background-color'] = "var(--c-original-background)"
+    bigger_section_focused.style['color'] = "var(--c-original-text)"
     bigger_section_focused = null
   } else if(article_focused)
   {
-    article_focused.style['background-color'] = "#fff"
+    article_focused.style['background-color'] = "var(--c-original-background)"
+    article_focused.style['color'] = "var(--c-original-text)"
     current_article -= 1
   } else
   {
@@ -98,7 +102,8 @@ function focusPreviousArticle()
   
   article_focused = document.getElementById('article_count_' + current_article)
   article_focused.scrollIntoView({block: 'center'})
-  article_focused.style['background-color'] = "#222"
+  article_focused.style['background-color'] = "var(--c-selected-article-background)"
+  article_focused.style['color'] = "var(--c-selected-article-text)"
 }
 
 function focusNextArticle()
@@ -106,11 +111,13 @@ function focusNextArticle()
   if (bigger_section_focused)
   {
     current_article = parseInt(bigger_section_focused.getAttribute("next_article"))
-    bigger_section_focused.style['background-color'] = "#fff"
+    bigger_section_focused.style['background-color'] = "var(--c-original-background)"
+    bigger_section_focused.style['color'] = "var(--c-original-text)"
     bigger_section_focused = null
   } else if(article_focused)
   {
-    article_focused.style['background-color'] = "#fff"
+    article_focused.style['background-color'] = "var(--c-original-background)"
+    article_focused.style['color'] = "var(--c-original-text)"
     current_article += 1
   } else
   {
@@ -119,7 +126,8 @@ function focusNextArticle()
 
   article_focused = document.getElementById('article_count_' + current_article)
   article_focused.scrollIntoView({block: 'center'})
-  article_focused.style['background-color'] = "#222"
+  article_focused.style['background-color'] = "var(--c-selected-article-background)"
+  article_focused.style['color'] = "var(--c-selected-article-text)"
 }
 
 /* Bigger section navigation */
@@ -132,17 +140,20 @@ function focusPreviousBiggerSection()
   if(article_focused)
   {
     current_bigger_section = parseInt(article_focused.getAttribute("last_bigger_section"))
-    article_focused.style['background-color'] = "#fff"
+    article_focused.style['background-color'] = "var(--c-original-background)"
+    article_focused.style['color'] = "var(--c-original-text)"
     article_focused = null
   } else if(bigger_section_focused)
   {
-    bigger_section_focused.style['background-color'] = "#fff"
+    bigger_section_focused.style['background-color'] = "var(--c-original-background)"
+    bigger_section_focused.style['color'] = "var(--c-original-text)"
     current_bigger_section -= 1
   }
 
   bigger_section_focused = document.getElementById('bigger_section_' + current_bigger_section)
   bigger_section_focused.scrollIntoView({block: 'center'})
-  bigger_section_focused.style['background-color'] = "#666"
+  bigger_section_focused.style['background-color'] = "var(--c-selected-bigger-section-background)"
+  bigger_section_focused.style['color'] = "var(--c-selected-bigger-section-text)"
 }
 
 function focusNextBiggerSection()
@@ -150,17 +161,20 @@ function focusNextBiggerSection()
   if(article_focused)
   {
     current_bigger_section = parseInt(article_focused.getAttribute("next_bigger_section"))
-    article_focused.style['background-color'] = "#fff"
+    article_focused.style['background-color'] = "var(--c-original-background)"
+    article_focused.style['color'] = "var(--c-original-text)"
     article_focused = null
   } else if(bigger_section_focused)
   {
-    bigger_section_focused.style['background-color'] = "#fff"
+    bigger_section_focused.style['background-color'] = "var(--c-original-background)"
+    bigger_section_focused.style['color'] = "var(--c-original-text)"
     current_bigger_section += 1
   }
-console.log('bigger_section_' + current_bigger_section)
+  
   bigger_section_focused = document.getElementById('bigger_section_' + current_bigger_section)
   bigger_section_focused.scrollIntoView({block: 'center'})
-  bigger_section_focused.style['background-color'] = "#666"
+  bigger_section_focused.style['background-color'] = "var(--c-selected-bigger-section-background)"
+  bigger_section_focused.style['color'] = "var(--c-selected-bigger-section-text)"
 }
 
 var onkeydown = (function (ev) {

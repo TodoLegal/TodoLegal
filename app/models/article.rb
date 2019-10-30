@@ -11,7 +11,7 @@ class Article < ApplicationRecord
                     tsearch: {
                       dictionary: "spanish",
                       highlight: {
-                        StartSel: '<b style="color:red" class="highlighted">',
+                        StartSel: '<b style="color: var(--c-highlight)" class="highlighted">',
                         StopSel: '</b>',
                         MaxWords: 123,
                         MinWords: 456,
@@ -30,7 +30,7 @@ class Article < ApplicationRecord
     trigram: {
       threshold: 0.01,
       highlight: {
-        StartSel: '<b style="color:red">',
+        StartSel: '<b style="color: var(--c-highlight)">',
         StopSel: '</b>',
         MaxWords: 123,
         MinWords: 456,

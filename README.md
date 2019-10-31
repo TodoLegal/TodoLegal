@@ -4,9 +4,24 @@
 
 Install Rails 6.0 and other tools needed.
 
+### In development Mode
+
 ```
 apt update
 apt install curl git libpq-dev gnupg2 postgresql-11
+gpg2 --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
+\curl -sSL https://get.rvm.io | bash -s stable --rails
+source /usr/local/rvm/scripts/rvm
+```
+
+### In Production Mode
+
+```
+apt update
+apt install curl git libpq-dev gnupg2 postgresql-11 nginx software-properties-common
+add-apt-repository ppa:certbot/certbot
+apt-get update
+apt-get install python-certbot-nginx
 gpg2 --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
 \curl -sSL https://get.rvm.io | bash -s stable --rails
 source /usr/local/rvm/scripts/rvm
@@ -41,6 +56,47 @@ nano ~/.bashrc
 source ~/.bashrc
 . ~/.bashrc
 ```
+
+#### c. Setup Nginx Proxy With SSL
+
+```
+unlink /etc/nginx/sites-enabled/default
+cd /etc/nginx/sites-available
+nano reverse-proxy.conf
+```
+
+And paste the following
+
+```
+server {
+  server_name  todolegal.app; # or test.todolegal.app for the testing server
+  
+  listen 80;
+  listen [::]:80;
+
+  access_log /var/log/nginx/reverse-access.log;
+  error_log /var/log/nginx/reverse-error.log;
+
+  location / {
+    proxy_pass http://127.0.0.1:3000;
+  }
+}
+```
+
+Then
+
+```
+ln -s /etc/nginx/sites-available/reverse-proxy.conf /etc/nginx/sites-enabled/reverse-proxy.conf
+certbot --nginx
+```
+
+Finally, fill the form with
+
+* whatever@mail.com (your email or whatever)
+* a (agree)
+* n (no)
+* 1 (select the domain)
+* 2 (enable redirect)
 
 ## 2. Create and setup the database
 
@@ -77,6 +133,7 @@ rails db:migrate
 #### In production mode
 
 ```
+cd ~/TodoLegal
 RAILS_ENV=production rails db:create
 RAILS_ENV=production rails db:migrate
 # optional: RAILS_ENV=production rails db:seed

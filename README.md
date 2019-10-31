@@ -56,7 +56,7 @@ export TodoLegalDB_Password=MyPassword
 export RAILS_SERVE_STATIC_FILES=yes
 ```
 
-And then
+And then back to the terminal
 
 ```
 source ~/.bashrc

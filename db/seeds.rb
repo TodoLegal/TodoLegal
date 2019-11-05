@@ -124,55 +124,57 @@ LawTag.create({law_id: ley_de_simplificacion_administrativa.id, tag_id: tag_decr
 LawTag.create({law_id: ley_de_transplante_y_extraccion_de_organos_y_tejidos_humanos.id, tag_id: tag_decreto_legislativo.id})
 LawTag.create({law_id: ley_del_fondo_hondureno_de_preinversion.id, tag_id: tag_decreto_legislativo.id})
 
-ARGV = ['ScrappedLaws/Civil/ley_codigo_civil.json', ley_codigo_civil.id]
-load 'ScrappedLaws/law_loader.rb'
-ARGV = ['ScrappedLaws/Mercantil/ley_codigo_del_comercio.json', ley_codigo_del_comercio.id]
-load 'ScrappedLaws/law_loader.rb'
-ARGV = ['ScrappedLaws/Laboral/ley_codigo_del_trabajo.json', ley_codigo_del_trabajo.id]
-load 'ScrappedLaws/law_loader.rb'
-ARGV = ['ScrappedLaws/Penal/ley_codigo_penal.json', ley_codigo_penal.id]
-load 'ScrappedLaws/law_loader.rb'
-ARGV = ['ScrappedLaws/Penal/ley_codigo_procesal_penal.json', ley_codigo_procesal_penal.id]
-load 'ScrappedLaws/law_loader.rb'
-ARGV = ['ScrappedLaws/Constitucional/ley_constitucion_politica.json', ley_constitucion_politica.id]
-load 'ScrappedLaws/law_loader.rb'
-ARGV = ['ScrappedLaws/Constitucional/ley_sobre_justicia.json', ley_sobre_justicia.id]
-load 'ScrappedLaws/law_loader.rb'
-ARGV = ['ScrappedLaws/Ambiental/ley_forestal_areas_protegidas_y_vida_silvestre.json', ley_forestal_areas_protegidas_y_vida_silvestre.id]
-load 'ScrappedLaws/law_loader.rb'
-ARGV = ['ScrappedLaws/Bancario/ley_de_creditos_usurarios.json', ley_de_creditos_usurarios.id]
-load 'ScrappedLaws/law_loader.rb'
-ARGV = ['ScrappedLaws/Bancario/ley_de_instituciones_de_seguros_y_reaseguros.json', ley_de_instituciones_de_seguros_y_reaseguros.id]
-load 'ScrappedLaws/law_loader.rb'
-ARGV = ['ScrappedLaws/Bancario/ley_del_banco_hondureño_del_cafe.json', ley_del_banco_hondureño_del_cafe.id]
-load 'ScrappedLaws/law_loader.rb'
-ARGV = ['ScrappedLaws/Mercantil/ley_de_inversiones.json', ley_de_inversiones.id]
-load 'ScrappedLaws/law_loader.rb'
-ARGV = ['ScrappedLaws/Mercantil/ley_de_propiedad_industrial.json', ley_de_propiedad_industrial.id]
-load 'ScrappedLaws/law_loader.rb'
-ARGV = ['ScrappedLaws/Tributario/ley_del_impuesto_activo_neto.json', ley_del_impuesto_activo_neto.id]
-load 'ScrappedLaws/law_loader.rb'
-ARGV = ['ScrappedLaws/Tributario/ley_sobre_el_impuesto_sobre_ventas.json', ley_sobre_el_impuesto_sobre_ventas.id]
-load 'ScrappedLaws/law_loader.rb'
-ARGV = ['ScrappedLaws/Administrativo/ley_de_casas_de_cambio.json', ley_de_casas_de_cambio.id]
-load 'ScrappedLaws/law_loader.rb'
-ARGV = ['ScrappedLaws/Administrativo/ley_de_contratacion_del_estado.json', ley_de_contratacion_del_estado.id]
-load 'ScrappedLaws/law_loader.rb'
-ARGV = ['ScrappedLaws/Administrativo/ley_de_control_de_armas_de_fuego_municiones_explosiones_y_otros_similares.json', ley_de_control_de_armas_de_fuego_municiones_explosiones_y_otros_similares.id]
-load 'ScrappedLaws/law_loader.rb'
-ARGV = ['ScrappedLaws/Administrativo/ley_de_creacion_de_fondo_de_apoyo_a_la_policia.json', ley_de_creacion_de_fondo_de_apoyo_a_la_policia.id]
-load 'ScrappedLaws/law_loader.rb'
-ARGV = ['ScrappedLaws/Administrativo/ley_de_facilitacion_administrativa_para_la_recontruccion_nacional.json', ley_de_facilitacion_administrativa_para_la_recontruccion_nacional.id]
-load 'ScrappedLaws/law_loader.rb'
-ARGV = ['ScrappedLaws/Administrativo/ley_de_hidrocarburos.json', ley_de_hidrocarburos.id]
-load 'ScrappedLaws/law_loader.rb'
-ARGV = ['ScrappedLaws/Administrativo/ley_de_procedimiento_administrativo.json', ley_de_procedimiento_administrativo.id]
-load 'ScrappedLaws/law_loader.rb'
-ARGV = ['ScrappedLaws/Administrativo/ley_de_procedimiento_para_contratacion_de_financiamiento_y_consultoria_de_estudios_de_preinversion.json', ley_de_procedimiento_para_contratacion_de_financiamiento_y_consultoria_de_estudios_de_preinversion.id]
-load 'ScrappedLaws/law_loader.rb'
-ARGV = ['ScrappedLaws/Administrativo/ley_de_simplificacion_administrativa.json', ley_de_simplificacion_administrativa.id]
-load 'ScrappedLaws/law_loader.rb'
-ARGV = ['ScrappedLaws/Administrativo/ley_de_transplante_y_extraccion_de_organos_y_tejidos_humanos.json', ley_de_transplante_y_extraccion_de_organos_y_tejidos_humanos.id]
-load 'ScrappedLaws/law_loader.rb'
-ARGV = ['ScrappedLaws/Administrativo/ley_del_fondo_hondureno_de_preinversion.json', ley_del_fondo_hondureno_de_preinversion.id]
-load 'ScrappedLaws/law_loader.rb'
+scrapped_laws_dir = '../ScrappedLaws/'
+
+ARGV = [scrapped_laws_dir + 'Civil/ley_codigo_civil.json', ley_codigo_civil.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Mercantil/ley_codigo_del_comercio.json', ley_codigo_del_comercio.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Laboral/ley_codigo_del_trabajo.json', ley_codigo_del_trabajo.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Penal/ley_codigo_penal.json', ley_codigo_penal.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Penal/ley_codigo_procesal_penal.json', ley_codigo_procesal_penal.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Constitucional/ley_constitucion_politica.json', ley_constitucion_politica.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Constitucional/ley_sobre_justicia.json', ley_sobre_justicia.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Ambiental/ley_forestal_areas_protegidas_y_vida_silvestre.json', ley_forestal_areas_protegidas_y_vida_silvestre.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Bancario/ley_de_creditos_usurarios.json', ley_de_creditos_usurarios.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Bancario/ley_de_instituciones_de_seguros_y_reaseguros.json', ley_de_instituciones_de_seguros_y_reaseguros.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Bancario/ley_del_banco_hondureño_del_cafe.json', ley_del_banco_hondureño_del_cafe.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Mercantil/ley_de_inversiones.json', ley_de_inversiones.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Mercantil/ley_de_propiedad_industrial.json', ley_de_propiedad_industrial.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Tributario/ley_del_impuesto_activo_neto.json', ley_del_impuesto_activo_neto.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Tributario/ley_sobre_el_impuesto_sobre_ventas.json', ley_sobre_el_impuesto_sobre_ventas.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_de_casas_de_cambio.json', ley_de_casas_de_cambio.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_de_contratacion_del_estado.json', ley_de_contratacion_del_estado.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_de_control_de_armas_de_fuego_municiones_explosiones_y_otros_similares.json', ley_de_control_de_armas_de_fuego_municiones_explosiones_y_otros_similares.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_de_creacion_de_fondo_de_apoyo_a_la_policia.json', ley_de_creacion_de_fondo_de_apoyo_a_la_policia.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_de_facilitacion_administrativa_para_la_recontruccion_nacional.json', ley_de_facilitacion_administrativa_para_la_recontruccion_nacional.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_de_hidrocarburos.json', ley_de_hidrocarburos.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_de_procedimiento_administrativo.json', ley_de_procedimiento_administrativo.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_de_procedimiento_para_contratacion_de_financiamiento_y_consultoria_de_estudios_de_preinversion.json', ley_de_procedimiento_para_contratacion_de_financiamiento_y_consultoria_de_estudios_de_preinversion.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_de_simplificacion_administrativa.json', ley_de_simplificacion_administrativa.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_de_transplante_y_extraccion_de_organos_y_tejidos_humanos.json', ley_de_transplante_y_extraccion_de_organos_y_tejidos_humanos.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_del_fondo_hondureno_de_preinversion.json', ley_del_fondo_hondureno_de_preinversion.id]
+load scrapped_laws_dir + 'law_loader.rb'

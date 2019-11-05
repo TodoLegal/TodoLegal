@@ -18,10 +18,7 @@ source /usr/local/rvm/scripts/rvm
 
 ```
 apt update
-apt install curl git libpq-dev gnupg2 postgresql-11 nginx software-properties-common
-add-apt-repository ppa:certbot/certbot
-apt-get update
-apt-get install python-certbot-nginx
+apt install curl git libpq-dev gnupg2 postgresql-11 nginx software-properties-common python-certbot-nginx
 gpg2 --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
 \curl -sSL https://get.rvm.io | bash -s stable --rails
 source /usr/local/rvm/scripts/rvm
@@ -50,9 +47,18 @@ EDITOR="nano" rails credentials:edit
 
 ```
 nano ~/.bashrc
-# add the following at the end of the file
-# export TodoLegalDB_Password=MyPassword
-# export RAILS_SERVE_STATIC_FILES=yes
+```
+
+Add the following at the end of the file
+
+```
+export TodoLegalDB_Password=MyPassword
+export RAILS_SERVE_STATIC_FILES=yes
+```
+
+And then back to the terminal
+
+```
 source ~/.bashrc
 . ~/.bashrc
 ```

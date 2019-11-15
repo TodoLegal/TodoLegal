@@ -15,8 +15,10 @@
   --c-selected-bigger-section-background: #757575;
   --c-selected-bigger-section-text: #fff;
   /* Highlights */
-  --c-highlight: #090;
-  --c-selected-highlight: #f90;
+  --c-highlight: #000;
+  --c-highlight-background: #FFD1C2;
+  --c-selected-highlight: #000;
+  --c-selected-highlight-background: #FF6636;
   /* Other */
   --c-sidebar: #2196F3;
 }

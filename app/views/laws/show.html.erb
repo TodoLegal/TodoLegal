@@ -1,154 +1,16 @@
 <div data-spy="scroll" data-target="#myScrollspy">
-  <nav id="myScrollspy" class="navbar sticky-top navbar-expand-xl navbar-light bg-light">
-    <% if !@highlight_enabled %>
-      <button type="button" id="sidebarCollapse" class="btn indice">
-        <i class="fas fa-align-left"></i>
-        <span>Índice</span>
-      </button>
-    <% end %>
-    <a class="navbar-brand" href="/"><img src="/img/logo_navbar.png" height="70" style="max-height:inherit"></a>
-
-    <ul class="navbar-nav mr-auto" style="margin-inline-end: 50px;">
-      <div style="font-size: 25px">
-        <%= @law.name %>
-        <br>
-        <span style="font-size: 15px; padding: 0px;"><%= @articles_count %> artículos
-      </div>
-    </ul>
-    
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="mr-auto">
-      </ul>
-      <form class="form-inline" action="<%= law_path(@law) %>" method="get">
-        <input id="query-input" class="form-control mr-sm-2" name="query" type="search" placeholder="Buscar" value="<%= @query %>" aria-label="Buscar">
-        <div style="padding-right: 15px">
-          <% if @highlight_enabled %>
-            <span id="result-count">2/5</span>
-            <a onclick="browseHighlightedUp()">
-              <i class='fas fa-angle-up' style='font-size:24px'></i>
-            </a>
-            <a onclick="browseHighlightedDown()">
-              <i class='fas fa-angle-down' style='font-size:24px'></i>
-            </a>
-            <button onclick="document.getElementById('query-input').value = '';" type="submit" style="padding: 0;border: none;background: none;">
-              <i class="fas fa-times" style='font-size:24px'></i>
-            </button>
-          <% end %>
-        </div>
-        <button class="btn btn-outline my-2 my-sm-0 buscar" type="submit">Buscar</button>
-      </form>
-    </div>
-  </nav>
+  <% if @highlight_enabled %>
+    <%= render 'navbar_search_enabled' %>
+  <% else %>
+    <%= render 'navbar_search_disabled' %>
+  <% end %>
 
   <div class="container-fluid" style="padding-top:60">
       
-    <p id="notice"><%= notice %></p>
-    <h1>
-      <%= @law.name %>
-      <% if user_signed_in? %>
-        <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_law_path(@law) %>
-      <% end %>
-    </h1>
-
-    <% if @law.creation_number && @law.creation_number != "" %>
-      <p>
-        <p>Número de creación: <%= @law.creation_number %></p>
-      </p>
-    <% end %>
-    
-    <% if @law.modifications && @law.modifications != "" %>
-      <p>
-        <p>Modificaciones: <%= @law.modifications %></p>
-      </p>
-    <% end %>
-    <p>
-      <p><%= @articles_count %> artículos en total</p>
-    </p>
-
-    <% article_iterator = 0 %>
-    <% bigger_section_iterator = 0 %>
-    <% @stream.each do |stream| %>
-      <% if stream.instance_of? Title %>
-        <div id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
-          <h2 style="padding-top:120px;" id="title_<%= stream.position %>">
-            Título <%= stream.number %>
-            <% if user_signed_in? %>
-              <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_title_path(stream) %>
-            <% end %>
-          </h2>
-          <h3><%= stream.name %></h3>
-        </div>
-        <% bigger_section_iterator += 1 %>
-      <% end %>
-      <% if stream.instance_of? Chapter %>
-        <div id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
-          <h3 style="padding-top:120px;" id="chapter_<%= stream.position %>">
-            Capítulo <%= stream.number %>
-            <% if user_signed_in? %>
-              <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_chapter_path(stream) %>
-            <% end %>
-          </h3>
-          <h4><%= stream.name %></h4>
-        </div>
-        <% bigger_section_iterator += 1 %>
-      <% end %>
-      <% if stream.instance_of? Article %>
-        <p class="article" article_id="<%= article_iterator %>" last_bigger_section="<%= bigger_section_iterator - 1 %>" next_bigger_section="<%= bigger_section_iterator %>" id="article_count_<%= article_iterator %>">
-          <b>Artículo: <%= stream.number %>
-            <% if user_signed_in? %>
-              <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_article_path(stream) %>
-            <% end %>
-          </b>
-          <% if @highlight_enabled %>
-            <%= stream.pg_search_highlight.html_safe %>
-          <% else %>
-            <%= stream.body %>
-          <% end %>
-        </p>
-        <% article_iterator += 1 %>
-      <% end %>
-    <% end %>
-
-
+    <%= render 'content' %>
 
     <div class="wrapper">
-    <!-- Sidebar  -->
-    <nav id="sidebar">
-      <div id="dismiss">
-        <i class="fas fa-arrow-left"></i>
-      </div>
-
-      <div class="sidebar-header">
-        <h3>Índice</h3>
-      </div>
-
-      <ul class="list-unstyled components" id="sidebar_index">
-        <input id="query_input" onkeyup="filterIndice()" class="form-control mr-sm-2" name="query" type="search" placeholder="Buscar título o capítulo" value="<%= @query %>" aria-label="Buscar">
-        <% @index_items.each do |index_items|%>  
-          <% if index_items.instance_of? Title %>
-            <li>
-              <a href="#title_<%= index_items.position %>" onclick="return colapseIndice();">
-                <b>Titulo <%= index_items.number %></b></br>
-                <%= index_items.name %>
-              </a>
-            </li>
-          <% end %>
-          <% if index_items.instance_of? Chapter %>
-            <li>
-              <a href="#chapter_<%= index_items.position %>" onclick="return colapseIndice();">
-                <b>Capítulo <%= index_items.number %></b></br>
-                <%= index_items.name %>
-              </a>
-            </li>
-          <% end %>
-        <% end %>
-      </ul>
-    </nav>
-
+      <%= render 'sidebar_indice' %>
     </div>
     </div>
   </div>

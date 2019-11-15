@@ -11,7 +11,7 @@ class Article < ApplicationRecord
                     tsearch: {
                       dictionary: "spanish",
                       highlight: {
-                        StartSel: '<b style="color: var(--c-highlight)" class="highlighted">',
+                        StartSel: '<b style="color: var(--c-highlight); background-color: var(--c-highlight-background)" class="highlighted">',
                         StopSel: '</b>',
                         MaxWords: 123,
                         MinWords: 456,

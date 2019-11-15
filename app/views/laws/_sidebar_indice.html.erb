@@ -1,0 +1,32 @@
+<!-- Sidebar  -->
+<nav id="sidebar" style="z-index: 9999;">
+  <div id="dismiss">
+    <i class="fas fa-arrow-left"></i>
+  </div>
+
+  <div class="sidebar-header">
+    <h3>Índice</h3>
+  </div>
+
+  <ul class="list-unstyled components" id="sidebar_index">
+    <input id="query_input" onkeyup="filterIndice()" class="form-control mr-sm-2" name="query" type="search" placeholder="Buscar título o capítulo" value="<%= @query %>" aria-label="Buscar">
+    <% @index_items.each do |index_items|%>  
+      <% if index_items.instance_of? Title %>
+        <li>
+          <a href="#title_<%= index_items.position %>" onclick="return colapseIndice();">
+            <b>Titulo <%= index_items.number %></b></br>
+            <%= index_items.name %>
+          </a>
+        </li>
+      <% end %>
+      <% if index_items.instance_of? Chapter %>
+        <li>
+          <a href="#chapter_<%= index_items.position %>" onclick="return colapseIndice();">
+            <b>Capítulo <%= index_items.number %></b></br>
+            <%= index_items.name %>
+          </a>
+        </li>
+      <% end %>
+    <% end %>
+  </ul>
+</nav>

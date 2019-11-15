@@ -1,0 +1,71 @@
+<nav id="myScrollspy" class="navbar sticky-top navbar-expand-xl navbar-light bg-light">
+  <a class="navbar-brand" href="/"><img src="/img/logo_navbar.png" height="70" style="max-height:inherit"></a>
+
+  <div class="d-xl-none" >
+    <ul class="navbar-nav mr-auto" style="margin-inline-end: 50px;">
+      <div style="font-size: 25px">
+        <div>
+          <span class="text-nowrap" style="width: 100%; width: 100vw;">
+            <%= @law.name %>
+          </span>
+        </div>
+      </div>
+    </ul>
+  </div>
+
+  <div class="d-none d-xl-block">
+    <ul class="navbar-nav mr-auto" style="margin-inline-end: 50px;">
+      <div style="font-size: 25px">
+        <div>
+          <span style="max-width: 400px;">
+            <%= @law.name %>
+          </span>
+          <br>
+        </div>
+        <span style="font-size: 15px; padding: 0px;"><%= @articles_count %> artículos</span>
+      </div>
+    </ul>
+  </div>
+  <ul class="mr-auto">
+  </ul>
+  <div class="d-xl-none" >
+    <form style="width: 100%; width: 100vw;" class="form-inline" action="<%= law_path(@law) %>" method="get">
+      <input id="query-input-small" class="form-control mr-sm-6" name="query" type="search" placeholder="Buscar" value="<%= @query %>" aria-label="Buscar">
+      <div style="padding-right: 15px">
+        <% if @highlight_enabled %>
+          <span id="result-count">2/5</span>
+          <a onclick="browseHighlightedUp()">
+            <i class='fas fa-angle-up' style='font-size:24px'></i>
+          </a>
+          <a onclick="browseHighlightedDown()">
+            <i class='fas fa-angle-down' style='font-size:24px'></i>
+          </a>
+          <button onclick="document.getElementById('query-input-small').value = '';" type="submit" style="padding: 0;border: none;background: none;">
+            <i class="fas fa-times" style='font-size:24px'></i>
+          </button>
+        <% end %>
+      </div>
+      <button class="btn btn-outline my-2 my-sm-0 buscar" type="submit">Buscar</button>
+    </form>
+  </div>
+  <div class="d-none d-xl-block" >
+    <form class="form-inline" action="<%= law_path(@law) %>" method="get">
+      <input id="query-input-big" class="form-control mr-sm-2" name="query" type="search" placeholder="Buscar" value="<%= @query %>" aria-label="Buscar">
+      <div style="padding-right: 15px">
+        <% if @highlight_enabled %>
+          <span id="result-count">2/5</span>
+          <a onclick="browseHighlightedUp()">
+            <i class='fas fa-angle-up' style='font-size:24px'></i>
+          </a>
+          <a onclick="browseHighlightedDown()">
+            <i class='fas fa-angle-down' style='font-size:24px'></i>
+          </a>
+          <button onclick="document.getElementById('query-input-big').value = '';" type="submit" style="padding: 0;border: none;background: none;">
+            <i class="fas fa-times" style='font-size:24px'></i>
+          </button>
+        <% end %>
+      </div>
+      <button class="btn btn-outline my-2 my-sm-0 buscar" type="submit">Buscar</button>
+    </form>
+  </div>
+</nav>

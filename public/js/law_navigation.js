@@ -34,14 +34,18 @@ function updateHighlightedView()
   document.getElementById("result-count").innerText = (currrent_highlighted + 1) +"/"+highlighted_count
   element_highlighted = document.getElementsByClassName('highlighted')[currrent_highlighted]
   element_highlighted.scrollIntoView({block: 'center'})
-  element_highlighted.style.color="var(--c-selected-highlight)"
+  element_highlighted.style["color"]="var(--c-selected-highlight)"
+  element_highlighted.style["background-color"]="var(--c-selected-highlight-background)"
 }
 
 function browseHighlightedUp()
 {
   last_element_highlighted = document.getElementsByClassName('highlighted')[currrent_highlighted]
   if(last_element_highlighted)
-    last_element_highlighted.style.color = "var(--c-highlight)";
+  {
+    last_element_highlighted.style["color"] = "var(--c-highlight)"
+    last_element_highlighted.style["background-color"] = "var(--c-highlight-background)"
+  }
   currrent_highlighted -= 1;
   if(currrent_highlighted < 0)
     currrent_highlighted = highlighted_count - 1;
@@ -52,7 +56,10 @@ function browseHighlightedDown()
 {
   last_element_highlighted = document.getElementsByClassName('highlighted')[currrent_highlighted]
   if(last_element_highlighted)
+  {
     last_element_highlighted.style.color = "var(--c-highlight)"
+    last_element_highlighted.style["background-color"] = "var(--c-highlight-background)"
+  }
   currrent_highlighted += 1;
   if(currrent_highlighted >= highlighted_count)
     currrent_highlighted = 0;

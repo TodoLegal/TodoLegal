@@ -7,7 +7,7 @@
 
 <div class="row">
   <% @tag.laws.each do |law| %>
-    <div class="col-4 py-2">
+    <div class="col-sm-6 col-md-4 py-2">
       <div class="card card-body h-100" style="padding:0px">
         <a href="<%= law_path(law) %>" style="padding:20px">
           <h5 class="card-title"><%= law.name %></h5>

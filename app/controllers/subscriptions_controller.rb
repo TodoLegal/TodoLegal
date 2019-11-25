@@ -1,4 +1,6 @@
 class SubscriptionsController < ApplicationController
+  skip_before_action :verify_authenticity_token
+
   def subscribe
     email = params[:email]
     @error_message = nil

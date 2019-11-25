@@ -1,0 +1,22 @@
+<!-- section -->
+<div class="section border-top">
+  <div class="container">
+    <!-- box 1 -->
+    <div class="row align-items-center col-spacing-50">
+      <div class="col-12 col-md-6">
+        <img src="/images/subscribed.png" alt="">
+      </div>
+      <div class="col-12 col-md-6">
+        <h6 class="heading-uppercase">Subscription confirmation</h6>
+        <% if @error_message %>
+          <h4>Woops! Error found</h4>
+          <p><%= @error_message %></p>
+        <% else %>
+          <h4>Success!</h4>
+          <p>Estás suscrito!</p>
+          <p>As thanks, we sent you a gift to your email.</p>
+        <% end%>
+      </div>
+    </div>
+  </div>
+</div>

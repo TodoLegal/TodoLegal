@@ -1,0 +1,21 @@
+<!-- section -->
+<div class="section border-top">
+  <div class="container">
+    <!-- box 1 -->
+    <div class="row align-items-center col-spacing-50">
+      <div class="col-12 col-md-6">
+        <img src="/images/col-2.jpg" alt="">
+      </div>
+      <div class="col-12 col-md-6">
+        <h6 class="heading-uppercase">Email unsubscription</h6>
+        <% if @error_message %>
+          <h4>Ups! Ocurrió un error</h4>
+          <p><%= @error_message %></p>
+        <% else %>
+          <h4>Te has suscrito</h4>
+          <p>Te puedes re-suscribir haciendo clic de nuevo al link que te enviamos inicialmente.</p>
+        <% end%>
+      </div>
+    </div>
+  </div>
+</div>

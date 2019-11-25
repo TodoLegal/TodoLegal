@@ -10,5 +10,9 @@ Rails.application.routes.draw do
 
   root :to => "home#index"
   get '/search_law', to: 'home#search_law'
+
+  post "subscribe" => "subscriptions#subscribe", as: "subscribe"
+  get "unsubscribe" => "subscriptions#unsubscribe", as: "unsubscribe"
+  get "confirm_subscription" => "subscriptions#confirm_subscription", as: "confirm_subscription"
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

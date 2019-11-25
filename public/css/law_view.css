@@ -102,10 +102,10 @@ a:focus {
 ----------------------------------------------------- */
 
 #sidebar {
-    width: 550px;
+    width: 80%;
     position: fixed;
     top: 0;
-    left: -550px;
+    left: -80%;
     height: 100vh;
     z-index: 999;
     background: var(--c-sidebar);

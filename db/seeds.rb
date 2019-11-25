@@ -53,7 +53,6 @@ ley_del_banco_hondureño_del_cafe = Law.create({ name: 'Ley del banco hondureño
 ley_de_inversiones = Law.create({ name: 'Ley de inversiones', creation_number: '80-92' })
 ley_de_propiedad_industrial = Law.create({ name: 'Ley de propiedad industrial', creation_number: '12-99' })
 ley_del_impuesto_activo_neto = Law.create({ name: 'Ley del impuesto activo neto', creation_number: '137-94' })
-ley_sobre_el_impuesto_sobre_ventas = Law.create({ name: 'Ley del impuesto sobre ventas', creation_number: '24 del 2004' })
 ley_de_casas_de_cambio = Law.create({ name: 'Ley de casas de cambio', creation_number: '16-92' })
 ley_de_contratacion_del_estado = Law.create({ name: 'Ley de Contratacion de Estado', creation_number: '74-2001' })
 ley_de_control_de_armas_de_fuego_municiones_explosiones_y_otros_similares = Law.create({ name: 'Ley de Control de Armas de Fuego Municiones Explosiones y Otros Similares', creation_number: '' })
@@ -116,7 +115,6 @@ LawTag.create({law_id: ley_del_banco_hondureño_del_cafe.id, tag_id: tag_bancari
 LawTag.create({law_id: ley_de_inversiones.id, tag_id: tag_mercantil.id})
 LawTag.create({law_id: ley_de_propiedad_industrial.id, tag_id: tag_mercantil.id})
 LawTag.create({law_id: ley_del_impuesto_activo_neto.id, tag_id: tag_tributario.id})
-LawTag.create({law_id: ley_sobre_el_impuesto_sobre_ventas.id, tag_id: tag_tributario.id})
 LawTag.create({law_id: ley_de_casas_de_cambio.id, tag_id: tag_administrativo.id})
 LawTag.create({law_id: ley_de_contratacion_del_estado.id, tag_id: tag_administrativo.id})
 LawTag.create({law_id: ley_de_control_de_armas_de_fuego_municiones_explosiones_y_otros_similares.id, tag_id: tag_administrativo.id})
@@ -180,7 +178,6 @@ LawTag.create({law_id: ley_del_banco_hondureño_del_cafe.id, tag_id: tag_decreto
 LawTag.create({law_id: ley_de_inversiones.id, tag_id: tag_decreto_legislativo.id})
 LawTag.create({law_id: ley_de_propiedad_industrial.id, tag_id: tag_decreto_legislativo.id})
 LawTag.create({law_id: ley_del_impuesto_activo_neto.id, tag_id: tag_decreto_legislativo.id})
-LawTag.create({law_id: ley_sobre_el_impuesto_sobre_ventas.id, tag_id: tag_acuerdo_ejecutivo.id})
 LawTag.create({law_id: ley_de_casas_de_cambio.id, tag_id: tag_decreto_legislativo.id})
 LawTag.create({law_id: ley_de_contratacion_del_estado.id, tag_id: tag_decreto_legislativo.id})
 LawTag.create({law_id: ley_de_control_de_armas_de_fuego_municiones_explosiones_y_otros_similares.id, tag_id: tag_decreto_legislativo.id})
@@ -256,8 +253,6 @@ load scrapped_laws_dir + 'law_loader.rb'
 ARGV = [scrapped_laws_dir + 'Mercantil/ley_de_propiedad_industrial.json', ley_de_propiedad_industrial.id]
 load scrapped_laws_dir + 'law_loader.rb'
 ARGV = [scrapped_laws_dir + 'Tributario/ley_del_impuesto_activo_neto.json', ley_del_impuesto_activo_neto.id]
-load scrapped_laws_dir + 'law_loader.rb'
-ARGV = [scrapped_laws_dir + 'Tributario/ley_sobre_el_impuesto_sobre_ventas.json', ley_sobre_el_impuesto_sobre_ventas.id]
 load scrapped_laws_dir + 'law_loader.rb'
 ARGV = [scrapped_laws_dir + 'Administrativo/ley_de_casas_de_cambio.json', ley_de_casas_de_cambio.id]
 load scrapped_laws_dir + 'law_loader.rb'

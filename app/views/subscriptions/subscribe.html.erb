@@ -1,0 +1,27 @@
+<div class="jumbotron">
+  <h1 class="display-4">Buscando leyes</h1>
+</div>
+<div class="container">
+  <!-- section -->
+  <div class="section border-top">
+    <div class="container">
+      <!-- box 1 -->
+      <div class="row align-items-center col-spacing-50">
+        <div class="col-12 col-md-6">
+          <img src="/images/email_confirmation.png" alt="">
+        </div>
+        <div class="col-12 col-md-6">
+          <h6 class="heading-uppercase">Email subscription</h6>
+          <% if @error_message %>
+            Error: 
+            <h4>Ups! Ocurrió un error</h4>
+            <p><%= @error_message %></p>
+          <% else %>
+            <h4>¡Casi estás ahi!</h4>
+            <p>Para completar su suscripción debes confirmar tu correo electrónico.</p>
+          <% end%>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

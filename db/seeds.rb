@@ -290,54 +290,54 @@ ARGV = [scrapped_laws_dir + 'Judicial/ley_de_organizacion_y_atribucion_a_los_tri
 load scrapped_laws_dir + 'law_loader.rb'
 ARGV = [scrapped_laws_dir + 'Tributario/ley_del_impuesto_sobre_renta.json', ley_del_impuesto_sobre_renta.id]
 load scrapped_laws_dir + 'law_loader.rb'
-ARG = [scrapped_laws_dir + 'Civil/ley_codigo_procesal_civil.json', ley_codigo_procesal_civil.id]
+ARGV = [scrapped_laws_dir + 'Civil/ley_codigo_procesal_civil.json', ley_codigo_procesal_civil.id]
 load scrapped_laws_dir + 'law_loader.rb'
-ARG = [scrapped_laws_dir + 'Tributatio/ley_del_impuesto_sobre_ventas.json', ley_del_impuesto_sobre_ventas.id]
+ARGV = [scrapped_laws_dir + 'Tributario/ley_del_impuesto_sobre_ventas.json', ley_del_impuesto_sobre_ventas.id]
 load scrapped_laws_dir + 'law_loader.rb'
-ARG = [scrapped_laws_dir + 'Administrativo/ley_cauca.json', ley_cauca.id]
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_cauca.json', ley_cauca.id]
 load scrapped_laws_dir + 'law_loader.rb'
-ARG = [scrapped_laws_dir + 'Tributario/ley_codigo_tributario.json', ley_codigo_tributario.id]
+ARGV = [scrapped_laws_dir + 'Tributario/ley_codigo_tributario.json', ley_codigo_tributario.id]
 load scrapped_laws_dir + 'law_loader.rb'
-ARG = [scrapped_laws_dir + 'Administrativo/ley_constitutiva_de_la_empresa_nacional_de_energia_electrica.json', ley_constitutiva_de_la_empresa_nacional_de_energia_electrica.id]
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_constitutiva_de_la_empresa_nacional_de_energia_electrica.json', ley_constitutiva_de_la_empresa_nacional_de_energia_electrica.id]
 load scrapped_laws_dir + 'law_loader.rb'
-ARG = [scrapped_laws_dir + 'Mercantil/ley_de_apoyo_a_la_micro_y_pequena_empresa.json', ley_de_apoyo_a_la_micro_y_pequena_empresa.id]
+ARGV = [scrapped_laws_dir + 'Mercantil/ley_de_apoyo_a_la_micro_y_pequena_empresa.json', ley_de_apoyo_a_la_micro_y_pequena_empresa.id]
 load scrapped_laws_dir + 'law_loader.rb'
-ARG = [scrapped_laws_dir + 'Penal/ley_de_creacion_del_consejo_nacional_contra_narcotrafico.json', ley_de_creacion_del_consejo_nacional_contra_narcotrafico.id]
+ARGV = [scrapped_laws_dir + 'Penal/ley_de_creacion_del_consejo_nacional_contra_narcotrafico.json', ley_de_creacion_del_consejo_nacional_contra_narcotrafico.id]
 load scrapped_laws_dir + 'law_loader.rb'
-ARG = [scrapped_laws_dir + 'Administrativo/ley_derecho_de_autor_y_derechos_conexos.json', ley_derecho_de_autor_y_derechos_conexos.id]
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_derecho_de_autor_y_derechos_conexos.json', ley_derecho_de_autor_y_derechos_conexos.id]
 load scrapped_laws_dir + 'law_loader.rb'
-ARG = [scrapped_laws_dir + 'Penal/ley_de_disponibiilidad_emergente_de_activos_incautados.json', ley_de_disponibiilidad_emergente_de_activos_incautados.id]
+ARGV = [scrapped_laws_dir + 'Penal/ley_de_disponibiilidad_emergente_de_activos_incautados.json', ley_de_disponibiilidad_emergente_de_activos_incautados.id]
 load scrapped_laws_dir + 'law_loader.rb'
-ARG = [scrapped_laws_dir + 'Especiales_y_Otras/ley_de_fomento_al_turismo.json', ley_de_fomento_al_turismo.id]
+ARGV = [scrapped_laws_dir + 'Especiales_y_Otras/ley_de_fomento_al_turismo.json', ley_de_fomento_al_turismo.id]
 load scrapped_laws_dir + 'law_loader.rb'
-ARG = [scrapped_laws_dir + 'Mercantil/ley_de_garantias_mobiliarias.json', ley_de_garantias_mobiliarias.id]
+ARGV = [scrapped_laws_dir + 'Mercantil/ley_de_garantias_mobiliarias.json', ley_de_garantias_mobiliarias.id]
 load scrapped_laws_dir + 'law_loader.rb'
-ARG = [scrapped_laws_dir + 'Administrativo/ley_de_inquilinato.json', ley_de_inquilinato.id]
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_de_inquilinato.json', ley_de_inquilinato.id]
 load scrapped_laws_dir + 'law_loader.rb'
-ARG = [scrapped_laws_dir + 'Administrativo/ley_de_la_policia_militar_del_orden_publico.json', ley_de_la_policia_militar_del_orden_publico.id]
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_de_la_policia_militar_del_orden_publico.json', ley_de_la_policia_militar_del_orden_publico.id]
 load scrapped_laws_dir + 'law_loader.rb'
-ARG = [scrapped_laws_dir + 'Mercantil/ley_zona_libre_turistica_islas_de_la_bahia.json', ley_zona_libre_turistica_islas_de_la_bahia.id]
+ARGV = [scrapped_laws_dir + 'Mercantil/ley_zona_libre_turistica_islas_de_la_bahia.json', ley_zona_libre_turistica_islas_de_la_bahia.id]
 load scrapped_laws_dir + 'law_loader.rb'
-ARG = [scrapped_laws_dir + 'Administrativo/ley_de_migracion_y_extranjeria.json', ley_de_migracion_y_extranjeria.id]
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_de_migracion_y_extranjeria.json', ley_de_migracion_y_extranjeria.id]
 load scrapped_laws_dir + 'law_loader.rb'
-ARG = [scrapped_laws_dir + 'Mercantil/ley_proteccion_al_consumidor.json', ley_proteccion_al_consumidor.id]
+ARGV = [scrapped_laws_dir + 'Mercantil/ley_proteccion_al_consumidor.json', ley_proteccion_al_consumidor.id]
 load scrapped_laws_dir + 'law_loader.rb'
-ARG = [scrapped_laws_dir + 'Administrativo/ley_proteccion_de_funcionarios_y_exfuncionarios_riesgo_extraordinario.json', ley_proteccion_de_funcionarios_y_exfuncionarios_riesgo_extraordinario.id]
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_proteccion_de_funcionarios_y_exfuncionarios_riesgo_extraordinario.json', ley_proteccion_de_funcionarios_y_exfuncionarios_riesgo_extraordinario.id]
 load scrapped_laws_dir + 'law_loader.rb'
-ARG = [scrapped_laws_dir + 'Bancario/ley_de_regulacion_actividades_y_profesiones_no_financieras_designadas.json', ley_de_regulacion_actividades_y_profesiones_no_financieras_designadas.id]
+ARGV = [scrapped_laws_dir + 'Bancario/ley_de_regulacion_actividades_y_profesiones_no_financieras_designadas.json', ley_de_regulacion_actividades_y_profesiones_no_financieras_designadas.id]
 load scrapped_laws_dir + 'law_loader.rb'
-ARG = [scrapped_laws_dir + 'Especiales_y_Otras/ley_de_transito.json', ley_de_transito.id]
+ARGV = [scrapped_laws_dir + 'Especiales_y_Otras/ley_de_transito.json', ley_de_transito.id]
 load scrapped_laws_dir + 'law_loader.rb'
-ARG = [scrapped_laws_dir + 'Administrativo/ley_transporte_terreste_de_honduras.json', ley_transporte_terreste_de_honduras.id]
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_transporte_terreste_de_honduras.json', ley_transporte_terreste_de_honduras.id]
 load scrapped_laws_dir + 'law_loader.rb'
-ARG = [scrapped_laws_dir + 'Laboral/ley_del_programa_para_la_consolidacion_de_deudas_trabajador_hondureno.json', ley_del_programa_para_la_consolidacion_de_deudas_trabajador_hondureno.id]
+ARGV = [scrapped_laws_dir + 'Laboral/ley_del_programa_para_la_consolidacion_de_deudas_trabajador_hondureno.json', ley_del_programa_para_la_consolidacion_de_deudas_trabajador_hondureno.id]
 load scrapped_laws_dir + 'law_loader.rb'
-ARG = [scrapped_laws_dir + 'Administrativo/ley_del_registro_nacional_de_las_personas.json', ley_del_registro_nacional_de_las_personas.id]
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_del_registro_nacional_de_las_personas.json', ley_del_registro_nacional_de_las_personas.id]
 load scrapped_laws_dir + 'law_loader.rb'
-ARG = [scrapped_laws_dir + 'Especiales_y_Otras/ley_del_seguro_social.json', ley_del_seguro_social.id]
+ARGV = [scrapped_laws_dir + 'Especiales_y_Otras/ley_del_seguro_social.json', ley_del_seguro_social.id]
 load scrapped_laws_dir + 'law_loader.rb'
-ARG = [scrapped_laws_dir + 'Especiales_y_Otras/ley_del_sistema_nacional_de_emergencia.json', ley_del_sistema_nacional_de_emergencia.id]
+ARGV = [scrapped_laws_dir + 'Especiales_y_Otras/ley_del_sistema_nacional_de_emergencia.json', ley_del_sistema_nacional_de_emergencia.id]
 load scrapped_laws_dir + 'law_loader.rb'
-ARG = [scrapped_laws_dir + 'Constitucional/ley_electoral_y_de_las_organizaciones_politicas.json', ley_electoral_y_de_las_organizaciones_politicas.id]
+ARGV = [scrapped_laws_dir + 'Constitucional/ley_electoral_y_de_las_organizaciones_politicas.json', ley_electoral_y_de_las_organizaciones_politicas.id]
 load scrapped_laws_dir + 'law_loader.rb'
 

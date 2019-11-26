@@ -1,9 +1,13 @@
-<div class="jumbotron">
-<h1 class="display-4"><strong><%= @tag.tag_type.name %>:</strong> <%= @tag.name %></h1>
+<div class="jumbotron" style="min-height: 100px;" align="center">
+  <a href="/">
+    <img src="/img/logo_buscador.png" class="img-fluid" height="50">
+  </a>
 </div>
 
 <div class="container">
 <p id="notice"><%= notice %></p>
+
+<h1 class="display-4"><strong><%= @tag.tag_type.name %>:</strong> <%= @tag.name %></h1>
 
 <div class="row">
   <% @tag.laws.each do |law| %>

@@ -20,7 +20,8 @@
   --c-selected-highlight: #000;
   --c-selected-highlight-background: #FF6636;
   /* Other */
-  --c-sidebar: #2196F3;
+  --c-sidebar: #2E2E2E;
+  --c-sidebar-header: #171717;
 }
 
 .jumbotron {
@@ -156,7 +157,7 @@ a:focus {
 
 #sidebar .sidebar-header {
     padding: 20px;
-    background: #6d7fcc;
+    background: var(--c-sidebar-header);
 }
 
 #sidebar ul.components {

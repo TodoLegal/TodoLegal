@@ -1,5 +1,7 @@
-<div class="jumbotron">
-<h1 class="display-4">Buscando leyes</h1>
+<div class="jumbotron" style="min-height: 100px;" align="center">
+  <a href="/">
+    <img src="img/logo_buscador.png" class="img-fluid" height="50">
+  </a>
 </div>
 
 <div class="container">
@@ -7,7 +9,13 @@
 
 <%= render 'search_law_input' %>
 
+<h1 class="display-4">Buscando leyes</h1>
+
 <p>Busqueda realizada en <%= Article.count %> artículos</p>
+
+<% if @laws.size > 0 %>
+  <h2>Leyes completas</h2>
+<% end %>
 
 <div class="row">
   <% @laws.each do |law| %>
@@ -23,6 +31,10 @@
 </div>
 
 <hr>
+
+<% if @grouped_laws.size > 0 %>
+  <h2>Resultados específicos</h2>
+<% end %>
 
 <div class="row">
   <% @grouped_laws.each do |grouped_law| %>

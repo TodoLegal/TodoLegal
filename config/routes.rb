@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :sections
+  resources :books
   devise_for :users
   resources :law_tags
   resources :tags
@@ -10,6 +12,7 @@ Rails.application.routes.draw do
 
   root :to => "home#index"
   get '/search_law', to: 'home#search_law'
+  get '/terms', to: 'home#terms_and_conditions'
 
   post "subscribe" => "subscriptions#subscribe", as: "subscribe"
   get "unsubscribe" => "subscriptions#unsubscribe", as: "unsubscribe"

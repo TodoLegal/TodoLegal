@@ -23,7 +23,7 @@
       <div class="card card-body h-100" style="padding:0px">
         <a href="<%= law_path(law) %>" style="padding:20px">
           <h5 class="card-title"><%= law.name %></h5>
-          <p>Nnúmero de creación <%= law.creation_number %></p>
+          <p><%= law.creation_number %></p>
         </a>
       </div>
     </div>
@@ -42,7 +42,7 @@
       <div class="card card-body h-100" style="padding:0px">
         <a href="<%= law_path(grouped_law[:law]) + '?query='+@query %>" style="padding:20px">
           <h5 class="card-title"><%= grouped_law[:law].name %></h5>
-          <p>Número de creación <%= grouped_law[:law].creation_number %></p>
+          <p><%= grouped_law[:law].creation_number %></p>
           <p>
             <%= grouped_law[:count] %>
             <% if grouped_law[:count] == 1 %>

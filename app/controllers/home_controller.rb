@@ -17,4 +17,7 @@ class HomeController < ApplicationController
     end
     @grouped_laws = @grouped_laws.sort_by{|k|k[:count]}.reverse
   end
+
+  def terms_and_conditions
+  end
 end

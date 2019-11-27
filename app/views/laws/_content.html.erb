@@ -24,6 +24,18 @@
 <% article_iterator = 0 %>
 <% bigger_section_iterator = 0 %>
 <% @stream.each do |stream| %>
+  <% if stream.instance_of? Book %>
+    <div id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
+      <h2 style="padding-top:160px;" id="book_<%= stream.position %>">
+        Libro <%= stream.number %>
+        <% if user_signed_in? %>
+          <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_book_path(stream) %>
+        <% end %>
+      </h2>
+      <h3><%= stream.name %></h3>
+    </div>
+    <% bigger_section_iterator += 1 %>
+  <% end %>
   <% if stream.instance_of? Title %>
     <div id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
       <h2 style="padding-top:160px;" id="title_<%= stream.position %>">
@@ -48,9 +60,21 @@
     </div>
     <% bigger_section_iterator += 1 %>
   <% end %>
+  <% if stream.instance_of? Section %>
+    <div id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
+      <h3 style="padding-top:160px;" id="section_<%= stream.position %>">
+        Sección <%= stream.number %>
+        <% if user_signed_in? %>
+          <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_section_path(stream) %>
+        <% end %>
+      </h3>
+      <h5><%= stream.name %></h5>
+    </div>
+    <% bigger_section_iterator += 1 %>
+  <% end %>
   <% if stream.instance_of? Article %>
     <p class="article" article_id="<%= article_iterator %>" last_bigger_section="<%= bigger_section_iterator - 1 %>" next_bigger_section="<%= bigger_section_iterator %>" id="article_count_<%= article_iterator %>">
-      <b>Artículo: <%= stream.number %>
+      <b>Artículo <%= stream.number %>:
         <% if user_signed_in? %>
           <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_article_path(stream) %>
         <% end %>

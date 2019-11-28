@@ -20,7 +20,6 @@ class LawsController < ApplicationController
     @highlight_enabled = false
     @query = ""
     @articles_count = 0
-    @has_articles_only = true
     if params[:query] && params[:query] != ""
       @highlight_enabled = true
       @query = params[:query]
@@ -29,40 +28,25 @@ class LawsController < ApplicationController
     else
       i = 0
       title_iterator = 0
-      book_iterator = 0
       chapter_iterator = 0
-      section_iterator = 0
       article_iterator = 0
 
       @titles = @law.titles.order(:position)
-      @books = @law.books.order(:position)
       @chapters = @law.chapters.order(:position)
-      @sections = @law.sections.order(:position)
       @articles = @law.articles.order(:position)
 
       @articles_count = @articles.count
-      stream_size = @titles.size + @books.size + @chapters.size + @sections.size + @articles.size
+
+      stream_size = @titles.size + @chapters.size + @articles.size
       while i < stream_size
-        if title_iterator < @titles.size && chapter_iterator < @chapters.size && section_iterator < @sections.size && article_iterator < @articles.size && book_iterator < @books.size && @titles[title_iterator].position < @chapters[chapter_iterator].position && @titles[title_iterator].position < @sections[section_iterator].position && @titles[title_iterator].position < @articles[article_iterator].position && @titles[title_iterator].position < @books[book_iterator].position
+        if title_iterator < @titles.size && chapter_iterator < @chapters.size && article_iterator < @articles.size && @titles[title_iterator].position < @chapters[chapter_iterator].position && @titles[title_iterator].position < @articles[article_iterator].position
           @stream.push @titles[title_iterator]
           @index_items.push @titles[title_iterator]
           title_iterator+=1
-          @has_articles_only = false
-        elsif chapter_iterator < @chapters.size && section_iterator < @sections.size && article_iterator < @articles.size && book_iterator < @books.size && @chapters[chapter_iterator].position < @sections[section_iterator].position && @chapters[chapter_iterator].position < @articles[article_iterator].position && @chapters[chapter_iterator].position < @books[book_iterator].position
+        elsif chapter_iterator < @chapters.size && @chapters[chapter_iterator].position < @articles[article_iterator].position
           @stream.push @chapters[chapter_iterator]
           @index_items.push @chapters[chapter_iterator]
           chapter_iterator+=1
-          @has_articles_only = false
-        elsif section_iterator < @sections.size && article_iterator < @articles.size && book_iterator < @books.size && @sections[section_iterator].position < @articles[article_iterator].position && @sections[section_iterator].position < @books[book_iterator].position
-          @stream.push @sections[section_iterator]
-          @index_items.push @sections[section_iterator]
-          section_iterator+=1
-          @has_articles_only = false
-        elsif article_iterator < @articles.size && book_iterator < @books.size && @books[book_iterator].position < @articles[article_iterator].position
-          @stream.push @books[book_iterator]
-          @index_items.push @books[book_iterator]
-          book_iterator+=1
-          @has_articles_only = false
         else
           @stream.push @articles[article_iterator]
           article_iterator+=1

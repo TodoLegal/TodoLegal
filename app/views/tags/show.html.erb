@@ -1,13 +1,40 @@
-<div class="jumbotron" style="min-height: 100px;" align="center">
-  <a href="/">
-    <img src="/img/logo_buscador.png" class="img-fluid" height="50">
-  </a>
+<div class="jumbotron d-none d-sm-block" style="padding-top: 0px; padding-bottom: 20px;background-color: #FFF;margin: 0px">
+  <img align="center" src="/img/logo_landing.png" class="img-fluid" height="300">
 </div>
 
-<div class="container">
-<p id="notice"><%= notice %></p>
+<div class="jumbotron d-block d-sm-none" style="padding-top: 0px; padding-bottom: 40px;background-color: #FFF;margin: 0px">
+  <img align="center" src="/img/logo_landing_mobile.png" class="img-fluid" height="300">
+</div>
 
-<h1 class="display-4"><strong><%= @tag.tag_type.name %>:</strong> <%= @tag.name %></h1>
+<div class="container" style="">
+  <p id="notice"><%= notice %></p>
+
+<form action="/search_law" method="get">
+  <div style="margin: 0;" class="input-group input-group-lg mb-3">
+    <input name="query" value="<%= @query %>" type="text" class="form-control" placeholder="ej. Código del Comercio" aria-label="Recipient's username" aria-describedby="button-addon2">
+    <div class="input-group-append">
+      <button type="submit" class="btn btn-outline-secondary buscar" type="button" id="button-addon2">Buscar</button>
+    </div>
+  </div>
+</form>
+
+<p class="myinfo"><%= @tag.laws.count %> leyes encontradas</p>
+
+<h1 class="display-4" style="margin:0"><%= @tag.name %></h1>
+
+<style>
+hr { 
+  opcaity: 0.6;
+  height: 4px;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 0px;
+  margin-bottom: 25px;
+  border-top: 0px;
+  background-color:#ccc;
+}
+</style>
+<hr >
 
 <div class="row">
   <% @tag.laws.each do |law| %>
@@ -15,7 +42,7 @@
       <div class="card card-body h-100" style="padding:0px">
         <a href="<%= law_path(law) %>" style="padding:20px">
           <h5 class="card-title"><%= law.name %></h5>
-          <p>Número de creación <%= law.creation_number %></p>
+          <p><%= law.creation_number %></p>
         </a>
       </div>
     </div>

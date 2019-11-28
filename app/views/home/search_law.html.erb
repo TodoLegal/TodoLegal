@@ -1,7 +1,9 @@
-<div class="jumbotron" style="min-height: 100px;" align="center">
-  <a href="/">
-    <img src="img/logo_buscador.png" class="img-fluid" height="50">
-  </a>
+<div class="jumbotron d-none d-sm-block" style="padding-top: 0px; padding-bottom: 20px;background-color: #FFF;margin: 0px">
+  <img align="center" src="/img/logo_landing.png" class="img-fluid" height="300">
+</div>
+
+<div class="jumbotron d-block d-sm-none" style="padding-top: 0px; padding-bottom: 40px;background-color: #FFF;margin: 0px">
+  <img align="center" src="/img/logo_landing_mobile.png" class="img-fluid" height="300">
 </div>
 
 <div class="container">
@@ -9,12 +11,10 @@
 
 <%= render 'search_law_input' %>
 
-<h1 class="display-4">Buscando leyes</h1>
-
-<p>Busqueda realizada en <%= Article.count %> artículos</p>
+<p class="myinfo"><%= number_with_delimiter(@result_count, :delimiter => ',') %> resultados encontrados</p>
 
 <% if @laws.size > 0 %>
-  <h2>Leyes completas</h2>
+  <h2>Leyes</h2>
 <% end %>
 
 <div class="row">

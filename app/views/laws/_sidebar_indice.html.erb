@@ -8,40 +8,52 @@
     <h3>Índice</h3>
   </div>
 
-  <ul class="list-unstyled components" id="sidebar_index">
+  <ul class="list-unstyled components" style="border-bottom: 1px solid #000;" id="sidebar_index">
     <input id="query_input" onkeyup="filterIndice()" class="form-control mr-sm-2" name="query" type="search" placeholder="Buscar título o capítulo" value="<%= @query %>" aria-label="Buscar">
-    <% @index_items.each do |index_items|%>
-      <% if index_items.instance_of? Book %>
-        <li>
-          <a href="#book_<%= index_items.position %>" onclick="return colapseIndice();">
-            <b>Libro <%= index_items.number %></b></br>
-            <%= index_items.name %>
-          </a>
-        </li>
+    <% if @has_articles_only %>
+      <% @stream.each do |stream| %>
+        <% if stream.instance_of? Article %>
+          <li>
+            <a href="#article_<%= stream.position %>" onclick="return colapseIndice();">
+              <b>Artículo <%= stream.number %></b></br>
+            </a>
+          </li>
+        <% end %>
       <% end %>
-      <% if index_items.instance_of? Title %>
-        <li>
-          <a href="#title_<%= index_items.position %>" onclick="return colapseIndice();">
-            <b>Titulo <%= index_items.number %></b></br>
-            <%= index_items.name %>
-          </a>
-        </li>
-      <% end %>
-      <% if index_items.instance_of? Chapter %>
-        <li>
-          <a href="#chapter_<%= index_items.position %>" onclick="return colapseIndice();">
-            <b>Capítulo <%= index_items.number %></b></br>
-            <%= index_items.name %>
-          </a>
-        </li>
-      <% end %>
-      <% if index_items.instance_of? Section %>
-        <li>
-          <a href="#section_<%= index_items.position %>" onclick="return colapseIndice();">
-            <b>Sección <%= index_items.number %></b></br>
-            <%= index_items.name %>
-          </a>
-        </li>
+    <% else %>
+      <% @index_items.each do |index_items|%>
+        <% if index_items.instance_of? Book %>
+          <li>
+            <a href="#book_<%= index_items.position %>" onclick="return colapseIndice();">
+              <b>Libro <%= index_items.number %></b></br>
+              <%= index_items.name %>
+            </a>
+          </li>
+        <% end %>
+        <% if index_items.instance_of? Title %>
+          <li>
+            <a href="#title_<%= index_items.position %>" onclick="return colapseIndice();">
+              <b>Titulo <%= index_items.number %></b></br>
+              <%= index_items.name %>
+            </a>
+          </li>
+        <% end %>
+        <% if index_items.instance_of? Chapter %>
+          <li>
+            <a href="#chapter_<%= index_items.position %>" onclick="return colapseIndice();">
+              <b>Capítulo <%= index_items.number %></b></br>
+              <%= index_items.name %>
+            </a>
+          </li>
+        <% end %>
+        <% if index_items.instance_of? Section %>
+          <li>
+            <a href="#section_<%= index_items.position %>" onclick="return colapseIndice();">
+              <b>Sección <%= index_items.number %></b></br>
+              <%= index_items.name %>
+            </a>
+          </li>
+        <% end %>
       <% end %>
     <% end %>
   </ul>

@@ -10,6 +10,8 @@ class SubscriptionsMailer < ApplicationMailer
     @email = email_subscription.email
     @security_key = email_subscription.security_key
 
+    attachments.inline['subscription.png'] = File.read("#{Rails.root}/app/assets/images/subscription_mail.png")
+
     @confirmation_link = "https://todolegal.app/confirm_subscription?security_key=" + @security_key
     @unsubscribe_link = "https://todolegal.app/unsubscribe?security_key=" + @security_key
     #if is_a_valid_email?(@email)
@@ -20,6 +22,8 @@ class SubscriptionsMailer < ApplicationMailer
   def email_confirmed_email(email_subscription)
     @email = email_subscription.email
     @security_key = email_subscription.security_key
+
+    attachments.inline['confirmation.png'] = File.read("#{Rails.root}/app/assets/images/confirmation_mail.png")
 
     @confirmation_link = "https://todolegal.app/confirm_subscription?security_key=" + @security_key
     @unsubscribe_link = "https://todolegal.app/unsubscribe?security_key=" + @security_key

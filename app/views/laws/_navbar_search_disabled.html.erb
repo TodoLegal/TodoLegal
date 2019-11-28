@@ -1,10 +1,14 @@
-<nav id="myScrollspy" class="navbar sticky-top navbar-expand-xl navbar-light bg-light">
-  <button type="button" id="sidebarCollapse" class="btn indice">
+<nav id="myScrollspy" style="padding: 0px" class="navbar sticky-top navbar-expand-xl navbar-light bg-light">
+  <button type="button" id="sidebarCollapse" class="d-xl-none btn indice">
+    <i class="fas fa-align-left"></i>
+    <span></span>
+  </button>
+  <button type="button" id="sidebarCollapse" class="d-none d-xl-block btn indice">
     <i class="fas fa-align-left"></i>
     <span>Índice</span>
   </button>
 
-  <a class="navbar-brand" href="/"><img src="/img/logo_navbar.png" height="70" style="max-height:inherit"></a>
+  <a class="navbar-brand" href="/"><img src="/img/logo_navbar.png" height="50" style="max-height:inherit"></a>
 
   <div class="d-none d-xl-block">
     <ul class="navbar-nav mr-auto" style="margin-inline-end: 50px;">
@@ -15,7 +19,6 @@
           </span>
           <br>
         </div>
-        <span style="font-size: 15px; padding: 0px;"><%= @articles_count %> artículos</span>
       </div>
     </ul>
   </div>

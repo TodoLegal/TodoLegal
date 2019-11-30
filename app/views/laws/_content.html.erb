@@ -62,12 +62,12 @@
   <% end %>
   <% if stream.instance_of? Section %>
     <div id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
-      <h3 style="padding-top:160px;" id="section_<%= stream.position %>">
+      <h4 style="padding-top:160px;" id="section_<%= stream.position %>">
         Sección <%= stream.number %>
         <% if user_signed_in? %>
           <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_section_path(stream) %>
         <% end %>
-      </h3>
+      </h4>
       <h5><%= stream.name %></h5>
     </div>
     <% bigger_section_iterator += 1 %>

@@ -27,26 +27,58 @@ class LawsController < ApplicationController
       @articles_count = @stream.size
     else
       i = 0
+      book_iterator = 0
       title_iterator = 0
       chapter_iterator = 0
+      section_iterator = 0
       article_iterator = 0
 
+      @books = @law.books.order(:position)
       @titles = @law.titles.order(:position)
       @chapters = @law.chapters.order(:position)
+      @sections = @law.sections.order(:position)
       @articles = @law.articles.order(:position)
 
       @articles_count = @articles.count
 
-      stream_size = @titles.size + @chapters.size + @articles.size
+      stream_size = @books.size + @titles.size + @chapters.size + @sections.size + @articles.size
       while i < stream_size
-        if title_iterator < @titles.size && chapter_iterator < @chapters.size && article_iterator < @articles.size && @titles[title_iterator].position < @chapters[chapter_iterator].position && @titles[title_iterator].position < @articles[article_iterator].position
+        if book_iterator < @books.size &&
+            (@titles.size == 0 ||
+            (title_iterator < @titles.size && @books[book_iterator].position < @titles[title_iterator].position)) &&
+            (@chapters.size == 0 ||
+            (chapter_iterator < @chapters.size && @books[book_iterator].position < @chapters[chapter_iterator].position)) &&
+            (@sections.size == 0 ||
+            (section_iterator < @sections.size && @books[book_iterator].position < @sections[section_iterator].position)) &&
+            (@articles.size == 0 ||
+            (article_iterator < @articles.size && @books[book_iterator].position < @articles[article_iterator].position))
+          @stream.push @books[book_iterator]
+          @index_items.push @books[book_iterator]
+          book_iterator+=1
+        elsif title_iterator < @titles.size &&
+            (@chapters.size == 0 ||
+            (chapter_iterator < @chapters.size && @titles[title_iterator].position < @chapters[chapter_iterator].position)) &&
+            (@sections.size == 0 ||
+            (section_iterator < @sections.size && @titles[title_iterator].position < @sections[section_iterator].position)) &&
+            (@articles.size == 0 ||
+            (article_iterator < @articles.size && @titles[title_iterator].position < @articles[article_iterator].position))
           @stream.push @titles[title_iterator]
           @index_items.push @titles[title_iterator]
           title_iterator+=1
-        elsif chapter_iterator < @chapters.size && @chapters[chapter_iterator].position < @articles[article_iterator].position
+        elsif chapter_iterator < @chapters.size &&
+            (@sections.size == 0 ||
+            (section_iterator < @sections.size && @chapters[chapter_iterator].position < @sections[section_iterator].position)) &&
+            (@articles.size == 0 ||
+            (article_iterator < @articles.size && @chapters[chapter_iterator].position < @articles[article_iterator].position))
           @stream.push @chapters[chapter_iterator]
           @index_items.push @chapters[chapter_iterator]
           chapter_iterator+=1
+        elsif section_iterator < @sections.size &&
+            (@articles.size == 0 ||
+            (article_iterator < @articles.size && @sections[section_iterator].position < @articles[article_iterator].position))
+          @stream.push @sections[section_iterator]
+          @index_items.push @sections[section_iterator]
+          section_iterator+=1
         else
           @stream.push @articles[article_iterator]
           article_iterator+=1

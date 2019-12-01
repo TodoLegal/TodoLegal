@@ -73,7 +73,6 @@ ley_de_organizacion_y_atribucion_a_los_tribunales = Law.create({name: 'Ley de Or
 ley_del_impuesto_sobre_renta = Law.create({name: 'Ley del Impuesto Sobre la Renta',creation_number: '25-2004'})
 ley_codigo_procesal_civil = Law.create({ name: 'Codigo Procesal Civil', creation_number: '211-2006' })
 ley_del_impuesto_sobre_ventas = Law.create({ name: 'Ley del Impuesto Sobre Ventas', creation_number: '24-1994' })
-
 ley_cauca = Law.create({ name: 'Código Aduanero Uniforme Centroamericano CAUCA', creation_number: '023-2003' })
 ley_codigo_tributario = Law.create({ name: 'Código Tributario', creation_number: '170-2016' })
 ley_constitutiva_de_la_empresa_nacional_de_energia_electrica = Law.create({ name: 'Ley Constitutiva de la Empresa Nacional de Energía Eléctrica', creation_number: '48-1957' })
@@ -98,6 +97,19 @@ ley_del_registro_nacional_de_las_personas = Law.create({name: 'Ley del Registro 
 ley_del_seguro_social = Law.create({name: 'Ley del Seguro Social', creation_number: '80-2001'})
 ley_del_sistema_nacional_de_emergencia = Law.create({name: 'Ley Del Sistema Nacional De Emergencia', creation_number: '58-2015'})
 ley_electoral_y_de_las_organizaciones_politicas = Law.create({name: 'Ley Electoral y de las Organizaciones Políticas', creation_number: '44-2004'})
+
+ley_especial_del_consejo_nacional_de_defensa = Law.create({name: 'Ley Especial del Consejo Nacional de Defensa y Seguridad', creation_number: '239-2011'})
+ley_especial_para_la_depuracion_policial = Law.create({name: 'Ley Especial para la Depuración Policial', creation_number: '89-2012'})
+ley_especial_para_simplificacion_de_procedimientos_de_inversion_en_infraestructura_publica = Law.create({name: 'Ley Especial para Simplificación de Procedimientos de Inversión en Infraestructura Publica', creation_number: '58-2011'})
+ley_especial_reguladora_de_proyectos_publicos_de_energia_renovable = Law.create({name: 'Ley Especial Reguladora de Proyectos Públicos de Energía Renovable', creation_number: '279-2010'})
+ley_general_de_la_industria_electrica =  Law.create({name: 'Ley General De La Industria Eléctrica ', creation_number: '404-2013'})
+ley_marco_de_politicas_publicas_en_materia_social = Law.create({name: 'Ley Marco de Políticas Publicas en Materia Social', creation_number: '38-2011'})
+ley_recauca = Law.create({name: 'Reglamento del Código Aduanero Uniforme Centroamericano RECAUCA', creation_number: 'Resolución 024-2008'})
+ley_especial_de_fomento_para_las_organizaciones_no_gubernamentales_de_desarrollo = Law.create({name: 'Ley Especial de Fomento para las Organizaciones No Gubernamentales de Desarrollo ONGD', creation_number: '32-2011'})
+ley_general_de_la_superintendencia_para_la_aplicacion_de_pruebas_de_evaluacion_de_confianza = Law.create({name: 'Ley General de la Superintendencia para la Aplicación de Pruebas de Evaluación de Confianza', creation_number: '254-2013'})
+ley_especial_de_intervencion_de_comunicaciones_privadas = Law.create({name: 'Ley Especial de Intervención de Comunicaciones Privadas', creation_number: '243-2011'})
+ley_especial_para_el_ejercicio_del_sufragio_de_los_hondurenos_en_el_exterior = Law.create({name: 'Ley Especial para el Ejercicio del Sufragio de los Hondureños en el Exterior', creation_number: '72-2001'})
+ley_especial_que_regula_el_plesbicito_y_el_referendum = Law.create({name: 'Ley Especial que Regula el Plebiscito y el Referéndum', creation_number: '135-2009'})
 
 # Tags de Materia de Leyes
 
@@ -135,7 +147,6 @@ LawTag.create({law_id: ley_de_organizacion_y_atribucion_a_los_tribunales.id, tag
 LawTag.create({law_id: ley_del_impuesto_sobre_renta.id, tag_id: tag_tributario.id})
 LawTag.create({law_id: ley_codigo_procesal_civil.id, tag_id: tag_civil.id})
 LawTag.create({law_id: ley_del_impuesto_sobre_ventas.id, tag_id: tag_tributario.id})
-
 LawTag.create({law_id: ley_cauca.id, tag_id: tag_administrativo.id})
 LawTag.create({law_id: ley_codigo_tributario.id, tag_id: tag_tributario.id})
 LawTag.create({law_id: ley_constitutiva_de_la_empresa_nacional_de_energia_electrica.id, tag_id: tag_administrativo.id})
@@ -160,6 +171,19 @@ LawTag.create({law_id: ley_del_registro_nacional_de_las_personas.id, tag_id: tag
 LawTag.create({law_id: ley_del_seguro_social.id, tag_id: tag_especiales_y_otras.id})
 LawTag.create({law_id: ley_del_sistema_nacional_de_emergencia.id, tag_id: tag_especiales_y_otras.id})
 LawTag.create({law_id: ley_electoral_y_de_las_organizaciones_politicas.id, tag_id: tag_constitucional.id})
+
+LawTag.create({law_id: ley_especial_del_consejo_nacional_de_defensa, tag_administrativo.id})
+LawTag.create({law_id: ley_especial_para_la_depuracion_policial, tag_administrativo.id})
+LawTag.create({law_id: ley_especial_para_simplificacion_de_procedimientos_de_inversion_en_infraestructura_publica, tag_administrativo.id})
+LawTag.create({law_id: ley_especial_reguladora_de_proyectos_publicos_de_energia_renovable, tag_administrativo.id})
+LawTag.create({law_id: ley_general_de_la_industria_electrica, tag_administrativo.id})
+LawTag.create({law_id: ley_marco_de_politicas_publicas_en_materia_social, tag_administrativo.id})
+LawTag.create({law_id: ley_recauca, tag_administrativo.id})
+LawTag.create({law_id: ley_especial_de_fomento_para_las_organizaciones_no_gubernamentales_de_desarrollo, tag_especiales_y_otras.id})
+LawTag.create({law_id: ley_general_de_la_superintendencia_para_la_aplicacion_de_pruebas_de_evaluacion_de_confianza, tag_especiales_y_otras.id})
+LawTag.create({law_id: ley_especial_de_intervencion_de_comunicaciones_privadas, tag_penal.id})
+LawTag.create({law_id: ley_especial_para_el_ejercicio_del_sufragio_de_los_hondurenos_en_el_exterior, tag_constitucional.id})
+LawTag.create({law_id: ley_especial_que_regula_el_plesbicito_y_el_referendum, tag_constitucional.id})
 
 
 # Tags de Creacion de Leyes
@@ -198,7 +222,6 @@ LawTag.create({law_id: ley_de_organizacion_y_atribucion_a_los_tribunales.id, tag
 LawTag.create({law_id: ley_del_impuesto_sobre_renta.id, tag_id: tag_acuerdo_ejecutivo.id})
 LawTag.create({law_id: ley_codigo_procesal_civil.id, tag_id: tag_decreto_legislativo.id})
 LawTag.create({law_id: ley_del_impuesto_sobre_ventas.id, tag_id: tag_acuerdo_ejecutivo.id})
-
 LawTag.create({law_id: ley_cauca.id, tag_id: tag_tratado_internacional.id})
 LawTag.create({law_id: ley_codigo_tributario.id, tag_id: tag_decreto_legislativo.id})
 LawTag.create({law_id: ley_constitutiva_de_la_empresa_nacional_de_energia_electrica.id, tag_id: tag_decreto_junta_militar.id})
@@ -223,6 +246,20 @@ LawTag.create({law_id: ley_del_registro_nacional_de_las_personas.id, tag_id: tag
 LawTag.create({law_id: ley_del_seguro_social.id, tag_id: tag_decreto_legislativo.id})
 LawTag.create({law_id: ley_del_sistema_nacional_de_emergencia.id, tag_id: tag_decreto_legislativo.id})
 LawTag.create({law_id: ley_electoral_y_de_las_organizaciones_politicas.id, tag_id: tag_decreto_legislativo.id})
+
+
+LawTag.create({law_id: ley_especial_del_consejo_nacional_de_defensa, tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_especial_para_la_depuracion_policial, tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_especial_para_simplificacion_de_procedimientos_de_inversion_en_infraestructura_publica, tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_especial_reguladora_de_proyectos_publicos_de_energia_renovable, tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_general_de_la_industria_electrica, tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_marco_de_politicas_publicas_en_materia_social, tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_recauca, tag_tratado_internacional.id})
+LawTag.create({law_id: ley_especial_de_fomento_para_las_organizaciones_no_gubernamentales_de_desarrollo, tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_general_de_la_superintendencia_para_la_aplicacion_de_pruebas_de_evaluacion_de_confianza, tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_especial_de_intervencion_de_comunicaciones_privadas, tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_especial_para_el_ejercicio_del_sufragio_de_los_hondurenos_en_el_exterior, tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_especial_que_regula_el_plesbicito_y_el_referendum, tag_decreto_legislativo.id})
 
 scrapped_laws_dir = '../ScrappedLaws/'
 
@@ -341,3 +378,27 @@ load scrapped_laws_dir + 'law_loader.rb'
 ARGV = [scrapped_laws_dir + 'Constitucional/ley_electoral_y_de_las_organizaciones_politicas.json', ley_electoral_y_de_las_organizaciones_politicas.id]
 load scrapped_laws_dir + 'law_loader.rb'
 
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_especial_del_consejo_nacional_de_defensa.json', ley_especial_del_consejo_nacional_de_defensa.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_especial_para_la_depuracion_policial.json', ley_especial_para_la_depuracion_policial.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_especial_para_simplificacion_de_procedimientos_de_inversion_en_infraestructura_publica.json', ley_especial_para_simplificacion_de_procedimientos_de_inversion_en_infraestructura_publica.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_especial_reguladora_de_proyectos_publicos_de_energia_renovable.json', ley_especial_reguladora_de_proyectos_publicos_de_energia_renovable.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_general_de_la_industria_electrica.json', ley_general_de_la_industria_electrica.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_marco_de_politicas_publicas_en_materia_social.json', ley_marco_de_politicas_publicas_en_materia_social.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_recauca.json', ley_recauca.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Especiales_y_Otras/ley_especial_de_fomento_para_las_organizaciones_no_gubernamentales_de_desarrollo.json', ley_especial_de_fomento_para_las_organizaciones_no_gubernamentales_de_desarrollo.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Especiales_y_Otras/ley_general_de_la_superintendencia_para_la_aplicacion_de_pruebas_de_evaluacion_de_confianza.json', ley_especial_de_fomento_para_las_organizaciones_no_gubernamentales_de_desarrollo.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Penal/ley_especial_de_intervencion_de_comunicaciones_privadas.json', ley_especial_de_intervencion_de_comunicaciones_privadas.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Constitucional/ley_especial_para_el_ejercicio_del_sufragio_de_los_hondurenos_en_el_exterior.json', ley_especial_para_el_ejercicio_del_sufragio_de_los_hondurenos_en_el_exterior.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Constitucional/ley_especial_que_regula_el_plesbicito_y_el_referendum.json', ley_especial_que_regula_el_plesbicito_y_el_referendum.id]
+load scrapped_laws_dir + 'law_loader.rb'

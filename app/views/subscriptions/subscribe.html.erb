@@ -1,5 +1,5 @@
 <div class="jumbotron">
-  <h1 class="display-4">Buscando leyes</h1>
+  <h1 class="">Validación de descuento</h1>
 </div>
 <div class="container">
   <!-- section -->
@@ -8,17 +8,17 @@
       <!-- box 1 -->
       <div class="row align-items-center col-spacing-50">
         <div class="col-12 col-md-6">
-          <img src="/images/subscription_mail.png" alt="">
+          <img width="300" src="/images/subscription_mail.png" alt="">
         </div>
         <div class="col-12 col-md-6">
-          <h6 class="heading-uppercase">Email subscription</h6>
+          <h6 class="heading-uppercase">El correo ha sido enviado</h6>
           <% if @error_message %>
             Error: 
             <h4>Ups! Ocurrió un error</h4>
             <p><%= @error_message %></p>
           <% else %>
-            <h4>¡Casi estás ahi!</h4>
-            <p>Para completar su suscripción debes confirmar tu correo electrónico.</p>
+            <h4></h4>
+            <p>Para validar tu cupón ve a tu bandeja de entrada y confirma tu correo.</p>
           <% end%>
         </div>
       </div>

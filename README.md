@@ -75,6 +75,10 @@ And paste the following
 
 ```
 server {
+    server_name www.todolegal.app;
+    return 301 $scheme://todolegal.app$request_uri;
+}
+server {
   server_name  todolegal.app; # or test.todolegal.app for the testing server
   
   listen 80;

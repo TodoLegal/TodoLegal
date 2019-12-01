@@ -21,7 +21,7 @@
   <% @laws.each do |law| %>
     <div class="col-sm-6 col-md-4 py-2">
       <div class="card card-body h-100" style="padding:0px">
-        <a class="uncolored_link" href="<%= law_path(law) %>" style="padding:20px">
+        <a class="" href="<%= law_path(law) %>" style="padding:20px">
           <h5 class="card-title"><%= law.name %></h5>
           <p><%= law.creation_number %></p>
         </a>
@@ -40,7 +40,7 @@
   <% @grouped_laws.each do |grouped_law| %>
     <div class="col-sm-6 col-md-4 py-2">
       <div class="card card-body h-100" style="padding:0px">
-        <a class="uncolored_link" href="<%= law_path(grouped_law[:law]) + '?query='+@query %>" style="padding:20px">
+        <a class="" href="<%= law_path(grouped_law[:law]) + '?query='+@query %>" style="padding:20px">
           <h5 class="card-title"><%= grouped_law[:law].name %></h5>
           <p><%= grouped_law[:law].creation_number %></p>
           <p>

@@ -13,7 +13,7 @@ class SubscriptionsController < ApplicationController
     email_subscription = EmailSubscription.find_by_email(email)
     if email_subscription
       @email_sent = true
-      if email_subscription.status = "confirmed"
+      if email_subscription.status == "confirmed"
         @email_confirmed = true
       end
       return

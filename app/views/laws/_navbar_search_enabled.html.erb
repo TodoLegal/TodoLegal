@@ -1,5 +1,5 @@
-<nav id="myScrollspy" class="navbar sticky-top navbar-expand-xl navbar-light bg-light">
-  <a class="navbar-brand" href="/"><img src="/img/logo_navbar.png" height="70" style="max-height:inherit"></a>
+<nav id="myScrollspy" style="padding: 0px" class="navbar sticky-top navbar-expand-xl navbar-light bg-light">
+  <a class="navbar-brand" href="/"><img src="/img/logo_navbar.png" height="50" style="max-height:inherit"></a>
 
   <div class="d-xl-none" >
     <ul class="navbar-nav mr-auto" style="margin-inline-end: 50px;">
@@ -22,7 +22,7 @@
           </span>
           <br>
         </div>
-        <span style="font-size: 15px; padding: 0px;"><%= @articles_count %> artículos</span>
+        <span style="font-size: 15px; padding: 0px;"><a class="" href="<%= law_path(@law) %>">Ver ley completa</a></span>
       </div>
     </ul>
   </div>
@@ -46,6 +46,7 @@
         <% end %>
       </div>
       <button class="btn btn-outline my-2 my-sm-0 buscar" type="submit">Buscar</button>
+      <span style="font-size: 15px; padding: 0px;"><a class="" style="padding-left:15px" href="<%= law_path(@law) %>">Ver ley completa</a></span>
     </form>
   </div>
   <div class="d-none d-xl-block" >

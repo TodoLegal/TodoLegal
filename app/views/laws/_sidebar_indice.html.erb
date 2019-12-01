@@ -14,7 +14,7 @@
       <% @stream.each do |stream| %>
         <% if stream.instance_of? Article %>
           <li>
-            <a href="#article_<%= stream.position %>" onclick="return colapseIndice();">
+            <a class="uncolored_link" href="#article_<%= stream.position %>" onclick="gotoArticle(<%= stream.number.to_i - 1 %>);return colapseIndice();">
               <b>Artículo <%= stream.number %></b></br>
             </a>
           </li>
@@ -24,7 +24,7 @@
       <% @index_items.each do |index_items|%>
         <% if index_items.instance_of? Book %>
           <li>
-            <a href="#book_<%= index_items.position %>" onclick="return colapseIndice();">
+            <a class="uncolored_link" href="#book_<%= index_items.position %>" onclick="return colapseIndice();">
               <b>Libro <%= index_items.number %></b></br>
               <%= index_items.name %>
             </a>
@@ -32,7 +32,7 @@
         <% end %>
         <% if index_items.instance_of? Title %>
           <li>
-            <a href="#title_<%= index_items.position %>" onclick="return colapseIndice();">
+            <a class="uncolored_link" href="#title_<%= index_items.position %>" onclick="return colapseIndice();">
               <b>Titulo <%= index_items.number %></b></br>
               <%= index_items.name %>
             </a>
@@ -40,7 +40,7 @@
         <% end %>
         <% if index_items.instance_of? Chapter %>
           <li>
-            <a href="#chapter_<%= index_items.position %>" onclick="return colapseIndice();">
+            <a class="uncolored_link" href="#chapter_<%= index_items.position %>" onclick="return colapseIndice();">
               <b>Capítulo <%= index_items.number %></b></br>
               <%= index_items.name %>
             </a>
@@ -48,7 +48,7 @@
         <% end %>
         <% if index_items.instance_of? Section %>
           <li>
-            <a href="#section_<%= index_items.position %>" onclick="return colapseIndice();">
+            <a class="uncolored_link" href="#section_<%= index_items.position %>" onclick="return colapseIndice();">
               <b>Sección <%= index_items.number %></b></br>
               <%= index_items.name %>
             </a>

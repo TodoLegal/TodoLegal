@@ -13,6 +13,10 @@
 
 <p class="myinfo"><%= number_with_delimiter(@result_count, :delimiter => ',') %> resultados encontrados</p>
 
+<% if @result_count == 0 %>
+  <p>Intenta tu búsqueda de nuevo cambiando las palabras o revisando la ortografía.</p>
+<% end %>
+
 <% if @laws.size > 0 %>
   <h2>Leyes</h2>
 <% end %>

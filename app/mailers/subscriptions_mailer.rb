@@ -15,7 +15,7 @@ class SubscriptionsMailer < ApplicationMailer
     @confirmation_link = "https://todolegal.app/confirm_subscription?security_key=" + @security_key
     @unsubscribe_link = "https://todolegal.app/unsubscribe?security_key=" + @security_key
     #if is_a_valid_email?(@email)
-      mail(from: 'Todo Legal <rodil@todolegal.app>', to: @email, subject: 'Completa tu subscripción a Todo Legal haciendo clic al siguiente enlace')
+      mail(from: 'TodoLegal <rodil@todolegal.app>', to: @email, subject: 'Confirmación de correo')
     #end
   end
 
@@ -28,7 +28,7 @@ class SubscriptionsMailer < ApplicationMailer
     @confirmation_link = "https://todolegal.app/confirm_subscription?security_key=" + @security_key
     @unsubscribe_link = "https://todolegal.app/unsubscribe?security_key=" + @security_key
     #if is_a_valid_email?(@email)
-      mail(from: 'Todo Legal <rodil@todolegal.app>', to: @email, subject: 'Bienvenido a Todo Legal! Haz completado tu subscripción.')
+      mail(from: 'TodoLegal <rodil@todolegal.app>', to: @email, subject: 'Descuento')
     #end
   end
 end

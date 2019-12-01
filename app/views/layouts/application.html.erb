@@ -41,6 +41,9 @@
     </p>
   <% end %>
 
+  <p>Signed in -<%= user_signed_in? %>-</p>
+  <p>Current user -<%= current_user %>-</p>
+
   <%= yield %>
   
   <div class="overlay"></div>

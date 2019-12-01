@@ -3,71 +3,41 @@
 </div>
 
 <nav id="myScrollspy" style="padding: 0px" class="d-block d-sm-none navbar sticky-top navbar-expand-xl navbar-light bg-light">
-  <button type="button" id="sidebarCollapse" class="d-none d-xl-block btn indice">
-    <i class="fas fa-align-left"></i>
-    <span>Índice</span>
-  </button>
-
   <a class="navbar-brand" align="right" href="/"><img src="/img/logo_navbar.png" height="50" style="max-height:inherit"></a>
-
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="fas fa-search"></span>
-  </button>
-
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="mr-auto">
-    </ul>
-    <form class="form-inline" action="" method="get">
-      <input id="query-input" class="form-control mr-sm-2" name="query" type="search" placeholder="Buscar" value="<%= @query %>" aria-label="Buscar">
-      <button class="btn btn-outline my-2 my-sm-0 buscar" type="submit">Buscar</button>
-    </form>
-  </div>
+  <%= render 'home/search_law_input' %>
 </nav>
 
 <div class="container" style="">
   <p id="notice"><%= notice %></p>
 
   <div class="d-none d-sm-block">
-<form class="d-sm-block" action="/search_law" method="get">
-  <div style="margin: 0;" class="input-group input-group-lg mb-3">
-    <input name="query" value="<%= @query %>" type="text" class="form-control" placeholder="ej. Código del Comercio" aria-label="Recipient's username" aria-describedby="button-addon2">
-    <div class="input-group-append">
-      <button type="submit" class="btn btn-outline-secondary buscar" type="button" id="button-addon2">Buscar</button>
-    </div>
-  </div>
-</form>
-  </div>
-<p class="myinfo"><%= @tag.laws.count %> resultados encontrados</p>
-
-<h1 style="margin:0"><%= @tag.name %></h1>
-
-<style>
-hr { 
-  opcaity: 0.6;
-  height: 4px;
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 0px;
-  margin-bottom: 25px;
-  border-top: 0px;
-  background-color:#ccc;
-}
-</style>
-<hr >
-
-<div class="row">
-  <% @tag.laws.each do |law| %>
-    <div class="col-sm-6 col-md-4 py-2">
-      <div class="card card-body h-100" style="padding:0px">
-        <a href="<%= law_path(law) %>" style="padding:20px">
-          <h5 class="card-title"><%= law.name %></h5>
-          <p><%= law.creation_number %></p>
-        </a>
+    <form class="d-sm-block" action="/search_law" method="get">
+      <div style="margin: 0;" class="input-group input-group-lg mb-3">
+        <input name="query" value="<%= @query %>" type="text" class="form-control" placeholder="ej. Código del Comercio" aria-label="Recipient's username" aria-describedby="button-addon2">
+        <div class="input-group-append">
+          <button type="submit" class="btn btn-outline-secondary buscar" type="button" id="button-addon2">Buscar</button>
+        </div>
       </div>
-    </div>
-  <% end %>
-</div>
+    </form>
+  </div>
 
-<%= link_to 'Ir a inicio', root_path %>
+  <p class="myinfo"><%= @tag.laws.count %> resultados encontrados</p>
+
+  <h1 style="margin:0"><%= @tag.name %></h1>
+
+  <div class="row">
+    <% @tag.laws.each do |law| %>
+      <div class="col-sm-6 col-md-4 py-2">
+        <div class="card card-body h-100" style="padding:0px">
+          <a href="<%= law_path(law) %>" style="padding:20px">
+            <h5 class="card-title"><%= law.name %></h5>
+            <p><%= law.creation_number %></p>
+          </a>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <%= link_to 'Ir a inicio', root_path %>
 
 </div>

@@ -11,15 +11,25 @@
           <img width="300" src="/images/subscription_mail.png" alt="">
         </div>
         <div class="col-12 col-md-6">
-          <h6 class="heading-uppercase">El correo ha sido enviado</h6>
           <% if @error_message %>
             Error: 
             <h4>Ups! Ocurrió un error</h4>
             <p><%= @error_message %></p>
-          <% else %>
-            <h4></h4>
-            <p>Para validar tu cupón ve a tu bandeja de entrada y confirma tu correo.</p>
-          <% end%>
+          <% else %>          
+            <% if @email_confirmed %>
+              <h6 class="heading-uppercase">Tu correo ya fué confirmado</h6>
+              <h4></h4>
+              <p>Ya tienes un cupón de descuento válido.</p>
+            <% elsif @email_sent %>
+              <h6 class="heading-uppercase">Te enviamos un correo anteriormente</h6>
+              <h4></h4>
+              <p>Ve a tu bandeja de entrada y confirma tu correo para validar tu cupón.</p>
+            <% else %>
+              <h6 class="heading-uppercase">Tu correo ha sido enviado</h6>
+              <h4></h4>
+              <p>Confirma tu correo desde tu bandeja de entrada para validar tu cupón.</p>
+            <% end %>
+          <% end %>
         </div>
       </div>
     </div>

@@ -20,10 +20,12 @@ class LawsController < ApplicationController
     @highlight_enabled = false
     @query = ""
     @articles_count = 0
+    @has_articles_only = true
+    
     if params[:query] && params[:query] != ""
       @highlight_enabled = true
       @query = params[:query]
-      @stream = @law.articles.search_by_body(params[:query]).with_pg_search_highlight
+      @stream = @law.articles.search_by_body(params[:query]).with_pg_search_highlight.order(:position).sort_by { |article| article.position }
       @articles_count = @stream.size
     else
       i = 0
@@ -85,6 +87,8 @@ class LawsController < ApplicationController
         end
         i+=1
       end
+
+      @has_articles_only = book_iterator == 0 && title_iterator == 0 && chapter_iterator == 0 && section_iterator == 0
     end
   end
 

@@ -72,6 +72,7 @@ var current_article = 0;
 var article_focused = null;
 
 var articles_element = document.getElementsByClassName('article')
+
 for(var article_iterator=0; article_iterator<articles_element.length; article_iterator++)
 {
   article_element = articles_element[article_iterator]
@@ -87,6 +88,28 @@ for(var article_iterator=0; article_iterator<articles_element.length; article_it
     article_focused.style['color'] = "var(--c-selected-article-text)"
     return true;
   };
+}
+
+function gotoArticle(article_number)
+{
+  if (bigger_section_focused)
+  {
+    current_article = parseInt(bigger_section_focused.getAttribute("last_article"))
+    bigger_section_focused.style['background-color'] = "var(--c-original-background)"
+    bigger_section_focused.style['color'] = "var(--c-original-text)"
+    bigger_section_focused = null
+  } else if(article_focused)
+  {
+    article_focused.style['background-color'] = "var(--c-original-background)"
+    article_focused.style['color'] = "var(--c-original-text)"
+  }
+
+  current_article = article_number
+  
+  article_focused = document.getElementById('article_count_' + current_article)
+  article_focused.scrollIntoView({block: 'center'})
+  article_focused.style['background-color'] = "var(--c-selected-article-background)"
+  article_focused.style['color'] = "var(--c-selected-article-text)"
 }
 
 function focusPreviousArticle()

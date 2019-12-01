@@ -33,10 +33,12 @@ tag_familia = Tag.create({ name: 'Familia', tag_type_id: tag_type_materia.id })
 # Tags de Creacion
 
 tag_acuerdo_ejecutivo = Tag.create({ name: 'Acuerdo Ejecutivo', tag_type_id: tag_type_creacion.id })
+tag_decreto_ejecutivo = Tag.create({ name: 'Decreto Ejecutivo', tag_type_id: tag_type_creacion.id })
 tag_decreto_legislativo = Tag.create({ name: 'Decreto Legislativo', tag_type_id: tag_type_creacion.id })
 tag_decreto_junta_militar = Tag.create({ name: 'Decreto Junta Militar', tag_type_id: tag_type_creacion.id })
 tag_tratado_internacional = Tag.create({ name: 'Tratado Internacional', tag_type_id: tag_type_creacion.id })
 tag_asamblea_constituyente = Tag.create({ name: 'Asamblea Constituyente', tag_type_id: tag_type_creacion.id })
+tag_resolucion = Tag.create({ name: 'Resolucion', tag_type_id: tag_type_creacion.id })
 
 # Leyes
 
@@ -99,7 +101,6 @@ ley_del_registro_nacional_de_las_personas = Law.create({name: 'Ley del Registro 
 ley_del_seguro_social = Law.create({name: 'Ley del Seguro Social', creation_number: '80-2001'})
 ley_del_sistema_nacional_de_emergencia = Law.create({name: 'Ley Del Sistema Nacional De Emergencia', creation_number: '58-2015'})
 ley_electoral_y_de_las_organizaciones_politicas = Law.create({name: 'Ley Electoral y de las Organizaciones Políticas', creation_number: '44-2004'})
-
 ley_especial_del_consejo_nacional_de_defensa = Law.create({name: 'Ley Especial del Consejo Nacional de Defensa y Seguridad', creation_number: '239-2011'})
 ley_especial_para_la_depuracion_policial = Law.create({name: 'Ley Especial para la Depuración Policial', creation_number: '89-2012'})
 ley_especial_para_simplificacion_de_procedimientos_de_inversion_en_infraestructura_publica = Law.create({name: 'Ley Especial para Simplificación de Procedimientos de Inversión en Infraestructura Publica', creation_number: '58-2011'})
@@ -112,6 +113,52 @@ ley_general_de_la_superintendencia_para_la_aplicacion_de_pruebas_de_evaluacion_d
 ley_especial_de_intervencion_de_comunicaciones_privadas = Law.create({name: 'Ley Especial de Intervención de Comunicaciones Privadas', creation_number: '243-2011'})
 ley_especial_para_el_ejercicio_del_sufragio_de_los_hondurenos_en_el_exterior = Law.create({name: 'Ley Especial para el Ejercicio del Sufragio de los Hondureños en el Exterior', creation_number: '72-2001'})
 ley_especial_que_regula_el_plesbicito_y_el_referendum = Law.create({name: 'Ley Especial que Regula el Plebiscito y el Referéndum', creation_number: '135-2009'})
+
+codigo_del_notariado = Law.create({name: 'Código del Notariado ', creation_number: '353-2005'})
+ley_constitutiva_de_las_zonas_de_exportacion = Law.create({name: 'Ley Constitutiva de las Zonas de Exportación (ZADE) ', creation_number: '233-2001'});
+ley_de_credito_publico = Law.create({name: 'Ley de Crédito Publico', creation_number: '111-90'})
+ley_de_policia_y_convivencia_social = Law.create({name: 'Ley de Policía y de Convivencia Social', creation_number: '226-2001'})
+ley_de_promocion_de_la_alianza_publico_privada = Law.create({name: 'Ley de Promoción de la Alianza Publico-Privada', creation_number: '143-2010'})
+ley_fundamental_de_educacion = Law.create({name: 'Ley Fundamental de Educación', creation_number: '262-2011'})
+ley_general_de_mineria = Law.create({name: 'Ley General de Minería', creation_number: '238-2012'})
+ley_monetaria = Law.create({name: 'Ley Monetaria', creation_number: '51-1950'})
+ley_organica_de_la_marina_mercante = Law.create({name: 'Ley Orgánica de la Marina Mercante ', creation_number: '167-94'})
+ley_organica_de_la_policia_nacional_de_honduras = Law.create({name: 'Ley Orgánica de la Policía Nacional de Honduras', creation_number: '67-2008'})
+ley_organica_de_la_procuradoria_general_de_la_republica = Law.create({name: 'Ley Orgánica de la Procuraduría General de la República', creation_number: '74-1994'})
+ley_organica_del_comisionado_nacional_de_los_derechos_humanos = Law.create({name: 'Ley Orgánica del Comisionado Nacional de los Derechos Humanos', creation_number: '153-95'})
+ley_organica_del_presupuesto = Law.create({name: 'Ley Orgánica del Presupuesto', creation_number: '83-2004'})
+ley_organica_del_tribunal_superio_de_cuentas = Law.create({name: 'Ley Orgánica del Tribunal Superior de Cuentas', creation_number: '10-2002'})
+ley_para_la_proteccion_beneficios_y_regulacion_de_actividad_informal = Law.create({name: 'Ley Para La Protección, Beneficios y Regulación de Actividad Informal ', creation_number: '318-2013'})
+ley_para_optimizar_la_administracion_publica_mejorar_los_servicios_a_la_ciudadania = Law.create({name: 'Ley Para Optimizar la Administración Publica, mejorar los Servicios a la Ciudadanía y Fortalecimiento de la Transparencia en el Gobierno', creation_number: '266-2013'})
+ley_para_repatriacion_capitales = Law.create({name: 'Ley Para Repatriación de Capitales', creation_number: '99-93'})
+ley_racionalizacion_de_combustibles_para_generacion_energia = Law.create({name: 'Ley Racionalización de Combustibles para Generación Energía', creation_number: '181-2012'})
+ley_general_del_ambiente = Law.create({name: 'Ley General del Ambiente', creation_number: '104-93'})
+ley_para_la_regulacion_de_las_operaciones_de_exploracion_y_explotacion_petrolera_y_minera = Law.create({name: 'Ley para la Regulación de las Operaciones de Exploración y Explotación Petrolera y Minera', creation_number: '56-91'})
+ley_de_seguro_de_deposito_en_instituciones_del_sistema_financiero = Law.create({name: 'Ley de Seguro de Deposito en Instituciones del Sistema Financiero', creation_number: '53-2001'})
+ley_del_sistema_financiero = Law.create({name: 'Ley del Sistema Financiero', creation_number: '129-2004'})
+reglamento_del_regimen_de_obligaciones_medidas_de_control_y_deberes_de_instituciones_supervisadas = Law.create({name: 'Reglamento del Régimen de Obligaciones, Medidas de Control y Deberes de las Instituciones Supervisadas en Relación a la Ley Especial Contra el Lavado de Activos', creation_number: '019/2016'})
+codigo_de_la_nines_y_la_adolescencia = Law.create({name: 'Código de la Niñez y la Adolescencia ', creation_number: '73-96'})
+ley_de_amparo = Law.create({name: 'Ley de Amparo', creation_number: '9-1936'})
+ley_marco_del_sistema_de_proteccion_social = Law.create({name: 'Ley Marco del Sistema de Protección Social', creation_number: '56-2015'})
+ley_para_la_promocion_y_fomento_del_desarrollo_cientifico_tecnologico_y_la_innovacion = Law.create({name: 'Ley para la Promoción y Fomento del Desarrollo Cientifico,Tecnologico y la Innovación', creation_number: '276-2013'})
+ley_especialidad_para_maternidad_y_paternidad_responsable = Law.create({name: 'Ley Especialidad para Maternidad y Paternidad Responsable', creation_number: '92-2013'})
+ley_de_la_carrera_judicial = Law.create({name: 'Ley de la Carrera Judicial', creation_number: '953-1980'})
+ley_para_el_financiamiento_de_los_ajustes_salariales = Law.create({name: 'Ley para el Financiamiento de los Ajustes Salariales del Personal Docente y de los Empleados de la Administración Pública', creation_number: '46-91'});
+ley_para_la_defensa_y_promocion_de_la_competencia = Law.create({name: 'Ley para la Defensa y Promoción de la Competencia', creation_number: '357-2005'})
+ley_para_la_promocion_y_de_proteccion_de_inversiones = Law.create({name: 'Ley para la Promoción y de Protección de Inversiones  ', creation_number: '51-2011'})
+ley_para_produccion_y_consumo_de_biocombustible = Law.create({name: 'Ley para la Producción y Consumo de Biocombustibles', creation_number: '144-2007'})
+ley_sobre_comercializacion_y_procesamiento_de_materiales_metalicos = Law.create({name: 'Ley Sobre Comercialización y Procesamiento De Materiales Metálicos', creation_number: '61-2014'})
+ley_sobre_comercio_electronico = Law.create({name: 'Ley Sobre Comercio Electrónico  ', creation_number: '149-2014'}) 
+ley_sobre_firmas_electronicas = Law.create({name: 'Ley Sobre Firmas Electrónicas', creation_number: '149-2013'})
+reglamento_de_la_ley_de_apoyo_a_la_micro_y_pequena_empresa = Law.create({name: 'Reglamento de La Ley de Apoyo a la Micro y Pequeña Empresa', creation_number: '826-2018'})
+ley_contra_el_delito_de_lavado_de_activos = Law.create({name: 'Ley Contra el Delito de Lavado de Activos', creation_number: '45-2002'})
+ley_contra_el_enriquecimiento_ilicito_de_los_servidores_publicos = Law.create({name: 'Ley Contra el Enriquecimiento Ilícito de los Servidores Públicos', creation_number: '301-1994'})
+ley_contra_el_financiamiento_del_terrorismo = Law.create({name: 'Ley Contra el Financiamiento del Terrorismo', creation_number: '241-2010'})
+ley_contra_la_violencia_domestica  = Law.create({name: 'Ley Contra la Violencia Domestica', creation_number: '132-97'})
+ley_de_indulto = Law.create({name: 'Ley de Indulto', creation_number: '31-2013'})
+ley_del_ministerio_publico = Law.create({name: 'Ley del Ministerio Publico', creation_number: '228-93'})
+ley_especial_contra_el_lavado_de_activos = Law.create({name: 'Ley Especial Contra el de Lavado de Activos', creation_number: '144-2014'})
+
 
 # Tags de Materia de Leyes
 
@@ -173,7 +220,6 @@ LawTag.create({law_id: ley_del_registro_nacional_de_las_personas.id, tag_id: tag
 LawTag.create({law_id: ley_del_seguro_social.id, tag_id: tag_especiales_y_otras.id})
 LawTag.create({law_id: ley_del_sistema_nacional_de_emergencia.id, tag_id: tag_especiales_y_otras.id})
 LawTag.create({law_id: ley_electoral_y_de_las_organizaciones_politicas.id, tag_id: tag_constitucional.id})
-
 LawTag.create({law_id: ley_especial_del_consejo_nacional_de_defensa, tag_id: tag_administrativo.id})
 LawTag.create({law_id: ley_especial_para_la_depuracion_policial, tag_id: tag_administrativo.id})
 LawTag.create({law_id: ley_especial_para_simplificacion_de_procedimientos_de_inversion_en_infraestructura_publica, tag_id: tag_administrativo.id})
@@ -186,6 +232,52 @@ LawTag.create({law_id: ley_general_de_la_superintendencia_para_la_aplicacion_de_
 LawTag.create({law_id: ley_especial_de_intervencion_de_comunicaciones_privadas, tag_id: tag_penal.id})
 LawTag.create({law_id: ley_especial_para_el_ejercicio_del_sufragio_de_los_hondurenos_en_el_exterior, tag_id: tag_constitucional.id})
 LawTag.create({law_id: ley_especial_que_regula_el_plesbicito_y_el_referendum, tag_id: tag_constitucional.id})
+
+LawTag.create({law_id: codigo_del_notariado, tag_id: tag_administrativo.id})
+LawTag.create({law_id: ley_constitutiva_de_las_zonas_de_exportacion, tag_id: tag_administrativo.id})
+LawTag.create({law_id: ley_de_credito_publico, tag_id: tag_administrativo.id})
+LawTag.create({law_id: ley_de_policia_y_convivencia_social, tag_id: tag_administrativo.id})
+LawTag.create({law_id: ley_de_promocion_de_la_alianza_publico_privada, tag_id: tag_administrativo.id})
+LawTag.create({law_id: ley_fundamental_de_educacion, tag_id: tag_administrativo.id})
+LawTag.create({law_id: ley_general_de_mineria, tag_id: tag_administrativo.id})
+LawTag.create({law_id: ley_monetaria, tag_id: tag_administrativo.id})
+LawTag.create({law_id: ley_organica_de_la_marina_mercante, tag_id: tag_administrativo.id})
+LawTag.create({law_id: ley_organica_de_la_policia_nacional_de_honduras, tag_id: tag_administrativo.id})
+LawTag.create({law_id: ley_organica_de_la_procuradoria_general_de_la_republica, tag_id: tag_administrativo.id})
+LawTag.create({law_id: ley_organica_del_comisionado_nacional_de_los_derechos_humanos, tag_id: tag_administrativo.id})
+LawTag.create({law_id: ley_organica_del_presupuesto, tag_id: tag_administrativo.id})
+LawTag.create({law_id: ley_organica_del_tribunal_superio_de_cuentas, tag_id: tag_administrativo.id})
+LawTag.create({law_id: ley_para_la_proteccion_beneficios_y_regulacion_de_actividad_informal, tag_id: tag_administrativo.id})
+LawTag.create({law_id: ley_para_optimizar_la_administracion_publica_mejorar_los_servicios_a_la_ciudadania, tag_id: tag_administrativo.id})
+LawTag.create({law_id: ley_para_repatriacion_capitales, tag_id: tag_administrativo.id})
+LawTag.create({law_id: ley_racionalizacion_de_combustibles_para_generacion_energia, tag_id: tag_administrativo.id})
+LawTag.create({law_id: ley_general_del_ambiente, tag_id: tag_ambiental.id})
+LawTag.create({law_id: ley_para_la_regulacion_de_las_operaciones_de_exploracion_y_explotacion_petrolera_y_minera, tag_id: tag_ambiental.id})
+LawTag.create({law_id: ley_de_seguro_de_deposito_en_instituciones_del_sistema_financiero, tag_id: tag_bancario.id})
+LawTag.create({law_id: ley_del_sistema_financiero, tag_id: tag_bancario.id})
+LawTag.create({law_id: reglamento_del_regimen_de_obligaciones_medidas_de_control_y_deberes_de_instituciones_supervisadas, tag_id: tag_bancario.id})
+LawTag.create({law_id: codigo_de_la_nines_y_la_adolescencia, tag_id: tag_civil.id})
+LawTag.create({law_id: ley_de_amparo, tag_id: tag_constitucional.id})
+LawTag.create({law_id: ley_marco_del_sistema_de_proteccion_social, tag_id: tag_especiales_y_otras.id})
+LawTag.create({law_id: ley_para_la_promocion_y_fomento_del_desarrollo_cientifico_tecnologico_y_la_innovacion, tag_id: tag_especiales_y_otras.id})
+LawTag.create({law_id: ley_especialidad_para_maternidad_y_paternidad_responsable, tag_id: tag_familia.id})
+LawTag.create({law_id: ley_de_la_carrera_judicial, tag_id: tag_judicial.id})
+LawTag.create({law_id: ley_para_el_financiamiento_de_los_ajustes_salariales, tag_id: tag_laboral.id})
+LawTag.create({law_id: ley_para_la_defensa_y_promocion_de_la_competencia, tag_id: tag_mercantil.id})
+LawTag.create({law_id: ley_para_la_promocion_y_de_proteccion_de_inversiones, tag_id: tag_mercantil.id})
+LawTag.create({law_id: ley_para_produccion_y_consumo_de_biocombustible, tag_id: tag_mercantil.id})
+LawTag.create({law_id: ley_sobre_comercializacion_y_procesamiento_de_materiales_metalicos, tag_id: tag_mercantil.id})
+LawTag.create({law_id: ley_sobre_comercio_electronico, tag_id: tag_mercantil.id})
+LawTag.create({law_id: ley_sobre_firmas_electronicas, tag_id: tag_mercantil.id})
+LawTag.create({law_id: reglamento_de_la_ley_de_apoyo_a_la_micro_y_pequena_empresa, tag_id: tag_mercantil.id})
+LawTag.create({law_id: ley_contra_el_delito_de_lavado_de_activos, tag_id: tag_penal.id})
+LawTag.create({law_id: ley_contra_el_enriquecimiento_ilicito_de_los_servidores_publicos, tag_id: tag_penal.id})
+LawTag.create({law_id: ley_contra_el_financiamiento_del_terrorismo, tag_id: tag_penal.id})
+LawTag.create({law_id: ley_contra_la_violencia_domestica, tag_id: tag_penal.id})
+LawTag.create({law_id: ley_de_indulto, tag_id: tag_penal.id})
+LawTag.create({law_id: ley_del_ministerio_publico, tag_id: tag_penal.id})
+LawTag.create({law_id: ley_especial_contra_el_lavado_de_activos, tag_id: tag_penal.id})
+
 
 
 # Tags de Creacion de Leyes
@@ -248,8 +340,6 @@ LawTag.create({law_id: ley_del_registro_nacional_de_las_personas.id, tag_id: tag
 LawTag.create({law_id: ley_del_seguro_social.id, tag_id: tag_decreto_legislativo.id})
 LawTag.create({law_id: ley_del_sistema_nacional_de_emergencia.id, tag_id: tag_decreto_legislativo.id})
 LawTag.create({law_id: ley_electoral_y_de_las_organizaciones_politicas.id, tag_id: tag_decreto_legislativo.id})
-
-
 LawTag.create({law_id: ley_especial_del_consejo_nacional_de_defensa, tag_id: tag_decreto_legislativo.id})
 LawTag.create({law_id: ley_especial_para_la_depuracion_policial, tag_id: tag_decreto_legislativo.id})
 LawTag.create({law_id: ley_especial_para_simplificacion_de_procedimientos_de_inversion_en_infraestructura_publica, tag_id: tag_decreto_legislativo.id})
@@ -262,6 +352,53 @@ LawTag.create({law_id: ley_general_de_la_superintendencia_para_la_aplicacion_de_
 LawTag.create({law_id: ley_especial_de_intervencion_de_comunicaciones_privadas, tag_id: tag_decreto_legislativo.id})
 LawTag.create({law_id: ley_especial_para_el_ejercicio_del_sufragio_de_los_hondurenos_en_el_exterior, tag_id: tag_decreto_legislativo.id})
 LawTag.create({law_id: ley_especial_que_regula_el_plesbicito_y_el_referendum, tag_id: tag_decreto_legislativo.id})
+
+LawTag.create({law_id: codigo_del_notariado, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_constitutiva_de_las_zonas_de_exportacion, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_de_credito_publico, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_de_policia_y_convivencia_social, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_de_promocion_de_la_alianza_publico_privada, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_fundamental_de_educacion, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_general_de_mineria, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_monetaria, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_organica_de_la_marina_mercante, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_organica_de_la_policia_nacional_de_honduras, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_organica_de_la_procuradoria_general_de_la_republica, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_organica_del_comisionado_nacional_de_los_derechos_humanos, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_organica_del_presupuesto, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_organica_del_tribunal_superio_de_cuentas, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_para_la_proteccion_beneficios_y_regulacion_de_actividad_informal, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_para_optimizar_la_administracion_publica_mejorar_los_servicios_a_la_ciudadania, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_para_repatriacion_capitales, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_racionalizacion_de_combustibles_para_generacion_energia, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_general_del_ambiente, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_para_la_regulacion_de_las_operaciones_de_exploracion_y_explotacion_petrolera_y_minera, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_de_seguro_de_deposito_en_instituciones_del_sistema_financiero, tag_id: tag_decreto_ejecutivo.id})
+LawTag.create({law_id: ley_del_sistema_financiero, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: reglamento_del_regimen_de_obligaciones_medidas_de_control_y_deberes_de_instituciones_supervisadas, tag_id: tag_resolucion.id})
+LawTag.create({law_id: codigo_de_la_nines_y_la_adolescencia, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_de_amparo, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_marco_del_sistema_de_proteccion_social, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_para_la_promocion_y_fomento_del_desarrollo_cientifico_tecnologico_y_la_innovacion, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_especialidad_para_maternidad_y_paternidad_responsable, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_de_la_carrera_judicial, tag_id: tag_decreto_ejecutivo.id})
+LawTag.create({law_id: ley_para_el_financiamiento_de_los_ajustes_salariales, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_para_la_defensa_y_promocion_de_la_competencia, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_para_la_promocion_y_de_proteccion_de_inversiones, tag_id: tag_acuerdo_ejecutivo.id})
+LawTag.create({law_id: ley_para_produccion_y_consumo_de_biocombustible, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_sobre_comercializacion_y_procesamiento_de_materiales_metalicos, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_sobre_comercio_electronico, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_sobre_firmas_electronicas, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: reglamento_de_la_ley_de_apoyo_a_la_micro_y_pequena_empresa, tag_id: tag_acuerdo_ejecutivo.id})
+LawTag.create({law_id: ley_contra_el_delito_de_lavado_de_activos, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_contra_el_enriquecimiento_ilicito_de_los_servidores_publicos, tag_id: tag_decreto_ejecutivo.id})
+LawTag.create({law_id: ley_contra_el_financiamiento_del_terrorismo, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_contra_la_violencia_domestica, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_de_indulto, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_del_ministerio_publico, tag_id: tag_decreto_legislativo.id})
+LawTag.create({law_id: ley_especial_contra_el_lavado_de_activos, tag_id: tag_decreto_legislativo.id})
+
+
 
 scrapped_laws_dir = '../ScrappedLaws/'
 
@@ -379,7 +516,6 @@ ARGV = [scrapped_laws_dir + 'Especiales_y_Otras/ley_del_sistema_nacional_de_emer
 load scrapped_laws_dir + 'law_loader.rb'
 ARGV = [scrapped_laws_dir + 'Constitucional/ley_electoral_y_de_las_organizaciones_politicas.json', ley_electoral_y_de_las_organizaciones_politicas.id]
 load scrapped_laws_dir + 'law_loader.rb'
-
 ARGV = [scrapped_laws_dir + 'Administrativo/ley_especial_del_consejo_nacional_de_defensa.json', ley_especial_del_consejo_nacional_de_defensa.id]
 load scrapped_laws_dir + 'law_loader.rb'
 ARGV = [scrapped_laws_dir + 'Administrativo/ley_especial_para_la_depuracion_policial.json', ley_especial_para_la_depuracion_policial.id]
@@ -403,4 +539,93 @@ load scrapped_laws_dir + 'law_loader.rb'
 ARGV = [scrapped_laws_dir + 'Constitucional/ley_especial_para_el_ejercicio_del_sufragio_de_los_hondurenos_en_el_exterior.json', ley_especial_para_el_ejercicio_del_sufragio_de_los_hondurenos_en_el_exterior.id]
 load scrapped_laws_dir + 'law_loader.rb'
 ARGV = [scrapped_laws_dir + 'Constitucional/ley_especial_que_regula_el_plesbicito_y_el_referendum.json', ley_especial_que_regula_el_plesbicito_y_el_referendum.id]
+load scrapped_laws_dir + 'law_loader.rb'
+
+ARGV = [scrapped_laws_dir + 'Administrativo/codigo_del_notariado.json', codigo_del_notariado.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_constitutiva_de_las_zonas_de_exportacion.json', ley_constitutiva_de_las_zonas_de_exportacion.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_de_credito_publico.json', ley_de_credito_publico.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_de_policia_y_convivencia_social.json', ley_de_policia_y_convivencia_social.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_de_promocion_de_la_alianza_publico_privada.json', ley_de_promocion_de_la_alianza_publico_privada.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_fundamental_de_educacion.json', ley_fundamental_de_educacion.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_general_de_mineria.json', ley_general_de_mineria.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_monetaria.json', ley_monetaria.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_organica_de_la_marina_mercante.json', ley_organica_de_la_marina_mercante.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_organica_de_la_policia_nacional_de_honduras.json', ley_organica_de_la_policia_nacional_de_honduras.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_organica_de_la_procuradoria_general_de_la_republica.json', ley_organica_de_la_procuradoria_general_de_la_republica.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_organica_del_comisionado_nacional_de_los_derechos_humanos.json', ley_organica_del_comisionado_nacional_de_los_derechos_humanos.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_organica_del_presupuesto.json', ley_organica_del_presupuesto.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_organica_del_tribunal_superio_de_cuentas.json', ley_organica_del_tribunal_superio_de_cuentas.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_para_la_proteccion_beneficios_y_regulacion_de_actividad_informal.json', ley_para_la_proteccion_beneficios_y_regulacion_de_actividad_informal.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_para_optimizar_la_administracion_publica_mejorar_los_servicios_a_la_ciudadania.json', ley_para_optimizar_la_administracion_publica_mejorar_los_servicios_a_la_ciudadania.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_para_repatriacion_capitales.json', ley_para_repatriacion_capitales.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Administrativo/ley_racionalizacion_de_combustibles_para_generacion_energia.json', ley_racionalizacion_de_combustibles_para_generacion_energia.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Ambiental/ley_general_del_ambiente.json', ley_general_del_ambiente.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Ambiental/ley_para_la_regulacion_de_las_operaciones_de_exploracion_y_explotacion_petrolera_y_minera.json', ley_para_la_regulacion_de_las_operaciones_de_exploracion_y_explotacion_petrolera_y_minera.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Bancario/ley_de_seguro_de_deposito_en_instituciones_del_sistema_financiero.json', ley_de_seguro_de_deposito_en_instituciones_del_sistema_financiero.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Bancario/ley_del_sistema_financiero.json', ley_del_sistema_financiero.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Bancario/reglamento_del_regimen_de_obligaciones_medidas_de_control_y_deberes_de_instituciones_supervisadas.json', reglamento_del_regimen_de_obligaciones_medidas_de_control_y_deberes_de_instituciones_supervisadas.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Civil/codigo_de_la_nines_y_la_adolescencia.json', codigo_de_la_nines_y_la_adolescencia.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Constitucional/ley_de_amparo.json', ley_de_amparo.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Especiales_y_Otras/ley_marco_del_sistema_de_proteccion_social.json', ley_marco_del_sistema_de_proteccion_social.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Especiales_y_Otras/ley_para_la_promocion_y_fomento_del_desarrollo_cientifico_tecnologico_y_la_innovacion.json', ley_para_la_promocion_y_fomento_del_desarrollo_cientifico_tecnologico_y_la_innovacion.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Familia/ley_especialidad_para_maternidad_y_paternidad_responsable.json', ley_especialidad_para_maternidad_y_paternidad_responsable.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Judicial/ley_de_la_carrera_judicial.json', ley_de_la_carrera_judicial.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Laboral/ley_para_el_financiamiento_de_los_ajustes_salariales.json', ley_para_el_financiamiento_de_los_ajustes_salariales.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Mercantil/ley_para_la_defensa_y_promocion_de_la_competencia.json', ley_para_la_defensa_y_promocion_de_la_competencia.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Mercantil/ley_para_la_promocion_y_de_proteccion_de_inversiones.json', ley_para_la_promocion_y_de_proteccion_de_inversiones.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Mercantil/ley_para_produccion_y_consumo_de_biocombustible.json', ley_para_produccion_y_consumo_de_biocombustible.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Mercantil/ley_sobre_comercializacion_y_procesamiento_de_materiales_metalicos.json', ley_sobre_comercializacion_y_procesamiento_de_materiales_metalicos.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Mercantil/ley_sobre_comercio_electronico.json', ley_sobre_comercio_electronico.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Mercantil/ley_sobre_firmas_electronicas.json', ley_sobre_firmas_electronicas.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Mercantil/reglamento_de_la_ley_de_apoyo_a_la_micro_y_pequena_empresa.json', reglamento_de_la_ley_de_apoyo_a_la_micro_y_pequena_empresa.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Penal/ley_contra_el_delito_de_lavado_de_activos.json', ley_contra_el_delito_de_lavado_de_activos.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Penal/ley_contra_el_enriquecimiento_ilicito_de_los_servidores_publicos.json', ley_contra_el_enriquecimiento_ilicito_de_los_servidores_publicos.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Penal/ley_contra_el_financiamiento_del_terrorismo.json', ley_contra_el_financiamiento_del_terrorismo.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Penal/ley_contra_la_violencia_domestica.json', ley_contra_la_violencia_domestica.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Penal/ley_de_indulto.json', ley_de_indulto.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Penal/ley_del_ministerio_publico.json', ley_del_ministerio_publico.id]
+load scrapped_laws_dir + 'law_loader.rb'
+ARGV = [scrapped_laws_dir + 'Penal/ley_especial_contra_el_lavado_de_activos.json', ley_especial_contra_el_lavado_de_activos.id]
 load scrapped_laws_dir + 'law_loader.rb'

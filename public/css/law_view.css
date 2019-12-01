@@ -241,3 +241,13 @@ a.article:hover {
     top: 0;
     right: 0;
 }
+
+.myinfo {
+  color: #888;
+  font-size:15px;
+}
+
+.primaryinfo {
+  color: #666;
+  font-size:17px;
+}

@@ -17,5 +17,6 @@ Rails.application.routes.draw do
   post "subscribe" => "subscriptions#subscribe", as: "subscribe"
   get "unsubscribe" => "subscriptions#unsubscribe", as: "unsubscribe"
   get "confirm_subscription" => "subscriptions#confirm_subscription", as: "confirm_subscription"
+  get "subscriptions/admin" => "subscriptions#admin", as: "subscriptions_admin"
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

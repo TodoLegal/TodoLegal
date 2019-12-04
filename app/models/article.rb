@@ -15,7 +15,7 @@ class Article < ApplicationRecord
                         StopSel: '</b>',
                         MaxWords: 9999,
                         MinWords: 456,
-                        ShortWord: 4,
+                        ShortWord: 0,
                         HighlightAll: true,
                         MaxFragments: 3,
                         FragmentDelimiter: '&hellip;'

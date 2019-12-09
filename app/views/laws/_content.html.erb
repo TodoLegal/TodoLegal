@@ -79,6 +79,18 @@
     </div>
     <% bigger_section_iterator += 1 %>
   <% end %>
+  <% if stream.instance_of? Subsection %>
+    <div id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
+      <h5 style="padding-top:160px;" id="subsection_<%= stream.position %>">
+        <%= stream.number %>
+        <% if user_signed_in? %>
+          <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_subsection_path(stream) %>
+        <% end %>
+      </h5>
+      <h5><%= stream.name %></h5>
+    </div>
+    <% bigger_section_iterator += 1 %>
+  <% end %>
   <% if stream.instance_of? Article %>
     <p class="article" article_id="<%= article_iterator %>" last_bigger_section="<%= bigger_section_iterator - 1 %>" next_bigger_section="<%= bigger_section_iterator %>" id="article_count_<%= article_iterator %>">
       <b>Artículo <%= stream.number %>:

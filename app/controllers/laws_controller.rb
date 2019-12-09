@@ -33,17 +33,19 @@ class LawsController < ApplicationController
       title_iterator = 0
       chapter_iterator = 0
       section_iterator = 0
+      subsection_iterator = 0
       article_iterator = 0
 
       @books = @law.books.order(:position)
       @titles = @law.titles.order(:position)
       @chapters = @law.chapters.order(:position)
       @sections = @law.sections.order(:position)
+      @subsections = @law.subsections.order(:position)
       @articles = @law.articles.order(:position)
 
       @articles_count = @articles.count
 
-      stream_size = @books.size + @titles.size + @chapters.size + @sections.size + @articles.size
+      stream_size = @books.size + @titles.size + @chapters.size + @subsections.size + @sections.size + @articles.size
       while i < stream_size
         if book_iterator < @books.size &&
             (@titles.size == 0 ||
@@ -52,6 +54,8 @@ class LawsController < ApplicationController
             (chapter_iterator < @chapters.size && @books[book_iterator].position < @chapters[chapter_iterator].position)) &&
             (@sections.size == 0 ||
             (section_iterator < @sections.size && @books[book_iterator].position < @sections[section_iterator].position)) &&
+            (@subsections.size == 0 ||
+            (subsection_iterator < @subsections.size && @books[book_iterator].position < @subsections[subsection_iterator].position)) &&
             (@articles.size == 0 ||
             (article_iterator < @articles.size && @books[book_iterator].position < @articles[article_iterator].position))
           @stream.push @books[book_iterator]
@@ -62,6 +66,8 @@ class LawsController < ApplicationController
             (chapter_iterator < @chapters.size && @titles[title_iterator].position < @chapters[chapter_iterator].position)) &&
             (@sections.size == 0 ||
             (section_iterator < @sections.size && @titles[title_iterator].position < @sections[section_iterator].position)) &&
+            (@subsections.size == 0 ||
+            (subsection_iterator < @subsections.size && @titles[title_iterator].position < @subsections[subsection_iterator].position)) &&
             (@articles.size == 0 ||
             (article_iterator < @articles.size && @titles[title_iterator].position < @articles[article_iterator].position))
           @stream.push @titles[title_iterator]
@@ -70,17 +76,27 @@ class LawsController < ApplicationController
         elsif chapter_iterator < @chapters.size &&
             (@sections.size == 0 ||
             (section_iterator < @sections.size && @chapters[chapter_iterator].position < @sections[section_iterator].position)) &&
+            (@subsections.size == 0 ||
+            (subsection_iterator < @subsections.size && @chapters[chapter_iterator].position < @subsections[subsection_iterator].position)) &&
             (@articles.size == 0 ||
             (article_iterator < @articles.size && @chapters[chapter_iterator].position < @articles[article_iterator].position))
           @stream.push @chapters[chapter_iterator]
           @index_items.push @chapters[chapter_iterator]
           chapter_iterator+=1
         elsif section_iterator < @sections.size &&
+            (@subsections.size == 0 ||
+            (subsection_iterator < @subsections.size && @sections[section_iterator].position < @subsections[subsection_iterator].position)) &&
             (@articles.size == 0 ||
             (article_iterator < @articles.size && @sections[section_iterator].position < @articles[article_iterator].position))
           @stream.push @sections[section_iterator]
           @index_items.push @sections[section_iterator]
           section_iterator+=1
+        elsif subsection_iterator < @subsections.size &&
+            (@articles.size == 0 ||
+            (article_iterator < @articles.size && @subsections[subsection_iterator].position < @articles[article_iterator].position))
+          @stream.push @subsections[subsection_iterator]
+          @index_items.push @subsections[subsection_iterator]
+          subsection_iterator+=1
         else
           @stream.push @articles[article_iterator]
           article_iterator+=1
@@ -88,7 +104,7 @@ class LawsController < ApplicationController
         i+=1
       end
 
-      @has_articles_only = book_iterator == 0 && title_iterator == 0 && chapter_iterator == 0 && section_iterator == 0
+      @has_articles_only = book_iterator == 0 && title_iterator == 0 && chapter_iterator == 0 && subsection_iterator == 0 && section_iterator == 0
     end
   end
 

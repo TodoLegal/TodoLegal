@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Subsections</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Number</th>
+      <th>Name</th>
+      <th>Position</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @subsections.each do |subsection| %>
+      <tr>
+        <td><%= subsection.number %></td>
+        <td><%= subsection.name %></td>
+        <td><%= subsection.position %></td>
+        <td><%= link_to 'Show', subsection %></td>
+        <td><%= link_to 'Edit', edit_subsection_path(subsection) %></td>
+        <td><%= link_to 'Destroy', subsection, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Subsection', new_subsection_path %>

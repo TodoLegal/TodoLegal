@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Number:</strong>
+  <%= @subsection.number %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @subsection.name %>
+</p>
+
+<p>
+  <strong>Position:</strong>
+  <%= @subsection.position %>
+</p>
+
+<%= link_to 'Edit', edit_subsection_path(@subsection) %> |
+<%= link_to 'Back', subsections_path %>

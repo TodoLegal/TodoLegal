@@ -54,6 +54,14 @@
             </a>
           </li>
         <% end %>
+        <% if index_items.instance_of? Subsection %>
+          <li>
+            <a class="uncolored_link" href="#subsection_<%= index_items.position %>" onclick="return colapseIndice();">
+              <b>Sección <%= index_items.number %></b></br>
+              <%= index_items.name %>
+            </a>
+          </li>
+        <% end %>
       <% end %>
     <% end %>
   </ul>

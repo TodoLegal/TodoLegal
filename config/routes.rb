@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :subsections
   resources :sections
   resources :books
   devise_for :users

@@ -3,6 +3,7 @@
 
 <head>
   <%= render 'layouts/google_analytics_head' %>
+  <%= render 'layouts/crisp_chat' %>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -41,8 +42,7 @@
     </p>
   <% end %>
 
-  <p>Signed in -<%= user_signed_in? %>-</p>
-  <p>Current user -<%= current_user %>-</p>
+  <%= render 'subscriptions/subscribe_form' %>
 
   <%= yield %>
   

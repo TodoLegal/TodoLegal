@@ -59,4 +59,12 @@ class SubscriptionsController < ApplicationController
     email_subscription.status = "unsubscribed"
     email_subscription.save
   end
+
+  def admin
+    if !current_user
+      redirect_to "/"
+    end
+    @subscriptions = EmailSubscription.all
+    @confirmed_subscriptions = EmailSubscription.where(status: "confirmed")
+  end
 end

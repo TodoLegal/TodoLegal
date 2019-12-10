@@ -17,9 +17,8 @@
     <p>Modificaciones: <%= @law.modifications %></p>
   </p>
 <% end %>
-<p>
-  <p><%= @articles_count %> artículos en total</p>
-</p>
+
+<p class="myinfo"><%= @articles_count %> artículos en total</p>
 
 <!--
 <% if @highlight_enabled %>
@@ -82,13 +81,13 @@
   <% end %>
   <% if stream.instance_of? Article %>
     <p class="article" article_id="<%= article_iterator %>" last_bigger_section="<%= bigger_section_iterator - 1 %>" next_bigger_section="<%= bigger_section_iterator %>" id="article_count_<%= article_iterator %>">
-      <b>Artículo <%= stream.number %>
+      <b>Artículo <%= stream.number %>:
         <% if user_signed_in? %>
           <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_article_path(stream) %>
         <% end %>
       </b>
       <% if @highlight_enabled %>
-        <%= stream.pg_search_highlight.html_safe %>
+        <%= stream.pg_search_highlight.html_safe %>.
       <% else %>
         <%= stream.body %>
       <% end %>

@@ -74,6 +74,9 @@ nano reverse-proxy.conf
 And paste the following
 
 ```
+upstream thin {
+  server 127.0.0.1:3000;
+}
 server {
     server_name www.todolegal.app;
     return 301 $scheme://todolegal.app$request_uri;
@@ -88,7 +91,13 @@ server {
   error_log /var/log/nginx/reverse-error.log;
 
   location / {
-    proxy_pass http://127.0.0.1:3000;
+    proxy_pass        http://thin;
+    proxy_set_header  Host $host;
+    proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header  X-Forwarded-Proto $scheme;
+    proxy_set_header  X-Forwarded-Ssl on; # Optional
+    proxy_set_header  X-Forwarded-Port $server_port;
+    proxy_set_header  X-Forwarded-Host $host;
   }
 }
 ```

@@ -13,9 +13,9 @@ class Article < ApplicationRecord
                       highlight: {
                         StartSel: '<b style="color: var(--c-highlight); background-color: var(--c-highlight-background)" class="highlighted">',
                         StopSel: '</b>',
-                        MaxWords: 123,
+                        MaxWords: 9999,
                         MinWords: 456,
-                        ShortWord: 4,
+                        ShortWord: 0,
                         HighlightAll: true,
                         MaxFragments: 3,
                         FragmentDelimiter: '&hellip;'

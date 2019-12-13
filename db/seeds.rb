@@ -396,7 +396,7 @@ LawTag.create({law_id: ley_especial_contra_el_lavado_de_activos.id, tag_id: tag_
 
 
 
-scrapped_laws_dir = '../ScrappedLaws/'
+scrapped_laws_dir = '../scrappedlaws/'
 
 ARGV = [scrapped_laws_dir + 'Civil/ley_codigo_civil.json', ley_codigo_civil.id]
 load scrapped_laws_dir + 'law_loader.rb'

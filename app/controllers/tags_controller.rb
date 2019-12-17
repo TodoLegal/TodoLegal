@@ -14,6 +14,25 @@ class TagsController < ApplicationController
   # GET /tags/1
   # GET /tags/1.json
   def show
+    @query = params[:query]
+    if @query
+      @query = params[:query]
+      @laws = @tag.laws.search_by_name(@query).with_pg_search_highlight
+      @stream = Article.where(law: @tag.laws).search_by_body(@query).group_by(&:law_id)
+      @result_count = @laws.size
+      @articles_count = @stream.size
+      
+      @grouped_laws = []
+      @stream.each do |grouped_law|
+        law = {count: grouped_law[1].count, law: Law.find_by_id(grouped_law[0])}
+        @grouped_laws.push(law)
+        @result_count += grouped_law[1].count
+      end
+      @grouped_laws = @grouped_laws.sort_by{|k|k[:count]}.reverse
+    else
+      @laws = @tag.laws
+      @result_count = @laws.count
+    end
   end
 
   # GET /tags/new

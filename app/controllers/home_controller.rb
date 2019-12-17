@@ -5,12 +5,9 @@ class HomeController < ApplicationController
 
   def search_law
     @query = params[:query]
-    @result_count = 0
-    @laws = Law.all.search_by_name(@query).with_pg_search_highlight
-    
-    @result_count += @laws.size
-
-    @stream = Article.all.search_by_body(params[:query]).group_by(&:law_id)
+    @laws = findLaws @query
+    @stream = findArticles @query
+    @result_count = @laws.size
     @articles_count = @stream.size
     
     @grouped_laws = []

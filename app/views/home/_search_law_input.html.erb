@@ -1,4 +1,4 @@
-<form action="/search_law" method="get">
+<form action="<%= target_url %>" method="get">
   <div class="input-group input-group-lg mb-3">
     <input name="query" value="<%= @query %>" type="text" class="form-control" placeholder="Ej. Divorcio, despido, prórroga" aria-label="Recipient's username" aria-describedby="button-addon2">
     <div class="input-group-append">
@@ -6,4 +6,3 @@
     </div>
   </div>
 </form>
-

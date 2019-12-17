@@ -1,0 +1,80 @@
+<p class="myinfo"><%= number_with_delimiter(@result_count, :delimiter => ',') %> resultados encontrados</p>
+
+<% if @result_count == 0 %>
+  <p>Intenta tu búsqueda de nuevo cambiando las palabras o revisando la ortografía.</p>
+<% end %>
+
+<% if @laws.size > 0 %>
+  <h2>Leyes</h2>
+<% end %>
+
+<div class="row">
+  <% i = 0 %>
+  <% @laws.each do |law| %>
+    <% i+=1 %>
+    <div class="collapsable-law-cards col-sm-6 col-md-4 py-2" style="display:<%= i>6 ? 'none' : 'block' %>">
+      <div class="card card-body h-100" style="padding:0px">
+        <a class="" href="<%= law_path(law) %>" style="padding:20px">
+          <h5 class="card-title"><%= law.name %></h5>
+          <p class="primaryinfo"><%= law.creation_number %></p>
+        </a>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<a href="#" onclick="showCollapsableLawCards();return false;">Ver mas resultados</a>
+<br>
+<br>
+
+<hr>
+
+<% if @grouped_laws %>
+  <% if @grouped_laws.size > 0 %>
+    <h2>Resultados específicos</h2>
+  <% end %>
+
+  <div class="row">
+    <% i = 0 %>
+    <% @grouped_laws.each do |grouped_law| %>
+      <% i += 1 %>
+      <div class="collapsable-specific-results-cards col-sm-6 col-md-4 py-2" style="display:<%= i>6 ? 'none' : 'block' %>">
+        <div class="card card-body h-100" style="padding:0px">
+          <a class="" href="<%= law_path(grouped_law[:law]) + '?query='+@query %>" style="padding:20px">
+          <h5 class="card-title"><%= grouped_law[:law].name %></h5>
+          <p class="primaryinfo"><%= grouped_law[:law].creation_number %></p>
+          <p class="myinfo">
+            <%= grouped_law[:count] %>
+            <% if grouped_law[:count] == 1 %>
+              artículo relacionado
+            <% else %>
+              artículos relacionados
+            <% end %>
+          </p>
+          </a>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <a href="#" onclick="showCollapsableSpecificResultsCards();return false;">Ver mas resultados</a>
+  <br>
+  <br>
+<% end %>
+
+<script>
+function showCards(cards)
+{
+  for(var i=0; i<cards.length; i++)
+  {
+    cards[i].style.display = "flex"
+  }
+}
+
+function showCollapsableLawCards() {
+  showCards(document.getElementsByClassName("collapsable-law-cards"))
+}
+
+function showCollapsableSpecificResultsCards() {
+  showCards(document.getElementsByClassName("collapsable-specific-results-cards"))
+}
+</script>

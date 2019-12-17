@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :law_modifications
   resources :subsections
   resources :sections
   resources :books

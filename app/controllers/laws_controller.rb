@@ -131,6 +131,7 @@ class LawsController < ApplicationController
     creacion_tag_type = TagType.find_by_name("creacion")
     @all_creacions = Tag.where(tag_type: creacion_tag_type)
     @law_creacions = LawTag.where(law_id: @law.id, tag_id: @all_creacions)
+    @law_modifications = @law.law_modifications
   end
 
   # POST /laws

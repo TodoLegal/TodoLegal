@@ -12,6 +12,19 @@
   </p>
 <% end %>
 
+<% if @law.law_modifications.size != 0 %>
+  <p>
+    <p>
+      <% @law.law_modifications.each do |law_modification| %>
+        <%= law_modification.name %>
+        <% if law_modification != @law.law_modifications.last %>
+          ,
+        <% end %>
+      <% end %>
+    </p>
+  </p>
+<% end %>
+
 <% if @law.modifications && @law.modifications != "" %>
   <p>
     <p>Modificaciones: <%= @law.modifications %></p>

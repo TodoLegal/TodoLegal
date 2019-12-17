@@ -8,6 +8,7 @@ class Law < ApplicationRecord
   has_many :subsections
   has_many :articles
   has_many :law_tags
+  has_many :law_modifications
   has_many :tags, through: :law_tags
 
   pg_search_scope :search_by_name,

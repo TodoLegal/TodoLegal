@@ -63,4 +63,38 @@
       </li>
     <% end %>
   </ul>
+
+  <h2>Modificaciones</h2>
+
+  <% law_modification = LawModification.new %>
+  <%= form_with(model: law_modification, local: true) do |form| %>
+    <% if law_modification.errors.any? %>
+      <div id="error_explanation">
+      <h2><%= pluralize(law_modification.errors.count, "error") %> prohibited this law_modification from being saved:</h2>  
+        <ul>
+          <% law_modification.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <%= form.hidden_field :law_id, value: @law.id %>
+
+    <div class="form-group">
+      <%= form.label :nombre %>
+      <%= form.text_field :name, class: "form-control" %>
+    </div>
+    
+    <div class="actions">
+      <%= form.submit "Agregar creacion", class: 'btn btn-primary' %>
+    </div>
+  <% end %>
+
+  <ul class="list-group">
+    <% @law_modifications.each do |law_modification| %>
+      <li class="list-group-item">
+        <%= law_modification.name %> <%= button_to 'Eliminar', law_modification, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-secondary" %>
+      </li>
+    <% end %>
+  </ul>
 </div>

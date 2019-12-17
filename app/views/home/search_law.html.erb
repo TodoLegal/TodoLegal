@@ -7,60 +7,12 @@
 </div>
 
 <div class="container">
-<p id="notice"><%= notice %></p>
+  <p id="notice"><%= notice %></p>
 
-<%= render 'search_law_input' %>
+  <%= render partial: 'search_law_input', locals: {target_url: '/search_law'} %>
 
-<p class="myinfo"><%= number_with_delimiter(@result_count, :delimiter => ',') %> resultados encontrados</p>
+  <%= render 'search_result' %>
 
-<% if @result_count == 0 %>
-  <p>Intenta tu búsqueda de nuevo cambiando las palabras o revisando la ortografía.</p>
-<% end %>
-
-<% if @laws.size > 0 %>
-  <h2>Leyes</h2>
-<% end %>
-
-<div class="row">
-  <% @laws.each do |law| %>
-    <div class="col-sm-6 col-md-4 py-2">
-      <div class="card card-body h-100" style="padding:0px">
-        <a class="" href="<%= law_path(law) %>" style="padding:20px">
-          <h5 class="card-title"><%= law.name %></h5>
-          <p class="primaryinfo"><%= law.creation_number %></p>
-        </a>
-      </div>
-    </div>
-  <% end %>
-</div>
-
-<hr>
-
-<% if @grouped_laws.size > 0 %>
-  <h2>Resultados específicos</h2>
-<% end %>
-
-<div class="row">
-  <% @grouped_laws.each do |grouped_law| %>
-    <div class="col-sm-6 col-md-4 py-2">
-      <div class="card card-body h-100" style="padding:0px">
-        <a class="" href="<%= law_path(grouped_law[:law]) + '?query='+@query %>" style="padding:20px">
-          <h5 class="card-title"><%= grouped_law[:law].name %></h5>
-          <p class="primaryinfo"><%= grouped_law[:law].creation_number %></p>
-          <p class="myinfo">
-            <%= grouped_law[:count] %>
-            <% if grouped_law[:count] == 1 %>
-              artículo relacionado
-            <% else %>
-              artículos relacionados
-            <% end %>
-          </p>
-        </a>
-      </div>
-    </div>
-  <% end %>
-</div>
-
-<%= link_to 'Ir a inicio', root_path %>
+  <%= link_to 'Ir a inicio', root_path %>
 
 </div>

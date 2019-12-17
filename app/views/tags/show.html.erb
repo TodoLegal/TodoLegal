@@ -4,39 +4,17 @@
 
 <nav id="myScrollspy" style="padding: 0px" class="d-block d-sm-none navbar sticky-top navbar-expand-xl navbar-light bg-light">
   <a class="navbar-brand" align="right" href="/"><img src="/img/logo_navbar.png" height="50" style="max-height:inherit"></a>
-  <%= render 'home/search_law_input' %>
+  <%= render partial: 'home/search_law_input', locals: {target_url: tag_path(@tag)} %>
 </nav>
 
 <div class="container" style="">
   <p id="notice"><%= notice %></p>
 
   <div class="d-none d-sm-block">
-    <form class="d-sm-block" action="/search_law" method="get">
-      <div style="margin: 0;" class="input-group input-group-lg mb-3">
-        <input name="query" value="<%= @query %>" type="text" class="form-control" placeholder="Ej. Divorcio, despido, prórroga" aria-label="Recipient's username" aria-describedby="button-addon2">
-        <div class="input-group-append">
-          <button type="submit" class="btn btn-outline-secondary buscar" type="button" id="button-addon2">Buscar</button>
-        </div>
-      </div>
-    </form>
+  <%= render partial: 'home/search_law_input', locals: {target_url: tag_path(@tag)} %>
   </div>
 
-  <p class="myinfo"><%= @tag.laws.count %> resultados encontrados</p>
-
-  <h1 style="margin:0"><%= @tag.name %></h1>
-
-  <div class="row">
-    <% @tag.laws.each do |law| %>
-      <div class="col-sm-6 col-md-4 py-2">
-        <div class="card card-body h-100" style="padding:0px">
-          <a class="" href="<%= law_path(law) %>" style="padding:20px">
-            <h5 class="card-title"><%= law.name %></h5>
-            <p class="primaryinfo"><%= law.creation_number %></p>
-          </a>
-        </div>
-      </div>
-    <% end %>
-  </div>
+  <%= render 'home/search_result.html.erb' %>
 
   <%= link_to 'Ir a inicio', root_path %>
 

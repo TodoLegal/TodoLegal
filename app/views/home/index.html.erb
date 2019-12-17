@@ -8,7 +8,7 @@
 
 <div class="container" style="">
 
-  <%= render 'search_law_input' %>
+  <%= render partial: 'search_law_input', locals: {target_url: '/search_law'} %>
 
   <div class="row">
     <% @tags.each do |tag| %>

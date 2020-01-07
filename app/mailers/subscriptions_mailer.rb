@@ -1,5 +1,5 @@
 class SubscriptionsMailer < ApplicationMailer
-  default from: 'Todo Legal <rodil@todolegal.app>'
+  default from: 'Todo Legal <suscripciones@todolegal.app>'
 
   def is_a_valid_email?(email)
     #email_regex = %r{/\b[A-Z0-9._%a-z\-]+@(?:[A-Z0-9a-z\-]+\.)+[A-Za-z]{2,4}\z/}xi # Case insensitive
@@ -15,7 +15,7 @@ class SubscriptionsMailer < ApplicationMailer
     @confirmation_link = "https://todolegal.app/confirm_subscription?security_key=" + @security_key
     @unsubscribe_link = "https://todolegal.app/unsubscribe?security_key=" + @security_key
     #if is_a_valid_email?(@email)
-      mail(from: 'TodoLegal <rodil@todolegal.app>', to: @email, subject: 'Confirmación de correo')
+      mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: @email, subject: 'Confirmación de correo')
     #end
   end
 
@@ -28,7 +28,7 @@ class SubscriptionsMailer < ApplicationMailer
     @confirmation_link = "https://todolegal.app/confirm_subscription?security_key=" + @security_key
     @unsubscribe_link = "https://todolegal.app/unsubscribe?security_key=" + @security_key
     #if is_a_valid_email?(@email)
-      mail(from: 'TodoLegal <rodil@todolegal.app>', to: @email, subject: 'Descuento')
+      mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: @email, subject: 'Descuento')
     #end
   end
 end

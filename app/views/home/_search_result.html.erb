@@ -1,15 +1,20 @@
-<% if @tag %>
-  <p class="myinfo"><%= number_with_delimiter(@result_count, :delimiter => ',') %> resultados encontrados en la materia <%= @tag.name %>. Buscar en <a href="/search_law?query=<%= @query%>">todas las materias</a></p>
-<% else %>
-  <p class="myinfo"><%= number_with_delimiter(@result_count, :delimiter => ',') %> resultados encontrados.</a></p>
+<p class="resultinfo">
+  <%= @result_info_text %>
+  <% if @tag && @query %>
+    Buscar en <a href="/search_law?query=<%= @query%>">todas las materias</a>
+  <% end %>
+</p>
+
+<% if @tag && !@query %>
+  <h1><%= @tag.name %></h1>
 <% end %>
 
 <% if @result_count == 0 %>
   <p>Intenta tu búsqueda de nuevo cambiando las palabras o revisando la ortografía.</p>
 <% end %>
 
-<% if @laws.size > 0 %>
-  <h2>Leyes</h2>
+<% if @laws.size > 0 && @query %>
+    <h2>Leyes</h2>
 <% end %>
 
 <div class="row">
@@ -50,7 +55,7 @@
           <a class="" href="<%= law_path(grouped_law[:law]) + '?query='+@query %>" style="padding:20px">
           <h5 class="card-title"><%= grouped_law[:law].name %></h5>
           <p class="primaryinfo"><%= grouped_law[:law].creation_number %></p>
-          <p class="myinfo">
+          <p class="resultinfo">
             <%= grouped_law[:count] %>
             <% if grouped_law[:count] == 1 %>
               artículo relacionado

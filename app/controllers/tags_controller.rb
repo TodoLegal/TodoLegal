@@ -1,4 +1,6 @@
 class TagsController < ApplicationController
+  include ActionView::Helpers::NumberHelper
+
   before_action :set_tag, only: [:show, :edit, :update, :destroy]
 
   # GET /tags
@@ -29,9 +31,19 @@ class TagsController < ApplicationController
         @result_count += grouped_law[1].count
       end
       @grouped_laws = @grouped_laws.sort_by{|k|k[:count]}.reverse
+      if @result_count == 1
+        @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' resultado encontrado en la materia ' + @tag.name + '.'
+      else
+        @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' resultados encontrados en la materia ' + @tag.name + '.'
+      end
     else
       @laws = @tag.laws
       @result_count = @laws.count
+      if @result_count == 1
+        @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' resultado encontrado.'
+      else
+        @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' resultados encontrados.'
+      end
     end
   end
 

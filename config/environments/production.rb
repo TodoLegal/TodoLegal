@@ -122,7 +122,7 @@ Rails.application.configure do
     :user_name            => ENV['GMAIL_USERNAME'],
     :password             => ENV['GMAIL_PASSWORD'],
     :authentication       => "plain",
-    :enable_starttls_auto => true
+    #:enable_starttls_auto => true
   }
 
   # config.to_prepare { Devise::SessionsController.force_ssl }

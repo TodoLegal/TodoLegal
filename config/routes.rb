@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :customer_users
   resources :law_modifications
   resources :subsections
   resources :sections

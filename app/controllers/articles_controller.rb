@@ -1,44 +1,30 @@
 class ArticlesController < ApplicationController
   before_action :set_article, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_admin!, only: [:index, :show, :new, :edit, :create, :update, :destroy]
 
   # GET /articles
   # GET /articles.json
   def index
-    if !current_user
-      redirect_to "/"
-    end
     @articles = Article.all
   end
 
   # GET /articles/1
   # GET /articles/1.json
   def show
-    if !current_user
-      redirect_to "/"
-    end
   end
 
   # GET /articles/new
   def new
-    if !current_user
-      redirect_to "/"
-    end
     @article = Article.new
   end
 
   # GET /articles/1/edit
   def edit
-    if !current_user
-      redirect_to "/"
-    end
   end
 
   # POST /articles
   # POST /articles.json
   def create
-    if !current_user
-      redirect_to "/"
-    end
     @article = Article.new(article_params)
 
     respond_to do |format|
@@ -55,10 +41,6 @@ class ArticlesController < ApplicationController
   # PATCH/PUT /articles/1
   # PATCH/PUT /articles/1.json
   def update
-    if !current_user
-      redirect_to "/"
-    end
-
     respond_to do |format|
       if @article.update(article_params)
         format.html { redirect_to @article.law, notice: 'Article was successfully updated.' }
@@ -73,10 +55,6 @@ class ArticlesController < ApplicationController
   # DELETE /articles/1
   # DELETE /articles/1.json
   def destroy
-    if !current_user
-      redirect_to "/"
-    end
-    
     @article.destroy
     respond_to do |format|
       format.html { redirect_to articles_url, notice: 'Article was successfully destroyed.' }

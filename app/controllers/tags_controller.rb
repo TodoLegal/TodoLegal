@@ -2,14 +2,11 @@ class TagsController < ApplicationController
   include ActionView::Helpers::NumberHelper
 
   before_action :set_tag, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_admin!, only: [:index, :new, :edit, :create, :update, :destroy]
 
   # GET /tags
   # GET /tags.json
   def index
-    if !current_user
-      redirect_to "/"
-    end
-
     @tags = Tag.all
   end
 
@@ -49,27 +46,16 @@ class TagsController < ApplicationController
 
   # GET /tags/new
   def new
-    if !current_user
-      redirect_to "/"
-    end
-
     @tag = Tag.new
   end
 
   # GET /tags/1/edit
   def edit
-    if !current_user
-      redirect_to "/"
-    end
   end
 
   # POST /tags
   # POST /tags.json
   def create
-    if !current_user
-      redirect_to "/"
-    end
-
     @tag = Tag.new(tag_params)
 
     respond_to do |format|
@@ -86,10 +72,6 @@ class TagsController < ApplicationController
   # PATCH/PUT /tags/1
   # PATCH/PUT /tags/1.json
   def update
-    if !current_user
-      redirect_to "/"
-    end
-
     respond_to do |format|
       if @tag.update(tag_params)
         format.html { redirect_to @tag, notice: 'Tag was successfully updated.' }
@@ -104,10 +86,6 @@ class TagsController < ApplicationController
   # DELETE /tags/1
   # DELETE /tags/1.json
   def destroy
-    if !current_user
-      redirect_to "/"
-    end
-
     @tag.destroy
     respond_to do |format|
       format.html { redirect_to tags_url, notice: 'Tag was successfully destroyed.' }

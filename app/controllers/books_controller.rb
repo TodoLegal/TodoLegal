@@ -1,44 +1,30 @@
 class BooksController < ApplicationController
   before_action :set_book, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_admin!, only: [:index, :show, :new, :edit, :create, :update, :destroy]
 
   # GET /books
   # GET /books.json
   def index
-    if !current_user
-      redirect_to "/"
-    end
     @books = Book.all
   end
 
   # GET /books/1
   # GET /books/1.json
   def show
-    if !current_user
-      redirect_to "/"
-    end
   end
 
   # GET /books/new
   def new
-    if !current_user
-      redirect_to "/"
-    end
     @book = Book.new
   end
 
   # GET /books/1/edit
   def edit
-    if !current_user
-      redirect_to "/"
-    end
   end
 
   # POST /books
   # POST /books.json
   def create
-    if !current_user
-      redirect_to "/"
-    end
     @book = Book.new(book_params)
 
     respond_to do |format|
@@ -55,9 +41,6 @@ class BooksController < ApplicationController
   # PATCH/PUT /books/1
   # PATCH/PUT /books/1.json
   def update
-    if !current_user
-      redirect_to "/"
-    end
     respond_to do |format|
       if @book.update(book_params)
         format.html { redirect_to @book, notice: 'Book was successfully updated.' }
@@ -72,9 +55,6 @@ class BooksController < ApplicationController
   # DELETE /books/1
   # DELETE /books/1.json
   def destroy
-    if !current_user
-      redirect_to "/"
-    end
     @book.destroy
     respond_to do |format|
       format.html { redirect_to books_url, notice: 'Book was successfully destroyed.' }

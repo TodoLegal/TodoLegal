@@ -1,30 +1,20 @@
 class ChaptersController < ApplicationController
   before_action :set_chapter, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_admin!, only: [:index, :show, :new, :edit, :create, :update, :destroy]
 
   # GET /chapters
   # GET /chapters.json
   def index
-    if !current_user
-      redirect_to "/"
-    end
-
     @chapters = Chapter.all
   end
 
   # GET /chapters/1
   # GET /chapters/1.json
   def show
-    if !current_user
-      redirect_to "/"
-    end
   end
 
   # GET /chapters/new
   def new
-    if !current_user
-      redirect_to "/"
-    end
-
     @chapter = Chapter.new
   end
 
@@ -35,10 +25,6 @@ class ChaptersController < ApplicationController
   # POST /chapters
   # POST /chapters.json
   def create
-    if !current_user
-      redirect_to "/"
-    end
-
     @chapter = Chapter.new(chapter_params)
 
     respond_to do |format|
@@ -55,10 +41,6 @@ class ChaptersController < ApplicationController
   # PATCH/PUT /chapters/1
   # PATCH/PUT /chapters/1.json
   def update
-    if !current_user
-      redirect_to "/"
-    end
-
     respond_to do |format|
       if @chapter.update(chapter_params)
         format.html { redirect_to @chapter, notice: 'Chapter was successfully updated.' }
@@ -73,10 +55,6 @@ class ChaptersController < ApplicationController
   # DELETE /chapters/1
   # DELETE /chapters/1.json
   def destroy
-    if !current_user
-      redirect_to "/"
-    end
-    
     @chapter.destroy
     respond_to do |format|
       format.html { redirect_to chapters_url, notice: 'Chapter was successfully destroyed.' }

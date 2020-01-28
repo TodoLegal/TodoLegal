@@ -1,28 +1,20 @@
 class SubsectionsController < ApplicationController
   before_action :set_subsection, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_admin!, only: [:index, :show, :new, :edit, :create, :update, :destroy]
 
   # GET /subsections
   # GET /subsections.json
   def index
-    if !current_user
-      redirect_to "/"
-    end
     @subsections = Subsection.all
   end
 
   # GET /subsections/1
   # GET /subsections/1.json
   def show
-    if !current_user
-      redirect_to "/"
-    end
   end
 
   # GET /subsections/new
   def new
-    if !current_user
-      redirect_to "/"
-    end
     @subsection = Subsection.new
   end
 
@@ -33,9 +25,6 @@ class SubsectionsController < ApplicationController
   # POST /subsections
   # POST /subsections.json
   def create
-    if !current_user
-      redirect_to "/"
-    end
     @subsection = Subsection.new(subsection_params)
 
     respond_to do |format|
@@ -52,9 +41,6 @@ class SubsectionsController < ApplicationController
   # PATCH/PUT /subsections/1
   # PATCH/PUT /subsections/1.json
   def update
-    if !current_user
-      redirect_to "/"
-    end
     respond_to do |format|
       if @subsection.update(subsection_params)
         format.html { redirect_to @subsection, notice: 'Subsection was successfully updated.' }
@@ -69,9 +55,6 @@ class SubsectionsController < ApplicationController
   # DELETE /subsections/1
   # DELETE /subsections/1.json
   def destroy
-    if !current_user
-      redirect_to "/"
-    end
     @subsection.destroy
     respond_to do |format|
       format.html { redirect_to subsections_url, notice: 'Subsection was successfully destroyed.' }

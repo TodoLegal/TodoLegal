@@ -1,44 +1,30 @@
 class LawModificationsController < ApplicationController
   before_action :set_law_modification, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_admin!, only: [:index, :show, :new, :edit, :create, :update, :destroy]
 
   # GET /law_modifications
   # GET /law_modifications.json
   def index
-    if !current_user
-      redirect_to "/"
-    end
     @law_modifications = LawModification.all
   end
 
   # GET /law_modifications/1
   # GET /law_modifications/1.json
   def show
-    if !current_user
-      redirect_to "/"
-    end
   end
 
   # GET /law_modifications/new
   def new
-    if !current_user
-      redirect_to "/"
-    end
     @law_modification = LawModification.new
   end
 
   # GET /law_modifications/1/edit
   def edit
-    if !current_user
-      redirect_to "/"
-    end
   end
 
   # POST /law_modifications
   # POST /law_modifications.json
   def create
-    if !current_user
-      redirect_to "/"
-    end
     @law_modification = LawModification.new(law_modification_params)
 
     respond_to do |format|
@@ -55,9 +41,6 @@ class LawModificationsController < ApplicationController
   # PATCH/PUT /law_modifications/1
   # PATCH/PUT /law_modifications/1.json
   def update
-    if !current_user
-      redirect_to "/"
-    end
     respond_to do |format|
       if @law_modification.update(law_modification_params)
         format.html { redirect_to @law_modification, notice: 'Law modification was successfully updated.' }
@@ -72,9 +55,6 @@ class LawModificationsController < ApplicationController
   # DELETE /law_modifications/1
   # DELETE /law_modifications/1.json
   def destroy
-    if !current_user
-      redirect_to "/"
-    end
     law = @law_modification.law
     @law_modification.destroy
     respond_to do |format|

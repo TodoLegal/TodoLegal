@@ -42,6 +42,19 @@
     </p>
   <% end %>
 
+  <% if customer_user_signed_in? %>
+    <p>
+      <%= link_to('Cerrar sesión', destroy_customer_user_session_path, method: :delete) %>        
+    </p>
+  <% else %>
+    <p>
+      <%= link_to('Iniciar sesión', new_customer_user_session_path) %>        
+    </p>
+    <p>
+      <%= link_to('Regístrate', new_customer_user_registration_path) %>        
+    </p>
+  <% end %>
+
   <%= render 'subscriptions/subscribe_form' %>
 
   <%= yield %>

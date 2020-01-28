@@ -10,18 +10,20 @@
       </ul>
     </div>
   <% end %>
+  <div class="container">
+    <div class="row justify-content-end">
+      <%= form.submit "Actualizar", class: "btn btn-primary"%>
+      &nbsp;&nbsp;
+      <%= link_to 'Cancelar', law_path, class: "btn btn-secondary"%>
+    </div>
+      <div class="form-group">
+        <%= form.label :nombre %>
+        <%= form.text_field :name, class: "form-control" %>
+      </div>
 
-  <div class="form-group">
-    <%= form.label :nombre %>
-    <%= form.text_field :name, class: "form-control" %>
-  </div>
-
-  <div class="form-group">
-    <%= form.label :numero_de_creacion %>
-    <%= form.text_field :creation_number, class: "form-control" %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit "Actualizar", class: "btn btn-primary" %>
+      <div class="form-group">
+        <%= form.label :numero_de_creacion %>
+        <%= form.text_field :creation_number, class: "form-control" %>
+      </div>
   </div>
 <% end %>

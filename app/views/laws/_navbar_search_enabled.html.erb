@@ -33,16 +33,16 @@
       <input id="query-input-small" class="form-control mr-sm-6" name="query" type="search" placeholder="Buscar" value="<%= @query %>" aria-label="Buscar">
       <div style="padding-right: 15px">
         <% if @highlight_enabled %>
-          <span id="result-count">2/5</span>
+          <span id="result-count-small"></span>
           <a onclick="browseHighlightedUp()">
             <i class='fas fa-angle-up' style='font-size:24px'></i>
           </a>
           <a onclick="browseHighlightedDown()">
             <i class='fas fa-angle-down' style='font-size:24px'></i>
           </a>
-          <button onclick="document.getElementById('query-input-small').value = '';" type="submit" style="padding: 0;border: none;background: none;">
+          <a href="<%= law_path(@law) %>" style="color: #252a2d">  
             <i class="fas fa-times" style='font-size:24px'></i>
-          </button>
+          </a>
         <% end %>
       </div>
       <button class="btn btn-outline my-2 my-sm-0 buscar" type="submit">Buscar</button>
@@ -54,16 +54,16 @@
       <input id="query-input-big" class="form-control mr-sm-2" name="query" type="search" placeholder="Buscar" value="<%= @query %>" aria-label="Buscar">
       <div style="padding-right: 15px">
         <% if @highlight_enabled %>
-          <span id="result-count">2/5</span>
+          <span id="result-count-big"></span>
           <a onclick="browseHighlightedUp()">
             <i class='fas fa-angle-up' style='font-size:24px'></i>
           </a>
           <a onclick="browseHighlightedDown()">
             <i class='fas fa-angle-down' style='font-size:24px'></i>
           </a>
-          <button onclick="document.getElementById('query-input-big').value = '';" type="submit" style="padding: 0;border: none;background: none;">
+          <a href="<%= law_path(@law) %>" style="color: #252a2d">  
             <i class="fas fa-times" style='font-size:24px'></i>
-          </button>
+          </a>
         <% end %>
       </div>
       <button class="btn btn-outline my-2 my-sm-0 buscar" type="submit">Buscar</button>

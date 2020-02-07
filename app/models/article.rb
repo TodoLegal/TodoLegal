@@ -41,4 +41,10 @@ class Article < ApplicationRecord
       }
     }
   }
+
+  class << self
+    def markdown
+      Redcarpet::Markdown.new(Redcarpet::Render::HTML, :tables => true)
+    end
+  end
 end

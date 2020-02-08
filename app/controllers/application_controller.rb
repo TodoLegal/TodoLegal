@@ -1,6 +1,12 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :null_session
 
+  def authenticate_admin!
+    if !current_user
+      redirect_to "/?error=Invalid+permissions"
+    end
+  end
+
 protected
   def after_sign_up_path_for(resource)
     root_path

@@ -1,5 +1,6 @@
 class SubscriptionsController < ApplicationController
   skip_before_action :verify_authenticity_token
+  before_action :authenticate_admin!, only: [:admin]
 
   def subscribe
     email = params[:email]
@@ -61,9 +62,6 @@ class SubscriptionsController < ApplicationController
   end
 
   def admin
-    if !current_user
-      redirect_to "/"
-    end
     @subscriptions = EmailSubscription.all
     @confirmed_subscriptions = EmailSubscription.where(status: "confirmed")
   end

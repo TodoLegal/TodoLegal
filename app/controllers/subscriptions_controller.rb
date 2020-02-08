@@ -6,17 +6,17 @@ class SubscriptionsController < ApplicationController
     email = params[:email]
     @error_message = nil
 
-    if !email =~ Devise.email_regexp
-      @error_message = "Invalid mail, please try again."
-      return
-    end
-
-    email_subscription = EmailSubscription.find_by_email(email)
-    if email_subscription
-      @email_sent = true
-      if email_subscription.status == "confirmed"
-        @email_confirmed = true
+    if valid_email?(email)
+      email_subscription = EmailSubscription.find_by_email(email)
+      if email_subscription
+        @email_sent = true
+        if email_subscription.status == "confirmed"
+          @email_confirmed = true
+        end
+        return
       end
+    else
+      @error_message = "Correo inválido, inténtalo de nuevo."
       return
     end
 
@@ -64,5 +64,10 @@ class SubscriptionsController < ApplicationController
   def admin
     @subscriptions = EmailSubscription.all
     @confirmed_subscriptions = EmailSubscription.where(status: "confirmed")
+  end
+
+private
+  def valid_email?(email)
+    email =~ /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   end
 end

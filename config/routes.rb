@@ -3,7 +3,6 @@ Rails.application.routes.draw do
   resources :subsections
   resources :sections
   resources :books
-  devise_for :users
   resources :law_tags
   resources :tags
   resources :tag_types
@@ -11,7 +10,9 @@ Rails.application.routes.draw do
   resources :titles
   resources :chapters
   resources :articles
-
+  devise_for :users
+  devise_for :customer_users, path: '', path_names: { sign_in: 'login', sign_up: 'sign_up'}
+  
   root :to => "home#index"
   get '/search_law', to: 'home#search_law'
   get '/terms', to: 'home#terms_and_conditions'

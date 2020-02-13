@@ -26,7 +26,6 @@ class TagTypesController < ApplicationController
   # POST /tag_types.json
   def create
     @tag_type = TagType.new(tag_type_params)
-
     respond_to do |format|
       if @tag_type.save
         format.html { redirect_to @tag_type, notice: 'Tag type was successfully created.' }

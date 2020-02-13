@@ -26,7 +26,6 @@ class LawModificationsController < ApplicationController
   # POST /law_modifications.json
   def create
     @law_modification = LawModification.new(law_modification_params)
-
     respond_to do |format|
       if @law_modification.save
         format.html { redirect_to edit_law_path(@law_modification.law), notice: 'Law modification was successfully created.' }

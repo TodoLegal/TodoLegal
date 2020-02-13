@@ -26,7 +26,6 @@ class LawTagsController < ApplicationController
   # POST /law_tags.json
   def create
     @law_tag = LawTag.new(law_tag_params)
-
     respond_to do |format|
       if @law_tag.save
         format.html { redirect_to edit_law_path(@law_tag.law), notice: 'Law tag was successfully created.' }

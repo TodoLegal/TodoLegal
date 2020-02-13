@@ -26,7 +26,6 @@ class SectionsController < ApplicationController
   # POST /sections.json
   def create
     @section = Section.new(section_params)
-
     respond_to do |format|
       if @section.save
         format.html { redirect_to @section, notice: 'Section was successfully created.' }

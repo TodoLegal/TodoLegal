@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
 
   def authenticate_admin!
     if !current_user
-      redirect_to "/?yes"
+      redirect_to "/?error=Invalid+permissions"
     end
   end
 
@@ -20,6 +20,6 @@ protected
   end
 
   def findArticles query
-    Article.all.search_by_body(query).group_by(&:law_id)
+    Article.search_by_body_trimmed(query).with_pg_search_highlight.group_by(&:law_id)
   end
 end

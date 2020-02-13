@@ -114,7 +114,7 @@
       <% if @highlight_enabled %>
         <%= stream.pg_search_highlight.html_safe %>.
       <% else %>
-        <%= stream.body %>
+        <%= stream.class.markdown.render(stream.body).html_safe %>
       <% end %>
     </p>
     <% article_iterator += 1 %>

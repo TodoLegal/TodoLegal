@@ -26,7 +26,6 @@ class SubsectionsController < ApplicationController
   # POST /subsections.json
   def create
     @subsection = Subsection.new(subsection_params)
-
     respond_to do |format|
       if @subsection.save
         format.html { redirect_to @subsection, notice: 'Subsection was successfully created.' }

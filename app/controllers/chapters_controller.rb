@@ -26,7 +26,6 @@ class ChaptersController < ApplicationController
   # POST /chapters.json
   def create
     @chapter = Chapter.new(chapter_params)
-
     respond_to do |format|
       if @chapter.save
         format.html { redirect_to @chapter, notice: 'Chapter was successfully created.' }

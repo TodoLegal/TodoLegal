@@ -7,6 +7,7 @@ class Article < ApplicationRecord
 
   pg_search_scope :search_by_body,
                   against: :body,
+                  ignoring: :accents,
                   using: {
                     tsearch: {
                       dictionary: "spanish",
@@ -23,12 +24,29 @@ class Article < ApplicationRecord
                     }
                   }
 
+pg_search_scope :search_by_body_trimmed,
+                  against: :body,
+                  ignoring: :accents,
+                  using: {
+                    tsearch: {
+                      dictionary: "spanish",
+                      highlight: {
+                        StartSel: '<b>',
+                        StopSel: '</b>',
+                        MaxWords: 20,
+                        MinWords: 465,
+                        ShortWord: 1,
+                        HighlightAll: true,
+                        MaxFragments: 3,
+                        FragmentDelimiter: '&hellip;'
+                      }
+                    }
+                  }
 
   pg_search_scope :roughly_spelled_like,
   against: :body,
   using: {
-    trigram: {
-      threshold: 0.01,
+    tsearch: {
       highlight: {
         StartSel: '<b style="color: var(--c-highlight)">',
         StopSel: '</b>',
@@ -41,4 +59,10 @@ class Article < ApplicationRecord
       }
     }
   }
+
+  class << self
+    def markdown
+      Redcarpet::Markdown.new(Redcarpet::Render::HTML, :tables => true)
+    end
+  end
 end

@@ -1,21 +1,22 @@
 class SubscriptionsController < ApplicationController
   skip_before_action :verify_authenticity_token
+  before_action :authenticate_admin!, only: [:admin]
 
   def subscribe
     email = params[:email]
     @error_message = nil
 
-    if !email =~ Devise.email_regexp
-      @error_message = "Invalid mail, please try again."
-      return
-    end
-
-    email_subscription = EmailSubscription.find_by_email(email)
-    if email_subscription
-      @email_sent = true
-      if email_subscription.status == "confirmed"
-        @email_confirmed = true
+    if valid_email?(email)
+      email_subscription = EmailSubscription.find_by_email(email)
+      if email_subscription
+        @email_sent = true
+        if email_subscription.status == "confirmed"
+          @email_confirmed = true
+        end
+        return
       end
+    else
+      @error_message = "Correo inválido, inténtalo de nuevo."
       return
     end
 
@@ -61,10 +62,12 @@ class SubscriptionsController < ApplicationController
   end
 
   def admin
-    if !current_user
-      redirect_to "/"
-    end
     @subscriptions = EmailSubscription.all
     @confirmed_subscriptions = EmailSubscription.where(status: "confirmed")
+  end
+
+private
+  def valid_email?(email)
+    email =~ /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   end
 end

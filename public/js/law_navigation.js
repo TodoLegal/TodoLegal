@@ -31,7 +31,8 @@ if(highlighted_count > 0)
 
 function updateHighlightedView()
 {
-  document.getElementById("result-count").innerText = (currrent_highlighted + 1) +"/"+highlighted_count
+  document.getElementById("result-count-big").innerText = (currrent_highlighted + 1) +"/"+highlighted_count
+  document.getElementById("result-count-small").innerText = (currrent_highlighted + 1) +"/"+highlighted_count
   element_highlighted = document.getElementsByClassName('highlighted')[currrent_highlighted]
   element_highlighted.scrollIntoView({block: 'center'})
   element_highlighted.style["color"]="var(--c-selected-highlight)"

@@ -14,7 +14,7 @@ class HomeController < ApplicationController
     
     @grouped_laws = []
     @stream.each do |grouped_law|
-      law = {count: grouped_law[1].count, law: Law.find_by_id(grouped_law[0])}
+      law = {count: grouped_law[1].count, law: Law.find_by_id(grouped_law[0]), preview: grouped_law[1].first.pg_search_highlight.html_safe}
       @grouped_laws.push(law)
       @result_count += grouped_law[1].count
     end

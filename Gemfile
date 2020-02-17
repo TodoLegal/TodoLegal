@@ -9,6 +9,7 @@ gem 'pg_search'
 gem 'thin'
 gem 'route_translator'
 gem 'devise'
+gem 'redcarpet'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.0.0'

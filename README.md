@@ -6,12 +6,22 @@ Install Rails 6.0 and other tools needed.
 
 ### In development Mode
 
+#### Linux
+
 ```
 apt update
 apt install curl git libpq-dev gnupg2 postgresql-11
 gpg2 --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
 \curl -sSL https://get.rvm.io | bash -s stable --rails
 source /usr/local/rvm/scripts/rvm
+```
+
+#### MacOS
+
+```
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+\curl -sSL https://get.rvm.io | bash -s stable --rails
+brew install postgresql yarn
 ```
 
 ### In Production Mode
@@ -123,11 +133,22 @@ Finally, fill the form with
 
 #### In development mode
 
+
+##### Linux
+
 ```
 sudo -u postgres psql
 postgres=# create database TodoLegalDB_Development;
 postgres=# alter user postgres with encrypted password 'MyPassword';
 \q
+```
+
+#### MacOS
+
+```
+initdb /usr/local/var/postgres
+/usr/local/opt/postgres/bin/createuser -s postgres
+pg_ctl -D /usr/local/var/postgres start
 ```
 
 #### In production mode

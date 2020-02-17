@@ -7,6 +7,7 @@ class Article < ApplicationRecord
 
   pg_search_scope :search_by_body,
                   against: :body,
+                  ignoring: :accents,
                   using: {
                     tsearch: {
                       dictionary: "spanish",
@@ -25,6 +26,7 @@ class Article < ApplicationRecord
 
 pg_search_scope :search_by_body_trimmed,
                   against: :body,
+                  ignoring: :accents,
                   using: {
                     tsearch: {
                       dictionary: "spanish",

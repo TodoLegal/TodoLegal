@@ -1,6 +1,9 @@
 <div class="container">
-
-  <h1>Información general de documento legal</h1>
+  <p> </p>
+  <h1>
+    <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, law_path%>
+    Información general del documento legal
+  </h1>
 
   <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item">
@@ -33,6 +36,7 @@
               </ul>
           </div>
         <% end %>
+        <p> </p>
         <div class="row">
           <div class="col-sm-8">
             <h2>Materias</h2>
@@ -51,7 +55,7 @@
         <thead>
           <tr>
             <th scope="col">Materia</th>
-            <th scope="col">Actions</th>
+            <th scope="col">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -61,7 +65,9 @@
                 <%= materia.tag.name %> 
               </td>
               <td>
-                <%= button_to 'Eliminar', materia, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger" %>
+                <%= button_to materia, method: :delete, data: { confirm: 'Are you sure?'}, class:"btn btn-outline-danger" do %>
+                  <i class="fas fa-trash-alt"></i>
+                <% end %>
               </td>
             </tr>
           <% end %>
@@ -81,6 +87,7 @@
               </ul>
           </div>
         <% end %>
+        <p> </p>
         <div class="row">
           <div class="col-sm-8">
             <h2>Tipo de Creación</h2>
@@ -99,7 +106,7 @@
         <thead>
           <tr>
             <th scope="col">Creación</th>
-            <th scope="col">Actions</th>
+            <th scope="col">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -109,7 +116,9 @@
                 <%= creacions.tag.name %> 
               </td>
               <td>
-                <%= button_to 'Eliminar', creacions, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger" %>
+                 <%= button_to creacions, method: :delete, data: { confirm: 'Are you sure?'}, class:"btn btn-outline-danger" do %>
+                  <i class="fas fa-trash-alt"></i>
+                <% end %>
               </td>
             </tr>
           <% end %>
@@ -129,6 +138,7 @@
               </ul>
           </div>
         <% end %>
+        <p> </p>
         <div class="row">
           <div class="col-sm-5">
             <h2>Modificaciones</h2>
@@ -147,7 +157,7 @@
         <thead>
           <tr>
             <th scope="col">Modificación</th>
-            <th scope="col">Actions</th>
+            <th scope="col">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -157,7 +167,9 @@
                 <%= law_modification.name %> 
               </td>
               <td>
-                <%= button_to 'Eliminar', law_modification, method: :delete, data: { confirm: 'Are you sure?'}, class:"btn btn-danger" %>
+                 <%= button_to law_modification, method: :delete, data: { confirm: 'Are you sure?'}, class:"btn btn-outline-danger" do %>
+                  <i class="fas fa-trash-alt"></i>
+                <% end %>
               </td>
             </tr>
           <% end %>

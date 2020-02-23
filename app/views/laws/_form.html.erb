@@ -1,32 +1,35 @@
-<%= form_with(model: law, local: true) do |form| %>
-  <% if law.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(law.errors.count, "error") %> prohibited this law from being saved:</h2>
+<div class="container">
+  <%= form_with(model: law, local: true) do |form| %>
+    <% if law.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(law.errors.count, "error") %> prohibited this law from being saved:</h2>
 
-      <ul>
-        <% law.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+        <ul>
+          <% law.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="container">
+      <p></p>
+      <div class="form-group">
+        <%= form.label :nombre %>
+        <%= form.text_field :name, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= form.label :numero_de_creacion %>
+        <%= form.text_field :creation_number, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= form.label :modificaciones %>
+        <%= form.text_field :modifications, class: "form-control" %>
+      </div>
+      <div class="row justify-content-end">
+        <%= link_to 'Cancelar', law_path, class: "btn btn-secondary"%>
+        &nbsp;&nbsp;
+        <%= form.submit "Actualizar", class: "btn btn-primary"%>
+      </div>
     </div>
   <% end %>
-  <div class="container">
-    <div class="row justify-content-end">
-      <%= form.submit "Actualizar", class: "btn btn-primary"%>
-      &nbsp;&nbsp;
-      <%= link_to 'Cancelar', law_path, class: "btn btn-secondary"%>
-    </div>
-    <div class="form-group">
-      <%= form.label :nombre %>
-      <%= form.text_field :name, class: "form-control" %>
-    </div>
-    <div class="form-group">
-      <%= form.label :numero_de_creacion %>
-      <%= form.text_field :creation_number, class: "form-control" %>
-    </div>
-    <div class="form-group">
-      <%= form.label :modificaciones %>
-      <%= form.text_field :modifications, class: "form-control" %>
-    </div>
-  </div>
-<% end %>
+</div>

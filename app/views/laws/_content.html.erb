@@ -1,3 +1,13 @@
+<style>
+  strong {font-weight:bold;}
+  .bigger-section {
+    font-family: 'Montserrat', sans-serif;
+  }
+  .article {
+    font-family: 'Merriweather', serif;
+  }
+</style>
+
 <p id="notice"><%= notice %></p>
 <h1>
   <%= @law.name %>
@@ -45,7 +55,7 @@
 <% bigger_section_iterator = 0 %>
 <% @stream.each do |stream| %>
   <% if stream.instance_of? Book %>
-    <div id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
+    <div class="bigger-section" id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
       <h2 style="padding-top:160px;" id="book_<%= stream.position %>">
         Libro <%= stream.number %>
         <% if user_signed_in? %>
@@ -57,7 +67,7 @@
     <% bigger_section_iterator += 1 %>
   <% end %>
   <% if stream.instance_of? Title %>
-    <div id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
+    <div class="bigger-section" id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
       <h2 style="padding-top:160px;" id="title_<%= stream.position %>">
         Título <%= stream.number %>
         <% if user_signed_in? %>
@@ -69,7 +79,7 @@
     <% bigger_section_iterator += 1 %>
   <% end %>
   <% if stream.instance_of? Chapter %>
-    <div id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
+    <div class="bigger-section" id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
       <h3 style="padding-top:160px;" id="chapter_<%= stream.position %>">
         Capítulo <%= stream.number %>
         <% if user_signed_in? %>
@@ -81,7 +91,7 @@
     <% bigger_section_iterator += 1 %>
   <% end %>
   <% if stream.instance_of? Section %>
-    <div id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
+    <div class="bigger-section" id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
       <h4 style="padding-top:160px;" id="section_<%= stream.position %>">
         Sección <%= stream.number %>
         <% if user_signed_in? %>
@@ -93,7 +103,7 @@
     <% bigger_section_iterator += 1 %>
   <% end %>
   <% if stream.instance_of? Subsection %>
-    <div id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
+    <div class="bigger-section" id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
       <h5 style="padding-top:160px;" id="subsection_<%= stream.position %>">
         <%= stream.number %>
         <% if user_signed_in? %>
@@ -106,7 +116,7 @@
   <% end %>
   <% if stream.instance_of? Article %>
     <p class="article" article_id="<%= article_iterator %>" last_bigger_section="<%= bigger_section_iterator - 1 %>" next_bigger_section="<%= bigger_section_iterator %>" id="article_count_<%= article_iterator %>">
-      <b>Artículo <%= stream.number %>:
+      <b style="font-weight:bold;">Artículo <%= stream.number %>:
         <% if user_signed_in? %>
           <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_article_path(stream) %>
         <% end %>

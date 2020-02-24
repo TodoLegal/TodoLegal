@@ -1,0 +1,52 @@
+<div class="container">
+
+    <%= form_with(model: law_tag, local: true) do |form|%>
+      <% if law_tag.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(law_tag.errors.count, "error") %> prohibited this law_tag from being saved:</h2>  
+            <ul>
+              <% law_tag.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+        </div>
+      <% end %>
+      <p> </p>
+      <div class="row">
+        <div class="col-sm-8">
+          <h2><%= title %></h2>
+        </div>
+        <div class='col-sm-2'>  
+          <%= form.hidden_field :law_id, value: @law.id %>
+          <%= form.collection_select(:tag_id, @all_creacions, :id, :name, {:prompt=>true}, {:class=>'form-control'}) %>
+        </div>
+        <div class='col-sm-2'>
+          <%= form.submit "Agregar", class: 'btn btn-primary' %> 
+        </div>
+      </div>
+    <% end %>
+
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col"><%= table_title %></th>
+          <th scope="col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%@law_creacions.each do |creacions|%>
+          <tr>
+            <td>
+              <%= creacions.tag.name %> 
+            </td>
+            <td>
+              <%= button_to creacions, method: :delete, data: { confirm: 'Are you sure?'}, class:"btn btn-outline-danger" do %>
+                <i class="fas fa-trash-alt"></i>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+</div>

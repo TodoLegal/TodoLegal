@@ -10,13 +10,13 @@
       <a class="nav-link active" id="ley-tab" data-toggle="tab" href="#ley" role="tab" aria-controls="ley" aria-selected="true">Editar Ley</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" id="materias-tab" data-toggle="tab" href="#materias" role="tab" aria-controls="materias" aria-selected="false">Articulos</a>
+      <a class="nav-link" id="modificaciones-tab" data-toggle="tab" href="#modificaciones" role="tab" aria-controls="modificaciones" aria-selected="false">Modificaciones</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" id="creacion-tab" data-toggle="tab" href="#creacion" role="tab" aria-controls="creacion" aria-selected="false">Capitulos</a>
+      <a class="nav-link" id="articles-tab" data-toggle="tab" href="#articles" role="tab" aria-controls="articles" aria-selected="false">Artículos</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" id="modificaiones-tab" data-toggle="tab" href="#modificaciones" role="tab" aria-controls="modificaciones" aria-selected="false">Modificaciones</a>
+      <a class="nav-link" id="articles-tab" data-toggle="tab" href="#chapters" role="tab" aria-controls="articles" aria-selected="false">Capítulos</a>
     </li>
   </ul>
 
@@ -37,28 +37,28 @@
             </div>
             <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
               <%law_tag = LawTag.new %>
-              <%= render partial:'edit_table', locals: {law_tag: law_tag, all: @all_creacions, tag_type: @law_creacions, title: "Tipo de Creación", table_title: "Creación"}%>
+              <%= render partial:'edit_table', locals: {law_tag: law_tag, all: @all_creacions, tag_type: "creacion", title: "Tipo de Creación", table_title: "Creación"}%>
             </div>
             <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
               <%law_tag = LawTag.new %>
-              <%= render partial:'edit_table', locals: {law_tag: law_tag, all: @all_materias, tag_type: @law_materias, title: "Materias", table_title: "Materia"}%>
+              <%= render partial:'edit_table', locals: {law_tag: law_tag, all: @all_materias, tag_type: "materia", title: "Materias", table_title: "Materia"}%>
             </div>
           </div>
         </div>
       </div>
     </div>
     
-    <div class="tab-pane fade" id="materias" role="tabpanel" aria-labelledby="materias-tab">
-      
-    </div>
-
-    <div class="tab-pane fade" id="creacion" role="tabpanel" aria-labelledby="creacion-tab">
-      
-    </div>
-
     <div class="tab-pane fade" id="modificaciones" role="tabpanel" aria-labelledby="modificaciones-tab">
       <%law_modification = LawModification.new %>
-      <%= render partial:'edit_table', locals: {law_tag: law_modification, all: @all_creacions, tag_type: @law_modifications, title: "Modificaciones", table_title: "Modificación"}%>
+      <%= render partial:'edit_table', locals: {law_tag: law_modification, all: @all_modifications, tag_type: "modificacion", title: "Modificaciones", table_title: "Modificación"}%>
+    </div>
+
+    <div class="tab-pane fade" id="articles" role="tabpanel" aria-labelledby="articles-tab">
+      
+    </div>
+
+    <div class="tab-pane fade" id="chapters" role="tabpanel" aria-labelledby="chapters-tab">
+      
     </div>
   </div>
   <p></p>

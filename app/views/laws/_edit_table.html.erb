@@ -13,17 +13,39 @@
       <% end %>
       <p> </p>
       <div class="row">
-        <div class="col-sm-8">
-          <h2><%= title %></h2>
-        </div>
-        <div class='col-sm-2'>  
-          <%= form.hidden_field :law_id, value: @law.id %>
-          <%= form.collection_select(:tag_id, @all_creacions, :id, :name, {:prompt=>true}, {:class=>'form-control'}) %>
-        </div>
+        <% if tag_type != "modificacion" %>
+          <div class="col-sm-8">
+            <h2><%= title %></h2>
+          </div>
+          <div class='col-sm-2'>  
+            <%= form.hidden_field :law_id, value: @law.id %>
+            <%= form.collection_select(:tag_id, (all), :id, :name, {:prompt=>true}, {:class=>'form-control'}) %>
+          </div>
+        <% else %>
+          <div class="col-sm-5">
+            <h2>Modificaciones</h2>
+          </div>
+          <div class='col-sm-5'>
+            <%= form.hidden_field :law_id, value: @law.id %>
+            <%= form.text_field :name, class: "form-control"%>
+          </div>
+        <% end %>
         <div class='col-sm-2'>
           <%= form.submit "Agregar", class: 'btn btn-primary' %> 
         </div>
       </div>
+    <% end %>
+
+    <% tag = @law_creacions %>
+
+    <% if tag_type == "creacion" %>
+      <% tag = @law_creacions %>
+    <% elsif tag_type == "materia" %>
+      <% tag = @law_materias %>
+    <% elsif tag_type == "modificacion"  %>
+      <% tag = @law_modifications %>
+    <% else %>
+      <% tag = @law_creacions %>
     <% end %>
 
     <table class="table table-bordered">
@@ -34,13 +56,17 @@
         </tr>
       </thead>
       <tbody>
-        <%@law_creacions.each do |creacions|%>
+        <%tag.each do |x|%>
           <tr>
             <td>
-              <%= creacions.tag.name %> 
+              <% if tag_type != "modificacion"%>
+                <%= x.tag.name %> 
+              <% else %>
+                <%= x.name %> 
+              <% end %>
             </td>
             <td>
-              <%= button_to creacions, method: :delete, data: { confirm: 'Are you sure?'}, class:"btn btn-outline-danger" do %>
+              <%= button_to x, method: :delete, data: { confirm: 'Are you sure?'}, class:"btn btn-outline-danger" do %>
                 <i class="fas fa-trash-alt"></i>
               <% end %>
             </td>

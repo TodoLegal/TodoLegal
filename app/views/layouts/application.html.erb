@@ -37,9 +37,9 @@
   <%= render 'layouts/google_analytics_body' %>
 
   <% if user_signed_in? %>
-      <%= render 'layouts/logged_navbar' %>        
-  <% else %>
-    <%= render 'layouts/unlogged_navbar' %>
+    <p>
+      <%= link_to('Logout', destroy_user_session_path, method: :delete) %>        	
+    </p>
   <% end %>
 
   <%= render 'subscriptions/subscribe_form' %>

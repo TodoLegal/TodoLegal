@@ -4,9 +4,33 @@
     <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, law_path%>
     Información general del documento legal
   </h1>
+  
+  <%
+=begin%>
+ <% tab_number = 0 %>
+  <script>
+    $(document).ready(function(){
+        $("#myTab li:eq(<%= tab_number %>) a").tab('show');
+    })
+  </script> 
+<%
+=end%>
 
-  <ul class="nav nav-tabs" id="pills-tab" role="tablist">
-    <li class="nav-item">
+  <script>
+    $(document).ready(function(){
+      $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        localStorage.setItem('activeTab', $(e.target).attr('href'));
+      });
+
+      var activeTab = localStorage.getItem('activeTab');
+      if(activeTab){
+          $('#myTab a[href="' + activeTab + '"]').tab('show');
+      }
+    });
+  </script> 
+  
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li  class="nav-item">
       <a class="nav-link active" id="ley-tab" data-toggle="tab" href="#ley" role="tab" aria-controls="ley" aria-selected="true">Editar Ley</a>
     </li>
     <li class="nav-item">
@@ -24,7 +48,7 @@
     <div class="tab-pane fade show active" id="ley" role="tabpanel" aria-labelledby="ley-tab">
       <div class="row">
         <div class = "col-sm-2">
-          <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+          <div class="nav flex-column nav-pills" id="myTab2" role="tablist" aria-orientation="vertical">
             <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Ley</a>
             <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Creación</a>
             <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">Materias</a>

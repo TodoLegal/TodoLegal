@@ -30,6 +30,7 @@ class TagsController < ApplicationController
       @grouped_laws = []
       @stream.each do |grouped_law|
         law = {count: grouped_law[1].count, law: Law.find_by_id(grouped_law[0])}
+        law[:materia_names] = law[:law].materia_names
         @grouped_laws.push(law)
         @result_count += grouped_law[1].count
         legal_documents.add(grouped_law[0])

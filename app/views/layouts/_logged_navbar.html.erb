@@ -6,9 +6,11 @@
             <i class="fas fa-bars"></i>
         </button>
         <div class="dropdown-menu dropdown-menu-right">
-            <button class="dropdown-item" type="button">Action</button>
+            <button class="dropdown-item" type="button">Usuarios</button>
             <div class="dropdown-divider"></div>
-            <button class="dropdown-item" type="button">Another action</button>
+            <%= link_to('Sucriptores', subscriptions_admin_path, class:"dropdown-item")%>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" type="button">Editar Ley</button>
             <div class="dropdown-divider"></div>
             <%= link_to('Cerrar sesión', destroy_user_session_path, method: :delete, class:"dropdown-item") %>
         </div>

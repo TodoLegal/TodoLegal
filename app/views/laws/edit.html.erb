@@ -4,177 +4,86 @@
     <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, law_path%>
     Información general del documento legal
   </h1>
+  
+  <%
+=begin%>
+ <% tab_number = 0 %>
+  <script>
+    $(document).ready(function(){
+        $("#myTab li:eq(<%= tab_number %>) a").tab('show');
+    })
+  </script> 
+<%
+=end%>
 
+  <script>
+    $(document).ready(function(){
+      $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        localStorage.setItem('activeTab', $(e.target).attr('href'));
+      });
+
+      var activeTab = localStorage.getItem('activeTab');
+      if(activeTab){
+          $('#myTab a[href="' + activeTab + '"]').tab('show');
+      }
+    });
+  </script> 
+  
   <ul class="nav nav-tabs" id="myTab" role="tablist">
-    <li class="nav-item">
+    <li  class="nav-item">
       <a class="nav-link active" id="ley-tab" data-toggle="tab" href="#ley" role="tab" aria-controls="ley" aria-selected="true">Editar Ley</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" id="materias-tab" data-toggle="tab" href="#materias" role="tab" aria-controls="materias" aria-selected="false">Materias</a>
+      <a class="nav-link" id="modificaciones-tab" data-toggle="tab" href="#modificaciones" role="tab" aria-controls="modificaciones" aria-selected="false">Modificaciones</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" id="creacion-tab" data-toggle="tab" href="#creacion" role="tab" aria-controls="creacion" aria-selected="false">Tipo de creación</a>
+      <a class="nav-link" id="articles-tab" data-toggle="tab" href="#articles" role="tab" aria-controls="articles" aria-selected="false">Artículos</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" id="modificaiones-tab" data-toggle="tab" href="#modificaciones" role="tab" aria-controls="modificaciones" aria-selected="false">Modificaciones</a>
+      <a class="nav-link" id="articles-tab" data-toggle="tab" href="#chapters" role="tab" aria-controls="articles" aria-selected="false">Capítulos</a>
     </li>
   </ul>
+
   <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="ley" role="tabpanel" aria-labelledby="ley-tab">
-      <%= render 'form', law: @law %>
-    </div>
-    <div class="tab-pane fade" id="materias" role="tabpanel" aria-labelledby="materias-tab">
-      <%law_tag = LawTag.new %>
-      <%= form_with(model: law_tag, local: true) do |form|%>
-        <% if law_tag.errors.any? %>
-          <div id="error_explanation">
-            <h2><%= pluralize(law_tag.errors.count, "error") %> prohibited this law_tag from being saved:</h2>  
-              <ul>
-                <% law_tag.errors.full_messages.each do |message| %>
-                  <li><%= message %></li>
-                <% end %>
-              </ul>
-          </div>
-        <% end %>
-        <p> </p>
-        <div class="row">
-          <div class="col-sm-8">
-            <h2>Materias</h2>
-          </div>
-          <div class="col-sm-2">
-            <%= form.hidden_field :law_id, value: @law.id %>
-            <%= form.collection_select(:tag_id, @all_materias, :id, :name, {:prompt=>true}, {:class=>'form-control'}) %>
-          </div>
-          <div class="col-sm-2">
-            <%= form.submit "Agregar materia", class: 'btn btn-primary' %> 
+      <div class="row">
+        <div class = "col-sm-2">
+          <div class="nav flex-column nav-pills" id="myTab2" role="tablist" aria-orientation="vertical">
+            <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Ley</a>
+            <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Creación</a>
+            <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">Materias</a>
           </div>
         </div>
-      <% end %>
-
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th scope="col">Materia</th>
-            <th scope="col">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <%@law_materias.each do |materia|%>
-            <tr>
-              <td>
-                <%= materia.tag.name %> 
-              </td>
-              <td>
-                <%= button_to materia, method: :delete, data: { confirm: 'Are you sure?'}, class:"btn btn-outline-danger" do %>
-                  <i class="fas fa-trash-alt"></i>
-                <% end %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-    <div class="tab-pane fade" id="creacion" role="tabpanel" aria-labelledby="creacion-tab">
-      <%law_tag = LawTag.new %>
-      <%= form_with(model: law_tag, local: true) do |form|%>
-        <% if law_tag.errors.any? %>
-          <div id="error_explanation">
-            <h2><%= pluralize(law_tag.errors.count, "error") %> prohibited this law_tag from being saved:</h2>  
-              <ul>
-                <% law_tag.errors.full_messages.each do |message| %>
-                  <li><%= message %></li>
-                <% end %>
-              </ul>
-          </div>
-        <% end %>
-        <p> </p>
-        <div class="row">
-          <div class="col-sm-8">
-            <h2>Tipo de Creación</h2>
-          </div>
-          <div class='col-sm-2'>  
-            <%= form.hidden_field :law_id, value: @law.id %>
-            <%= form.collection_select(:tag_id, @all_creacions, :id, :name, {:prompt=>true}, {:class=>'form-control'}) %>
-          </div>
-          <div class='col-sm-2'>
-            <%= form.submit "Agregar creación", class: 'btn btn-primary' %> 
+        <div class="col-sm-10">
+          <div class="tab-content" id="v-pills-tabContent">
+            <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+              <%= render 'form', law: @law %>
+            </div>
+            <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+              <%law_tag = LawTag.new %>
+              <%= render partial:'edit_table', locals: {law_tag: law_tag, all: @all_creacions, tag_type: "creacion", title: "Tipo de Creación", table_title: "Creación"}%>
+            </div>
+            <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+              <%law_tag = LawTag.new %>
+              <%= render partial:'edit_table', locals: {law_tag: law_tag, all: @all_materias, tag_type: "materia", title: "Materias", table_title: "Materia"}%>
+            </div>
           </div>
         </div>
-      <% end %>
-
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th scope="col">Creación</th>
-            <th scope="col">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <%@law_creacions.each do |creacions|%>
-            <tr>
-              <td>
-                <%= creacions.tag.name %> 
-              </td>
-              <td>
-                 <%= button_to creacions, method: :delete, data: { confirm: 'Are you sure?'}, class:"btn btn-outline-danger" do %>
-                  <i class="fas fa-trash-alt"></i>
-                <% end %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+      </div>
     </div>
+    
     <div class="tab-pane fade" id="modificaciones" role="tabpanel" aria-labelledby="modificaciones-tab">
       <%law_modification = LawModification.new %>
-      <%= form_with(model: law_modification, local: true) do |form|%>
-        <% if law_modification.errors.any? %>
-          <div id="error_explanation">
-            <h2><%= pluralize(law_modification.errors.count, "error") %> prohibited this law_tag from being saved:</h2>  
-              <ul>
-                <% law_modification.errors.full_messages.each do |message| %>
-                  <li><%= message %></li>
-                <% end %>
-              </ul>
-          </div>
-        <% end %>
-        <p> </p>
-        <div class="row">
-          <div class="col-sm-5">
-            <h2>Modificaciones</h2>
-          </div>
-          <div class='col-sm-5'>
-            <%= form.hidden_field :law_id, value: @law.id %>
-            <%= form.text_field :name, class: "form-control"%>
-          </div>
-          <div class='col-sm-2'>
-            <%= form.submit "Agregar modificación", class: 'btn btn-primary' %> 
-          </div>
-        </div>
-      <% end %>
+      <%= render partial:'edit_table', locals: {law_tag: law_modification, all: @all_modifications, tag_type: "modificacion", title: "Modificaciones", table_title: "Modificación"}%>
+    </div>
 
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th scope="col">Modificación</th>
-            <th scope="col">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <%@law_modifications.each do |law_modification|%>
-            <tr>
-              <td>
-                <%= law_modification.name %> 
-              </td>
-              <td>
-                 <%= button_to law_modification, method: :delete, data: { confirm: 'Are you sure?'}, class:"btn btn-outline-danger" do %>
-                  <i class="fas fa-trash-alt"></i>
-                <% end %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+    <div class="tab-pane fade" id="articles" role="tabpanel" aria-labelledby="articles-tab">
+      
+    </div>
+
+    <div class="tab-pane fade" id="chapters" role="tabpanel" aria-labelledby="chapters-tab">
+      
     </div>
   </div>
+  <p></p>
 </div>

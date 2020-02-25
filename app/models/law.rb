@@ -13,6 +13,7 @@ class Law < ApplicationRecord
 
   pg_search_scope :search_by_name,
                   against: [:name, :creation_number],
+                  ignoring: :accents,
                   using: {
                     tsearch: {
                       dictionary: "spanish",
@@ -30,6 +31,18 @@ class Law < ApplicationRecord
                   }
 
   def to_param
-    [id, name.parameterize].join("-")
+    [id, name.parameterize].join('-')
+  end
+
+  def materias
+    tags.where(tag_type_id: TagType.find_by_name('materia').id)
+  end
+
+  def materia_names
+    materia_names = []
+    tags.where(tag_type_id: TagType.find_by_name('materia').id).each do |materia|
+      materia_names.push(materia.name)
+    end
+    return materia_names
   end
 end

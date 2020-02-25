@@ -21,13 +21,7 @@ class HomeController < ApplicationController
     @grouped_laws = []
     @stream.each do |grouped_law|
       law = {count: grouped_law[1].count, law: Law.find_by_id(grouped_law[0]), preview: ("<b>Artículo " + grouped_law[1].first.number + ":</b> ..." + grouped_law[1].first.pg_search_highlight + "...").html_safe, tag_text: ""}
-      law[:law].tags.each do |tag|
-        if law[:tag_text] == ""
-          law[:tag_text] = tag.name
-        else
-          law[:tag_text] += ", " + tag.name
-        end
-      end
+      law[:materia_names] = law[:law].materia_names
       @grouped_laws.push(law)
       @result_count += grouped_law[1].count
       legal_documents.add(grouped_law[0])

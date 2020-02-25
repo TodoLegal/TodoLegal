@@ -66,7 +66,7 @@
               <% end %>
             </td>
             <td>
-              <%= button_to x, method: :delete, data: { confirm: 'Are you sure?'}, class:"btn btn-outline-danger" do %>
+              <%= button_to x, method: :delete, data: { confirm: 'Are you sure?', toggle:"modal", target:"#modal-center"}, class:"btn btn-outline-danger"  do %>
                 <i class="fas fa-trash-alt"></i>
               <% end %>
             </td>
@@ -74,5 +74,7 @@
         <% end %>
       </tbody>
     </table>
-
+    <div id="modal-center">
+      <%= render 'layouts/confirm_modal' %>
+    </div>
 </div>

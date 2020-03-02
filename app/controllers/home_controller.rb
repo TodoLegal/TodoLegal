@@ -12,6 +12,7 @@ class HomeController < ApplicationController
     @stream = findArticles @query
     @result_count = @laws.size
     @articles_count = @stream.size
+    @is_search_law = true
     legal_documents = Set[]
 
     @laws.each do |law|
@@ -34,9 +35,9 @@ class HomeController < ApplicationController
       @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' resultados encontrados'
     end
     if @legal_documents_count > 1
-      @result_info_text += " en " + @legal_documents_count.to_s + " documentos legales (leyes, acuerdos, reglamentos y otra normativa)."
+      @result_info_text += " en " + @legal_documents_count.to_s + " documentos legales."
     elsif @legal_documents_count == 1
-      @result_info_text += " en " + @legal_documents_count.to_s + " documento legal (leyes, acuerdos, reglamentos y otra normativa)."
+      @result_info_text += " en " + @legal_documents_count.to_s + " documento legal."
     end
   end
 

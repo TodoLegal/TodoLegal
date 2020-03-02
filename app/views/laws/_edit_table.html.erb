@@ -37,6 +37,17 @@
           </td>
         </tr>
       <% end %>
+      <%= form_with(model: law_tag, local: true) do |form|%>
+        <tr>
+          <td>
+            <%= form.hidden_field :law_id, value: @law.id %>
+            <%= form.collection_select(:tag_id, (all), :id, :name, {:prompt=>true}, {:class=>'form-control'}) %>
+          </td>
+          <td>
+            
+          </td>
+        </tr>
+      <% end %>
     </tbody>
   </table>
   <div id="modal-center">

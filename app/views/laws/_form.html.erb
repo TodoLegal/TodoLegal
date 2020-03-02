@@ -12,30 +12,36 @@
       </div>
     <% end %>
     <p></p>
-    <div class="card">
-      <div class = "card-body">
+    <div class="row">
+      <div class="col-md-8">
         <div class="form-group">
           <%= form.label :nombre %>
           <%= form.text_field :name, class: "form-control" %>
         </div>
+      </div>
+      <div class="col-md-8">
         <div class="form-group">
           <p>Forma de creación</p>
           <%= form.hidden_field :law_id, value: @law.id %>
           <%= form.collection_select(:tag_id, (@all_creacions), :id, :name, {:prompt=>true}, {:class=>'form-control'}) %>
         </div>
+      </div>
+      <div class="col-md-8">
         <div class="form-group">
           <%= form.label :numero_de_creacion %>
           <%= form.text_field :creation_number, class: "form-control" %>
         </div>
+      </div>
+      <div class="col-md-8">
         <div class="form-group">
           <%= form.label :modificaciones %>
           <%= form.text_field :modifications, class: "form-control" %>
         </div>
-        <div class="row justify-content-end">
-          <%= link_to 'Cancelar', law_path, class: "btn btn-secondary"%>
-          &nbsp;&nbsp;
-          <%= form.submit "Actualizar", class: "btn btn-primary"%>
-        </div>
+      </div>
+      <div class="col-md-8 justify-content-end">
+        <%= link_to 'Cancelar', law_path, class: "btn btn-secondary"%>
+        &nbsp;&nbsp;
+        <%= form.submit "Actualizar", class: "btn btn-primary"%>
       </div>
     </div>
   <% end %>

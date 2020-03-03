@@ -112,6 +112,13 @@ class LawsController < ApplicationController
 
   # GET /laws/1/edit
   def edit
+    @article_number = params[:article_number]
+    if @article_number
+      @article = @law.articles.where('number LIKE ?', "%#{@article_number}%").first
+    else
+      @article = @law.articles.first
+    end
+
     @law_materias = []
     materia_tag_type = TagType.find_by_name("materia")
     @all_materias = Tag.where(tag_type: materia_tag_type)

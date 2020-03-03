@@ -1,7 +1,8 @@
 class AdminController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_action :authenticate_admin!
-  
+  before_action :user_can_manage_permissions!, only: [:users, :grant_permission, :revoke_permission]
+  before_action :user_can_see_subscriptions!, only: [:subscriptions]
+
   def users
     @email = params[:email]
     if @email

@@ -46,14 +46,15 @@
     </div>
 
     <div class="tab-pane fade" id="articles" role="tabpanel" aria-labelledby="articles-tab">
+      <p></p>
+
       <form action="<%= edit_law_path %>" method="get">
-        <div>
-          <input name="article_number" value="<%= @article_number %>" type="text">
-          <div>
-            <button type="submit">Buscar</button>
-          </div>
+        <div class="form-group">
+          <input name="article_number" value="<%= @article_number %>" type="text" placeholder="Número de artículo">
+          <button class="btn btn-outline-primary" type="submit" >Buscar</button>
         </div>
       </form>
+
       <% if @article %>
         <%= form_with(model: @article, local: true) do |form| %>
           <% if @article.errors.any? %>
@@ -69,8 +70,8 @@
           <% end %>
         
           <div class="form-group">
-            <%= form.label :number %>
-            <%= form.text_field :number, class: 'form-control' %>
+            <p>Articulo actual: <%= @article_number %></p>
+            
           </div>
         
           <div class="form-group">
@@ -78,9 +79,18 @@
             <%= form.text_area :body, class: 'form-control', rows: '10' %>
           </div>
         
-          <div class="actions">
+          <div class="actions d-inline p-2">
             <%= form.submit class: 'btn btn-primary' %>
           </div>
+          <div class="row justify-content-end">
+            <div class="col-2">
+              <button class="btn btn-outline-secondary pull-right" type="submit" >Anterior</button>
+            </div>
+            <div class="col-2">
+              <button class="btn btn-outline-secondary pull-right" type="submit" >Siguiente</button>
+            </div>
+          </div>
+          
         <% end %>
       <% end %>
     </div>

@@ -4,15 +4,6 @@
     <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, law_path%>
     Información general del documento legal
   </h1>
-  <%=begin%>
- <% tab_number = 0 %>
-  <script>
-    $(document).ready(function(){
-        $("#myTab li:eq(<%= tab_number %>) a").tab('show');
-    })
-  </script> 
-<%
-=end%>
 
   <script>
     $(document).ready(function(){

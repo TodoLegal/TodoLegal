@@ -37,8 +37,7 @@
 
     <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
       <%= render 'form', law: @law %>
-      <%law_tag = LawTag.new %>
-      <%= render partial:'edit_table', locals: {law_tag: law_tag, all: @all_materias, tag_type: "materia", table_title: "Materia"}%>
+      
     </div>
     
     <div class="tab-pane fade" id="modifications" role="tabpanel" aria-labelledby="modifications-tab">

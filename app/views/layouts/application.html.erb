@@ -35,8 +35,12 @@
 
   <% if user_signed_in? %>
       <%= render 'layouts/logged_navbar' %>        
-  <% else %>
-    <%= render 'layouts/unlogged_navbar' %>
+  <%
+=begin%>
+ <% else %>
+    <%= render 'layouts/unlogged_navbar' %> 
+<%
+=end%>
   <% end %>
 
   <%= render 'subscriptions/subscribe_form' %>

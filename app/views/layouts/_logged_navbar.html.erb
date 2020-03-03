@@ -7,28 +7,31 @@
         </button>
         <div class="dropdown-menu dropdown-menu-right">
             <button class="dropdown-item" type="button">
-                <i class="fas fa-user-alt"></i>
+                
                 Cuenta
             </button>
             <div class="dropdown-divider"></div>
             <button class="dropdown-item" type="button" >
-                <i class="fas fa-user-cog"></i>
+                
                 Admin
             </button>
             <div class="dropdown-divider"></div>
-            <div class="d-inline p-2"><i class="fas fa-users"></i></div>
-            <%= link_to('Ver usuarios', admin_users_path, class:"dropdown-item d-inline p-2") %>
+           
+            <%= link_to('Ver usuarios', admin_users_path, class:"dropdown-item") %>
             <div class="dropdown-divider"></div>
-            <div class="d-inline p-2"><i class="fas fa-user-check"></i></div>
-            <%= link_to('Ver suscritos', admin_subscriptions_path, class:"dropdown-item d-inline p-2")%>
+            
+            <%= link_to('Ver suscritos', admin_subscriptions_path, class:"dropdown-item")%>
             <div class="dropdown-divider"></div>
-            <div class="d-inline p-2">  </div>
-            <%= link_to('Ver leyes', laws_path, class:"dropdown-item d-inline p-2")%>
+            
+            <%= link_to('Ver leyes', laws_path, class:"dropdown-item")%>
             <div class="dropdown-divider"></div>
-            <button class="dropdown-item" type="button">Modo edición</button>
+            <button class="dropdown-item" type="button">
+                
+                Modo edición
+            </button>
             <div class="dropdown-divider"></div>
-            <div class="d-inline p-2">  </div>
-            <%= link_to('Cerrar sesión', destroy_user_session_path, method: :delete, class:"dropdown-item d-inline p-2") %>
+            
+            <%= link_to('Cerrar sesión', destroy_user_session_path, method: :delete, class:"dropdown-item") %>
         </div>
         </div>
     </ul>

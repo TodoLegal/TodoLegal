@@ -21,7 +21,7 @@
       </div>
       <div class="col-md-8">
         <div class="form-group">
-          <p>Forma de creación</p>
+          <%= form.label :forma_de_creacion %>
           <%= form.hidden_field :law_id, value: @law.id %>
           <%= form.collection_select(:tag_id, (@all_creacions), :id, :name, {:prompt=>true}, {:class=>'form-control'}) %>
         </div>
@@ -38,10 +38,13 @@
           <%= form.text_field :modifications, class: "form-control" %>
         </div>
       </div>
+      <%law_tag = LawTag.new %>
+      <%= render partial:'edit_table', locals: {law_tag: law_tag, all: @all_materias, tag_type: "materia", table_title: "Materia"}%>
       <div class="col-md-8 justify-content-end">
-        <%= link_to 'Cancelar', law_path, class: "btn btn-secondary"%>
-        &nbsp;&nbsp;
+        <p></p>
         <%= form.submit "Actualizar", class: "btn btn-primary"%>
+        &nbsp;&nbsp;
+       <u> <%= link_to 'Cancelar', law_path, class: "text-danger"%> </u>
       </div>
     </div>
   <% end %>

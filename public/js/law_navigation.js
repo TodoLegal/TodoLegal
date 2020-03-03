@@ -247,3 +247,11 @@ var onkeydown = (function (ev) {
 $(document).ready(function () {
   
 });
+
+
+function addrow(){
+  var table = document.getElementById("edit_table");
+  var row = document.getElementById("edit_table").lastChild;
+  var clone = row.cloneNode(true);
+  table.appendChild(clone);
+}

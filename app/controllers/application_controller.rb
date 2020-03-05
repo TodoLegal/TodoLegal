@@ -3,6 +3,27 @@ class ApplicationController < ActionController::Base
 
   def authenticate_admin!
     if !current_user
+      redirect_to "/?error=No+session"
+      return
+    end
+  end
+
+  def user_can_manage_permissions!
+    if !current_user
+      redirect_to "/?error=No+session"
+      return
+    end
+    if !current_user.permissions.find_by_name("manejar permisos")
+      redirect_to "/?error=Invalid+permissions"
+    end
+  end
+
+  def user_can_see_subscriptions!
+    if !current_user
+      redirect_to "/?error=No+session"
+      return
+    end
+    if !current_user.permissions.find_by_name("ver suscripciones")
       redirect_to "/?error=Invalid+permissions"
     end
   end

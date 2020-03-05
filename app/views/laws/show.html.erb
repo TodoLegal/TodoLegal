@@ -1,12 +1,17 @@
 <div data-spy="scroll" data-target="#myScrollspy">
   <% if user_signed_in? %>
     <%= render 'layouts/logged_navbar'%>        
-  <% else %>
-    <%= render 'layouts/unlogged_navbar' %>
+  <%
+=begin%>
+ <% else %>
+    <%= render 'layouts/unlogged_navbar' %> 
+<%
+=end%>
   <% end %>
 
   <%= render 'subscriptions/subscribe_form' %>
 
+  <%= render 'navbar_subbar' %>
   <% if @highlight_enabled %>
     <%= render 'navbar_search_enabled' %>
   <% else %>

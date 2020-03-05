@@ -10,7 +10,9 @@
 
   <%= render 'layouts/favicons' %>
 
-  <title>Todo Legal</title>
+  <title>Todo Legal - El buscador de leyes de Honduras</title>
+  <meta name="description" content="En Todo Legal tú puedes navegar las leyes hondureñas artículo por artículo y realizar busquedas por palabras clave.">
+  <meta name="keywords" content="constitución, constitución de la república, ley, poder judicial, ley de procedimiento administrativo">
 
   <!-- Bootstrap CSS CDN -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
@@ -38,7 +40,7 @@
 
   <% if user_signed_in? %>
     <p>
-      <%= link_to('Logout', destroy_user_session_path, method: :delete) %>        
+      <%= link_to('Logout', destroy_user_session_path, method: :delete) %>        	
     </p>
   <% end %>
 
@@ -73,7 +75,7 @@
 <!--
   <footer class="footer">
     <div class="container">
-      <span class="text-muted">2019 Legal Technologies S.A.</span>
+      <span class="text-muted">2019-2020 Legal Technologies S.A.</span>
        <a align="right" href="/terms"><span class="text-muted">Términos y condiciones</span></a>
     </div>
   </footer>

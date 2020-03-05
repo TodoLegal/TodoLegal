@@ -1,18 +1,19 @@
 class Law < ApplicationRecord
   include PgSearch
   
-  has_many :books
-  has_many :titles
-  has_many :chapters
-  has_many :sections
-  has_many :subsections
-  has_many :articles
-  has_many :law_tags
-  has_many :law_modifications
-  has_many :tags, through: :law_tags
+  has_many :books, :dependent => :destroy
+  has_many :titles, :dependent => :destroy
+  has_many :chapters, :dependent => :destroy
+  has_many :sections, :dependent => :destroy
+  has_many :subsections, :dependent => :destroy
+  has_many :articles, :dependent => :destroy
+  has_many :law_tags, :dependent => :destroy
+  has_many :law_modifications, :dependent => :destroy
+  has_many :tags, through: :law_tags, :dependent => :destroy
 
   pg_search_scope :search_by_name,
                   against: [:name, :creation_number],
+                  ignoring: :accents,
                   using: {
                     tsearch: {
                       dictionary: "spanish",

@@ -1,30 +1,20 @@
 class LawTagsController < ApplicationController
   before_action :set_law_tag, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_admin!, only: [:index, :show, :new, :edit, :create, :update, :destroy]
 
   # GET /law_tags
   # GET /law_tags.json
   def index
-    if !current_user
-      redirect_to "/"
-    end
-
     @law_tags = LawTag.all
   end
 
   # GET /law_tags/1
   # GET /law_tags/1.json
   def show
-    if !current_user
-      redirect_to "/"
-    end
   end
 
   # GET /law_tags/new
   def new
-    if !current_user
-      redirect_to "/"
-    end
-
     @law_tag = LawTag.new
   end
 
@@ -35,12 +25,7 @@ class LawTagsController < ApplicationController
   # POST /law_tags
   # POST /law_tags.json
   def create
-    if !current_user
-      redirect_to "/"
-    end
-
     @law_tag = LawTag.new(law_tag_params)
-
     respond_to do |format|
       if @law_tag.save
         format.html { redirect_to edit_law_path(@law_tag.law), notice: 'Law tag was successfully created.' }
@@ -55,10 +40,6 @@ class LawTagsController < ApplicationController
   # PATCH/PUT /law_tags/1
   # PATCH/PUT /law_tags/1.json
   def update
-    if !current_user
-      redirect_to "/"
-    end
-
     respond_to do |format|
       if @law_tag.update(law_tag_params)
         format.html { redirect_to @law_tag, notice: 'Law tag was successfully updated.' }
@@ -73,10 +54,6 @@ class LawTagsController < ApplicationController
   # DELETE /law_tags/1
   # DELETE /law_tags/1.json
   def destroy
-    if !current_user
-      redirect_to "/"
-    end
-    
     law = @law_tag.law
     @law_tag.destroy
     respond_to do |format|

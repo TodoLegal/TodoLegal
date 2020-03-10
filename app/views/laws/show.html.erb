@@ -42,7 +42,11 @@ function myFunction(section_id) {
       <%= render 'sidebar_indice' %>
     </div>
     </div>
+    <% if !@user_can_access_law %>
+      <p>Crea una cuenta para acceder a esta ley</p>
+    <% end %>
   </div>
 </div>
+
 
 <script src="/js/law_navigation.js"></script>

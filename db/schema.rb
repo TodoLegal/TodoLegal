@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_23_221520) do
+ActiveRecord::Schema.define(version: 2020_03_05_201418) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -25,6 +25,8 @@ ActiveRecord::Schema.define(version: 2020_02_23_221520) do
     t.integer "law_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.text "body_markdown"
+    t.text "body_html"
   end
 
   create_table "books", force: :cascade do |t|
@@ -65,6 +67,12 @@ ActiveRecord::Schema.define(version: 2020_02_23_221520) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "law_accesses", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "law_modifications", force: :cascade do |t|
     t.integer "law_id"
     t.string "name"
@@ -85,6 +93,7 @@ ActiveRecord::Schema.define(version: 2020_02_23_221520) do
     t.datetime "updated_at", precision: 6, null: false
     t.text "modifications"
     t.string "creation_number"
+    t.integer "law_access_id"
   end
 
   create_table "permissions", force: :cascade do |t|

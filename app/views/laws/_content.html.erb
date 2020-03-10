@@ -116,7 +116,7 @@
       <% bigger_section_iterator += 1 %>
     <% end %>
     <% if stream.instance_of? Article %>
-      <p class="article" article_id="<%= article_iterator %>" last_bigger_section="<%= bigger_section_iterator - 1 %>" next_bigger_section="<%= bigger_section_iterator %>" id="article_count_<%= article_iterator %>">
+      <div onclick="onClickArticle(<%= article_iterator %>)" class="article" article_id="<%= article_iterator %>" last_bigger_section="<%= bigger_section_iterator - 1 %>" next_bigger_section="<%= bigger_section_iterator %>" id="article_count_<%= article_iterator %>">
         <b style="font-weight:bold;">Artículo <%= stream.number %>:
           <% if user_signed_in? %>
             <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_article_path(stream) %>
@@ -127,30 +127,8 @@
         <% else %>
           <%= stream.class.markdown.render(stream.body).html_safe %>
         <% end %>
-      </p>
+      </div>
       <% article_iterator += 1 %>
     <% end %>
   <% end %>
 </div>
-
-<script>
-window.onscroll = function() {onScrollCallback()};
-
-var bigger_sections = document.getElementsByClassName("bigger-section");
-
-console.log(bigger_sections)
-
-function onScrollCallback()
-{
-  var sticky_header = null
-  for(var i=0; i<bigger_sections.length; i++)
-  {
-    if (window.pageYOffset > bigger_sections[i].offsetTop)
-      sticky_header = bigger_sections[i]
-  }
-  sticky_header_text = ""
-  if(sticky_header)
-    sticky_header_text = sticky_header.innerText
-  document.getElementById("sticky_nav_header").innerText = sticky_header_text
-}
-</script>

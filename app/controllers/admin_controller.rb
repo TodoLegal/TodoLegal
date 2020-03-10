@@ -49,6 +49,15 @@ class AdminController < ApplicationController
     redirect_to admin_users_url
   end
 
+  def set_law_access
+    law_id = params[:law][:law_id]
+    law_access_id = params[:law][:law_access_id]
+    @law = Law.find_by_id(law_id)
+    @law.law_access_id = law_access_id
+    @law.save
+    redirect_to laws_path
+  end
+
   def subscriptions
     @subscriptions = EmailSubscription.all
     @confirmed_subscriptions = EmailSubscription.where(status: "confirmed")

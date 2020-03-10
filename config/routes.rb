@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :law_accesses
   resources :user_permissions
   resources :permissions
   resources :law_modifications
@@ -24,6 +25,7 @@ Rails.application.routes.draw do
   get "admin/users" => "admin#users", as: "admin_users"
   post "admin/grant_permission" => "admin#grant_permission", as: "admin_grant_permission"
   post "admin/revoke_permission" => "admin#revoke_permission", as: "admin_revoke_permission"
+  post "admin/set_law_access" => "admin#set_law_access", as: "admin_set_law_access"
   get "admin/subscriptions" => "admin#subscriptions", as: "admin_subscriptions"
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

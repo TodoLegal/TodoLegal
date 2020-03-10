@@ -6,6 +6,7 @@
   <thead>
     <tr>
       <th>Name</th>
+      <th>Acceso</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -14,9 +15,15 @@
     <% @laws.each do |law| %>
       <tr>
         <td><%= law.name %></td>
+        <td>
+          <%= form_for(law, url: admin_set_law_access_url, html: { method: :post }) do |form| %>
+            <%= form.hidden_field :law_id, value: law.id %>
+            <%= form.collection_select(:law_access_id, LawAccess.all, :id, :name, {:prompt=>true}, {:class=>'form-control'}) %>
+            <%= form.submit 'Cambiar acceso', class: 'btn btn-primary' %> 
+          <% end %>
+        </td>
         <td><%= link_to 'Show', law %></td>
         <td><%= link_to 'Edit', edit_law_path(law) %></td>
-        <td><%= link_to 'Destroy', law, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>

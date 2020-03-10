@@ -42,6 +42,7 @@ class ArticlesController < ApplicationController
   def update
     respond_to do |format|
       if @article.update(article_params)
+        # @article.number = @article.number.to_i + 1 
         format.html { redirect_to edit_law_path(@article.law, article_number: @article.number), notice: 'Article was successfully updated.' }
         format.json { render :show, status: :ok, location: @article }
       else

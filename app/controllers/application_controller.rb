@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
       redirect_to "/?error=Invalid+permissions"
     end
   end
-
+  
 protected
   def after_sign_up_path_for(resource)
     root_path

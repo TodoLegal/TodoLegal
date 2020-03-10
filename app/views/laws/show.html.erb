@@ -5,6 +5,16 @@ function myFunction(section_id) {
 </script>
 
 <div data-spy="scroll" data-target="#myScrollspy">
+  <% if user_signed_in? %>
+    <%= render 'layouts/logged_navbar'%>        
+  <%
+=begin%>
+ <% else %>
+    <%= render 'layouts/unlogged_navbar' %> 
+<%
+=end%>
+  <% end %>
+
   <%= render 'subscriptions/subscribe_form' %>
 
   <%= render 'navbar_subbar' %>
@@ -31,7 +41,11 @@ function myFunction(section_id) {
     <div class="wrapper">
       <%= render 'sidebar_indice' %>
     </div>
+    <% if !@user_can_access_law %>
+      <p>Crea una cuenta para acceder a esta ley</p>
+    <% end %>
   </div>
 </div>
+
 
 <script src="/js/law_navigation.js"></script>

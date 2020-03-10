@@ -183,7 +183,7 @@ class LawsController < ApplicationController
       law_access = law.law_access
       if law_access
         if law_access.name == "Pro"
-          if !current_user.permissions.find_by_name("ver leyes pro")
+          if !current_user || !current_user.permissions.find_by_name("ver leyes pro")
             return false
           end
         end

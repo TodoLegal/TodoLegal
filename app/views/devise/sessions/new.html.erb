@@ -1,21 +1,26 @@
 <div class="container">
-  <h2>Log in</h2>
+  <div class="card w-75 shadow p-3 mb-5 bg-white rounded", style="margin-left: 70px;">
+    <img class="card-img-top" src="/img/logo_landing.png" alt="Card image cap" class="img-fluid">
+    <div class="card-body">
+      <h2 class="card-title text-center">Iniciar sesión</h2>
 
-  <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
 
-    <div class="form-group">
-      <%= f.label :email %><br />
-      <%= f.email_field :email, autofocus: true, autocomplete: "email", class: 'form-control' %>
+        <div class="form-group">
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: 'form-control', placeholder:"E-mail" %>
+        </div>
+
+        <div class="form-group">
+          <%= f.password_field :password, autocomplete: "current-password", class: 'form-control', placeholder:"Contraseña" %>
+        </div>
+
+        <div class="form-group">
+          <%= f.submit "Inicia sesión", class: 'btn btn-primary btn-block' %>
+        </div>
+      <% end %>
     </div>
-
-    <div class="form-group">
-      <%= f.label :password %><br />
-      <%= f.password_field :password, autocomplete: "current-password", class: 'form-control' %>
+    <div class="card-footer text-center">
+      <em>¿No tienes una cuenta? <%= render "devise/shared/links" %></em>
     </div>
-
-    <div class="actions">
-      <%= f.submit "Log in", class: 'btn btn-primary' %>
-    </div>
-  <% end %>
-
+  </div>
 </div>

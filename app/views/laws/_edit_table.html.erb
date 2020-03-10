@@ -1,0 +1,82 @@
+<div class="container">
+
+  <p></p>
+  <% tag = @law_creacions %>
+
+  <% if tag_type == "creacion" %>
+    <% tag = @law_creacions %>
+  <% elsif tag_type == "materia" %>
+    <% tag = @law_materias %>
+  <% elsif tag_type == "modificacion"  %>
+    <% tag = @law_modifications %>
+  <% else %>
+    <% tag = @law_creacions %>
+  <% end %>
+
+  <table class="table table-bordered" id="edit_table">
+    <thead>
+      <tr>
+        <th scope="col"><%= table_title %></th>
+        <th scope="col">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%tag.each do |x|%>
+        <tr>
+          <td>
+            <% if tag_type != "modificacion"%>
+              <%= x.tag.name %> 
+            <% else %>
+              <%= x.name %> 
+            <% end %>
+          </td>
+          <td>
+            <%= button_to x, method: :delete, data: { confirm: 'Are you sure?', toggle:"modal", target:"#modal-center"}, class:"btn btn-outline-danger"  do %>
+              <i class="fas fa-trash-alt"></i>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+      <%= form_with(model: law_tag, local: true) do |form|%>
+        <% if law_tag.errors.any? %>
+          <div id="error_explanation">
+            <h2><%= pluralize(law_tag.errors.count, "error") %> prohibited this law_tag from being saved:</h2>  
+              <ul>
+                <% law_tag.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+              </ul>
+          </div>
+        <% end %>
+        <tr>
+          <% if tag_type != "modificacion" %>
+            <td>
+              <%= form.hidden_field :law_id, value: @law.id %>
+              <%= form.collection_select(:tag_id, @all_materias, :id, :name, {:prompt=>true}, {:class=>'form-control'}) %>
+            </td>
+            <td>
+            
+            </td>
+          <% else %>
+            <td>
+              <%= form.hidden_field :law_id, value: @law.id %>
+              <%= form.text_field :name, class: "form-control"%>
+            </td>
+            <td>
+
+            </td>
+          <% end %>
+          <%= form.submit "Agregar", class: 'btn btn-primary' %>
+      <% end %>
+    </tbody>
+  </table>
+  <%
+=begin%>
+ <button class="btn btn-primary" id="add_row" onclick="addrow();"> <i class="fas fa-plus"></i> </button> 
+<%
+=end%>
+  <div id="modal-center">
+    <%= render 'layouts/confirm_modal' %>
+  </div>
+
+</div>

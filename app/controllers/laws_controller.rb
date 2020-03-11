@@ -189,12 +189,12 @@ class LawsController < ApplicationController
     def user_can_access_law law
       law_access = law.law_access
       if law_access
-        if law_access.name == "Pro"
-          if !current_user || !current_user.permissions.find_by_name("ver leyes pro")
+        if law_access.name == "pro"
+          if !current_user_is_pro
             return false
           end
         end
-        if law_access.name == "Básico"
+        if law_access.name == "basic"
           if !current_user
             return false
           end

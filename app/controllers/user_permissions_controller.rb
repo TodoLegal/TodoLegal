@@ -1,5 +1,6 @@
 class UserPermissionsController < ApplicationController
   before_action :set_user_permission, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_admin!, only: [:index, :show, :new, :edit, :create, :update, :destroy]
 
   # GET /user_permissions
   # GET /user_permissions.json

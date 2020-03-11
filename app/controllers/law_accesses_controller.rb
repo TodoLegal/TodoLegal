@@ -1,5 +1,6 @@
 class LawAccessesController < ApplicationController
   before_action :set_law_access, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_admin!, only: [:index, :show, :new, :edit, :create, :update, :destroy]
 
   # GET /law_accesses
   # GET /law_accesses.json

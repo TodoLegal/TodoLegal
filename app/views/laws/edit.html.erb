@@ -2,17 +2,8 @@
   <p> </p>
   <h1>
     <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, law_path%>
-    Información general del documento legal
+    Edición archivo Legal
   </h1>
-  <%=begin%>
- <% tab_number = 0 %>
-  <script>
-    $(document).ready(function(){
-        $("#myTab li:eq(<%= tab_number %>) a").tab('show');
-    })
-  </script> 
-<%
-=end%>
 
   <script>
     $(document).ready(function(){
@@ -22,66 +13,91 @@
 
       var activeTab = localStorage.getItem('activeTab');
       if(activeTab){
-          $('#myTab a[href="' + activeTab + '"]').tab('show');
+          $('#lawEditorTab a[href="' + activeTab + '"]').tab('show');
       }
     });
   </script> 
   
-  <ul class="nav nav-tabs" id="myTab" role="tablist">
+  <ul class="nav nav-tabs" id="lawEditorTab" role="tablist">
     <li  class="nav-item">
-      <a class="nav-link active" id="ley-tab" data-toggle="tab" href="#ley" role="tab" aria-controls="ley" aria-selected="true">Editar Ley</a>
+      <a class="nav-link active" id="general-tab" data-toggle="tab" href="#general" role="tab" aria-controls="general" aria-selected="true">General</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" id="modificaciones-tab" data-toggle="tab" href="#modificaciones" role="tab" aria-controls="modificaciones" aria-selected="false">Modificaciones</a>
+      <a class="nav-link" id="modifications-tab" data-toggle="tab" href="#modifications" role="tab" aria-controls="modifications" aria-selected="false">Modificaciones</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" id="articles-tab" data-toggle="tab" href="#articles" role="tab" aria-controls="articles" aria-selected="false">Artículos</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" id="articles-tab" data-toggle="tab" href="#chapters" role="tab" aria-controls="articles" aria-selected="false">Capítulos</a>
+      <a class="nav-link" id="index-tab" data-toggle="tab" href="#index" role="tab" aria-controls="index" aria-selected="false">Índice</a>
     </li>
   </ul>
 
   <div class="tab-content" id="myTabContent">
-    <div class="tab-pane fade show active" id="ley" role="tabpanel" aria-labelledby="ley-tab">
-      <div class="row">
-        <div class = "col-sm-2">
-          <div class="nav flex-column nav-pills" id="myTab2" role="tablist" aria-orientation="vertical">
-            <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Ley</a>
-            <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Creación</a>
-            <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">Materias</a>
-          </div>
-        </div>
-        <div class="col-sm-10">
-          <div class="tab-content" id="v-pills-tabContent">
-            <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
-              <%= render 'form', law: @law %>
-            </div>
-            <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-              <%law_tag = LawTag.new %>
-              <%= render partial:'edit_table', locals: {law_tag: law_tag, all: @all_creacions, tag_type: "creacion", title: "Tipo de Creación", table_title: "Creación"}%>
-            </div>
-            <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
-              <%law_tag = LawTag.new %>
-              <%= render partial:'edit_table', locals: {law_tag: law_tag, all: @all_materias, tag_type: "materia", title: "Materias", table_title: "Materia"}%>
-            </div>
-          </div>
-        </div>
-      </div>
+
+    <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
+      <%= render 'form', law: @law %>
+      
     </div>
     
-    <div class="tab-pane fade" id="modificaciones" role="tabpanel" aria-labelledby="modificaciones-tab">
+    <div class="tab-pane fade" id="modifications" role="tabpanel" aria-labelledby="modifications-tab">
       <%law_modification = LawModification.new %>
-      <%= render partial:'edit_table', locals: {law_tag: law_modification, all: @all_modifications, tag_type: "modificacion", title: "Modificaciones", table_title: "Modificación"}%>
+      <%= render partial:'edit_table', locals: {law_tag: law_modification, all: @all_modifications, tag_type: "modificacion", table_title: "Modificación"}%>
     </div>
 
     <div class="tab-pane fade" id="articles" role="tabpanel" aria-labelledby="articles-tab">
+      <p></p>
+
+      <form action="<%= edit_law_path %>" method="get">
+        <div class="form-group">
+          <input name="article_number" value="<%= @article_number %>" type="text" placeholder="Número de artículo">
+          <button class="btn btn-outline-primary" type="submit" >Buscar</button>
+        </div>
+      </form>
+      
+      <% if @article %>
+        <%= form_with(model: @article, local: true) do |form| %>
+          <% if @article.errors.any? %>
+            <div id="error_explanation">
+              <h2><%= pluralize(@article.errors.count, "error") %> prohibited this article from being saved:</h2>
+        
+              <ul>
+                <% @article.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+        
+          <div class="form-group">
+            <p>Articulo actual: <%= @article_number %></p>
+          </div>
+        
+          <div class="form-group">
+            <%= form.label :body %>
+            <%= form.text_area :body, class: 'form-control', rows: '10' %>
+          </div>
+
+          <div class="actions d-inline p-2">
+            <%= form.submit class: 'btn btn-primary' %>
+          </div>
+          <div class="row justify-content-end">
+            <div class="col-2">
+              <button class="btn btn-outline-secondary pull-right" type="submit" >Anterior</button>
+            </div>
+            <div class="col-2">
+              <button class="btn btn-outline-secondary pull-right" type="submit" >Siguiente</button>
+            </div>
+          </div>
+      
+        <% end %>
+      <% end %>
+    </div>
+
+    <div class="tab-pane fade" id="index" role="tabpanel" aria-labelledby="index-tab">
       
     </div>
 
-    <div class="tab-pane fade" id="chapters" role="tabpanel" aria-labelledby="chapters-tab">
-      
-    </div>
   </div>
   <p></p>
 </div>

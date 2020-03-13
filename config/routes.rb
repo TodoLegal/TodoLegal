@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get '/users/sign_up', to: "home#index"
   resources :law_modifications
   resources :subsections
   resources :sections

@@ -1,148 +1,103 @@
 <div class="container">
+  <p> </p>
+  <h1>
+    <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, law_path%>
+    Edición archivo Legal
+  </h1>
 
-  <h1>Editando ley</h1>
+  <script>
+    $(document).ready(function(){
+      $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        localStorage.setItem('activeTab', $(e.target).attr('href'));
+      });
 
-  <%= render 'form', law: @law %>
+      var activeTab = localStorage.getItem('activeTab');
+      if(activeTab){
+          $('#lawEditorTab a[href="' + activeTab + '"]').tab('show');
+      }
+    });
+  </script> 
+  
+  <ul class="nav nav-tabs" id="lawEditorTab" role="tablist">
+    <li  class="nav-item">
+      <a class="nav-link active" id="general-tab" data-toggle="tab" href="#general" role="tab" aria-controls="general" aria-selected="true">General</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="modifications-tab" data-toggle="tab" href="#modifications" role="tab" aria-controls="modifications" aria-selected="false">Modificaciones</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="articles-tab" data-toggle="tab" href="#articles" role="tab" aria-controls="articles" aria-selected="false">Artículos</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="index-tab" data-toggle="tab" href="#index" role="tab" aria-controls="index" aria-selected="false">Índice</a>
+    </li>
+  </ul>
 
-  <%law_tag = LawTag.new %>
-  <%= form_with(model: law_tag, local: true) do |form|%>
-    <% if law_tag.errors.any? %>
-      <div id="error_explanation">
-        <h2><%= pluralize(law_tag.errors.count, "error") %> prohibited this law_tag from being saved:</h2>  
-          <ul>
-            <% law_tag.errors.full_messages.each do |message| %>
-              <li><%= message %></li>
-            <% end %>
-          </ul>
-      </div>
-    <% end %>
-    <div class="row">
-      <div class="col-sm-8">
-        <h2>Materias</h2>
-      </div>
-      <div class="col-sm-2">
-        <%= form.hidden_field :law_id, value: @law.id %>
-        <%= form.collection_select(:tag_id, @all_materias, :id, :name, {:prompt=>true}, {:class=>'form-control'}) %>
-      </div>
-      <div class="col-sm-2">
-        <%= form.submit "Agregar materia", class: 'btn btn-primary' %> 
-      </div>
+  <div class="tab-content" id="myTabContent">
+
+    <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
+      <%= render 'form', law: @law %>
+      
     </div>
-  <% end %>
+    
+    <div class="tab-pane fade" id="modifications" role="tabpanel" aria-labelledby="modifications-tab">
+      <%law_modification = LawModification.new %>
+      <%= render partial:'edit_table', locals: {law_tag: law_modification, all: @all_modifications, tag_type: "modificacion", table_title: "Modificación"}%>
+    </div>
 
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th scope="col">Materia</th>
-          <th scope="col">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <%@law_materias.each do |materia|%>
-          <tr>
-            <td>
-              <%= materia.tag.name %> 
-            </td>
-            <td>
-              <%= button_to 'Eliminar', materia, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger" %>
-            </td>
-          </tr>
+    <div class="tab-pane fade" id="articles" role="tabpanel" aria-labelledby="articles-tab">
+      <p></p>
+
+      <form action="<%= edit_law_path %>" method="get">
+        <div class="form-group">
+          <input name="article_number" value="<%= @article_number %>" type="text" placeholder="Número de artículo">
+          <button class="btn btn-outline-primary" type="submit" >Buscar</button>
+        </div>
+      </form>
+      
+      <% if @article %>
+        <%= form_with(model: @article, local: true) do |form| %>
+          <% if @article.errors.any? %>
+            <div id="error_explanation">
+              <h2><%= pluralize(@article.errors.count, "error") %> prohibited this article from being saved:</h2>
+        
+              <ul>
+                <% @article.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+        
+          <div class="form-group">
+            <p>Articulo actual: <%= @article_number %></p>
+          </div>
+        
+          <div class="form-group">
+            <%= form.label :body %>
+            <%= form.text_area :body, class: 'form-control', rows: '10' %>
+          </div>
+
+          <div class="actions d-inline p-2">
+            <%= form.submit class: 'btn btn-primary' %>
+          </div>
+          <div class="row justify-content-end">
+            <div class="col-2">
+              <button class="btn btn-outline-secondary pull-right" type="submit" >Anterior</button>
+            </div>
+            <div class="col-2">
+              <button class="btn btn-outline-secondary pull-right" type="submit" >Siguiente</button>
+            </div>
+          </div>
+      
         <% end %>
-      </tbody>
-    </table>
-
-  <%law_tag = LawTag.new %>
-  <%= form_with(model: law_tag, local: true) do |form|%>
-    <% if law_tag.errors.any? %>
-      <div id="error_explanation">
-        <h2><%= pluralize(law_tag.errors.count, "error") %> prohibited this law_tag from being saved:</h2>  
-          <ul>
-            <% law_tag.errors.full_messages.each do |message| %>
-              <li><%= message %></li>
-            <% end %>
-          </ul>
-      </div>
-    <% end %>
-    <div class="row">
-      <div class="col-sm-8">
-        <h2>Tipo de Creación</h2>
-      </div>
-      <div class='col-sm-2'>  
-        <%= form.hidden_field :law_id, value: @law.id %>
-        <%= form.collection_select(:tag_id, @all_creacions, :id, :name, {:prompt=>true}, {:class=>'form-control'}) %>
-      </div>
-      <div class='col-sm-2'>
-        <%= form.submit "Agregar creación", class: 'btn btn-primary' %> 
-      </div>
-    </div>
-  <% end %>
-
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th scope="col">Creación</th>
-        <th scope="col">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <%@law_creacions.each do |creacions|%>
-        <tr>
-          <td>
-            <%= creacions.tag.name %> 
-          </td>
-          <td>
-            <%= button_to 'Eliminar', creacions, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger" %>
-          </td>
-        </tr>
       <% end %>
-    </tbody>
-  </table>
-  
-  <%law_modification = LawModification.new %>
-  <%= form_with(model: law_modification, local: true) do |form|%>
-    <% if law_modification.errors.any? %>
-      <div id="error_explanation">
-        <h2><%= pluralize(law_modification.errors.count, "error") %> prohibited this law_tag from being saved:</h2>  
-          <ul>
-            <% law_modification.errors.full_messages.each do |message| %>
-              <li><%= message %></li>
-            <% end %>
-          </ul>
-      </div>
-    <% end %>
-    <div class="row">
-      <div class="col-sm-5">
-        <h2>Modificaciones</h2>
-      </div>
-      <div class='col-sm-5'>
-        <%= form.hidden_field :law_id, value: @law.id %>
-        <%= form.text_field :name, class: "form-control"%>
-      </div>
-      <div class='col-sm-2'>
-        <%= form.submit "Agregar modificación", class: 'btn btn-primary' %> 
-      </div>
     </div>
-  <% end %>
 
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th scope="col">Modificación</th>
-        <th scope="col">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <%@law_modifications.each do |law_modification|%>
-        <tr>
-          <td>
-            <%= law_modification.name %> 
-          </td>
-          <td>
-            <%= button_to 'Eliminar', law_modification, method: :delete, data: { confirm: 'Are you sure?'}, class:"btn btn-danger" %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-  
+    <div class="tab-pane fade" id="index" role="tabpanel" aria-labelledby="index-tab">
+      
+    </div>
+
+  </div>
+  <p></p>
 </div>

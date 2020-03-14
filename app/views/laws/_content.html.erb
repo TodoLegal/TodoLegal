@@ -8,50 +8,7 @@
   }
 </style>
 
-<div class="container" style="">
-  <p id="notice"><%= notice %></p>
-  <h1>
-    <%= @law.name %>
-    <% if user_signed_in? %>
-      <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_law_path(@law) %>
-    <% end %>
-  </h1>
-
-  <% if @law.creation_number && @law.creation_number != "" %>
-    <p>
-      <p><%= @law.creation_number %></p>
-    </p>
-  <% end %>
-
-  <% if @law.law_modifications.size != 0 %>
-    <p>
-      <p>
-        <% @law.law_modifications.each do |law_modification| %>
-          <%= law_modification.name %>
-          <% if law_modification != @law.law_modifications.last %>
-            ,
-          <% end %>
-        <% end %>
-      </p>
-    </p>
-  <% end %>
-
-  <% if @law.modifications && @law.modifications != "" %>
-    <p>
-      <p>Modificaciones: <%= @law.modifications %></p>
-    </p>
-  <% end %>
-
-  <p class="resultinfo"><%= @articles_count %> artículos en total</p>
-
-  <!--
-  <% if @highlight_enabled %>
-    <p>
-      <a class="" href="<%= law_path(@law) %>">Ver ley completa</a>
-    </p>
-  <% end %>
-  -->
-
+<div style="">
   <% article_iterator = 0 %>
   <% bigger_section_iterator = 0 %>
   <% @stream.each do |stream| %>

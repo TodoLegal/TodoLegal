@@ -4,18 +4,15 @@ function myFunction(section_id) {
 }
 </script>
 
-<div data-spy="scroll" data-target="#myScrollspy">
+<div class="container" data-spy="scroll" data-target="#myScrollspy">
+
   <% if user_signed_in? %>
     <%= render 'layouts/logged_navbar'%>        
-  <%
-=begin%>
- <% else %>
+  <% else %>
     <%= render 'layouts/unlogged_navbar' %> 
-<%
-=end%>
   <% end %>
 
-  <%= render 'subscriptions/subscribe_form' %>
+  <%= render 'law_header' %>
 
   <%= render 'navbar_subbar' %>
 <!--
@@ -34,6 +31,9 @@ function myFunction(section_id) {
       </div>
       <div class="tab-pane fade show" id="indice" role="tabpanel" aria-labelledby="indice-tab">
         <%= render 'indice' %>
+      </div>
+      <div class="tab-pane fade show" id="modifications" role="tabpanel" aria-labelledby="modifications-tab">
+        <%= render 'modifications_tab' %>
       </div>
     </div>
     

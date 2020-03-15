@@ -1,6 +1,7 @@
 class Law < ApplicationRecord
   include PgSearch
-  
+
+  belongs_to :law_access
   has_many :books, :dependent => :destroy
   has_many :titles, :dependent => :destroy
   has_many :chapters, :dependent => :destroy

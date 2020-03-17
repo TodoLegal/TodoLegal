@@ -15,6 +15,14 @@ class HomeController < ApplicationController
     @is_search_law = true
     legal_documents = Set[]
 
+    @tokens = nil
+    if @query
+      @tokens = @query.scan(/\w+|\W/)
+      if @tokens.first == '/'
+        redirect_to "/tags/" + Tag.where('lower(name) = ?', @tokens.second.downcase).first.id.to_s + "-" + @tokens.second.downcase + "?query=" + @tokens.fourth
+      end
+    end
+
     @laws.each do |law|
       legal_documents.add(law.id)
     end

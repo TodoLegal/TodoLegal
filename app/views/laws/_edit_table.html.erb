@@ -1,4 +1,10 @@
 <div class="container">
+  <%confirm = false%>
+  <script>
+    function myFunction() {
+     confirm = confirm("¿Seguro que lo desea eliminar?");
+    }
+  </script>
 
   <p></p>
   <% tag = @law_creacions %>
@@ -31,7 +37,7 @@
             <% end %>
           </td>
           <td>
-            <%= button_to x, method: :delete, data: { confirm: 'Are you sure?', toggle:"modal", target:"#modal-center"}, class:"btn btn-outline-danger"  do %>
+            <%= button_to x, method: :delete, data: { confirm: 'Are you sure?', toggle:"modal", target:"#modal-center"}, class:"btn btn-outline-danger", onclick:"myFunction()"  do %>
               <i class="fas fa-trash-alt"></i>
             <% end %>
           </td>

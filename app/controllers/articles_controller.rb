@@ -40,10 +40,11 @@ class ArticlesController < ApplicationController
   # PATCH/PUT /articles/1
   # PATCH/PUT /articles/1.json
   def update
+    @article_updated = true
     respond_to do |format|
       if @article.update(article_params)
-        # @article.number = @article.number.to_i + 1 
-        format.html { redirect_to edit_law_path(@article.law, article_number: @article.number), notice: 'Article was successfully updated.' }
+        @article_updated = true
+        format.html { redirect_to edit_law_path(@article.law, article_number: @article.number, article_updated: @article_updated), notice: 'Article was successfully updated.' }
         format.json { render :show, status: :ok, location: @article }
       else
         format.html { render :edit }

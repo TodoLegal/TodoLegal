@@ -17,6 +17,13 @@
       }
     });
   </script> 
+  <script>
+    $(document).ready(function(){
+      $("#updateArticle").submit(function(e){
+        $("#savedArticle").show()
+      });
+    });
+  </script>
   
   <ul class="nav nav-tabs" id="lawEditorTab" role="tablist">
     <li  class="nav-item">
@@ -75,7 +82,7 @@
 
         <form action="<%= edit_law_path %>" method="get" class="d-inline p-2">
           <div class="form-group">
-            <button class="btn btn-outline-secondary" type="button" style="margin-left:20px;" data-toggle="modal" data-target="#exampleModalCenter"><i class="fas fa-plus"></i></button>
+            <button class="btn btn-outline-secondary" type="button" style="margin-left:20px;" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i></button>
           </div>
         </form>
 
@@ -102,16 +109,50 @@
           <div class="form-group">
             <%= form.text_area :body, class: 'form-control', rows: '10' %>
           </div>
+
+          <%if @article_updated%>
+            <div class="alert alert-success alert-dismissible fade show" role="alert" id="savedArticle"> 
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+              </button>
+                Cambios guardados exitosamente.
+            </div>
+          <%else%>
+            <p> valor:<%=@article_updated %></p>
+          <% end %>
         
           <div class="actions d-inline p-2">
-            <%= form.submit "Guardar cambios", class: 'btn btn-primary' %>
+            <%= form.submit "Guardar cambios", class: 'btn btn-primary', id:'updateArticle'%>
             &nbsp;&nbsp;
-            <u> <%= link_to 'Eliminar Artículo', law_path, class: "d-inline p-2 text-danger"%> </u>
+            <u> <%= link_to 'Eliminar Artículo', edit_law_path, class: "d-inline p-2 text-danger"%> </u>
           </div>
+
+          <!-- Modal -->
+          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  ...
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
         <% end %>
       <% end %>
     </div>
 
+    
     <div class="tab-pane fade" id="index" role="tabpanel" aria-labelledby="index-tab">
       
     </div>

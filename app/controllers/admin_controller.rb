@@ -1,7 +1,6 @@
 class AdminController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_action :user_can_manage_permissions!, only: [:users, :grant_permission, :revoke_permission]
-  before_action :user_can_see_subscriptions!, only: [:subscriptions]
+  before_action :authenticate_admin!, only: [:users, :grant_permission, :revoke_permission, :set_law_access, :subscriptions]
 
   def users
     @email = params[:email]
@@ -47,6 +46,15 @@ class AdminController < ApplicationController
       @error_message = "No se pudo encontrar el usuario o permiso."
     end
     redirect_to admin_users_url
+  end
+
+  def set_law_access
+    law_id = params[:law][:law_id]
+    law_access_id = params[:law][:law_access_id]
+    @law = Law.find_by_id(law_id)
+    @law.law_access_id = law_access_id
+    @law.save
+    redirect_to laws_path
   end
 
   def subscriptions

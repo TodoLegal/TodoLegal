@@ -6,7 +6,7 @@ class LawsController < ApplicationController
   # GET /laws
   # GET /laws.json
   def index
-    @laws = Law.all
+    @laws = Law.all.order(:law_access_id)
   end
 
   # GET /laws/1
@@ -103,6 +103,11 @@ class LawsController < ApplicationController
 
       @has_articles_only = book_iterator == 0 && title_iterator == 0 && chapter_iterator == 0 && subsection_iterator == 0 && section_iterator == 0
     end
+
+    @user_can_access_law = user_can_access_law @law
+    if !@user_can_access_law
+      @stream = @stream.take(5)
+    end
   end
 
   # GET /laws/new
@@ -179,5 +184,22 @@ class LawsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def law_params
       params.require(:law).permit(:name, :modifications, :creation_number)
+    end
+
+    def user_can_access_law law
+      law_access = law.law_access
+      if law_access
+        if law_access.name == "pro"
+          if !current_user_is_pro
+            return false
+          end
+        end
+        if law_access.name == "basic"
+          if !current_user
+            return false
+          end
+        end
+      end
+      return true
     end
 end

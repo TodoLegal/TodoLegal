@@ -5,13 +5,6 @@ function myFunction(section_id) {
 </script>
 
 <div class="container" data-spy="scroll" data-target="#myScrollspy">
-
-  <% if user_signed_in? %>
-    <%= render 'layouts/logged_navbar'%>        
-  <% else %>
-    <%= render 'layouts/unlogged_navbar' %> 
-  <% end %>
-
   <%= render 'law_header' %>
 
   <%= render 'navbar_subbar' %>

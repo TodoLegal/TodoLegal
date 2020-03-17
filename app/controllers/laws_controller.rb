@@ -1,5 +1,6 @@
 class LawsController < ApplicationController
   layout 'law'
+  layout 'application', only: [:index]
   before_action :set_law, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_admin!, only: [:index, :new, :edit, :create, :update, :destroy]
 

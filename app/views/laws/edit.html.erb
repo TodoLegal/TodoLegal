@@ -109,7 +109,7 @@
           <div class="form-group">
             <%= form.text_area :body, class: 'form-control', rows: '10' %>
           </div>
-
+          <!-------------------------------- saved message --------------------------------------------------->
           <%if @article_updated%>
             <div class="alert alert-success alert-dismissible fade show" role="alert" id="savedArticle"> 
               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -120,6 +120,7 @@
           <%else%>
             <p> valor:<%=@article_updated %></p>
           <% end %>
+           <!-------------------------------- end of saved message ---------------------------------------------->
         
           <div class="actions d-inline p-2">
             <%= form.submit "Guardar cambios", class: 'btn btn-primary', id:'updateArticle'%>

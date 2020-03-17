@@ -1,33 +1,26 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :null_session
 
+  def current_user_is_admin
+    current_user && current_user.permissions.find_by_name("admin")
+  end
+
+  def current_user_is_pro
+    current_user && current_user.permissions.find_by_name("pro")
+  end
+
   def authenticate_admin!
-    if !current_user
-      redirect_to "/?error=No+session"
-      return
-    end
-  end
-
-  def user_can_manage_permissions!
-    if !current_user
-      redirect_to "/?error=No+session"
-      return
-    end
-    if !current_user.permissions.find_by_name("manejar permisos")
+    if !current_user_is_admin
       redirect_to "/?error=Invalid+permissions"
     end
   end
 
-  def user_can_see_subscriptions!
-    if !current_user
-      redirect_to "/?error=No+session"
-      return
-    end
-    if !current_user.permissions.find_by_name("ver suscripciones")
+  def authenticate_pro!
+    if current_user_is_pro
       redirect_to "/?error=Invalid+permissions"
     end
   end
-
+  
 protected
   def after_sign_up_path_for(resource)
     root_path

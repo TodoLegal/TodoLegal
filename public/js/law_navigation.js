@@ -3,6 +3,41 @@ function colapseIndice() {
   $('.overlay').removeClass('active');
 }
 
+/* Tabs navigation */
+var active_tab = "#articulos"
+window.onscroll = function() {onScrollCallback()};
+
+var bigger_sections = document.getElementsByClassName("bigger-section");
+
+function setStickySectionHeading(header_text)
+{
+  document.getElementById('sticky_nav_header').innerText = header_text
+}
+
+function onScrollCallback()
+{
+  if(active_tab == "#articulos")
+  {
+    var sticky_header = null
+    for(var i=0; i<bigger_sections.length; i++)
+    {
+      if (bigger_sections[i].offsetTop - 1 <= window.pageYOffset)
+        sticky_header = bigger_sections[i]
+    }
+    sticky_header_text = ""
+    if(sticky_header)
+      setStickySectionHeading(sticky_header.innerText)
+    else
+      setStickySectionHeading("")
+  }
+}
+
+$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+  var target = $(e.target).attr('href')
+  setStickySectionHeading("")
+  active_tab = target
+});
+
 /* Indice filter */
 
 function filterIndice() {
@@ -74,21 +109,18 @@ var article_focused = null;
 
 var articles_element = document.getElementsByClassName('article')
 
-for(var article_iterator=0; article_iterator<articles_element.length; article_iterator++)
+function onClickArticle(clicked_article_id)
 {
-  article_element = articles_element[article_iterator]
-  article_element.onmousedown = function (event) {
-    if(article_focused)
-    {
-      article_focused.style['background-color'] = "var(--c-original-background)"
-      article_focused.style['color'] = "var(--c-original-text)"
-    }
-    current_article = parseInt(event.srcElement.getAttribute("article_id"))
-    article_focused = document.getElementById('article_count_' + current_article)
-    article_focused.style['background-color'] = "var(--c-selected-article-background)"
-    article_focused.style['color'] = "var(--c-selected-article-text)"
-    return true;
-  };
+  if(article_focused)
+  {
+    article_focused.style['background-color'] = "var(--c-original-background)"
+    article_focused.style['color'] = "var(--c-original-text)"
+  }
+  current_article = clicked_article_id
+  article_focused = document.getElementById('article_count_' + current_article)
+  article_focused.style['background-color'] = "var(--c-selected-article-background)"
+  article_focused.style['color'] = "var(--c-selected-article-text)"
+  return true;
 }
 
 function gotoArticle(article_number)
@@ -247,3 +279,11 @@ var onkeydown = (function (ev) {
 $(document).ready(function () {
   
 });
+
+
+function addrow(){
+  var table = document.getElementById("edit_table");
+  var row = document.getElementById("edit_table").lastChild;
+  var clone = row.cloneNode(true);
+  table.appendChild(clone);
+}

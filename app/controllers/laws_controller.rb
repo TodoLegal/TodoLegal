@@ -1,5 +1,6 @@
 class LawsController < ApplicationController
   layout 'law'
+  layout 'application', only: [:index]
   before_action :set_law, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_admin!, only: [:index, :new, :edit, :create, :update, :destroy]
 
@@ -117,6 +118,13 @@ class LawsController < ApplicationController
 
   # GET /laws/1/edit
   def edit
+    @article_number = params[:article_number]
+    if @article_number
+      @article = @law.articles.where('number LIKE ?', "%#{@article_number}%").first
+    else
+      @article = @law.articles.first
+    end
+
     @law_materias = []
     materia_tag_type = TagType.find_by_name("materia")
     @all_materias = Tag.where(tag_type: materia_tag_type)
@@ -182,12 +190,12 @@ class LawsController < ApplicationController
     def user_can_access_law law
       law_access = law.law_access
       if law_access
-        if law_access.name == "Pro"
-          if !current_user || !current_user.permissions.find_by_name("ver leyes pro")
+        if law_access.name == "pro"
+          if !current_user_is_pro
             return false
           end
         end
-        if law_access.name == "Básico"
+        if law_access.name == "basic"
           if !current_user
             return false
           end

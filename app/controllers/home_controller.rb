@@ -12,6 +12,7 @@ class HomeController < ApplicationController
     @stream = findArticles @query
     @result_count = @laws.size
     @articles_count = @stream.size
+    @is_search_law = true
     legal_documents = Set[]
 
     @laws.each do |law|
@@ -21,13 +22,7 @@ class HomeController < ApplicationController
     @grouped_laws = []
     @stream.each do |grouped_law|
       law = {count: grouped_law[1].count, law: Law.find_by_id(grouped_law[0]), preview: ("<b>Artículo " + grouped_law[1].first.number + ":</b> ..." + grouped_law[1].first.pg_search_highlight + "...").html_safe, tag_text: ""}
-      law[:law].tags.each do |tag|
-        if law[:tag_text] == ""
-          law[:tag_text] = tag.name
-        else
-          law[:tag_text] += ", " + tag.name
-        end
-      end
+      law[:materia_names] = law[:law].materia_names
       @grouped_laws.push(law)
       @result_count += grouped_law[1].count
       legal_documents.add(grouped_law[0])
@@ -40,9 +35,9 @@ class HomeController < ApplicationController
       @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' resultados encontrados'
     end
     if @legal_documents_count > 1
-      @result_info_text += " en " + @legal_documents_count.to_s + " documentos legales (leyes, acuerdos, reglamentos y otra normativa)."
+      @result_info_text += " en " + @legal_documents_count.to_s + " documentos legales."
     elsif @legal_documents_count == 1
-      @result_info_text += " en " + @legal_documents_count.to_s + " documento legal (leyes, acuerdos, reglamentos y otra normativa)."
+      @result_info_text += " en " + @legal_documents_count.to_s + " documento legal."
     end
   end
 

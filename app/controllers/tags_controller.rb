@@ -30,6 +30,7 @@ class TagsController < ApplicationController
       @grouped_laws = []
       @stream.each do |grouped_law|
         law = {count: grouped_law[1].count, law: Law.find_by_id(grouped_law[0])}
+        law[:materia_names] = law[:law].materia_names
         @grouped_laws.push(law)
         @result_count += grouped_law[1].count
         legal_documents.add(grouped_law[0])
@@ -42,17 +43,17 @@ class TagsController < ApplicationController
         @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' resultados encontrados en la materia ' + @tag.name
       end
       if @legal_documents_count > 1
-        @result_info_text += " en " + @legal_documents_count.to_s + " documentos legales (leyes, acuerdos, reglamentos y otra normativa)."
+        @result_info_text += " en " + @legal_documents_count.to_s + " documentos legales."
       elsif @legal_documents_count == 1
-        @result_info_text += " en " + @legal_documents_count.to_s + " documento legal (leyes, acuerdos, reglamentos y otra normativa)."
+        @result_info_text += " en " + @legal_documents_count.to_s + " documento legal."
       end
     else
       @laws = @tag.laws
       @result_count = @laws.count
       if @result_count == 1
-        @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' documento legal (leyes, acuerdos, reglamentos y otra normativa).'
+        @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' documento legal.'
       else
-        @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' documentos legales (leyes, acuerdos, reglamentos y otra normativa).'
+        @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' documentos legales.'
       end
     end
   end

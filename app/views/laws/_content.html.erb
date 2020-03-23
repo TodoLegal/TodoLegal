@@ -8,125 +8,84 @@
   }
 </style>
 
-<p id="notice"><%= notice %></p>
-<h1>
-  <%= @law.name %>
-  <% if user_signed_in? %>
-    <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_law_path(@law) %>
-  <% end %>
-</h1>
-
-<% if @law.creation_number && @law.creation_number != "" %>
-  <p>
-    <p><%= @law.creation_number %></p>
-  </p>
-<% end %>
-
-<% if @law.law_modifications.size != 0 %>
-  <p>
-    <p>
-      <% @law.law_modifications.each do |law_modification| %>
-        <%= law_modification.name %>
-        <% if law_modification != @law.law_modifications.last %>
-          ,
+<div style="">
+  <% article_iterator = 0 %>
+  <% bigger_section_iterator = 0 %>
+  <% @stream.each do |stream| %>
+    <% if stream.instance_of? Book %>
+      <div class="bigger-section" id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
+        <h2 id="book_<%= stream.position %>">
+          Libro <%= stream.number %>
+          <% if user_signed_in? %>
+            <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_book_path(stream) %>
+          <% end %>
+        </h2>
+        <h3><%= stream.name %></h3>
+      </div>
+      <% bigger_section_iterator += 1 %>
+    <% end %>
+    <% if stream.instance_of? Title %>
+      <div class="bigger-section" id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
+        <h2 id="title_<%= stream.position %>">
+          Título <%= stream.number %>
+          <% if user_signed_in? %>
+            <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_title_path(stream) %>
+          <% end %>
+        </h2>
+        <h3><%= stream.name %></h3>
+      </div>
+      <% bigger_section_iterator += 1 %>
+    <% end %>
+    <% if stream.instance_of? Chapter %>
+      <div class="bigger-section" id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
+        <h3 id="chapter_<%= stream.position %>">
+          Capítulo <%= stream.number %>
+          <% if user_signed_in? %>
+            <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_chapter_path(stream) %>
+          <% end %>
+        </h3>
+        <h4><%= stream.name %></h4>
+      </div>
+      <% bigger_section_iterator += 1 %>
+    <% end %>
+    <% if stream.instance_of? Section %>
+      <div class="bigger-section" id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
+        <h4 id="section_<%= stream.position %>">
+          Sección <%= stream.number %>
+          <% if user_signed_in? %>
+            <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_section_path(stream) %>
+          <% end %>
+        </h4>
+        <h5><%= stream.name %></h5>
+      </div>
+      <% bigger_section_iterator += 1 %>
+    <% end %>
+    <% if stream.instance_of? Subsection %>
+      <div class="bigger-section" id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
+        <h5 id="subsection_<%= stream.position %>">
+          <%= stream.number %>
+          <% if user_signed_in? %>
+            <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_subsection_path(stream) %>
+          <% end %>
+        </h5>
+        <h5><%= stream.name %></h5>
+      </div>
+      <% bigger_section_iterator += 1 %>
+    <% end %>
+    <% if stream.instance_of? Article %>
+      <div align="justify" style="color: #444; padding: 10px" onclick="onClickArticle(<%= article_iterator %>)" class="article" article_id="<%= article_iterator %>" last_bigger_section="<%= bigger_section_iterator - 1 %>" next_bigger_section="<%= bigger_section_iterator %>" id="article_count_<%= article_iterator %>">
+        <b align="justify" style="color: #111;font-weight:bold;">Artículo <%= stream.number %><br>
+          <% if user_signed_in? %>
+            <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_article_path(stream) %>
+          <% end %>
+        </b>
+        <% if @highlight_enabled %>
+          <%= stream.pg_search_highlight.html_safe %>.
+        <% else %>
+          <%= stream.class.markdown.render(stream.body).html_safe %>
         <% end %>
-      <% end %>
-    </p>
-  </p>
-<% end %>
-
-<% if @law.modifications && @law.modifications != "" %>
-  <p>
-    <p>Modificaciones: <%= @law.modifications %></p>
-  </p>
-<% end %>
-
-<p class="resultinfo"><%= @articles_count %> artículos en total</p>
-
-<!--
-<% if @highlight_enabled %>
-  <p>
-    <a class="" href="<%= law_path(@law) %>">Ver ley completa</a>
-  </p>
-<% end %>
--->
-
-<% article_iterator = 0 %>
-<% bigger_section_iterator = 0 %>
-<% @stream.each do |stream| %>
-  <% if stream.instance_of? Book %>
-    <div class="bigger-section" id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
-      <h2 style="padding-top:160px;" id="book_<%= stream.position %>">
-        Libro <%= stream.number %>
-        <% if user_signed_in? %>
-          <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_book_path(stream) %>
-        <% end %>
-      </h2>
-      <h3><%= stream.name %></h3>
-    </div>
-    <% bigger_section_iterator += 1 %>
+      </div>
+      <% article_iterator += 1 %>
+    <% end %>
   <% end %>
-  <% if stream.instance_of? Title %>
-    <div class="bigger-section" id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
-      <h2 style="padding-top:160px;" id="title_<%= stream.position %>">
-        Título <%= stream.number %>
-        <% if user_signed_in? %>
-          <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_title_path(stream) %>
-        <% end %>
-      </h2>
-      <h3><%= stream.name %></h3>
-    </div>
-    <% bigger_section_iterator += 1 %>
-  <% end %>
-  <% if stream.instance_of? Chapter %>
-    <div class="bigger-section" id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
-      <h3 style="padding-top:160px;" id="chapter_<%= stream.position %>">
-        Capítulo <%= stream.number %>
-        <% if user_signed_in? %>
-          <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_chapter_path(stream) %>
-        <% end %>
-      </h3>
-      <h4><%= stream.name %></h4>
-    </div>
-    <% bigger_section_iterator += 1 %>
-  <% end %>
-  <% if stream.instance_of? Section %>
-    <div class="bigger-section" id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
-      <h4 style="padding-top:160px;" id="section_<%= stream.position %>">
-        Sección <%= stream.number %>
-        <% if user_signed_in? %>
-          <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_section_path(stream) %>
-        <% end %>
-      </h4>
-      <h5><%= stream.name %></h5>
-    </div>
-    <% bigger_section_iterator += 1 %>
-  <% end %>
-  <% if stream.instance_of? Subsection %>
-    <div class="bigger-section" id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
-      <h5 style="padding-top:160px;" id="subsection_<%= stream.position %>">
-        <%= stream.number %>
-        <% if user_signed_in? %>
-          <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_subsection_path(stream) %>
-        <% end %>
-      </h5>
-      <h5><%= stream.name %></h5>
-    </div>
-    <% bigger_section_iterator += 1 %>
-  <% end %>
-  <% if stream.instance_of? Article %>
-    <p class="article" article_id="<%= article_iterator %>" last_bigger_section="<%= bigger_section_iterator - 1 %>" next_bigger_section="<%= bigger_section_iterator %>" id="article_count_<%= article_iterator %>">
-      <b style="font-weight:bold;">Artículo <%= stream.number %>:
-        <% if user_signed_in? %>
-          <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_article_path(stream) %>
-        <% end %>
-      </b>
-      <% if @highlight_enabled %>
-        <%= stream.pg_search_highlight.html_safe %>.
-      <% else %>
-        <%= stream.body %>
-      <% end %>
-    </p>
-    <% article_iterator += 1 %>
-  <% end %>
-<% end %>
+</div>

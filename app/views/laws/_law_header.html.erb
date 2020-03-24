@@ -6,13 +6,12 @@
   <% end %>
 </h1>
 
-<% if @law.creation_number && @law.creation_number != "" %>
 <p>
-  <p><%= @law.creation_number %></p>
-</p>
+<% if @law.creation_number && @law.creation_number != "" %>
+  <span class="badge badge badge-secondary"><%= @law.creation_number %></span>
 <% end %>
-
-<p class="resultinfo"><%= @articles_count %> artículos en total</p>
+<span class="badge badge badge-secondary"><%= @articles_count %> artículos en total</span>
+</p>
 
 <!--
 <% if @highlight_enabled %>

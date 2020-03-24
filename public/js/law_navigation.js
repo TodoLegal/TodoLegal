@@ -21,10 +21,11 @@ function onScrollCallback()
     var sticky_header = null
     for(var i=0; i<bigger_sections.length; i++)
     {
-      if (bigger_sections[i].offsetTop - 1 <= window.pageYOffset)
+      if (bigger_sections[i].offsetTop != 0 && bigger_sections[i].offsetTop - 1 <= window.pageYOffset)
+      {
         sticky_header = bigger_sections[i]
+      }
     }
-    sticky_header_text = ""
     if(sticky_header)
       setStickySectionHeading(sticky_header.innerText)
     else

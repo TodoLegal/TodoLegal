@@ -36,10 +36,8 @@
   <% if user_signed_in? %>
       <%= render 'layouts/logged_navbar' %>        
   <% else %>
-    <%= render 'layouts/unlogged_navbar' %>
+      <%= render 'layouts/unlogged_navbar' %> 
   <% end %>
-
-  <%= render 'subscriptions/subscribe_form' %>
 
   <%= yield %>
   
@@ -54,6 +52,8 @@
   <!-- jQuery Custom Scroller CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
 
+  <script src="/js/law_navigation.js"></script>
+  
   <style>
     .customButton{
       display: block;

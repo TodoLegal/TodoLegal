@@ -51,4 +51,7 @@ class HomeController < ApplicationController
 
   def terms_and_conditions
   end
+
+  def pricing
+  end
 end

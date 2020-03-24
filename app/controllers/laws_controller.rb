@@ -1,12 +1,13 @@
 class LawsController < ApplicationController
   layout 'law'
+  layout 'application', only: [:index]
   before_action :set_law, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_admin!, only: [:index, :new, :edit, :create, :update, :destroy]
 
   # GET /laws
   # GET /laws.json
   def index
-    @laws = Law.all
+    @laws = Law.all.order(:law_access_id)
   end
 
   # GET /laws/1
@@ -103,6 +104,11 @@ class LawsController < ApplicationController
 
       @has_articles_only = book_iterator == 0 && title_iterator == 0 && chapter_iterator == 0 && subsection_iterator == 0 && section_iterator == 0
     end
+
+    @user_can_access_law = user_can_access_law @law
+    if !@user_can_access_law
+      @stream = @stream.take(5)
+    end
   end
 
   # GET /laws/new
@@ -112,6 +118,13 @@ class LawsController < ApplicationController
 
   # GET /laws/1/edit
   def edit
+    @article_number = params[:article_number]
+    if @article_number
+      @article = @law.articles.where('number LIKE ?', "%#{@article_number}%").first
+    else
+      @article = @law.articles.first
+    end
+
     @law_materias = []
     materia_tag_type = TagType.find_by_name("materia")
     @all_materias = Tag.where(tag_type: materia_tag_type)
@@ -172,5 +185,22 @@ class LawsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def law_params
       params.require(:law).permit(:name, :modifications, :creation_number)
+    end
+
+    def user_can_access_law law
+      law_access = law.law_access
+      if law_access
+        if law_access.name == "pro"
+          if !current_user_is_pro
+            return false
+          end
+        end
+        if law_access.name == "basic"
+          if !current_user
+            return false
+          end
+        end
+      end
+      return true
     end
 end

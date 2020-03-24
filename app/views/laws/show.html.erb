@@ -7,7 +7,6 @@ function myFunction(section_id) {
 <div class="container" data-spy="scroll" data-target="#myScrollspy">
   <%= render 'law_header' %>
 
-  <%= render 'navbar_subbar' %>
 <!--
   <% if @highlight_enabled %>
     <%= render 'navbar_search_enabled' %>
@@ -17,6 +16,7 @@ function myFunction(section_id) {
 -->
 
   <div class="container-fluid" style="padding-top:60">
+    <%= render 'navbar_subbar' %>
       
     <div class="tab-content" id="myTabContent">
       <div class="tab-pane fade show active" id="articulos" role="tabpanel" aria-labelledby="articulos-tab">
@@ -39,6 +39,3 @@ function myFunction(section_id) {
     <% end %>
   </div>
 </div>
-
-
-<script src="/js/law_navigation.js"></script>

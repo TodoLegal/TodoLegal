@@ -1,68 +1,93 @@
 <style>
   strong {font-weight:bold;}
-  .bigger-section {
-    font-family: 'Montserrat', sans-serif;
-  }
-  .article {
+  .index-element {
     font-family: 'Merriweather', serif;
   }
 </style>
 
 <div class="container" style="">
-  <ul class="list-unstyled components">
+  <table class="list-unstyled components">
     <% if @has_articles_only %>
       <% @stream.each do |stream| %>
         <% if stream.instance_of? Article %>
-          <li>
-            <a class="uncolored_link" href="#article_<%= stream.position %>" onclick="gotoArticle(<%= stream.number.to_i - 1 %>);return colapseIndice();">
-              <b>Artículo <%= stream.number %></b></br>
-            </a>
-          </li>
+          <a class="uncolored_link" href="#article_<%= stream.position %>" onclick="gotoArticle(<%= stream.number.to_i - 1 %>);return colapseIndice();">
+            <b>Artículo <%= stream.number %></b></br>
+          </a>
         <% end %>
       <% end %>
     <% else %>
       <% @index_items.each do |index_items|%>
         <% if index_items.instance_of? Book %>
-          <li style="font-size: 25px;padding-right: 50px;">
-            <a class="uncolored_link" href="#book_<%= index_items.position %>" onclick="$('.nav-tabs a:first').tab('show');setTimeout(function(){myFunction('book_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
-              <b>Libro <%= index_items.number %></b></br>
-              <%= index_items.name %>
-            </a>
-          </li>
+          <tr class="index-element" style="font-size: 25px;padding-right: 50px;">
+            <td style="white-space: nowrap; text-align: center;">
+              <a class="uncolored_link" href="#book_<%= index_items.position %>" onclick="$('.nav-tabs a:first').tab('show');setTimeout(function(){myFunction('book_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
+                <b>Libro <%= index_items.number %></b></br>
+              </a>
+            </td>
+            <td style="padding-left: 40px">
+              <a class="uncolored_link" href="#book_<%= index_items.position %>" onclick="$('.nav-tabs a:first').tab('show');setTimeout(function(){myFunction('book_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
+                <%= index_items.name %>
+              </a>
+            </td>
+          </tr>
         <% end %>
         <% if index_items.instance_of? Title %>
-          <li class="bigger-section" style="font-size: 20px;padding-right: 50px;">
-            <a class="uncolored_link" href="#title_<%= index_items.position %>" onclick="$('.nav-tabs a:first').tab('show');setTimeout(function(){myFunction('title_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
-              <b>&nbsp;&nbsp;Titulo <%= index_items.number %></b></br>
-              &nbsp;&nbsp;<%= index_items.name %>
-            </a>
-          </li>
+          <tr class="index-element" style="font-size: 20px;padding-right: 50px;">
+            <td style="white-space: nowrap; text-align: center;">
+              <a class="uncolored_link" href="#title_<%= index_items.position %>" onclick="$('.nav-tabs a:first').tab('show');setTimeout(function(){myFunction('title_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
+                <b>Titulo <%= index_items.number %></b>
+              </a>
+            </td>
+            <td style="padding-left: 40px">
+              <a class="uncolored_link" href="#title_<%= index_items.position %>" onclick="$('.nav-tabs a:first').tab('show');setTimeout(function(){myFunction('title_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
+                <%= index_items.name %>
+              </a>
+            </td>
+          </tr>
         <% end %>
         <% if index_items.instance_of? Chapter %>
-          <li class="bigger-section" style="font-size: 15px;padding-right: 50px;">
-            <a class="uncolored_link" href="#chapter_<%= index_items.position %>" onclick="$('.nav-tabs a:first').tab('show');setTimeout(function(){myFunction('chapter_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
-              <b>&nbsp;&nbsp;&nbsp;&nbsp;Capítulo <%= index_items.number %></b></br>
-              &nbsp;&nbsp;&nbsp;&nbsp;<%= index_items.name %>
-            </a>
-          </li>
+          <tr class="index-element" style="font-size: 15px;padding-right: 50px;">
+            <td style="white-space: nowrap; text-align: center;">
+              <a class="uncolored_link" href="#chapter_<%= index_items.position %>" onclick="$('.nav-tabs a:first').tab('show');setTimeout(function(){myFunction('chapter_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
+                <b>Capítulo <%= index_items.number %></b></br>
+              </a>
+            </td>
+            <td style="padding-left: 40px">
+              <a class="uncolored_link" href="#chapter_<%= index_items.position %>" onclick="$('.nav-tabs a:first').tab('show');setTimeout(function(){myFunction('chapter_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
+                <%= index_items.name %>
+              </a>
+            <td>
+          </tr>
         <% end %>
         <% if index_items.instance_of? Section %>
-          <li class="bigger-section" style="font-size: 12px;padding-right: 50px;">
-            <a class="uncolored_link" href="#section_<%= index_items.position %>" onclick="$('.nav-tabs a:first').tab('show');setTimeout(function(){myFunction('section_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
-              <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sección <%= index_items.number %></b></br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= index_items.name %>
-            </a>
-          </li>
+          <tr class="index-element" style="font-size: 12px;padding-right: 50px;">
+            <td style="white-space: nowrap; text-align: center;">
+              <a class="uncolored_link" href="#section_<%= index_items.position %>" onclick="$('.nav-tabs a:first').tab('show');setTimeout(function(){myFunction('section_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
+                <b>Sección <%= index_items.number %></b></br>
+              </a>
+            </td>
+            <td style="padding-left: 40px">
+              <a class="uncolored_link" href="#section_<%= index_items.position %>" onclick="$('.nav-tabs a:first').tab('show');setTimeout(function(){myFunction('section_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
+                <%= index_items.name %>
+              </a>
+            </td>
+          </tr>
         <% end %>
         <% if index_items.instance_of? Subsection %>
-          <li class="bigger-section" style="font-size: 12px;padding-right: 50px;">
-            <a class="uncolored_link" href="#subsection_<%= index_items.position %>" onclick="$('.nav-tabs a:first').tab('show');setTimeout(function(){myFunction('subsection_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
-              <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sección <%= index_items.number %></b></br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= index_items.name %>
-            </a>
-          </li>
+          <tr class="index-element" style="font-size: 12px;padding-right: 50px;">
+            <td style="white-space: nowrap; text-align: center;">
+              <a class="uncolored_link" href="#subsection_<%= index_items.position %>" onclick="$('.nav-tabs a:first').tab('show');setTimeout(function(){myFunction('subsection_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
+                <b>Sección <%= index_items.number %></b></br>
+              </a>
+            </td>
+            <td style="padding-left: 40px">
+              <a class="uncolored_link" href="#subsection_<%= index_items.position %>" onclick="$('.nav-tabs a:first').tab('show');setTimeout(function(){myFunction('subsection_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
+                <%= index_items.name %>
+              </a>
+            </td>
+          </tr>
         <% end %>
       <% end %>
     <% end %>
-  </ul>
+  </table>
 </div>

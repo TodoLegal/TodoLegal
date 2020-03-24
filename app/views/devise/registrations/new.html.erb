@@ -15,16 +15,16 @@
               <%= render "devise/shared/error_messages", resource: resource %>
               <div class="form-group">
                 <div class="row">
-                  <div class="col-md-6">
-                    <input type="text" class="form-control" placeholder="Nombre" required>
+                  <div class="col-md-6 form-group">
+                    <%= f.text_field :first_name, autofocus: true, class:"form-control", placeholder:"Nombre"%>
                   </div>
-                  <div class="col-md-6">
-                    <input type="text" class="form-control" placeholder="Apellido" required>
+                  <div class="col-md-6 form-group">
+                    <%= f.text_field :last_name, class:"form-control", placeholder:"Apellido"%>
                   </div>
                 </div>
               </div>
               <div class="form-group">
-                <%= f.email_field :email, autofocus: true, autocomplete: "email", class:"form-control", placeholder:"E-mail"%>
+                <%= f.email_field :email, autocomplete: "email", class:"form-control", placeholder:"E-mail"%>
               </div>
 
               <div class="form-group">
@@ -63,22 +63,17 @@
               
               <p>¿A qué te dedicas?</p>
               <div class="form-group">
-                <select class="custom-select" id="inputGroupSelect02">
-                  <option selected>Elija una opción</option>
-                  <option value="1">Abogado</option>
-                  <option value="2">Estudiante</option>
-                  <option value="3">Otro</option>
-                </select>
+                <%= f.select :occupation, ['Abogado', 'Estudiante', 'Otro'], {}, {class:"custom-select"} %>
               </div>
               <p>¿Deseas contribuir con mejoras?</p>
               <p class="text-secondary">Te podemos enviar encuestas o entrevistarte en persona.</p>
               <div class="form-group">
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                  <%= f.radio_button :is_contributor, "1", {class: "form-check-input"} %>
                   <label class="form-check-label" for="inlineRadio1">Sí</label>
                 </div>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                <%= f.radio_button :is_contributor, "0", {class: "form-check-input"} %>
                   <label class="form-check-label" for="inlineRadio2">No</label>
                 </div>
               </div>

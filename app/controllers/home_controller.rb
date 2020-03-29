@@ -15,11 +15,10 @@ class HomeController < ApplicationController
     @is_search_law = true
     legal_documents = Set[]
 
-    @tokens = nil
     if @query
       @tokens = @query.scan(/\w+|\W/)
       if @tokens.first == '/'
-        redirect_to "/tags/" + Tag.where('lower(name) = ?', @tokens.second.downcase).first.id.to_s + "-" + @tokens.second.downcase + "?query=" + @tokens.fourth
+        redirect_to "/tags/" + Tag.where('lower(name) = ?', @tokens.fourth.downcase).first.id.to_s + "-" + @tokens.fourth.downcase + "?query=/" + @tokens.second
       end
     end
 

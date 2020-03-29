@@ -1,6 +1,7 @@
 <script>
-function myFunction(section_id) {
-  document.getElementById(section_id).scrollIntoView();
+function onIndexElementClicked(section_id) {
+  console.log(section_id)
+  document.getElementById(section_id).scrollIntoView({block:'center'});
 }
 </script>
 

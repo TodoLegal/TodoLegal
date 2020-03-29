@@ -1,4 +1,3 @@
-<p id="notice"><%= notice %></p>
 <h1>
   <%= @law.name %>
   <% if user_signed_in? %>
@@ -10,7 +9,11 @@
 <% if @law.creation_number && @law.creation_number != "" %>
   <span class="badge badge badge-secondary"><%= @law.creation_number %></span>
 <% end %>
-<span class="badge badge badge-secondary"><%= @articles_count %> artículos en total</span>
+<% if !@highlight_enabled %>
+  <span class="badge badge badge-secondary"><%= @articles_count %> artículos en total</span>
+<% else %>
+  <span class="badge badge badge-secondary"><%= @articles_count %> resultados encontrados</span>
+<% end %>
 </p>
 
 <!--

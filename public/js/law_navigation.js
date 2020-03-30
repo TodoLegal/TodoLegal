@@ -8,6 +8,7 @@ var active_tab = "#articulos"
 window.onscroll = function() {onScrollCallback()};
 
 var bigger_sections = document.getElementsByClassName("bigger-section");
+var article_names = document.getElementsByClassName("article-name");
 
 function setStickySectionHeading(header_text)
 {
@@ -19,22 +20,25 @@ function onScrollCallback()
   if(active_tab == "#articulos")
   {
     var sticky_header = null
-    for(var i=0; i<bigger_sections.length; i++)
+    var sticky_elements = bigger_sections
+    if(bigger_sections.length == 0)
+      sticky_elements = article_names
+    for(var i=0; i<sticky_elements.length; i++)
     {
-      if (bigger_sections[i].offsetTop - 1 <= window.pageYOffset)
-        sticky_header = bigger_sections[i]
+      if (sticky_elements[i].offsetTop != 0 && sticky_elements[i].offsetTop - 1 <= window.pageYOffset)
+      {
+        sticky_header = sticky_elements[i]
+      }
     }
-    sticky_header_text = ""
-    if(sticky_header)
+    if(sticky_header && bigger_sections.length > 0)
       setStickySectionHeading(sticky_header.innerText)
-    else
-      setStickySectionHeading("")
   }
 }
 
 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
   var target = $(e.target).attr('href')
-  setStickySectionHeading("")
+  if(sticky_header && bigger_sections.length > 0)
+    setStickySectionHeading("")
   active_tab = target
 });
 
@@ -67,8 +71,9 @@ if(highlighted_count > 0)
 function updateHighlightedView()
 {
   document.getElementById("result-count-big").innerText = (currrent_highlighted + 1) +"/"+highlighted_count
-  document.getElementById("result-count-small").innerText = (currrent_highlighted + 1) +"/"+highlighted_count
   element_highlighted = document.getElementsByClassName('highlighted')[currrent_highlighted]
+  console.log(currrent_highlighted)
+  console.log(element_highlighted)
   element_highlighted.scrollIntoView({block: 'center'})
   element_highlighted.style["color"]="var(--c-selected-highlight)"
   element_highlighted.style["background-color"]="var(--c-selected-highlight-background)"
@@ -141,6 +146,7 @@ function gotoArticle(article_number)
   
   article_focused = document.getElementById('article_count_' + current_article)
   article_focused.scrollIntoView({block: 'center'})
+  console.log(23)
   article_focused.style['background-color'] = "var(--c-selected-article-background)"
   article_focused.style['color'] = "var(--c-selected-article-text)"
 }

@@ -13,33 +13,35 @@
   <p>Intenta tu búsqueda de nuevo cambiando las palabras o revisando la ortografía.</p>
 <% end %>
 
-<div class="row">
-  <% i = 0 %>
-  <% @laws.each do |law| %>
-    <% i+=1 %>
-    <div class="collapsable-law-cards col-sm-6 col-md-4 py-2" style="display:<%= i>6 ? 'none' : 'block' %>">
-      <div class="card card-body h-100" style="padding:0px">
-        <a class="" href="<%= law_path(law) %>" style="padding:20px">
-          <% if @is_search_law %>
-            <p style="font-size: 15px">
-              <% law.materia_names.each do |materia_name| %>
-                <span class="badge badge-light badge-secondary"><%= materia_name %></span>
+<% if @laws %>
+  <div class="row">
+    <% i = 0 %>
+    <% @laws.each do |law| %>
+      <% i+=1 %>
+      <div class="collapsable-law-cards col-sm-6 col-md-4 py-2" style="display:<%= i>6 ? 'none' : 'block' %>">
+        <div class="card card-body h-100" style="padding:0px">
+          <a class="" href="<%= law_path(law) %>" style="padding:20px">
+            <% if @is_search_law %>
+              <p style="font-size: 15px">
+                <% law.materia_names.each do |materia_name| %>
+                  <span class="badge badge-light badge-secondary"><%= materia_name %></span>
+                <% end %>
+              </p>
               <% end %>
-            </p>
-            <% end %>
-          <h5 class="card-title"><%= law.name %></h5>
-          <p class="primaryinfo">[<%= law.creation_number %>]</p>
-          <p class="primaryinfo"><%= law.articles.count %> artículos</p>
-        </a>
+            <h5 class="card-title"><%= law.name %></h5>
+            <p class="primaryinfo">[<%= law.creation_number %>]</p>
+            <p class="primaryinfo"><%= law.articles.count %> artículos</p>
+          </a>
+        </div>
       </div>
-    </div>
+    <% end %>
+  </div>
+
+  <br>
+
+  <% if @laws.size > 0 %>
+    <hr>
   <% end %>
-</div>
-
-<br>
-
-<% if @laws.size > 0 %>
-  <hr>
 <% end %>
 
 <% if @grouped_laws %>

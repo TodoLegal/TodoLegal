@@ -9,11 +9,10 @@
             <i class="fas fa-bars"></i>
         </button>
         <div class="dropdown-menu dropdown-menu-right">
-            <button class="dropdown-item" type="button">
-                
-                Cuenta
-            </button>
+
+            <a href="/users/edit" class="dropdown-item">Mi cuenta</a>
             <div class="dropdown-divider"></div>
+            
             <% if current_user_is_admin %>
                 <button class="dropdown-item disabled font-weight-bold " type="button" >
                     

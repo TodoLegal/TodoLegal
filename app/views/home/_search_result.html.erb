@@ -59,12 +59,15 @@
         <h5 class="card-title"><%= grouped_law[:law].name %> <span style="font-size: 15px">[<%= grouped_law[:law].creation_number %>]</span></h5>
         <p class="primaryinfo"><%= grouped_law[:preview] %></p>
         <p class="resultinfo">
-          <%= grouped_law[:count] %>
-          <% if grouped_law[:count] == 1 %>
-            artículo relacionado
+          <% if grouped_law[:preview] %>
           <% else %>
-            artículos relacionados
-          <% end %>
+            <%= grouped_law[:count] %>
+            <% if grouped_law[:count] == 1 %>
+              artículo relacionado
+            <% else %>
+              artículos relacionados
+            <% end %>
+          <% end %>            
         </p>
         </a>
       </div>

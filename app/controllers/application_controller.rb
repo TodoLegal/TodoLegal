@@ -21,6 +21,18 @@ class ApplicationController < ActionController::Base
       redirect_to "/?error=Invalid+permissions"
     end
   end
+
+  def redirectOnEspecialCode query
+    tokens = query.scan(/\w+|\W/)
+    if tokens.size >= 4 && tokens.first == '/'
+      tag_temp = Tag.where('lower(name) = ?', tokens.fourth.downcase).first
+      if tag_temp
+        redirect_to "/tags/" + tag_temp.id.to_s + "-" + tokens.fourth.downcase + "?query=/" + tokens.second
+        return true
+      end
+    end
+    return false
+  end
   
 protected
   def after_sign_up_path_for(resource)

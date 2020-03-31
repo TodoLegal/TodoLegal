@@ -25,11 +25,11 @@
   </div>
   <div class="row">
     <div class="col-<%= @highlight_enabled ? '2' : '12' %>">
-      <span class="d-inline-block text-truncate" style="width: 100%; width: 100%vw;" id="sticky_nav_header"><%= @highlight_enabled ? @query : '' %></span>
+      <span class="resultinfo d-inline-block text-truncate" style="width: 100%; width: 100%vw;padding-left: 10px" id="sticky_nav_header"><%= @highlight_enabled ? @query : '' %></span>
     </div>
     <% if @highlight_enabled %>
     <div class="col-7">
-      <span style="font-size: 15px; padding: 0px;"><a class="" href="<%= law_path(@law) %>">Ver ley completa</a></span>
+      <span style="font-size: 15px; padding: 0px;"><a class="" style="font-size: 12px;" href="<%= law_path(@law) %>">Ver ley completa</a></span>
     </div>
     <div class="col-1" style="padding-top:2px;">
       <span id="result-count-big"></span>

@@ -16,9 +16,8 @@ class HomeController < ApplicationController
     legal_documents = Set[]
 
     if @query
-      @tokens = @query.scan(/\w+|\W/)
-      if @tokens.first == '/'
-        redirect_to "/tags/" + Tag.where('lower(name) = ?', @tokens.fourth.downcase).first.id.to_s + "-" + @tokens.fourth.downcase + "?query=/" + @tokens.second
+      if redirectOnEspecialCode @query
+        return
       end
     end
 

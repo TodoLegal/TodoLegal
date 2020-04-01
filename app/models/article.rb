@@ -1,3 +1,9 @@
+class CustomRender < Redcarpet::Render::HTML
+  def paragraph(text)
+    text
+  end
+end
+
 class Article < ApplicationRecord
   include PgSearch
 
@@ -62,7 +68,7 @@ pg_search_scope :search_by_body_trimmed,
 
   class << self
     def markdown
-      Redcarpet::Markdown.new(Redcarpet::Render::HTML, :tables => true)
+      Redcarpet::Markdown.new(CustomRender, :tables => true)
     end
   end
 end

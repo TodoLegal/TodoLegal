@@ -1,6 +1,5 @@
 class SubscriptionsController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_action :authenticate_admin!, only: [:admin]
 
   def subscribe
     email = params[:email]
@@ -59,11 +58,6 @@ class SubscriptionsController < ApplicationController
 
     email_subscription.status = "unsubscribed"
     email_subscription.save
-  end
-
-  def admin
-    @subscriptions = EmailSubscription.all
-    @confirmed_subscriptions = EmailSubscription.where(status: "confirmed")
   end
 
 private

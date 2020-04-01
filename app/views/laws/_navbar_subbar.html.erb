@@ -1,0 +1,47 @@
+<div id="myScrollspy" class="sticky-top" style="top:70px; padding: 0px; padding-top:5px; padding-bottom:5px; background-color: #fff;">
+  <div class="row">
+    <div class="col-8">
+      <ul class="nav nav-tabs" id="lawEditorTab" role="tablist">
+        <li  class="nav-item">
+          <a class="nav-link active" id="articulos-tab" data-toggle="tab" href="#articulos" role="tab" aria-controls="articulos" aria-selected="true">Artículos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="tab" href="#indice">Índice</a>
+        </li>
+      </ul>
+    </div>
+    <div class="col-4">
+      <form class="form-inline" action="<%= law_path(@law) %>" method="get">
+        <div class="input-group">
+          <input type="text" class="form-control" name="query" type="search" placeholder="Buscar" value="<%= @query %>" aria-label="Buscar">
+          <div class="input-group-append">
+            <button class="btn btn-secondary" style="background-color: #FF5722;border-color: #FF5722;" type="submit">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-<%= @highlight_enabled ? '2' : '12' %>">
+      <span class="resultinfo d-inline-block text-truncate" style="width: 100%; width: 100%vw;padding-left: 10px" id="sticky_nav_header"><%= @highlight_enabled ? @query : '' %></span>
+    </div>
+    <% if @highlight_enabled %>
+    <div class="col-7">
+      <span style="font-size: 15px; padding: 0px;"><a class="" style="font-size: 12px;" href="<%= law_path(@law) %>">Ver ley completa</a></span>
+    </div>
+    <div class="col-1" style="padding-top:2px;">
+      <span id="result-count-big"></span>
+    </div>
+    <div class="col-2">
+      <button class="btn btn-sm" style="padding-left:4;" onclick="browseHighlightedUp()"><i class="fa fa-chevron-left"></i></button>
+      <button class="btn btn-sm" style="padding-left:4;" onclick="browseHighlightedDown()"><i class="fa fa-chevron-right"></i></button>
+    </div>
+    <% end %>
+  </div>
+</div>
+<style>
+br{content:' ';}
+br:after{content:' ';}
+</style>

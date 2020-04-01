@@ -1,43 +1,177 @@
-<h2>Edit <%= resource_name.to_s.humanize %></h2>
+<div class = "container">
+  <h2></h2>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+    <div class="card">
+      <div class="card-body">
+        <%= render "devise/shared/error_messages", resource: resource %>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
+        <h2 class="card-title" style="margin-bottom:0%;">
+          <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#salirModal">
+            <i class="fas fa-arrow-left"></i>
+          </button>
+          Editar <%= resource_name.to_s.humanize %>
+        </h2>
+        <hr class="style1">
 
-  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-    <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+        <!-- Modal -->
+        <div class="modal fade" id="salirModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Salir de editar cuenta</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <label>Si ha realizado algún cambio se perderá, ¿seguro que desea salir?</label>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <%= link_to "Salir", :back, class:"btn btn-primary" %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--End Modal-->
+
+        <div class="form-group">
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <%= f.label :Nombre %><br />
+              <%= f.text_field :first_name, autofocus: true, class:"form-control"%>
+            </div>
+            <div class="col-md-6 form-group">
+              <%= f.label :Apellido %><br />
+              <%= f.text_field :last_name, autofocus: true, class:"form-control" %>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="row">
+            <div class="col-md-12 form-group">  
+              <%= f.label :email %><br />
+              <%= f.email_field :email, autofocus: true, autocomplete: "email", class:"form-control" %>
+            </div>
+          </div>
+        </div>
+            
+        
+        <div class="form-group">
+          <div class="row">
+            <div class="col-md-12 form-group"> 
+              <%= f.label :Ocupación %><br />
+              <%= f.text_field :occupation, autofocus: true, class:"form-control"%>
+            </div>
+          </div>
+        </div>
+
+        <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+          <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+        <% end %>
+
+        <div class="row">
+          <div class="col-12 col-sm-6 mb-3">
+            <div class="mb-2"><b>Cambiar contraseña</b></div>
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <label>Dejala en blanco si no la quieres cambiar</label>
+                  <%= f.password_field :password, autocomplete: "new-password", class: "form-control" %>
+                  <small id="passwordHelpBlock" class="form-text text-muted">
+                    <em>(Mínimo <%= @minimum_password_length %> caracteres)</em>
+                  </small>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <label>Confirmar contraseña</label>
+                  <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control"%>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-5 offset-sm-1 mb-3">
+            <div class="mb-2"><b>Sé contribuidor</b></div>
+            <div class="row">
+              <div class="col">
+                <label>Te podemos enviar encuestas o entrevistarte en persona</label>
+                <div class="custom-controls-stacked px-2">
+                  <div class="custom-control custom-checkbox">
+                    <%= f.check_box :is_contributor, autofocus: true, class:"custom-control-input", id:"contributor" %>
+                    <label class="custom-control-label" for="contributor">Contribuidor</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmModal">
+            Actualizar
+          </button>
+        </div>
+
+         <!-- Modal -->
+        <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Confirmar cambios</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <label>Ingresa tu contraseña actual para confirmar los cambios</label>
+                <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control"%>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <%= f.submit "Guardar cambios", class: 'btn btn-primary'%>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
-    <%= f.password_field :password, autocomplete: "new-password" %>
-    <% if @minimum_password_length %>
-      <br />
-      <em><%= @minimum_password_length %> characters minimum</em>
-    <% end %>
+  <div class="card", style="margin-top:2%;">
+    <div class="card-body">
+      <h2 class="card-title" style="margin-bottom:0%;">Cancelar cuenta</h2>
+      <hr class="style1">
+      
+      <p>Unhappy?</p>
+      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#cancelAccountModal">Cancelar mi cuenta</button>
+      
+      <!-- Modal -->
+      <div class="modal fade" id="cancelAccountModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="cancelModalLongTitle">Eliminar cuenta</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <label>¿Estás seguro que deseas eliminar tu cuenta?</label>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+              <%= button_to "Sí, estoy seguro", registration_path(resource_name), method: :delete, class:"btn btn-danger" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
-
-  <div class="field">
-    <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
-    <%= f.password_field :current_password, autocomplete: "current-password" %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "Update" %>
-  </div>
-<% end %>
-
-<h3>Cancel my account</h3>
-
-<p>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete %></p>
-
-<%= link_to "Back", :back %>
+</div>

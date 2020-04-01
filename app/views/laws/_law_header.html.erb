@@ -1,0 +1,25 @@
+<h1>
+  <%= @law.name %>
+  <% if user_signed_in? %>
+    <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_law_path(@law) %>
+  <% end %>
+</h1>
+
+<p>
+<% if @law.creation_number && @law.creation_number != "" %>
+  <span class="badge badge badge-secondary"><%= @law.creation_number %></span>
+<% end %>
+<% if !@highlight_enabled %>
+  <span class="badge badge badge-secondary"><%= @articles_count %> artículos en total</span>
+<% else %>
+  <span class="badge badge badge-secondary"><%= @articles_count %> resultados encontrados</span>
+<% end %>
+</p>
+
+<!--
+<% if @highlight_enabled %>
+<p>
+  <a class="" href="<%= law_path(@law) %>">Ver ley completa</a>
+</p>
+<% end %>
+-->

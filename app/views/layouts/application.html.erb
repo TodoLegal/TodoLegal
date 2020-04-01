@@ -17,15 +17,14 @@
   <meta name="keywords" content="constitución, constitución de la república, ley, poder judicial, ley de procedimiento administrativo">
 
   <!-- Bootstrap CSS CDN -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-  <!--
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-  -->
+  <link href="https://getbootstrap.com/docs/4.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
   <!-- Our Custom CSS -->
   <link rel="stylesheet" href="/css/law_view.css">
   <link rel="stylesheet" href="/css/footer.css">
   <!-- Scrollbar Custom CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+  <!--Bootstrap form validator-->
+  <script src="https://cdn.rawgit.com/PascaleBeier/bootstrap-validate/v2.2.0/dist/bootstrap-validate.js"></script>
 
   <!-- Font Awesome JS -->
   <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
@@ -41,12 +40,10 @@
   <%= render 'layouts/google_analytics_body' %>
 
   <% if user_signed_in? %>
-    <p>
-      <%= link_to('Logout', destroy_user_session_path, method: :delete) %>        	
-    </p>
+      <%= render 'layouts/logged_navbar' %>        
+  <% else %>
+      <%= render 'layouts/unlogged_navbar' %> 
   <% end %>
-
-  <%= render 'subscriptions/subscribe_form' %>
 
   <%= yield %>
   
@@ -61,6 +58,9 @@
   <!-- jQuery Custom Scroller CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
 
+  <script src="/js/law_navigation.js"></script>
+  <%= render 'laws/law_postscripts' %>
+  
   <style>
     .customButton{
       display: block;

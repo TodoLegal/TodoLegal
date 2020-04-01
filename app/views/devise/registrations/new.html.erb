@@ -41,7 +41,9 @@
               </div>
 
               <div class="form-group">
-                <button type="button" class="btn btn-primary" id="nextButton" data-target="#carouselExampleIndicators" data-slide-to="1">Siguiente</button>
+                <button type="button" class="btn btn-primary" id="nextButton" data-target="#carouselExampleIndicators" 
+                data-slide-to="1" data-container="body" data-toggle="popover" data-placement="top" data-trigger="focus"
+                data-content="Complete todos los campos.">Siguiente</button>
               </div>
 
             </div>
@@ -103,55 +105,72 @@
 
   <script>
     bootstrapValidate('#name', 'required:Debes ingresar tu nombre', function (isValid){
-      if(isValid){
+      if(isValid)
+      {
         $('#nextButton').unbind();
-      }else{
+        $('#nextButton').popover('hide')
+      } else
+      {
         $('#nextButton').click(function (e) {
-          alert("Debes llenar todos los campos");
+          $('#nextButton').popover('show')
           e.preventDefault();
           e.stopPropagation();
         });
       }
     });
     bootstrapValidate('#lastname', 'required:Debes ingresar tu apellido', function (isValid){
-      if(isValid){
+      if(isValid)
+      {
         $('#nextButton').unbind();
-      }else{
+        $('#nextButton').popover('hide')
+      } else
+      {
         $('#nextButton').click(function (e) {
-          alert("Debes llenar todos los campos");
+          $('#nextButton').popover('show');
           e.preventDefault();
           e.stopPropagation();
         });
       }
+
     });
     bootstrapValidate('#email', 'email:Debes ingresar un correo válido', function (isValid){
-      if(isValid){
+      if(isValid)
+      {
         $('#nextButton').unbind();
-      }else{
+        $('#nextButton').popover('hide')
+      } else
+      {
         $('#nextButton').click(function (e) {
-          alert("Debes llenar todos los campos");
+          $('#nextButton').popover('show')
           e.preventDefault();
           e.stopPropagation();
         });
       }
+
     });
     bootstrapValidate('#password', 'min:8:Debes ingresar una contraseña válida',function (isValid){
-      if(isValid){
+      if(isValid)
+      {
         $('#nextButton').unbind();
-      }else{
+        $('#nextButton').popover('hide')
+      } else
+      {
         $('#nextButton').click(function (e) {
-          alert("Debes llenar todos los campos");
+          $('#nextButton').popover('show')
           e.preventDefault();
           e.stopPropagation();
         });
       }
     });
     bootstrapValidate('#confirmPassword', 'matches:#password:Tus contraseñas deben ser iguales', function (isValid){
-      if(isValid){
+      if(isValid)
+      {
         $('#nextButton').unbind();
-      }else{
+        $('#nextButton').popover('hide')
+      } else
+      {
         $('#nextButton').click(function (e) {
-          alert("Debes llenar todos los campos");
+          $('#nextButton').popover('show')
           e.preventDefault();
           e.stopPropagation();
         });

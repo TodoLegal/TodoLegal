@@ -44,7 +44,7 @@
   <% end %>
 <% end %>
 
-<% if @grouped_laws %>
+<% if @grouped_laws && @grouped_laws.size > 0 %>
   <div class="list-group">
     <% i = 0 %>
     <% @grouped_laws.each do |grouped_law| %>

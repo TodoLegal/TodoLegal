@@ -12,32 +12,32 @@
               <h2 class="card-title text-center">Crea una cuenta</h2>
               <p class="card-text text-center"><small class="text-muted">Es fácil y toma menos de un minuto.</small></p>
               
-              <%= render "devise/shared/error_messages", resource: resource %>
+              <%= render "devise/shared/error_messages", resource: resource%>
               <div class="form-group">
                 <div class="row">
                   <div class="col-md-6 form-group">
-                    <%= f.text_field :first_name, autofocus: true, class:"form-control", placeholder:"Nombre", id:"name", required:"required"%>
+                    <%= f.text_field :first_name, autofocus: true, class:"form-control", placeholder:"Nombre", id:"name"%>
                   </div>
                   <div class="col-md-6 form-group">
-                    <%= f.text_field :last_name, class:"form-control", placeholder:"Apellido", id:"lastname", required:"required"%>
+                    <%= f.text_field :last_name, class:"form-control", placeholder:"Apellido", id:"lastname"%>
                   </div>
                 </div>
               </div>
               <div class="form-group">
-                <%= f.email_field :email, autocomplete: "email", class:"form-control", placeholder:"E-mail", id:"email", required:"required"%>
+                <%= f.email_field :email, autocomplete: "email", class:"form-control", placeholder:"E-mail", id:"email"%>
               </div>
 
               <div class="form-group">
                 <% if @minimum_password_length %>
                 <% end %><br />
-                <%= f.password_field :password, autocomplete: "new-password", class: "form-control", placeholder:"Contraseña", id:"password",required:"required"%>
+                <%= f.password_field :password, autocomplete: "new-password", class: "form-control", placeholder:"Contraseña", id:"password"%>
                 <small id="passwordHelpBlock" class="form-text text-muted">
                   <em>(Mínimo <%= @minimum_password_length %> caracteres)</em>
                 </small>
               </div>
 
               <div class="form-group">
-                <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", placeholder:"Confirmar contraseña", id:"confirmPassword", required:"required"%>
+                <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", placeholder:"Confirmar contraseña", id:"confirmPassword"%>
               </div>
 
               <div class="form-group">

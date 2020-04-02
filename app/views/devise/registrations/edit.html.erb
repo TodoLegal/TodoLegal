@@ -25,11 +25,12 @@
                 </button>
               </div>
               <div class="modal-body">
-                <label>Si ha realizado algún cambio se perderá, ¿seguro que desea salir?</label>
+                <label>¿Seguro que desea salir?</label>
               </div>
               <div class="modal-footer" style="justify-content:flex-start;">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
-                <%= link_to "Salir", :back, class:"text-secondary font-weight-bold", style:"text-decoration:underline;" %>
+                &nbsp;&nbsp;&nbsp;
+                <%= link_to "Sí, estoy seguro", :back, class:"text-secondary font-weight-bold", style:"text-decoration:underline;" %>
               </div>
             </div>
           </div>
@@ -165,7 +166,7 @@
             </div>
             <div class="modal-footer" style="justify-content: flex-start">
               <button type="button" class="btn btn-primary" data-dismiss="modal">No, cancelar y regresar</button>
-              <%= link_to "Sí, estoy seguro", registration_path(resource_name), method: :delete, class:"text-danger", style:"text-decoration:underline;" %>
+              <%= link_to "Sí, estoy seguro", registration_path(resource_name), remote: true, method: :delete, class:"text-danger", style:"text-decoration:underline;"%>
             </div>
           </div>
         </div>

@@ -30,7 +30,7 @@
               <div class="modal-footer" style="justify-content:flex-start;">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
                 &nbsp;&nbsp;&nbsp;
-                <%= link_to "Sí, estoy seguro", :back, class:"text-secondary font-weight-bold", style:"text-decoration:underline;" %>
+                <%= link_to "Sí, estoy seguro", :back, class:"text-secondary font-weight-bold", style:"text-decoration: underline;" %>
               </div>
             </div>
           </div>
@@ -64,7 +64,7 @@
           <div class="row">
             <div class="col-md-12 form-group"> 
               <%= f.label :Ocupación %><br />
-              <%= f.text_field :occupation, autofocus: true, class:"form-control"%>
+              <%= f.select :occupation, ['Abogado', 'Estudiante', 'Otro'], {}, {class:"custom-select form-control"}%>
             </div>
           </div>
         </div>
@@ -134,6 +134,7 @@
               </div>
               <div class="modal-footer" style="justify-content:flex-start;">
                 <%= f.submit "Guardar cambios", class: 'btn btn-primary'%>
+                &nbsp;&nbsp;&nbsp;
                 <a href="#" class="text-secondary" data-dismiss="modal" style="text-decoration:underline;">Cancelar</a>
               </div>
             </div>
@@ -146,7 +147,7 @@
 
   <div class="card", style="margin-top:2%;">
     <div class="card-body">
-      <h2 class="card-title text-danger" style="margin-bottom:0%;">Eliminar cuenta</h2>
+      <h4 class="card-title text-danger" style="margin-bottom:0%;">Eliminar cuenta</h4>
       <hr class="style1">
       
       <p>Una vez elimines tu cuenta no hay marcha atrás.</p>
@@ -166,7 +167,8 @@
             </div>
             <div class="modal-footer" style="justify-content: flex-start">
               <button type="button" class="btn btn-primary" data-dismiss="modal">No, cancelar y regresar</button>
-              <%= link_to "Sí, estoy seguro", registration_path(resource_name), remote: true, method: :delete, class:"text-danger", style:"text-decoration:underline;"%>
+              &nbsp;&nbsp;&nbsp;
+              <%= button_to "Sí, estoy seguro", registration_path(resource_name), remote: true, method: :delete, class:"btn btn-outline-danger"%>
             </div>
           </div>
         </div>

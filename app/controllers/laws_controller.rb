@@ -113,7 +113,7 @@ class LawsController < ApplicationController
           subsection_iterator+=1
         else
           @stream.push @articles[article_iterator]
-          if go_to_position && go_to_position == @articles[article_iterator].position
+          if go_to_position && @articles[article_iterator] && go_to_position == @articles[article_iterator].position
             @go_to_article = article_iterator
           end
           article_iterator+=1

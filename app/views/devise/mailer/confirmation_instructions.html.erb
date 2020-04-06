@@ -1,5 +1,9 @@
-<p>Welcome <%= @email %>!</p>
+<p>Hola <%= @current_user.name %>.</p>
 
-<p>You can confirm your account email through the link below:</p>
+<p>Tu cuenta en TodoLegal ha sido creada, ya puedes acceder a las más de 150 leyes, acuerdos y normativa jurídica de Honduras que tenemos en nuestra plataforma.</p>
 
-<p><%= link_to 'Confirm my account', confirmation_url(@resource, confirmation_token: @token) %></p>
+<p>Sólo tienes que confirmar tu correo para que podamos asegurar que te pertenece a tí.</p>
+
+<p>¡Gracias!</p>
+
+<p><%= link_to 'Confirma tu correo', confirmation_url(@resource, confirmation_token: @token) %></p>

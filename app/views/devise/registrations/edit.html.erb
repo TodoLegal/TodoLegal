@@ -30,7 +30,7 @@
               <div class="modal-footer" style="justify-content:flex-start;">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
                 &nbsp;&nbsp;&nbsp;
-                <%= link_to "Sí, estoy seguro", :back, class:"text-secondary font-weight-bold", style:"text-decoration: underline;" %>
+                <%= link_to "Sí, estoy seguro", :back, class:"text-secondary", style:"text-decoration: underline;" %>
               </div>
             </div>
           </div>
@@ -140,18 +140,22 @@
             </div>
           </div>
         </div>
-
+        <a href="#" class="text-danger" data-toggle="modal" data-target="#cancelAccountModal"  style="text-decoration:underline;">Cancelar mi cuenta</a>
       </div>
     </div>
   <% end %>
 
-  <div class="card", style="margin-top:2%;">
+  <%
+=begin%>
+ <div class="card", style="margin-top:2%;">
     <div class="card-body">
       <h4 class="card-title text-danger" style="margin-bottom:0%;">Eliminar cuenta</h4>
       <hr class="style1">
       
-      <p>Una vez elimines tu cuenta no hay marcha atrás.</p>
-      <a href="#" class="text-danger" data-toggle="modal" data-target="#cancelAccountModal"  style="text-decoration:underline;">Cancelar mi cuenta</a>
+      <p>Una vez elimines tu cuenta no hay marcha atrás.</p> 
+<%
+=end%>
+      
       <!-- Modal -->
       <div class="modal fade" id="cancelAccountModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -168,12 +172,16 @@
             <div class="modal-footer" style="justify-content: flex-start">
               <button type="button" class="btn btn-primary" data-dismiss="modal">No, cancelar y regresar</button>
               &nbsp;&nbsp;&nbsp;
-              <%= button_to "Sí, estoy seguro", registration_path(resource_name), remote: true, method: :delete, class:"btn btn-outline-danger"%>
+              <%= button_to "Sí, estoy seguro", registration_path(resource), method: :delete, remote: true, class:"text-danger", style:"background:none; border:none; padding:0; text-decoration: underline; cursor:pointer;"%>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
+    <%
+=begin%>
+ </div>
+  </div> 
+<%
+=end%>
 
 </div>

@@ -25,11 +25,12 @@
                 </button>
               </div>
               <div class="modal-body">
-                <label>Si ha realizado algún cambio se perderá, ¿seguro que desea salir?</label>
+                <label>¿Seguro que desea salir?</label>
               </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <%= link_to "Salir", :back, class:"btn btn-primary" %>
+              <div class="modal-footer" style="justify-content:flex-start;">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+                &nbsp;&nbsp;&nbsp;
+                <%= link_to "Sí, estoy seguro", :back, class:"text-secondary", style:"text-decoration: underline;" %>
               </div>
             </div>
           </div>
@@ -63,7 +64,7 @@
           <div class="row">
             <div class="col-md-12 form-group"> 
               <%= f.label :Ocupación %><br />
-              <%= f.text_field :occupation, autofocus: true, class:"form-control"%>
+              <%= f.select :occupation, ['Abogado', 'Estudiante', 'Otro'], {}, {class:"custom-select form-control"}%>
             </div>
           </div>
         </div>
@@ -131,32 +132,36 @@
                 <label>Ingresa tu contraseña actual para confirmar los cambios</label>
                 <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control"%>
               </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+              <div class="modal-footer" style="justify-content:flex-start;">
                 <%= f.submit "Guardar cambios", class: 'btn btn-primary'%>
+                &nbsp;&nbsp;&nbsp;
+                <a href="#" class="text-secondary" data-dismiss="modal" style="text-decoration:underline;">Cancelar</a>
               </div>
             </div>
           </div>
         </div>
-
+        <a href="#" class="text-danger" data-toggle="modal" data-target="#cancelAccountModal"  style="text-decoration:underline;">Cancelar mi cuenta</a>
       </div>
     </div>
   <% end %>
 
-  <div class="card", style="margin-top:2%;">
+  <%
+=begin%>
+ <div class="card", style="margin-top:2%;">
     <div class="card-body">
-      <h2 class="card-title" style="margin-bottom:0%;">Cancelar cuenta</h2>
+      <h4 class="card-title text-danger" style="margin-bottom:0%;">Eliminar cuenta</h4>
       <hr class="style1">
       
-      <p>Unhappy?</p>
-      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#cancelAccountModal">Cancelar mi cuenta</button>
+      <p>Una vez elimines tu cuenta no hay marcha atrás.</p> 
+<%
+=end%>
       
       <!-- Modal -->
       <div class="modal fade" id="cancelAccountModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="cancelModalLongTitle">Eliminar cuenta</h5>
+              <h5 class="modal-title text-danger" id="cancelModalLongTitle">Eliminar cuenta</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -164,14 +169,19 @@
             <div class="modal-body">
               <label>¿Estás seguro que deseas eliminar tu cuenta?</label>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-              <%= button_to "Sí, estoy seguro", registration_path(resource_name), method: :delete, class:"btn btn-danger" %>
+            <div class="modal-footer" style="justify-content: flex-start">
+              <button type="button" class="btn btn-primary" data-dismiss="modal">No, cancelar y regresar</button>
+              &nbsp;&nbsp;&nbsp;
+              <%= button_to "Sí, estoy seguro", registration_path(resource), method: :delete, remote: true, class:"text-danger", style:"background:none; border:none; padding:0; text-decoration: underline; cursor:pointer;"%>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
+    <%
+=begin%>
+ </div>
+  </div> 
+<%
+=end%>
 
 </div>

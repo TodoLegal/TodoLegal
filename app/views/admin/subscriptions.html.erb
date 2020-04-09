@@ -1,4 +1,4 @@
-<h3>Subscripciones</h3>
+<h3>Suscripciones</h3>
 <p>
 <% @subscriptions.each do |subscription| %>
   <%= subscription.email %>, 
@@ -13,4 +13,9 @@ Total: <%= @subscriptions.count %>
 <% end %>
 </p>
 
-Total: <%= @confirmed_subscriptions.count %>
+<p>Total: <%= @confirmed_subscriptions.count %></p>
+
+<ul>
+  <li><a href="/confirmed.csv" download>Descargar confirmados</a></li>
+  <li><a href="/pending.csv" download>Descargar pendientes</a></li>
+</ul>

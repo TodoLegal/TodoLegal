@@ -1,4 +1,4 @@
-<p>Hola <%= @first_name %>.</p>
+<p>Hola <% if User.find_by_email(@email) %><%= User.find_by_email(@email).first_name %><% end %>.</p>
 
 <p>Tu cuenta en TodoLegal ha sido creada, ya puedes acceder a las más de 150 leyes, acuerdos y normativa jurídica de Honduras que tenemos en nuestra plataforma.</p>
 

@@ -69,10 +69,10 @@ class AdminController < ApplicationController
     pending_content = ""
 
     @confirmed_subscriptions.each do |subscription|
-      confirmed_content += subscription + '\n'
+      confirmed_content += subscription.email + '\n'
     end
     @pending_subscriptions.each do |subscription|
-      pending_content += subscription + '\n'
+      pending_content += subscription.email + '\n'
     end
 
     File.open(confirmed_path, "w+") do |f|

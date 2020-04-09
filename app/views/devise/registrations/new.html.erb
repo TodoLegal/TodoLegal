@@ -12,36 +12,38 @@
               <h2 class="card-title text-center">Crea una cuenta</h2>
               <p class="card-text text-center"><small class="text-muted">Es fácil y toma menos de un minuto.</small></p>
               
-              <%= render "devise/shared/error_messages", resource: resource %>
+              <%= render "devise/shared/error_messages", resource: resource%>
               <div class="form-group">
                 <div class="row">
                   <div class="col-md-6 form-group">
-                    <%= f.text_field :first_name, autofocus: true, class:"form-control", placeholder:"Nombre", id:"name", required:"required"%>
+                    <%= f.text_field :first_name, autofocus: true, class:"form-control", placeholder:"Nombre", id:"name"%>
                   </div>
                   <div class="col-md-6 form-group">
-                    <%= f.text_field :last_name, class:"form-control", placeholder:"Apellido", id:"lastname", required:"required"%>
+                    <%= f.text_field :last_name, class:"form-control", placeholder:"Apellido", id:"lastname"%>
                   </div>
                 </div>
               </div>
               <div class="form-group">
-                <%= f.email_field :email, autocomplete: "email", class:"form-control", placeholder:"E-mail", id:"email", required:"required"%>
+                <%= f.email_field :email, autocomplete: "email", class:"form-control", placeholder:"E-mail", id:"email"%>
               </div>
 
               <div class="form-group">
                 <% if @minimum_password_length %>
                 <% end %><br />
-                <%= f.password_field :password, autocomplete: "new-password", class: "form-control", placeholder:"Contraseña", id:"password",required:"required"%>
+                <%= f.password_field :password, autocomplete: "new-password", class: "form-control", placeholder:"Contraseña", id:"password"%>
                 <small id="passwordHelpBlock" class="form-text text-muted">
                   <em>(Mínimo <%= @minimum_password_length %> caracteres)</em>
                 </small>
               </div>
 
               <div class="form-group">
-                <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", placeholder:"Confirmar contraseña", id:"confirmPassword", required:"required"%>
+                <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", placeholder:"Confirmar contraseña", id:"confirmPassword"%>
               </div>
 
               <div class="form-group">
-                <button type="button" class="btn btn-primary" id="nextButton" data-target="#carouselExampleIndicators" data-slide-to="1">Siguiente</button>
+                <button type="button" class="btn btn-primary" id="nextButton" data-target="#carouselExampleIndicators" 
+                data-slide-to="1" data-container="body" data-toggle="popover" data-placement="top" data-trigger="focus"
+                data-content="Complete todos los campos.">Siguiente</button>
               </div>
 
             </div>
@@ -103,55 +105,72 @@
 
   <script>
     bootstrapValidate('#name', 'required:Debes ingresar tu nombre', function (isValid){
-      if(isValid){
+      if(isValid)
+      {
         $('#nextButton').unbind();
-      }else{
+        $('#nextButton').popover('hide')
+      } else
+      {
         $('#nextButton').click(function (e) {
-          alert("Debes llenar todos los campos");
+          $('#nextButton').popover('show')
           e.preventDefault();
           e.stopPropagation();
         });
       }
     });
     bootstrapValidate('#lastname', 'required:Debes ingresar tu apellido', function (isValid){
-      if(isValid){
+      if(isValid)
+      {
         $('#nextButton').unbind();
-      }else{
+        $('#nextButton').popover('hide')
+      } else
+      {
         $('#nextButton').click(function (e) {
-          alert("Debes llenar todos los campos");
+          $('#nextButton').popover('show');
           e.preventDefault();
           e.stopPropagation();
         });
       }
+
     });
     bootstrapValidate('#email', 'email:Debes ingresar un correo válido', function (isValid){
-      if(isValid){
+      if(isValid)
+      {
         $('#nextButton').unbind();
-      }else{
+        $('#nextButton').popover('hide')
+      } else
+      {
         $('#nextButton').click(function (e) {
-          alert("Debes llenar todos los campos");
+          $('#nextButton').popover('show')
           e.preventDefault();
           e.stopPropagation();
         });
       }
+
     });
     bootstrapValidate('#password', 'min:8:Debes ingresar una contraseña válida',function (isValid){
-      if(isValid){
+      if(isValid)
+      {
         $('#nextButton').unbind();
-      }else{
+        $('#nextButton').popover('hide')
+      } else
+      {
         $('#nextButton').click(function (e) {
-          alert("Debes llenar todos los campos");
+          $('#nextButton').popover('show')
           e.preventDefault();
           e.stopPropagation();
         });
       }
     });
     bootstrapValidate('#confirmPassword', 'matches:#password:Tus contraseñas deben ser iguales', function (isValid){
-      if(isValid){
+      if(isValid)
+      {
         $('#nextButton').unbind();
-      }else{
+        $('#nextButton').popover('hide')
+      } else
+      {
         $('#nextButton').click(function (e) {
-          alert("Debes llenar todos los campos");
+          $('#nextButton').popover('show')
           e.preventDefault();
           e.stopPropagation();
         });

@@ -60,6 +60,27 @@ class AdminController < ApplicationController
   def subscriptions
     @subscriptions = EmailSubscription.all
     @confirmed_subscriptions = EmailSubscription.where(status: "confirmed")
+    @pending_subscriptions = EmailSubscription.where(status: "pending")
+
+    confirmed_path = Rails.root.join("public", "confirmed.csv")
+    pending_path = Rails.root.join("public", "pending.csv")
+
+    confirmed_content = ""
+    pending_content = ""
+
+    @confirmed_subscriptions.each do |subscription|
+      confirmed_content += subscription + '\n'
+    end
+    @pending_subscriptions.each do |subscription|
+      pending_content += subscription + '\n'
+    end
+
+    File.open(confirmed_path, "w+") do |f|
+      f.write(confirmed_content)
+    end
+    File.open(pending_path, "w+") do |f|
+      f.write(pending_content)
+    end
   end
 end
   

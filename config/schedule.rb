@@ -5,7 +5,7 @@
 
 set :output, "/root/TodoLegal/log/cron_log.log"
 
-every 2.minutes do
+every 5.minutes do
   command "/root/TodoLegal/update_covid_doc.sh"
 end
 #

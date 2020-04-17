@@ -39,11 +39,6 @@ class ApplicationRecord < ActiveRecord::Base
     credentials
   end
   
-  # Initialize the API
-  drive_service = Google::Apis::DriveV3::DriveService.new
-  drive_service.client_options.application_name = APPLICATION_NAME
-  drive_service.authorization = authorize
-  
   def count_files drive_service, folder_id
     puts folder_id
     response = drive_service.list_files(page_size: 1000,
@@ -60,6 +55,11 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
   def cron_job
+    # Initialize the API
+    drive_service = Google::Apis::DriveV3::DriveService.new
+    drive_service.client_options.application_name = APPLICATION_NAME
+    drive_service.authorization = authorize
+
     file_count = count_files drive_service, '15WjHMcU2_QOukmbOyRJAFmOPxZpa0O9k'
 
     open('public/covid_drive_data.json', 'w') { |f|

@@ -3,12 +3,10 @@
 # It's helpful, but not entirely necessary to understand cron before proceeding.
 # http://en.wikipedia.org/wiki/Cron
 
-# Example:
-#
-set :output, "log/cron_log.log"
-#
+set :output, "/root/TodoLegal/log/cron_log.log"
+
 every 2.minutes do
-  runner "ApplicationRecord.cron_job"
+  command "/root/TodoLegal/update_covid_doc.sh"
 end
 #
 # every 4.days do

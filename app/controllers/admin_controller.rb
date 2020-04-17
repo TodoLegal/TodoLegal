@@ -2,6 +2,20 @@ class AdminController < ApplicationController
   skip_before_action :verify_authenticity_token
   before_action :authenticate_admin!, only: [:users, :grant_permission, :revoke_permission, :set_law_access, :subscriptions]
 
+  def write_users_csv filename, users
+    file_path = Rails.root.join("public", filename)
+
+    content = ""
+
+    users.each do |user|
+      content += user.email + "\n"
+    end
+
+    File.open(file_path, "w+") do |f|
+      f.write(content)
+    end
+  end
+
   def users
     @email = params[:email]
     if @email
@@ -10,6 +24,8 @@ class AdminController < ApplicationController
       @users = User.all
     end
     @permissions = Permission.all
+
+    write_users_csv 'users.csv', @users
   end
 
   def grant_permission
@@ -60,6 +76,10 @@ class AdminController < ApplicationController
   def subscriptions
     @subscriptions = EmailSubscription.all
     @confirmed_subscriptions = EmailSubscription.where(status: "confirmed")
+    @pending_subscriptions = EmailSubscription.where(status: "pending")
+
+    write_users_csv 'confirmed.csv', @confirmed_subscriptions
+    write_users_csv 'pending.csv', @pending_subscriptions
   end
 end
   

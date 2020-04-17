@@ -8,14 +8,6 @@ function onIndexElementClicked(section_id) {
 <div class="container" data-spy="scroll" data-target="#myScrollspy">
   <%= render 'law_header' %>
 
-<!--
-  <% if @highlight_enabled %>
-    <%= render 'navbar_search_enabled' %>
-  <% else %>
-    <%= render 'navbar_search_disabled' %>
-  <% end %>
--->
-
   <div class="container-fluid" style="padding-top:60">
     <%= render 'navbar_subbar' %>
       
@@ -30,7 +22,6 @@ function onIndexElementClicked(section_id) {
         <%= render 'modifications_tab' %>
       </div>
     </div>
-    
 
     <div class="wrapper">
       <%= render 'sidebar_indice' %>

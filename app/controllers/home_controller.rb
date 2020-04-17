@@ -7,7 +7,7 @@ class HomeController < ApplicationController
 
     file = File.read('public/covid_drive_data.json')
     data_hash = JSON.parse(file)
-    puts data_hash['file_count']
+    @covid_files_count = data_hash['file_count']
   end
 
   def search_law

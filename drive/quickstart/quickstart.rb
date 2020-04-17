@@ -41,11 +41,33 @@ drive_service = Google::Apis::DriveV3::DriveService.new
 drive_service.client_options.application_name = APPLICATION_NAME
 drive_service.authorization = authorize
 
+def count_files drive_service, folder_id
+  puts folder_id
+  response = drive_service.list_files(page_size: 1000,
+                                        q: "'#{folder_id}' in parents")
+  result = 0
+  response.files.each do |file|
+    if file.mime_type == 'application/vnd.google-apps.folder'
+      result += count_files drive_service, file.id
+    else
+      result += 1
+    end
+  end
+  return result
+end
+
 # List the 10 most recently modified files.
-response = drive_service.list_files(page_size: 10,
-                                    fields:    "nextPageToken, files(id, name)")
+response = drive_service.list_files(page_size: 1000,
+                                        q: "'15WjHMcU2_QOukmbOyRJAFmOPxZpa0O9k' in parents")
 puts "Files:"
 puts "No files found" if response.files.empty?
-response.files.each do |file|
-  puts "#{file.name} (#{file.id})"
-end
+
+file_count = count_files drive_service, '15WjHMcU2_QOukmbOyRJAFmOPxZpa0O9k'
+
+open('public/covid_drive_data.json', 'w') { |f|
+  f.puts '{"file_count": "' + file_count.to_s + '", "datetime": "' + Time.now.to_s + '" }'
+}
+
+file = File.read('public/covid_drive_data.json')
+data_hash = JSON.parse(file)
+puts data_hash['file_count']

@@ -4,6 +4,10 @@ class HomeController < ApplicationController
   
   def index
     @tags = Tag.where(tag_type: TagType.find_by_name("materia"))
+
+    file = File.read('public/covid_drive_data.json')
+    data_hash = JSON.parse(file)
+    puts data_hash['file_count']
   end
 
   def search_law

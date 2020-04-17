@@ -11,6 +11,7 @@ gem 'route_translator'
 gem 'devise'
 gem 'redcarpet'
 gem 'google-api-client'
+gem 'whenever', require: false
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.0.0'

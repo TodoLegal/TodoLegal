@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   resources :subsections
   resources :sections
   resources :books
-  devise_for :users, controllers: { confirmations: 'confirmations' }
+  devise_for :users, controllers: { confirmations: 'users/confirmations' }
   resources :law_tags
   resources :tags
   resources :tag_types
@@ -28,5 +28,8 @@ Rails.application.routes.draw do
   post "admin/revoke_permission" => "admin#revoke_permission", as: "admin_revoke_permission"
   post "admin/set_law_access" => "admin#set_law_access", as: "admin_set_law_access"
   get "admin/subscriptions" => "admin#subscriptions", as: "admin_subscriptions"
+  get "signed_in" => "home#index", as: "signed_in"
+  get "signed_up" => "home#index", as: "signed_up"
+  get "signed_out" => "home#index", as: "signed_out"
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

@@ -19,7 +19,7 @@
                     <%= f.text_field :first_name, autofocus: true, class:"form-control", placeholder:"Nombre", id:"name"%>
                   </div>
                   <div class="col-md-6 form-group">
-                    <%= f.text_field :last_name, class:"form-control", placeholder:"Apellido", id:"lastname"%>
+                    <%= f.text_field :last_name, class:"form-control", placeholder:"Apellido", id:"lastName"%>
                   </div>
                 </div>
               </div>
@@ -43,7 +43,7 @@
               <div class="form-group">
                 <button type="button" class="btn btn-primary" id="nextButton" data-target="#carouselExampleIndicators" 
                 data-slide-to="1" data-container="body" data-toggle="popover" data-placement="top" data-trigger="focus"
-                data-content="Complete todos los campos.">Siguiente</button>
+                data-content="Complete todos los campos." onclick="required()">Siguiente</button>
               </div>
 
             </div>
@@ -118,7 +118,7 @@
         });
       }
     });
-    bootstrapValidate('#lastname', 'required:Debes ingresar tu apellido', function (isValid){
+    bootstrapValidate('#lastName', 'required:Debes ingresar tu apellido', function (isValid){
       if(isValid)
       {
         $('#nextButton').unbind();
@@ -176,6 +176,27 @@
         });
       }
     });
+
+    function required ()
+    {
+      var name = document.getElementById("name").value;
+      var lastName = document.getElementById("lastName").value;
+      var email = document.getElementById("email").value;
+      var password = document.getElementById("password").value;
+      var confirmPassword = document.getElementById("confirmPassword").value;
+      
+      if( (name.trim() == "") || (lastName.trim() == "") || (email.trim() == "") || (password.trim() == "") || (confirmPassword.trim() == ""))
+      {
+          $('#nextButton').popover('show')
+          event.preventDefault();
+          event.stopPropagation();
+      }
+      else
+      {
+        $('#nextButton').unbind();
+        $('#nextButton').popover('hide') 
+      }
+    }
   </script>
 
 </div>

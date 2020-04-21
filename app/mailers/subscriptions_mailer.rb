@@ -1,5 +1,5 @@
 class SubscriptionsMailer < ApplicationMailer
-  default from: 'Todo Legal <suscripciones@todolegal.app>'
+  default from: 'TodoLegal <suscripciones@todolegal.app>'
 
   def is_a_valid_email?(email)
     #email_regex = %r{/\b[A-Z0-9._%a-z\-]+@(?:[A-Z0-9a-z\-]+\.)+[A-Za-z]{2,4}\z/}xi # Case insensitive

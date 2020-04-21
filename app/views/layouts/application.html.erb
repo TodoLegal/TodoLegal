@@ -13,7 +13,7 @@
   <%= render 'layouts/favicons' %>
 
   <title>TodoLegal - El buscador de leyes de Honduras</title>
-  <meta name="description" content="En Todo Legal tú puedes navegar las leyes hondureñas artículo por artículo y realizar búsquedas por palabras clave.">
+  <meta name="description" content="En TodoLegal tú puedes navegar las leyes hondureñas artículo por artículo y realizar búsquedas por palabras clave.">
   <meta name="keywords" content="constitución, constitución de la república, ley, poder judicial, ley de procedimiento administrativo">
 
   <!-- Bootstrap CSS CDN -->
@@ -43,6 +43,15 @@
       <%= render 'layouts/logged_navbar' %>        
   <% else %>
       <%= render 'layouts/unlogged_navbar' %> 
+  <% end %>
+
+  <% if notice %>
+    <div class="alert alert-primary alert-dismissible fade show" role="alert" id="notice">
+      <%= notice %>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
   <% end %>
 
   <%= yield %>

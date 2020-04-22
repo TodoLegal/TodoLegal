@@ -9,8 +9,6 @@
 
         <div class="form-group">
           <%= f.label :password, "Nueva contraseña" %><br />
-          <% if @minimum_password_length %>
-          <% end %>
           <%= f.password_field :password, autocomplete: "new-password", class: "form-control", id:"password"%>
           <small id="passwordHelpBlock" class="form-text text-muted">
             <em>(Mínimo <%= @minimum_password_length %> caracteres)</em>
@@ -28,9 +26,6 @@
           </em>
         </div>
       <% end %>
-    </div>
-    <div class="card-footer text-center">
-      <%= render "devise/shared/links" %>
     </div>
   </div>
 </div>

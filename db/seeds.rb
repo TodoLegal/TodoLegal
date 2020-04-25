@@ -44,3 +44,8 @@ tag_resolucion = Tag.create({ name: 'Resolucion', tag_type_id: tag_type_creacion
 
 law_access_pro = LawAccess.create(name: "pro")
 law_access_basic = LawAccess.create(name: "basic")
+
+# Permissions
+
+permissions_admin = Permission.create(name: "admin")
+permissions_pro = Permission.create(name: "pro")

@@ -109,10 +109,16 @@ function browseHighlightedDown()
 
 /* Article navigation */
 
-var current_article = 0;
-var article_focused = null;
+var current_article = -1
+var article_focused = null
 
 var articles_element = document.getElementsByClassName('article')
+
+function unselectCurrentArticle()
+{
+  current_article = -1
+  article_focused = null
+}
 
 function onClickArticle(clicked_article_id)
 {
@@ -121,10 +127,16 @@ function onClickArticle(clicked_article_id)
     article_focused.style['background-color'] = "var(--c-original-background)"
     article_focused.style['color'] = "var(--c-original-text)"
   }
-  current_article = clicked_article_id
-  article_focused = document.getElementById('article_count_' + current_article)
-  article_focused.style['background-color'] = "var(--c-selected-article-background)"
-  article_focused.style['color'] = "var(--c-selected-article-text)"
+  if(current_article != clicked_article_id)
+  {
+    current_article = clicked_article_id
+    article_focused = document.getElementById('article_count_' + current_article)
+    article_focused.style['background-color'] = "var(--c-selected-article-background)"
+    article_focused.style['color'] = "var(--c-selected-article-text)"
+  }else
+  {
+    unselectCurrentArticle()
+  }
   return true;
 }
 

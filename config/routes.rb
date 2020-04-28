@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   resources :subsections
   resources :sections
   resources :books
-  devise_for :users, controllers: { confirmations: 'users/confirmations' }
+  devise_for :users, controllers: { confirmations: 'users/confirmations', registrations: "users/registrations" }
   resources :law_tags
   resources :tags
   resources :tag_types
@@ -31,5 +31,6 @@ Rails.application.routes.draw do
   get "signed_in" => "home#index", as: "signed_in"
   get "signed_up" => "home#index", as: "signed_up"
   get "signed_out" => "home#index", as: "signed_out"
+  get '/covid19', to: redirect('https://drive.google.com/drive/folders/15WjHMcU2_QOukmbOyRJAFmOPxZpa0O9k')
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

@@ -2,8 +2,7 @@
 
 <style>
     section.pricing {
-        background: #007bff;
-        background: linear-gradient(to right, #0062E6, #33AEFF);
+        background: #EFF3F8;
     }
 
     .pricing .card {
@@ -68,7 +67,9 @@
 
 
 <section class="pricing py-5">
+  <h2 class="text-center" style="font-weight: bold;margin-bottom: 3%;">¡Tu cuenta ha sido creada!</h3>
   <div class="container">
+    <h4 style="font-weight: bold;margin-bottom: 3%;">Elige un plan</h4>
     <div class="row">
       <!-- Free Tier -->
       <div class="col-lg-6">
@@ -84,7 +85,7 @@
               <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Algo más</li>
               <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Algo más</li>
             </ul>
-            <a href="#" class="btn btn-block btn-primary text-uppercase">Button</a>
+            <%= button_to "Continuar con Plan Básico", invite_colleagues_path, method: :get, remote: true, class:"btn btn-block btn-primary text-uppercase" %>
           </div>
         </div>
       </div>
@@ -102,7 +103,7 @@
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Algo más</li>
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Algo más</li>
             </ul>
-            <a href="#" class="btn btn-block btn-primary text-uppercase">Button</a>
+            <a href="#" class="btn btn-block btn-primary text-uppercase">Elegir Plan Pro</a>
           </div>
         </div>
       </div>

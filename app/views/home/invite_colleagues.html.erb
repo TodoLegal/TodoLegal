@@ -1,0 +1,22 @@
+<div class="container d-flex justify-content-center" style="margin-top:2%;">
+  <div class="card w-75 shadow p-3 mb-5 bg-white rounded">
+    <div class="card-body">
+        <img class="card-img-top" src="/img/logo_landing.png" alt="Card image cap" class="img-fluid" style="margin-bottom: 5%;">
+  
+        <h2 class="card-title text-center" style="margin-bottom: 5%;">Invita a tus colegas</h2>
+        <h5 style="margin-bottom: 5%;"> Enviar invitación a </h5>
+        <div class="form-group">
+            <input type="email" class="form-control" id="email1" aria-describedby="emailHelp" placeholder="nombre@ejemplo.com">
+        </div>
+
+        <div class="form-group">
+            <input type="email" class="form-control" id="email2" aria-describedby="emailHelp" placeholder="nombre@ejemplo.com">
+        </div>
+
+        <div class="form-group">
+            <%= button_to "Enviar", signed_up_path, method: :get, remote: true, class:"btn btn-block btn-primary text-uppercase" %>
+        </div>
+
+    </div>
+  </div>
+</div>

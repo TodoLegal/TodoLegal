@@ -56,4 +56,7 @@ class HomeController < ApplicationController
 
   def pricing
   end
+
+  def invite_colleagues
+  end
 end

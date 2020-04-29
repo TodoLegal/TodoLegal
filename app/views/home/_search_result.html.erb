@@ -35,6 +35,7 @@
         </div>
       </div>
     <% end %>
+    <button id="see_more_laws_link" class="btn btn-outline-primary btn-block" style="margin-top:2%;" onclick="showCollapsableLawCards();return false;">Ver más leyes</button>
   </div>
 
   <br>
@@ -59,15 +60,12 @@
         <h5 class="card-title"><%= grouped_law[:law].name %> <span style="font-size: 15px">[<%= grouped_law[:law].creation_number %>]</span></h5>
         <p class="primaryinfo"><%= grouped_law[:preview] %></p>
         <p class="resultinfo">
-          <% if grouped_law[:preview] %>
+          <%= grouped_law[:count] %>
+          <% if grouped_law[:count] == 1 %>
+            artículo relacionado
           <% else %>
-            <%= grouped_law[:count] %>
-            <% if grouped_law[:count] == 1 %>
-              artículo relacionado
-            <% else %>
-              artículos relacionados
-            <% end %>
-          <% end %>            
+            artículos relacionados
+          <% end %>
         </p>
         </a>
       </div>

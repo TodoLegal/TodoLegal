@@ -39,3 +39,13 @@ tag_decreto_junta_militar = Tag.create({ name: 'Decreto Junta Militar', tag_type
 tag_tratado_internacional = Tag.create({ name: 'Tratado Internacional', tag_type_id: tag_type_creacion.id })
 tag_asamblea_constituyente = Tag.create({ name: 'Asamblea Constituyente', tag_type_id: tag_type_creacion.id })
 tag_resolucion = Tag.create({ name: 'Resolucion', tag_type_id: tag_type_creacion.id })
+
+# Law Accesses
+
+law_access_pro = LawAccess.create(name: "pro")
+law_access_basic = LawAccess.create(name: "basic")
+
+# Permissions
+
+permissions_admin = Permission.create(name: "admin")
+permissions_pro = Permission.create(name: "pro")

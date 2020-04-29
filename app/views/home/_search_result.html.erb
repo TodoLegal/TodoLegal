@@ -35,6 +35,7 @@
         </div>
       </div>
     <% end %>
+    <button id="see_more_laws_link" class="btn btn-outline-primary btn-block" style="margin-top:2%;" onclick="showCollapsableLawCards();return false;">Ver más leyes</button>
   </div>
 
   <br>
@@ -82,6 +83,11 @@ visible_collapsable_specific_results_cards = 6
 collapsable_law_cards_elements = document.getElementsByClassName("collapsable-law-cards")
 collapsable_law_specific_results_elements = document.getElementsByClassName("collapsable-specific-results-cards")
 
+if(collapsable_law_cards_elements.length <= 6)
+{
+  hideSeeMoreLawsLink()
+}
+
 if(collapsable_law_specific_results_elements.length <= 6)
 {
   hideSeeMoreSpecificResultsLink()
@@ -95,6 +101,15 @@ function showCards(cards, visible_cards)
   }
 }
 
+function showCollapsableLawCards() {
+  visible_collapsable_law_cards += 6
+  if(visible_collapsable_law_cards >= collapsable_law_cards_elements.length)
+  {
+    hideSeeMoreLawsLink()
+  }
+  showCards(collapsable_law_cards_elements, visible_collapsable_law_cards)
+}
+
 function showCollapsableSpecificResultsCards() {
   visible_collapsable_specific_results_cards += 6
   if(visible_collapsable_specific_results_cards >= collapsable_law_specific_results_elements.length)
@@ -102,6 +117,11 @@ function showCollapsableSpecificResultsCards() {
     hideSeeMoreSpecificResultsLink()
   }
   showCards(collapsable_law_specific_results_elements, visible_collapsable_specific_results_cards)
+}
+
+function hideSeeMoreLawsLink()
+{
+  document.getElementById("see_more_laws_link").style.display = "none"
 }
 
 function hideSeeMoreSpecificResultsLink()

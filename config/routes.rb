@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   get '/search_law', to: 'home#search_law'
   get '/terms', to: 'home#terms_and_conditions'
   get '/pricing', to: 'home#pricing'
+  get '/drive_search', to: 'home#drive_search'
 
   post "subscribe" => "subscriptions#subscribe", as: "subscribe"
   get "unsubscribe" => "subscriptions#unsubscribe", as: "unsubscribe"

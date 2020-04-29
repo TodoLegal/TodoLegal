@@ -57,7 +57,6 @@ def count_files drive_service, folder_id
   return result
 end
 
-# List the 10 most recently modified files.
 response = drive_service.list_files(page_size: 1000,
                                         q: "'15WjHMcU2_QOukmbOyRJAFmOPxZpa0O9k' in parents")
 puts "Files:"

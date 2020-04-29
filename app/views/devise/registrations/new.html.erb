@@ -56,32 +56,40 @@
           </div>
           <div class="carousel-item">
             <!-------------------------------- Register Card ------------------------------------------->
-            <img class="card-img-top" src="/img/logo_landing.png" alt="Card image cap" class="img-fluid">
+            <section class="containter" style="margin-left: 12.5%;width: 75%;">
+              <div class="row">
+                <div class="col-2 align-self-center">
+                 <i class="fas fa-arrow-left" data-target="#carouselExampleIndicators" data-slide-to="0" style="font-size: 2rem;"></i>
+                </div>
+                <div class="col-10">
+                  <img class="card-img-top" src="/img/logo_landing.png" alt="Card image cap" class="img-fluid"  style="margin-left: 0%">
+                </div>
+            </section>
+
             <div class="card w-75 shadow p-3 bg-white rounded", style="margin-left: 12.5%;">
               <!-------------------------------- Card Body ------------------------------------------->
               <div class="card-body">
                 <%= render "devise/shared/error_messages", resource: resource %>
-                
-                <p>¿A qué te dedicas?</p>
+                <h2 class="card-title text-center" style="font-weight: bold;">Información del perfil</h2>
+                 <p class="card-text text-center" style="font-family: SF Pro Display;color: #505864;">Brindanos un poco de información para ofrecerte contenido de acuerdo a tus necesidades.</p>
+                <p style="font-family: SF Pro Display;font-size: 24px;">Profesión</p>
                 <div class="form-group">
                   <%= f.select :occupation, ['Abogado', 'Estudiante', 'Otro'], {}, {class:"custom-select"} %>
                 </div>
-                <p>¿Deseas contribuir con mejoras?</p>
-                <p class="text-secondary">Te podemos enviar encuestas o entrevistarte en persona.</p>
+                <p style="font-family: SF Pro Display;font-size: 24px;">Preferencias</p>
                 <div class="form-group">
-                  <div class="form-check form-check-inline">
-                    <%= f.radio_button :is_contributor, "1", {class: "form-check-input", checked:"checked", required:"required"} %>
-                    <label class="form-check-label" for="inlineRadio1">Sí</label>
+                  <div class="form-check" style="border-radius: 5px;">
+                    <%= f.check_box :is_contributor, {class: "form-check-input", id:"check1"}, "1" %>
+                    <label class="form-check-label" for="check1">Quiero recibir el boletín informativo a mi correo electrónico.</label>
                   </div>
-                  <div class="form-check form-check-inline">
-                  <%= f.radio_button :is_contributor, "0", {class: "form-check-input"}%>
-                    <label class="form-check-label" for="inlineRadio2">No</label>
+                  <div class="form-check">
+                  <%= f.check_box :is_contributor, {class: "form-check-input", id:"check2", checked:"checked"}, "0"%>
+                    <label class="form-check-label" for="check2">Quiero participar en actividades para contribuir al estudio y mejora de la app.</label>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <%= f.submit "Registrarse", class: 'btn btn-primary', id:"registerButton"%>
-                  <a href="#" data-target="#carouselExampleIndicators" data-slide-to="0",  style="margin-left:50%;text-decoration:underline;">Anterior</a>
+                  <%= f.submit "Registrarse", class: 'btn btn-primary btn-block', id:"registerButton"%>
                 </div>
               </div>
               <!-------------------------------- End of Card Body ------------------------------------------->
@@ -174,23 +182,23 @@
   //prevent nextButton click is input fields are empty
   function required ()
   {
-    var name = document.getElementById("name").value;
-    var lastName = document.getElementById("lastName").value;
-    var email = document.getElementById("email").value;
-    var password = document.getElementById("password").value;
-    var confirmPassword = document.getElementById("confirmPassword").value;
+    // var name = document.getElementById("name").value;
+    // var lastName = document.getElementById("lastName").value;
+    // var email = document.getElementById("email").value;
+    // var password = document.getElementById("password").value;
+    // var confirmPassword = document.getElementById("confirmPassword").value;
     
-    if( (name.trim() == "") || (lastName.trim() == "") || (email.trim() == "") || (password.trim() == "") || (confirmPassword.trim() == "") || (isValid == false) )
-    {
-        $('#nextButton').popover('show')
-        event.preventDefault();
-        event.stopPropagation();
-    }
-    else
-    {
-      $('#nextButton').unbind();
-      $('#nextButton').popover('hide') 
-    }
+    // if( (name.trim() == "") || (lastName.trim() == "") || (email.trim() == "") || (password.trim() == "") || (confirmPassword.trim() == "") || (isValid == false) )
+    // {
+    //     $('#nextButton').popover('show')
+    //     event.preventDefault();
+    //     event.stopPropagation();
+    // }
+    // else
+    // {
+    //   $('#nextButton').unbind();
+    //   $('#nextButton').popover('hide') 
+    // }
   }
 
   //triggers button click on enter

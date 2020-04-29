@@ -1,0 +1,31 @@
+<div class="container">
+  <form action="/drive_search" method="get">
+    <div id="search-input" class="input-group input-group-lg mb-3">
+      <input name="query" value="<%= @query %>" type="text" class="form-control" placeholder="Ej. Ad-litem, despido, prórroga" aria-label="Recipient's username" aria-describedby="button-addon2">
+      <div class="input-group-append">
+        <button type="submit" onclick="document.getElementById('loading-spinner').style.display = 'block';document.getElementById('search-input').style.display = 'none';" class="btn btn-outline-secondary buscar" type="button" id="button-addon2">Buscar</button>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center input-group input-group-lg mb-3">
+      <div id="loading-spinner" style="display: none; color: #FD8100;" class="spinner-grow" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+  </form>
+  <div class="row">
+    <% i=1 %>
+    <% @files.each do |file| %>
+      <% i+=1 %>
+      <div class="collapsable-law-cards col-sm-6 col-md-4 py-2" style="display:<%= i>6 ? 'block' : 'block' %>">
+        <div class="card card-body h-100" style="padding:0px">
+          <a class="" href="<%= file.web_view_link %>" target="_blank" style="padding:20px">
+            <img src="/img/google_drive_logo.png"/>
+            <h5 class="card-title"><%= file.name %></h5>
+            <p class="primaryinfo">[<%= file.mime_type %>]</p>
+            <i>Abrir en google drive</i>
+          </a>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

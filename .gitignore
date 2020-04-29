@@ -7,7 +7,7 @@
 /public/users.csv
 /public/confirmed.csv
 /public/pending.csv
-token.yml
+token.yaml
 
 Gemfile.lock
 /config/credentials.yml.enc

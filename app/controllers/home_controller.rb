@@ -63,7 +63,7 @@ class HomeController < ApplicationController
   require "fileutils"
   OOB_URI = "urn:ietf:wg:oauth:2.0:oob".freeze
   APPLICATION_NAME = "Drive API Ruby Quickstart".freeze
-  CREDENTIALS_PATH = "../credentials.json".freeze
+  CREDENTIALS_PATH = "/root/credentials.json".freeze
   TOKEN_PATH = "token.yaml".freeze
   SCOPE = Google::Apis::DriveV3::AUTH_DRIVE_METADATA_READONLY
 

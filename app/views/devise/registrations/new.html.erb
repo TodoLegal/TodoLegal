@@ -4,7 +4,7 @@
 
       <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="false">
         <div class="carousel-inner">
-          <div class="carousel-item active">
+          <div class="carousel-item active" id="account">
             <!-------------------------------- Register Card ------------------------------------------->
             <img class="card-img-top" src="/img/logo_landing.png" alt="Card image cap" class="img-fluid">
             <div class="card w-75 p-3 shadow bg-white rounded", style="margin-left: 12.5%; margin-bottom: 0">
@@ -42,7 +42,6 @@
                   <%= f.label :Confirma_tu_contraseña %><br />
                   <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", id:"confirmPassword"%>
                 </div>
-
                 <div class="form-group">
                   <button type="button" class="btn btn-primary btn-block" id="nextButton" data-target="#carouselExampleIndicators" 
                   data-slide-to="1" data-container="body" data-toggle="popover" data-placement="top" data-trigger="focus"
@@ -66,7 +65,7 @@
                 </div>
             </section>
 
-            <div class="card w-75 shadow p-3 bg-white rounded", style="margin-left: 12.5%;">
+            <div class="card w-75 shadow p-3 bg-white rounded", style="margin-left: 12.5%;" id="profileInfo" tabindex="0">
               <!-------------------------------- Card Body ------------------------------------------->
               <div class="card-body">
                 <%= render "devise/shared/error_messages", resource: resource %>
@@ -87,7 +86,6 @@
                     <label class="form-check-label" for="check2">Quiero participar en actividades para contribuir al estudio y mejora de la app.</label>
                   </div>
                 </div>
-
                 <div class="form-group">
                   <%= f.submit "Registrarse", class: 'btn btn-primary btn-block', id:"registerButton"%>
                 </div>
@@ -197,16 +195,26 @@
     // else
     // {
     //   $('#nextButton').unbind();
-    //   $('#nextButton').popover('hide') 
-    // }
+    //   $('#nextButton').popover('hide')
+    //   document.getElementById("profileInfo").focus(); 
+    }
   }
-
-  //triggers button click on enter
+  
+  //triggers nextButton click on enter
   //var input = document.getElementById("confirmPassword");
   addEventListener("keypress", function(event) {
     if ( event.keyCode === 13 ) {
       event.preventDefault();
       document.getElementById("nextButton").click();
+    }
+  });
+
+  //triggers registerButton click on enter when second card is focused
+  var input = document.getElementById("profileInfo");
+  input.addEventListener("keypress", function(event) {
+    if ( event.keyCode === 13 ) {
+      event.preventDefault();
+      document.getElementById("registerButton").click();
     }
   });
 

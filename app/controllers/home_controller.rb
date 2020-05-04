@@ -64,6 +64,7 @@ class HomeController < ApplicationController
   OOB_URI = "urn:ietf:wg:oauth:2.0:oob".freeze
   APPLICATION_NAME = "Drive API Ruby Quickstart".freeze
   CREDENTIALS_PATH = "/root/credentials.json".freeze
+  # CREDENTIALS_PATH = "/home/turupawn/Projects/TodoLegal/credentials.json".freeze
   TOKEN_PATH = "token.yaml".freeze
   SCOPE = Google::Apis::DriveV3::AUTH_DRIVE_METADATA_READONLY
 
@@ -87,21 +88,72 @@ class HomeController < ApplicationController
 
   def drive_search
     @query = params[:query]
+    @folder = params[:folder]
+    @get_parent_files = params[:get_parent_files] == 'true'
     @files = []
 
     drive_service = Google::Apis::DriveV3::DriveService.new
     drive_service.client_options.application_name = APPLICATION_NAME
     drive_service.authorization = authorize
 
-    if @query
+    if @query && @query!=""
       response = drive_service.list_files(page_size: 1000,
                                           q: "'1bD-lkYMih3ct86gRzv4bQU8YBmH8z1vo' in parents and name contains '" + @query + "'",
                                           fields: "files")
+      response.files.each do |file|
+        if file.mime_type == 'application/vnd.google-apps.folder'
+          @files.push({"type"=> file.mime_type, "name"=> file.name, "link"=> file.web_view_link})
+        else
+          @files.push({"type"=> file.mime_type, "name"=> file.name, "link"=> file.web_view_link})
+        end
+      end
+    elsif @folder && @folder!=""
+      covid_drive_data = File.read('public/covid_drive_data.json')
+      if @get_parent_files
+        @folder = get_parrent_folder_name JSON.parse(covid_drive_data)["data"], @folder
+      end
+      if @folder == ""
+        covid_drive_data = File.read('public/covid_drive_data.json')
+        @files = JSON.parse(covid_drive_data)["data"].sort_by { |v| v["name"] }
+      else
+        @files = get_folder_files JSON.parse(covid_drive_data)["data"], @folder
+      end
     else
-      response = drive_service.list_files(page_size: 1000,
-                                          q: "'1bD-lkYMih3ct86gRzv4bQU8YBmH8z1vo' in parents",
-                                          fields: "files")
+      covid_drive_data = File.read('public/covid_drive_data.json')
+      @files = JSON.parse(covid_drive_data)["data"].sort_by { |v| v["name"] }
     end
-    @files = response.files
+  end
+
+protected
+  def get_folder_files covid_drive_data, folder_name
+    covid_drive_data.each do |file|
+      if file['type'] == 'application/vnd.google-apps.folder'
+        if file['name'] == folder_name
+          return file['files'].sort_by { |v| v["name"] }
+        end
+        recursive_result = get_folder_files file['files'], folder_name
+        if recursive_result != []
+          return recursive_result
+        end
+      end
+    end
+    return []
+  end
+
+  def get_parrent_folder_name covid_drive_data, folder_name
+    covid_drive_data.each do |file|
+      if file['type'] == 'application/vnd.google-apps.folder'
+        file['files'].each do |sub_file|
+          if sub_file['name'] == folder_name
+            return file['name']
+          end
+        end
+        recursive_result = get_parrent_folder_name file['files'], folder_name
+        if recursive_result != ""
+          return recursive_result
+        end
+      end
+    end
+    return ""
   end
 end

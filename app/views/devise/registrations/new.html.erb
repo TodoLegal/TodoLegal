@@ -77,12 +77,12 @@
                 </div>
                 <p style="font-family: SF Pro Display;font-size: 24px;">Preferencias</p>
                 <div class="form-group">
-                  <div class="form-check" style="border-radius: 5px;">
-                    <%= f.check_box :is_contributor, {class: "form-check-input", id:"check1"}, "1" %>
+                  <div class="form-check" style="border-radius: 5px;background-color:#EFF3F8;margin-bottom: 4%;">
+                    <%= f.check_box :is_contributor, {class: "form-check-input", id:"check1"}, "1"%>
                     <label class="form-check-label" for="check1">Quiero recibir el boletín informativo a mi correo electrónico.</label>
                   </div>
-                  <div class="form-check">
-                  <%= f.check_box :is_contributor, {class: "form-check-input", id:"check2", checked:"checked"}, "0"%>
+                  <div class="form-check" style="background: #171F2A;color: white;border-radius: 8px;">
+                    <%= f.check_box :is_contributor, {class: "form-check-input", id:"check2", checked:"checked"}, "0"%>
                     <label class="form-check-label" for="check2">Quiero participar en actividades para contribuir al estudio y mejora de la app.</label>
                   </div>
                 </div>
@@ -197,7 +197,8 @@
     //   $('#nextButton').unbind();
     //   $('#nextButton').popover('hide')
     //   document.getElementById("profileInfo").focus(); 
-    }
+    // }
+    
   }
   
   //triggers nextButton click on enter
@@ -218,4 +219,29 @@
     }
   });
 
+  addEventListener("change", function(event){
+    $('.form-check').each(function(){
+      if($(this).children().is(":checked")){
+        this.style.background = "#171F2A";
+        this.style.color = "white";
+        this.style.borderRadius = "8px";
+      }
+      else if ($(this).children().is(":not(:checked)")){
+        // border-radius: 5px;background-color:#EFF3F8;margin-bottom: 4%;
+        this.style.background = "#EFF3F8";
+        this.style.color= "#505864";
+        // this.style.marginBottom = "4%";
+        this.style.borderRadius = "5px";
+      }
+    });
+  });
+
 </script>
+
+<style>
+  /* input:checked + label {
+    color: white;
+    background: #171F2A;
+    border-radius: 8px;
+  } */
+</style>

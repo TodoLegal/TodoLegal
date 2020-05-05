@@ -1,22 +1,57 @@
-<div class="container d-flex justify-content-center" style="margin-top:2%;">
-  <div class="card w-75 shadow p-3 mb-5 bg-white rounded">
-    <div class="card-body">
-        <img class="card-img-top" src="/img/logo_landing.png" alt="Card image cap" class="img-fluid" style="margin-bottom: 5%;">
-  
-        <h2 class="card-title text-center" style="margin-bottom: 5%;">Invita a tus colegas</h2>
-        <h5 style="margin-bottom: 5%;"> Enviar invitación a </h5>
-        <div class="form-group">
-            <input type="email" class="form-control" id="email1" aria-describedby="emailHelp" placeholder="nombre@ejemplo.com">
-        </div>
+<section style="background: #EFF3F8;">
+  <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="img-fluid" style="width: 130px;margin-left: auto;margin-right: auto;display: block;">
+  <div class="container d-flex justify-content-center">
+    <div class="card w-75 p-3 mb-5 bg-white rounded">
+      <div class="card-body">
+          <section class="temporal"> Invita a tus colegas </section>
+          <h5 style="margin-bottom: 5%;"> Enviar invitación a </h5>
+          <div class="form-group">
+              <input type="email" class="form-control" id="email1" aria-describedby="emailHelp" placeholder="nombre@ejemplo.com">
+          </div>
 
-        <div class="form-group">
-            <input type="email" class="form-control" id="email2" aria-describedby="emailHelp" placeholder="nombre@ejemplo.com">
-        </div>
+          <div class="form-group">
+              <input type="email" class="form-control" id="email2" aria-describedby="emailHelp" placeholder="nombre@ejemplo.com">
+          </div>
 
-        <div class="form-group">
-            <%= button_to "Enviar", signed_up_path, method: :get, remote: true, class:"btn btn-block btn-primary text-uppercase" %>
-        </div>
+          <div class="form-group">
+              <%= button_to "Enviar", signed_up_path, method: :get, remote: true, class:"btn btn-block btn-primary" %>
+              <a href="/" id= "omitirPaso" class="text-center">Omitir este paso</a>
+          </div>
 
+      </div>
     </div>
   </div>
-</div>
+</section>
+<style>
+  .form-control{
+    background: #EFF3F8;
+  }
+
+  .btn{
+    border-radius: 8px;
+    margin-top: 7%; 
+  }
+
+  #omitirPaso{
+    display:block;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 21px;
+    color: #1A7FFA;
+    margin-top: 5%;
+  }
+
+  h5{
+    font-weight: bold;
+  }
+
+  .temporal{
+    background: #171F2A;
+    border-radius: 8px;
+    color:white;
+    text-align: center;
+    align-items: center;
+    padding-bottom:50%;
+    margin-bottom: 4%;
+  }
+</style>

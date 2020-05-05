@@ -7,7 +7,7 @@
 :root {
   /* Original colors */
   --c-original-background: #fff;
-  --c-original-text: #000;
+  --c-original-text: #444;
   /* Articles */
   --c-selected-article-background: #757575;
   --c-selected-article-text: #fff;

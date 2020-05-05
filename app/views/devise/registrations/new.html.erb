@@ -6,8 +6,8 @@
         <div class="carousel-inner">
           <div class="carousel-item active" id="account">
             <!-------------------------------- Register Card ------------------------------------------->
-            <img class="card-img-top" src="/img/logo_landing.png" alt="Card image cap" class="img-fluid">
-            <div class="card w-75 p-3 shadow bg-white rounded", style="margin-left: 12.5%; margin-bottom: 0">
+            <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="img-fluid" style="width: 130px;margin-left: auto;margin-right: auto;display: block;">
+            <div class="card w-75 p-3  bg-white rounded", style="margin-left: 12.5%; margin-bottom: 0">
               <!-------------------------------- Card Body ------------------------------------------->
               <div class="card-body">
                 <h2 class="card-title text-center" style="font-weight: bold;">Crea tu cuenta</h2>
@@ -56,28 +56,34 @@
           <div class="carousel-item">
             <!-------------------------------- Register Card ------------------------------------------->
             <section class="containter" style="margin-left: 12.5%;width: 75%;">
-              <div class="row">
-                <div class="col-2 align-self-center">
-                 <i class="fas fa-arrow-left" data-target="#carouselExampleIndicators" data-slide-to="0" style="font-size: 2rem;"></i>
-                </div>
-                <div class="col-10">
-                  <img class="card-img-top" src="/img/logo_landing.png" alt="Card image cap" class="img-fluid"  style="margin-left: 0%">
-                </div>
+              <i class="fas fa-arrow-left" data-target="#carouselExampleIndicators" data-slide-to="0" style="font-size: 2rem;"></i>
+              <img src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="img-fluid"  style="width: 130px;margin-left: 28%">
             </section>
 
-            <div class="card w-75 shadow p-3 bg-white rounded", style="margin-left: 12.5%;" id="profileInfo" tabindex="0">
+            <div class="card w-75  p-3 bg-white rounded", style="margin-left: 12.5%;" id="profileInfo" tabindex="0">
               <!-------------------------------- Card Body ------------------------------------------->
               <div class="card-body">
                 <%= render "devise/shared/error_messages", resource: resource %>
                 <h2 class="card-title text-center" style="font-weight: bold;">Información del perfil</h2>
                  <p class="card-text text-center" style="font-family: SF Pro Display;color: #505864;">Brindanos un poco de información para ofrecerte contenido de acuerdo a tus necesidades.</p>
-                <p style="font-family: SF Pro Display;font-size: 24px;">Profesión</p>
+                <p class = "titles" >Profesión</p>
                 <div class="form-group">
-                  <%= f.select :occupation, ['Abogado', 'Estudiante', 'Otro'], {}, {class:"custom-select"} %>
+                  <div class="form-check form-check-inline" style="border-radius: 8px;background-color: #171F2A;color: white;margin-bottom: 4%;width: 49%;">
+                    <%= f.radio_button :occupation, "Abogado", {class: "form-check-input", id:"radio1", checked:"checked"}%>
+                    <label class="form-check-label" for="radio1">Abogado</label>
+                  </div>
+                  <div class="form-check form-check-inline" style="border-radius: 5px;background-color: #EFF3F8;margin-bottom: 4%;width: 49%;">
+                    <%= f.radio_button :occupation, "Estudiante", {class: "form-check-input", id:"radio2"}%>
+                    <label class="form-check-label" for="radio2">Estudiante</label>
+                  </div>
+                  <div class="form-check form-check-inline" style="border-radius: 5px;background-color: #EFF3F8;margin-bottom: 4%;width: 49%;">
+                    <%= f.radio_button :occupation, "Otro", {class: "form-check-input", id:"radio3"}%>
+                    <label class="form-check-label" for="radio3">Otro</label>
+                  </div>
                 </div>
-                <p style="font-family: SF Pro Display;font-size: 24px;">Preferencias</p>
+                <p class = "titles">Preferencias</p>
                 <div class="form-group">
-                  <div class="form-check" style="border-radius: 5px;background-color:#EFF3F8;margin-bottom: 4%;">
+                  <div class="form-check" style="border-radius: 5px;background-color: #EFF3F8;margin-bottom: 4%;">
                     <%= f.check_box :is_contributor, {class: "form-check-input", id:"check1"}, "1"%>
                     <label class="form-check-label" for="check1">Quiero recibir el boletín informativo a mi correo electrónico.</label>
                   </div>
@@ -227,10 +233,8 @@
         this.style.borderRadius = "8px";
       }
       else if ($(this).children().is(":not(:checked)")){
-        // border-radius: 5px;background-color:#EFF3F8;margin-bottom: 4%;
         this.style.background = "#EFF3F8";
         this.style.color= "#505864";
-        // this.style.marginBottom = "4%";
         this.style.borderRadius = "5px";
       }
     });
@@ -239,9 +243,34 @@
 </script>
 
 <style>
-  /* input:checked + label {
-    color: white;
-    background: #171F2A;
-    border-radius: 8px;
-  } */
+  .form-check-input{
+    width: 23px; 
+    height:23px;
+    border: 1px solid #505864;
+    border-radius: 4px;
+  }
+
+  .form-check{
+    padding-top: 4%;
+    padding-bottom: 4%;
+    padding-left: 8%;
+  }
+
+  .form-check-label{
+    padding-left:2%;
+    width: fit-content;
+  }
+
+  .form-check-inline{
+    margin-right: 0px;
+    padding-left: 4%
+  }
+
+  .titles{
+    font-family: SF Pro Display;
+    font-style: normal;
+    /* font-weight: bold; */
+    font-size: 24px;
+    line-height: 29px;
+  }
 </style>

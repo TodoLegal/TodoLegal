@@ -1,9 +1,6 @@
 class ApplicationController < ActionController::Base
-  protect_from_forgery with: :exception, prepend: true,
-    unless: -> { params[:action] == 'create' &&
-    params[:controller] == 'users/sessions' }
+  protect_from_forgery with: :null_session
   before_action :configure_devise_permitted_parameters, if: :devise_controller?
-  after_action :skip_session_for_public_cache
 
   def current_user_is_admin
     current_user && current_user.permissions.find_by_name("admin")
@@ -36,14 +33,6 @@ class ApplicationController < ActionController::Base
     end
     return false
   end
-
-  def skip_session_for_public_cache
-    if !keep_session?
-     request.session_options[:skip] = true
-     #if you using cookie_store you need to delete session cookie!
-     cookies.delete('_rails_app_session')
-    end
-  end
   
 protected
   
@@ -66,10 +55,5 @@ protected
   def configure_devise_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up) { |u| u.permit(:first_name, :last_name, :occupation, :is_contributor, :email, :password, :password_confirmation)}
     devise_parameter_sanitizer.permit(:account_update) { |u| u.permit(:first_name, :last_name, :occupation, :is_contributor, :email, :password, :current_password)}
-  end
-
-  def keep_session?
-    !flash.blank? ||
-    current_user
   end
 end

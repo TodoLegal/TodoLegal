@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
     unless: -> { params[:action] == 'create' &&
     params[:controller] == 'users/sessions' }
   before_action :configure_devise_permitted_parameters, if: :devise_controller?
-  after_action skip_session_for_public_cache
+  after_action :skip_session_for_public_cache
 
   def current_user_is_admin
     current_user && current_user.permissions.find_by_name("admin")
@@ -69,7 +69,6 @@ protected
   end
 
   def keep_session?
-    forgot_password? ||
     !flash.blank? ||
     current_user
   end

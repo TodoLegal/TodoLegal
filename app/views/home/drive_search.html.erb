@@ -4,7 +4,7 @@
 <div class="container">
   <form action="/drive_search" method="get">
     <div id="search-input" class="input-group input-group-lg mb-3">
-      <input name="query" value="<%= @query %>" type="text" class="form-control" placeholder="Ej. Ad-litem, despido, prórroga" aria-label="Recipient's username" aria-describedby="button-addon2">
+      <input name="query" value="<%= @query %>" type="text" class="form-control" placeholder="Busca información sobre el COVID-19" aria-label="Recipient's username" aria-describedby="button-addon2">
       <div class="input-group-append">
         <button type="submit" onclick="document.getElementById('loading-spinner').style.display = 'block';document.getElementById('search-input').style.display = 'none';" class="btn btn-outline-secondary buscar" type="button" id="button-addon2">Buscar</button>
       </div>
@@ -12,13 +12,11 @@
   </form>
   <h1>Repositorio COVID-19</h1>
   <%= render '/home/loading_spinner' %>
-  <% if @folder && @folder!="" %>
-    <a href="/drive_search?get_parent_files=true&folder=<%= @folder %>">
-      <button type="button" class="btn btn-outline-primary">
-        <i class="fas fa-arrow-left"></i>
-      </button>
-    </a>
-  <% end %>
+  <a href="<%= get_covid_search_back_link_path %>">
+    <button type="button" class="btn btn-outline-primary">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+  </a>
   <% if @files == [] %>
     <div class="row">
       <p>Intenta tu búsqueda de nuevo cambiando las palabras o revisando la ortografía.</p>

@@ -31,4 +31,13 @@ class SubscriptionsMailer < ApplicationMailer
       mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: @email, subject: 'Descuento')
     #end
   end
+
+  def refer(referrer, email)
+    @referrer_name = referrer.first_name
+    if referrer.last_name
+      @referrer_name += " "
+      @referrer_name += referrer.last_name
+    end
+    mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: email, subject: 'Te han invitado a TodoLegal')
+  end
 end

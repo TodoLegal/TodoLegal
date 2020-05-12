@@ -111,6 +111,7 @@ function browseHighlightedDown()
 
 var current_article = -1
 var article_focused = null
+var article_clicked = true
 
 var articles_element = document.getElementsByClassName('article')
 
@@ -118,6 +119,19 @@ function unselectCurrentArticle()
 {
   current_article = -1
   article_focused = null
+}
+
+function onClickBody()
+{
+  if(!article_clicked)
+  {
+    article_focused.style['background-color'] = "var(--c-original-background)"
+    article_focused.style['color'] = "var(--c-original-text)"
+    unselectCurrentArticle()
+  }else
+  {
+    article_clicked = false
+  }
 }
 
 function onClickArticle(clicked_article_id)
@@ -137,6 +151,7 @@ function onClickArticle(clicked_article_id)
   {
     unselectCurrentArticle()
   }
+  article_clicked = true
   return true;
 }
 

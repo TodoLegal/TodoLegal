@@ -1,6 +1,6 @@
-<nav class="navbar navbar-light bg-light sticky-top" style="margin-bottom:0px;">
+<nav class="navbar sticky-top" id="topNavbar">
   <a href="/" class="navbar-brand text-primary" >
-      <i class="fas fa-home"></i>
+      <img  src="/img/favicon-48x48.png" alt="Card image cap" class="img-fluid" id="logo">
   </a>
   <form class="form-inline">
     <a class="nav-link" href="/users/sign_in" role="button">
@@ -13,3 +13,16 @@
     </div>
   </form>
 </nav>
+
+<style>
+  #topNavbar{
+      margin-bottom: 0px; 
+      z-index: 1000; 
+      background: #171F2A;
+      padding: 5px;
+  }
+
+  #logo{
+      background-color: #171F2A;
+    }
+</style>

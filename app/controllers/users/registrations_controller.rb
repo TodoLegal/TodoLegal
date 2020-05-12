@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Users::RegistrationsController < Devise::RegistrationsController
+  layout "onboarding"
   include Devise::Controllers::Helpers
   #skip_before_filter :verify_authenticity_token, :only => :create
   # before_action :configure_sign_up_params, only: [:create]
@@ -54,7 +55,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # The path used after sign up.
   def after_sign_up_path_for(resource)
-    signed_up_path
+    # pricing_path
+    invite_colleagues_path
   end
 
   # The path used after sign up for inactive accounts.

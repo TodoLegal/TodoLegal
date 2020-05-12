@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   get '/terms', to: 'home#terms_and_conditions'
   get '/pricing', to: 'home#pricing'
   get '/invite_colleagues', to: 'home#invite_colleagues'
+  get '/drive_search', to: 'home#drive_search', as: "drive_search"
 
   post "subscribe" => "subscriptions#subscribe", as: "subscribe"
   get "unsubscribe" => "subscriptions#unsubscribe", as: "unsubscribe"

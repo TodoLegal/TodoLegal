@@ -6,7 +6,9 @@
     <ul class="navbar-nav" >
         <div class="btn-group">
         <button type="button" class="btn btn-primary btn-lg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border-radius: 50%;">
-            <%= current_user.first_name[0]%>
+            <% if current_user.first_name %>
+                <%= current_user.first_name[0]%>
+            <% end %>
         </button>
         <div class="dropdown-menu dropdown-menu-right">
 

@@ -320,3 +320,7 @@ function addrow(){
   var clone = row.cloneNode(true);
   table.appendChild(clone);
 }
+
+$(window).on('load',function(){
+  $('#modalCreateBasicAccount').modal('show');
+});

@@ -87,28 +87,6 @@ class HomeController < ApplicationController
     end
   end
 
-  def refer
-    if !current_user
-      respond_to do |format|
-        format.html { redirect_to root_path, notice: 'Error, para referir a un amigo debes iniciar sesión.' }
-      end
-      return
-    end
-    if !params[:emails]
-      respond_to do |format|
-        format.html { redirect_to root_path, notice: 'Error, no se encontraron correos para referir.' }
-      end
-      return
-    end
-    emails = params[:emails].split(',')
-    respond_to do |format|
-      emails.each do |email|
-        SubscriptionsMailer.refer(current_user, email).deliver
-      end
-      format.html { redirect_to root_path, notice: 'Hemos enviado un correo a tus refereridos.' }
-    end
-  end
-
 protected
   def get_folder_files covid_drive_data, folder_name
     covid_drive_data.each do |file|

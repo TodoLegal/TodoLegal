@@ -1,7 +1,13 @@
 class ApplicationController < ActionController::Base
+  include Devise::Controllers::Rememberable
+
   protect_from_forgery with: :null_session
   before_action :configure_devise_permitted_parameters, if: :devise_controller?
 
+  def after_sign_in_remember_me(resource)
+    remember_me resource
+  end
+  
   def current_user_is_admin
     current_user && current_user.permissions.find_by_name("admin")
   end

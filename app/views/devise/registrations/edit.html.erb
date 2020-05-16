@@ -5,14 +5,11 @@
     <div class="card">
       <div class="card-body">
         <%= render "devise/shared/error_messages", resource: resource %>
-
-        <h2 class="card-title" style="margin-bottom:0%;">
-          <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#salirModal">
-            <i class="fas fa-arrow-left"></i>
-          </button>
-          Editar <%= resource_name.to_s.humanize %>
-        </h2>
-        <hr class="style1">
+        <!--
+        <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#salirModal">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        -->
 
         <!-- Modal -->
         <div class="modal fade" id="salirModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -37,37 +34,118 @@
         </div>
         <!--End Modal-->
 
-        <div class="form-group">
-          <div class="row">
-            <div class="col-md-6 form-group">
-              <%= f.label :Nombre %><br />
-              <%= f.text_field :first_name, autofocus: true, class:"form-control"%>
+        <!-- Start edition of user data-->
+        <div class="media">
+          <div class="circle">
+            <%= current_user.first_name[0].upcase + current_user.last_name[0].upcase%>
+          </div>
+          <div class = "media-body">
+            <div class = "row">
+              <div class = "user-name col-md-12">
+                <div id="name">
+                  <%= current_user.first_name + " " + current_user.last_name %>
+                  <span class = "edit-text" onclick="showDialog('name', 'editName')"><i class="fas fa-pencil-alt"></i> Editar nombre</span>
+                </div>
+                <div class="card" id="editName">
+                  <button type="button" class="close" onclick = "showDialog('name', 'editName')" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <div class = "card-body">
+                    <div class="form-group">
+                      <div class="row">
+                        <div class="col-md-6 form-group">
+                          <%= f.label :Nombre %><br />
+                          <%= f.text_field :first_name, autofocus: true, class:"form-control"%>
+                        </div>
+                        <div class="col-md-6 form-group">
+                          <%= f.label :Apellido %><br />
+                          <%= f.text_field :last_name, autofocus: true, class:"form-control" %>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="col-md-6 form-group">
-              <%= f.label :Apellido %><br />
-              <%= f.text_field :last_name, autofocus: true, class:"form-control" %>
+            <div class = "row">
+              <div class = "col-md-12">
+                <div id="occupation">
+                  <%= current_user.occupation%>
+                  <span class = "edit-text" onclick ="showDialog('occupation', 'editOccupation')"><i class="fas fa-pencil-alt"></i> Editar profesión</span> 
+                </div>
+                <div class="card" id="editOccupation">
+                  <button type="button" class="close" onclick = "showDialog('occupation', 'editOccupation')" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <div class = "card-body">
+                    <div class="form-group">
+                      <div class="row">
+                        <div class="col-md-12 form-group"> 
+                          <%= f.label :Ocupación %><br />
+                          <%= f.select :occupation, ['Abogado', 'Estudiante', 'Otro'], {}, {class:"custom-select form-control"}%>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class = "row">
+              <div class = "col-md-12">
+                <div id="email">
+                  <%= current_user.email%>
+                  <span class = "edit-text" onclick = "showDialog('email', 'editEmail')"><i class="fas fa-pencil-alt"></i> Editar correo</span> 
+                </div>
+                <div class="card" id="editEmail">
+                  <button type="button" class="close" onclick = "showDialog('email', 'editEmail')" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <div class = "card-body">
+                    <div class="form-group">
+                      <div class="row">
+                        <div class="col-md-12 form-group">  
+                          <%= f.label :email %><br />
+                          <%= f.email_field :email, autofocus: true, autocomplete: "email", class:"form-control" %>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class = "row">
+              <div class = "col-md-12">
+                <div id="password">
+                  <span class = "edit-text" onclick = "showDialog('password', 'editPassword')"><i class="fas fa-pencil-alt"></i> Cambiar contraseña</span> 
+                </div>
+                <div class="card" id="editPassword">
+                  <button type="button" class="close" onclick = "showDialog('password', 'editPassword')" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <div class = "card-body">
+                    <div class="form-group">
+                      <div class="row">
+                        <div class="col-md-12 form-group">
+                          <label>Dejala en blanco si no la quieres cambiar</label>
+                          <%= f.password_field :password, autocomplete: "new-password", class: "form-control" %>
+                          <small id="passwordHelpBlock" class="form-text text-muted">
+                            <em>(Mínimo <%= @minimum_password_length %> caracteres)</em>
+                          </small>
+                        </div>
+                        <div class="col-md-12 form-group">
+                          <label>Confirmar contraseña</label>
+                          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control"%>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-
-        <div class="form-group">
-          <div class="row">
-            <div class="col-md-12 form-group">  
-              <%= f.label :email %><br />
-              <%= f.email_field :email, autofocus: true, autocomplete: "email", class:"form-control" %>
-            </div>
-          </div>
-        </div>
-            
+        <!-- End edition of user data-->
         
-        <div class="form-group">
-          <div class="row">
-            <div class="col-md-12 form-group"> 
-              <%= f.label :Ocupación %><br />
-              <%= f.select :occupation, ['Abogado', 'Estudiante', 'Otro'], {}, {class:"custom-select form-control"}%>
-            </div>
-          </div>
-        </div>
 
         <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
           <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
@@ -76,25 +154,6 @@
         <div class="row">
           <div class="col-12 col-sm-6 mb-3">
             <div class="mb-2"><b>Cambiar contraseña</b></div>
-            <div class="row">
-              <div class="col">
-                <div class="form-group">
-                  <label>Dejala en blanco si no la quieres cambiar</label>
-                  <%= f.password_field :password, autocomplete: "new-password", class: "form-control" %>
-                  <small id="passwordHelpBlock" class="form-text text-muted">
-                    <em>(Mínimo <%= @minimum_password_length %> caracteres)</em>
-                  </small>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <div class="form-group">
-                  <label>Confirmar contraseña</label>
-                  <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control"%>
-                </div>
-              </div>
-            </div>
           </div>
           <div class="col-12 col-sm-5 offset-sm-1 mb-3">
             <div class="mb-2"><b>Sé contribuidor</b></div>
@@ -186,3 +245,74 @@
 =end%>
 
 </div>
+
+<script>
+  function showDialog (x, y){
+    var x = document.getElementById(x);
+    var y = document.getElementById(y);
+    if (x.style.display === "none") {
+      x.style.display = "block";
+      y.style.display = "none";
+    } else {
+      x.style.display = "none";
+      y.style.display = "block";
+    }
+  }
+</script>
+
+<style>
+  .card{
+    width: 743px;
+    height: 826px;
+    background: #FFFFFF;
+    border-radius: 2px;
+  } 
+  .circle{
+    height: 100px;
+    width: 100px;
+    background: #1A7FFA;
+    color: white; 
+    border-radius: 50%;
+    font-weight: 800;
+    font-size: 40px;
+    line-height: 48px;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+  }
+
+  .media-body{
+    padding-top: 10px;
+    padding-left: 25px;
+  }
+
+  #name{
+    font-style: normal;
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 26px;
+  }
+
+  .edit-text{
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: #A6B9D3;
+    padding-left: 5px;
+  }
+
+  .edit-text:hover{
+    color: #A6B9D3;
+    cursor: pointer;
+  }
+
+  #editName, #editOccupation, #editEmail, #editPassword{
+    width: 528px;
+    height: 183px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    display: none;
+  }
+</style>

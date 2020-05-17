@@ -62,6 +62,9 @@
                           <%= f.text_field :last_name, autofocus: true, class:"form-control" %>
                         </div>
                       </div>
+                      <label>Ingresa tu contraseña actual para confirmar los cambios</label>
+                      <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control"%>
+                      <%= f.submit "Guardar cambios", class: 'btn btn-primary'%>
                     </div>
                   </div>
                 </div>
@@ -145,29 +148,37 @@
           </div>
         </div>
         <!-- End edition of user data-->
+
+        <% if current_user_is_pro %>
+          <section class="change-plan">
+            <div class="change-plan-content">
+              <h5 id="change-plan-title">¿Listo para cambiar tu plan?</h5>
+              <p id="change-plan-text">Tendrás acceso a más de 150 documentos de legislación hondureña.</p>
+              <p id="change-plan-link"> Leer más sobre el Plan Pro</p>
+            </div>
+            <div class="form-group" id="change-plan-btn-form">
+              <button type="button" class="btn btn-primary" id="change-plan-button">
+                Cambiar Plan
+              </button>
+            </div>
+          </section>
+        <% end %>
         
+        <hr>
 
         <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
           <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
         <% end %>
-
-        <div class="row">
-          <div class="col-12 col-sm-6 mb-3">
-            <div class="mb-2"><b>Cambiar contraseña</b></div>
+      
+        <p class = "titles">Preferencias</p>
+        <div class="form-group">
+          <div class="form-check" style="border-radius: 5px;background-color: #EFF3F8;margin-bottom: 4%;">
+            <%= f.check_box :receive_information_emails, autofocus: true, class: "form-check-input", id:"check1"%>
+            <label class="form-check-label" for="check1">Quiero recibir el boletín informativo a mi correo electrónico.</label>
           </div>
-          <div class="col-12 col-sm-5 offset-sm-1 mb-3">
-            <div class="mb-2"><b>Sé contribuidor</b></div>
-            <div class="row">
-              <div class="col">
-                <label>Te podemos enviar encuestas o entrevistarte en persona</label>
-                <div class="custom-controls-stacked px-2">
-                  <div class="custom-control custom-checkbox">
-                    <%= f.check_box :is_contributor, autofocus: true, class:"custom-control-input", id:"contributor" %>
-                    <label class="custom-control-label" for="contributor">Contribuidor</label>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div class="form-check" style="background: #171F2A;color: white;border-radius: 8px;">
+            <%= f.check_box :is_contributor, autofocus: true, class: "form-check-input", id:"check2"%>
+            <label class="form-check-label" for="check2">Quiero participar en actividades para contribuir al estudio y mejora de la app.</label>
           </div>
         </div>
 
@@ -192,61 +203,49 @@
                 <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control"%>
               </div>
               <div class="modal-footer" style="justify-content:flex-start;">
-                <%= f.submit "Guardar cambios", class: 'btn btn-primary'%>
+                <%= f.submit "Guardar cambios", class: 'btn btn-primary' params:%>
                 &nbsp;&nbsp;&nbsp;
                 <a href="#" class="text-secondary" data-dismiss="modal" style="text-decoration:underline;">Cancelar</a>
               </div>
             </div>
           </div>
         </div>
-        <!-- <a href="#" class="text-danger" data-toggle="modal" data-target="#cancelAccountModal"  style="text-decoration:underline;">Cancelar mi cuenta</a>
-        -->
+        <!-- End Modal -->
+        <hr>
+        <!-- Cancel Button -->
+        <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#cancelAccountModal" id="delete-account-btn">Borrar tu cuenta</button>
+        <!-- End Cancel Button -->
       </div>
     </div>
   <% end %>
 
-  <%
-=begin%>
- <div class="card", style="margin-top:2%;">
-    <div class="card-body">
-      <h4 class="card-title text-danger" style="margin-bottom:0%;">Eliminar cuenta</h4>
-      <hr class="style1">
-      
-      <p>Una vez elimines tu cuenta no hay marcha atrás.</p> 
-<%
-=end%>
-      
-      <!-- Modal -->
-      <div class="modal fade" id="cancelAccountModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title text-danger" id="cancelModalLongTitle">Eliminar cuenta</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <label>¿Estás seguro que deseas eliminar tu cuenta?</label>
-            </div>
-            <div class="modal-footer" style="justify-content: flex-start">
-              <button type="button" class="btn btn-primary" data-dismiss="modal">No, cancelar y regresar</button>
-              &nbsp;&nbsp;&nbsp;
-              <%= button_to "Sí, estoy seguro", registration_path(resource), method: :delete, remote: true, class:"text-danger", style:"background:none; border:none; padding:0; text-decoration: underline; cursor:pointer;"%>
-            </div>
-          </div>
+  <!-- Modal -->
+  <div class="modal fade" id="cancelAccountModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-danger" id="cancelModalLongTitle">Eliminar cuenta</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <label>¿Estás seguro que deseas eliminar tu cuenta?</label>
+        </div>
+        <div class="modal-footer" style="justify-content: flex-start">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">No, cancelar y regresar</button>
+          &nbsp;&nbsp;&nbsp;
+          <%= button_to "Sí, estoy seguro", registration_path(resource), method: :delete, remote: true, class:"text-danger", style:"background:none; border:none; padding:0; text-decoration: underline; cursor:pointer;"%>
         </div>
       </div>
-    <%
-=begin%>
- </div>
-  </div> 
-<%
-=end%>
+    </div>
+  </div>
+  <!--End modal -->
 
 </div>
 
 <script>
+
   function showDialog (x, y){
     var x = document.getElementById(x);
     var y = document.getElementById(y);
@@ -258,12 +257,30 @@
       y.style.display = "block";
     }
   }
+
+  addEventListener("change", function(event){
+    $('.form-check').each(function(){
+      if($(this).children().is(":checked")){
+        this.style.background = "#171F2A";
+        this.style.color = "white";
+        this.style.borderRadius = "8px";
+      }
+      else if ($(this).children().is(":not(:checked)")){
+        this.style.background = "#EFF3F8";
+        this.style.color= "#505864";
+        this.style.borderRadius = "5px";
+      }
+    });
+  });
+
 </script>
 
 <style>
+  .container{
+    max-width: fit-content;
+  }
   .card{
     width: 743px;
-    height: 826px;
     background: #FFFFFF;
     border-radius: 2px;
   } 
@@ -309,10 +326,105 @@
 
   #editName, #editOccupation, #editEmail, #editPassword{
     width: 528px;
-    height: 183px;
     background: #FFFFFF;
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
     border-radius: 8px;
     display: none;
   }
+
+  .form-check-input{
+    width: 23px; 
+    height:23px;
+    border: 1px solid #505864;
+    border-radius: 4px;
+    color: #505864;
+  }
+
+  .form-check{
+    padding-top: 2%;
+    padding-bottom: 2%;
+    padding-left: 8%;
+  }
+
+  .form-check-label{
+    padding-left:2%;
+    width: fit-content;
+    font-family: -apple-system, sans-serif;
+    font-size: 18px;
+    line-height: 21px;
+  }
+
+  .form-check-inline{
+    margin-right: 0px;
+    padding-left: 4%;
+    width: 49%
+  }
+
+  .titles{
+    font-family: -apple-system, sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 29px;
+  }
+
+  .change-plan{
+    height: 223px;
+    margin-top: 30px;
+    background: #EFF3F8;
+    border-radius: 8px;
+  }
+
+  .change-plan-content{
+    text-align: center;
+    padding-top: 25px;
+  }
+
+  #change-plan-title{
+    font-style: normal;
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 26px;
+  }
+
+  #change-plan-text, #change-plan-link{
+    font-family: -apple-system, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 21px;
+  }
+
+  #change-plan-text{
+    padding-top: 25px;
+    color: #505864;
+    margin-bottom: 0.2em;
+  }
+
+  #change-plan-link{
+    color: #1A7FFA;
+  }
+
+  #change-plan-link:hover{
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  #change-plan-btn-form{
+    text-align: center;
+  }
+
+  #change-plan-button{
+    width: 400px;
+    border-radius: 8px;
+  }
+
+  #delete-account-btn{
+    border: 1px solid #FA1A35;
+    box-sizing: border-box;
+    border-radius: 8px;
+    width: 200px;
+    margin-bottom: 20px;
+  }
+
 </style>

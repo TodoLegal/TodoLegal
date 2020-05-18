@@ -9,7 +9,7 @@
             <a href="/">
               <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="img-fluid">
             </a>
-            <div class="card bg-white rounded">
+            <div class="card card--login bg-white rounded">
               <!-------------------------------- Card Body ------------------------------------------->
               <div class="card-body">
                 <h2 class="card-title text-center">Crea tu cuenta</h2>
@@ -52,7 +52,7 @@
               </div>
               <!-------------------------------- End of Card Body ------------------------------------------->
             </div>
-            <p class="text-center" style="font-family: SF Pro Display;color: #505864;align-items: center;text-align: center;">Al crear una cuenta accedes a aceptar<br/>nuestros <a href="/terms">Términos y condiciones</a></p>
+            <p class="text-center" style="font-family: SF Pro Display;color: #505864;align-items: center;text-align: center;">Al crear una cuenta, accedes a los <a href="/terms">Términos y condiciones</a></p>
           <!-------------------------------- End of Register Card ------------------------------------------->
           </div>
           <div class="carousel-item">
@@ -311,8 +311,24 @@
     width: 130px;
   }
 
+  .form-group label {
+    font-weight: bold;
+    color: #171F2A;
+    margin-bottom: 4px;
+    font-size: 1.12rem;
+  }
+
   .form-control{
       background-color: #EFF3F8;
+      height: 50px;
+      border-radius: 8px;
+      border: none;
+  }
+
+  input.form-control:focus {
+      color: #495057;
+      background-color: #EFF3F8;
+      box-shadow: 0 0 0 2px #A6B9D3;
   }
 
   #back-icon{
@@ -344,8 +360,10 @@
     section{
       background: white;
     }
+
     .form-control{
       background-color: #EFF3F8;
+      height: 50px;
     }
 
     .img-fluid{

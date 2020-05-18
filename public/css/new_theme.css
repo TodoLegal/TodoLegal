@@ -1,0 +1,11 @@
+/* New styles and adjustments */
+
+.card--login {
+    border: none;
+    margin-bottom: 1rem;
+}
+
+.btn {
+    height: 46px;
+    border-radius: 8px;
+}

@@ -3,57 +3,54 @@
 */
 
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
-
 :root {
-  /* Original colors */
-  --c-original-background: #fff;
-  --c-original-text: #444;
-  /* Articles */
-  --c-selected-article-background: #757575;
-  --c-selected-article-text: #fff;
-  /* Bigger sections */
-  --c-selected-bigger-section-background: #757575;
-  --c-selected-bigger-section-text: #fff;
-  /* Highlights */
-  --c-highlight: #000;
-  --c-highlight-background: #FFD1C2;
-  --c-selected-highlight: #000;
-  --c-selected-highlight-background: #FF6636;
-  /* Other */
-  --c-sidebar: #2E2E2E;
-  --c-sidebar-header: #171717;
+    /* Original colors */
+    --c-original-background: #fff;
+    --c-original-text: #444;
+    /* Articles */
+    --c-selected-article-background: #757575;
+    --c-selected-article-text: #fff;
+    /* Bigger sections */
+    --c-selected-bigger-section-background: #757575;
+    --c-selected-bigger-section-text: #fff;
+    /* Highlights */
+    --c-highlight: #000;
+    --c-highlight-background: #FFD1C2;
+    --c-selected-highlight: #000;
+    --c-selected-highlight-background: #FF6636;
+    /* Other */
+    --c-sidebar: #2E2E2E;
+    --c-sidebar-header: #171717;
 }
 
 .jumbotron {
-  background: #e5ebedff;
+    background: #e5ebedff;
 }
 
 .indice {
-  color: #FFF;
-  background: #FF5722;
-  border-color: #FF5722;
+    color: #FFF;
+    background: #FF5722;
+    border-color: #FF5722;
 }
 
 .indice:hover {
-  background: #D1481C;
-  border-color: #D1481C;
+    background: #D1481C;
+    border-color: #D1481C;
 }
 
 .buscar {
-  color: #FF5722;
-  border-color: #FF5722;
-  background-color: Transparent;
+    color: #FF5722;
+    border-color: #FF5722;
+    background-color: Transparent;
 }
 
 .buscar:hover {
-  color: #fff;
-  border-color: #FF5722;
-  background-color: #D1481C;
+    color: #fff;
+    border-color: #FF5722;
+    background-color: #D1481C;
 }
 
-indice
-
-body {
+indice body {
     font-family: 'Poppins', sans-serif;
     background: #fff;
     /*background: #fafafa;*/
@@ -62,7 +59,7 @@ body {
 p {
     font-family: 'Poppins', sans-serif;
     font-size: 1.1em;
-    font-weight: 300;
+    font-weight: regular;
     line-height: 1.7em;
     color: #000;
     /*color: #fff;*/
@@ -97,6 +94,7 @@ p {
     border-bottom: 1px dashed #ddd;
     margin: 40px 0;
 }
+
 
 /* ---------------------------------------------------
     SIDEBAR STYLE
@@ -150,6 +148,7 @@ p {
     opacity: 0;
     transition: all 0.5s ease-in-out;
 }
+
 .overlay.active {
     display: block;
     opacity: 1;
@@ -228,6 +227,7 @@ a.article:hover {
     color: #fff !important;
 }
 
+
 /* ---------------------------------------------------
     CONTENT STYLE
 ----------------------------------------------------- */
@@ -243,11 +243,11 @@ a.article:hover {
 }
 
 .resultinfo {
-  color: #888;
-  font-size:15px;
+    color: #888;
+    font-size: 15px;
 }
 
 .primaryinfo {
-  color: #666;
-  font-size:17px;
+    color: #666;
+    font-size: 17px;
 }

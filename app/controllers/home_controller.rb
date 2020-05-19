@@ -6,9 +6,9 @@ class HomeController < ApplicationController
   def index
     @tags = Tag.where(tag_type: TagType.find_by_name("materia"))
 
-    file = File.read('public/covid_drive_data.json')
-    data_hash = JSON.parse(file)
-    @covid_files_count = data_hash['file_count']
+    # file = File.read('public/covid_drive_data.json')
+    # data_hash = JSON.parse(file)
+    # @covid_files_count = data_hash['file_count']
   end
 
   def search_law
@@ -84,6 +84,28 @@ class HomeController < ApplicationController
     else
       covid_drive_data = File.read('public/covid_drive_data.json')
       @files = JSON.parse(covid_drive_data)["data"].sort_by { |v| v["name"] }
+    end
+  end
+
+  def refer
+    if !current_user
+      respond_to do |format|
+        format.html { redirect_to root_path, notice: 'Error, para referir a un amigo debes iniciar sesión.' }
+      end
+      return
+    end
+    if !params[:emails]
+      respond_to do |format|
+        format.html { redirect_to root_path, notice: 'Error, no se encontraron correos para referir.' }
+      end
+      return
+    end
+    emails = params[:emails].split(',')
+    respond_to do |format|
+      emails.each do |email|
+        SubscriptionsMailer.refer(current_user, email).deliver
+      end
+      format.html { redirect_to root_path, notice: 'Hemos enviado un correo a tus refereridos.' }
     end
   end
 

@@ -13,7 +13,7 @@
               <!-------------------------------- Card Body ------------------------------------------->
               <div class="card-body">
                 <h2 class="card-title text-center">Crea tu cuenta</h2>
-                <p class="card-text text-center" style="font-family: SF Pro Display;color: #505864;">Si ya tienes una cuenta <%= render "devise/shared/links" %></p>
+                <p class="content text-center">Si ya tienes una cuenta <%= render "devise/shared/links" %></p>
                 <%= render "devise/shared/error_messages", resource: resource%>
                 <div class="form-group">
                   <div class="row">
@@ -52,7 +52,7 @@
               </div>
               <!-------------------------------- End of Card Body ------------------------------------------->
             </div>
-            <p class="text-center" style="font-family: SF Pro Display;color: #505864;align-items: center;text-align: center;">Al crear una cuenta accedes a aceptar<br/>nuestros <a href="/terms">Términos y condiciones</a></p>
+            <p class="content text-center">Al crear una cuenta accedes a aceptar<br/>nuestros <a href="/terms">Términos y condiciones</a></p>
           <!-------------------------------- End of Register Card ------------------------------------------->
           </div>
           <div class="carousel-item">
@@ -69,7 +69,7 @@
               <div class="card-body">
                 <%= render "devise/shared/error_messages", resource: resource %>
                 <h2 class="card-title text-center">Información del perfil</h2>
-                 <p class="content">Brindanos un poco de información para ofrecerte contenido de acuerdo a tus necesidades.</p>
+                <p class="content">Brindanos un poco de información para ofrecerte contenido de acuerdo a tus necesidades.</p>
                 <p class = "titles" >Profesión</p>
                 <div class="form-group">
                   <div class="form-check form-check-inline" style="border-radius: 8px;background-color: #171F2A;color: white;margin-bottom: 4%;">

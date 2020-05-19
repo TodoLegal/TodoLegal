@@ -1,39 +1,39 @@
 
 <nav class="navbar navbar-expand-lg navbar-light  sticky-top" id="topNavbar">
     <a href="/" class="navbar-brand text-primary" >
-        <img  src="/img/favicon-48x48.png" alt="Card image cap" class="img-fluid" id="logo">
+        <img  src="/img/top_navbar/top_navbar.svg" alt="Card image cap" class="img-fluid" id="logo">
     </a>
     <ul class="navbar-nav" >
         <div class="btn-group">
-        <button type="button" class="btn btn-primary btn-lg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border-radius: 50%;">
-            <% if current_user.first_name %>
-                <%= current_user.first_name[0]%>
-            <% end %>
-        </button>
-        <div class="dropdown-menu dropdown-menu-right">
+            <button type="button" class="btn btn-primary btn-lg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border-radius: 50%;">
+                <% if current_user.first_name %>
+                    <%= current_user.first_name[0]%>
+                <% end %>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right">
 
-            <a href="/users/edit" class="dropdown-item">Mi cuenta</a>
-            <div class="dropdown-divider"></div>
-            
-            <% if current_user_is_admin %>
-                <button class="dropdown-item disabled font-weight-bold " type="button" >
-                    
-                    Administrar
-                </button>
+                <a href="/users/edit" class="dropdown-item">Mi cuenta</a>
                 <div class="dropdown-divider"></div>
-                <%= link_to('-> Usuarios', admin_users_path, class:"dropdown-item") %>
-                <%= link_to('-> Suscritos', admin_subscriptions_path, class:"dropdown-item")%>
-                <%= link_to('-> Leyes', laws_path, class:"dropdown-item")%>
-                <div class="dropdown-divider"></div>
-                <button class="dropdown-item" type="button">
-                    
-                    Modo edición
-                </button>
-                <div class="dropdown-divider"></div>
-            <% end %>
-            
-            <%= link_to('Cerrar sesión', destroy_user_session_path, method: :delete, class:"dropdown-item") %>
-        </div>
+                
+                <% if current_user_is_admin %>
+                    <button class="dropdown-item disabled font-weight-bold " type="button" >
+                        
+                        Administrar
+                    </button>
+                    <div class="dropdown-divider"></div>
+                    <%= link_to('-> Usuarios', admin_users_path, class:"dropdown-item") %>
+                    <%= link_to('-> Suscritos', admin_subscriptions_path, class:"dropdown-item")%>
+                    <%= link_to('-> Leyes', laws_path, class:"dropdown-item")%>
+                    <div class="dropdown-divider"></div>
+                    <button class="dropdown-item" type="button">
+                        
+                        Modo edición
+                    </button>
+                    <div class="dropdown-divider"></div>
+                <% end %>
+                
+                <%= link_to('Cerrar sesión', destroy_user_session_path, method: :delete, class:"dropdown-item") %>
+            </div>
         </div>
     </ul>
 </nav>
@@ -49,6 +49,10 @@
 
     #logo{
       background-color: #171F2A;
+    }
+
+    .circle{
+        
     }
 </style>
 

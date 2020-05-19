@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Users::SessionsController < Devise::SessionsController
+  layout "onboarding"
   include Devise::Controllers::Helpers
   skip_before_action :verify_authenticity_token
   

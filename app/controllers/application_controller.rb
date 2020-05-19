@@ -9,11 +9,11 @@ class ApplicationController < ActionController::Base
   end
   
   def current_user_is_admin
-    current_user && current_user.permissions.find_by_name("admin")
+    current_user && current_user.permissions.find_by_name("Admin")
   end
 
   def current_user_is_pro
-    current_user && current_user.permissions.find_by_name("pro")
+    current_user && current_user.permissions.find_by_name("Pro")
   end
 
   def authenticate_admin!

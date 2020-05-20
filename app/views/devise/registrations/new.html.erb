@@ -88,7 +88,7 @@
                 <p class = "titles">Preferencias</p>
                 <div class="form-group">
                   <div class="form-check" style="border-radius: 5px;background-color: #EFF3F8;margin-bottom: 4%;">
-                    <%= f.check_box :is_contributor, {class: "form-check-input", id:"check1"}, "1"%>
+                    <%= f.check_box :receive_information_emails, {class: "form-check-input", id:"check1"}, "1"%>
                     <label class="form-check-label" for="check1">Quiero recibir el boletín informativo a mi correo electrónico.</label>
                   </div>
                   <div class="form-check" style="background: #171F2A;color: white;border-radius: 8px;">
@@ -248,8 +248,8 @@
 
 <style>
   .form-check-input{
-    width: 23px; 
-    height:23px;
+    width: 25px; 
+    height:25px;
     border: 1px solid #505864;
     border-radius: 4px;
   }
@@ -262,7 +262,7 @@
 
   .form-check-label{
     padding-left:2%;
-    width: fit-content;
+    width: 100%;
     font-family: -apple-system, sans-serif;
   }
 

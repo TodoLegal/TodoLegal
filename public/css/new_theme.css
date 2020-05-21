@@ -1,6 +1,11 @@
 /* Basics */
 
-.card--login {
+body {
+    background-color: #F2F5F8;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+.card--onboarding {
     border: none;
     margin-bottom: 1rem;
 }
@@ -8,6 +13,18 @@
 .btn {
     height: 46px;
     border-radius: 8px;
+}
+
+h2 {
+    font-weight: 600;
+}
+
+.content {
+    line-height: 1.25rem;
+}
+
+.card--onboarding .content {
+    margin-bottom: 40px;
 }
 
 
@@ -18,6 +35,15 @@
     color: #171F2A;
     margin-bottom: 4px;
     font-size: 1.12rem;
+}
+
+.form-group .form-check label {
+    font-weight: 400;
+}
+
+.form-group .form-check input[type=checkbox]:checked~label,
+.form-group .form-check input[type=radio]:checked~label {
+    color: white;
 }
 
 .form-control {

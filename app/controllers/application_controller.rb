@@ -1,7 +1,13 @@
 class ApplicationController < ActionController::Base
+  include Devise::Controllers::Rememberable
+
   protect_from_forgery with: :null_session
   before_action :configure_devise_permitted_parameters, if: :devise_controller?
 
+  def after_sign_in_remember_me(resource)
+    remember_me resource
+  end
+  
   def current_user_is_admin
     current_user && current_user.permissions.find_by_name("admin")
   end
@@ -53,7 +59,7 @@ protected
   end
 
   def configure_devise_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up) { |u| u.permit(:first_name, :last_name, :occupation, :is_contributor, :email, :password, :password_confirmation)}
-    devise_parameter_sanitizer.permit(:account_update) { |u| u.permit(:first_name, :last_name, :occupation, :is_contributor, :email, :password, :current_password)}
+    devise_parameter_sanitizer.permit(:sign_up) { |u| u.permit(:first_name, :last_name, :occupation, :receive_information_emails, :is_contributor, :email, :password, :password_confirmation)}
+    devise_parameter_sanitizer.permit(:account_update) { |u| u.permit(:first_name, :last_name, :occupation, :receive_information_emails, :is_contributor, :email, :password, :current_password)}
   end
 end

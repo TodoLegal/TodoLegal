@@ -1,14 +1,24 @@
 <nav class="navbar sticky-top" id="topNavbar">
   <a href="/" class="navbar-brand text-primary" >
-      <img  src="/img/favicon-48x48.png" alt="Card image cap" class="img-fluid" id="logo">
+      <img src="/img/top_navbar/top_navbar.svg" alt="Card image cap" class="img-fluid" id="logo">
+      &nbsp;&nbsp;
+      <img src="/img/top_navbar/vector_t.svg" alt="Card image cap" class="todolegal img-fluid">
+      <img src="/img/top_navbar/vector_o.svg" alt="Card image cap" class="todolegal img-fluid">
+      <img src="/img/top_navbar/vector_d.svg" alt="Card image cap" class="todolegal img-fluid">
+      <img src="/img/top_navbar/vector_o.svg" alt="Card image cap" class="todolegal img-fluid">
+      <img src="/img/top_navbar/vector_l.svg" alt="Card image cap" class="todolegal img-fluid">
+      <img src="/img/top_navbar/vector_e.svg" alt="Card image cap" class="todolegal img-fluid">
+      <img src="/img/top_navbar/vector_g.svg" alt="Card image cap" class="todolegal img-fluid">
+      <img src="/img/top_navbar/vector_a.svg" alt="Card image cap" class="todolegal img-fluid">
+      <img src="/img/top_navbar/vector_l.svg" alt="Card image cap" class="todolegal img-fluid">
   </a>
   <form class="form-inline">
     <a class="nav-link" href="/users/sign_in" role="button">
-        Iniciar Sesión
+        Inicia Sesión
     </a>
     <div style="padding-left: 10px;">
       <a class="btn btn-outline-primary" href="/users/sign_up" role="button">
-        Registrarse
+        Regístrate
       </a>
     </div>
   </form>
@@ -24,5 +34,17 @@
 
   #logo{
       background-color: #171F2A;
+      padding-left: 20%;
     }
+
+  @media only screen and (max-width: 767.98px){
+    .todolegal{
+      margin:0px;
+      display: none;
+    }
+
+    #logo{
+      padding-left: 20px;
+    }
+  }
 </style>

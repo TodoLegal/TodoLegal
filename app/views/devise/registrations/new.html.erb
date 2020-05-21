@@ -13,7 +13,7 @@
               <!-------------------------------- Card Body ------------------------------------------->
               <div class="card-body">
                 <h2 class="card-title text-center">Crea tu cuenta</h2>
-                <p class="card-text text-center" style="font-family: SF Pro Display;color: #505864;">Si ya tienes una cuenta <%= render "devise/shared/links" %></p>
+                <p class="content text-center">Si ya tienes una cuenta <%= render "devise/shared/links" %></p>
                 <%= render "devise/shared/error_messages", resource: resource%>
                 <div class="form-group">
                   <div class="row">
@@ -52,7 +52,7 @@
               </div>
               <!-------------------------------- End of Card Body ------------------------------------------->
             </div>
-            <p class="text-center" style="font-family: SF Pro Display;color: #505864;align-items: center;text-align: center;">Al crear una cuenta, accedes a los <a href="/terms">Términos y condiciones</a></p>
+            <p class="content text-center">Al crear una cuenta accedes a aceptar<br/>nuestros <a href="/terms">Términos y condiciones</a></p>
           <!-------------------------------- End of Register Card ------------------------------------------->
           </div>
           <div class="carousel-item">
@@ -69,7 +69,7 @@
               <div class="card-body">
                 <%= render "devise/shared/error_messages", resource: resource %>
                 <h2 class="card-title text-center">Información del perfil</h2>
-                 <p class="content">Brindanos un poco de información para ofrecerte contenido de acuerdo a tus necesidades.</p>
+                <p class="content">Brindanos un poco de información para ofrecerte contenido de acuerdo a tus necesidades.</p>
                 <p class = "titles" >Profesión</p>
                 <div class="form-group">
                   <div class="form-check form-check-inline" style="border-radius: 8px;background-color: #171F2A;color: white;margin-bottom: 4%;">
@@ -88,7 +88,7 @@
                 <p class = "titles">Preferencias</p>
                 <div class="form-group">
                   <div class="form-check" style="border-radius: 5px;background-color: #EFF3F8;margin-bottom: 4%;">
-                    <%= f.check_box :is_contributor, {class: "form-check-input", id:"check1"}, "1"%>
+                    <%= f.check_box :receive_information_emails, {class: "form-check-input", id:"check1"}, "1"%>
                     <label class="form-check-label" for="check1">Quiero recibir el boletín informativo a mi correo electrónico.</label>
                   </div>
                   <div class="form-check" style="background: #171F2A;color: white;border-radius: 8px;">
@@ -248,8 +248,8 @@
 
 <style>
   .form-check-input{
-    width: 23px; 
-    height:23px;
+    width: 25px; 
+    height:25px;
     border: 1px solid #505864;
     border-radius: 4px;
   }
@@ -262,7 +262,7 @@
 
   .form-check-label{
     padding-left:2%;
-    width: fit-content;
+    width: 100%;
     font-family: -apple-system, sans-serif;
   }
 

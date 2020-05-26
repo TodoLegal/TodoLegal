@@ -5,7 +5,7 @@ function onIndexElementClicked(section_id) {
 }
 </script>
 
-<div class="container" data-spy="scroll" data-target="#myScrollspy">
+<div class="container" data-spy="scroll" data-target="#myScrollspy" style="background-color: #FFF !important;">
   <%= render 'law_header' %>
 
   <div class="container-fluid" style="padding-top:60">
@@ -28,6 +28,43 @@ function onIndexElementClicked(section_id) {
     </div>
     <% if !@user_can_access_law %>
       <p>Crea una cuenta para acceder a esta ley</p>
+      <!-- Modal -->
+      <div class="modal fade" data-backdrop="static" id="modalCreateBasicAccount" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content" style="padding-top: 66px; padding-bottom: 66px; padding-left: 33; padding-right:33">
+            <div class="modal-body">
+              <div class="container col-md-12">
+                <div class="row">
+                  <div class="col-md-12">
+                    <p style="font-size:22px; text-align:center;"><b>Regístrate y accede a esta ley.</b></p>
+                  </div>
+                  <div class="col-md-12">
+                    <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
+                    Crea una cuenta y accede a más de <b>150 documentos</b> de Legislación Hondureña y recibe boletines informativos sobre cambios que están sucediendo.
+                  </p>
+                  </div>
+                  <div class="col-md-12">
+                    <a href="<%= new_user_registration_path %>">
+                      <button type="button" class="btn btn-primary btn-block">Crear cuenta básica</button>
+                    </a>
+                  </div>
+                  <div class="col-md-12">
+                      <div with="100%" style="text-align:center; padding-top: 22px;">
+                        ¿Ya tienes cuenta?
+                      </div>
+                      <div with="100%" style="text-align:center;">
+                        <a style="font-size:18px;text-align:center;" href="<%= new_user_session_path %>">
+                          Inicia sesión
+                        </a>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--End Modal-->
     <% end %>
   </div>
 </div>

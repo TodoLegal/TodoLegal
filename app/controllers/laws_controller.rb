@@ -207,7 +207,6 @@ class LawsController < ApplicationController
     end
 
     def user_can_access_law law
-      return true
       law_access = law.law_access
       if current_user
         return true

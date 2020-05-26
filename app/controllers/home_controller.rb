@@ -100,13 +100,13 @@ class HomeController < ApplicationController
   def refer
     if !current_user
       respond_to do |format|
-        format.html { redirect_to root_path, notice: 'Error, para referir a un amigo debes iniciar sesión.' }
+        format.html { redirect_to root_path }
       end
       return
     end
     if !params[:emails]
       respond_to do |format|
-        format.html { redirect_to root_path, notice: 'Error, no se encontraron correos para referir.' }
+        format.html { redirect_to root_path }
       end
       return
     end
@@ -115,7 +115,7 @@ class HomeController < ApplicationController
       emails.each do |email|
         SubscriptionsMailer.refer(current_user, email).deliver
       end
-      format.html { redirect_to root_path, notice: 'Hemos enviado un correo a tus refereridos.' }
+      format.html { redirect_to root_path }
     end
   end
 

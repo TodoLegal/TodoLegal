@@ -33,12 +33,12 @@ class HomeController < ApplicationController
 
     @tokens = @query.scan(/\w+|\W/)
     if @tokens.first == '/'
-      @stream = Article.where(law: Law.all.search_by_name(@tokens.fourth)).where('number LIKE ?', "%#{@tokens.second}%").group_by(&:law_id)
+      @stream = Article.where(law: Law.all.search_by_name(@tokens.fourth)).where(number: @tokens.second).group_by(&:law_id)
       @stream.each do |grouped_law|
         law = {count: grouped_law[1].count, law: Law.find_by_id(grouped_law[0]), preview: ("<b>Artículo " + grouped_law[1].first.number + ":</b> " + grouped_law[1].first.body[0,300] + "...").html_safe}
         law[:materia_names] = law[:law].materia_names
         @grouped_laws.push(law)
-        #@result_count += grouped_law[1].count
+        @result_count = @grouped_laws.count
         #legal_documents.add(grouped_law[0])
       end
       @grouped_laws = @grouped_laws.sort_by{|k|k[:count]}.reverse

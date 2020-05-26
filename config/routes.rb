@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   resources :subsections
   resources :sections
   resources :books
-  devise_for :users, controllers: { confirmations: 'users/confirmations', registrations: "users/registrations" }
+  devise_for :users, controllers: { confirmations: 'users/confirmations', registrations: "users/registrations", sessions: "users/sessions" }
   resources :law_tags
   resources :tags
   resources :tag_types
@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   get '/terms', to: 'home#terms_and_conditions'
   get '/pricing', to: 'home#pricing'
   get '/drive_search', to: 'home#drive_search', as: "drive_search"
+  get '/refer', to: 'home#refer', as: "refer"
 
   post "subscribe" => "subscriptions#subscribe", as: "subscribe"
   get "unsubscribe" => "subscriptions#unsubscribe", as: "unsubscribe"

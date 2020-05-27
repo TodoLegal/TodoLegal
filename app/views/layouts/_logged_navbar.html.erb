@@ -3,15 +3,7 @@
     <a href="/" class="navbar-brand text-primary" >
         <img  src="/img/top_navbar/top_navbar.svg" alt="Card image cap" class="img-fluid" id="logo">
          &nbsp;&nbsp;
-        <img src="/img/top_navbar/vector_t.svg" alt="Card image cap" class="todolegal img-fluid">
-        <img src="/img/top_navbar/vector_o.svg" alt="Card image cap" class="todolegal img-fluid">
-        <img src="/img/top_navbar/vector_d.svg" alt="Card image cap" class="todolegal img-fluid">
-        <img src="/img/top_navbar/vector_o.svg" alt="Card image cap" class="todolegal img-fluid">
-        <img src="/img/top_navbar/vector_l.svg" alt="Card image cap" class="todolegal img-fluid">
-        <img src="/img/top_navbar/vector_e.svg" alt="Card image cap" class="todolegal img-fluid">
-        <img src="/img/top_navbar/vector_g.svg" alt="Card image cap" class="todolegal img-fluid">
-        <img src="/img/top_navbar/vector_a.svg" alt="Card image cap" class="todolegal img-fluid">
-        <img src="/img/top_navbar/vector_l.svg" alt="Card image cap" class="todolegal img-fluid">
+        <img src="/img/top_navbar/Logo-letras-white.svg" alt="Card image cap" class="todolegal img-fluid">
     </a>
     <ul class="navbar-nav" >
         <div class="btn-group">
@@ -23,11 +15,9 @@
             <div class="dropdown-menu dropdown-menu-right">
 
                 <a href="/users/edit" class="dropdown-item">Mi cuenta</a>
-                <div class="dropdown-divider"></div>
                 
                 <% if current_user_is_admin %>
                     <button class="dropdown-item disabled font-weight-bold " type="button" >
-                        
                         Administrar
                     </button>
                     <div class="dropdown-divider"></div>
@@ -36,10 +26,8 @@
                     <%= link_to('-> Leyes', laws_path, class:"dropdown-item")%>
                     <div class="dropdown-divider"></div>
                     <button class="dropdown-item" type="button">
-                        
                         Modo edición
                     </button>
-                    <div class="dropdown-divider"></div>
                 <% end %>
                 
                 <%= link_to('Cerrar sesión', destroy_user_session_path, method: :delete, class:"dropdown-item") %>
@@ -74,6 +62,14 @@
         display: flex;
         align-items: center;
         padding-left: 20px;
+    }
+
+    .dropdown-menu{
+        background: #171F2A;
+    }
+
+    .dropdown-item{
+        color: #FFFFFF;
     }
 
     .navbar-brand{

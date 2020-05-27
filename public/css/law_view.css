@@ -39,9 +39,8 @@
 }
 
 .buscar {
-    color: #FF5722;
-    border-color: #FF5722;
-    background-color: Transparent;
+    color: white border-color: #FF5722;
+    background-color: #FF5722;
 }
 
 .buscar:hover {

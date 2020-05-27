@@ -46,6 +46,13 @@ h2 {
     color: white;
 }
 
+.form-group .form-check label,
+.form-group .form-check label {
+    padding: 1em 1em 1em 2em;
+    display: flex;
+    cursor: pointer;
+}
+
 .form-control {
     background-color: #EFF3F8;
     height: 50px;
@@ -57,4 +64,91 @@ input.form-control:focus {
     color: #495057;
     background-color: #EFF3F8;
     box-shadow: 0 0 0 2px #A6B9D3;
+}
+
+.form-check {
+    padding: 0;
+}
+
+.form-check-inline .form-check-input,
+.form-check-input {
+    position: absolute;
+    opacity: 0;
+}
+
+.custom-form {
+    position: relative;
+    min-height: 60px;
+    margin-bottom: 1rem;
+}
+
+.custom-form:before {
+    position: absolute;
+    left: 10px;
+    top: 1.5em;
+    content: "";
+    height: 20px;
+    width: 20px;
+    border-radius: 4px;
+    background: white;
+}
+
+.custom-form--radio:before {
+    border-radius: 10px;
+}
+
+.custom-form:after {
+    position: absolute;
+    left: 14px;
+    top: 1.9em;
+    content: "";
+    height: 6px;
+    width: 12px;
+    transform: rotate(-45deg);
+    border-left: 3px solid #171F2A;
+    border-bottom: 3px solid #171F2A;
+    display: none;
+}
+
+.custom-form.checked:after {
+    display: block;
+}
+
+.custom-form label {
+    background-color: #F2F5F8;
+    border-radius: 8px;
+    color: #171F2A;
+    box-sizing: border-box;
+    min-height: 60px;
+}
+
+.custom-form input:focus+label {
+    box-shadow: 0 0 0 2px #A6B9D3;
+}
+
+.custom-form.checked label {
+    background-color: #171F2A;
+    color: white;
+}
+
+.btn-next {
+    margin-top: 3em;
+}
+
+.navbar-expand-lg .navbar-nav .dropdown-menu {
+    position: absolute;
+    ;
+}
+
+.btn-avatar {
+    background: linear-gradient(145deg, #1A7FFA 50%, #033FF5 50.1%);
+}
+
+.main-search .form-control {
+    background-color: white;
+}
+
+.main-search .form-control:focus,
+.main-search .form-control:active {
+    background-color: white;
 }

@@ -9,11 +9,11 @@ class ApplicationController < ActionController::Base
   end
   
   def current_user_is_admin
-    current_user && current_user.permissions.find_by_name("admin")
+    current_user && current_user.permissions.find_by_name("Admin")
   end
 
   def current_user_is_pro
-    current_user && current_user.permissions.find_by_name("pro")
+    current_user && current_user.permissions.find_by_name("Pro")
   end
 
   def authenticate_admin!
@@ -43,7 +43,13 @@ class ApplicationController < ActionController::Base
 protected
   
   def after_sign_in_path_for(resource)
-    signed_in_path
+    redirect_to_law_id = session[:redirect_to_law]
+    if redirect_to_law_id
+      session[:redirect_to_law] = nil
+      Law.find_by_id(redirect_to_law_id)
+    else
+      signed_in_path
+    end
   end
 
   def after_sign_out_path_for(resource)

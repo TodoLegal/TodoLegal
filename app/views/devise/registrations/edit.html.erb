@@ -8,34 +8,6 @@
   <div class="card">
     <div class="card-body">
       <%= render "devise/shared/error_messages", resource: resource %>
-      <!--
-      <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#salirModal">
-        <i class="fas fa-arrow-left"></i>
-      </button>
-      -->
-
-      <!-- Modal -->
-      <div class="modal fade" id="salirModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLongTitle">Salir de editar cuenta</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <label>¿Seguro que desea salir?</label>
-            </div>
-            <div class="modal-footer" style="justify-content:flex-start;">
-              <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
-              &nbsp;&nbsp;&nbsp;
-              <%= link_to "Sí, estoy seguro", :back, class:"text-secondary", style:"text-decoration: underline;" %>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!--End Modal-->
 
       <!-- Start edition of user data-->
       <div class="row">
@@ -199,81 +171,53 @@
       <div class="form-group">
         <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
           <div class="form-check" style="border-radius: 5px;background-color: #EFF3F8;margin-bottom: 4%;">
-            <%= f.check_box :receive_information_emails, autofocus: true, class: "form-check-input", id:"check1"%>
+            <%= f.check_box :receive_information_emails, autofocus: true, class: "form-check-input check-submit", id:"check1"%>
             <label class="form-check-label" for="check1">Quiero recibir el boletín informativo a mi correo electrónico.</label>
           </div>
           <div class="form-check" style="background: #171F2A;color: white;border-radius: 8px;">
-            <%= f.check_box :is_contributor, autofocus: true, class: "form-check-input", id:"check2"%>
+            <%= f.check_box :is_contributor, autofocus: true, class: "form-check-input check-submit", id:"check2"%>
             <label class="form-check-label" for="check2">Quiero participar en actividades para contribuir al estudio y mejora de la app.</label>
           </div>
+          <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control"%>
+          <%= f.submit "Guardar cambios", class: 'btn btn-primary', id:"submitPreferences", style:"display:none;"%>
         <% end %>
       </div>
-      <!--
-      <div class="form-group">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmModal">
-          Actualizar
-        </button>
-      </div>
-      -->
+      <hr>
+      <!-- Cancel Button -->
+      <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#cancelAccountModal" id="delete-account-btn">Borrar tu cuenta</button>
+      <!-- End Cancel Button -->
 
-        <!-- Modal
-      <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <!-- Start delet account Modal -->
+      <div class="modal fade" id="cancelAccountModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalCenterTitle" aria-hidden="true">
         <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
           <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Confirmar cambios</h5>
+              <div class="modal-body">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
-              </div>
-              <div class="modal-body">
-                <label>Ingresa tu contraseña actual para confirmar los cambios</label>
-                <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control"%>
-              </div>
-              <div class="modal-footer" style="justify-content:flex-start;">
-                <%= f.submit "Guardar cambios", class: 'btn btn-primary'%>
-                &nbsp;&nbsp;&nbsp;
-                <a href="#" class="text-secondary" data-dismiss="modal" style="text-decoration:underline;">Cancelar</a>
+                <h5 class="modal-title" id="cancelModalLongTitle">¿Estás seguro?</h5>
+                <% if current_user_is_pro %>
+                  <label id="labelPro">
+                    Si borras tu cuenta ya no podras accesar a los documentos exclusivos para cuentas Pro.<br>
+                    También puedes modificar tu suscripción si decides <a href="/" style="text-decoration: underline;">bajar a la cuenta básica.<a>
+                  </label>
+                <% else %>
+                  <label id="labelBasico">Si borras tu cuenta ya no podras accesar a los documentos exclusivos para cuentas básicas.</label>
+                <% end %>
+                <div class="form-group" id="bottonsGroup">
+                  <%= button_to "Borrar cuenta", registration_path(resource), method: :delete, remote: true, id:"deleteAccount", class:"btn btn-outline-danger"%>
+                  &nbsp;&nbsp;&nbsp;
+                  <button type="button" id="dismissBtn" class="btn btn-secondary" data-dismiss="modal">Regresar</button>
+                </div>
               </div>
             </div>
           </div>
         <% end %>
       </div>
-      End Modal -->
-
-      <hr>
-      <!-- Cancel Button -->
-      <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#cancelAccountModal" id="delete-account-btn">Borrar tu cuenta</button>
-      <!-- End Cancel Button -->
+      <!--End delete account modal -->
     </div>
   </div>
-
-  <!-- Start delet account Modal -->
-  <div class="modal fade" id="cancelAccountModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalCenterTitle" aria-hidden="true">
-    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title text-danger" id="cancelModalLongTitle">Eliminar cuenta</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <label>¿Estás seguro que deseas eliminar tu cuenta?</label>
-          </div>
-          <div class="modal-footer" style="justify-content: flex-start">
-            <button type="button" class="btn btn-primary" data-dismiss="modal">No, cancelar y regresar</button>
-            &nbsp;&nbsp;&nbsp;
-            <%= button_to "Sí, estoy seguro", registration_path(resource), method: :delete, remote: true, class:"text-danger", style:"background:none; border:none; padding:0; text-decoration: underline; cursor:pointer;"%>
-          </div>
-        </div>
-      </div>
-    <% end %>
-  </div>
-  <!--End delete account modal -->
-
 </div>
 
 <script>
@@ -304,6 +248,15 @@
       }
     });
   });
+
+  var checkBoxes = document.getElementsByClassName("check-submit");
+  
+  var checkBoxClick = function (){
+    document.getElementById("submitPreferences").click();
+  };
+  //triggers form submit when checkboxes clicked
+  checkBoxes[0].addEventListener("click", checkBoxClick, false );
+  checkBoxes[1].addEventListener("click", checkBoxClick, false );
 
 </script>
 
@@ -473,6 +426,43 @@
   #user-data{
     padding-left: 5%;
   }
+
+  .modal-body{
+    text-align: center;
+  }
+
+  #dismissBtn, #deleteAccount{
+    border-radius: 8px;
+  }
+
+  #dismissBtn{
+    background: #F2F5F8; 
+    color: #505864; 
+    border:none;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .modal-title{
+    padding-top: 30px;
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 26px;
+  }
+
+  #labelBasico, #labelPro{
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 21px;
+    color: #505864;
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+
+  #bottonsGroup{
+    margin-bottom: 30px;
+  }
   
   @media only screen and (max-width: 767.98px){
     .container{
@@ -516,6 +506,10 @@
     .submit-btn, .confirm-pass-label{
       margin-top: 10px;
       width: 100%
+    }
+
+    #deleteAccount, #dismissBtn{
+      width: 100%;
     }
   
   }

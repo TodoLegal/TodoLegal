@@ -1,13 +1,14 @@
 class HomeController < ApplicationController
+  layout 'onboarding', only: [:pricing, :invite_colleagues]
   include ActionView::Helpers::NumberHelper
   require 'set'
   
   def index
     @tags = Tag.where(tag_type: TagType.find_by_name("materia"))
 
-    file = File.read('public/covid_drive_data.json')
-    data_hash = JSON.parse(file)
-    @covid_files_count = data_hash['file_count']
+    # file = File.read('public/covid_drive_data.json')
+    # data_hash = JSON.parse(file)
+    # @covid_files_count = data_hash['file_count']
   end
 
   def search_law
@@ -70,7 +71,10 @@ class HomeController < ApplicationController
 
   def pricing
   end
-
+  
+  def invite_colleagues
+  end
+  
   def drive_search
     @query = params[:query]
     @folder = params[:folder]

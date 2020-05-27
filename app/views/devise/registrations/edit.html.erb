@@ -1,125 +1,224 @@
+<% if user_signed_in? %>
+    <%= render 'layouts/logged_navbar' %>        
+<% else %>
+    <%= render 'layouts/unlogged_navbar' %> 
+<% end %>
+
 <div class = "container">
-  <h2></h2>
+  <div class="card">
+    <div class="card-body">
+      <%= render "devise/shared/error_messages", resource: resource %>
+      <!--
+      <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#salirModal">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      -->
 
-  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-    <div class="card">
-      <div class="card-body">
-        <%= render "devise/shared/error_messages", resource: resource %>
-
-        <h2 class="card-title" style="margin-bottom:0%;">
-          <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#salirModal">
-            <i class="fas fa-arrow-left"></i>
-          </button>
-          Editar <%= resource_name.to_s.humanize %>
-        </h2>
-        <hr class="style1">
-
-        <!-- Modal -->
-        <div class="modal fade" id="salirModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Salir de editar cuenta</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <label>¿Seguro que desea salir?</label>
-              </div>
-              <div class="modal-footer" style="justify-content:flex-start;">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
-                &nbsp;&nbsp;&nbsp;
-                <%= link_to "Sí, estoy seguro", :back, class:"text-secondary", style:"text-decoration: underline;" %>
-              </div>
+      <!-- Modal -->
+      <div class="modal fade" id="salirModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Salir de editar cuenta</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <label>¿Seguro que desea salir?</label>
+            </div>
+            <div class="modal-footer" style="justify-content:flex-start;">
+              <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+              &nbsp;&nbsp;&nbsp;
+              <%= link_to "Sí, estoy seguro", :back, class:"text-secondary", style:"text-decoration: underline;" %>
             </div>
           </div>
         </div>
-        <!--End Modal-->
+      </div>
+      <!--End Modal-->
 
-        <div class="form-group">
-          <div class="row">
-            <div class="col-md-6 form-group">
-              <%= f.label :Nombre %><br />
-              <%= f.text_field :first_name, autofocus: true, class:"form-control"%>
-            </div>
-            <div class="col-md-6 form-group">
-              <%= f.label :Apellido %><br />
-              <%= f.text_field :last_name, autofocus: true, class:"form-control" %>
-            </div>
+      <!-- Start edition of user data-->
+      <div class="row">
+        <div class ="col-md-2">
+          <div class="circle">
+            <%= current_user.first_name[0].upcase + current_user.last_name[0].upcase%>
           </div>
         </div>
-
-        <div class="form-group">
-          <div class="row">
-            <div class="col-md-12 form-group">  
-              <%= f.label :email %><br />
-              <%= f.email_field :email, autofocus: true, autocomplete: "email", class:"form-control" %>
-            </div>
-          </div>
-        </div>
-            
-        
-        <div class="form-group">
-          <div class="row">
-            <div class="col-md-12 form-group"> 
-              <%= f.label :Ocupación %><br />
-              <%= f.select :occupation, ['Abogado', 'Estudiante', 'Otro'], {}, {class:"custom-select form-control"}%>
-            </div>
-          </div>
-        </div>
-
-        <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-          <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
-        <% end %>
-
-        <div class="row">
-          <div class="col-12 col-sm-6 mb-3">
-            <div class="mb-2"><b>Cambiar contraseña</b></div>
-            <div class="row">
-              <div class="col">
-                <div class="form-group">
-                  <label>Dejala en blanco si no la quieres cambiar</label>
-                  <%= f.password_field :password, autocomplete: "new-password", class: "form-control" %>
-                  <small id="passwordHelpBlock" class="form-text text-muted">
-                    <em>(Mínimo <%= @minimum_password_length %> caracteres)</em>
-                  </small>
+        <div class = "col-md-10" id="user-data">
+        <!-- Edit name and Last name -->
+          <div class = "row">
+            <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+              <div class = "user-name col-md-12">
+                <div id="name">
+                  <%= current_user.first_name + " " + current_user.last_name %>
+                  <span class = "edit-text" onclick="showDialog('name', 'editName')"><i class="fas fa-pencil-alt"></i> Editar nombre</span>
                 </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <div class="form-group">
-                  <label>Confirmar contraseña</label>
-                  <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control"%>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-12 col-sm-5 offset-sm-1 mb-3">
-            <div class="mb-2"><b>Sé contribuidor</b></div>
-            <div class="row">
-              <div class="col">
-                <label>Te podemos enviar encuestas o entrevistarte en persona</label>
-                <div class="custom-controls-stacked px-2">
-                  <div class="custom-control custom-checkbox">
-                    <%= f.check_box :is_contributor, autofocus: true, class:"custom-control-input", id:"contributor" %>
-                    <label class="custom-control-label" for="contributor">Contribuidor</label>
+                <div class="card" id="editName">
+                  <button type="button" class="close" onclick = "showDialog('name', 'editName')" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <div class = "card-body">
+                    <div class="form-group">
+                      <div class="row">
+                        <div class="col-6 form-group">
+                          <%= f.label :Nombre %><br />
+                          <%= f.text_field :first_name, autofocus: true, class:"form-control"%>
+                        </div>
+                        <div class="col-6 form-group">
+                          <%= f.label :Apellido %><br />
+                          <%= f.text_field :last_name, autofocus: true, class:"form-control" %>
+                        </div>
+                      </div>
+                      <label class="confirm-pass-label">Ingresa tu contraseña actual para confirmar los cambios</label>
+                      <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control"%>
+                      <%= f.submit "Guardar cambios", class: 'submit-btn btn btn-primary'%>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            <% end %>
+          </div>
+          <!-- Edit occupation -->
+          <div class = "row">
+            <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+              <div class = "col-md-12">
+                <div id="occupation">
+                  <%= current_user.occupation%>
+                  <span class = "edit-text" onclick ="showDialog('occupation', 'editOccupation')"><i class="fas fa-pencil-alt"></i> Editar profesión</span> 
+                </div>
+                <div class="card" id="editOccupation">
+                  <button type="button" class="close" onclick = "showDialog('occupation', 'editOccupation')" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <div class = "card-body">
+                    <div class="form-group">
+                      <div class="form-check form-check-inline" style="border-radius: 8px;background-color: #171F2A;color: white;margin-bottom: 4%;">
+                        <%= f.radio_button :occupation, "Abogado", {class: "form-check-input", id:"radio1", checked:"checked"}%>
+                        <label class="form-check-label" for="radio1">Abogado</label>
+                      </div>
+                      <div class="form-check form-check-inline" style="border-radius: 5px;background-color: #EFF3F8;margin-bottom: 4%;">
+                        <%= f.radio_button :occupation, "Estudiante", {class: "form-check-input", id:"radio2"}%>
+                        <label class="form-check-label" for="radio2">Estudiante</label>
+                      </div>
+                      <div class="form-check form-check-inline" style="border-radius: 5px;background-color: #EFF3F8;margin-bottom: 4%;">
+                        <%= f.radio_button :occupation, "Otro", {class: "form-check-input", id:"radio3"}%>
+                        <label class="form-check-label" for="radio3">Otro</label>
+                      </div>
+                      <label class="confirm-pass-label">Ingresa tu contraseña actual para confirmar los cambios</label>
+                      <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control"%>
+                      <%= f.submit "Guardar cambios", class: 'submit-btn btn btn-primary'%>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+          <!-- Edit email -->
+          <div class = "row">
+            <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+              <div class = "col-md-12">
+                <div id="email">
+                  <%= current_user.email%>
+                  <span class = "edit-text" onclick = "showDialog('email', 'editEmail')"><i class="fas fa-pencil-alt"></i> Editar correo</span> 
+                </div>
+                <div class="card" id="editEmail">
+                  <button type="button" class="close" onclick = "showDialog('email', 'editEmail')" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <div class = "card-body">
+                    <div class="form-group">
+                      <%= f.label :email %><br />
+                      <%= f.email_field :email, autofocus: true, autocomplete: "email", class:"form-control" %>
+                      <label class="confirm-pass-label">Ingresa tu contraseña actual para confirmar los cambios</label>
+                      <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control"%>
+                      <%= f.submit "Guardar cambios", class: 'submit-btn btn btn-primary'%>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+          <!-- Edit Password -->
+          <div class = "row">
+            <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+              <div class = "col-md-12">
+                <div id="password">
+                  <span class = "edit-text" onclick = "showDialog('password', 'editPassword')"><i class="fas fa-pencil-alt"></i> Cambiar contraseña</span> 
+                </div>
+                <div class="card" id="editPassword">
+                  <button type="button" class="close" onclick = "showDialog('password', 'editPassword')" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <div class = "card-body">
+                    <div class="form-group">
+                      <label>Dejala en blanco si no la quieres cambiar</label>
+                      <%= f.password_field :password, autocomplete: "new-password", class: "form-control" %>
+                      <small id="passwordHelpBlock" class="form-text text-muted">
+                        <em>(Mínimo <%= @minimum_password_length %> caracteres)</em>
+                      </small>
+                    
+                      <label>Confirmar contraseña</label>
+                      <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control"%>
+                    
+                      <label class="confirm-pass-label">Ingresa tu contraseña actual para confirmar los cambios</label>
+                      <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control"%>
+                      <%= f.submit "Guardar cambios", class: 'submit-btn btn btn-primary'%> 
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
           </div>
         </div>
+      </div>
+      <!-- End edition of user data-->
 
-        <div class="form-group">
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmModal">
-            Actualizar
-          </button>
-        </div>
+      <% if current_user_is_pro %>
+        <section class="change-plan">
+          <div class="change-plan-content">
+            <h5 id="change-plan-title">¿Listo para cambiar tu plan?</h5>
+            <p id="change-plan-text">Tendrás acceso a más de 150 documentos de legislación hondureña.</p>
+            <p id="change-plan-link"> Leer más sobre el Plan Pro</p>
+          </div>
+          <div class="form-group" id="change-plan-btn-form">
+            <button type="button" class="btn btn-primary" id="change-plan-button">
+              Cambiar Plan
+            </button>
+          </div>
+        </section>
+      <% end %>
+      
+      <hr>
 
-         <!-- Modal -->
-        <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+        <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+      <% end %>
+
+      <!-- Edit preferences -->
+      <p class = "titles">Preferencias</p>
+      <div class="form-group">
+        <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+          <div class="form-check" style="border-radius: 5px;background-color: #EFF3F8;margin-bottom: 4%;">
+            <%= f.check_box :receive_information_emails, autofocus: true, class: "form-check-input", id:"check1"%>
+            <label class="form-check-label" for="check1">Quiero recibir el boletín informativo a mi correo electrónico.</label>
+          </div>
+          <div class="form-check" style="background: #171F2A;color: white;border-radius: 8px;">
+            <%= f.check_box :is_contributor, autofocus: true, class: "form-check-input", id:"check2"%>
+            <label class="form-check-label" for="check2">Quiero participar en actividades para contribuir al estudio y mejora de la app.</label>
+          </div>
+        <% end %>
+      </div>
+      <!--
+      <div class="form-group">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmModal">
+          Actualizar
+        </button>
+      </div>
+      -->
+
+        <!-- Modal
+      <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
           <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
               <div class="modal-header">
@@ -139,50 +238,285 @@
               </div>
             </div>
           </div>
-        </div>
-        <!-- <a href="#" class="text-danger" data-toggle="modal" data-target="#cancelAccountModal"  style="text-decoration:underline;">Cancelar mi cuenta</a>
-        -->
+        <% end %>
       </div>
-    </div>
-  <% end %>
+      End Modal -->
 
-  <%
-=begin%>
- <div class="card", style="margin-top:2%;">
-    <div class="card-body">
-      <h4 class="card-title text-danger" style="margin-bottom:0%;">Eliminar cuenta</h4>
-      <hr class="style1">
-      
-      <p>Una vez elimines tu cuenta no hay marcha atrás.</p> 
-<%
-=end%>
-      
-      <!-- Modal -->
-      <div class="modal fade" id="cancelAccountModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title text-danger" id="cancelModalLongTitle">Eliminar cuenta</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <label>¿Estás seguro que deseas eliminar tu cuenta?</label>
-            </div>
-            <div class="modal-footer" style="justify-content: flex-start">
-              <button type="button" class="btn btn-primary" data-dismiss="modal">No, cancelar y regresar</button>
-              &nbsp;&nbsp;&nbsp;
-              <%= button_to "Sí, estoy seguro", registration_path(resource), method: :delete, remote: true, class:"text-danger", style:"background:none; border:none; padding:0; text-decoration: underline; cursor:pointer;"%>
-            </div>
+      <hr>
+      <!-- Cancel Button -->
+      <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#cancelAccountModal" id="delete-account-btn">Borrar tu cuenta</button>
+      <!-- End Cancel Button -->
+    </div>
+  </div>
+
+  <!-- Start delet account Modal -->
+  <div class="modal fade" id="cancelAccountModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalCenterTitle" aria-hidden="true">
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-danger" id="cancelModalLongTitle">Eliminar cuenta</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <label>¿Estás seguro que deseas eliminar tu cuenta?</label>
+          </div>
+          <div class="modal-footer" style="justify-content: flex-start">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">No, cancelar y regresar</button>
+            &nbsp;&nbsp;&nbsp;
+            <%= button_to "Sí, estoy seguro", registration_path(resource), method: :delete, remote: true, class:"text-danger", style:"background:none; border:none; padding:0; text-decoration: underline; cursor:pointer;"%>
           </div>
         </div>
       </div>
-    <%
-=begin%>
- </div>
-  </div> 
-<%
-=end%>
+    <% end %>
+  </div>
+  <!--End delete account modal -->
 
 </div>
+
+<script>
+
+  function showDialog (x, y){
+    var x = document.getElementById(x);
+    var y = document.getElementById(y);
+    if (x.style.display === "none") {
+      x.style.display = "block";
+      y.style.display = "none";
+    } else {
+      x.style.display = "none";
+      y.style.display = "block";
+    }
+  }
+
+  addEventListener("change", function(event){
+    $('.form-check').each(function(){
+      if($(this).children().is(":checked")){
+        this.style.background = "#171F2A";
+        this.style.color = "white";
+        this.style.borderRadius = "8px";
+      }
+      else if ($(this).children().is(":not(:checked)")){
+        this.style.background = "#EFF3F8";
+        this.style.color= "#505864";
+        this.style.borderRadius = "5px";
+      }
+    });
+  });
+
+</script>
+
+<style>
+  .container{
+    max-width: fit-content;
+  }
+  .card{
+    background: #FFFFFF;
+    border-radius: 2px;
+  } 
+  .circle{
+    height: 100px;
+    width: 100px;
+    background: #1A7FFA;
+    color: white; 
+    border-radius: 50%;
+    font-weight: 800;
+    font-size: 40px;
+    line-height: 48px;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+  }
+
+  .media-body{
+    padding-top: 10px;
+    padding-left: 25px;
+  }
+
+  #name{
+    font-style: normal;
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 26px;
+  }
+
+  .edit-text{
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: #A6B9D3;
+    padding-left: 5px;
+  }
+
+  .edit-text:hover{
+    color: #A6B9D3;
+    cursor: pointer;
+  }
+
+  #editName, #editOccupation, #editEmail, #editPassword{
+    width: 450px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    display: none;
+  }
+
+  .form-control{
+    background-color: #EFF3F8;
+  }
+
+  .form-check-input{
+    width: 23px; 
+    height:23px;
+    border: 1px solid #505864;
+    border-radius: 4px;
+    color: #505864;
+  }
+
+  .form-check{
+    padding-top: 2%;
+    padding-bottom: 2%;
+    padding-left: 8%;
+  }
+
+  .form-check-label{
+    padding-left:2%;
+    width: fit-content;
+    font-family: -apple-system, sans-serif;
+    font-size: 18px;
+    line-height: 21px;
+  }
+
+  .form-check-inline{
+    margin-right: 0px;
+    padding-left: 4%;
+    width: 49%
+  }
+
+  .titles{
+    font-family: -apple-system, sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 29px;
+  }
+
+  .change-plan{
+    height: 223px;
+    margin-top: 30px;
+    background: #EFF3F8;
+    border-radius: 8px;
+  }
+
+  .change-plan-content{
+    text-align: center;
+    padding-top: 25px;
+  }
+
+  #change-plan-title{
+    font-style: normal;
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 26px;
+  }
+
+  #change-plan-text, #change-plan-link{
+    font-family: -apple-system, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 21px;
+  }
+
+  #change-plan-text{
+    padding-top: 25px;
+    color: #505864;
+    margin-bottom: 0.2em;
+  }
+
+  #change-plan-link{
+    color: #1A7FFA;
+  }
+
+  #change-plan-link:hover{
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  #change-plan-btn-form{
+    text-align: center;
+  }
+
+  #change-plan-button{
+    width: 65%;
+    border-radius: 8px;
+  }
+
+  #delete-account-btn{
+    border: 1px solid #FA1A35;
+    box-sizing: border-box;
+    border-radius: 8px;
+    width: 200px;
+    margin-bottom: 20px;
+  }
+
+  .submit-btn, .confirm-pass-label{
+    margin-top: 10px;
+  }
+
+  .form-group{
+    margin-bottom: 0px;
+  }
+
+  #user-data{
+    padding-left: 5%;
+  }
+  
+  @media only screen and (max-width: 767.98px){
+    .container{
+      padding: 0px;
+    }
+
+    .circle{
+      height: 60px;
+      width: 60px;
+      font-weight: 800;
+      font-size: 27px;
+      line-height: 32px;
+      padding-left: 10px;
+      margin-bottom: 15px;
+    }
+
+    #name{
+      font-size: 20px;
+    }
+
+    #editName, #editOccupation, #editEmail, #editPassword{
+      width: 100%;
+      background: #FFFFFF;
+      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
+      border-radius: 8px;
+      display: none;
+    }
+
+    .form-check-inline{
+      width: 100%;
+    }
+
+    #delete-account-btn{
+      border: 1px solid #FA1A35;
+      box-sizing: border-box;
+      border-radius: 8px;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    .submit-btn, .confirm-pass-label{
+      margin-top: 10px;
+      width: 100%
+    }
+  
+  }
+</style>

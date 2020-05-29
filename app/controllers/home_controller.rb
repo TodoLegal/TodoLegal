@@ -1,4 +1,5 @@
 class HomeController < ApplicationController
+  layout 'onboarding', only: [:pricing, :invite_colleagues]
   include ActionView::Helpers::NumberHelper
   require 'set'
   
@@ -70,7 +71,10 @@ class HomeController < ApplicationController
 
   def pricing
   end
-
+  
+  def invite_colleagues
+  end
+  
   def drive_search
     @query = params[:query]
     @folder = params[:folder]

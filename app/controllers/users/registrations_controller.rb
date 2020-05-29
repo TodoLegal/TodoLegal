@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Users::RegistrationsController < Devise::RegistrationsController
+  layout "onboarding"
   include Devise::Controllers::Helpers
   #skip_before_filter :verify_authenticity_token, :only => :create
   # before_action :configure_sign_up_params, only: [:create]
@@ -62,7 +63,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
       session[:redirect_to_law] = nil
       Law.find_by_id(redirect_to_law_id)
     else
-      signed_up_path
+      signed_up_path  
+     # invite_colleagues_path
     end
   end
 
@@ -70,6 +72,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
     edit_user_registration_path
   end
 
+  #The path used after edit
+  # def afer_update_path_for(resource)
+  #   root_path
+  # end
   # The path used after sign up for inactive accounts.
   # def after_inactive_sign_up_path_for(resource)
   #   super(resource)

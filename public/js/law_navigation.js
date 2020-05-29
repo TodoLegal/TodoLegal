@@ -3,6 +3,45 @@ function colapseIndice() {
   $('.overlay').removeClass('active');
 }
 
+/* Tabs navigation */
+var active_tab = "#articulos"
+window.onscroll = function() {onScrollCallback()};
+
+var bigger_sections = document.getElementsByClassName("bigger-section");
+var article_names = document.getElementsByClassName("article-name");
+
+function setStickySectionHeading(header_text)
+{
+  document.getElementById('sticky_nav_header').innerText = header_text
+}
+
+function onScrollCallback()
+{
+  if(active_tab == "#articulos")
+  {
+    var sticky_header = null
+    var sticky_elements = bigger_sections
+    if(bigger_sections.length == 0)
+      sticky_elements = article_names
+    for(var i=0; i<sticky_elements.length; i++)
+    {
+      if (sticky_elements[i].offsetTop != 0 && sticky_elements[i].offsetTop - 1 <= window.pageYOffset)
+      {
+        sticky_header = sticky_elements[i]
+      }
+    }
+    if(sticky_header && bigger_sections.length > 0)
+      setStickySectionHeading(sticky_header.innerText)
+  }
+}
+
+$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+  var target = $(e.target).attr('href')
+  if(sticky_header && bigger_sections.length > 0)
+    setStickySectionHeading("")
+  active_tab = target
+});
+
 /* Indice filter */
 
 function filterIndice() {
@@ -32,8 +71,9 @@ if(highlighted_count > 0)
 function updateHighlightedView()
 {
   document.getElementById("result-count-big").innerText = (currrent_highlighted + 1) +"/"+highlighted_count
-  document.getElementById("result-count-small").innerText = (currrent_highlighted + 1) +"/"+highlighted_count
   element_highlighted = document.getElementsByClassName('highlighted')[currrent_highlighted]
+  console.log(currrent_highlighted)
+  console.log(element_highlighted)
   element_highlighted.scrollIntoView({block: 'center'})
   element_highlighted.style["color"]="var(--c-selected-highlight)"
   element_highlighted.style["background-color"]="var(--c-selected-highlight-background)"
@@ -69,26 +109,50 @@ function browseHighlightedDown()
 
 /* Article navigation */
 
-var current_article = 0;
-var article_focused = null;
+var current_article = -1
+var article_focused = null
+var article_clicked = true
 
 var articles_element = document.getElementsByClassName('article')
 
-for(var article_iterator=0; article_iterator<articles_element.length; article_iterator++)
+function unselectCurrentArticle()
 {
-  article_element = articles_element[article_iterator]
-  article_element.onmousedown = function (event) {
-    if(article_focused)
-    {
-      article_focused.style['background-color'] = "var(--c-original-background)"
-      article_focused.style['color'] = "var(--c-original-text)"
-    }
-    current_article = parseInt(event.srcElement.getAttribute("article_id"))
+  current_article = -1
+  article_focused = null
+}
+
+function onClickBody()
+{
+  if(!article_clicked)
+  {
+    article_focused.style['background-color'] = "var(--c-original-background)"
+    article_focused.style['color'] = "var(--c-original-text)"
+    unselectCurrentArticle()
+  }else
+  {
+    article_clicked = false
+  }
+}
+
+function onClickArticle(clicked_article_id)
+{
+  if(article_focused)
+  {
+    article_focused.style['background-color'] = "var(--c-original-background)"
+    article_focused.style['color'] = "var(--c-original-text)"
+  }
+  if(current_article != clicked_article_id)
+  {
+    current_article = clicked_article_id
     article_focused = document.getElementById('article_count_' + current_article)
     article_focused.style['background-color'] = "var(--c-selected-article-background)"
     article_focused.style['color'] = "var(--c-selected-article-text)"
-    return true;
-  };
+  }else
+  {
+    unselectCurrentArticle()
+  }
+  article_clicked = true
+  return true;
 }
 
 function gotoArticle(article_number)
@@ -109,6 +173,7 @@ function gotoArticle(article_number)
   
   article_focused = document.getElementById('article_count_' + current_article)
   article_focused.scrollIntoView({block: 'center'})
+  console.log(23)
   article_focused.style['background-color'] = "var(--c-selected-article-background)"
   article_focused.style['color'] = "var(--c-selected-article-text)"
 }
@@ -246,4 +311,16 @@ var onkeydown = (function (ev) {
 
 $(document).ready(function () {
   
+});
+
+
+function addrow(){
+  var table = document.getElementById("edit_table");
+  var row = document.getElementById("edit_table").lastChild;
+  var clone = row.cloneNode(true);
+  table.appendChild(clone);
+}
+
+$(window).on('load',function(){
+  $('#modalCreateBasicAccount').modal('show');
 });

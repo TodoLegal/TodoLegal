@@ -1,4 +1,11 @@
 <h1>Usuarios</h1>
+
+<h3>Descarga</h3>
+
+<ul>
+  <li><a href="/users.csv" download>Descargar usuarios</a></li>
+</ul>
+
 <form action="<%= admin_users_url %>" method="get">
   <div>
     <input name="email" value="<%= @email %>" type="text" placeholder="usuario@correo.com">
@@ -7,9 +14,13 @@
     </div>
   </div>
 </form>
+
+<p><%= @users.count %> usuarios registrados</p>
+
 <table border="1">
   <tr>
     <th>email</th>
+    <th>last sign in</th>
     <% @permissions.each do |permission| %>
       <th><%= permission.name %></th>
     <% end %>
@@ -17,6 +28,7 @@
   <% @users.each do |user| %>
     <tr>
       <td><%= user.email %></td>
+      <td><%= user.last_sign_in_at ? time_ago_in_words(user.last_sign_in_at) : "" %> ago</td>
       <% @permissions.each do |permission| %>
         <% if UserPermission.find_by(user: user, permission: permission) %>
           <td>yes

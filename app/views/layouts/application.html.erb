@@ -4,13 +4,17 @@
 <head>
   <%= render 'layouts/google_analytics_head' %>
   <%= render 'layouts/crisp_chat' %>
+  <%= render 'layouts/facebook_pixel' %>
+  <%= render 'layouts/opengraph' %>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
   <%= render 'layouts/favicons' %>
 
-  <title>Todo Legal</title>
+  <title>TodoLegal - El buscador de leyes de Honduras</title>
+  <meta name="description" content="En TodoLegal tú puedes navegar las leyes hondureñas artículo por artículo y realizar búsquedas por palabras clave.">
+  <meta name="keywords" content="constitución, constitución de la república, ley, poder judicial, ley de procedimiento administrativo">
 
   <!-- Bootstrap CSS CDN -->
   <link href="https://getbootstrap.com/docs/4.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
@@ -19,6 +23,8 @@
   <link rel="stylesheet" href="/css/footer.css">
   <!-- Scrollbar Custom CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+  <!--Bootstrap form validator-->
+  <script src="https://cdn.rawgit.com/PascaleBeier/bootstrap-validate/v2.2.0/dist/bootstrap-validate.js"></script>
 
   <!-- Font Awesome JS -->
   <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
@@ -30,16 +36,23 @@
   <%= csp_meta_tag %>
 </head>
 
-<body>
+<body onclick="onClickBody()">
   <%= render 'layouts/google_analytics_body' %>
 
   <% if user_signed_in? %>
       <%= render 'layouts/logged_navbar' %>        
   <% else %>
-    <%= render 'layouts/unlogged_navbar' %>
+      <%= render 'layouts/unlogged_navbar' %> 
   <% end %>
 
-  <%= render 'subscriptions/subscribe_form' %>
+  <% if notice %>
+    <div class="alert alert-primary alert-dismissible fade show" role="alert" id="notice">
+      <%= notice %>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  <% end %>
 
   <%= yield %>
   
@@ -54,6 +67,9 @@
   <!-- jQuery Custom Scroller CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
 
+  <script src="/js/law_navigation.js"></script>
+  <%= render 'laws/law_postscripts' %>
+  
   <style>
     .customButton{
       display: block;
@@ -64,13 +80,19 @@
       position: fixed;
       border-radius: 10px;
     }
+    .card {
+      border: none;
+    }
+    body {
+      background: #EFF3F8;
+    }
   </style>
   <script src="/menu_control.js"></script>
   <%= render 'layouts/footer' %>
 <!--
   <footer class="footer">
     <div class="container">
-      <span class="text-muted">2019 Legal Technologies S.A.</span>
+      <span class="text-muted">2019-2020 Legal Technologies S.A.</span>
        <a align="right" href="/terms"><span class="text-muted">Términos y condiciones</span></a>
     </div>
   </footer>

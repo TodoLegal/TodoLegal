@@ -8,9 +8,12 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
   # end
 
   # POST /resource/confirmation
-  # def create
-  #   super
-  # end
+  def create
+    super
+    if @email
+      @first_name = User.find_by_email(@email).first_name
+    end
+  end
 
   # GET /resource/confirmation?confirmation_token=abcdef
   # def show

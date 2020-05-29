@@ -1,5 +1,5 @@
 class SubscriptionsMailer < ApplicationMailer
-  default from: 'Todo Legal <suscripciones@todolegal.app>'
+  default from: 'TodoLegal <suscripciones@todolegal.app>'
 
   def is_a_valid_email?(email)
     #email_regex = %r{/\b[A-Z0-9._%a-z\-]+@(?:[A-Z0-9a-z\-]+\.)+[A-Za-z]{2,4}\z/}xi # Case insensitive
@@ -30,5 +30,14 @@ class SubscriptionsMailer < ApplicationMailer
     #if is_a_valid_email?(@email)
       mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: @email, subject: 'Descuento')
     #end
+  end
+
+  def refer(referrer, email)
+    @referrer_name = referrer.first_name
+    if referrer.last_name
+      @referrer_name += " "
+      @referrer_name += referrer.last_name
+    end
+    mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: email, subject: 'Te han invitado a TodoLegal')
   end
 end

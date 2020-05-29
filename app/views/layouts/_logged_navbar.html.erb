@@ -1,17 +1,37 @@
 
-<nav class="navbar navbar-expand-lg navbar-light justify-content-end sticky-top" style="margin-bottom:0px;">
-    <ul class="navbar-nav">
+<nav class="navbar navbar-expand-lg navbar-light  sticky-top" style="margin-bottom: 0px; z-index: 1000; justify-content:space-between;">
+    <a href="/" class="navbar-brand text-primary" >
+      <i class="fas fa-home"></i>
+    </a>
+    <ul class="navbar-nav" >
         <div class="btn-group">
-        <button type="button" class="btn btn-outline-primary btn-lg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-bars"></i>
+        <button type="button" class="btn btn-primary btn-lg" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border-radius: 50%;">
+            <% if current_user.first_name %>
+                <%= current_user.first_name[0]%>
+            <% end %>
         </button>
         <div class="dropdown-menu dropdown-menu-right">
-            <button class="dropdown-item" type="button">Usuarios</button>
+
+            <a href="/users/edit" class="dropdown-item">Mi cuenta</a>
             <div class="dropdown-divider"></div>
-            <%= link_to('Sucriptores', admin_subscriptions_path, class:"dropdown-item")%>
-            <div class="dropdown-divider"></div>
-            <button class="dropdown-item" type="button">Editar Ley</button>
-            <div class="dropdown-divider"></div>
+            
+            <% if current_user_is_admin %>
+                <button class="dropdown-item disabled font-weight-bold " type="button" >
+                    
+                    Administrar
+                </button>
+                <div class="dropdown-divider"></div>
+                <%= link_to('-> Usuarios', admin_users_path, class:"dropdown-item") %>
+                <%= link_to('-> Suscritos', admin_subscriptions_path, class:"dropdown-item")%>
+                <%= link_to('-> Leyes', laws_path, class:"dropdown-item")%>
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-item" type="button">
+                    
+                    Modo edición
+                </button>
+                <div class="dropdown-divider"></div>
+            <% end %>
+            
             <%= link_to('Cerrar sesión', destroy_user_session_path, method: :delete, class:"dropdown-item") %>
         </div>
         </div>

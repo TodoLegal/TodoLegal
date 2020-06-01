@@ -250,33 +250,13 @@
 
   addEventListener("change", function(event){
     $('.form-check').each(function(){
-      if($(this).children().is(":checked")){
-        this.style.background = "#171F2A";
-        this.style.color = "white";
-        this.style.borderRadius = "8px";
-      }
-      else if ($(this).children().is(":not(:checked)")){
-        this.style.background = "#EFF3F8";
-        this.style.color= "#505864";
-        this.style.borderRadius = "5px";
+      if($(this).children().is(":checked")) {
+        this.classList.add('checked');
+      } else {
+        this.classList.remove('checked');
       }
     });
   });
-
-  // $(document).ready( function(){
-  //   $('.form-check').each(function(){
-  //     if($(this).children().is(":checked")){
-  //       this.style.background = "#171F2A";
-  //       this.style.color = "white";
-  //       this.style.borderRadius = "8px";
-  //     }
-  //     else if ($(this).children().is(":not(:checked)")){
-  //       this.style.background = "#EFF3F8";
-  //       this.style.color= "#505864";
-  //       this.style.borderRadius = "5px";
-  //     }
-  //   });
-  // });
 
   var checkBoxes = document.getElementsByClassName("check-submit");
   

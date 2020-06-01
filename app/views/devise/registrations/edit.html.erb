@@ -55,7 +55,17 @@
             <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
               <div class = "col-md-12">
                 <div id="occupation">
-                  <%= current_user.occupation%>
+                
+                  <%if current_user.occupation === "Otro"%>
+                    <%if current_user.other_occupation === " "%>
+                      <%= current_user.occupation%>
+                    <% else %>
+                      <%= current_user.other_occupation%>
+                    <% end %>
+                  <% else %>
+                    <%= current_user.occupation%>
+                  <% end %>
+
                   <span class = "edit-text" onclick ="showDialog('occupation', 'editOccupation')"><i class="fas fa-pencil-alt"></i> Editar profesión</span> 
                 </div>
                 <div class="card" id="editOccupation">
@@ -65,16 +75,20 @@
                   <div class = "card-body">
                     <div class="form-group">
                       <div class="form-check form-check-inline" style="border-radius: 8px;background-color: #171F2A;color: white;margin-bottom: 4%;">
-                        <%= f.radio_button :occupation, "Abogado", {class: "form-check-input", id:"radio1", checked:"checked"}%>
+                        <%= f.radio_button :occupation, "Abogado", {class: "form-check-input", id:"radio1", checked:"checked", onclick:"showOtherField('Abogado')"}%>
                         <label class="form-check-label" for="radio1">Abogado</label>
                       </div>
                       <div class="form-check form-check-inline" style="border-radius: 5px;background-color: #EFF3F8;margin-bottom: 4%;">
-                        <%= f.radio_button :occupation, "Estudiante", {class: "form-check-input", id:"radio2"}%>
+                        <%= f.radio_button :occupation, "Estudiante", {class: "form-check-input", id:"radio2", onclick:"showOtherField('Estudiante')"}%>
                         <label class="form-check-label" for="radio2">Estudiante</label>
                       </div>
                       <div class="form-check form-check-inline" style="border-radius: 5px;background-color: #EFF3F8;margin-bottom: 4%;">
-                        <%= f.radio_button :occupation, "Otro", {class: "form-check-input", id:"radio3"}%>
+                        <%= f.radio_button :occupation, "Otro", {class: "form-check-input", id:"radio3", onclick:"showOtherField('Otro')"}%>
                         <label class="form-check-label" for="radio3">Otro</label>
+                      </div>
+                          <div class="form-group"  id="otherField" style="display: none;">
+                        <label> ¿A qué te dedicas?</label>&nbsp;<label id="label-opcional">Opcional</label>
+                        <%= f.text_field :other_occupation, autocomplete: "Otro", value:" ", class:"form-control"%>
                       </div>
                       <label class="confirm-pass-label">Ingresa tu contraseña actual para confirmar los cambios</label>
                       <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control"%>
@@ -249,6 +263,21 @@
     });
   });
 
+  // $(document).ready( function(){
+  //   $('.form-check').each(function(){
+  //     if($(this).children().is(":checked")){
+  //       this.style.background = "#171F2A";
+  //       this.style.color = "white";
+  //       this.style.borderRadius = "8px";
+  //     }
+  //     else if ($(this).children().is(":not(:checked)")){
+  //       this.style.background = "#EFF3F8";
+  //       this.style.color= "#505864";
+  //       this.style.borderRadius = "5px";
+  //     }
+  //   });
+  // });
+
   var checkBoxes = document.getElementsByClassName("check-submit");
   
   var checkBoxClick = function (){
@@ -257,6 +286,17 @@
   //triggers form submit when checkboxes clicked
   checkBoxes[0].addEventListener("click", checkBoxClick, false );
   checkBoxes[1].addEventListener("click", checkBoxClick, false );
+
+  function showOtherField(field){
+    if(field === "Otro")
+    {
+      document.getElementById("otherField").style.display = "block";
+    }else
+    {
+      document.getElementById("otherField").style.display = "none";
+    }
+
+  }
 
 </script>
 
@@ -461,6 +501,13 @@
 
   #bottonsGroup{
     margin-bottom: 30px;
+  }
+
+  #label-opcional{
+    color: #505864;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 16px;
   }
   
   @media only screen and (max-width: 767.98px){

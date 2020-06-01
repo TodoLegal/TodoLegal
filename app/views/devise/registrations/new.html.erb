@@ -9,7 +9,7 @@
             <a href="/">
               <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="img-fluid">
             </a>
-            <div class="card bg-white rounded">
+            <div class="card card--onboarding bg-white rounded">
               <!-------------------------------- Card Body ------------------------------------------->
               <div class="card-body">
                 <h2 class="card-title text-center">Crea tu cuenta</h2>
@@ -45,14 +45,14 @@
                   <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", id:"confirmPassword"%>
                 </div>
                 <div class="form-group">
-                  <button type="button" class="btn btn-primary btn-block" id="nextButton" data-target="#carouselExampleIndicators" 
+                  <button type="button" class="btn btn-primary btn-block btn-next" id="nextButton" data-target="#carouselExampleIndicators" 
                   data-slide-to="1" data-container="body" data-toggle="popover" data-placement="top" data-trigger="focus"
                   data-content="Complete todos los campos." onclick="required()">Siguiente</button>
                 </div>
               </div>
               <!-------------------------------- End of Card Body ------------------------------------------->
             </div>
-            <p class="content text-center">Al crear una cuenta accedes a aceptar<br/>nuestros <a href="/terms">Términos y condiciones</a></p>
+            <p class="content text-center">Al crear una cuenta, accedes a los <a href="/terms">Términos y condiciones</a></p>
           <!-------------------------------- End of Register Card ------------------------------------------->
           </div>
           <div class="carousel-item">
@@ -64,7 +64,7 @@
               </a>
             </div>
 
-            <div class="card bg-white rounded" id="profileInfo" tabindex="0">
+            <div class="card card--onboarding bg-white rounded" id="profileInfo" tabindex="0">
               <!-------------------------------- Card Body ------------------------------------------->
               <div class="card-body">
                 <%= render "devise/shared/error_messages", resource: resource %>
@@ -72,37 +72,37 @@
                 <p class="content">Brindanos un poco de información para ofrecerte contenido de acuerdo a tus necesidades.</p>
                 <p class = "titles" >Profesión</p>
                 <div class="form-group">
-                  <div class="form-check form-check-inline" style="border-radius: 8px;background-color: #171F2A;color: white;margin-bottom: 4%;">
+                  <div class="form-check form-check-inline custom-form custom-form--radio">
                     <%= f.radio_button :occupation, "Abogado", {class: "form-check-input", id:"radio1", checked:"checked"}%>
                     <label class="form-check-label" for="radio1">Abogado</label>
                   </div>
-                  <div class="form-check form-check-inline" style="border-radius: 5px;background-color: #EFF3F8;margin-bottom: 4%;">
+                  <div class="form-check form-check-inline custom-form custom-form--radio">
                     <%= f.radio_button :occupation, "Estudiante", {class: "form-check-input", id:"radio2"}%>
                     <label class="form-check-label" for="radio2">Estudiante</label>
                   </div>
-                  <div class="form-check form-check-inline" style="border-radius: 5px;background-color: #EFF3F8;margin-bottom: 4%;">
+                  <div class="form-check form-check-inline custom-form custom-form--radio">
                     <%= f.radio_button :occupation, "Otro", {class: "form-check-input", id:"radio3"}%>
                     <label class="form-check-label" for="radio3">Otro</label>
                   </div>
                 </div>
                 <p class = "titles">Preferencias</p>
                 <div class="form-group">
-                  <div class="form-check" style="border-radius: 5px;background-color: #EFF3F8;margin-bottom: 4%;">
+                  <div class="form-check custom-form custom-form--checkbox" style="border-radius: 5px;background-color: #EFF3F8;margin-bottom: 4%;">
                     <%= f.check_box :receive_information_emails, {class: "form-check-input", id:"check1"}, "1"%>
                     <label class="form-check-label" for="check1">Quiero recibir el boletín informativo a mi correo electrónico.</label>
                   </div>
-                  <div class="form-check" style="background: #171F2A;color: white;border-radius: 8px;">
+                  <div class="form-check custom-form custom-form--checkbox" style="background: #171F2A;color: white;border-radius: 8px;">
                     <%= f.check_box :is_contributor, {class: "form-check-input", id:"check2", checked:"checked"}, "0"%>
                     <label class="form-check-label" for="check2">Quiero participar en actividades para contribuir al estudio y mejora de la app.</label>
                   </div>
                 </div>
                 <div class="form-group">
-                  <%= f.submit "Registrarse", class: 'btn btn-primary btn-block', id:"registerButton"%>
+                  <%= f.submit "Registrarse", class: 'btn btn-primary btn-block btn-next', id:"registerButton"%>
                 </div>
               </div>
               <!-------------------------------- End of Card Body ------------------------------------------->
             </div>
-            <p class="text-center" style="font-family: SF Pro Display;color: #505864;align-items: center;text-align: center;">Al crear una cuenta accedes a aceptar<br/>nuestros <a href="/terms">Términos y condiciones</a></p>
+            <p class="text-center" style="font-family: SF Pro Display;color: #505864;align-items: center;text-align: center;">Al crear una cuenta, accedes a los <a href="/terms">Términos y condiciones</a></p>
             <!-------------------------------- End of Register Card ------------------------------------------->
           </div>
         </div>
@@ -230,16 +230,11 @@
   });
 
   addEventListener("change", function(event){
-    $('.form-check').each(function(){
-      if($(this).children().is(":checked")){
-        this.style.background = "#171F2A";
-        this.style.color = "white";
-        this.style.borderRadius = "8px";
-      }
-      else if ($(this).children().is(":not(:checked)")){
-        this.style.background = "#EFF3F8";
-        this.style.color= "#505864";
-        this.style.borderRadius = "5px";
+    $('.form-check').each(function() {
+      if($(this).children().is(":checked")) {
+        this.classList.add('checked');
+      } else {
+        this.classList.remove('checked');
       }
     });
   });
@@ -254,12 +249,6 @@
     border-radius: 4px;
   }
 
-  .form-check{
-    padding-top: 4%;
-    padding-bottom: 4%;
-    padding-left: 8%;
-  }
-
   .form-check-label{
     padding-left:2%;
     width: 100%;
@@ -268,7 +257,6 @@
 
   .form-check-inline{
     margin-right: 0px;
-    padding-left: 4%;
     width: 49%
   }
 
@@ -311,10 +299,6 @@
     width: 130px;
   }
 
-  .form-control{
-      background-color: #EFF3F8;
-  }
-
   #back-icon{
     font-size: 2rem;
   }
@@ -344,8 +328,10 @@
     section{
       background: white;
     }
+
     .form-control{
       background-color: #EFF3F8;
+      height: 50px;
     }
 
     .img-fluid{

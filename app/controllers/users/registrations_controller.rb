@@ -58,14 +58,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # The path used after sign up.
   def after_sign_up_path_for(resource)
-    redirect_to_law_id = session[:redirect_to_law]
-    if redirect_to_law_id
-      session[:redirect_to_law] = nil
-      Law.find_by_id(redirect_to_law_id)
-    else
-      signed_up_path  
-     # invite_colleagues_path
-    end
+    session[:user_just_signed_up] = true
+    invite_colleagues_path
   end
 
   def after_update_path_for(resource)

@@ -40,11 +40,11 @@ function onIndexElementClicked(section_id) {
                   </div>
                   <div class="col-md-12">
                     <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
-                    Elige una cuenta <b>Básica</b>, podrás acceder a <b>20 leyes</b> y recibir boletines informativos a tu correo elecrónico.
+                    Crea una cuenta y accede a más de <b>150 documentos</b> de Legislación Hondureña y recibe boletines informativos sobre cambios que están sucediendo.
                   </p>
                   </div>
                   <div class="col-md-12">
-                    <a href="<%= new_user_registration_path %>">
+                    <a href="<%= new_user_registration_path %>?go_to_law=<%=@law.id%>">
                       <button type="button" class="btn btn-primary btn-block">Crear cuenta básica</button>
                     </a>
                   </div>
@@ -53,7 +53,7 @@ function onIndexElementClicked(section_id) {
                         ¿Ya tienes cuenta?
                       </div>
                       <div with="100%" style="text-align:center;">
-                        <a style="font-size:18px;text-align:center;" href="<%= new_user_session_path %>">
+                        <a style="font-size:18px;text-align:center;" href="<%= new_user_session_path %>?go_to_law=<%=@law.id%>">
                           Inicia sesión
                         </a>
                       </div>

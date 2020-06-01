@@ -3,7 +3,7 @@
     <a href="/">
       <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" id="logoImage">
     </a>
-    <div class="card bg-white rounded">
+    <div class="card card--onboarding bg-white rounded">
       <div class="card-body">
         <h2 class="card-title text-center" id="title">Inicia sesión</h2>
         <p class="card-text text-center">¿No tienes una cuenta aún?<br/><%= render partial: "devise/shared/links", locals:{create: true} %></p>
@@ -63,7 +63,6 @@
 
   #title{
     margin-bottom: 4%;
-    font-weight: bold;
   }
 
   @media only screen and (max-width: 767.98px){

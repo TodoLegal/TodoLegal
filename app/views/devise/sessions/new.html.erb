@@ -1,26 +1,92 @@
-<div class="container d-flex justify-content-center" style="margin-top:2%;">
-  <div class="card w-75 shadow p-3 mb-5 bg-white rounded">
-    <img class="card-img-top" src="/img/logo_landing.png" alt="Card image cap" class="img-fluid">
-    <div class="card-body">
-      <h2 class="card-title text-center">Iniciar sesión</h2>
+<section>
+  <div class="container">
+    <a href="/">
+      <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" id="logoImage">
+    </a>
+    <div class="card card--onboarding bg-white rounded">
+      <div class="card-body">
+        <h2 class="card-title text-center" id="title">Inicia sesión</h2>
+        <p class="card-text text-center">¿No tienes una cuenta aún?<br/><%= render partial: "devise/shared/links", locals:{create: true} %></p>
+        <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
 
-      <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+          <div class="form-group">
+            <%= f.label :Correo_eléctronico %><br />
+            <%= f.email_field :email, autofocus: true, autocomplete: "email", class: 'form-control' %>
+          </div>
 
-        <div class="form-group">
-          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: 'form-control', placeholder:"E-mail" %>
-        </div>
+          <div class="form-group">
+            <%= f.label :Contraseña %><br />
+            <%= f.password_field :password, autocomplete: "current-password", class: 'form-control' %>
+          </div>
 
-        <div class="form-group">
-          <%= f.password_field :password, autocomplete: "current-password", class: 'form-control', placeholder:"Contraseña" %>
-        </div>
+          <p class="card-text text-center" ><%= render partial: "devise/shared/links", locals:{create: false} %></p>
 
-        <div class="form-group">
-          <%= f.submit "Inicia sesión", class: 'btn btn-primary btn-block' %>
-        </div>
-      <% end %>
-    </div>
-    <div class="card-footer text-center">
-      <em>¿No tienes una cuenta? <%= render "devise/shared/links" %></em>
+          <div class="form-group">
+            <%= f.submit "Inicia sesión", class: 'btn btn-primary btn-block' %>
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
-</div>
+</section>
+
+<style>
+  .card{
+    width: 75%;
+    margin-left: 12.5%;
+    padding: 1rem;
+  }
+
+  .card-text{
+    font-family: -apple-system, sans-serif;color: #505864;
+  }
+  section{
+    background: #EFF3F8;
+    margin-bottom: 2%;
+  }
+
+  #logoImage{
+    width: 130px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin-bottom: 3%;
+  }
+  
+  .form-group{
+    font-family: -apple-system, sans-serif;
+  }
+
+  .form-control{
+    background-color: #EFF3F8;
+  }
+
+  #title{
+    margin-bottom: 4%;
+  }
+
+  @media only screen and (max-width: 767.98px){
+  .card{
+    width:100%;
+    margin-left: 0%;
+    padding: 0;
+    border: none;
+  }
+  .card-body{
+    padding: 0%;
+  }
+
+  section{
+    background: white;
+  }
+  .form-control{
+    background-color: #EFF3F8;
+  }
+
+  #logoImage{
+    width: 70px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+  }
+</style>

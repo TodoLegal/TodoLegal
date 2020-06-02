@@ -1,13 +1,22 @@
 class HomeController < ApplicationController
+  layout 'onboarding', only: [:pricing, :invite_colleagues]
   include ActionView::Helpers::NumberHelper
   require 'set'
   
   def index
+    if is_redirect_pending
+      handle_redirect
+      return
+    end
+
     @tags = Tag.where(tag_type: TagType.find_by_name("materia"))
 
-    file = File.read('public/covid_drive_data.json')
-    data_hash = JSON.parse(file)
-    @covid_files_count = data_hash['file_count']
+    covid_drive_data_json_path = 'public/covid_drive_data.json'
+    if File.file?(covid_drive_data_json_path)
+      file = File.read(covid_drive_data_json_path)
+      data_hash = JSON.parse(file)
+      @covid_files_count = data_hash['file_count']
+    end
   end
 
   def search_law
@@ -69,7 +78,10 @@ class HomeController < ApplicationController
 
   def pricing
   end
-
+  
+  def invite_colleagues
+  end
+  
   def drive_search
     @query = params[:query]
     @folder = params[:folder]
@@ -110,11 +122,16 @@ class HomeController < ApplicationController
       return
     end
     emails = params[:emails].split(',')
-    respond_to do |format|
-      emails.each do |email|
-        SubscriptionsMailer.refer(current_user, email).deliver
+    emails.each do |email|
+      SubscriptionsMailer.refer(current_user, email).deliver
+    end
+    if is_redirect_pending
+      handle_redirect
+      return
+    else
+      respond_to do |format|
+        format.html { redirect_to root_path }
       end
-      format.html { redirect_to root_path }
     end
   end
 

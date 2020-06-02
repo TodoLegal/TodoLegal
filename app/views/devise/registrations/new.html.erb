@@ -1,214 +1,456 @@
-<div class="container" style="margin-top:2%;">
-  <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+<section>
+  <div class="container">
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
 
-    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="false">
-      <div class="carousel-inner">
-        <div class="carousel-item active">
-          <!-------------------------------- Register Card ------------------------------------------->
-          <div class="card w-75 shadow p-3 mb-5 bg-white rounded", style="margin-left: 12.5%;">
-            <img class="card-img-top" src="/img/logo_landing.png" alt="Card image cap" class="img-fluid">
-            <!-------------------------------- Card Body ------------------------------------------->
-            <div class="card-body">
-              <h2 class="card-title text-center">Crea una cuenta</h2>
-              <p class="card-text text-center"><small class="text-muted">Es fácil y toma menos de un minuto.</small></p>
-              
-              <%= render "devise/shared/error_messages", resource: resource%>
-              <div class="form-group">
-                <div class="row">
-                  <div class="col-md-6 form-group">
-                    <%= f.text_field :first_name, autofocus: true, class:"form-control", placeholder:"Nombre", id:"name"%>
+      <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="false">
+        <div class="carousel-inner">
+          <div class="carousel-item active" id="account">
+            <!-------------------------------- Register Card ------------------------------------------->
+            <a href="/">
+              <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="img-fluid">
+            </a>
+            <div class="card card--onboarding bg-white rounded">
+              <!-------------------------------- Card Body ------------------------------------------->
+              <div class="card-body">
+                <h2 class="card-title text-center">Crea tu cuenta</h2>
+                <p class="content text-center">Si ya tienes una cuenta <%= render "devise/shared/links" %></p>
+                <%= render "devise/shared/error_messages", resource: resource%>
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-md-6 form-group">
+                      <%= f.label :Nombre %><br />
+                      <%= f.text_field :first_name, autofocus: true, class:"form-control", id:"name"%>
+                    </div>
+                    <div class="col-md-6 form-group">
+                      <%= f.label :Apellido %><br />
+                      <%= f.text_field :last_name, class:"form-control", id:"lastName"%>
+                    </div>
                   </div>
-                  <div class="col-md-6 form-group">
-                    <%= f.text_field :last_name, class:"form-control", placeholder:"Apellido", id:"lastName"%>
-                  </div>
+                </div>
+                <div class="form-group">
+                  <%= f.label :Correo_eléctronico %><br />
+                  <%= f.email_field :email, autocomplete: "email", class:"form-control", id:"email"%>
+                </div>
+
+                <div class="form-group">
+                  <%= f.label :Contraseña %><br />
+                  <%= f.password_field :password, autocomplete: "new-password", class: "form-control", id:"password"%>
+                  <small id="passwordHelpBlock" class="form-text text-muted">
+                    <em>(Mínimo <%= @minimum_password_length %> caracteres)</em>
+                  </small>
+                </div>
+
+                <div class="form-group">
+                  <%= f.label :Confirma_tu_contraseña %><br />
+                  <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", id:"confirmPassword"%>
+                </div>
+                <div class="form-group">
+                  <button type="button" class="btn btn-primary btn-block btn-next" id="nextButton" data-target="#carouselExampleIndicators" 
+                  data-slide-to="1" data-container="body" data-toggle="popover" data-placement="top" data-trigger="focus"
+                  data-content="Complete todos los campos." onclick="required()">Siguiente</button>
                 </div>
               </div>
-              <div class="form-group">
-                <%= f.email_field :email, autocomplete: "email", class:"form-control", placeholder:"E-mail", id:"email"%>
-              </div>
-
-              <div class="form-group">
-                <% if @minimum_password_length %>
-                <% end %><br />
-                <%= f.password_field :password, autocomplete: "new-password", class: "form-control", placeholder:"Contraseña", id:"password"%>
-                <small id="passwordHelpBlock" class="form-text text-muted">
-                  <em>(Mínimo <%= @minimum_password_length %> caracteres)</em>
-                </small>
-              </div>
-
-              <div class="form-group">
-                <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", placeholder:"Confirmar contraseña", id:"confirmPassword"%>
-              </div>
-
-              <div class="form-group">
-                <button type="button" class="btn btn-primary" id="nextButton" data-target="#carouselExampleIndicators" 
-                data-slide-to="1" data-container="body" data-toggle="popover" data-placement="top" data-trigger="focus"
-                data-content="Complete todos los campos." onclick="required()">Siguiente</button>
-              </div>
-
+              <!-------------------------------- End of Card Body ------------------------------------------->
             </div>
-            <!-------------------------------- End of Card Body ------------------------------------------->
-            <div class="card-footer text-center">
-              <em>¿Ya tienes una cuenta? <%= render "devise/shared/links" %></em>
-            </div>
-
-          </div>
-        <!-------------------------------- End of Register Card ------------------------------------------->
-        </div>
-        <div class="carousel-item">
-          <!-------------------------------- Register Card ------------------------------------------->
-          <div class="card w-75 shadow p-3 mb-5 bg-white rounded", style="margin-left: 12.5%;">
-            <img class="card-img-top" src="/img/logo_landing.png" alt="Card image cap" class="img-fluid">
-            <!-------------------------------- Card Body ------------------------------------------->
-            <div class="card-body">
-              <%= render "devise/shared/error_messages", resource: resource %>
-              
-              <p>¿A qué te dedicas?</p>
-              <div class="form-group">
-                <%= f.select :occupation, ['Abogado', 'Estudiante', 'Otro'], {}, {class:"custom-select"} %>
-              </div>
-              <p>¿Deseas contribuir con mejoras?</p>
-              <p class="text-secondary">Te podemos enviar encuestas o entrevistarte en persona.</p>
-              <div class="form-group">
-                <div class="form-check form-check-inline">
-                  <%= f.radio_button :is_contributor, "1", {class: "form-check-input", checked:"checked", required:"required"} %>
-                  <label class="form-check-label" for="inlineRadio1">Sí</label>
-                </div>
-                <div class="form-check form-check-inline">
-                <%= f.radio_button :is_contributor, "0", {class: "form-check-input"}%>
-                  <label class="form-check-label" for="inlineRadio2">No</label>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <%= f.submit "Registrarse", class: 'btn btn-primary', id:"registerButton"%>
-                <a href="#" data-target="#carouselExampleIndicators" data-slide-to="0",  style="margin-left:50%;text-decoration:underline;">Anterior</a>
-              </div>
-
-              <small class="text-muted text-center">Al hacer click en Registrarse aceptas nuestros <a href="/terms">Términos y condiciones</a>. </small>
-
-              
-            </div>
-            <!-------------------------------- End of Card Body ------------------------------------------->
-
-            <div class="card-footer text-center">
-              <em>¿Ya tienes una cuenta? <%= render "devise/shared/links" %></em>
-            </div>
-
-          </div>
+            <p class="content text-center">Al crear una cuenta, accedes a los <a href="/terms">Términos y condiciones</a></p>
           <!-------------------------------- End of Register Card ------------------------------------------->
+          </div>
+          <div class="carousel-item">
+            <!-------------------------------- Register Card ------------------------------------------->
+            <div class="containter" id="back-icon-container">
+              <i class="fas fa-arrow-left" id="back-icon" data-target="#carouselExampleIndicators"  data-slide-to="0"></i>
+              <a href="/" class="back-image" data-toggle="modal" data-target="#cancelRegistrationModal">
+                <img src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" id="logo">
+              </a>
+            </div>
+
+            <!-- Start Modal -->
+            <div class="modal fade" id="cancelRegistrationModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalCenterTitle" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-body">
+                    <h5 class="modal-title" id="cancelModalLongTitle">¿Estás seguro que deseas salir?</h5>
+                    <label id="labelBasico">
+                      Una vez que regreses a la página inicial no se guardará la información que llenaste aquí.
+                    </label>
+                    <div class="form-group" id="bottonsGroup">
+                      <%= link_to 'Salir', root_path, id:"okButton", class:"btn btn-primary", style:"padding-top: 10px;"%>
+                      &nbsp;&nbsp;&nbsp;
+                      <button type="button" id="dismissBtn" class="btn btn-secondary" data-dismiss="modal">Regresar al formulario</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--End modal -->
+
+            <div class="card card--onboarding bg-white rounded" id="profileInfo" tabindex="0">
+              <!-------------------------------- Card Body ------------------------------------------->
+              <div class="card-body">
+                <%= render "devise/shared/error_messages", resource: resource %>
+                <h2 class="card-title text-center">Información del perfil</h2>
+                <p class="content">Brindanos un poco de información para ofrecerte contenido de acuerdo a tus necesidades.</p>
+                <p class = "titles" >Profesión</p>
+                <div class="form-group">
+                  <div class="form-check form-check-inline custom-form custom-form--radio">
+                    <%= f.radio_button :occupation, "Abogado", {class: "form-check-input", id:"radio1", checked:"checked", onclick:"showOtherField('Abogado')"}%>
+                    <label class="form-check-label" for="radio1">Abogado</label>
+                  </div>
+                  <div class="form-check form-check-inline custom-form custom-form--radio">
+                    <%= f.radio_button :occupation, "Estudiante", {class: "form-check-input", id:"radio2", onclick:"showOtherField('Estudiante')"}%>
+                    <label class="form-check-label" for="radio2">Estudiante</label>
+                  </div>
+                  <div class="form-check form-check-inline custom-form custom-form--radio">
+                    <%= f.radio_button :occupation, "Otro", {class: "form-check-input", id:"radio3", onclick:"showOtherField('Otro')"}%>
+                    <label class="form-check-label" for="radio3">Otro</label>
+                  </div>
+                  <div class="form-group"  id="otherField" style="display: none;">
+                    <label> ¿A qué te dedicas?</label>&nbsp;<label id="label-opcional">Opcional</label>
+                    <%= f.text_field :other_occupation, autocomplete: "Otro", value:" ", class:"form-control"%>
+                  </div>
+                </div>
+                <p class = "titles">Preferencias</p>
+                <div class="form-group">
+                  <div class="form-check custom-form custom-form--checkbox" style="border-radius: 5px;background-color: #EFF3F8;margin-bottom: 4%;">
+                    <%= f.check_box :receive_information_emails, {class: "form-check-input", id:"check1"}, "1"%>
+                    <label class="form-check-label" for="check1">Quiero recibir el boletín informativo a mi correo electrónico.</label>
+                  </div>
+                  <div class="form-check custom-form custom-form--checkbox" style="background: #171F2A;color: white;border-radius: 8px;">
+                    <%= f.check_box :is_contributor, {class: "form-check-input", id:"check2", checked:"checked"}, "0"%>
+                    <label class="form-check-label" for="check2">Quiero participar en actividades para contribuir al estudio y mejora de la app.</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <%= f.submit "Crear cuenta", class: 'btn btn-primary btn-block btn-next', id:"registerButton"%>
+                </div>
+              </div>
+              <!-------------------------------- End of Card Body ------------------------------------------->
+            </div>
+            <p class="text-center" style="font-family: SF Pro Display;color: #505864;align-items: center;text-align: center;">Al crear una cuenta, accedes a los <a href="/terms">Términos y condiciones</a></p>
+            <!-------------------------------- End of Register Card ------------------------------------------->
+          </div>
         </div>
       </div>
-    </div>
 
-  <% end %>
+    <% end %>
+  </div>
+</section>
 
-  <script>
-    //validate if input fields were filled with the right format and activates the popover when needed
-    bootstrapValidate('#name', 'required:Debes ingresar tu nombre', function (isValid){
-      if(isValid)
-      {
-        $('#nextButton').unbind();
-        $('#nextButton').popover('hide')
-      } else
-      {
-        $('#nextButton').click(function (e) {
-          $('#nextButton').popover('show')
-          e.preventDefault();
-          e.stopPropagation();
-        });
-      }
-    });
-    bootstrapValidate('#lastName', 'required:Debes ingresar tu apellido', function (isValid){
-      if(isValid)
-      {
-        $('#nextButton').unbind();
-        $('#nextButton').popover('hide')
-      } else
-      {
-        $('#nextButton').click(function (e) {
-          $('#nextButton').popover('show');
-          e.preventDefault();
-          e.stopPropagation();
-        });
-      }
-
-    });
-    bootstrapValidate('#email', 'email:Debes ingresar un correo válido', function (isValid){
-      if(isValid)
-      {
-        $('#nextButton').unbind();
-        $('#nextButton').popover('hide')
-      } else
-      {
-        $('#nextButton').click(function (e) {
-          $('#nextButton').popover('show')
-          e.preventDefault();
-          e.stopPropagation();
-        });
-      }
-
-    });
-    bootstrapValidate('#password', 'min:6:Debes ingresar una contraseña válida',function (isValid){
-      if(isValid)
-      {
-        $('#nextButton').unbind();
-        $('#nextButton').popover('hide')
-      } else
-      {
-        $('#nextButton').click(function (e) {
-          $('#nextButton').popover('show')
-          e.preventDefault();
-          e.stopPropagation();
-        });
-      }
-    });
-    bootstrapValidate('#confirmPassword', 'matches:#password:Tus contraseñas deben ser iguales', function (isValid){
-      if(isValid)
-      {
-        $('#nextButton').unbind();
-        $('#nextButton').popover('hide')
-      } else
-      {
-        $('#nextButton').click(function (e) {
-          $('#nextButton').popover('show')
-          e.preventDefault();
-          e.stopPropagation();
-        });
-      }
-    });
-
-    //prevent nextButton click is input fields are empty
-    function required ()
+<script>
+  //validate if input fields were filled with the right format and activates the popover when needed
+  bootstrapValidate('#name', 'required:Debes ingresar tu nombre', function (isValid){
+    if(isValid)
     {
-      var name = document.getElementById("name").value;
-      var lastName = document.getElementById("lastName").value;
-      var email = document.getElementById("email").value;
-      var password = document.getElementById("password").value;
-      var confirmPassword = document.getElementById("confirmPassword").value;
-      
-      if( (name.trim() == "") || (lastName.trim() == "") || (email.trim() == "") || (password.trim() == "") || (confirmPassword.trim() == "") || (isValid == false) )
-      {
-          $('#nextButton').popover('show')
-          event.preventDefault();
-          event.stopPropagation();
-      }
-      else
-      {
-        $('#nextButton').unbind();
-        $('#nextButton').popover('hide') 
-      }
+      $('#nextButton').unbind();
+      $('#nextButton').popover('hide')
+    } else
+    {
+      $('#nextButton').click(function (e) {
+        $('#nextButton').popover('show')
+        e.preventDefault();
+        e.stopPropagation();
+      });
+    }
+  });
+  bootstrapValidate('#lastName', 'required:Debes ingresar tu apellido', function (isValid){
+    if(isValid)
+    {
+      $('#nextButton').unbind();
+      $('#nextButton').popover('hide')
+    } else
+    {
+      $('#nextButton').click(function (e) {
+        $('#nextButton').popover('show');
+        e.preventDefault();
+        e.stopPropagation();
+      });
     }
 
-    //triggers button click on enter
-    //var input = document.getElementById("confirmPassword");
-    addEventListener("keypress", function(event) {
-      if ( event.keyCode === 13 ) {
+  });
+  bootstrapValidate('#email', 'email:Debes ingresar un correo válido', function (isValid){
+    if(isValid)
+    {
+      $('#nextButton').unbind();
+      $('#nextButton').popover('hide')
+    } else
+    {
+      $('#nextButton').click(function (e) {
+        $('#nextButton').popover('show')
+        e.preventDefault();
+        e.stopPropagation();
+      });
+    }
+
+  });
+  bootstrapValidate('#password', 'min:6:Debes ingresar una contraseña válida',function (isValid){
+    if(isValid)
+    {
+      $('#nextButton').unbind();
+      $('#nextButton').popover('hide')
+    } else
+    {
+      $('#nextButton').click(function (e) {
+        $('#nextButton').popover('show')
+        e.preventDefault();
+        e.stopPropagation();
+      });
+    }
+  });
+  bootstrapValidate('#confirmPassword', 'matches:#password:Tus contraseñas deben ser iguales', function (isValid){
+    if(isValid)
+    {
+      $('#nextButton').unbind();
+      $('#nextButton').popover('hide')
+    } else
+    {
+      $('#nextButton').click(function (e) {
+        $('#nextButton').popover('show')
+        e.preventDefault();
+        e.stopPropagation();
+      });
+    }
+  });
+
+  //prevent nextButton click is input fields are empty
+  function required ()
+  {
+    var name = document.getElementById("name").value;
+    var lastName = document.getElementById("lastName").value;
+    var email = document.getElementById("email").value;
+    var password = document.getElementById("password").value;
+    var confirmPassword = document.getElementById("confirmPassword").value;
+    
+    if( (name.trim() == "") || (lastName.trim() == "") || (email.trim() == "") || (password.trim() == "") || (confirmPassword.trim() == "") || (isValid == false) )
+    {
+        $('#nextButton').popover('show')
         event.preventDefault();
-        document.getElementById("nextButton").click();
+        event.stopPropagation();
+    }
+    else
+    {
+      $('#nextButton').unbind();
+      $('#nextButton').popover('hide')
+      document.getElementById("profileInfo").focus(); 
+    }
+    
+  }
+  
+  //triggers nextButton click on enter
+  //var input = document.getElementById("confirmPassword");
+  addEventListener("keypress", function(event) {
+    if ( event.keyCode === 13 ) {
+      event.preventDefault();
+      document.getElementById("nextButton").click();
+    }
+  });
+
+  //triggers registerButton click on enter when second card is focused
+  var input = document.getElementById("profileInfo");
+  input.addEventListener("keypress", function(event) {
+    if ( event.keyCode === 13 ) {
+      event.preventDefault();
+      document.getElementById("registerButton").click();
+    }
+  });
+
+  addEventListener("change", function(event){
+    $('.form-check').each(function() {
+      if($(this).children().is(":checked")) {
+        this.classList.add('checked');
+      } else {
+        this.classList.remove('checked');
       }
     });
+  });
 
-  </script>
 
-</div>
+  function showOtherField(field){
+    if(field === "Otro")
+    {
+      document.getElementById("otherField").style.display = "block";
+    }else
+    {
+      document.getElementById("otherField").style.display = "none";
+    }
+
+  }
+
+</script>
+
+<style>
+  .form-check-input{
+    width: 25px; 
+    height:25px;
+    border: 1px solid #505864;
+    border-radius: 4px;
+  }
+
+  .form-check-label{
+    padding-left:2%;
+    width: 100%;
+    font-family: -apple-system, sans-serif;
+  }
+
+  .form-check-inline{
+    margin-right: 0px;
+    width: 49%
+  }
+
+  .card-titles:{
+    font-family: -apple-system, sans-serif;
+    font-weight: bold;
+  }
+  .titles{
+    font-family: -apple-system, sans-serif;
+    font-style: normal;
+    /* font-weight: bold; */
+    font-size: 24px;
+    line-height: 29px;
+  }
+
+  .card{
+    width: 75%;
+    margin-left: 12.5%;
+    padding: 1rem;
+    font-family: -apple-system, sans-serif;
+  }
+
+  section{
+    background: #EFF3F8;
+  }
+
+  .img-fluid{
+    width: 130px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+  }
+  
+  .back-image{
+    margin-left: 28%;
+    margin-right: auto;
+  }
+
+  #logo{
+    width: 130px;
+  }
+
+  #back-icon{
+    font-size: 2rem;
+  }
+
+  #back-icon-container{
+    width: 75%;
+    margin-left: 12.5%;
+  }
+
+  .content{
+    font-family: -apple-system, sans-serif;
+    color: #505864;
+    text-align: center;
+  }
+
+  #label-opcional{
+    color: #505864;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 16px;
+  }
+
+  .modal-body{
+    text-align: center;
+  }
+
+  #dismissBtn, #okButton{
+    border-radius: 8px;
+  }
+
+  #okButton{
+    width: 150px;
+  }
+
+  #dismissBtn{
+    background: #F2F5F8; 
+    color: #505864; 
+    border:none;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .modal-title{
+    padding-top: 30px;
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 26px;
+  }
+
+  #labelBasico{
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 21px;
+    color: #505864;
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+
+  #bottonsGroup{
+    margin-bottom: 30px;
+  }
+
+  @media only screen and (max-width: 767.98px){
+    .card{
+      width:100%;
+      margin-left: 0%;
+      padding: 0;
+      border: none;
+    }
+    .card-body{
+      padding: 0%;
+    }
+
+    section{
+      background: white;
+    }
+
+    .form-control{
+      background-color: #EFF3F8;
+      height: 50px;
+    }
+
+    .img-fluid{
+      width: 70px;
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+    }
+    
+    .back-image{
+      margin-left: 27.5%;
+      margin-right: auto;
+    }
+
+    #logo{
+      width: 70px;
+    }
+
+    #back-icon{
+      font-size: 2rem;
+    }
+
+    #back-icon-container{
+      width:100%;
+      margin-left: 0%;
+      margin-top: 2%;
+      margin-bottom: 5%;
+    }
+
+    .form-check-inline{
+      width: 100%;
+    }
+
+    #okButton, #dismissBtn{
+      width: 100%;
+    }
+  }
+</style>

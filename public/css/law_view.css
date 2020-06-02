@@ -25,7 +25,7 @@
 }
 
 .jumbotron {
-  background: #e5ebedff;
+  background: #EFF3F8;
 }
 
 .indice {
@@ -251,3 +251,19 @@ a.article:hover {
   color: #666;
   font-size:17px;
 }
+
+/* ---------------------------------------------------
+    MODAL
+----------------------------------------------------- */
+
+@media (min-width: 576px) {
+    .modal-dialog { max-width: none; }
+  }
+  
+  .modal-dialog {
+    padding: 0;
+  }
+  
+  .modal-content {
+    height: 60%;
+  }

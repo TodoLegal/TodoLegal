@@ -23,7 +23,7 @@ class TagsController < ApplicationController
     end
     
     if @query
-        @tokens = @query.scan(/\w+|\W/)
+      @tokens = @query.scan(/\w+|\W/)
       if @tokens.first == '/'
         @stream = Article.where(law: @tag.laws).where('number LIKE ?', "%#{@tokens.second}%").group_by(&:law_id)
         @grouped_laws = []
@@ -70,7 +70,10 @@ class TagsController < ApplicationController
       end
     else
       @laws = @tag.laws
-      @result_count = @laws.count
+        .left_joins(:articles)
+        .group(:id)
+        .order('COUNT(articles.id) DESC')
+      @result_count = @laws.count.values.size
       if @result_count == 1
         @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' documento legal.'
       else

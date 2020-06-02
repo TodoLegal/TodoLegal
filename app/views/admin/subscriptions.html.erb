@@ -1,8 +1,7 @@
 <h3>Descarga</h3>
-
 <ul>
-  <li><a href="/confirmed.csv" download>Descargar confirmados</a></li>
-  <li><a href="/pending.csv" download>Descargar pendientes</a></li>
+  <li><%= link_to 'Descargar confirmados', download_confirmed_subscriptions_path(format: :csv) %></li>
+  <li><%= link_to 'Descargar pendientes', download_pending_subscriptions_path(format: :csv) %></li>
 </ul>
 
 <h3>Suscripciones</h3>

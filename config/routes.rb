@@ -16,10 +16,10 @@ Rails.application.routes.draw do
   resources :articles
 
   root :to => "home#index"
-  get '/search_law', to: 'home#search_law'
-  get '/terms', to: 'home#terms_and_conditions'
-  get '/privacy', to: 'home#privacy_policy'
-  get '/pricing', to: 'home#pricing'
+  get '/search_law', to: 'home#search_law', as: "search_law"
+  get '/terms', to: 'home#terms_and_conditions', as: "terms_and_conditions"
+  get '/privacy', to: 'home#privacy_policy', as: "privacy_policy"
+  get '/pricing', to: 'home#pricing', as: "pricing"
   get '/drive_search', to: 'home#drive_search', as: "drive_search"
   get '/refer', to: 'home#refer', as: "refer"
 

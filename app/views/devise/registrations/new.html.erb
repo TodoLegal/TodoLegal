@@ -104,7 +104,7 @@
                     <%= f.radio_button :occupation, "Otro", {class: "form-check-input", id:"radio3", onclick:"showOtherField('Otro')"}%>
                     <label class="form-check-label" for="radio3">Otro</label>
                   </div>
-                  <div class="form-group"  id="otherField" style="display: none;">
+                  <div class="form-group other-profesion"  id="otherField" style="display: none;">
                     <label> ¿A qué te dedicas?</label>&nbsp;<label id="label-opcional">Opcional</label>
                     <%= f.text_field :other_occupation, autocomplete: "Otro", value:" ", class:"form-control"%>
                   </div>
@@ -303,14 +303,12 @@
   .titles{
     font-family: -apple-system, sans-serif;
     font-style: normal;
-    /* font-weight: bold; */
+    font-weight: bold;
     font-size: 24px;
     line-height: 29px;
   }
 
   .card{
-    width: 75%;
-    margin-left: 12.5%;
     padding: 1rem;
     font-family: -apple-system, sans-serif;
   }
@@ -320,9 +318,8 @@
   }
 
   .img-fluid{
-    width: 130px;
-    margin-left: auto;
-    margin-right: auto;
+    height: 15vh;
+    margin: 2vh auto 0;
     display: block;
   }
   
@@ -348,6 +345,16 @@
     font-family: -apple-system, sans-serif;
     color: #505864;
     text-align: center;
+  }
+
+  .content.text-center {
+    max-width: 260px;
+    margin: auto;
+  }
+
+  .card .content.text-center {
+    max-width: 100%;
+    margin-bottom: 2em;
   }
 
   #label-opcional{

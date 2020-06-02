@@ -1,5 +1,7 @@
 <section>
-  <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="img-fluid">
+  <a href="/">
+    <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="img-fluid">
+  </a>
   <div class="container">
     <div class="card bg-white rounded">
       <div class="card-body">
@@ -23,7 +25,9 @@
             -->
             <div class="form-group">
               <button type="submit" id="submitBtn" class="btn btn-block btn-primary" onclick="sendParameters()">Enviar</button>
-              <a href="/" id= "omitirPaso" class="text-center">Omitir este paso</a>
+              <%if !user_signed_in? %>
+                <a href="/" id= "omitirPaso" class="text-center">Omitir este paso</a>
+              <% end %>
             </div>
           </form>
       </div>

@@ -29,6 +29,26 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def is_redirect_pending
+    session[:redirect_to_law] || session[:user_just_signed_up]
+  end
+
+  def handle_redirect
+    redirect_to_law_id = session[:redirect_to_law]
+    user_just_signed_up = session[:user_just_signed_up]
+    session[:redirect_to_law] = nil
+    session[:user_just_signed_up] = nil
+    if redirect_to_law_id
+      respond_to do |format|
+        format.html { redirect_to Law.find_by_id(redirect_to_law_id) }
+      end
+    elsif user_just_signed_up
+      respond_to do |format|
+        format.html { redirect_to signed_up_path }
+      end
+    end
+  end
+
   def redirectOnSpecialCode query
     @tokens = @query.scan(/\w+|\W/)
     if @tokens.first == '/'

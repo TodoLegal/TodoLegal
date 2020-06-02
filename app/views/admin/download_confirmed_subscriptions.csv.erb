@@ -1,3 +1,0 @@
-<%- @confirmed_subscriptions.each do |confirmed_subscription| -%>
-<%= CSV.generate_line([confirmed_subscription.email]) -%>
-<%- end -%>

@@ -55,12 +55,9 @@
                           <%= f.text_field :last_name, autofocus: true, class:"form-control" %>
                         </div>
                       </div>
-                      <label class="confirm-pass-label">Contraseña</label>
-                      <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control"%>
-                      <small id="passwordHelpBlock" class="form-text text-muted">
-                        Ingresa tu contraseña para confirmar los cambios.
-                      </small>
-                      <%= f.submit "Guardar cambios", class: 'submit-btn btn btn-primary'%>
+                      <div class="form-group">
+                        <%= f.submit "Guardar cambios", class: 'submit-btn btn btn-primary'%>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -73,16 +70,8 @@
               <div class = "col-md-12">
                 <div id="occupation">
                 
-                  <%if current_user.occupation === "Otro"%>
-                    <%if current_user.other_occupation === " "%>
-                      <%= current_user.occupation%>
-                    <% else %>
-                      <%= current_user.other_occupation%>
-                    <% end %>
-                  <% else %>
-                    <%= current_user.occupation%>
-                  <% end %>
-
+                <%= current_user.occupation%>
+                
                   <span class = "edit-text" onclick ="showDialog('occupation', 'editOccupation')"><i class="fas fa-pencil-alt" aria-hidden="true"></i> Editar profesión</span> 
                 </div>
                 <div class="card" id="editOccupation">
@@ -103,16 +92,14 @@
                         <%= f.radio_button :occupation, "Otro", {class: "form-check-input", id:"radio3", onclick:"showOtherField('Otro')"}%>
                         <label class="form-check-label" for="radio3">Otro</label>
                       </div>
-                          <div class="form-group"  id="otherField" style="display: none;">
+                      <div class="form-group"  id="otherField" style="display: none;">
                         <label> ¿A qué te dedicas?</label>&nbsp;<label id="label-opcional">Opcional</label>
-                        <%= f.text_field :other_occupation, autocomplete: "Otro", value:" ", class:"form-control"%>
+                        <input type="text" id="otherOccupation" autocomplete= "Otro", value="", class="form-control">
+                        <input type="hidden" id="hiddenField" name="other_occupation" value=""> 
                       </div>
-                      <label class="confirm-pass-label">Contraseña</label>
-                      <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control"%>
-                      <small id="passwordHelpBlock" class="form-text text-muted">
-                        Ingresa tu contraseña para confirmar los cambios.
-                      </small>
-                      <%= f.submit "Guardar cambios", class: 'submit-btn btn btn-primary'%>
+                      <div class="form-group">
+                        <%= f.submit "Guardar cambios", class: 'submit-btn btn btn-primary', onclick:"sendParameter()"%>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -218,7 +205,6 @@
             <%= f.check_box :is_contributor, autofocus: true, class: "form-check-input check-submit", id:"check2"%>
             <label class="form-check-label" for="check2">Quiero participar en actividades para contribuir al estudio y mejora de la app.</label>
           </div>
-          <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control"%>
           <%= f.submit "Guardar cambios", class: 'btn btn-primary', id:"submitPreferences", style:"display:none;"%>
         <% end %>
       </div>
@@ -312,6 +298,13 @@
       document.getElementById("otherField").style.display = "none";
     }
 
+  }
+
+  //send occupation extra param
+  function sendParameter(){
+    var param = document.getElementById("otherOccupation").value;
+    console.log(param);
+    document.getElementById("hiddenField").value = param;
   }
 
 </script>

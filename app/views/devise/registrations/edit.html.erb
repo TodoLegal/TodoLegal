@@ -274,6 +274,16 @@
     }
   }
 
+  addEventListener("load", function(event){
+    $('.form-check').each(function(){
+      if($(this).children().is(":checked")) {
+        this.classList.add('checked');
+      } else {
+        this.classList.remove('checked');
+      }
+    });
+  });
+
   addEventListener("change", function(event){
     $('.form-check').each(function(){
       if($(this).children().is(":checked")) {

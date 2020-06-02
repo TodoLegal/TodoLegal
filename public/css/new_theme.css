@@ -7,12 +7,14 @@ body {
 
 .card--onboarding {
     border: none;
-    margin-bottom: 1rem;
+    margin: 2vh auto 1rem;
+    max-width: 580px;
 }
 
 .btn {
     height: 46px;
     border-radius: 8px;
+    font-size: 18px;
 }
 
 h2 {
@@ -35,6 +37,7 @@ h2 {
     color: #171F2A;
     margin-bottom: 4px;
     font-size: 1.12rem;
+    width: 100%;
 }
 
 .form-group .form-check label {
@@ -137,11 +140,11 @@ input.form-control:focus {
 
 .navbar-expand-lg .navbar-nav .dropdown-menu {
     position: absolute;
-    ;
 }
 
 .btn-avatar {
     background: linear-gradient(145deg, #1A7FFA 50%, #033FF5 50.1%);
+    font-weight: bold;
 }
 
 .main-search .form-control {
@@ -151,4 +154,67 @@ input.form-control:focus {
 .main-search .form-control:focus,
 .main-search .form-control:active {
     background-color: white;
+}
+
+
+/* General styles for modal */
+
+.modal-backdrop {
+    background-color: white;
+}
+
+.modal-backdrop.show {
+    opacity: 0.8;
+}
+
+.modal-body {
+    box-shadow: 0 0 40px rgba(0, 0, 0, .12);
+}
+
+
+/* General styles for Cuenta */
+
+.container--cuenta .card .card {
+    padding-top: .5em;
+    position: relative;
+    margin: 20px auto;
+}
+
+.container--cuenta .card .card .card-body {
+    padding: 1.5em;
+    padding-top: 40px;
+}
+
+.card .close {
+    padding: .25em;
+    right: 14px;
+    top: 14px;
+    position: absolute;
+    z-index: 2;
+}
+
+.other-profesion {
+    margin-bottom: 30px;
+}
+
+
+/* General styles for nav items */
+
+.nav-pills .nav-link {
+    color: #505864;
+}
+
+.nav-pills .nav-link:hover,
+.nav-pills .nav-link:focus {
+    color: #007bff;
+}
+
+.nav-pills .nav-link.active:hover,
+.nav-pills .nav-link.active:focus {
+    color: white;
+}
+
+.nav-pills .nav-link.highlighted,
+.nav-pills .nav-link.highlighted {
+    color: #007bff;
 }

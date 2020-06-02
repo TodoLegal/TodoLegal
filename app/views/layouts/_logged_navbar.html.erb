@@ -13,8 +13,19 @@
                 <% end %>
             </button>
             <div class="dropdown-menu dropdown-menu-right">
+                <div class="name-container">
+                <div class="circle btn-avatar btn-avatar-large">
+                    <%= current_user.first_name[0].upcase + current_user.last_name[0].upcase%>
+                </div>
+                <%= current_user.first_name + " " + current_user.last_name %>
+                <div>
+                    
+                </div>
+                </div>
 
-                <a href="/users/edit" class="dropdown-item">Mi cuenta</a>
+                <a href="/users/edit" class="dropdown-item">
+                <i class="fas fa-user" aria-hidden="true"></i>
+                Tu cuenta</a>
                 
                 <% if current_user_is_admin %>
                     <button class="dropdown-item disabled font-weight-bold " type="button" >
@@ -30,6 +41,7 @@
                     </button>
                 <% end %>
                 
+                <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
                 <%= link_to('Cerrar sesión', destroy_user_session_path, method: :delete, class:"dropdown-item") %>
             </div>
         </div>
@@ -53,7 +65,6 @@
     .circle{
         height: 60px;
         width: 60px;
-        background: #1A7FFA;
         color: white; 
         border-radius: 50%;
         font-weight: 800;
@@ -66,6 +77,7 @@
 
     .dropdown-menu{
         background: #171F2A;
+        min-width: 18em;
     }
 
     .dropdown-item{
@@ -80,6 +92,25 @@
         
     }
 
+    .btn-avatar-large {
+    height: 60px;
+    width: 60px;
+    font-size: 22px;
+    margin: 0.25em .85em 1em;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    }
+
+    .name-container {
+        color: white;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        border-bottom: 1px solid rgba(255,255,255,.2);
+        margin-bottom: 1em;
+    }
+
     @media only screen and (max-width: 767.98px){
         .todolegal{
         margin:0px;
@@ -88,6 +119,14 @@
 
         #logo{
         padding-left: 20px;
+        }
+
+        .navbar-expand-lg .navbar-nav .dropdown-menu {
+            width: 100%;
+            position: fixed;
+            left: 0;
+            top: 62px;
+            border-radius: 0 0 2px 2px;
         }
     }
 </style>

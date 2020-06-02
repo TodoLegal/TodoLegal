@@ -28,20 +28,16 @@ class HomeController < ApplicationController
     @is_search_law = true
     legal_documents = Set[]
 
-    #if @query
-    #  if redirectOnEspecialCode @query
-    #    return
-    #  end
-    #end
-
     @laws.each do |law|
       legal_documents.add(law.id)
     end
 
     @grouped_laws = []
+    @is_special_search = false
 
     @tokens = @query.scan(/\w+|\W/)
     if @tokens.first == '/'
+      @is_special_search = true
       @stream = Article.where(law: Law.all.search_by_name(@tokens.fourth)).where(number: @tokens.second).group_by(&:law_id)
       @stream.each do |grouped_law|
         law = {count: grouped_law[1].count, law: Law.find_by_id(grouped_law[0]), preview: ("<b>Artículo " + grouped_law[1].first.number + ":</b> " + grouped_law[1].first.body[0,300] + "...").html_safe}
@@ -75,6 +71,9 @@ class HomeController < ApplicationController
   end
 
   def terms_and_conditions
+  end
+
+  def privacy_policy
   end
 
   def pricing

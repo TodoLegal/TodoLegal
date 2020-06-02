@@ -1,3 +1,0 @@
-<%- @users.each do |user| -%>
-<%= CSV.generate_line([user.email]) -%>
-<%- end -%>

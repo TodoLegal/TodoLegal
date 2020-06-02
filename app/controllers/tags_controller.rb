@@ -17,56 +17,42 @@ class TagsController < ApplicationController
     @query = params[:query]
 
     if @query
-      if redirectOnEspecialCode @query
+      if redirectOnSpecialCode @query
         return
       end
     end
-    
-    if @query
-      @tokens = @query.scan(/\w+|\W/)
-      if @tokens.first == '/'
-        @stream = Article.where(law: @tag.laws).where('number LIKE ?', "%#{@tokens.second}%").group_by(&:law_id)
-        @grouped_laws = []
-        @stream.each do |grouped_law|
-          law = {count: grouped_law[1].count, law: Law.find_by_id(grouped_law[0]), preview: ("<b>Artículo " + grouped_law[1].first.number + ":</b> " + grouped_law[1].first.body[0,300] + "...").html_safe}
-          law[:materia_names] = law[:law].materia_names
-          @grouped_laws.push(law)
-          #@result_count += grouped_law[1].count
-          #legal_documents.add(grouped_law[0])
-        end
-        @grouped_laws = @grouped_laws.sort_by{|k|k[:count]}.reverse
-      else
-        @query = params[:query]
-        @laws = @tag.laws.search_by_name(@query).with_pg_search_highlight
-        @stream = Article.where(law: @tag.laws).search_by_body(@query).group_by(&:law_id)
-        @result_count = @laws.size
-        @articles_count = @stream.size
-        legal_documents = Set[]
-
-        @laws.each do |law|
-          legal_documents.add(law.id)
-        end
         
-        @grouped_laws = []
-        @stream.each do |grouped_law|
-          law = {count: grouped_law[1].count, law: Law.find_by_id(grouped_law[0]), preview: ("<b>Artículo " + grouped_law[1].first.number + ":</b> " + grouped_law[1].first.body[0,300] + "...").html_safe}
-          law[:materia_names] = law[:law].materia_names
-          @grouped_laws.push(law)
-          @result_count += grouped_law[1].count
-          legal_documents.add(grouped_law[0])
-        end
-        @grouped_laws = @grouped_laws.sort_by{|k|k[:count]}.reverse
-        @legal_documents_count = legal_documents.size
-        if @result_count == 1
-          @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' resultado encontrado en la materia ' + @tag.name
-        else
-          @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' resultados encontrados en la materia ' + @tag.name
-        end
-        if @legal_documents_count > 1
-          @result_info_text += " en " + @legal_documents_count.to_s + " documentos legales."
-        elsif @legal_documents_count == 1
-          @result_info_text += " en " + @legal_documents_count.to_s + " documento legal."
-        end
+    if @query
+      @query = params[:query]
+      @laws = @tag.laws.search_by_name(@query).with_pg_search_highlight
+      @stream = Article.where(law: @tag.laws).search_by_body(@query).group_by(&:law_id)
+      @result_count = @laws.size
+      @articles_count = @stream.size
+      legal_documents = Set[]
+
+      @laws.each do |law|
+        legal_documents.add(law.id)
+      end
+      
+      @grouped_laws = []
+      @stream.each do |grouped_law|
+        law = {count: grouped_law[1].count, law: Law.find_by_id(grouped_law[0]), preview: ("<b>Artículo " + grouped_law[1].first.number + ":</b> " + grouped_law[1].first.body[0,300] + "...").html_safe}
+        law[:materia_names] = law[:law].materia_names
+        @grouped_laws.push(law)
+        @result_count += grouped_law[1].count
+        legal_documents.add(grouped_law[0])
+      end
+      @grouped_laws = @grouped_laws.sort_by{|k|k[:count]}.reverse
+      @legal_documents_count = legal_documents.size
+      if @result_count == 1
+        @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' resultado encontrado en la materia ' + @tag.name
+      else
+        @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' resultados encontrados en la materia ' + @tag.name
+      end
+      if @legal_documents_count > 1
+        @result_info_text += " en " + @legal_documents_count.to_s + " documentos legales."
+      elsif @legal_documents_count == 1
+        @result_info_text += " en " + @legal_documents_count.to_s + " documento legal."
       end
     else
       @laws = @tag.laws

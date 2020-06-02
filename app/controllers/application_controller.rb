@@ -29,14 +29,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def redirectOnEspecialCode query
-    tokens = query.scan(/\w+|\W/)
-    if tokens.size >= 4 && tokens.first == '/'
-      tag_temp = Tag.where('lower(name) = ?', tokens.fourth.downcase).first
-      if tag_temp
-        redirect_to "/tags/" + tag_temp.id.to_s + "-" + tokens.fourth.downcase + "?query=/" + tokens.second
-        return true
-      end
+  def redirectOnSpecialCode query
+    @tokens = @query.scan(/\w+|\W/)
+    if @tokens.first == '/'
+      redirect_to search_law_path + "?query=" + @query
     end
     return false
   end

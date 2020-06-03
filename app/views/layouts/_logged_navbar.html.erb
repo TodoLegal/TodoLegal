@@ -19,7 +19,7 @@
                         <%= current_user.first_name[0].upcase + current_user.last_name[0].upcase%>
                     <% end %>
                 </div>
-                <% if current_user.first_name %>
+                <% if current_user.first_name && current_user.last_name %>
                     <%= current_user.first_name + " " + current_user.last_name %>
                 <% end %>
                 <div>

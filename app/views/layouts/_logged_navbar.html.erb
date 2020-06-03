@@ -15,7 +15,7 @@
             <div class="dropdown-menu dropdown-menu-right">
                 <div class="name-container">
                 <div class="circle btn-avatar btn-avatar-large">
-                    <% if current_user.first_name.present? %>
+                    <% if current_user.first_name.present? && current_user.last_name.present? %>
                         <%= current_user.first_name[0].upcase + current_user.last_name[0].upcase%>
                     <% end %>
                 </div>

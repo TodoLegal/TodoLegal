@@ -1,3 +1,0 @@
-<%- @pending_subscriptions.each do |pending_subscription| -%>
-<%= CSV.generate_line([pending_subscription.email]) -%>
-<%- end -%>

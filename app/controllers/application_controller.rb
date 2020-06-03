@@ -1,6 +1,5 @@
 class ApplicationController < ActionController::Base
   include Devise::Controllers::Rememberable
-  require 'csv'
 
   protect_from_forgery with: :null_session
   before_action :configure_devise_permitted_parameters, if: :devise_controller?
@@ -82,7 +81,7 @@ protected
   end
 
   def configure_devise_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up) { |u| u.permit(:first_name, :last_name, :occupation, :other_occupation, :receive_information_emails, :is_contributor, :email, :password, :password_confirmation)}
-    devise_parameter_sanitizer.permit(:account_update) { |u| u.permit(:first_name, :last_name, :occupation, :other_occupation, :receive_information_emails, :is_contributor, :email, :password, :current_password)}
+    devise_parameter_sanitizer.permit(:sign_up) { |u| u.permit(:first_name, :last_name, :occupation, :receive_information_emails, :is_contributor, :email, :password, :password_confirmation)}
+    devise_parameter_sanitizer.permit(:account_update) { |u| u.permit(:first_name, :last_name, :occupation, :receive_information_emails, :is_contributor, :email, :password, :current_password)}
   end
 end

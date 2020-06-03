@@ -256,12 +256,6 @@ a.article:hover {
     MODAL
 ----------------------------------------------------- */
 
-@media (min-width: 576px) {
-    .modal-dialog {
-        max-width: none;
-    }
-}
-
 .modal-dialog {
     padding: 0;
 }

@@ -16,9 +16,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   # POST /resource
-  # def create
-  #   super
-  # end
+  def create
+    validateOccupationParam (params)
+    super
+  end
 
   # GET /resource/edit
   # def edit
@@ -26,9 +27,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   # PUT /resource
-  # def update
-  #   super
-  # end
+  def update
+    validateOccupationParam (params)
+    super
+  end
 
   # DELETE /resource
   # def destroy
@@ -74,4 +76,13 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # def after_inactive_sign_up_path_for(resource)
   #   super(resource)
   # end
+
+  def validateOccupationParam params
+    if params[:other_occupation]&.present?
+      params[:user][:occupation].replace(params[:other_occupation])
+    end
+    if !params[:user][:occupation]&.present?
+      params[:user][:occupation].replace("Otro")
+    end
+  end
 end

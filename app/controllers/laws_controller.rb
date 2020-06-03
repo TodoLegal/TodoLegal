@@ -211,6 +211,9 @@ class LawsController < ApplicationController
       if current_user
         return true
       end
+      if !law_access
+        return true
+      end
       return law_access.name == "Todos"
       
       #law_access = law.law_access

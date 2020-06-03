@@ -27,7 +27,9 @@
       <div class="row">
         <div class ="col-md-2">
           <div class="circle btn-avatar">
-            <%= current_user.first_name[0].upcase + current_user.last_name[0].upcase%>
+            <% if current_user.first_name.present? %>
+              <%= current_user.first_name[0].upcase + current_user.last_name[0].upcase%>
+            <% end %>
           </div>
         </div>
         <div class = "col-md-10" id="user-data">
@@ -36,7 +38,9 @@
             <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
               <div class = "user-name col-md-12">
                 <div id="name">
-                  <%= current_user.first_name + " " + current_user.last_name %>
+                  <% if current_user.first_name %>
+                    <%= current_user.first_name + " " + current_user.last_name %>
+                  <% end %>
                   <span class = "edit-text" onclick="showDialog('name', 'editName')"><i class="fas fa-pencil-alt"></i> Editar nombre</span>
                 </div>
                 <div class="card" id="editName">

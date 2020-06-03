@@ -5,7 +5,7 @@
       <img src="/img/top_navbar/Logo-letras-white.svg" alt="Card image cap" class="todolegal img-fluid">
   </a>
   <form class="form-inline">
-    <a class="nav-link" href="/users/sign_in" role="button">
+    <a class="btn btn-outline-light" href="/users/sign_in" role="button">
         Inicia Sesión
     </a>
     <div style="padding-left: 10px;">
@@ -21,12 +21,11 @@
       margin-bottom: 0px; 
       z-index: 1000; 
       background: #171F2A;
-      padding: 5px;
+      padding: 5px 20px;
   }
 
   #logo{
     background-color: #171F2A;
-    padding-left: 20%;
   }
 
   #registerButton{
@@ -43,9 +42,13 @@
       margin:0px;
       display: none;
     }
+  }
 
-    #logo{
-      padding-left: 20px;
-    }
+   @media only screen and (min-width: 1200px){
+
+    #topNavbar{
+      padding: 5px 10vw;
+  }
+
   }
 </style>

@@ -16,9 +16,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   # POST /resource
-  # def create
-  #   super
-  # end
+  def create
+    validateOccupationParam (params)
+    super
+  end
 
   # GET /resource/edit
   # def edit
@@ -26,9 +27,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   # PUT /resource
-  # def update
-  #   super
-  # end
+  def update
+    validateOccupationParam (params)
+    super
+  end
 
   # DELETE /resource
   # def destroy
@@ -75,11 +77,12 @@ class Users::RegistrationsController < Devise::RegistrationsController
   #   super(resource)
   # end
 
-  def update_resource(resource, params)
-    if params["password"]&.present? or params["email"]&.present?
-      return super
-    else
-      resource.update_without_password(params.except("current_password"))
+  def validateOccupationParam params
+    if params[:other_occupation]&.present?
+      params[:user][:occupation].replace(params[:other_occupation])
+    end
+    if !params[:user][:occupation]&.present?
+      params[:user][:occupation].replace("Otro")
     end
   end
 end

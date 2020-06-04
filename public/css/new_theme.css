@@ -15,6 +15,9 @@ body {
     height: 46px;
     border-radius: 8px;
     font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 h2 {
@@ -37,11 +40,11 @@ h2 {
     color: #171F2A;
     margin-bottom: 4px;
     font-size: 1.12rem;
-    width: 100%;
 }
 
 .form-group .form-check label {
     font-weight: 400;
+    width: 100%;
 }
 
 .form-group .form-check input[type=checkbox]:checked~label,
@@ -54,6 +57,10 @@ h2 {
     padding: 1em 1em 1em 2em;
     display: flex;
     cursor: pointer;
+}
+
+.form-group .row .form-group {
+    margin-bottom: 0;
 }
 
 .form-control {

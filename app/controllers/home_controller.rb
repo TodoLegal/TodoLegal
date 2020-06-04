@@ -136,6 +136,9 @@ class HomeController < ApplicationController
     end
   end
 
+  def crash_tester
+  end
+
 protected
   def get_folder_files covid_drive_data, folder_name
     covid_drive_data.each do |file|

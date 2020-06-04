@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   get '/invite_colleagues', to: 'home#invite_colleagues'
   get '/drive_search', to: 'home#drive_search', as: "drive_search"
   get '/refer', to: 'home#refer', as: "refer"
+  get '/crash_tester', to: 'home#crash_tester', as: "crash_tester"
 
   post "subscribe" => "subscriptions#subscribe", as: "subscribe"
   get "unsubscribe" => "subscriptions#unsubscribe", as: "unsubscribe"

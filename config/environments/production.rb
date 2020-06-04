@@ -1,3 +1,28 @@
+require 'discordrb'
+
+module ExceptionNotifier
+  class DiscordNotifier
+    def initialize(options)
+      puts '[Discord bot]: Initializing'
+      if options[:token] && options[:client_id] && options[:channel_id]
+        @@channel_id = options[:channel_id]
+
+        @@bot = Discordrb::Bot.new token: options[:token], client_id: options[:client_id]
+
+        Thread.new {
+          puts "[Discord bot]: Starting bot thread"
+          @@bot.run
+        }
+      end
+    end
+
+    def call(exception, options={})
+      puts '[Discord bot]: Exception found'
+      @@bot.send_message(@@channel_id, "Encontré un error: " + exception.to_s)
+    end
+  end
+end
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -128,4 +153,11 @@ Rails.application.configure do
   # config.to_prepare { Devise::SessionsController.force_ssl }
   # config.to_prepare { Devise::RegistrationsController.force_ssl }
   # config.to_prepare { Devise::PasswordsController.force_ssl }
+
+  Rails.application.config.middleware.use ExceptionNotification::Rack,
+    discord: {
+      token: ENV['EXCEPTION_BOT_TOKEN'],
+      client_id: 717812663761240117,
+      channel_id: 364659731270205441
+    }
 end

@@ -18,7 +18,7 @@ module ExceptionNotifier
 
     def call(exception, options={})
       puts '[Discord bot]: Exception found'
-      @@bot.send_message(@@channel_id, "Encontré un error: " + exception.to_s)
+      @@bot.send_message(@@channel_id, "Encontré un error! [" + exception.to_s) + "]"
     end
   end
 end
@@ -158,6 +158,6 @@ Rails.application.configure do
     discord: {
       token: ENV['EXCEPTION_BOT_TOKEN'],
       client_id: 717812663761240117,
-      channel_id: 364659731270205441
+      channel_id: 717989750421848115
     }
 end

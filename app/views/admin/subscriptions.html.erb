@@ -1,0 +1,26 @@
+<h3>Descarga</h3>
+
+<ul>
+  <li><a href="/confirmed.csv" download>Descargar confirmados</a></li>
+  <li><a href="/pending.csv" download>Descargar pendientes</a></li>
+</ul>
+
+<h3>Suscripciones</h3>
+
+<p>
+  <% @subscriptions.each do |subscription| %>
+    <%= subscription.email %>, 
+  <% end %>
+</p>
+
+<p>Total: <%= @subscriptions.count %></p>
+
+<h3>Confirmadas</h3>
+
+<p>
+  <% @confirmed_subscriptions.each do |confirmed_subscription| %>
+    <%= confirmed_subscription.email %>, 
+  <% end %>
+</p>
+
+<p>Total: <%= @confirmed_subscriptions.count %></p>

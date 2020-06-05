@@ -1,25 +1,80 @@
-<h2>Change your password</h2>
+<div class="container d-flex justify-content-center">
+  <div class="card w-75 shadow p-3 mb-5 bg-white rounded">
+    <img class="card-img-top" src="/img/logo_landing.png" alt="Card image cap" class="img-fluid">
+    <div class="card-body">
+      <h3 class="card-title text-center">Cambia tu contraseña</h3>
+      <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
+        <%= render "devise/shared/error_messages", resource: resource %>
+        <%= f.hidden_field :reset_password_token %>
 
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
-  <%= f.hidden_field :reset_password_token %>
+        <div class="form-group">
+          <%= f.label :password, "Nueva contraseña" %><br />
+          <%= f.password_field :password, autocomplete: "new-password", class: "form-control", id:"password"%>
+          <small id="passwordHelpBlock" class="form-text text-muted">
+            <em>(Mínimo <%= @minimum_password_length %> caracteres)</em>
+          </small>
+        </div>
 
-  <div class="field">
-    <%= f.label :password, "New password" %><br />
-    <% if @minimum_password_length %>
-      <em>(<%= @minimum_password_length %> characters minimum)</em><br />
-    <% end %>
-    <%= f.password_field :password, autofocus: true, autocomplete: "new-password" %>
+        <div class="form-group">
+          <%= f.label :password_confirmation, "Confirmar nueva contraseña" %><br />
+          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", id:"confirmPassword"%>
+        </div>
+
+        <div class="from-group">
+          <em> <%= f.submit "Cambiar mi contraseña", class:"btn btn-primary btn-block", id:"submitButton", data:{toggle:"popover", placement:"top", trigger:"focus",
+                content:"Complete todos los campos."},  onsubmit:"required()" %> 
+          </em>
+        </div>
+      <% end %>
+    </div>
   </div>
+</div>
 
-  <div class="field">
-    <%= f.label :password_confirmation, "Confirm new password" %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
+<script>
+  bootstrapValidate('#password', 'min:8:Debes ingresar una contraseña válida',function (isValid){
+    if(isValid)
+    {
+      $('#submitButton').unbind();
+      $('#submitButton').popover('hide')
+    } else
+    {
+      $('#submitButton').click(function (e) {
+        $('#submitButton').popover('show')
+        e.preventDefault();
+        e.stopPropagation();
+      });
+    }
+  });
+  bootstrapValidate('#confirmPassword', 'matches:#password:Tus contraseñas deben ser iguales', function (isValid){
+    if(isValid)
+    {
+      $('#submitButton').unbind();
+      $('#submitButton').popover('hide')
+    } else
+    {
+      $('#submitButton').click(function (e) {
+        $('#submitButton').popover('show')
+        e.preventDefault();
+        e.stopPropagation();
+      });
+    }
+  });
 
-  <div class="actions">
-    <%= f.submit "Change my password" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+  function required ()
+  {
+    var password = document.getElementById("password").value;
+    var confirmPassword = document.getElementById("confirmPassword").value;
+    
+    if( (password.trim() == "") || (confirmPassword.trim() == ""))
+    {
+        $('#submitButton').popover('show')
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    else
+    {
+      $('#submitButton').unbind();
+      $('#submitButton').popover('hide') 
+    }
+  }
+</script>

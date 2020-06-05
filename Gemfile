@@ -10,6 +10,10 @@ gem 'thin'
 gem 'route_translator'
 gem 'devise'
 gem 'redcarpet'
+gem 'google-api-client'
+gem 'whenever', require: false
+gem 'exception_notification'
+gem 'discordrb'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.0.0'

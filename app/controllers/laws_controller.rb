@@ -208,11 +208,13 @@ class LawsController < ApplicationController
     end
 
     def user_can_access_law law
-      law_access = law.law_access
-      if current_user
-        return true
-      end
-      return law_access.name == "Todos"
+      return true
+
+      #law_access = law.law_access
+      #if current_user
+      #  return true
+      #end
+      #return law_access.name == "Todos"
       
       #law_access = law.law_access
       #if law_access

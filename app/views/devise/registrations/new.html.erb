@@ -9,7 +9,7 @@
             <a href="/">
               <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="img-fluid">
             </a>
-            <div class="card bg-white rounded">
+            <div class="card card--onboarding bg-white rounded">
               <!-------------------------------- Card Body ------------------------------------------->
               <div class="card-body">
                 <h2 class="card-title text-center">Crea tu cuenta</h2>
@@ -45,26 +45,46 @@
                   <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", id:"confirmPassword"%>
                 </div>
                 <div class="form-group">
-                  <button type="button" class="btn btn-primary btn-block" id="nextButton" data-target="#carouselExampleIndicators" 
+                  <button type="button" class="btn btn-primary btn-block btn-next" id="nextButton" data-target="#carouselExampleIndicators" 
                   data-slide-to="1" data-container="body" data-toggle="popover" data-placement="top" data-trigger="focus"
                   data-content="Complete todos los campos." onclick="required()">Siguiente</button>
                 </div>
               </div>
               <!-------------------------------- End of Card Body ------------------------------------------->
             </div>
-            <p class="content text-center">Al crear una cuenta accedes a aceptar<br/>nuestros <a href="/terms">Términos y condiciones</a></p>
+            <p class="content text-center">Al crear una cuenta, accedes a los <a href="/terms">Términos y condiciones</a></p>
           <!-------------------------------- End of Register Card ------------------------------------------->
           </div>
           <div class="carousel-item">
             <!-------------------------------- Register Card ------------------------------------------->
             <div class="containter" id="back-icon-container">
               <i class="fas fa-arrow-left" id="back-icon" data-target="#carouselExampleIndicators"  data-slide-to="0"></i>
-              <a href="/" class="back-image">
+              <a href="/" class="back-image" data-toggle="modal" data-target="#cancelRegistrationModal">
                 <img src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" id="logo">
               </a>
             </div>
 
-            <div class="card bg-white rounded" id="profileInfo" tabindex="0">
+            <!-- Start Modal -->
+            <div class="modal fade" id="cancelRegistrationModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalCenterTitle" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-body">
+                    <h5 class="modal-title" id="cancelModalLongTitle">¿Estás seguro que deseas salir?</h5>
+                    <label id="labelBasico">
+                      Una vez que regreses a la página inicial no se guardará la información que llenaste aquí.
+                    </label>
+                    <div class="form-group" id="bottonsGroup">
+                      <%= link_to 'Salir', root_path, id:"okButton", class:"btn btn-primary", style:"padding-top: 10px;"%>
+                      &nbsp;&nbsp;&nbsp;
+                      <button type="button" id="dismissBtn" class="btn btn-secondary" data-dismiss="modal">Regresar al formulario</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--End modal -->
+
+            <div class="card card--onboarding bg-white rounded" id="profileInfo" tabindex="0">
               <!-------------------------------- Card Body ------------------------------------------->
               <div class="card-body">
                 <%= render "devise/shared/error_messages", resource: resource %>
@@ -72,37 +92,42 @@
                 <p class="content">Brindanos un poco de información para ofrecerte contenido de acuerdo a tus necesidades.</p>
                 <p class = "titles" >Profesión</p>
                 <div class="form-group">
-                  <div class="form-check form-check-inline" style="border-radius: 8px;background-color: #171F2A;color: white;margin-bottom: 4%;">
-                    <%= f.radio_button :occupation, "Abogado", {class: "form-check-input", id:"radio1", checked:"checked"}%>
+                  <div class="form-check form-check-inline custom-form custom-form--radio">
+                    <%= f.radio_button :occupation, "Abogado", {class: "form-check-input", id:"radio1", checked:"checked", onclick:"showOtherField('Abogado')"}%>
                     <label class="form-check-label" for="radio1">Abogado</label>
                   </div>
-                  <div class="form-check form-check-inline" style="border-radius: 5px;background-color: #EFF3F8;margin-bottom: 4%;">
-                    <%= f.radio_button :occupation, "Estudiante", {class: "form-check-input", id:"radio2"}%>
+                  <div class="form-check form-check-inline custom-form custom-form--radio">
+                    <%= f.radio_button :occupation, "Estudiante", {class: "form-check-input", id:"radio2", onclick:"showOtherField('Estudiante')"}%>
                     <label class="form-check-label" for="radio2">Estudiante</label>
                   </div>
-                  <div class="form-check form-check-inline" style="border-radius: 5px;background-color: #EFF3F8;margin-bottom: 4%;">
-                    <%= f.radio_button :occupation, "Otro", {class: "form-check-input", id:"radio3"}%>
+                  <div class="form-check form-check-inline custom-form custom-form--radio">
+                    <%= f.radio_button :occupation, "Otro", {class: "form-check-input", id:"radio3", onclick:"showOtherField('Otro')"}%>
                     <label class="form-check-label" for="radio3">Otro</label>
+                  </div>
+                  <div class="form-group other-profesion"  id="otherField" style="display: none;">
+                    <label> ¿A qué te dedicas?</label>&nbsp;<label id="label-opcional">Opcional</label>
+                    <input type="text" id="otherOccupation" autocomplete= "Otro", value="", class="form-control">
+                    <input type="hidden" id="hiddenField" name="other_occupation" value="">
                   </div>
                 </div>
                 <p class = "titles">Preferencias</p>
                 <div class="form-group">
-                  <div class="form-check" style="border-radius: 5px;background-color: #EFF3F8;margin-bottom: 4%;">
-                    <%= f.check_box :is_contributor, {class: "form-check-input", id:"check1"}, "1"%>
+                  <div class="form-check custom-form custom-form--checkbox" style="border-radius: 5px;background-color: #EFF3F8;margin-bottom: 4%;">
+                    <%= f.check_box :receive_information_emails, {class: "form-check-input", id:"check1"}, "1"%>
                     <label class="form-check-label" for="check1">Quiero recibir el boletín informativo a mi correo electrónico.</label>
                   </div>
-                  <div class="form-check" style="background: #171F2A;color: white;border-radius: 8px;">
+                  <div class="form-check custom-form custom-form--checkbox" style="background: #171F2A;color: white;border-radius: 8px;">
                     <%= f.check_box :is_contributor, {class: "form-check-input", id:"check2", checked:"checked"}, "0"%>
                     <label class="form-check-label" for="check2">Quiero participar en actividades para contribuir al estudio y mejora de la app.</label>
                   </div>
                 </div>
                 <div class="form-group">
-                  <%= f.submit "Registrarse", class: 'btn btn-primary btn-block', id:"registerButton"%>
+                  <%= f.submit "Crear cuenta", class: 'btn btn-primary btn-block btn-next', id:"registerButton", onclick:"sendParameter()"%>
                 </div>
               </div>
               <!-------------------------------- End of Card Body ------------------------------------------->
             </div>
-            <p class="text-center" style="font-family: SF Pro Display;color: #505864;align-items: center;text-align: center;">Al crear una cuenta accedes a aceptar<br/>nuestros <a href="/terms">Términos y condiciones</a></p>
+            <p class="content text-center" style="font-family: SF Pro Display;color: #505864;align-items: center;text-align: center;">Al crear una cuenta, accedes a los <a href="/terms">Términos y condiciones</a></p>
             <!-------------------------------- End of Register Card ------------------------------------------->
           </div>
         </div>
@@ -230,45 +255,51 @@
   });
 
   addEventListener("change", function(event){
-    $('.form-check').each(function(){
-      if($(this).children().is(":checked")){
-        this.style.background = "#171F2A";
-        this.style.color = "white";
-        this.style.borderRadius = "8px";
-      }
-      else if ($(this).children().is(":not(:checked)")){
-        this.style.background = "#EFF3F8";
-        this.style.color= "#505864";
-        this.style.borderRadius = "5px";
+    $('.form-check').each(function() {
+      if($(this).children().is(":checked")) {
+        this.classList.add('checked');
+      } else {
+        this.classList.remove('checked');
       }
     });
   });
+
+//show the other field when radio button "Otro" is selected
+  function showOtherField(field){
+    if(field === "Otro")
+    {
+      document.getElementById("otherField").style.display = "block";
+    }else
+    {
+      document.getElementById("otherField").style.display = "none";
+    }
+  }
+
+  //send occupation extra param
+  function sendParameter(){
+    var param = document.getElementById("otherOccupation").value;
+    console.log(param);
+    document.getElementById("hiddenField").value = param;
+  }
 
 </script>
 
 <style>
   .form-check-input{
-    width: 23px; 
-    height:23px;
+    width: 25px; 
+    height:25px;
     border: 1px solid #505864;
     border-radius: 4px;
   }
 
-  .form-check{
-    padding-top: 4%;
-    padding-bottom: 4%;
-    padding-left: 8%;
-  }
-
   .form-check-label{
     padding-left:2%;
-    width: fit-content;
+    width: 100%;
     font-family: -apple-system, sans-serif;
   }
 
   .form-check-inline{
     margin-right: 0px;
-    padding-left: 4%;
     width: 49%
   }
 
@@ -279,14 +310,12 @@
   .titles{
     font-family: -apple-system, sans-serif;
     font-style: normal;
-    /* font-weight: bold; */
+    font-weight: bold;
     font-size: 24px;
     line-height: 29px;
   }
 
   .card{
-    width: 75%;
-    margin-left: 12.5%;
     padding: 1rem;
     font-family: -apple-system, sans-serif;
   }
@@ -296,9 +325,8 @@
   }
 
   .img-fluid{
-    width: 130px;
-    margin-left: auto;
-    margin-right: auto;
+    height: 15vh;
+    margin: 2vh auto 0;
     display: block;
   }
   
@@ -309,10 +337,6 @@
 
   #logo{
     width: 130px;
-  }
-
-  .form-control{
-      background-color: #EFF3F8;
   }
 
   #back-icon{
@@ -330,6 +354,65 @@
     text-align: center;
   }
 
+  .content.text-center {
+    max-width: 260px;
+    margin: auto;
+    margin-bottom: 20px;
+  }
+
+  .card .content.text-center {
+    max-width: 100%;
+    margin-bottom: 2em;
+  }
+
+  #label-opcional{
+    color: #505864;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 16px;
+  }
+
+  .modal-body{
+    text-align: center;
+  }
+
+  #dismissBtn, #okButton{
+    border-radius: 8px;
+  }
+
+  #okButton{
+    width: 150px;
+  }
+
+  #dismissBtn{
+    background: #F2F5F8; 
+    color: #505864; 
+    border:none;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .modal-title{
+    padding-top: 30px;
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 26px;
+  }
+
+  #labelBasico{
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 21px;
+    color: #505864;
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+
+  #bottonsGroup{
+    margin-bottom: 30px;
+  }
+
   @media only screen and (max-width: 767.98px){
     .card{
       width:100%;
@@ -344,8 +427,10 @@
     section{
       background: white;
     }
+
     .form-control{
       background-color: #EFF3F8;
+      height: 50px;
     }
 
     .img-fluid{
@@ -376,6 +461,10 @@
     }
 
     .form-check-inline{
+      width: 100%;
+    }
+
+    #okButton, #dismissBtn{
       width: 100%;
     }
   }

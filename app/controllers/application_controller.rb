@@ -28,14 +28,30 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def redirectOnEspecialCode query
-    tokens = query.scan(/\w+|\W/)
-    if tokens.size >= 4 && tokens.first == '/'
-      tag_temp = Tag.where('lower(name) = ?', tokens.fourth.downcase).first
-      if tag_temp
-        redirect_to "/tags/" + tag_temp.id.to_s + "-" + tokens.fourth.downcase + "?query=/" + tokens.second
-        return true
+  def is_redirect_pending
+    session[:redirect_to_law] || session[:user_just_signed_up]
+  end
+
+  def handle_redirect
+    redirect_to_law_id = session[:redirect_to_law]
+    user_just_signed_up = session[:user_just_signed_up]
+    session[:redirect_to_law] = nil
+    session[:user_just_signed_up] = nil
+    if redirect_to_law_id
+      respond_to do |format|
+        format.html { redirect_to Law.find_by_id(redirect_to_law_id) }
       end
+    elsif user_just_signed_up
+      respond_to do |format|
+        format.html { redirect_to signed_up_path }
+      end
+    end
+  end
+
+  def redirectOnSpecialCode query
+    @tokens = @query.scan(/\w+|\W/)
+    if @tokens.first == '/'
+      redirect_to search_law_path + "?query=" + @query
     end
     return false
   end

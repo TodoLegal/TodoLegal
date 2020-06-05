@@ -1,38 +1,46 @@
 <section>
-  <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="img-fluid">
+  <a href="/">
+    <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="img-fluid">
+  </a>
   <div class="container">
     <div class="card bg-white rounded">
       <div class="card-body">
           <section class="temporal"> Invita a tus colegas </section>
           <h5> Enviar invitación a </h5>
-          <div id="formGroup">
-
-            <div class="form-group">
+          <form action="/refer" method="get">
+            <div id="formGroup">
+              <div class="form-group">
+                  <input type="email" class="form-control" id="email1" aria-describedby="emailHelp" placeholder="nombre@ejemplo.com">
+              </div>
+              <div class="form-group" id="inputElement">
                 <input type="email" class="form-control" id="email2" aria-describedby="emailHelp" placeholder="nombre@ejemplo.com">
+              </div>  
+              <input type="hidden" id="custId" name="emails" value=>
             </div>
-
-            <div class="form-group" id="inputElement">
-              <input type="email" class="form-control" id="email1" aria-describedby="emailHelp" placeholder="nombre@ejemplo.com">
-            </div>  
-
-          </div>
-          <!-- button to add another field
-          <div class="form-group">
-                <button type="button" class="btn btn-outline-primary" id="plusButton" onclick="cloneElement()"><i class="fas fa-plus"></i></button>
-                <button type="button" class="btn btn-outline-danger" id="plusButton" onclick="removeElement()"><i class="far fa-trash-alt"></i></button>
-          </div>
-          -->
-          <div class="form-group">
-              <%= button_to "Enviar", signed_up_path, method: :get, remote: true, class:"btn btn-block btn-primary" %>
+            <!-- button to add another field
+            <div class="form-group">
+                  <button type="button" class="btn btn-outline-primary" id="plusButton" onclick="cloneElement()"><i class="fas fa-plus"></i></button>
+                  <button type="button" class="btn btn-outline-danger" id="plusButton" onclick="removeElement()"><i class="far fa-trash-alt"></i></button>
+            </div>
+            -->
+            <div class="form-group">
+              <button type="submit" id="submitBtn" class="btn btn-block btn-primary" onclick="sendParameters()">Enviar</button>
               <a href="/" id= "omitirPaso" class="text-center">Omitir este paso</a>
-          </div>
-
+            </div>
+          </form>
       </div>
     </div>
   </div>
 </section>
 
 <script>
+  function sendParameters(){
+      var param1 = document.getElementById("email1").value;
+      var param2 = document.getElementById("email2").value;
+      var params = param1 + ',' + param2;
+      document.getElementById("custId").value = params;
+  }
+
   function cloneElement(){
     var inputForm =document.getElementById("inputElement");
     var cln = inputForm.cloneNode(true);
@@ -81,11 +89,16 @@
   .temporal{
     background: #171F2A;
     border-radius: 8px;
-    color:white;
+    color: white;
     text-align: center;
-    align-items: center;
-    padding-bottom:50%;
+    padding: 30px;
     margin-bottom: 6%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    font-size: 28px;
+    font-weight: bold;
   }
 
   section{

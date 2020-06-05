@@ -1,43 +1,567 @@
-<h2>Edit <%= resource_name.to_s.humanize %></h2>
-
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
-
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
-
-  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-    <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
-    <%= f.password_field :password, autocomplete: "new-password" %>
-    <% if @minimum_password_length %>
-      <br />
-      <em><%= @minimum_password_length %> characters minimum</em>
-    <% end %>
-  </div>
-
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
-
-  <div class="field">
-    <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
-    <%= f.password_field :current_password, autocomplete: "current-password" %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "Update" %>
-  </div>
+<% if user_signed_in? %>
+    <%= render 'layouts/logged_navbar' %>        
+<% else %>
+    <%= render 'layouts/unlogged_navbar' %> 
 <% end %>
 
-<h3>Cancel my account</h3>
+<div class = "container container--cuenta">
+  <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+    <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">
+    <i class="fas fa-user" aria-hidden="true"></i>
+    Tu cuenta</a>
+    <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">
+    <i class="fas fa-gift" aria-hidden="true"></i>
+    Invitar a un amigo</a>
+    <a class="nav-link highlighted" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">
+    <i class="fas fa-star" aria-hidden="true"></i>
+    Activa un nuevo Plan</a>
+    <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">
+    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+    Cerrar sesión</a>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <%= render "devise/shared/error_messages", resource: resource %>
 
-<p>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete %></p>
+      <!-- Start edition of user data-->
+      <div class="row">
+        <div class ="col-md-2">
+          <div class="circle btn-avatar">
+            <% if current_user.first_name.present? && current_user.last_name.present? %>
+              <%= current_user.first_name[0].upcase + current_user.last_name[0].upcase%>
+            <% end %>
+          </div>
+        </div>
+        <div class = "col-md-10" id="user-data">
+        <!-- Edit name and Last name -->
+          <div class = "row">
+            <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+              <div class = "user-name col-md-12">
+                <div id="name">
+                  <% if current_user.first_name && current_user.last_name %>
+                    <%= current_user.first_name + " " + current_user.last_name %>
+                  <% end %>
+                  <span class = "edit-text" onclick="showDialog('name', 'editName')"><i class="fas fa-pencil-alt"></i> Editar nombre</span>
+                </div>
+                <div class="card" id="editName">
+                  <button type="button" class="close" onclick = "showDialog('name', 'editName')" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <div class = "card-body">
+                    <div class="form-group">
+                      <div class="row">
+                        <div class="col-6 form-group">
+                          <%= f.label :Nombre %><br />
+                          <%= f.text_field :first_name, autofocus: true, class:"form-control"%>
+                        </div>
+                        <div class="col-6 form-group">
+                          <%= f.label :Apellido %><br />
+                          <%= f.text_field :last_name, autofocus: true, class:"form-control" %>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <%= f.submit "Guardar cambios", class: 'submit-btn btn btn-primary'%>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+          <!-- Edit occupation -->
+          <div class = "row">
+            <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+              <div class = "col-md-12">
+                <div id="occupation">
+                
+                <%= current_user.occupation%>
+                
+                  <span class = "edit-text" onclick ="showDialog('occupation', 'editOccupation')"><i class="fas fa-pencil-alt" aria-hidden="true"></i> Editar profesión</span> 
+                </div>
+                <div class="card" id="editOccupation">
+                  <button type="button" class="close" onclick = "showDialog('occupation', 'editOccupation')" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <div class = "card-body">
+                    <div class="form-group">
+                      <div class="form-check form-check-inline custom-form custom-form--radio">
+                        <%= f.radio_button :occupation, "Abogado", {class: "form-check-input", id:"radio1", checked:"checked", onclick:"showOtherField('Abogado')"}%>
+                        <label class="form-check-label" for="radio1">Abogado</label>
+                      </div>
+                      <div class="form-check form-check-inline custom-form custom-form--radio">
+                        <%= f.radio_button :occupation, "Estudiante", {class: "form-check-input", id:"radio2", onclick:"showOtherField('Estudiante')"}%>
+                        <label class="form-check-label" for="radio2">Estudiante</label>
+                      </div>
+                      <div class="form-check form-check-inline custom-form custom-form--radio" >
+                        <%= f.radio_button :occupation, "Otro", {class: "form-check-input", id:"radio3", onclick:"showOtherField('Otro')"}%>
+                        <label class="form-check-label" for="radio3">Otro</label>
+                      </div>
+                      <div class="form-group"  id="otherField" style="display: none;">
+                        <label> ¿A qué te dedicas?</label>&nbsp;<label id="label-opcional">Opcional</label>
+                        <input type="text" id="otherOccupation" autocomplete= "Otro", value="", class="form-control">
+                        <input type="hidden" id="hiddenField" name="other_occupation" value=""> 
+                      </div>
+                      <div class="form-group">
+                        <%= f.submit "Guardar cambios", class: 'submit-btn btn btn-primary', onclick:"sendParameter()"%>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+          <!-- Edit email -->
+          <div class = "row">
+            <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+              <div class = "col-md-12">
+                <div id="email">
+                  <%= current_user.email%>
+                  <span class = "edit-text" onclick = "showDialog('email', 'editEmail')"><i class="fas fa-pencil-alt"></i> Editar correo</span> 
+                </div>
+                <div class="card" id="editEmail">
+                  <button type="button" class="close" onclick = "showDialog('email', 'editEmail')" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <div class = "card-body">
+                    <div class="form-group">
+                      <%= f.label :email %><br />
+                      <%= f.email_field :email, autofocus: true, autocomplete: "email", class:"form-control" %>
+                      <label class="confirm-pass-label">Contraseña</label>
+                      <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control"%>
+                      <small id="passwordHelpBlock" class="form-text text-muted">
+                        Ingresa tu contraseña para confirmar los cambios.
+                      </small>
+                      <%= f.submit "Guardar cambios", class: 'submit-btn btn btn-primary'%>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+          <!-- Edit Password -->
+          <div class = "row">
+            <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+              <div class = "col-md-12">
+                <div id="password">
+                  <span class = "edit-text" onclick = "showDialog('password', 'editPassword')"><i class="fas fa-pencil-alt"></i> Cambiar contraseña</span> 
+                </div>
+                <div class="card" id="editPassword">
+                  <button type="button" class="close" onclick = "showDialog('password', 'editPassword')" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <div class = "card-body">
+                    <div class="form-group">
+                      <label>Nueva contraseña</label>
+                      <%= f.password_field :password, autocomplete: "new-password", class: "form-control" %>
+                      <small id="passwordHelpBlock" class="form-text text-muted">
+                        <em>(Mínimo <%= @minimum_password_length %> caracteres)</em>
+                      </small>
+                    
+                      <label>Confirmar contraseña</label>
+                      <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control"%>
+                    
+                      <label class="confirm-pass-label">Contraseña actual</label>
+                      <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control"%>
+                      <small id="passwordHelpBlock" class="form-text text-muted">
+                        Ingresa tu contraseña actual para confirmar los cambios.
+                      </small>
+                      <%= f.submit "Guardar cambios", class: 'submit-btn btn btn-primary'%> 
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <!-- End edition of user data-->
 
-<%= link_to "Back", :back %>
+      <% if current_user_is_pro %>
+        <section class="change-plan">
+          <div class="change-plan-content">
+            <h5 id="change-plan-title">¿Listo para cambiar tu plan?</h5>
+            <p id="change-plan-text">Tendrás acceso a más de 150 documentos de legislación hondureña.</p>
+            <p id="change-plan-link"> Leer más sobre el Plan Pro</p>
+          </div>
+          <div class="form-group" id="change-plan-btn-form">
+            <button type="button" class="btn btn-primary" id="change-plan-button">
+              Cambiar Plan
+            </button>
+          </div>
+        </section>
+      <% end %>
+      
+      <hr>
+
+      <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+        <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+      <% end %>
+
+      <!-- Edit preferences -->
+      <p class = "titles">Preferencias</p>
+      <div class="form-group">
+        <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+          <div class="form-check custom-form custom-form--checkbox">
+            <%= f.check_box :receive_information_emails, autofocus: true, class: "form-check-input check-submit", id:"check1"%>
+            <label class="form-check-label" for="check1">Quiero recibir el boletín informativo a mi correo electrónico.</label>
+          </div>
+          <div class="form-check custom-form custom-form--checkbox">
+            <%= f.check_box :is_contributor, autofocus: true, class: "form-check-input check-submit", id:"check2"%>
+            <label class="form-check-label" for="check2">Quiero participar en actividades para contribuir al estudio y mejora de la app.</label>
+          </div>
+          <%= f.submit "Guardar cambios", class: 'btn btn-primary', id:"submitPreferences", style:"display:none;"%>
+        <% end %>
+      </div>
+      <hr>
+      <!-- Cancel Button -->
+      <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#cancelAccountModal" id="delete-account-btn">Borrar tu cuenta</button>
+      <!-- End Cancel Button -->
+
+      <!-- Start delet account Modal -->
+      <div class="modal fade" id="cancelAccountModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalCenterTitle" aria-hidden="true">
+        <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+          <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                <h5 class="modal-title" id="cancelModalLongTitle">¿Estás seguro?</h5>
+                <% if current_user_is_pro %>
+                  <label id="labelPro">
+                    Si borras tu cuenta ya no podras accesar a los documentos exclusivos para cuentas Pro.<br>
+                    También puedes modificar tu suscripción si decides <a href="/" style="text-decoration: underline;">bajar a la cuenta básica.<a>
+                  </label>
+                <% else %>
+                  <label id="labelBasico">Si borras tu cuenta ya no podras accesar a los documentos exclusivos para cuentas básicas.</label>
+                <% end %>
+                <div class="form-group" id="bottonsGroup">
+                  <%= button_to "Borrar cuenta", registration_path(resource), method: :delete, remote: true, id:"deleteAccount", class:"btn btn-outline-danger"%>
+                  &nbsp;&nbsp;&nbsp;
+                  <button type="button" id="dismissBtn" class="btn btn-secondary" data-dismiss="modal">Regresar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <!--End delete account modal -->
+    </div>
+  </div>
+</div>
+
+<script>
+
+  function showDialog (x, y){
+    var x = document.getElementById(x);
+    var y = document.getElementById(y);
+    if (x.style.display === "none") {
+      x.style.display = "block";
+      y.style.display = "none";
+    } else {
+      x.style.display = "none";
+      y.style.display = "block";
+    }
+  }
+
+  addEventListener("load", function(event){
+    $('.form-check').each(function(){
+      if($(this).children().is(":checked")) {
+        this.classList.add('checked');
+      } else {
+        this.classList.remove('checked');
+      }
+    });
+  });
+
+  addEventListener("change", function(event){
+    $('.form-check').each(function(){
+      if($(this).children().is(":checked")) {
+        this.classList.add('checked');
+      } else {
+        this.classList.remove('checked');
+      }
+    });
+  });
+
+  var checkBoxes = document.getElementsByClassName("check-submit");
+  
+  var checkBoxClick = function (){
+    document.getElementById("submitPreferences").click();
+  };
+  //triggers form submit when checkboxes clicked
+  checkBoxes[0].addEventListener("click", checkBoxClick, false );
+  checkBoxes[1].addEventListener("click", checkBoxClick, false );
+
+  function showOtherField(field){
+    if(field === "Otro")
+    {
+      document.getElementById("otherField").style.display = "block";
+    }else
+    {
+      document.getElementById("otherField").style.display = "none";
+    }
+
+  }
+
+  //send occupation extra param
+  function sendParameter(){
+    var param = document.getElementById("otherOccupation").value;
+    console.log(param);
+    document.getElementById("hiddenField").value = param;
+  }
+
+</script>
+
+<style>
+  .container--cuenta {
+    max-width: 1090px;
+    margin: 5vh auto;
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: 260px auto;
+  }
+
+  .card{
+    background: #FFFFFF;
+    border-radius: 2px;
+  } 
+
+  .circle{
+    height: 100px;
+    width: 100px;
+    color: white; 
+    border-radius: 50%;
+    font-weight: 800;
+    font-size: 40px;
+    line-height: 48px;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+  }
+
+  .media-body{
+    padding-top: 10px;
+    padding-left: 25px;
+  }
+
+  #name{
+    font-style: normal;
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 26px;
+  }
+
+  .edit-text{
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: #A6B9D3;
+    padding-left: 5px;
+  }
+
+  .edit-text:hover{
+    color: #A6B9D3;
+    cursor: pointer;
+  }
+
+  #editName, #editOccupation, #editEmail, #editPassword{
+    width: 450px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    display: none;
+  }
+
+  .form-control{
+    background-color: #EFF3F8;
+  }
+
+  .form-check-inline{
+    margin-right: 0px;
+    width: 49%
+  }
+
+  .titles{
+    font-family: -apple-system, sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 29px;
+  }
+
+  .change-plan{
+    height: 223px;
+    margin-top: 30px;
+    background: #EFF3F8;
+    border-radius: 8px;
+  }
+
+  .change-plan-content{
+    text-align: center;
+    padding-top: 25px;
+  }
+
+  #change-plan-title{
+    font-style: normal;
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 26px;
+  }
+
+  #change-plan-text, #change-plan-link{
+    font-family: -apple-system, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 21px;
+  }
+
+  #change-plan-text{
+    padding-top: 25px;
+    color: #505864;
+    margin-bottom: 0.2em;
+  }
+
+  #change-plan-link{
+    color: #1A7FFA;
+  }
+
+  #change-plan-link:hover{
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  #change-plan-btn-form{
+    text-align: center;
+  }
+
+  #change-plan-button{
+    width: 65%;
+    border-radius: 8px;
+  }
+
+  #delete-account-btn{
+    border: 1px solid #FA1A35;
+    box-sizing: border-box;
+    border-radius: 8px;
+    width: 200px;
+    margin-bottom: 20px;
+  }
+
+  .submit-btn, .confirm-pass-label{
+    margin-top: 10px;
+  }
+
+  .form-group{
+    margin-bottom: 0px;
+  }
+
+  #user-data{
+    padding-left: 5%;
+  }
+
+  .modal-body{
+    text-align: center;
+  }
+
+  #dismissBtn, #deleteAccount{
+    border-radius: 8px;
+  }
+
+  #dismissBtn{
+    background: #F2F5F8; 
+    color: #505864; 
+    border:none;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .modal-title{
+    padding-top: 30px;
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 26px;
+  }
+
+  #labelBasico, #labelPro{
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 21px;
+    color: #505864;
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+
+  #bottonsGroup{
+    margin-bottom: 30px;
+  }
+
+  #label-opcional{
+    color: #505864;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 16px;
+  }
+  
+  @media only screen and (max-width: 767.98px){
+    .container{
+      padding: 0px;
+    }
+
+    .container--cuenta {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container--cuenta .nav-pills {
+      display: none;
+    }
+
+    .circle{
+      height: 60px;
+      width: 60px;
+      font-weight: 800;
+      font-size: 27px;
+      line-height: 32px;
+      padding-left: 10px;
+      margin-bottom: 15px;
+    }
+
+    #name{
+      font-size: 20px;
+    }
+
+    #editName, #editOccupation, #editEmail, #editPassword{
+      width: 100%;
+      background: #FFFFFF;
+      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
+      border-radius: 8px;
+      display: none;
+    }
+
+    .form-check-inline{
+      width: 100%;
+    }
+
+    #delete-account-btn{
+      border: 1px solid #FA1A35;
+      box-sizing: border-box;
+      border-radius: 8px;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    .submit-btn, .confirm-pass-label{
+      margin-top: 10px;
+      width: 100%
+    }
+
+    #deleteAccount, #dismissBtn{
+      width: 100%;
+    }
+  
+  }
+</style>

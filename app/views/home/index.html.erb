@@ -1,16 +1,41 @@
-<div class="jumbotron d-none d-sm-block" style="padding-top: 0px; padding-bottom: 20px;background-color: #FFF;margin: 0px">
+<div class="jumbotron d-none d-sm-block" align="center" style="padding-top: 0px; padding-bottom: 20px;background-color: #EFF3F8;margin: 0px">
   <a href="/"><img align="center" src="/img/logo_landing.png" class="img-fluid" height="300"></a>
 </div>
 
-<div class="jumbotron d-block d-sm-none" style="padding-top: 0px; padding-bottom: 40px;background-color: #FFF;margin: 0px">
-<a href="/"><img align="center" src="/img/logo_landing_mobile.png" class="img-fluid" height="300"></a>
+<div class="jumbotron d-block d-sm-none" style="padding-top: 0px; padding-bottom: 0px;background-color: #EFF3F8;margin: 0px">
+  <a href="/"><img align="center" src="/img/logo_landing_mobile.png" class="img-fluid" height="300"></a>
 </div>
 
-<div class="container" style="">
+<div class="container">
 
+  <div class="d-none d-xl-block">
+    <h3 align="center">El buscador de información legal para Honduras</h3>
+  </div>
+  <div class="d-xl-none">
+    <h6 align="center">El buscador de información legal para Honduras</h6>
+  </div>
+
+  <br/>
   <%= render partial: 'search_law_input', locals: {target_url: '/search_law'} %>
 
   <div class="row">
+    <div class="col-sm-6 col-md-4 py-2">
+      <div class="card card-body h-100" style="padding:0px">
+        <a class="" href="<%= drive_search_path %>" style="padding:20px">
+          <table>
+            <tr>
+              <td>
+                <h5 class="card-title">Repositorio COVID-19</h5>
+              </td>
+              <td>
+                <img src="/img/google_drive_logo.png" style="padding-bottom: 10px"/>
+              </td>
+            </tr>
+          </table>
+          <p><%= @covid_files_count %> documentos</p>
+        </a>
+      </div>
+    </div>
     <% @tags.each do |tag| %>
       <% if tag.laws.count != 0 %>
         <div class="col-sm-6 col-md-4 py-2">

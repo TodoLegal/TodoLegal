@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_11_004528) do
+ActiveRecord::Schema.define(version: 2020_06_01_064517) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -53,6 +53,12 @@ ActiveRecord::Schema.define(version: 2020_02_11_004528) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "law_accesses", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "law_modifications", force: :cascade do |t|
     t.integer "law_id"
     t.string "name"
@@ -73,6 +79,13 @@ ActiveRecord::Schema.define(version: 2020_02_11_004528) do
     t.datetime "updated_at", precision: 6, null: false
     t.text "modifications"
     t.string "creation_number"
+    t.integer "law_access_id"
+  end
+
+  create_table "permissions", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "sections", force: :cascade do |t|
@@ -115,6 +128,13 @@ ActiveRecord::Schema.define(version: 2020_02_11_004528) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "user_permissions", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "permission_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -123,6 +143,21 @@ ActiveRecord::Schema.define(version: 2020_02_11_004528) do
     t.datetime "remember_created_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "first_name"
+    t.string "last_name"
+    t.string "occupation"
+    t.boolean "is_contributor"
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.inet "current_sign_in_ip"
+    t.inet "last_sign_in_ip"
+    t.boolean "receive_information_emails"
+    t.string "other_occupation"
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

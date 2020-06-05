@@ -1,21 +1,17 @@
-<div class="jumbotron d-none d-sm-block" style="padding-top: 0px; padding-bottom: 20px;background-color: #FFF;margin: 0px">
-  <a href="/"><img align="center" src="/img/logo_header.png" class="img-fluid" height="300"></a>
+<div class="jumbotron d-none d-sm-block" align="center" style="padding-top: 0px; padding-bottom: 20px;background-color: #EFF3F8;margin: 0px">
+  <a href="/"><img src="/img/logo_header.png" class="img-fluid" height="300"></a>
 </div>
 
 <nav id="myScrollspy" style="padding: 0px" class="d-block d-sm-none navbar sticky-top navbar-expand-xl navbar-light bg-light">
-  <a class="navbar-brand" align="right" href="/"><img src="/img/logo_navbar.png" height="50" style="max-height:inherit"></a>
   <%= render partial: 'home/search_law_input', locals: {target_url: tag_path(@tag)} %>
 </nav>
 
 <div class="container" style="">
-  <p id="notice"><%= notice %></p>
-
   <div class="d-none d-sm-block">
-  <%= render partial: 'home/search_law_input', locals: {target_url: tag_path(@tag)} %>
+    <%= render partial: 'home/search_law_input', locals: {target_url: tag_path(@tag)} %>
   </div>
-
+  
   <%= render 'home/search_result.html.erb' %>
 
   <%= link_to 'Ir a inicio', root_path %>
-
 </div>

@@ -1,0 +1,54 @@
+<nav class="navbar sticky-top" id="topNavbar">
+  <a href="/" class="navbar-brand text-primary" >
+      <img src="/img/top_navbar/top_navbar.svg" alt="Card image cap" class="img-fluid" id="logo">
+      &nbsp;&nbsp;
+      <img src="/img/top_navbar/Logo-letras-white.svg" alt="Card image cap" class="todolegal img-fluid">
+  </a>
+  <form class="form-inline">
+    <a class="btn btn-outline-light" href="/users/sign_in" role="button">
+        Inicia Sesión
+    </a>
+    <div style="padding-left: 10px;">
+      <a class="btn btn-primary" id="registerButton" href="/users/sign_up" role="button">
+        Regístrate
+      </a>
+    </div>
+  </form>
+</nav>
+
+<style>
+  #topNavbar{
+      margin-bottom: 0px; 
+      z-index: 1000; 
+      background: #171F2A;
+      padding: 5px 20px;
+  }
+
+  #logo{
+    background-color: #171F2A;
+  }
+
+  #registerButton{
+    background: #1A7FFA;
+    border: 1px solid #1A7FFA;
+    box-sizing: border-box;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+  }
+
+  @media only screen and (max-width: 767.98px){
+    .todolegal{
+      margin:0px;
+      display: none;
+    }
+  }
+
+   @media only screen and (min-width: 1200px){
+
+    #topNavbar{
+      padding: 5px 10vw;
+  }
+
+  }
+</style>

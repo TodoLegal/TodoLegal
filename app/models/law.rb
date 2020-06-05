@@ -1,6 +1,7 @@
 class Law < ApplicationRecord
-  include PgSearch
-  
+  include PgSearch::Model
+
+  belongs_to :law_access
   has_many :books, :dependent => :destroy
   has_many :titles, :dependent => :destroy
   has_many :chapters, :dependent => :destroy
@@ -31,6 +32,18 @@ class Law < ApplicationRecord
                   }
 
   def to_param
-    [id, name.parameterize].join("-")
+    [id, name.parameterize].join('-')
+  end
+
+  def materias
+    tags.where(tag_type_id: TagType.find_by_name('materia').id)
+  end
+
+  def materia_names
+    materia_names = []
+    tags.where(tag_type_id: TagType.find_by_name('materia').id).each do |materia|
+      materia_names.push(materia.name)
+    end
+    return materia_names
   end
 end

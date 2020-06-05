@@ -4,6 +4,12 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile '~/.gitignore_global'
 
+/public/users.csv
+/public/confirmed.csv
+/public/pending.csv
+public/covid_drive_data.json
+token.yaml
+
 Gemfile.lock
 /config/credentials.yml.enc
 

@@ -1,12 +1,13 @@
 class LawsController < ApplicationController
   layout 'law'
+  layout 'application', only: [:index]
   before_action :set_law, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_admin!, only: [:index, :new, :edit, :create, :update, :destroy]
 
   # GET /laws
   # GET /laws.json
   def index
-    @laws = Law.all
+    @laws = Law.all.order(:law_access_id)
   end
 
   # GET /laws/1
@@ -18,6 +19,14 @@ class LawsController < ApplicationController
     @query = ""
     @articles_count = 0
     @has_articles_only = true
+
+    if params[:query]
+      @tokens = params[:query].scan(/\w+|\W/)
+      if @tokens.first == '/'
+        params[:article] = @tokens.second
+        params[:query] = nil
+      end
+    end
     
     if params[:query] && params[:query] != ""
       @highlight_enabled = true
@@ -41,6 +50,14 @@ class LawsController < ApplicationController
       @articles = @law.articles.order(:position)
 
       @articles_count = @articles.count
+
+      go_to_position = nil
+      if params[:article]
+        article = @articles.where('number LIKE ?', "%#{params[:article]}%").first
+        if article
+          go_to_position = @articles.where('number LIKE ?', "%#{params[:article]}%").first.position
+        end
+      end
 
       stream_size = @books.size + @titles.size + @chapters.size + @subsections.size + @sections.size + @articles.size
       while i < stream_size
@@ -96,12 +113,21 @@ class LawsController < ApplicationController
           subsection_iterator+=1
         else
           @stream.push @articles[article_iterator]
+          if go_to_position && @articles[article_iterator] && go_to_position == @articles[article_iterator].position
+            @go_to_article = article_iterator
+          end
           article_iterator+=1
         end
         i+=1
       end
 
       @has_articles_only = book_iterator == 0 && title_iterator == 0 && chapter_iterator == 0 && subsection_iterator == 0 && section_iterator == 0
+    end
+
+    @user_can_edit_law = current_user_is_admin
+    @user_can_access_law = user_can_access_law @law
+    if !@user_can_access_law
+      @stream = @stream.take(5)
     end
   end
 
@@ -179,5 +205,33 @@ class LawsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def law_params
       params.require(:law).permit(:name, :modifications, :creation_number)
+    end
+
+    def user_can_access_law law
+      return true
+
+      #law_access = law.law_access
+      #if current_user
+      #  return true
+      #end
+      #if !law_access
+      #  return true
+      #end
+      #return law_access.name == "Todos"
+      
+      #law_access = law.law_access
+      #if law_access
+      #  if law_access.name == "Pro"
+      #    if !current_user_is_pro
+      #      return false
+      #    end
+      #  end
+      #  if law_access.name == "Básica"
+      #    if !current_user
+      #      return false
+      #    end
+      #  end
+      #end
+      #return true
     end
 end

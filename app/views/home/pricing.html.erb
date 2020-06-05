@@ -1,0 +1,154 @@
+<!-- This snippet uses Font Awesome 5 Free as a dependency. You can download it at fontawesome.io! -->
+
+<style>
+    section.pricing {
+        background: #EFF3F8;
+    }
+
+    .pricing .card {
+        border: none;
+        border-radius: 1rem;
+        transition: all 0.2s;
+        box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+    }
+
+    .pricing hr {
+        margin: 1.5rem 0;
+    }
+
+    .pricing .card-title {
+        margin: 0.5rem 0;
+        font-size: 0.9rem;
+        letter-spacing: .1rem;
+        font-weight: bold;
+    }
+
+    .pricing .card-price {
+        font-size: 3rem;
+        margin: 0;
+    }
+
+    .pricing .card-price .period {
+        font-size: 0.8rem;
+    }
+
+    .pricing ul li {
+        margin-bottom: 1rem;
+    }
+
+    .pricing .text-muted {
+        opacity: 0.7;
+    }
+
+    .pricing{
+        background: #1A7FFA;
+    }
+    
+    .card-2{
+      margin-top: -.25rem;
+      margin-bottom: .25rem;
+      margin-left: 15%;
+      margin-right: 15%;
+      background: #FFFFFF;
+      border-radius: 4px;
+    }
+
+    .card{
+      background: #EFF3F8;
+      width:
+    }
+
+    .title1{
+      height: 34px;
+      left: 22.5%;
+      right: 22.43%;
+      top: 220px;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 28px;
+      line-height: 33px;
+      text-align: center;
+      color: #171F2A;
+      padding-top:4%;
+      margin-bottom: 7%;
+    }
+
+    .image{
+      width: 130px;
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+      margin-bottom: 2%;
+    }
+
+    #btnDisable{
+      /* opacity: 0.15; */
+      background: #C9DFFA;
+      border-style: none;
+      color: #0360E7;
+      line-height: 19px;
+    }
+
+  #btnBasico{
+    margin-top: 48%;
+  }
+
+/* Hover Effects on Card */
+
+    @media (min-width: 992px) {
+    .pricing .card:hover {
+        margin-top: -.25rem;
+        margin-bottom: .25rem;
+        box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.3);
+    }
+    .pricing .card:hover {
+        opacity: 1;
+    }
+}
+
+</style>
+
+<section class="pricing py-5">
+  <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="image">
+  <div class = "card-2">
+  <h2 class="title1">¡Tu cuenta ha sido creada!</h3>
+  <div class="container">
+    <h4 style="font-weight: bold;margin-bottom: 3%;">Elige un plan</h4>
+    <div class="row">
+      <!-- Free Tier -->
+      <div class="col-lg-6">
+        <div class="card mb-5 mb-lg-0">
+          <div class="card-body">
+            <h5 class="card-title text-muted text-uppercase text-center">Básico</h5>
+            <h6 class="card-price text-center">Grátis</h6>
+            <hr>
+            <ul class="fa-ul">
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Acceso a 20 documentos de legislación hondureña</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Buscador de palabras clave, por materia, ley o normas expecificas.</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Servicio al cliente básico</li>
+            </ul>
+            <%= button_to "Continuar con Plan Básico", invite_colleagues_path, method: :get, remote: true, class:"btn btn-block btn-primary", id:"btnBasico" %>
+          </div>
+        </div>
+      </div>
+      <!-- Pro Tier -->
+      <div class="col-lg-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title text-muted text-uppercase text-center">Pro</h5>
+            <h6 class="card-price text-center">L350<span class="period">/mes</span></h6>
+            <hr>
+            <ul class="fa-ul">
+              <li><span class="fa-li"><i class="fas fa-check"></i></span> Acceso a más de 150 documentos de legislación hondureña. Incluyendo todo los documentos nuevos que agreguemos.</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Buscador de palabras clave, por materia, ley o normas especificas.</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Servicio al cliente <strong>24/7</strong></li>
+            </ul>
+            <a href="#" id="btnDisable" class="btn btn-block btn-primary disabled" tabindex="-1" role="button" aria-disabled="true">Si pagas anualmente L 3,500/año </a>
+            <a href="#" class="btn btn-block btn-primary">Elegir Plan Pro</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</section>

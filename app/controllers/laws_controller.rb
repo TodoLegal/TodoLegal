@@ -124,6 +124,7 @@ class LawsController < ApplicationController
       @has_articles_only = book_iterator == 0 && title_iterator == 0 && chapter_iterator == 0 && subsection_iterator == 0 && section_iterator == 0
     end
 
+    @user_can_edit_law = current_user_is_admin
     @user_can_access_law = user_can_access_law @law
     if !@user_can_access_law
       @stream = @stream.take(5)
@@ -208,18 +209,27 @@ class LawsController < ApplicationController
 
     def user_can_access_law law
       law_access = law.law_access
-      if law_access
-        if law_access.name == "pro"
-          if !current_user_is_pro
-            return false
-          end
-        end
-        if law_access.name == "basic"
-          if !current_user
-            return false
-          end
-        end
+      if current_user
+        return true
       end
-      return true
+      if !law_access
+        return true
+      end
+      return law_access.name == "Todos"
+      
+      #law_access = law.law_access
+      #if law_access
+      #  if law_access.name == "Pro"
+      #    if !current_user_is_pro
+      #      return false
+      #    end
+      #  end
+      #  if law_access.name == "Básica"
+      #    if !current_user
+      #      return false
+      #    end
+      #  end
+      #end
+      #return true
     end
 end

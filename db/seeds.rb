@@ -28,6 +28,7 @@ tag_ambiental = Tag.create({ name: 'Ambiental', tag_type_id: tag_type_materia.id
 tag_militar = Tag.create({ name: 'Militar', tag_type_id: tag_type_materia.id })
 tag_judicial = Tag.create({ name: 'Judicial', tag_type_id: tag_type_materia.id })
 tag_familia = Tag.create({ name: 'Familia', tag_type_id: tag_type_materia.id })
+tag_derechos_humanos = Tag.create({ name: 'Derechos Humanos', tag_type_id: tag_type_materia.id })
 
 
 # Tags de Creacion
@@ -42,10 +43,10 @@ tag_resolucion = Tag.create({ name: 'Resolucion', tag_type_id: tag_type_creacion
 
 # Law Accesses
 
-law_access_pro = LawAccess.create(name: "pro")
-law_access_basic = LawAccess.create(name: "basic")
+law_access_pro = LawAccess.create(name: "Pro")
+law_access_basic = LawAccess.create(name: "Básica")
 
 # Permissions
 
-permissions_admin = Permission.create(name: "admin")
-permissions_pro = Permission.create(name: "pro")
+permissions_admin = Permission.create(name: "Admin")
+permissions_pro = Permission.create(name: "Pro")

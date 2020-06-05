@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Users::RegistrationsController < Devise::RegistrationsController
+  layout "onboarding"
   include Devise::Controllers::Helpers
   #skip_before_filter :verify_authenticity_token, :only => :create
   # before_action :configure_sign_up_params, only: [:create]
@@ -15,9 +16,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   # POST /resource
-  # def create
-  #   super
-  # end
+  def create
+    validateOccupationParam (params)
+    super
+  end
 
   # GET /resource/edit
   # def edit
@@ -25,9 +27,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   # PUT /resource
-  # def update
-  #   super
-  # end
+  def update
+    validateOccupationParam (params)
+    super
+  end
 
   # DELETE /resource
   # def destroy
@@ -57,29 +60,37 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # The path used after sign up.
   def after_sign_up_path_for(resource)
-    redirect_to_law_id = session[:redirect_to_law]
-    if redirect_to_law_id
-      session[:redirect_to_law] = nil
-      Law.find_by_id(redirect_to_law_id)
-    else
-      signed_up_path
-    end
+    session[:user_just_signed_up] = true
+    invite_colleagues_path
   end
 
   def after_update_path_for(resource)
     edit_user_registration_path
   end
 
+  #The path used after edit
+  # def afer_update_path_for(resource)
+  #   root_path
+  # end
   # The path used after sign up for inactive accounts.
   # def after_inactive_sign_up_path_for(resource)
   #   super(resource)
   # end
-
+  
   def update_resource(resource, params)
     if params["password"]&.present? or params["email"]&.present?
       return super
     else
       resource.update_without_password(params.except("current_password"))
+    end
+  end
+
+  def validateOccupationParam params
+    if params[:other_occupation]&.present?
+      params[:user][:occupation].replace(params[:other_occupation])
+    end
+    if params[:user][:occupation] && params[:user][:occupation] == ""
+      params[:user][:occupation].replace("Otro")
     end
   end
 end

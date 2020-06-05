@@ -28,6 +28,7 @@ tag_ambiental = Tag.create({ name: 'Ambiental', tag_type_id: tag_type_materia.id
 tag_militar = Tag.create({ name: 'Militar', tag_type_id: tag_type_materia.id })
 tag_judicial = Tag.create({ name: 'Judicial', tag_type_id: tag_type_materia.id })
 tag_familia = Tag.create({ name: 'Familia', tag_type_id: tag_type_materia.id })
+tag_derechos_humanos = Tag.create({ name: 'Derechos Humanos', tag_type_id: tag_type_materia.id })
 
 
 # Tags de Creacion

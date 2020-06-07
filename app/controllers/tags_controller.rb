@@ -17,7 +17,7 @@ class TagsController < ApplicationController
     @query = params[:query]
 
     if @query
-      if redirectOnEspecialCode @query
+      if redirectOnSpecialCode @query
         return
       end
     end

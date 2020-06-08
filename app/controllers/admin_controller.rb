@@ -1,6 +1,6 @@
 class AdminController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_action :authenticate_admin!, only: [:users, :grant_permission, :revoke_permission, :set_law_access, :subscriptions]
+  before_action :authenticate_admin!, only: [:users, :grant_permission, :revoke_permission, :set_law_access]
 
   def write_users_csv filename, users
     file_path = Rails.root.join("public", filename)
@@ -71,15 +71,6 @@ class AdminController < ApplicationController
     @law.law_access_id = law_access_id
     @law.save
     redirect_to laws_path
-  end
-
-  def subscriptions
-    @subscriptions = EmailSubscription.all
-    @confirmed_subscriptions = EmailSubscription.where(status: "confirmed")
-    @pending_subscriptions = EmailSubscription.where(status: "pending")
-
-    write_users_csv 'confirmed.csv', @confirmed_subscriptions
-    write_users_csv 'pending.csv', @pending_subscriptions
   end
 end
   

@@ -29,7 +29,7 @@ class HomeController < ApplicationController
     legal_documents = Set[]
 
     #if @query
-    #  if redirectOnEspecialCode @query
+    #  if redirectOnSpecialCode @query
     #    return
     #  end
     #end

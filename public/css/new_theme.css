@@ -5,12 +5,6 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
-.card--onboarding {
-    border: none;
-    margin: 2vh auto 1rem;
-    max-width: 580px;
-}
-
 .btn {
     height: 46px;
     border-radius: 8px;
@@ -28,8 +22,14 @@ h2 {
     line-height: 1.25rem;
 }
 
-.card--onboarding .content {
-    margin-bottom: 40px;
+.img-fluid-vertical {
+    height: 5vh;
+    min-height: 170px;
+    width: auto;
+}
+
+.container--home {
+    min-height: calc(100vh - 400px)
 }
 
 
@@ -179,6 +179,19 @@ input.form-control:focus {
 }
 
 
+/* General styles for Onboarding */
+
+.card--onboarding {
+    border: none;
+    margin: 2vh auto 1rem;
+    max-width: 580px;
+}
+
+.card--onboarding .content {
+    margin-bottom: 40px;
+}
+
+
 /* General styles for Cuenta */
 
 .container--cuenta .card .card {
@@ -224,4 +237,69 @@ input.form-control:focus {
 .nav-pills .nav-link.highlighted,
 .nav-pills .nav-link.highlighted {
     color: #007bff;
+}
+
+
+/* General styles for footer */
+
+footer .container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-top: 1px solid #A6B9D3;
+    padding: 1em 15px;
+    font-size: 14px;
+}
+
+footer p a {
+    color: #505864;
+}
+
+.footer-basic p {
+    color: #505864;
+    margin-bottom: .5em;
+}
+
+.footer-basic .social {
+    text-align: center;
+}
+
+.footer-basic .social>a {
+    font-size: 24px;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    display: inline-block;
+    text-align: center;
+    border-radius: 8px;
+    background-color: #505864;
+    color: white;
+    margin-left: 10px;
+}
+
+.footer-basic .social>a:hover {
+    opacity: 0.9;
+}
+
+.footer-basic .copyright {
+    text-align: left;
+    font-size: 13px;
+    margin-bottom: 0;
+}
+
+@media only screen and (max-width: 767.98px) {
+    footer .container {
+        flex-direction: column;
+        padding: 20px;
+    }
+    .footer-basic .social {
+        text-align: left;
+    }
+    .footer-basic .social>a {
+        margin-right: 10px;
+        margin-left: 0;
+    }
+    .footer-basic .social {
+        margin-top: 20px;
+    }
 }

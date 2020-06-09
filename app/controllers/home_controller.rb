@@ -84,6 +84,7 @@ class HomeController < ApplicationController
   end
   
   def invite_colleagues
+    @is_onboarding = params[:is_onboarding]
   end
   
   def drive_search

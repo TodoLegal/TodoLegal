@@ -28,7 +28,7 @@ class TagsController < ApplicationController
         @stream = Article.where(law: @tag.laws).where('number LIKE ?', "%#{@tokens.second}%").group_by(&:law_id)
         @grouped_laws = []
         @stream.each do |grouped_law|
-          law = {count: grouped_law[1].count, law: Law.find_by_id(grouped_law[0]), preview: ("<b>Artículo " + grouped_law[1].first.number + ":</b> " + grouped_law[1].first.body[0,300] + "...").html_safe}
+          law = {count: grouped_law[1].count, law: Law.find_by_id(grouped_law[0]), preview: ("<b>Artículo " + grouped_law[1].first.number + "</b> " + grouped_law[1].first.body[0,300] + "...").html_safe}
           law[:materia_names] = law[:law].materia_names
           @grouped_laws.push(law)
           #@result_count += grouped_law[1].count
@@ -49,7 +49,7 @@ class TagsController < ApplicationController
         
         @grouped_laws = []
         @stream.each do |grouped_law|
-          law = {count: grouped_law[1].count, law: Law.find_by_id(grouped_law[0]), preview: ("<b>Artículo " + grouped_law[1].first.number + ":</b> " + grouped_law[1].first.body[0,300] + "...").html_safe}
+          law = {count: grouped_law[1].count, law: Law.find_by_id(grouped_law[0]), preview: ("<b>Artículo " + grouped_law[1].first.number + "</b> " + grouped_law[1].first.body[0,300] + "...").html_safe}
           law[:materia_names] = law[:law].materia_names
           @grouped_laws.push(law)
           @result_count += grouped_law[1].count

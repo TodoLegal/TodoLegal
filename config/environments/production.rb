@@ -18,7 +18,7 @@ module ExceptionNotifier
 
     def call(exception, options={})
       puts '[Discord bot]: Exception found'
-      @@bot.send_message(@@channel_id, "Encontré un error! [" + exception.to_s) + "]"
+      @@bot.send_message(@@channel_id, "Encontré un error! " + exception.to_s)
     end
   end
 end

@@ -42,9 +42,13 @@
                     <%= link_to('-> Usuarios', admin_users_path, class:"dropdown-item") %>
                     <%= link_to('-> Leyes', laws_path, class:"dropdown-item")%>
                     <div class="dropdown-divider"></div>
-                    <button class="dropdown-item" type="button">
-                        Modo edición
-                    </button>
+                    <% if is_editor_mode_enabled %>
+                        <a href="/admin/disable_edit_mode" class="dropdown-item">
+                        Deshabilitar modo edición</a>
+                    <% else %>
+                        <a href="/admin/enable_edit_mode" class="dropdown-item">
+                        Habilitar modo edición</a>
+                    <% end %>
                 <% end %>
                 
                 <i class="fas fa-sign-out-alt" aria-hidden="true"></i>

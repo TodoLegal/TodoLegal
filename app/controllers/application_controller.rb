@@ -10,11 +10,11 @@ class ApplicationController < ActionController::Base
   end
   
   def current_user_is_admin
-    current_user && current_user.permissions.find_by_name("Admin")
+    current_user != nil && current_user.permissions.find_by_name("Admin") != nil
   end
 
   def current_user_is_pro
-    current_user && current_user.permissions.find_by_name("Pro")
+    current_user != nil && current_user.permissions.find_by_name("Pro") != nil
   end
 
   def authenticate_admin!

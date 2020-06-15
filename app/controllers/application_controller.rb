@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   include Devise::Controllers::Rememberable
+  require 'csv'
 
   protect_from_forgery with: :null_session
   before_action :configure_devise_permitted_parameters, if: :devise_controller?

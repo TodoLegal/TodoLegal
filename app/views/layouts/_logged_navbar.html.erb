@@ -50,8 +50,6 @@
                         Habilitar modo edición</a>
                     <% end %>
                 <% end %>
-                
-                <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
                 <%= link_to('Cerrar sesión', destroy_user_session_path, method: :delete, class:"dropdown-item") %>
             </div>
         </div>
@@ -101,7 +99,7 @@
         
     }
 
-    .btn-avatar-large {
+    .dropdown-menu .btn-avatar-large {
     height: 60px;
     width: 60px;
     font-size: 22px;
@@ -134,5 +132,18 @@
             border-radius: 0 0 2px 2px;
         }
     }
+
+    @media only screen and (max-width: 767.98px){
+    .todolegal{
+      margin:0px;
+      display: none;
+    }
+  }
+
+   @media only screen and (min-width: 1200px){
+
+    #topNavbar{
+      padding: 5px 10vw;
+  }
 </style>
 

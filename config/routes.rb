@@ -29,6 +29,8 @@ Rails.application.routes.draw do
   post "admin/grant_permission" => "admin#grant_permission", as: "admin_grant_permission"
   post "admin/revoke_permission" => "admin#revoke_permission", as: "admin_revoke_permission"
   post "admin/set_law_access" => "admin#set_law_access", as: "admin_set_law_access"
+  get 'admin/enable_edit_mode', to: 'admin#enable_edit_mode', as: "enable_edit_mode"
+  get 'admin/disable_edit_mode', to: 'admin#disable_edit_mode', as: "disable_edit_mode"
   get "signed_in" => "home#index", as: "signed_in"
   get "signed_up" => "home#index", as: "signed_up"
   get "signed_out" => "home#index", as: "signed_out"

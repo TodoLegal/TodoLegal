@@ -84,5 +84,15 @@ class AdminController < ApplicationController
     @law.save
     redirect_to laws_path
   end
+
+  def enable_edit_mode
+    session[:edit_mode_enabled] = true
+    redirect_back(fallback_location: root_path, notice: "Modo editor habilitado.")
+  end
+
+  def disable_edit_mode
+    session[:edit_mode_enabled] = false
+    redirect_back(fallback_location: root_path, notice: "Modo editor deshabilitado.")
+  end
 end
   

@@ -1,20 +1,6 @@
 class AdminController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_action :authenticate_admin!, only: [:users, :grant_permission, :revoke_permission, :set_law_access, :subscriptions]
-
-  def write_users_csv filename, users
-    file_path = Rails.root.join("public", filename)
-
-    content = ""
-
-    users.each do |user|
-      content += user.email + "\n"
-    end
-
-    File.open(file_path, "w+") do |f|
-      f.write(content)
-    end
-  end
+  before_action :authenticate_admin!, only: [:users, :download_contributor_users, :download_recieve_information_users, :grant_permission, :revoke_permission, :set_law_access]
 
   def users
     @email = params[:email]
@@ -25,7 +11,33 @@ class AdminController < ApplicationController
     end
     @permissions = Permission.all
 
-    write_users_csv 'users.csv', @users
+    respond_to do |format|
+      format.html
+      format.csv do
+        headers['Content-Disposition'] = "attachment; filename=\"users\""
+        headers['Content-Type'] ||= 'text/csv'
+      end
+    end
+  end
+
+  def download_contributor_users
+    @users = User.where(is_contributor: true)
+    respond_to do |format|
+      format.csv do
+        headers['Content-Disposition'] = "attachment; filename=\"contributors_users\""
+        headers['Content-Type'] ||= 'text/csv'
+      end
+    end
+  end
+
+  def download_recieve_information_users
+    @users = User.where(receive_information_emails: true)
+    respond_to do |format|
+      format.csv do
+        headers['Content-Disposition'] = "attachment; filename=\"recieve_information_users\""
+        headers['Content-Type'] ||= 'text/csv'
+      end
+    end
   end
 
   def grant_permission
@@ -71,15 +83,6 @@ class AdminController < ApplicationController
     @law.law_access_id = law_access_id
     @law.save
     redirect_to laws_path
-  end
-
-  def subscriptions
-    @subscriptions = EmailSubscription.all
-    @confirmed_subscriptions = EmailSubscription.where(status: "confirmed")
-    @pending_subscriptions = EmailSubscription.where(status: "pending")
-
-    write_users_csv 'confirmed.csv', @confirmed_subscriptions
-    write_users_csv 'pending.csv', @pending_subscriptions
   end
 end
   

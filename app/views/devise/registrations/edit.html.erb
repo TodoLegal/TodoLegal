@@ -176,8 +176,8 @@
       </div>
       <!-- End edition of user data-->
 
-      <% if current_user_is_pro %>
-        <section class="change-plan">
+      <% if !current_user_is_pro %>
+        <section class="change-plan" style="display: none;">
           <div class="change-plan-content">
             <h5 id="change-plan-title">¿Listo para cambiar tu plan?</h5>
             <p id="change-plan-text">Tendrás acceso a más de 150 documentos de legislación hondureña.</p>

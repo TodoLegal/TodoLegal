@@ -56,6 +56,10 @@ class ApplicationController < ActionController::Base
     end
     return false
   end
+
+  def is_number string
+    string.match(/^(\d)+$/)
+  end
   
 protected
   

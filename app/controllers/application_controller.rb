@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   include Devise::Controllers::Rememberable
+  require 'csv'
 
   protect_from_forgery with: :null_session
   before_action :configure_devise_permitted_parameters, if: :devise_controller?
@@ -9,11 +10,11 @@ class ApplicationController < ActionController::Base
   end
   
   def current_user_is_admin
-    current_user && current_user.permissions.find_by_name("Admin")
+    current_user != nil && current_user.permissions.find_by_name("Admin") != nil
   end
 
   def current_user_is_pro
-    current_user && current_user.permissions.find_by_name("Pro")
+    current_user != nil && current_user.permissions.find_by_name("Pro") != nil
   end
 
   def authenticate_admin!
@@ -54,6 +55,10 @@ class ApplicationController < ActionController::Base
       redirect_to search_law_path + "?query=" + @query
     end
     return false
+  end
+
+  def is_number string
+    string.match(/^(\d)+$/)
   end
   
 protected

@@ -1,6 +1,6 @@
 <h1>
   <%= @law.name %>
-  <% if @user_can_edit_law == true %>
+  <% if @user_can_edit_law && is_editor_mode_enabled %>
     <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_law_path(@law) %>
   <% end %>
 </h1>

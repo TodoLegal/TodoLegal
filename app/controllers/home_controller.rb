@@ -29,7 +29,7 @@ class HomeController < ApplicationController
     legal_documents = Set[]
 
     #if @query
-    #  if redirectOnEspecialCode @query
+    #  if redirectOnSpecialCode @query
     #    return
     #  end
     #end
@@ -42,9 +42,16 @@ class HomeController < ApplicationController
 
     @tokens = @query.scan(/\w+|\W/)
     if @tokens.first == '/'
-      @stream = Article.where(law: Law.all.search_by_name(@tokens.fourth)).where(number: @tokens.second).group_by(&:law_id)
+      if is_number(@tokens.second)
+        article_number_query = @tokens.second
+        law_name_query = @tokens.fourth
+      else
+        law_name_query = @tokens.second
+        article_number_query = @tokens.fourth
+      end
+      @stream = Article.where(law: Law.all.search_by_name(law_name_query)).where(number: article_number_query).group_by(&:law_id)
       @stream.each do |grouped_law|
-        law = {count: grouped_law[1].count, law: Law.find_by_id(grouped_law[0]), preview: ("<b>Artículo " + grouped_law[1].first.number + ":</b> " + grouped_law[1].first.body[0,300] + "...").html_safe}
+        law = {count: grouped_law[1].count, law: Law.find_by_id(grouped_law[0]), preview: ("<b>Artículo " + grouped_law[1].first.number + "</b> " + grouped_law[1].first.body[0,300] + "...").html_safe}
         law[:materia_names] = law[:law].materia_names
         @grouped_laws.push(law)
         @result_count = @grouped_laws.count
@@ -53,7 +60,7 @@ class HomeController < ApplicationController
       @grouped_laws = @grouped_laws.sort_by{|k|k[:count]}.reverse
     else
       @stream.each do |grouped_law|
-        law = {count: grouped_law[1].count, law: Law.find_by_id(grouped_law[0]), preview: ("<b>Artículo " + grouped_law[1].first.number + ":</b> ..." + grouped_law[1].first.pg_search_highlight + "...").html_safe, tag_text: ""}
+        law = {count: grouped_law[1].count, law: Law.find_by_id(grouped_law[0]), preview: ("<b>Artículo " + grouped_law[1].first.number + "</b> ..." + grouped_law[1].first.pg_search_highlight + "...").html_safe, tag_text: ""}
         law[:materia_names] = law[:law].materia_names
         @grouped_laws.push(law)
         @result_count += grouped_law[1].count
@@ -77,10 +84,14 @@ class HomeController < ApplicationController
   def terms_and_conditions
   end
 
+  def privacy_policy
+  end
+
   def pricing
   end
   
   def invite_colleagues
+    @is_onboarding = params[:is_onboarding]
   end
   
   def drive_search

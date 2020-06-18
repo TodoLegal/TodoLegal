@@ -40,15 +40,16 @@
                     </button>
                     <div class="dropdown-divider"></div>
                     <%= link_to('-> Usuarios', admin_users_path, class:"dropdown-item") %>
-                    <%= link_to('-> Suscritos', admin_subscriptions_path, class:"dropdown-item")%>
                     <%= link_to('-> Leyes', laws_path, class:"dropdown-item")%>
                     <div class="dropdown-divider"></div>
-                    <button class="dropdown-item" type="button">
-                        Modo edición
-                    </button>
+                    <% if is_editor_mode_enabled %>
+                        <a href="/admin/disable_edit_mode" class="dropdown-item">
+                        Deshabilitar modo edición</a>
+                    <% else %>
+                        <a href="/admin/enable_edit_mode" class="dropdown-item">
+                        Habilitar modo edición</a>
+                    <% end %>
                 <% end %>
-                
-                <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
                 <%= link_to('Cerrar sesión', destroy_user_session_path, method: :delete, class:"dropdown-item") %>
             </div>
         </div>
@@ -98,7 +99,7 @@
         
     }
 
-    .btn-avatar-large {
+    .dropdown-menu .btn-avatar-large {
     height: 60px;
     width: 60px;
     font-size: 22px;
@@ -131,5 +132,18 @@
             border-radius: 0 0 2px 2px;
         }
     }
+
+    @media only screen and (max-width: 767.98px){
+    .todolegal{
+      margin:0px;
+      display: none;
+    }
+  }
+
+   @media only screen and (min-width: 1200px){
+
+    #topNavbar{
+      padding: 5px 10vw;
+  }
 </style>
 

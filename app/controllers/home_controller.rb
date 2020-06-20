@@ -42,20 +42,21 @@ class HomeController < ApplicationController
 
     @tokens = @query.scan(/\w+|\W/)
     if @tokens.first == '/'
-      if is_number(@tokens.second)
-        article_number_query = @tokens.second
-        law_name_query = @tokens.fourth
-      else
-        law_name_query = @tokens.second
-        article_number_query = @tokens.fourth
+      articles_query = []
+      law_name_query = ""
+      @tokens.each do |token|
+        if is_number(token)
+          articles_query.push(token)
+        elsif token != '/'
+          law_name_query = token
+        end
       end
-      @stream = Article.where(law: Law.all.search_by_name(law_name_query)).where(number: article_number_query).group_by(&:law_id)
+      @stream = Article.where(law: Law.all.search_by_name(law_name_query)).where(number: articles_query).group_by(&:law_id)
       @stream.each do |grouped_law|
         law = {count: grouped_law[1].count, law: Law.find_by_id(grouped_law[0]), preview: ("<b>Artículo " + grouped_law[1].first.number + "</b> " + grouped_law[1].first.body[0,300] + "...").html_safe}
         law[:materia_names] = law[:law].materia_names
         @grouped_laws.push(law)
         @result_count = @grouped_laws.count
-        #legal_documents.add(grouped_law[0])
       end
       @grouped_laws = @grouped_laws.sort_by{|k|k[:count]}.reverse
     else

@@ -25,7 +25,9 @@
             -->
             <div class="form-group">
               <button type="submit" id="submitBtn" class="btn btn-block btn-primary" onclick="sendParameters()">Enviar</button>
-              <a href="/" id= "omitirPaso" class="text-center">Omitir este paso</a>
+              <% if @is_onboarding%>
+                <a href="/" id= "omitirPaso" class="text-center">Omitir este paso</a>
+              <% end %>
             </div>
           </form>
       </div>

@@ -64,7 +64,7 @@
               </a>
             </div>
 
-            <!-- Start Modal -->
+            <!-- Start Cancel Registration Modal -->
             <div class="modal fade" id="cancelRegistrationModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalCenterTitle" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -82,7 +82,7 @@
                 </div>
               </div>
             </div>
-            <!--End modal -->
+            <!--End Cancel Registration modal -->
 
             <div class="card card--onboarding bg-white rounded" id="profileInfo" tabindex="0">
               <!-------------------------------- Card Body ------------------------------------------->
@@ -121,6 +121,9 @@
                     <label class="form-check-label" for="check2">Quiero participar en actividades para contribuir al estudio y mejora de la app.</label>
                   </div>
                 </div>
+                <a href="/" data-toggle="modal" data-target="#moreInfoModal" style="text-decoration: underline;">
+                <i class="fas fa-info-circle"></i>
+                Más información</a>
                 <div class="form-group">
                   <%= f.submit "Crear cuenta", class: 'btn btn-primary btn-block btn-next', id:"registerButton", onclick:"sendParameter()"%>
                 </div>
@@ -132,6 +135,36 @@
           </div>
         </div>
       </div>
+
+      <!-- Start More info Modal -->
+      <div class="modal fade" id="moreInfoModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-body">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <h5 class="modal-title" id="cancelModalLongTitle">¿Cómo contribuir?</h5>
+              <h5 class="modal-subtitle" style="margin-top: 30px;"> 1. Regístrate</h5> 
+              <label class="more-info-text">
+                Termina de crear tu cuenta para tener como ponernos en contacto.
+              </label>
+              <h5 class="modal-subtitle"> 2. Participa</h5> 
+              <label class="more-info-text">
+                Recibirás invitación cuando tengamos una entrevista y/o prueba de usuario para ti (Te daremos más información junto a la invitación).
+              </label>
+              <h5 class="modal-subtitle"> 3. Contribuye</h5> 
+              <label class="more-info-text" style="margin-bottom: 20px;">
+                Tu participación nos ayudará al continuo desarrollo y mejoras del producto. Construimos TodoLegal en conjunto.
+              </label>
+              <div class="form-group" id="bottonsGroup">
+                <button type="button" id="dismissBtn" class="btn btn-secondary" data-dismiss="modal">Entendido</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--End More info modal -->
 
     <% end %>
   </div>
@@ -411,6 +444,23 @@
 
   #bottonsGroup{
     margin-bottom: 30px;
+  }
+
+  .more-info-text{
+    font-family: -apple-system, sans-serif;
+    color: #505864;
+    text-align: left;
+    font-size: 18px;
+    line-height: 21px;
+}
+
+  .modal-subtitle{
+    color: #fc5603;
+    text-align: left;
+    font-family: -apple-system, sans-serif;
+    font-weight: bold;
+    margin-top: 15px;
+    line-height: 10px;
   }
 
   @media only screen and (max-width: 767.98px){

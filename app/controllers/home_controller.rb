@@ -40,7 +40,11 @@ class HomeController < ApplicationController
 
     @grouped_laws = []
 
-    @tokens = @query.scan(/\w+|\W/)
+    @tokens = []
+    if @query
+      @tokens = @query.scan(/\w+|\W/)
+    end
+
     if @tokens.first == '/'
       articles_query = []
       law_name_query = ""

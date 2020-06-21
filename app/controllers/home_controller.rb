@@ -101,23 +101,22 @@ class HomeController < ApplicationController
     @get_parent_files = params[:get_parent_files] == 'true'
     @files = []
 
-    if @query && @query!=""
+    if File.file?('public/covid_drive_data.json')
       covid_drive_data = File.read('public/covid_drive_data.json')
-      @files = get_files_like_name(JSON.parse(covid_drive_data)["data"], @query).sort_by { |v| v["name"] }
-    elsif @folder && @folder!=""
-      covid_drive_data = File.read('public/covid_drive_data.json')
-      if @get_parent_files
-        @folder = get_parrent_folder_name JSON.parse(covid_drive_data)["data"], @folder
-      end
-      if @folder == ""
-        covid_drive_data = File.read('public/covid_drive_data.json')
-        @files = JSON.parse(covid_drive_data)["data"].sort_by { |v| v["name"] }
+      if @query && @query!=""
+        @files = get_files_like_name(JSON.parse(covid_drive_data)["data"], @query).sort_by { |v| v["name"] }
+      elsif @folder && @folder!=""
+        if @get_parent_files
+          @folder = get_parrent_folder_name JSON.parse(covid_drive_data)["data"], @folder
+        end
+        if @folder == ""
+          @files = JSON.parse(covid_drive_data)["data"].sort_by { |v| v["name"] }
+        else
+          @files = get_folder_files JSON.parse(covid_drive_data)["data"], @folder
+        end
       else
-        @files = get_folder_files JSON.parse(covid_drive_data)["data"], @folder
+        @files = JSON.parse(covid_drive_data)["data"].sort_by { |v| v["name"] }
       end
-    else
-      covid_drive_data = File.read('public/covid_drive_data.json')
-      @files = JSON.parse(covid_drive_data)["data"].sort_by { |v| v["name"] }
     end
   end
 

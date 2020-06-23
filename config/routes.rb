@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   get '/drive_search', to: 'home#drive_search', as: "drive_search"
   get '/refer', to: 'home#refer', as: "refer"
   get '/crash_tester', to: 'home#crash_tester', as: "crash_tester"
+  get '/maintenance', to: 'home#maintenance', as: "maintenance"
 
   get "admin/users" => "admin#users", as: "admin_users"
   post "admin/grant_permission" => "admin#grant_permission", as: "admin_grant_permission"

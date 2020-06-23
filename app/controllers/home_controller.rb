@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
-  layout 'onboarding', only: [:pricing, :invite_colleagues]
+  layout 'onboarding', only: [:pricing, :invite_friends]
   include ActionView::Helpers::NumberHelper
   require 'set'
   
@@ -95,7 +95,7 @@ class HomeController < ApplicationController
   def pricing
   end
   
-  def invite_colleagues
+  def invite_friends
     @is_onboarding = params[:is_onboarding]
   end
   

@@ -20,7 +20,7 @@ Rails.application.routes.draw do
   get '/terms', to: 'home#terms_and_conditions'
   get '/privacy', to: 'home#privacy_policy', as: "privacy_policy"
   get '/pricing', to: 'home#pricing'
-  get '/invite_colleagues', to: 'home#invite_colleagues'
+  get '/invite_friends', to: 'home#invite_friends'
   get '/drive_search', to: 'home#drive_search', as: "drive_search"
   get '/refer', to: 'home#refer', as: "refer"
   get '/crash_tester', to: 'home#crash_tester', as: "crash_tester"

@@ -15,7 +15,7 @@ class User < ApplicationRecord
 
   def email_uniqueness
     self.errors.clear
-    self.errors.add(:base, 'Este email ya está registrado en TodoLegal.') if User.where(:email => self.email).exists?
+    self.errors.add(:base, I18n.t(:email_taken)) if User.where(:email => self.email).exists?
   end
   
   protected

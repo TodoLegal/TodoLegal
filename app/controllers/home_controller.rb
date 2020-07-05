@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
-  layout 'onboarding', only: [:pricing, :invite_colleagues]
+  layout 'onboarding', only: [:pricing, :invite_friends]
   include ActionView::Helpers::NumberHelper
   require 'set'
   
@@ -40,7 +40,11 @@ class HomeController < ApplicationController
 
     @grouped_laws = []
 
-    @tokens = @query.scan(/\w+|\W/)
+    @tokens = []
+    if @query
+      @tokens = @query.scan(/\w+|\W/)
+    end
+
     if @tokens.first == '/'
       articles_query = []
       law_name_query = ""
@@ -91,7 +95,7 @@ class HomeController < ApplicationController
   def pricing
   end
   
-  def invite_colleagues
+  def invite_friends
     @is_onboarding = params[:is_onboarding]
   end
   
@@ -101,23 +105,22 @@ class HomeController < ApplicationController
     @get_parent_files = params[:get_parent_files] == 'true'
     @files = []
 
-    if @query && @query!=""
+    if File.file?('public/covid_drive_data.json')
       covid_drive_data = File.read('public/covid_drive_data.json')
-      @files = get_files_like_name(JSON.parse(covid_drive_data)["data"], @query).sort_by { |v| v["name"] }
-    elsif @folder && @folder!=""
-      covid_drive_data = File.read('public/covid_drive_data.json')
-      if @get_parent_files
-        @folder = get_parrent_folder_name JSON.parse(covid_drive_data)["data"], @folder
-      end
-      if @folder == ""
-        covid_drive_data = File.read('public/covid_drive_data.json')
-        @files = JSON.parse(covid_drive_data)["data"].sort_by { |v| v["name"] }
+      if @query && @query!=""
+        @files = get_files_like_name(JSON.parse(covid_drive_data)["data"], @query).sort_by { |v| v["name"] }
+      elsif @folder && @folder!=""
+        if @get_parent_files
+          @folder = get_parrent_folder_name JSON.parse(covid_drive_data)["data"], @folder
+        end
+        if @folder == ""
+          @files = JSON.parse(covid_drive_data)["data"].sort_by { |v| v["name"] }
+        else
+          @files = get_folder_files JSON.parse(covid_drive_data)["data"], @folder
+        end
       else
-        @files = get_folder_files JSON.parse(covid_drive_data)["data"], @folder
+        @files = JSON.parse(covid_drive_data)["data"].sort_by { |v| v["name"] }
       end
-    else
-      covid_drive_data = File.read('public/covid_drive_data.json')
-      @files = JSON.parse(covid_drive_data)["data"].sort_by { |v| v["name"] }
     end
   end
 
@@ -134,9 +137,11 @@ class HomeController < ApplicationController
       end
       return
     end
-    emails = params[:emails].split(',')
-    emails.each do |email|
-      SubscriptionsMailer.refer(current_user, email).deliver
+    if params[:email1]
+      SubscriptionsMailer.refer(current_user, params[:email1]).deliver
+    end
+    if params[:email2]
+      SubscriptionsMailer.refer(current_user, params[:email2]).deliver
     end
     if is_redirect_pending
       handle_redirect

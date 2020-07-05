@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>The page you were looking for doesn't exist (404)</title>
+  <title>Site Maintenance</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -30,24 +30,8 @@
     align-items: center;
   }
 
-  #topNavbar{
-      margin-bottom: 0px; 
-      z-index: 1000; 
-      background: #171F2A;
-      padding: 5px 20px;
-  }
-
   #logo{
     background-color: #171F2A;
-  }
-
-  #registerButton{
-    background: #1A7FFA;
-    border: 1px solid #1A7FFA;
-    box-sizing: border-box;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
   }
 
   .gray-logo{
@@ -56,21 +40,13 @@
     margin-top: 60px;
   }
 
-  h3{
-    font-style: normal;
-    font-weight: bold;
-    font-size: 20px;
-    line-height: 24px;
-    color: #505864;
-    margin-top: 20px;
-  }
-
   h2{
     font-style: normal;
     font-weight: bold;
     font-size: 24px;
     line-height: 29px;
     color: #171F2A;
+    margin-top: 40px;
   }
 
   p{
@@ -82,17 +58,6 @@
     margin-top: 30px;
   }
 
-  #back-btn{
-    font-weight: 500;
-    font-size: 18px;
-    line-height: 21px;
-    padding-top: 12px;
-    padding-bottom: 12px;
-    padding-left: 35px;
-    padding-right: 35px;
-    margin-top: 20px;
-    margin-bottom: 200px;
-  }
   @media only screen and (max-width: 767.98px){
     .todolegal{
       margin:0px;
@@ -100,46 +65,83 @@
     }
   }
 
-   @media only screen and (min-width: 1200px){
+/* General styles for footer */
 
-    #topNavbar{
-      padding: 5px 10vw;
+  footer .container {
+      padding: 1em 15px;
+      font-size: 14px;
   }
 
+  footer p a {
+      color: #505864;
+  }
+
+  .footer-basic p {
+      color: #505864;
+      margin-bottom: .5em;
+  }
+
+  .footer-basic .social>a {
+      font-size: 18px;
+      width: 30px;
+      height: 30px;
+      line-height: 30px;
+      display: inline-block;
+      text-align: center;
+      background-color: #505864;
+      color: white;
+      margin-left: 10px;
+  }
+
+  .footer-basic .social>a:hover {
+      opacity: 0.9;
+  }
+
+  .footer-basic .copyright {
+      text-align: left;
+      font-size: 13px;
+      margin-bottom: 0;
+  }
+
+  .footer-basic{
+    margin-bottom: 100px;
   }
   </style>
 </head>
 
 <body class="rails-default-error-page">
-  <!-- This file lives in public/404.html -->
-  <nav class="navbar sticky-top" id="topNavbar">
-    <a href="/" class="navbar-brand text-primary" >
-        <img src="/img/top_navbar/top_navbar.svg" alt="Card image cap" class="img-fluid" id="logo">
-        &nbsp;&nbsp;
-    </a>
-    <form class="form-inline">
-      <a class="btn btn-outline-light" href="http://test.todolegal.app/users/sign_in" role="button">
-          Inicia Sesión
-      </a>
-      <div style="padding-left: 10px;">
-        <a class="btn btn-primary" id="registerButton" href="http://test.todolegal.app/users/sign_up" role="button">
-          Regístrate
-        </a>
-      </div>
-    </form>
-  </nav>
-  
+  <!-- This file lives in public/505.html -->
   <div class="container">
     <img src="/img/top_navbar/Vector.svg" class="gray-logo">
-    <h3>ERROR 404</h3>
-    <h2>La página que buscas no existe o no<br>está disponible</h2>
-    <p>Verifica la dirección (url), si no encuentras ningún problema puede<br>
-      ser que la página haya cambiado de dirección. Intenta buscando en<br>
-      nuestro mapa.
+    <h2>TodoLegal está en mantenimiento</h2>
+    <p class="content">Estaremos de regreso dentro de poco. El mantenimiento está<br>
+        programado para un periodo breve de tiempo. Puedes contactarnos<br>
+        por nuestros canales de comunicación para más información:
     </p>
-    <a class="btn btn-primary" id="back-btn" href="http://test.todolegal.app/" role="button">
-      Volver al inicio
-    </a>
+    <div class="footer-basic">
+      <footer>
+      <div class="container">
+        <div class="social">
+          <a href="https://twitter.com/TodoLegal1">
+          <i class="fab fa-twitter"></i>
+          </a>
+          <a href="https://www.facebook.com/todolegaltech/">
+          <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="https://www.facebook.com/todolegaltech/">
+          <i class="fab fa-linkedin-in"></i>
+          </a>
+          <a href="https://instagram.com/todolegal.app?igshid=1ibunfzqohm2g">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="https://wa.me/50494714842">
+            <i class="fab fa-whatsapp"></i>
+          </a>
+        </div>
+      </div>
+      </footer>
+    </div>
+  
   </div>
 
 </body>

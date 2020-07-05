@@ -1,3 +1,5 @@
+<% content_for :title, @law.name + " - TodoLegal" %>
+
 <script>
 function onIndexElementClicked(section_id) {
   console.log(section_id)
@@ -29,9 +31,9 @@ function onIndexElementClicked(section_id) {
     <% if !@user_can_access_law %>
       <p>Crea una cuenta para acceder a esta ley</p>
       <!-- Modal -->
-      <div class="modal fade" data-backdrop="static" id="modalCreateBasicAccount" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal fade" data-keyboard="false" data-backdrop="static" id="modalCreateBasicAccount" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content" style="padding-top: 66px; padding-bottom: 66px; padding-left: 33; padding-right:33">
+          <div class="modal-content">
             <div class="modal-body">
               <div class="container col-md-12">
                 <div class="row">
@@ -40,12 +42,12 @@ function onIndexElementClicked(section_id) {
                   </div>
                   <div class="col-md-12">
                     <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
-                    Crea una cuenta y accede a más de <b>150 documentos</b> de Legislación Hondureña y recibe boletines informativos sobre cambios que están sucediendo.
+                    Crea una cuenta y accede a más de <b>150 documentos</b> de Legislación Hondureña y recibe boletines informativos.
                   </p>
                   </div>
                   <div class="col-md-12">
                     <a href="<%= new_user_registration_path %>?go_to_law=<%=@law.id%>">
-                      <button type="button" class="btn btn-primary btn-block">Crear cuenta básica</button>
+                      <button type="button" class="btn btn-primary btn-block">Crear cuenta</button>
                     </a>
                   </div>
                   <div class="col-md-12">

@@ -30,4 +30,6 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  hello: 'Hello world'
+  referal_sent: 'Hemos enviado correos de invitación a tus amigos.'
+  email_taken: 'Este email ya está registrado en TodoLegal.'

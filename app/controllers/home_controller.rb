@@ -137,9 +137,11 @@ class HomeController < ApplicationController
       end
       return
     end
-    emails = params[:emails].split(',')
-    emails.each do |email|
-      SubscriptionsMailer.refer(current_user, email).deliver
+    if params[:email1]
+      SubscriptionsMailer.refer(current_user, params[:email1]).deliver
+    end
+    if params[:email2]
+      SubscriptionsMailer.refer(current_user, params[:email2]).deliver
     end
     if is_redirect_pending
       handle_redirect

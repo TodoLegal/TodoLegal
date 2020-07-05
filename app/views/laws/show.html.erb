@@ -1,3 +1,5 @@
+<% content_for :title, @law.name + " - TodoLegal" %>
+
 <script>
 function onIndexElementClicked(section_id) {
   console.log(section_id)
@@ -29,7 +31,7 @@ function onIndexElementClicked(section_id) {
     <% if !@user_can_access_law %>
       <p>Crea una cuenta para acceder a esta ley</p>
       <!-- Modal -->
-      <div class="modal fade" data-backdrop="static" id="modalCreateBasicAccount" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal fade" data-keyboard="false" data-backdrop="static" id="modalCreateBasicAccount" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
             <div class="modal-body">

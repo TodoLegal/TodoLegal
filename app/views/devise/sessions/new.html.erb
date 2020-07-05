@@ -1,3 +1,5 @@
+<% content_for :title, "Inicia sesión - TodoLegal" %>
+
 <section>
   <div class="container">
     <a href="/">
@@ -6,7 +8,10 @@
     <div class="card card--onboarding bg-white rounded">
       <div class="card-body">
         <h2 class="card-title text-center" id="title">Inicia sesión</h2>
-        <p class="card-text text-center">¿No tienes una cuenta aún?<br/><%= render partial: "devise/shared/links", locals:{create: true} %></p>
+        <p class="card-text text-center">
+          ¿No tienes una cuenta aún?<br/>
+          <%= link_to "Regístrate", new_registration_path(resource_name) %><br />
+        </p>
         <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
 
           <div class="form-group">

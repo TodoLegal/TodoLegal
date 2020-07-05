@@ -12,7 +12,13 @@
 
   <%= render 'layouts/favicons' %>
 
-  <title>TodoLegal - El buscador de leyes de Honduras</title>
+  <title>
+    <% if yield(:title).blank? %>
+      TodoLegal
+    <% else %>
+      <%= yield(:title) %>
+    <% end %>
+  </title>
   <meta name="description" content="En TodoLegal tú puedes navegar las leyes hondureñas artículo por artículo y realizar búsquedas por palabras clave.">
   <meta name="keywords" content="constitución, constitución de la república, ley, poder judicial, ley de procedimiento administrativo">
 

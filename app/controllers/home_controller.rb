@@ -142,7 +142,7 @@ class HomeController < ApplicationController
       return
     else
       respond_to do |format|
-        format.html { redirect_to root_path, notice: "Hemos enviado correos de invitación a tus amigos." }
+        format.html { redirect_to root_path, notice: I18n.t(:referal_sent) }
       end
     end
   end

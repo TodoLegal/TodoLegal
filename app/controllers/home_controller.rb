@@ -131,24 +131,18 @@ class HomeController < ApplicationController
       end
       return
     end
-    if !params[:emails]
-      respond_to do |format|
-        format.html { redirect_to root_path }
-      end
-      return
+    if !params["email1"].blank?
+      SubscriptionsMailer.refer(current_user, params["email1"]).deliver
     end
-    if params[:email1]
-      SubscriptionsMailer.refer(current_user, params[:email1]).deliver
-    end
-    if params[:email2]
-      SubscriptionsMailer.refer(current_user, params[:email2]).deliver
+    if !params["email2"].blank?
+      SubscriptionsMailer.refer(current_user, params["email2"]).deliver
     end
     if is_redirect_pending
       handle_redirect
       return
     else
       respond_to do |format|
-        format.html { redirect_to root_path }
+        format.html { redirect_to root_path, notice: "Hemos enviado correos de invitación a tus amigos." }
       end
     end
   end

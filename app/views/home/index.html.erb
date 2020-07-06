@@ -44,7 +44,7 @@
           <div class="card card-body h-100" style="padding:0px">
             <a class="" href="<%= tag_path(tag) %>" style="padding:20px">
               <h5 class="card-title"><%= tag.name %></h5>
-              <p><%= tag.laws.count %> leyes</p>
+              <p><%= tag.laws.count %> documentos</p>
             </a>
           </div>
         </div>
@@ -52,6 +52,6 @@
     <% end %>
   </div>
 
-  <p class="resultinfo"><%= Law.count %> leyes ingresadas y creciendo</p>
+  <p class="resultinfo"><%= Law.count %> documentos ingresados y creciendo</p>
 
 </div>

@@ -1,7 +1,7 @@
 <% content_for :title, "Leyes - TodoLegal" %>
 
 <div class="container">
-  <h1>Administrar leyes</h1>
+  <h1>Administrar dociumentos</h1>
   
   <input type="text"/>
   <button type="button" class="btn btn-primary" text="Buscar">Buscar</button>
@@ -21,7 +21,7 @@
         <tr>
           <% i=i+1 %>
           <td><%=i%>. <%= law.name %>
-            <%= link_to 'Editar ley', edit_law_path(law) %>
+            <%= link_to 'Editar Documento', edit_law_path(law) %>
           </td>
           <% if law.materias.first %>
             <td><%= law.materias.first.name %></td>

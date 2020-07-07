@@ -96,7 +96,7 @@ class HomeController < ApplicationController
   end
   
   def invite_friends
-    @is_onboarding = params[:is_onboarding]
+    # @is_onboarding = params[:is_onboarding]
   end
   
   def drive_search

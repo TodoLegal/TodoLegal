@@ -1,9 +1,55 @@
-<form action="<%= target_url %>" method="get">
-  <div id="search-input" class="input-group input-group-lg mb-3 main-search">
-    <input name="query" value="<%= @query %>" type="text" class="form-control" placeholder="Ej. Ad-litem, despido, prórroga" aria-label="Recipient's username" aria-describedby="button-addon2">
-    <div class="input-group-append">
-      <button type="submit" onclick="document.getElementById('loading-spinner').style.display = 'block';document.getElementById('search-input').style.display = 'none';" class="btn btn-primary buscar" type="button" id="button-addon2">Buscar</button>
+<section>
+  <form action="<%= target_url %>" method="get">
+    <div id="search-input" class="input-group input-group-lg mb-3 main-search">
+      <input name="query" id="searchInput" value="<%= @query %>" type="text" class="form-control" placeholder="Ej. Ad-litem, despido, prórroga" aria-label="Recipient's username" aria-describedby="button-addon2">
+      <div class="input-group-append">
+        <button type="submit" onclick="document.getElementById('loading-spinner').style.display = 'block';document.getElementById('search-input').style.display = 'none';" class="btn btn-primary buscar" type="button" id="button-addon2">Buscar</button>
+      </div>
+    </div>
+    <div class="card" id="helpCard" style="display: none; z-index: 3;">
+    <div class = "card-body">
+      <p class="help-card-text">1. Busca por palabra clave, escribiendo el término en la barra de búsqueda</p>
+      <p class="help-card-text">2. Puedes buscar artículos específicos escribiendo una pleca <strong>/</strong> al inicio de la busqueda, seguido por el o 
+          los números y el término separados por plecas. Como el ejemplo a continuación: 
+      </p>
+      <a href="#" id="btnDisable" class="btn btn-block btn-primary disabled" tabindex="-1" role="button" aria-disabled="true">/12/14/civil </a>
     </div>
   </div>
-</form>
+  </form>
+  
+</section>
 <%= render '/home/loading_spinner' %>
+
+<script>
+  var inputField = document.getElementById('searchInput');
+  var helpCard = document.getElementById('helpCard');
+
+  inputField.addEventListener('focus', function(){
+    helpCard.style.display = 'block';
+  });
+
+  inputField.addEventListener('focusout', function(){
+    helpCard.style.display = 'none';
+  });
+</script>
+
+<style>
+  #btnDisable{
+    /* opacity: 0.15; */
+    background: #EFF3F8;
+    border-style: none;
+    color: black;
+    line-height: 19px;
+    justify-content: left;
+  }
+  
+  #helpCard{
+     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);none
+  }
+
+  .help-card-text{
+   color: #A6B9D3;
+   line-height: nomal;
+  }
+
+</style>

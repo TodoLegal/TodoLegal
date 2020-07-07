@@ -178,6 +178,11 @@ input.form-control:focus {
     box-shadow: 0 0 40px rgba(0, 0, 0, .12);
 }
 
+.modal-body .form-group {
+    display: flex;
+    justify-content: center;
+}
+
 
 /* General styles for Onboarding */
 

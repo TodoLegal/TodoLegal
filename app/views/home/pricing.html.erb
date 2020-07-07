@@ -2,8 +2,7 @@
 
 <style>
     section.pricing {
-        background: #007bff;
-        background: linear-gradient(to right, #0062E6, #33AEFF);
+        background: #EFF3F8;
     }
 
     .pricing .card {
@@ -41,15 +40,58 @@
         opacity: 0.7;
     }
 
-    .pricing .btn {
-        font-size: 80%;
-        border-radius: 5rem;
-        letter-spacing: .1rem;
-        font-weight: bold;
-        padding: 1rem;
-        opacity: 0.7;
-        transition: all 0.2s;
+    .pricing{
+        background: #1A7FFA;
     }
+    
+    .card-2{
+      margin-top: -.25rem;
+      margin-bottom: .25rem;
+      margin-left: 15%;
+      margin-right: 15%;
+      background: #FFFFFF;
+      border-radius: 4px;
+    }
+
+    .card{
+      background: #EFF3F8;
+      width:
+    }
+
+    .title1{
+      height: 34px;
+      left: 22.5%;
+      right: 22.43%;
+      top: 220px;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 28px;
+      line-height: 33px;
+      text-align: center;
+      color: #171F2A;
+      padding-top:4%;
+      margin-bottom: 7%;
+    }
+
+    .image{
+      width: 130px;
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+      margin-bottom: 2%;
+    }
+
+    #btnDisable{
+      /* opacity: 0.15; */
+      background: #C9DFFA;
+      border-style: none;
+      color: #0360E7;
+      line-height: 19px;
+    }
+
+  #btnBasico{
+    margin-top: 48%;
+  }
 
 /* Hover Effects on Card */
 
@@ -59,16 +101,19 @@
         margin-bottom: .25rem;
         box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.3);
     }
-    .pricing .card:hover .btn {
+    .pricing .card:hover {
         opacity: 1;
     }
 }
 
 </style>
 
-
 <section class="pricing py-5">
+  <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="image">
+  <div class = "card-2">
+  <h2 class="title1">¡Tu cuenta ha sido creada!</h3>
   <div class="container">
+    <h4 style="font-weight: bold;margin-bottom: 3%;">Elige un plan</h4>
     <div class="row">
       <!-- Free Tier -->
       <div class="col-lg-6">
@@ -78,13 +123,11 @@
             <h6 class="card-price text-center">Grátis</h6>
             <hr>
             <ul class="fa-ul">
-              <li><span class="fa-li"><i class="fas fa-check"></i></span>Acceso a 30 leyes, normas, etc.</li>
-              <li><span class="fa-li"><i class="fas fa-check"></i></span>Buscador de palabras clave, por materia, ley o normas específicas</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Acceso a 20 documentos de legislación hondureña</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Buscador de palabras clave, por materia, ley o normas expecificas.</li>
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Servicio al cliente básico</li>
-              <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Algo más</li>
-              <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Algo más</li>
             </ul>
-            <a href="#" class="btn btn-block btn-primary text-uppercase">Button</a>
+            <%= button_to "Continuar con Plan Básico", invite_friends_path, method: :get, remote: true, class:"btn btn-block btn-primary", id:"btnBasico" %>
           </div>
         </div>
       </div>
@@ -96,16 +139,16 @@
             <h6 class="card-price text-center">L350<span class="period">/mes</span></h6>
             <hr>
             <ul class="fa-ul">
-              <li><span class="fa-li"><i class="fas fa-check"></i></span>Acceso <strong>ilimitado</strong> a más de 150 leyes, normas, etc.</li>
-              <li><span class="fa-li"><i class="fas fa-check"></i></span>Buscador de palabras clave, por materia, ley o normas específicas</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span> Acceso a más de 150 documentos de legislación hondureña. Incluyendo todo los documentos nuevos que agreguemos.</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Buscador de palabras clave, por materia, ley o normas especificas.</li>
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Servicio al cliente <strong>24/7</strong></li>
-              <li><span class="fa-li"><i class="fas fa-check"></i></span>Algo más</li>
-              <li><span class="fa-li"><i class="fas fa-check"></i></span>Algo más</li>
             </ul>
-            <a href="#" class="btn btn-block btn-primary text-uppercase">Button</a>
+            <a href="#" id="btnDisable" class="btn btn-block btn-primary disabled" tabindex="-1" role="button" aria-disabled="true">Si pagas anualmente L 3,500/año </a>
+            <a href="#" class="btn btn-block btn-primary">Elegir Plan Pro</a>
           </div>
         </div>
       </div>
     </div>
+  </div>
   </div>
 </section>

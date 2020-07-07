@@ -1,12 +1,14 @@
+<% content_for :title, "TodoLegal - El buscador de leyes de Honduras" %>
+
 <div class="jumbotron d-none d-sm-block" align="center" style="padding-top: 0px; padding-bottom: 20px;background-color: #EFF3F8;margin: 0px">
-  <a href="/"><img align="center" src="/img/logo_landing.png" class="img-fluid" height="300"></a>
+  <a href="/"><img align="center" src="/img/logo_landing_mobile.png" class="img-fluid-vertical" height="300"></a>
 </div>
 
 <div class="jumbotron d-block d-sm-none" style="padding-top: 0px; padding-bottom: 0px;background-color: #EFF3F8;margin: 0px">
   <a href="/"><img align="center" src="/img/logo_landing_mobile.png" class="img-fluid" height="300"></a>
 </div>
 
-<div class="container">
+<div class="container container--home">
 
   <div class="d-none d-xl-block">
     <h3 align="center">El buscador de información legal para Honduras</h3>
@@ -42,7 +44,7 @@
           <div class="card card-body h-100" style="padding:0px">
             <a class="" href="<%= tag_path(tag) %>" style="padding:20px">
               <h5 class="card-title"><%= tag.name %></h5>
-              <p><%= tag.laws.count %> leyes</p>
+              <p><%= tag.laws.count %> documentos</p>
             </a>
           </div>
         </div>
@@ -50,6 +52,6 @@
     <% end %>
   </div>
 
-  <p class="resultinfo"><%= Law.count %> leyes ingresadas y creciendo</p>
+  <p class="resultinfo"><%= Law.count %> documentos ingresados y creciendo</p>
 
 </div>

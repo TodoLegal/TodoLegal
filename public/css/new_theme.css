@@ -1,0 +1,305 @@
+/* Basics */
+
+body {
+    background-color: #F2F5F8;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+.btn {
+    height: 46px;
+    border-radius: 8px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+h2 {
+    font-weight: 600;
+}
+
+.content {
+    line-height: 1.25rem;
+}
+
+.img-fluid-vertical {
+    height: 5vh;
+    min-height: 170px;
+    width: auto;
+}
+
+.container--home {
+    min-height: calc(100vh - 400px)
+}
+
+
+/* General styles for forms */
+
+.form-group label {
+    font-weight: bold;
+    color: #171F2A;
+    margin-bottom: 4px;
+    font-size: 1.12rem;
+}
+
+.form-group .form-check label {
+    font-weight: 400;
+    width: 100%;
+}
+
+.form-group .form-check input[type=checkbox]:checked~label,
+.form-group .form-check input[type=radio]:checked~label {
+    color: white;
+}
+
+.form-group .form-check label,
+.form-group .form-check label {
+    padding: 1em 1em 1em 2em;
+    display: flex;
+    cursor: pointer;
+}
+
+.form-group .row .form-group {
+    margin-bottom: 0;
+}
+
+.form-control {
+    background-color: #EFF3F8;
+    height: 50px;
+    border-radius: 8px;
+    border: none;
+}
+
+input.form-control:focus {
+    color: #495057;
+    background-color: #EFF3F8;
+    box-shadow: 0 0 0 2px #A6B9D3;
+}
+
+.form-check {
+    padding: 0;
+}
+
+.form-check-inline .form-check-input,
+.form-check-input {
+    position: absolute;
+    opacity: 0;
+}
+
+.custom-form {
+    position: relative;
+    min-height: 60px;
+    margin-bottom: 1rem;
+}
+
+.custom-form:before {
+    position: absolute;
+    left: 10px;
+    top: 1.5em;
+    content: "";
+    height: 20px;
+    width: 20px;
+    border-radius: 4px;
+    background: white;
+}
+
+.custom-form--radio:before {
+    border-radius: 10px;
+}
+
+.custom-form:after {
+    position: absolute;
+    left: 14px;
+    top: 1.9em;
+    content: "";
+    height: 6px;
+    width: 12px;
+    transform: rotate(-45deg);
+    border-left: 3px solid #171F2A;
+    border-bottom: 3px solid #171F2A;
+    display: none;
+}
+
+.custom-form.checked:after {
+    display: block;
+}
+
+.custom-form label {
+    background-color: #F2F5F8;
+    border-radius: 8px;
+    color: #171F2A;
+    box-sizing: border-box;
+    min-height: 60px;
+}
+
+.custom-form input:focus+label {
+    box-shadow: 0 0 0 2px #A6B9D3;
+}
+
+.custom-form.checked label {
+    background-color: #171F2A;
+    color: white;
+}
+
+.btn-next {
+    margin-top: 3em;
+}
+
+.navbar-expand-lg .navbar-nav .dropdown-menu {
+    position: absolute;
+}
+
+.btn-avatar {
+    background: linear-gradient(145deg, #1A7FFA 50%, #033FF5 50.1%);
+    font-weight: bold;
+}
+
+.main-search .form-control {
+    background-color: white;
+}
+
+.main-search .form-control:focus,
+.main-search .form-control:active {
+    background-color: white;
+}
+
+
+/* General styles for modal */
+
+.modal-backdrop {
+    background-color: white;
+}
+
+.modal-backdrop.show {
+    opacity: 0.8;
+}
+
+.modal-body {
+    box-shadow: 0 0 40px rgba(0, 0, 0, .12);
+}
+
+
+/* General styles for Onboarding */
+
+.card--onboarding {
+    border: none;
+    margin: 2vh auto 1rem;
+    max-width: 580px;
+}
+
+.card--onboarding .content {
+    margin-bottom: 40px;
+}
+
+
+/* General styles for Cuenta */
+
+.container--cuenta .card .card {
+    padding-top: .5em;
+    position: relative;
+    margin: 20px auto;
+}
+
+.container--cuenta .card .card .card-body {
+    padding: 1.5em;
+    padding-top: 40px;
+}
+
+.card .close {
+    padding: .25em;
+    right: 14px;
+    top: 14px;
+    position: absolute;
+    z-index: 2;
+}
+
+.other-profesion {
+    margin-bottom: 30px;
+}
+
+
+/* General styles for nav items */
+
+.nav-pills .nav-link {
+    color: #505864;
+}
+
+.nav-pills .nav-link:hover,
+.nav-pills .nav-link:focus {
+    color: #007bff;
+}
+
+.nav-pills .nav-link.active:hover,
+.nav-pills .nav-link.active:focus {
+    color: white;
+}
+
+.nav-pills .nav-link.highlighted,
+.nav-pills .nav-link.highlighted {
+    color: #007bff;
+}
+
+
+/* General styles for footer */
+
+footer .container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-top: 1px solid #A6B9D3;
+    padding: 1em 15px;
+    font-size: 14px;
+}
+
+footer p a {
+    color: #505864;
+}
+
+.footer-basic p {
+    color: #505864;
+    margin-bottom: .5em;
+}
+
+.footer-basic .social {
+    text-align: center;
+}
+
+.footer-basic .social>a {
+    font-size: 24px;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    display: inline-block;
+    text-align: center;
+    border-radius: 8px;
+    background-color: #505864;
+    color: white;
+    margin-left: 10px;
+}
+
+.footer-basic .social>a:hover {
+    opacity: 0.9;
+}
+
+.footer-basic .copyright {
+    text-align: left;
+    font-size: 13px;
+    margin-bottom: 0;
+}
+
+@media only screen and (max-width: 767.98px) {
+    footer .container {
+        flex-direction: column;
+        padding: 20px;
+    }
+    .footer-basic .social {
+        text-align: left;
+    }
+    .footer-basic .social>a {
+        margin-right: 10px;
+        margin-left: 0;
+    }
+    .footer-basic .social {
+        margin-top: 20px;
+    }
+}

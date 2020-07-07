@@ -1,13 +1,22 @@
 class HomeController < ApplicationController
+  layout 'onboarding', only: [:pricing, :invite_friends]
   include ActionView::Helpers::NumberHelper
   require 'set'
   
   def index
+    if is_redirect_pending
+      handle_redirect
+      return
+    end
+
     @tags = Tag.where(tag_type: TagType.find_by_name("materia"))
 
-    file = File.read('public/covid_drive_data.json')
-    data_hash = JSON.parse(file)
-    @covid_files_count = data_hash['file_count']
+    covid_drive_data_json_path = 'public/covid_drive_data.json'
+    if File.file?(covid_drive_data_json_path)
+      file = File.read(covid_drive_data_json_path)
+      data_hash = JSON.parse(file)
+      @covid_files_count = data_hash['file_count']
+    end
   end
 
   def search_law
@@ -20,7 +29,7 @@ class HomeController < ApplicationController
     legal_documents = Set[]
 
     #if @query
-    #  if redirectOnEspecialCode @query
+    #  if redirectOnSpecialCode @query
     #    return
     #  end
     #end
@@ -31,20 +40,32 @@ class HomeController < ApplicationController
 
     @grouped_laws = []
 
-    @tokens = @query.scan(/\w+|\W/)
+    @tokens = []
+    if @query
+      @tokens = @query.scan(/\w+|\W/)
+    end
+
     if @tokens.first == '/'
-      @stream = Article.where(law: Law.all.search_by_name(@tokens.fourth)).where(number: @tokens.second).group_by(&:law_id)
+      articles_query = []
+      law_name_query = ""
+      @tokens.each do |token|
+        if is_number(token)
+          articles_query.push(token)
+        elsif token != '/'
+          law_name_query = token
+        end
+      end
+      @stream = Article.where(law: Law.all.search_by_name(law_name_query)).where(number: articles_query).group_by(&:law_id)
       @stream.each do |grouped_law|
-        law = {count: grouped_law[1].count, law: Law.find_by_id(grouped_law[0]), preview: ("<b>Artículo " + grouped_law[1].first.number + ":</b> " + grouped_law[1].first.body[0,300] + "...").html_safe}
+        law = {count: grouped_law[1].count, law: Law.find_by_id(grouped_law[0]), preview: ("<b>Artículo " + grouped_law[1].first.number + "</b> " + grouped_law[1].first.body[0,300] + "...").html_safe}
         law[:materia_names] = law[:law].materia_names
         @grouped_laws.push(law)
         @result_count = @grouped_laws.count
-        #legal_documents.add(grouped_law[0])
       end
       @grouped_laws = @grouped_laws.sort_by{|k|k[:count]}.reverse
     else
       @stream.each do |grouped_law|
-        law = {count: grouped_law[1].count, law: Law.find_by_id(grouped_law[0]), preview: ("<b>Artículo " + grouped_law[1].first.number + ":</b> ..." + grouped_law[1].first.pg_search_highlight + "...").html_safe, tag_text: ""}
+        law = {count: grouped_law[1].count, law: Law.find_by_id(grouped_law[0]), preview: ("<b>Artículo " + grouped_law[1].first.number + "</b> ..." + grouped_law[1].first.pg_search_highlight + "...").html_safe, tag_text: ""}
         law[:materia_names] = law[:law].materia_names
         @grouped_laws.push(law)
         @result_count += grouped_law[1].count
@@ -68,32 +89,38 @@ class HomeController < ApplicationController
   def terms_and_conditions
   end
 
-  def pricing
+  def privacy_policy
   end
 
+  def pricing
+  end
+  
+  def invite_friends
+    # @is_onboarding = params[:is_onboarding]
+  end
+  
   def drive_search
     @query = params[:query]
     @folder = params[:folder]
     @get_parent_files = params[:get_parent_files] == 'true'
     @files = []
 
-    if @query && @query!=""
+    if File.file?('public/covid_drive_data.json')
       covid_drive_data = File.read('public/covid_drive_data.json')
-      @files = get_files_like_name(JSON.parse(covid_drive_data)["data"], @query).sort_by { |v| v["name"] }
-    elsif @folder && @folder!=""
-      covid_drive_data = File.read('public/covid_drive_data.json')
-      if @get_parent_files
-        @folder = get_parrent_folder_name JSON.parse(covid_drive_data)["data"], @folder
-      end
-      if @folder == ""
-        covid_drive_data = File.read('public/covid_drive_data.json')
-        @files = JSON.parse(covid_drive_data)["data"].sort_by { |v| v["name"] }
+      if @query && @query!=""
+        @files = get_files_like_name(JSON.parse(covid_drive_data)["data"], @query).sort_by { |v| v["name"] }
+      elsif @folder && @folder!=""
+        if @get_parent_files
+          @folder = get_parrent_folder_name JSON.parse(covid_drive_data)["data"], @folder
+        end
+        if @folder == ""
+          @files = JSON.parse(covid_drive_data)["data"].sort_by { |v| v["name"] }
+        else
+          @files = get_folder_files JSON.parse(covid_drive_data)["data"], @folder
+        end
       else
-        @files = get_folder_files JSON.parse(covid_drive_data)["data"], @folder
+        @files = JSON.parse(covid_drive_data)["data"].sort_by { |v| v["name"] }
       end
-    else
-      covid_drive_data = File.read('public/covid_drive_data.json')
-      @files = JSON.parse(covid_drive_data)["data"].sort_by { |v| v["name"] }
     end
   end
 
@@ -104,19 +131,23 @@ class HomeController < ApplicationController
       end
       return
     end
-    if !params[:emails]
-      respond_to do |format|
-        format.html { redirect_to root_path }
-      end
+    if !params["email1"].blank?
+      SubscriptionsMailer.refer(current_user, params["email1"]).deliver
+    end
+    if !params["email2"].blank?
+      SubscriptionsMailer.refer(current_user, params["email2"]).deliver
+    end
+    if is_redirect_pending
+      handle_redirect
       return
-    end
-    emails = params[:emails].split(',')
-    respond_to do |format|
-      emails.each do |email|
-        SubscriptionsMailer.refer(current_user, email).deliver
+    else
+      respond_to do |format|
+        format.html { redirect_to root_path, notice: I18n.t(:referal_sent) }
       end
-      format.html { redirect_to root_path }
     end
+  end
+
+  def crash_tester
   end
 
 protected

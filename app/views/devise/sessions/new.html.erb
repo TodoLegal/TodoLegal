@@ -16,24 +16,44 @@
 
           <div class="form-group">
             <%= f.label :Correo_eléctronico %><br />
-            <%= f.email_field :email, autofocus: true, autocomplete: "email", class: 'form-control' %>
+            <%= f.email_field :email, autofocus: true, autocomplete: "email", class: 'form-control', id:"email" %>
           </div>
 
           <div class="form-group">
             <%= f.label :Contraseña %><br />
-            <%= f.password_field :password, autocomplete: "current-password", class: 'form-control' %>
+            <%= f.password_field :password, autocomplete: "current-password", class: 'form-control'%>
           </div>
 
           <p class="card-text text-center" ><%= render partial: "devise/shared/links", locals:{create: false} %></p>
 
           <div class="form-group">
-            <%= f.submit "Inicia sesión", class: 'btn btn-primary btn-block' %>
+            <%= f.submit "Inicia sesión", class: 'btn btn-primary btn-block', id:"nextButton", data:{toggle:"popover", placement:"top", trigger:"focus",
+                content:"Complete todos los campos."}, :onclick => "required()" %>
           </div>
+          <%= javascript_pack_tag "form_validator" %>
         <% end %>
       </div>
     </div>
   </div>
 </section>
+
+<script>
+  function required(){
+    var email = document.getElementById("email").value;
+     
+    if( email.trim() == "")
+    {
+        $('#nextButton').popover('show')
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    else
+    {
+      $('#nextButton').unbind();
+      $('#nextButton').popover('hide') 
+    }
+  }
+</script>
 
 <style>
   .card{
@@ -71,27 +91,28 @@
   }
 
   @media only screen and (max-width: 767.98px){
-  .card{
-    width:100%;
-    margin-left: 0%;
-    padding: 0;
-    border: none;
-  }
-  .card-body{
-    padding: 0%;
-  }
+    .card{
+      width:100%;
+      margin-left: 0%;
+      padding: 0;
+      border: none;
+    }
+    .card-body{
+      padding: 0%;
+    }
 
-  section{
-    background: white;
-  }
-  .form-control{
-    background-color: #EFF3F8;
-  }
+    section{
+      background: white;
+    }
+    .form-control{
+      background-color: #EFF3F8;
+    }
 
-  #logoImage{
-    width: 70px;
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
+    #logoImage{
+      width: 70px;
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+    }
   }
 </style>

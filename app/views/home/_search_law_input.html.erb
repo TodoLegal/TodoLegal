@@ -8,11 +8,14 @@
     </div>
     <div class="card" id="helpCard" style="display: none; z-index: 3;">
     <div class = "card-body">
-      <p class="help-card-text">1. Busca por palabra clave, escribiendo el término en la barra de búsqueda</p>
-      <p class="help-card-text">2. Puedes buscar artículos específicos escribiendo una pleca <strong>/</strong> al inicio de la busqueda, seguido por el o 
-          los números y el término separados por plecas. Como el ejemplo a continuación: 
+      <p class="help-card-text" style="color: #A6B9D3; font-size: 16px; line-height: 19px;">Busca por:</p>
+      <p class="help-card-text">1. Título de documento o número de publicación.</p>
+      <p class="help-card-text">2. Palabra clave.</p>
+      <p class="help-card-text">3. Artículos específicos. Para esta opción escribe un símbolo de pleca <strong>/</strong> al inicio, 
+      seguido por el o los números, y finalmente el término, cada uno separado por pleca. Cómo el ejemplo a continuación:
       </p>
-      <a href="#" id="btnDisable" class="btn btn-block btn-primary disabled" tabindex="-1" role="button" aria-disabled="true">/12/14/civil </a>
+      <a href="#" id="search-example" class="btn btn-block btn-primary disabled" tabindex="-1" role="button" aria-disabled="true">/12/14/civil </a>
+      <p class="help-card-text" style="color: #A6B9D3; font-size: 14px; line-height: 17px;">Equivale a la busqueda de artículos <i>12</i> y <i>14</i> que contengan el término <i>civil</i>.</p>
     </div>
   </div>
   </form>
@@ -34,8 +37,7 @@
 </script>
 
 <style>
-  #btnDisable{
-    /* opacity: 0.15; */
+  #search-example{
     background: #EFF3F8;
     border-style: none;
     color: black;
@@ -48,8 +50,9 @@
   }
 
   .help-card-text{
-   color: #A6B9D3;
-   line-height: nomal;
+    font-size: 18px;
+    line-height: 21px;
+    color: #505864;
   }
 
 </style>

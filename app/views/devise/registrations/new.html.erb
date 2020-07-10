@@ -167,85 +167,12 @@
         </div>
       </div>
       <!--End More info modal -->
-
+      <%= javascript_pack_tag "form_validator" %>>
     <% end %>
   </div>
 </section>
 
 <script>
-  //validate if input fields were filled with the right format and activates the popover when needed
-  bootstrapValidate('#name', 'required:Debes ingresar tu nombre', function (isValid){
-    if(isValid)
-    {
-      $('#nextButton').unbind();
-      $('#nextButton').popover('hide')
-    } else
-    {
-      $('#nextButton').click(function (e) {
-        $('#nextButton').popover('show')
-        e.preventDefault();
-        e.stopPropagation();
-      });
-    }
-  });
-  bootstrapValidate('#lastName', 'required:Debes ingresar tu apellido', function (isValid){
-    if(isValid)
-    {
-      $('#nextButton').unbind();
-      $('#nextButton').popover('hide')
-    } else
-    {
-      $('#nextButton').click(function (e) {
-        $('#nextButton').popover('show');
-        e.preventDefault();
-        e.stopPropagation();
-      });
-    }
-
-  });
-  bootstrapValidate('#email', 'email:Debes ingresar un correo válido', function (isValid){
-    if(isValid)
-    {
-      $('#nextButton').unbind();
-      $('#nextButton').popover('hide')
-    } else
-    {
-      $('#nextButton').click(function (e) {
-        $('#nextButton').popover('show')
-        e.preventDefault();
-        e.stopPropagation();
-      });
-    }
-
-  });
-  bootstrapValidate('#password', 'min:6:Debes ingresar una contraseña válida',function (isValid){
-    if(isValid)
-    {
-      $('#nextButton').unbind();
-      $('#nextButton').popover('hide')
-    } else
-    {
-      $('#nextButton').click(function (e) {
-        $('#nextButton').popover('show')
-        e.preventDefault();
-        e.stopPropagation();
-      });
-    }
-  });
-  bootstrapValidate('#confirmPassword', 'matches:#password:Tus contraseñas deben ser iguales', function (isValid){
-    if(isValid)
-    {
-      $('#nextButton').unbind();
-      $('#nextButton').popover('hide')
-    } else
-    {
-      $('#nextButton').click(function (e) {
-        $('#nextButton').popover('show')
-        e.preventDefault();
-        e.stopPropagation();
-      });
-    }
-  });
 
   //prevent nextButton click is input fields are empty
   function required ()

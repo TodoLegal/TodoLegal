@@ -10,11 +10,12 @@
         <%= render "devise/shared/error_messages", resource: resource %>
 
         <div class="form-group">
-          <%= f.email_field :email, autofocus: true, autocomplete: "email", class:"form-control", placeholder:"Correo electrónico" %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", class:"form-control", placeholder:"Correo electrónico", id:"email" %>
         </div>
 
         <div class="form-group">
-          <%= f.submit "Enviar instrucciones de recuperación", class: 'btn btn-primary btn-block'%>
+          <%= f.submit "Enviar instrucciones de recuperación", class: 'btn btn-primary btn-block', id:"nextButton", data:{toggle:"popover", placement:"top", trigger:"focus",
+                content:"Complete todos los campos."}%>
         </div>
       <% end %>
     </div>
@@ -22,4 +23,5 @@
       <em><%= render "devise/shared/links" %></em>
     </div>
   </div>
+  <%= javascript_pack_tag "form_validator" %>
 </div>

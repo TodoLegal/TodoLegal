@@ -1,7 +1,7 @@
 <section>
   <form action="<%= target_url %>" method="get">
     <div id="search-input" class="input-group input-group-lg mb-3 main-search">
-      <input name="query" id="searchInput" value="<%= @query %>" type="text" class="form-control" placeholder="Ej. Ad-litem, despido, prórroga" aria-label="Recipient's username" aria-describedby="button-addon2">
+      <input name="query" id="searchInput" value="<%= @query %>" type="text" class="form-control" placeholder="Ej. Ad-litem, despido, prórroga" aria-label="Recipient's username" aria-describedby="button-addon2" autocomplete="off">
       <div class="input-group-append">
         <button type="submit" onclick="document.getElementById('loading-spinner').style.display = 'block';document.getElementById('search-input').style.display = 'none';" class="btn btn-primary buscar" type="button" id="button-addon2">Buscar</button>
       </div>

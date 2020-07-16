@@ -47,14 +47,14 @@
                   <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", id:"confirmPassword"%>
                 </div>
                 <div class="form-group">
-                  <button type="button" class="btn btn-primary btn-block btn-next" id="nextButton" data-target="#carouselExampleIndicators" 
+                  <button type="button" class="btn btn-primary btn-block btn-next btn-lg" id="nextButton" data-target="#carouselExampleIndicators" 
                   data-slide-to="1" data-container="body" data-toggle="popover" data-placement="top" data-trigger="focus"
                   data-content="Complete todos los campos." onclick="required()">Siguiente</button>
                 </div>
               </div>
               <!-------------------------------- End of Card Body ------------------------------------------->
             </div>
-            <p class="content text-center">Al crear una cuenta, accedes a los <a href="/terms">Términos y condiciones</a></p>
+            <p class="content text-center">Al crear una cuenta, accedes a los <a href="/terms" target="_blank">Términos y condiciones</a></p>
           <!-------------------------------- End of Register Card ------------------------------------------->
           </div>
           <div class="carousel-item">
@@ -62,7 +62,7 @@
             <div class="containter" id="back-icon-container">
               <i class="fas fa-arrow-left" id="back-icon" data-target="#carouselExampleIndicators"  data-slide-to="0"></i>
               <a href="/" class="back-image" data-toggle="modal" data-target="#cancelRegistrationModal">
-                <img src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" id="logo">
+                <img src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="img-fluid">
               </a>
             </div>
 
@@ -127,7 +127,7 @@
                 <i class="fas fa-info-circle"></i>
                 Más información</a>
                 <div class="form-group">
-                  <%= f.submit "Crear cuenta", class: 'btn btn-primary btn-block btn-next', id:"registerButton", onclick:"sendParameter()"%>
+                  <%= f.submit "Crear cuenta", class: 'btn btn-primary btn-block btn-next btn-lg', id:"registerButton", onclick:"sendParameter()"%>
                 </div>
               </div>
               <!-------------------------------- End of Card Body ------------------------------------------->
@@ -287,27 +287,39 @@
   }
 
   .img-fluid{
-    height: 15vh;
+    height: 12vh;
+    max-height: 110px;
     margin: 2vh auto 0;
     display: block;
   }
-  
-  .back-image{
-    margin-left: 28%;
-    margin-right: auto;
-  }
 
-  #logo{
-    width: 130px;
-  }
-
-  #back-icon{
-    font-size: 2rem;
+  .back-image {
+    width: 30%;
+    display: block;
+    margin: auto;
   }
 
   #back-icon-container{
     width: 75%;
-    margin-left: 12.5%;
+    margin: auto;
+    position: relative;
+  }
+
+   #back-icon{
+    font-size: 1.5rem;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: auto; 
+    margin: auto;
+    color: #495057;
+    transition: color .2s ease-in-out;
+    cursor: pointer;
+  }
+
+   #back-icon:hover {
+    color: #171F2A;
   }
 
   .content{
@@ -343,7 +355,7 @@
   }
 
   #dismissBtn{
-    background: #F2F5F8; 
+    background: #EFF3F7; 
     color: #505864; 
     border:none;
     padding-left: 10px;
@@ -413,11 +425,6 @@
       margin-left: auto;
       margin-right: auto;
       display: block;
-    }
-    
-    .back-image{
-      margin-left: 27.5%;
-      margin-right: auto;
     }
 
     #logo{

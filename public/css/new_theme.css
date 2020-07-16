@@ -154,6 +154,11 @@ input.form-control:focus {
     font-weight: bold;
 }
 
+.main-search {
+    max-width: 640px;
+    margin: auto;
+}
+
 .main-search .form-control {
     background-color: white;
 }

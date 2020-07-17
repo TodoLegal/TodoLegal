@@ -137,13 +137,9 @@ class HomeController < ApplicationController
     if !params["email2"].blank?
       SubscriptionsMailer.refer(current_user, params["email2"]).deliver
     end
-    if is_redirect_pending
-      handle_redirect
-      return
-    else
-      respond_to do |format|
-        format.html { redirect_to root_path, notice: I18n.t(:referal_sent) }
-      end
+
+    respond_to do |format|
+      format.html { redirect_to root_path, notice: I18n.t(:referal_sent) }
     end
   end
 

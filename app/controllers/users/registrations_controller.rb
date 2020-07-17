@@ -13,6 +13,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
     if params[:go_to_law]
       session[:redirect_to_law] = params[:go_to_law]
     end
+    if params[:go_to_checkout]
+      session[:redirect_to_checkout] = params[:go_to_checkout]
+    end
   end
 
   # POST /resource

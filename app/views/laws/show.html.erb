@@ -57,6 +57,11 @@ function onIndexElementClicked(section_id) {
                     </a>
                   </div>
                   <div class="col-md-12">
+                    <a href="<%= new_user_registration_path %>?go_to_law=<%=@law.id%>&go_to_checkout=true">
+                      <button type="button" class="btn btn-primary btn-block">Crear cuenta Pro</button>
+                    </a>
+                  </div>
+                  <div class="col-md-12">
                       <div with="100%" style="text-align:center; padding-top: 22px;">
                         ¿Ya tienes cuenta?
                       </div>

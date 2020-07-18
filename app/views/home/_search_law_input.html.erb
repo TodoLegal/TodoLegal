@@ -4,7 +4,7 @@
       <% if home_flag == false %>
         <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, style:"font-size: 1.5rem; color: #171F2A; margin-top: 10px;" %>
       <% end %>
-      <input name="query" id="searchInput" value="<%= @query %>" type="text" class="form-control" placeholder="Ej. Ad-litem, despido, prórroga" aria-label="Recipient's username" aria-describedby="button-addon2">
+      <input name="query" id="searchInput" value="<%= @query %>" type="text" class="form-control" placeholder="Ej. Ad-litem, despido, prórroga" aria-label="Recipient's username" aria-describedby="button-addon2" autocomplete="off">
       <div class="input-group-append">
         <% if home_flag %>
           <button type="submit" onclick="document.getElementById('loading-spinner').style.display = 'block';document.getElementById('search-input').style.display = 'none';" class="btn btn-primary buscar" type="button" id="button-addon2">
@@ -19,11 +19,14 @@
     </div>
     <div class="card" id="helpCard" style="display: none; z-index: 3;">
     <div class = "card-body">
-      <p class="help-card-text">1. Busca por palabra clave, escribiendo el término en la barra de búsqueda</p>
-      <p class="help-card-text">2. Puedes buscar artículos específicos escribiendo una pleca <strong>/</strong> al inicio de la busqueda, seguido por el o 
-          los números y el término separados por plecas. Como el ejemplo a continuación: 
+      <p class="help-card-text" style="color: #A6B9D3; font-size: 16px; line-height: 19px;">Busca por:</p>
+      <p class="help-card-text">1. Título de documento o número de publicación.</p>
+      <p class="help-card-text">2. Palabra clave.</p>
+      <p class="help-card-text">3. Artículos específicos. Para esta opción escribe un símbolo de pleca <strong>/</strong> al inicio, 
+      seguido por el o los números, y finalmente el término, cada uno separado por pleca. Cómo el ejemplo a continuación:
       </p>
-      <a href="#" id="btnDisable" class="btn btn-block btn-primary disabled" tabindex="-1" role="button" aria-disabled="true">/12/14/civil </a>
+      <a href="#" id="search-example" class="btn btn-block btn-primary disabled" tabindex="-1" role="button" aria-disabled="true">/12/14/civil </a>
+      <p class="help-card-text" style="color: #A6B9D3; font-size: 14px; line-height: 17px;">Equivale a la busqueda de artículos <i>12</i> y <i>14</i> que contengan el término <i>civil</i>.</p>
     </div>
   </div>
   </form>
@@ -45,8 +48,7 @@
 </script>
 
 <style>
-  #btnDisable{
-    /* opacity: 0.15; */
+  #search-example{
     background: #EFF3F8;
     border-style: none;
     color: black;
@@ -55,12 +57,20 @@
   }
   
   #helpCard{
-     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);none
+     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
+     position: absolute;
+     width: 100%;
+     max-width: 640px;
+     left: 0;
+     right: 0;
+     margin: auto;
+     margin-top: -.65rem;
   }
 
   .help-card-text{
-   color: #A6B9D3;
-   line-height: nomal;
+    font-size: 18px;
+    line-height: 21px;
+    color: #505864;
   }
 
 </style>

@@ -1,23 +1,50 @@
-<h1>Checkout</h1>
+<div class="container">
+  <h3 class="payment-title">Agregar método de pago</h3>
 
-<form action="/charge" method="post" id="payment-form">
-  <div class="form-row">
+  <form action="/charge" method="post" id="payment-form">
+    <div class="form-row">
 
-    <div id="card-element" style="width: 30em">
-      <!-- A Stripe Element will be inserted here. -->
+      <div class="form-control" id="cardNumber-element" style="width: 30em">
+        <!-- A Stripe Element will be inserted here. -->
+      </div>
+      <div id="cardExpiry-element" style="width: 30em">
+        <!-- A Stripe Element will be inserted here. -->
+      </div>
+       <div id="cardCvc-element" style="width: 30em">
+        <!-- A Stripe Element will be inserted here. -->
+      </div>
+
+      <!-- Used to display Element errors. -->
+      <div id="card-errors" role="alert"></div>
     </div>
 
-    <!-- Used to display Element errors. -->
-    <div id="card-errors" role="alert"></div>
+    <%= hidden_field_tag :go_to_law, @go_to_law %>
+
+    <%= hidden_field_tag :email, current_user.email %>
+
+    <button>Submit Payment</button>
+  </form>
+
+  <div data-attrs='{"PUBLIC_KEY": "pk_test_txfdiljergIpYg37zQPdSZT400FUwoSOay"}' id='stripe_params'>
+    <%= javascript_pack_tag 'stripe_integration' %>
   </div>
-
-  <%= hidden_field_tag :go_to_law, @go_to_law %>
-
-  <%= hidden_field_tag :email, current_user.email %>
-
-  <button>Submit Payment</button>
-</form>
-
-<div data-attrs='{"PUBLIC_KEY": "pk_test_txfdiljergIpYg37zQPdSZT400FUwoSOay"}' id='stripe_params'>
-  <%= javascript_pack_tag 'stripe_integration' %>
 </div>
+
+<style>
+  .payment-title{
+    text-align: center;
+  }
+
+  .form-control {
+    background-color: #EFF3F8;
+    height: 3rem;
+    border-radius: 4px;
+    border: none;
+  }
+
+  .form-control:focus {
+      color: #495057;
+      background-color: #EFF3F8;
+      box-shadow: 0 0 0 2px #A6B9D3;
+  }
+</style>

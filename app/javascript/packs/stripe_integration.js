@@ -3,7 +3,7 @@ var elements = stripe.elements();
 
 
 // Custom styling can be passed to options when creating an Element.
-var style = {
+var cardNumberStyle = {
   base: {
     // Add your base input styles here. For example:
     fontSize: '16px',
@@ -12,11 +12,14 @@ var style = {
 };
 
 // Create an instance of the card Element.
-var card = elements.create('card', {style: style});
+var cardNumberElement = elements.create('cardNumber', {showIcon: true, placeholder: ""});
+var cardExpiryElement = elements.create('cardExpiry');
+var cardCvcElement = elements.create('cardCvc');
 
 // Add an instance of the card Element into the `card-element` <div>.
-card.mount('#card-element');
-
+cardNumberElement.mount('#cardNumber-element');
+cardExpiryElement.mount('#cardExpiry-element');
+cardCvcElement.mount('#cardCvc-element');
 
 function stripeTokenHandler(token) {
   // Insert the token ID into the form so it gets submitted to the server

@@ -25,6 +25,8 @@ Rails.application.routes.draw do
   get '/refer', to: 'home#refer', as: "refer"
   get '/crash_tester', to: 'home#crash_tester', as: "crash_tester"
   get '/maintenance', to: 'home#maintenance', as: "maintenance"
+  get '/checkout', to: 'billing#checkout', as: "checkout"
+  post "/charge" => "billing#charge", as: "charge"
 
   get "admin/users" => "admin#users", as: "admin_users"
   post "admin/grant_permission" => "admin#grant_permission", as: "admin_grant_permission"

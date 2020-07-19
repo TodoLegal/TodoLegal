@@ -1,50 +1,93 @@
-<div class="container">
-  <h3 class="payment-title">Agregar método de pago</h3>
+<section>
+  <div class="container">
+  <a href="/">
+    <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="img-logo">
+  </a>
+  <div class="card card--onboarding bg-white rounded">
+    <div class="card-body">
+      <h2 class="card-title text-center">Agregar método de pago</h2>
 
-  <form action="/charge" method="post" id="payment-form">
-    <div class="form-row">
+      <form action="/charge" method="post" id="payment-form">
+        <div class="form-group">  
+          <label>Número de tarjeta </label>
+          <div class="form-control" id="cardNumber-element">
+            <!-- A Stripe Element will be inserted here. -->
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-7 form-group">
+              <label>Fecha de expiración </label>
+              <div class="form-control"  id="cardExpiry-element">
+                <!-- A Stripe Element will be inserted here. -->
+              </div>
+            </div>
+            <div class="col-5 form-group">
+              <label>Código CVV</label>
+              <div class="form-control" id="cardCvc-element">
+                <!-- A Stripe Element will be inserted here. -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Used to display Element errors. -->
+        <div id="card-errors" role="alert"></div>
+        <%= hidden_field_tag :go_to_law, @go_to_law %>
 
-      <div class="form-control" id="cardNumber-element" style="width: 30em">
-        <!-- A Stripe Element will be inserted here. -->
-      </div>
-      <div id="cardExpiry-element" style="width: 30em">
-        <!-- A Stripe Element will be inserted here. -->
-      </div>
-       <div id="cardCvc-element" style="width: 30em">
-        <!-- A Stripe Element will be inserted here. -->
-      </div>
-
-      <!-- Used to display Element errors. -->
-      <div id="card-errors" role="alert"></div>
+        <% if user_signed_in? %>
+          <%= hidden_field_tag :email, current_user.email %>
+        <% end %>
+        <div class="form-group">
+          <button  type="submit" class="btn btn-primary btn-block btn-next btn-lg">Continuar</button>
+        </div>
+      </form>
     </div>
-
-    <%= hidden_field_tag :go_to_law, @go_to_law %>
-
-    <%= hidden_field_tag :email, current_user.email %>
-
-    <button>Submit Payment</button>
-  </form>
-
-  <div data-attrs='{"PUBLIC_KEY": "pk_test_txfdiljergIpYg37zQPdSZT400FUwoSOay"}' id='stripe_params'>
-    <%= javascript_pack_tag 'stripe_integration' %>
+    <div data-attrs='{"PUBLIC_KEY": "pk_test_txfdiljergIpYg37zQPdSZT400FUwoSOay"}' id='stripe_params'>
+      <%= javascript_pack_tag 'stripe_integration' %>
+    </div>
   </div>
 </div>
+</section>
 
 <style>
-  .payment-title{
-    text-align: center;
+  .img-logo{
+    height: 15vh;
+    max-height: 110px;
+    margin: 2vh auto 0;
+    display: block;
   }
 
-  .form-control {
-    background-color: #EFF3F8;
-    height: 3rem;
-    border-radius: 4px;
-    border: none;
+  .card-title{
+    margin-bottom: 35px;
   }
 
-  .form-control:focus {
-      color: #495057;
-      background-color: #EFF3F8;
-      box-shadow: 0 0 0 2px #A6B9D3;
+  @media only screen and (max-width: 767.98px){
+
+    section{
+      background: white;
+      height: 750px;
+    }
+    
+    .card{
+      width:100%;
+      margin-left: 0%;
+      padding: 0%;
+      border: none;
+    }
+    .card-body{
+      padding: 0%;
+    }
+
+    .card-title{
+      font-size: 28px;
+      line-height: 33px
+    }
+
+    .img-logo{
+      width: 70px;
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+    }
   }
 </style>

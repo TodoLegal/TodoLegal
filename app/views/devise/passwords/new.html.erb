@@ -1,16 +1,19 @@
 <% content_for :title, "Recuperación de la cuenta - TodoLegal" %>
 
-<div class="container d-flex justify-content-center" style="margin-top:2%;">
-  <div class="card w-75 shadow p-3 mb-5 bg-white rounded">
-    <img class="card-img-top" src="/img/logo_landing.png" alt="Card image cap" class="img-fluid">
+<section>
+<div class="container">
+  <a href="/">
+    <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="img-logo">
+  </a>
+  <div class="card card--onboarding bg-white rounded">
     <div class="card-body">
-      <h3 class="card-title text-center">Recuperación de la cuenta</h2>
-      <p>Le enviaremos instrucciones para recuperar su cuenta a</p>
+      <h2 class="card-title text-center">Recuperación de la cuenta</h2>
+      <p class="card-text">Le enviaremos instrucciones para recuperar su cuenta a</p>
       <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
         <%= render "devise/shared/error_messages", resource: resource %>
 
         <div class="form-group">
-          <%= f.email_field :email, autofocus: true, autocomplete: "email", class:"form-control", placeholder:"Correo electrónico", id:"email" %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", class:'form-control', placeholder:"Correo electrónico", id:"email" %>
         </div>
 
         <div class="form-group">
@@ -19,9 +22,59 @@
         </div>
       <% end %>
     </div>
-    <div class="card-footer text-center">
-      <em><%= render "devise/shared/links" %></em>
-    </div>
+    <p class="card-text text-center content" > <%= render "devise/shared/links" %> </p>
   </div>
   <%= javascript_pack_tag "form_validator" %>
 </div>
+</section>
+
+<style>
+  .img-logo{
+    height: 12vh;
+    max-height: 110px;
+    margin: auto;
+    display: block;
+  }
+
+  .card-title{
+    margin-bottom: 30px;
+  }
+
+  .card-text{
+    font-size: 18px;
+    line-height: 21px;
+    /* text-align: center; */
+    color: #505864;
+    margin-bottom: 10px;
+  }
+
+  @media only screen and (max-width: 767.98px){
+    .card{
+      width:100%;
+      margin-left: 0%;
+      padding: 0;
+      border: none;
+    }
+    .card-body{
+      padding: 0%;
+    }
+
+    section{
+      background: white;
+      height: 500px;
+    }
+
+    .img-logo{
+      width: 70px;
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+    }
+
+    .card-title{
+      font-size: 27px;
+      line-height: 33px
+    }
+  }
+
+</style>

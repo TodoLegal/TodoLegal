@@ -8,7 +8,7 @@
   <div class="card card--onboarding bg-white rounded">
     <div class="card-body">
       <h2 class="card-title text-center">Recuperación de la cuenta</h2>
-      <p class="card-text">Le enviaremos instrucciones para recuperar su cuenta a</p>
+      <p class="card-text">Ingresa tu correo electrónico para enviarte instrucciones</p>
       <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
         <%= render "devise/shared/error_messages", resource: resource %>
 

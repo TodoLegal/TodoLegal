@@ -57,11 +57,11 @@ indice body {
 }
 
 p {
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.1em;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 1em;
     font-weight: regular;
     line-height: 1.7em;
-    color: #000;
+    color: #171F2A;
     /*color: #fff;*/
 }
 
@@ -263,4 +263,5 @@ a.article:hover {
 
 .modal-content {
     height: 60%;
+    border: none;
 }

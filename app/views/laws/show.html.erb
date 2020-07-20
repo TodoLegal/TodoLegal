@@ -1,12 +1,5 @@
 <% content_for :title, @law.name + " - TodoLegal" %>
 
-<script>
-function onIndexElementClicked(section_id) {
-  console.log(section_id)
-  document.getElementById(section_id).scrollIntoView({block:'center'});
-}
-</script>
-
 <div class="container" data-spy="scroll" data-target="#myScrollspy" style="background-color: #FFF !important;">
   <%= render 'law_header' %>
 
@@ -76,3 +69,39 @@ function onIndexElementClicked(section_id) {
     <% end %>
   </div>
 </div>
+  
+<script>
+  function onIndexElementClicked(section_id) {
+    console.log(section_id)
+    document.getElementById(section_id).scrollIntoView({block:'center'});
+  }
+</script>
+
+<style>
+  .container-law{
+    max-width: 1090px;
+    margin: 5vh auto;
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: 860px auto;
+  }
+
+   .container-law .nav-pills {
+      background-color: #EFF3F8;
+    }
+
+  @media only screen and (max-width: 767.98px){
+    .container-law{
+      padding: 0px;
+    }
+
+    .container-law {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container-law .nav-pills {
+      display: none;
+    }
+  }
+</style>

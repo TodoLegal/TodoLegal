@@ -37,6 +37,11 @@ h2 {
     width: auto;
 }
 
+p.body {
+    line-height: 1.2rem;
+    margin-bottom: .75rem;
+}
+
 .container--home {
     min-height: calc(100vh - 400px)
 }
@@ -44,6 +49,17 @@ h2 {
 .container--privacy,
 .container--terms {
     margin: 1rem auto;
+}
+
+/* General styles for cards */
+
+.card--dark-100 {
+    background-color: #F2F5F8;
+}
+
+.card--pricing {
+    max-width: 1068px;
+    margin: 0 auto;
 }
 
 /* General styles for forms */

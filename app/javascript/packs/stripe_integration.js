@@ -11,12 +11,15 @@ var style = {
   },
 };
 
-// Create an instance of the card Element.
-var card = elements.create('card', {style: style});
+// Creates individual elements instances
+var cardNumberElement = elements.create('cardNumber', {showIcon: true});
+var cardExpiryElement = elements.create('cardExpiry');
+var cardCvcElement = elements.create('cardCvc');
 
-// Add an instance of the card Element into the `card-element` <div>.
-card.mount('#card-element');
-
+// Add an instance of an element into a container DOM element
+cardNumberElement.mount('#cardNumber-element');
+cardExpiryElement.mount('#cardExpiry-element');
+cardCvcElement.mount('#cardCvc-element');
 
 function stripeTokenHandler(token) {
   // Insert the token ID into the form so it gets submitted to the server
@@ -33,7 +36,7 @@ function stripeTokenHandler(token) {
 }
 
 function createToken() {
-  stripe.createToken(card).then(function(result) {
+  stripe.createToken(cardNumberElement).then(function(result) {
     if (result.error) {
       // Inform the user if there was an error
       var errorElement = document.getElementById('card-errors');

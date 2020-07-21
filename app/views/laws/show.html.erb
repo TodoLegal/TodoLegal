@@ -1,13 +1,14 @@
 <% content_for :title, @law.name + " - TodoLegal" %>
 
 <div class="container" data-spy="scroll" data-target="#myScrollspy" style="background-color: #FFF !important;">
-  <%= render 'law_header' %>
+  <div class="law-header-desktop"><%= render 'law_header' %></div>
 
   <div class="container-fluid" style="padding-top:60">
     <%= render 'navbar_subbar' %>
-      
+
     <div class="tab-content" id="myTabContent">
       <div class="tab-pane fade show active" id="articulos" role="tabpanel" aria-labelledby="articulos-tab">
+        <div class="law-header-mobile"><%= render 'law_header' %></div>
         <%= render 'content' %>
       </div>
       <div class="tab-pane fade show" id="indice" role="tabpanel" aria-labelledby="indice-tab">
@@ -20,6 +21,7 @@
         <%= render 'related_tab' %>
       </div>
     </div>
+    
 
     <div class="wrapper">
       <%= render 'sidebar_indice' %>
@@ -86,9 +88,17 @@
     grid-template-columns: 860px auto;
   }
 
-   .container-law .nav-pills {
-      background-color: #EFF3F8;
-    }
+  .container-law .nav-pills {
+    background-color: #EFF3F8;
+  }
+
+  .law-header-desktop{
+    display: block;
+  }
+
+  .law-header-mobile{
+    display: none;
+  }
 
   @media only screen and (max-width: 767.98px){
     .container-law{
@@ -102,6 +112,14 @@
 
     .container-law .nav-pills {
       display: none;
+    }
+
+    .law-header-desktop{
+      display: none;
+    }
+
+    .law-header-mobile{
+      display: block;
     }
   }
 </style>

@@ -1,11 +1,13 @@
-<section>
+<section class="checkout">
   <div class="container">
   <a href="/">
     <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="img-logo">
   </a>
   <div class="card card--onboarding bg-white rounded">
     <div class="card-body">
-      <h2 class="card-title text-center">Agregar método de pago</h2>
+      <h5 class="card-subtitle text-center">Suscripción Pro</h5>
+      <h2 class="card-title text-center">L.200.00<small style="font-size: 1rem;">/mensual</small></h2>
+      <p class="body text-center">Agrega tu tarjeta de crédito o débito para completar el pago de la suscripción.</p>
 
       <form action="/charge" method="post" id="payment-form">
         <div class="form-group">  
@@ -38,8 +40,10 @@
           <%= hidden_field_tag :email, current_user.email %>
         <% end %>
         <div class="form-group">
-          <button  type="submit" class="btn btn-primary btn-block btn-next btn-lg">Continuar</button>
+          <button  type="submit" class="btn btn-primary btn-block btn-next btn-lg">Pagar suscripción</button>
         </div>
+        <p class="text-center">¿No estás seguro del plan? <a href="#">Cambiar de plan</a></p>
+        <p class="text-center"><small>Si tienes preguntas o necesitas ayuda contactanos a <a class="link" href="mailto:info@todolegal.app">info@todolegal.app</a></small></p>
       </form>
     </div>
     <div data-attrs='{"PUBLIC_KEY": "pk_test_txfdiljergIpYg37zQPdSZT400FUwoSOay"}' id='stripe_params'>
@@ -58,7 +62,21 @@
   }
 
   .card-title{
-    margin-bottom: 35px;
+    margin-bottom: 2rem;
+  }
+
+  .card-subtitle {
+    margin-top: 1.4rem;
+  }
+
+  .checkout .form-control {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .checkout .card-title {
+    color: #505864;
   }
 
   @media only screen and (max-width: 767.98px){

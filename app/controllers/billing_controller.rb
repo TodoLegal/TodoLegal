@@ -2,6 +2,13 @@ class BillingController < ApplicationController
   layout 'billing'
   
   def checkout
+    if !current_user
+      respond_to do |format|
+        format.html { redirect_to root_path, notice: I18n.t(:login_required) }
+      end
+      return
+    end
+
     @go_to_law = params["go_to_law"]
   end
 
@@ -13,6 +20,10 @@ class BillingController < ApplicationController
         price: STRIPE_PRODUCT_PRICE,
       }],
     })
+
+    user = User.find_by_email(params["email"])
+    user.stripe_customer_id = customer.id
+    user.save
 
     respond_to do |format|
       if params["go_to_law"].blank?

@@ -1,3 +1,4 @@
 Stripe.api_key = ENV['STRIPE_SECRET_KEY']
 STRIPE_PUBLIC_KEY = "pk_test_txfdiljergIpYg37zQPdSZT400FUwoSOay"
 STRIPE_PRODUCT_PRICE = "price_1H47u3Cg28Y4yaQ4viRg6vF0"
+STRIPE_PRODUCT = "prod_HdOhNcOCea06MO"

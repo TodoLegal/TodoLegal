@@ -13,8 +13,19 @@ class ApplicationController < ActionController::Base
     current_user != nil && current_user.permissions.find_by_name("Admin") != nil
   end
 
-  def current_user_is_pro
-    current_user != nil && current_user.permissions.find_by_name("Pro") != nil
+  def user_is_pro user
+    if !user
+      return false
+    end
+    if !user.stripe_customer_id.blank?
+      customer = Stripe::Customer.retrieve(user.stripe_customer_id)
+      if current_user_plan_is_active customer
+        return true
+      end
+    elsif user.permissions.find_by_name("Pro") != nil
+      return true
+    end
+    return false
   end
 
   def authenticate_admin!
@@ -24,7 +35,7 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_pro!
-    if current_user_is_pro
+    if user_is_pro current_user
       redirect_to "/?error=Invalid+permissions"
     end
   end
@@ -74,6 +85,30 @@ class ApplicationController < ActionController::Base
   def is_number string
     string.match(/^(\d)+$/)
   end
+
+  def current_user_plan_is_active customer
+    begin
+      customer.subscriptions.data.each do |subscription|
+        if subscription.plan.product == STRIPE_PRODUCT and subscription.plan.active
+          return true
+        end
+      end
+    rescue
+      puts "Todo: Handle Stripe customer error"
+    end
+    return false
+  end
+
+  def cancel_all_subscriptions customer
+    customer.subscriptions.data.each do |subscription|
+      Stripe::Subscription.update(
+        subscription.id,
+        {
+          cancel_at_period_end: true,
+        }
+      )
+    end
+  end
   
 protected
   
@@ -101,6 +136,6 @@ protected
 
   def configure_devise_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up) { |u| u.permit(:first_name, :last_name, :occupation, :receive_information_emails, :is_contributor, :email, :password, :password_confirmation)}
-    devise_parameter_sanitizer.permit(:account_update) { |u| u.permit(:first_name, :last_name, :occupation, :receive_information_emails, :is_contributor, :email, :password, :current_password)}
+    devise_parameter_sanitizer.permit(:account_update) { |u| u.permit(:first_name, :last_name, :occupation, :receive_information_emails, :is_contributor, :email, :stripe_customer_id, :password, :current_password)}
   end
 end

@@ -136,7 +136,7 @@ class LawsController < ApplicationController
     end
 
     @user_can_edit_law = current_user_is_admin
-    @user_can_access_law = user_can_access_law @law
+    @user_can_access_law = user_can_access_law @law, current_user
     if !@user_can_access_law
       @stream = @stream.take(5)
     end
@@ -218,29 +218,20 @@ class LawsController < ApplicationController
       params.require(:law).permit(:name, :modifications, :creation_number)
     end
 
-    def user_can_access_law law
+    def user_can_access_law law, user
       law_access = law.law_access
-      if current_user
-        return true
+      if law_access
+        if law_access.name == "Pro"
+          if !user_is_pro user
+            return false
+          end
+        end
+        if law_access.name == "Básica"
+          if !current_user
+            return false
+          end
+        end
       end
-      if !law_access
-        return true
-      end
-      return law_access.name == "Todos"
-      
-      #law_access = law.law_access
-      #if law_access
-      #  if law_access.name == "Pro"
-      #    if !current_user_is_pro
-      #      return false
-      #    end
-      #  end
-      #  if law_access.name == "Básica"
-      #    if !current_user
-      #      return false
-      #    end
-      #  end
-      #end
-      #return true
+      return true
     end
 end

@@ -1,12 +1,26 @@
 <div id="myScrollspy" class="sticky-top" style="top:69px; padding: 0px; padding-top:5px; padding-bottom:5px; background-color: #fff;">
   <div class="row">
     <div class="col-12 col-xl-8" style="padding-bottom: 10px;">
-      <ul class="nav nav-tabs" id="lawEditorTab" role="tablist">
-        <li  class="nav-item">
-          <a class="nav-link active" id="articulos-tab" data-toggle="tab" href="#articulos" role="tab" aria-controls="articulos" aria-selected="true">Artículos</a>
+      <ul class="nav" id="lawEditorTab" role="tablist">
+        <li  class="nav-item active subbar-item" id="item1">
+          <a class="nav-link subbar-text" id="articulos-tab" data-toggle="tab" href="#articulos" role="tab" aria-controls="articulos" aria-selected="true">
+          <i class="far fa-file-alt subbar-icon"></i>
+          Documento</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" data-toggle="tab" href="#indice">Índice</a>
+        <li class="nav-item subbar-item" id="item2" >
+          <a class="nav-link subbar-text" data-toggle="tab" href="#indice">
+          <i class="far fa-list-alt subbar-icon" data-toggle="tab" href="#indice"></i>
+          Índice</a>
+        </li>
+        <li class="nav-item subbar-item" id="item3">
+          <a class="nav-link subbar-text" data-toggle="tab" href="#modifications">
+          <i class="far fa-clock subbar-icon" data-toggle="tab" href="#modifications"></i>
+          Modificaciones</a>
+        </li>
+        <li class="nav-item subbar-item" id="item4">
+          <a class="nav-link subbar-text" data-toggle="tab" href="#related">
+          <i class="fas fa-link subbar-icon" data-toggle="tab" href="#related" style="margin-left: 33px;"></i>
+          Relacionados</a>
         </li>
       </ul>
     </div>
@@ -42,7 +56,77 @@
     <% end %>
   </div>
 </div>
+
 <style>
 br{content:' ';}
 br:after{content:' ';}
+
+.subbar-icon{
+  font-size: 20px;
+  display: block;
+}
+
+.subbar-text{
+  color: #505864;
+  text-align: center;
+  line-height: 1.7rem;
+}
+
+.subbar-text:hover{
+  color: #171F2A;
+}
+
+ul li.active a{
+  color: #171F2A;
+   border-bottom-style: solid;
+   border-bottom-color: #1A7FFA;
+}
+
+.subbar-item{
+  text-align: center;
+  line-height: 1.2rem;
+}
+@media only screen and (max-width: 767.98px){
+  .subbar-text{
+    font-size: 13px;
+    padding-right: 5px;
+    padding-left: 5px;
+    padding-top: 0px;
+  }
+}
 </style>
+
+<script>
+  var item1 = document.getElementById("item1");
+  var item2 = document.getElementById("item2");
+  var item3 = document.getElementById("item3");
+  var item4 = document.getElementById("item4");
+
+  item1.addEventListener("click", function () {
+    item1.classList.add('active');
+    item2.classList.remove('active');
+    item3.classList.remove('active');
+    item4.classList.remove('active');
+  })
+
+  item2.addEventListener("click", function () {
+    item2.classList.add('active');
+    item1.classList.remove('active');
+    item3.classList.remove('active');
+    item4.classList.remove('active');
+  })
+
+  item3.addEventListener("click", function () {
+    item3.classList.add('active');
+    item1.classList.remove('active');
+    item2.classList.remove('active');
+    item4.classList.remove('active');
+  })
+
+  item4.addEventListener("click", function () {
+    item4.classList.add('active');
+    item1.classList.remove('active');
+    item2.classList.remove('active');
+    item3.classList.remove('active');
+  })
+</script>

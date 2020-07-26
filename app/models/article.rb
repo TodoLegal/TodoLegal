@@ -16,7 +16,7 @@ class Article < ApplicationRecord
                   ignoring: :accents,
                   using: {
                     tsearch: {
-                      dictionary: "spanish",
+                      dictionary: "tl_config",
                       highlight: {
                         StartSel: '<b style="color: var(--c-highlight); background-color: var(--c-highlight-background)" class="highlighted">',
                         StopSel: '</b>',
@@ -35,7 +35,7 @@ pg_search_scope :search_by_body_trimmed,
                   ignoring: :accents,
                   using: {
                     tsearch: {
-                      dictionary: "spanish",
+                      dictionary: "tl_config",
                       highlight: {
                         StartSel: '<b>',
                         StopSel: '</b>',

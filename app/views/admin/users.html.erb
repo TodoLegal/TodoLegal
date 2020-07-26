@@ -24,6 +24,7 @@
 <table border="1">
   <tr>
     <th>email</th>
+    <th>created at</th>
     <th>last sign in</th>
     <% @permissions.each do |permission| %>
       <th><%= permission.name %></th>
@@ -32,6 +33,7 @@
   <% @users.each do |user| %>
     <tr>
       <td><%= user.email %></td>
+      <td><%= user.created_at %> ago</td>
       <td><%= user.last_sign_in_at ? time_ago_in_words(user.last_sign_in_at) : "" %> ago</td>
       <% @permissions.each do |permission| %>
         <% if UserPermission.find_by(user: user, permission: permission) %>

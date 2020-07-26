@@ -3,29 +3,111 @@
 <style>
     section.pricing {
         background: #EFF3F8;
+        padding-top: 1rem;
     }
+
+  @media only screen and (max-width: 767.98px) {
+    section.pricing {
+        background: white;
+    }
+  }
+
+  section.pricing .alert{
+    width: calc(100% - 30px);
+    margin: auto auto 1rem;
+    max-width: 1068px;
+  }
+
+  section.pricing .body,
+  section.pricing li,
+  section.pricing small .link {
+    color: #505864;
+  }
+
+  section.pricing small {
+    display: inline-block;
+    margin-bottom: 1rem;  
+  }
+  
+  .pricing .link {
+    text-decoration: underline;
+  }
+
+  .pricing-heading {
+    text-align: left;
+    margin-bottom: 1rem;
+  }
+
+  section.pricing .plan-description {
+    color: #171F2A;
+  }
+
+  @media only screen and (max-width: 767.98px) {
+     .pricing-heading {
+        text-align: center;
+        margin-bottom: .5rem;
+      }
+  }
+
+  .card--pricing {
+      padding-bottom: 2rem;
+  }
+
+  .card-bottom {
+    padding-bottom: 1.5rem;
+  }
+
+@media only screen and (min-width: 1280px) {
+     .card--pricing {
+        padding: 0 2rem 3rem 2rem;
+    }
+  }
+
+  @media only screen and (min-width: 1280px) {
+     section.pricing ul {
+       margin-bottom: 2rem; 
+      }
+  }
+
+  @media only screen and (max-width: 992px) {
+     .card.col-lg-6 {
+       margin: auto 1rem;
+     }
+  }
+
+  @media only screen and (min-width: 992px) {
+     
+     .pricing .row {
+       justify-content: space-between;
+     }
+     .card.col-lg-6 {
+       flex: 0 0 48%;
+       margin-top: 1rem;
+     }
+     .card-bottom {
+      min-height: 100px;
+    }
+  }
+  
 
     .pricing .card {
         border: none;
-        border-radius: 1rem;
-        transition: all 0.2s;
-        box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
     }
 
     .pricing hr {
         margin: 1.5rem 0;
     }
 
-    .pricing .card-title {
-        margin: 0.5rem 0;
-        font-size: 0.9rem;
-        letter-spacing: .1rem;
+    .pricing .card-title,
+    .pricing .card-price {
+        font-size: 1.5rem;
+        margin: .5rem auto;
         font-weight: bold;
     }
 
-    .pricing .card-price {
-        font-size: 3rem;
-        margin: 0;
+    .card-price {
+      color: #1A7FFA;
     }
 
     .pricing .card-price .period {
@@ -43,42 +125,19 @@
     .pricing{
         background: #1A7FFA;
     }
-    
-    .card-2{
-      margin-top: -.25rem;
-      margin-bottom: .25rem;
-      margin-left: 15%;
-      margin-right: 15%;
-      background: #FFFFFF;
-      border-radius: 4px;
-    }
 
-    .card{
-      background: #EFF3F8;
-      width:
-    }
-
-    .title1{
-      height: 34px;
-      left: 22.5%;
-      right: 22.43%;
-      top: 220px;
-      font-style: normal;
+    .title{
+      font-size: 24px;
+      padding-top: 4%;
+      margin-bottom: .5rem;
       font-weight: bold;
-      font-size: 28px;
-      line-height: 33px;
-      text-align: center;
-      color: #171F2A;
-      padding-top:4%;
-      margin-bottom: 7%;
     }
 
     .image{
-      width: 130px;
-      margin-left: auto;
-      margin-right: auto;
+      height: 12vh;
+      max-height: 110px;
+      margin: 2vh auto 0;
       display: block;
-      margin-bottom: 2%;
     }
 
     #btnDisable{
@@ -89,65 +148,89 @@
       line-height: 19px;
     }
 
-  #btnBasico{
-    margin-top: 48%;
-  }
-
-/* Hover Effects on Card */
-
-    @media (min-width: 992px) {
-    .pricing .card:hover {
-        margin-top: -.25rem;
-        margin-bottom: .25rem;
-        box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.3);
+    ul li .fa-li {
+      color: #1A7FFA;
     }
-    .pricing .card:hover {
-        opacity: 1;
-    }
-}
 
 </style>
 
-<section class="pricing py-5">
+<section class="pricing">
   <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="image">
-  <div class = "card-2">
-  <h2 class="title1">¡Tu cuenta ha sido creada!</h3>
+
+  <div class="alert alert-success alert-dismissible fade show" role="alert" id="savedArticle"> 
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+      La información de perfil ha sido guardada, procede a elegir un plan para tu cuenta.
+  </div>
+
+
+  <div class="card card--pricing">
   <div class="container">
-    <h4 style="font-weight: bold;margin-bottom: 3%;">Elige un plan</h4>
-    <div class="row">
+    <div class="row row-eq-height">
+      <div class="pricing-heading col-12">
+      <h2 class="title">Elige un Plan</h3>
+      <p class="body">Si eliges el plan Pro, puedes pagar mensual o anualmente, cancelar o bajar al plan básico en cualquier momento.</p>
+      </div>
       <!-- Free Tier -->
-      <div class="col-lg-6">
-        <div class="card mb-5 mb-lg-0">
+        <div class="col-lg-6 card card--dark-100 mb-2 mb-lg-0">
           <div class="card-body">
-            <h5 class="card-title text-muted text-uppercase text-center">Básico</h5>
-            <h6 class="card-price text-center">Grátis</h6>
+            <h5 class="card-title">Básico</h5>
+            <h6 class="card-price">Grátis</h6>
+            <p class="body plan-description">Abierto a cualquier persona para  consultas de la legislación hondureña.</p>
             <hr>
             <ul class="fa-ul">
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Acceso a 20 documentos de legislación hondureña</li>
-              <li><span class="fa-li"><i class="fas fa-check"></i></span>Buscador de palabras clave, por materia, ley o normas expecificas.</li>
-              <li><span class="fa-li"><i class="fas fa-check"></i></span>Servicio al cliente básico</li>
+              <li class="d-none d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>Buscador de palabras clave, por materia, ley o normas expecificas.</li>
+              <li class="d-none d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>Servicio al cliente básico</li>
             </ul>
-            <%= button_to "Continuar con Plan Básico", invite_friends_path, method: :get, remote: true, class:"btn btn-block btn-primary", id:"btnBasico" %>
           </div>
-        </div>
+          <div class="card-bottom">
+            <%= button_to "Continuar con Plan Básico", invite_friends_path, method: :get, remote: true, class:"btn btn-block btn-outline-primary", id:"btnBasico" %>
+          </div>
       </div>
       <!-- Pro Tier -->
-      <div class="col-lg-6">
-        <div class="card">
+        <div class="col-lg-6 card card--dark-100">
           <div class="card-body">
-            <h5 class="card-title text-muted text-uppercase text-center">Pro</h5>
-            <h6 class="card-price text-center">L350<span class="period">/mes</span></h6>
+            <h5 class="card-title">Pro</h5>
+            <h6 class="card-price">L200.00<span class="period">/mensual</span></h6>
+            <small>Facturado a <strong>L2,400.00</strong> anual</small>
+            <p class="body plan-description">Para profesionales que requieran información legal avanzada.</p>
             <hr>
             <ul class="fa-ul">
               <li><span class="fa-li"><i class="fas fa-check"></i></span> Acceso a más de 150 documentos de legislación hondureña. Incluyendo todo los documentos nuevos que agreguemos.</li>
-              <li><span class="fa-li"><i class="fas fa-check"></i></span>Buscador de palabras clave, por materia, ley o normas especificas.</li>
-              <li><span class="fa-li"><i class="fas fa-check"></i></span>Servicio al cliente <strong>24/7</strong></li>
+              <li class="d-none d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>Buscador de palabras clave, por materia, ley o normas especificas.</li>
+              <li class="d-none d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>Servicio al cliente <strong>24/7</strong></li>
             </ul>
-            <a href="#" id="btnDisable" class="btn btn-block btn-primary disabled" tabindex="-1" role="button" aria-disabled="true">Si pagas anualmente L 3,500/año </a>
-            <a href="<%= new_user_registration_path %>?go_to_checkout=true" class="btn btn-block btn-primary">Elegir Plan Pro</a>
           </div>
-        </div>
+          <div class="card-bottom">
+            <a href="#" class="btn btn-block btn-primary">Elegir Plan Pro</a>
+            <p class="body text-center py-2"><a href="#" class="link">Cambiar a pago mensual</a></p>
+          </div>
       </div>
+
+      <!-- Card - Plan Pro Mensual  -->
+        <div class="col-lg-6 card card--dark-100">
+          <div class="card-body">
+            <h5 class="card-title">Pro</h5>
+            <h6 class="card-price">L 250.00<span class="period">/mensual</span></h6>
+            <small>Podrás ahorrar <strong>L600.00</strong> si eliges el
+             <!-- Agregar el switch de mensual a anual tambien  -->
+             <a class="link" href="#">pago anual</a></small>
+            <p class="body plan-description">Para profesionales que requieran información legal avanzada.</p>
+            <hr>
+            <ul class="fa-ul">
+              <li><span class="fa-li"><i class="fas fa-check"></i></span> Acceso a más de 150 documentos de legislación hondureña. Incluyendo todo los documentos nuevos que agreguemos.</li>
+              <li class="d-none d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>Buscador de palabras clave, por materia, ley o normas especificas.</li>
+              <li class="d-none d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>Servicio al cliente <strong>24/7</strong></li>
+            </ul>
+          </div>
+          <div class="card-bottom">
+            <a href="#" class="btn btn-block btn-primary">Elegir Plan Pro</a>
+            <p class="body text-center py-2"><a href="#" class="link">Cambiar a pago anual</a></p>
+          </div>
+      </div>
+
     </div>
   </div>
   </div>

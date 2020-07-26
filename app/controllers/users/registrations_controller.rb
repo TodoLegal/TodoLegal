@@ -25,9 +25,13 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   # GET /resource/edit
-  # def edit
-  #   super
-  # end
+  def edit
+    if current_user and current_user.stripe_customer_id
+      customer = Stripe::Customer.retrieve(current_user.stripe_customer_id)
+      @current_user_plan_is_active = current_user_plan_is_active customer
+    end
+    super
+  end
 
   # PUT /resource
   def update

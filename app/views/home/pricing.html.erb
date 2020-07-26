@@ -1,10 +1,105 @@
-<!-- This snippet uses Font Awesome 5 Free as a dependency. You can download it at fontawesome.io! -->
+<section class="pricing">
+  <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="image">
+
+  <div class="alert alert-success alert-dismissible fade show" role="alert" id="savedArticle"> 
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+      La información de perfil ha sido guardada, procede a elegir un plan para tu cuenta.
+  </div>
+
+
+  <div class="card card--pricing">
+  <div class="container">
+    <div class="row row-eq-height">
+      <div class="pricing-heading col-12">
+      <h2 class="title">Elige un Plan</h3>
+      <p class="body">Si eliges el plan Pro, puedes pagar mensual o anualmente, cancelar o bajar al plan básico en cualquier momento.</p>
+      </div>
+      <!-- Free Tier -->
+        <div class="col-lg-6 card card--dark-100 mb-2 mb-lg-0">
+          <div class="card-body">
+            <h5 class="card-title">Básico</h5>
+            <h6 class="card-price">Grátis</h6>
+            <p class="body plan-description">Abierto a cualquier persona para  consultas de la legislación hondureña.</p>
+            <hr>
+            <ul class="fa-ul">
+              <li><span class="fa-li"><i class="fas fa-check"></i></span>Acceso a 20 documentos de legislación hondureña</li>
+              <li class="d-none d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>Buscador de palabras clave, por materia, ley o normas expecificas.</li>
+              <li class="d-none d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>Servicio al cliente básico</li>
+            </ul>
+          </div>
+          <div class="card-bottom">
+            <%= button_to "Continuar con Plan Básico", invite_friends_path, method: :get, remote: true, class:"btn btn-block btn-outline-primary", id:"btnBasico" %>
+          </div>
+      </div>
+      <!-- Pro Tier -->
+        <div class="col-lg-6 card card--dark-100 hide-plan" id="pro-tier">
+          <div class="card-body">
+            <h5 class="card-title">Pro</h5>
+            <h6 class="card-price">L200.00<span class="period">/mensual</span></h6>
+            <small>Facturado a <strong>L2,400.00</strong> anual</small>
+            <p class="body plan-description">Para profesionales que requieran información legal avanzada.</p>
+            <hr>
+            <ul class="fa-ul">
+              <li><span class="fa-li"><i class="fas fa-check"></i></span> Acceso a más de 150 documentos de legislación hondureña. Incluyendo todo los documentos nuevos que agreguemos.</li>
+              <li class="d-none d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>Buscador de palabras clave, por materia, ley o normas especificas.</li>
+              <li class="d-none d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>Servicio al cliente <strong>24/7</strong></li>
+            </ul>
+          </div>
+          <div class="card-bottom">
+            <a href="#" class="btn btn-block btn-primary">Elegir Plan Pro</a>
+            <p class="text-center py-2 change-plan-link" onclick="changePlan(2)">Cambiar a pago mensual</p>
+          </div>
+      </div>
+
+      <!-- Card - Plan Pro Mensual  -->
+        <div class="col-lg-6 card card--dark-100" id="pro-mensual">
+          <div class="card-body">
+            <h5 class="card-title">Pro</h5>
+            <h6 class="card-price">L 250.00<span class="period">/mensual</span></h6>
+            <small>Podrás ahorrar <strong>L600.00</strong> si eliges el
+             <!-- Agregar el switch de mensual a anual tambien  -->
+             <label class="link" onclick="changePlan(1)">pago anual</label></small>
+            <p class="body plan-description">Para profesionales que requieran información legal avanzada.</p>
+            <hr>
+            <ul class="fa-ul">
+              <li><span class="fa-li"><i class="fas fa-check"></i></span> Acceso a más de 150 documentos de legislación hondureña. Incluyendo todo los documentos nuevos que agreguemos.</li>
+              <li class="d-none d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>Buscador de palabras clave, por materia, ley o normas especificas.</li>
+              <li class="d-none d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>Servicio al cliente <strong>24/7</strong></li>
+            </ul>
+          </div>
+          <div class="card-bottom">
+            <button class="btn btn-block btn-primary">Elegir Plan Pro</button>
+            <p class="text-center py-2 change-plan-link" onclick="changePlan(1)">Cambiar a pago anual</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function changePlan(plan){
+    if(plan == 1){
+      document.getElementById("pro-tier").classList.remove('hide-plan');
+      document.getElementById("pro-mensual").classList.add('hide-plan');
+    }else{
+      document.getElementById("pro-mensual").classList.remove('hide-plan');
+      document.getElementById("pro-tier").classList.add('hide-plan');
+    }
+  }
+</script>
 
 <style>
-    section.pricing {
-        background: #EFF3F8;
-        padding-top: 1rem;
-    }
+  section.pricing {
+      background: #EFF3F8;
+      padding-top: 1rem;
+  }
+
+  .hide-plan{
+    display: none;
+  }
 
   @media only screen and (max-width: 767.98px) {
     section.pricing {
@@ -33,9 +128,18 @@
     text-decoration: underline;
   }
 
+  .change-plan-link, .link:hover{
+    cursor: pointer;
+  }
+
   .pricing-heading {
     text-align: left;
     margin-bottom: 1rem;
+  }
+
+  .change-plan-link{
+    text-decoration: underline;
+    color: #1A7FFA;
   }
 
   section.pricing .plan-description {
@@ -153,85 +257,3 @@
     }
 
 </style>
-
-<section class="pricing">
-  <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="image">
-
-  <div class="alert alert-success alert-dismissible fade show" role="alert" id="savedArticle"> 
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-    </button>
-      La información de perfil ha sido guardada, procede a elegir un plan para tu cuenta.
-  </div>
-
-
-  <div class="card card--pricing">
-  <div class="container">
-    <div class="row row-eq-height">
-      <div class="pricing-heading col-12">
-      <h2 class="title">Elige un Plan</h3>
-      <p class="body">Si eliges el plan Pro, puedes pagar mensual o anualmente, cancelar o bajar al plan básico en cualquier momento.</p>
-      </div>
-      <!-- Free Tier -->
-        <div class="col-lg-6 card card--dark-100 mb-2 mb-lg-0">
-          <div class="card-body">
-            <h5 class="card-title">Básico</h5>
-            <h6 class="card-price">Grátis</h6>
-            <p class="body plan-description">Abierto a cualquier persona para  consultas de la legislación hondureña.</p>
-            <hr>
-            <ul class="fa-ul">
-              <li><span class="fa-li"><i class="fas fa-check"></i></span>Acceso a 20 documentos de legislación hondureña</li>
-              <li class="d-none d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>Buscador de palabras clave, por materia, ley o normas expecificas.</li>
-              <li class="d-none d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>Servicio al cliente básico</li>
-            </ul>
-          </div>
-          <div class="card-bottom">
-            <%= button_to "Continuar con Plan Básico", invite_friends_path, method: :get, remote: true, class:"btn btn-block btn-outline-primary", id:"btnBasico" %>
-          </div>
-      </div>
-      <!-- Pro Tier -->
-        <div class="col-lg-6 card card--dark-100">
-          <div class="card-body">
-            <h5 class="card-title">Pro</h5>
-            <h6 class="card-price">L200.00<span class="period">/mensual</span></h6>
-            <small>Facturado a <strong>L2,400.00</strong> anual</small>
-            <p class="body plan-description">Para profesionales que requieran información legal avanzada.</p>
-            <hr>
-            <ul class="fa-ul">
-              <li><span class="fa-li"><i class="fas fa-check"></i></span> Acceso a más de 150 documentos de legislación hondureña. Incluyendo todo los documentos nuevos que agreguemos.</li>
-              <li class="d-none d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>Buscador de palabras clave, por materia, ley o normas especificas.</li>
-              <li class="d-none d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>Servicio al cliente <strong>24/7</strong></li>
-            </ul>
-          </div>
-          <div class="card-bottom">
-            <a href="#" class="btn btn-block btn-primary">Elegir Plan Pro</a>
-            <p class="body text-center py-2"><a href="#" class="link">Cambiar a pago mensual</a></p>
-          </div>
-      </div>
-
-      <!-- Card - Plan Pro Mensual  -->
-        <div class="col-lg-6 card card--dark-100">
-          <div class="card-body">
-            <h5 class="card-title">Pro</h5>
-            <h6 class="card-price">L 250.00<span class="period">/mensual</span></h6>
-            <small>Podrás ahorrar <strong>L600.00</strong> si eliges el
-             <!-- Agregar el switch de mensual a anual tambien  -->
-             <a class="link" href="#">pago anual</a></small>
-            <p class="body plan-description">Para profesionales que requieran información legal avanzada.</p>
-            <hr>
-            <ul class="fa-ul">
-              <li><span class="fa-li"><i class="fas fa-check"></i></span> Acceso a más de 150 documentos de legislación hondureña. Incluyendo todo los documentos nuevos que agreguemos.</li>
-              <li class="d-none d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>Buscador de palabras clave, por materia, ley o normas especificas.</li>
-              <li class="d-none d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>Servicio al cliente <strong>24/7</strong></li>
-            </ul>
-          </div>
-          <div class="card-bottom">
-            <a href="#" class="btn btn-block btn-primary">Elegir Plan Pro</a>
-            <p class="body text-center py-2"><a href="#" class="link">Cambiar a pago anual</a></p>
-          </div>
-      </div>
-
-    </div>
-  </div>
-  </div>
-</section>

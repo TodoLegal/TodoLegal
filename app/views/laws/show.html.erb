@@ -40,28 +40,43 @@ function onIndexElementClicked(section_id) {
             <div class="modal-body">
               <div class="container col-md-12">
                 <div class="row">
-                  <div class="col-md-12">
-                    <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, style:"font-size: 1.5rem; color:black;" %>
-                    <p  style="font-size:22px; text-align:center; display:inline; margin-left: 8%;">
-                    <b>Regístrate y accede a esta ley</b>
+                  <% if current_user %>
+                    <div class="col-md-12">
+                      <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, style:"font-size: 1.5rem; color:black;" %>
+                    </div>
+                    <div class="col-md-12">
+                      <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
+                      Para leer esta ley cambiate a un plan Pro. Por L 350/mensuales podrás acceder a este y más de 250 documentos.
                     </p>
-                  </div>
-                  <div class="col-md-12">
-                    <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
-                    Crea una cuenta y accede a más de <b>150 documentos</b> de Legislación Hondureña y recibe boletines informativos.
-                  </p>
-                  </div>
-                  <div class="col-md-12">
-                    <a href="<%= new_user_registration_path %>?go_to_law=<%=@law.id%>">
-                      <button type="button" class="btn btn-primary btn-block">Crear cuenta</button>
-                    </a>
-                  </div>
-                  <div class="col-md-12">
-                    <a href="<%= new_user_registration_path %>?go_to_law=<%=@law.id%>&go_to_checkout=true">
-                      <button type="button" class="btn btn-primary btn-block">Crear cuenta Pro</button>
-                    </a>
-                  </div>
-                  <div class="col-md-12">
+                    </div>
+                    <div class="col-md-12">
+                      <a href="<%= new_user_registration_path %>?go_to_law=<%=@law.id%>&go_to_checkout=true">
+                        <button type="button" class="btn btn-primary btn-block">Cambiar de plan</button>
+                      </a>
+                    </div>
+                  <% else %>
+                    <div class="col-md-12">
+                      <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, style:"font-size: 1.5rem; color:black;" %>
+                      <p  style="font-size:22px; text-align:center; display:inline; margin-left: 8%;">
+                      <b>Regístrate y accede a esta ley</b>
+                      </p>
+                    </div>
+                    <div class="col-md-12">
+                      <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
+                      Crea una cuenta y accede a más de <b>150 documentos</b> de Legislación Hondureña y recibe boletines informativos.
+                    </p>
+                    </div>
+                    <div class="col-md-12">
+                      <a href="<%= new_user_registration_path %>?go_to_law=<%=@law.id%>">
+                        <button type="button" class="btn btn-primary btn-block">Crear cuenta</button>
+                      </a>
+                    </div>
+                    <div class="col-md-12">
+                      <a href="<%= new_user_registration_path %>?go_to_law=<%=@law.id%>&go_to_checkout=true">
+                        <button type="button" class="btn btn-primary btn-block">Crear cuenta Pro</button>
+                      </a>
+                    </div>
+                    <div class="col-md-12">
                       <div with="100%" style="text-align:center; padding-top: 22px;">
                         ¿Ya tienes cuenta?
                       </div>
@@ -70,7 +85,8 @@ function onIndexElementClicked(section_id) {
                           Inicia sesión
                         </a>
                       </div>
-                  </div>
+                    </div>
+                  <% end %>
                 </div>
               </div>
             </div>

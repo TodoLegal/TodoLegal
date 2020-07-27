@@ -30,7 +30,7 @@
             </ul>
           </div>
           <div class="card-bottom">
-            <%= button_to "Continuar con Plan Básico", invite_friends_path, method: :get, remote: true, class:"btn btn-block btn-outline-primary", id:"btnBasico" %>
+            <%= button_to "Continuar con Plan Básico", root_path, method: :get, remote: true, class:"btn btn-block btn-outline-primary", id:"btnBasico" %>
           </div>
       </div>
       <!-- Pro Tier -->
@@ -48,7 +48,7 @@
             </ul>
           </div>
           <div class="card-bottom">
-            <a href="#" class="btn btn-block btn-primary">Elegir Plan Pro</a>
+            <%= button_to "Elegir Plan Pro", checkout_path, method: :get, remote: true, class:"btn btn-block btn-primary"%>
             <p class="text-center py-2 change-plan-link" onclick="changePlan(2)">Cambiar a pago mensual</p>
           </div>
       </div>
@@ -70,7 +70,7 @@
             </ul>
           </div>
           <div class="card-bottom">
-            <button class="btn btn-block btn-primary">Elegir Plan Pro</button>
+            <%= button_to "Elegir Plan Pro", checkout_path, method: :get, params: {is_monthly: true}, remote: true, class:"btn btn-block btn-primary"%>
             <p class="text-center py-2 change-plan-link" onclick="changePlan(1)">Cambiar a pago anual</p>
           </div>
         </div>

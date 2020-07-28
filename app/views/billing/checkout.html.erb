@@ -6,7 +6,11 @@
   <div class="card card--onboarding bg-white rounded">
     <div class="card-body">
       <h5 class="card-subtitle text-center">Suscripción Pro</h5>
-      <h2 class="card-title text-center">L.200.00<small style="font-size: 1rem;">/mensual</small></h2>
+      <% if @is_monthly %>
+        <h2 class="card-title text-center">L.250.00<small style="font-size: 1rem;">/mensual</small></h2>
+      <% else %>
+        <h2 class="card-title text-center">L.200.00<small style="font-size: 1rem;">/mensual</small></h2>
+      <% end %>
       <p class="body text-center">Agrega tu tarjeta de crédito o débito para completar el pago de la suscripción.</p>
 
       <form action="/charge" method="post" id="payment-form">
@@ -42,7 +46,7 @@
         <div class="form-group">
           <button  type="submit" class="btn btn-primary btn-block btn-next btn-lg">Pagar suscripción</button>
         </div>
-        <p class="text-center">¿No estás seguro del plan? <a href="#">Cambiar de plan</a></p>
+        <p class="text-center">¿No estás seguro del plan? <%= link_to "Cambiar de plan", :back %> </p>
         <p class="text-center"><small>Si tienes preguntas o necesitas ayuda contactanos a <a class="link" href="mailto:info@todolegal.app">info@todolegal.app</a></small></p>
       </form>
     </div>

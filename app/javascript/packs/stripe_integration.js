@@ -1,4 +1,7 @@
-var stripe = Stripe(JSON.parse(document.getElementById('stripe_params').dataset.attrs).PUBLIC_KEY);
+var stripe = Stripe(JSON.parse(document.getElementById('stripe_params').dataset.attrs).PUBLIC_KEY, {
+  locale: 'es-419'
+});
+
 var elements = stripe.elements();
 
 
@@ -39,6 +42,7 @@ function createToken() {
   stripe.createToken(cardNumberElement).then(function(result) {
     if (result.error) {
       // Inform the user if there was an error
+      console.log(result.error)
       var errorElement = document.getElementById('card-errors');
       errorElement.textContent = result.error.message;
     } else {

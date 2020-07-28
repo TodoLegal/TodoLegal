@@ -12,7 +12,7 @@ default: &default
 development:
   adapter: postgresql
   encoding: unicode
-  database: TodoLegalDB_Development
+  database: todolegaldb_development
   host: localhost
   pool: 5
   username: postgres

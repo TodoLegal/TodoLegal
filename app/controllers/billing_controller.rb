@@ -33,4 +33,12 @@ class BillingController < ApplicationController
       end
     end
   end
+
+  def create_customer_portal_session
+    portal_session = Stripe::BillingPortal::Session.create({
+      customer: current_user.stripe_customer_id,
+      return_url: 'https://todolegal.app/users/edit',
+    })
+    redirect_to portal_session.url
+  end
 end

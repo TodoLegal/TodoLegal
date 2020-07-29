@@ -19,7 +19,7 @@ class BillingController < ApplicationController
       customer: customer.id,
       items: [{
         price: STRIPE_PRODUCT_PRICE,
-      }],
+      }]
     })
 
     user = User.find_by_email(params["email"])

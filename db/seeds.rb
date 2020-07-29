@@ -83,8 +83,8 @@ Article.create(position: 2, number: "3", law_id: law_lorem_ipsum.id, body: "Es u
 Article.create(position: 3, number: "4", law_id: law_lorem_ipsum.id, body: "Hay muchas variaciones de los pasajes de Lorem Ipsum disponibles, pero la mayoría sufrió alteraciones en alguna manera, ya sea porque se le agregó humor, o palabras aleatorias que no parecen ni un poco creíbles. Si vas a utilizar un pasaje de Lorem Ipsum, necesitás estar seguro de que no hay nada avergonzante escondido en el medio del texto. Todos los generadores de Lorem Ipsum que se encuentran en Internet tienden a repetir trozos predefinidos cuando sea necesario, haciendo a este el único generador verdadero (válido) en la Internet. Usa un diccionario de mas de 200 palabras provenientes del latín, combinadas con estructuras muy útiles de sentencias, para generar texto de Lorem Ipsum que parezca razonable. Este Lorem Ipsum generado siempre estará libre de repeticiones, humor agregado o palabras no características del lenguaje, etc.")
 
 law_las_reglas = Law.create({ name: "Las Reglas", creation_number: "2020-02", law_access_id: law_access_pro.id })
-LawTag.create({law_id: law_demo.id, tag_id: Tag.find_by_name("Constitucional").id})
-LawTag.create({law_id: law_demo.id, tag_id: Tag.find_by_name("Acuerdo Ejecutivo").id})
+LawTag.create({law_id: law_las_reglas.id, tag_id: Tag.find_by_name("Constitucional").id})
+LawTag.create({law_id: law_las_reglas.id, tag_id: Tag.find_by_name("Acuerdo Ejecutivo").id})
 Article.create(position: 0, number: "1", law_id: law_las_reglas.id, body: "El ahijado tiene estríctamente prohibido revelar la existencia o la tenencia de padrinos mágicos, de lo contrario, los perderá para siempre, olvidando todo lo vivido con ellos.")
 Article.create(position: 1, number: "2", law_id: law_las_reglas.id, body: "Se le asignará un padrino mágico a los hijos de la especie dominante sobre la Tierra.")
 Article.create(position: 2, number: "3", law_id: law_las_reglas.id, body: "Cualquier deseo deshecho entra al archivo personal de deseos desechos en el Mundo Mágico.")

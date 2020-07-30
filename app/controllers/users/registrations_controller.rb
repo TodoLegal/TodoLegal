@@ -30,7 +30,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       @customer = Stripe::Customer.retrieve(current_user.stripe_customer_id)
       @current_user_plan_is_active = current_user_plan_is_active @customer
       if @customer.subscriptions.data.size > 0
-        @fin_del_periodo = @customer.subscriptions.data.first.current_period_end
+        @fin_del_periodo = Time.at(@customer.subscriptions.data.first.current_period_end)
       end
     end
     super

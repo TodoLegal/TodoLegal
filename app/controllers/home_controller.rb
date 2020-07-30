@@ -103,10 +103,10 @@ class HomeController < ApplicationController
   end
 
   def pricing
+    @is_onboarding = params[:is_onboarding]
   end
   
   def invite_friends
-    # @is_onboarding = params[:is_onboarding]
   end
   
   def drive_search

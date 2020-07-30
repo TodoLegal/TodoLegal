@@ -53,6 +53,9 @@
               <% else %>
                 <p>Suscripción inactiva</p>
               <% end %>
+              <% if @fin_del_periodo %>
+                Fecha de próximo pago: <%= @fin_del_periodo %>
+              <% end %>
               <div class = "user-name col-md-12">
                 <div id="name">
                   <% if current_user.first_name && current_user.last_name %>

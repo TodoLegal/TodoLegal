@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   get '/maintenance', to: 'home#maintenance', as: "maintenance"
   get '/checkout', to: 'billing#checkout', as: "checkout"
   post "/charge" => "billing#charge", as: "charge"
+  post "/create_customer_portal_session" => "billing#create_customer_portal_session", as: "create_customer_portal_session"
 
   get "admin/users" => "admin#users", as: "admin_users"
   post "admin/grant_permission" => "admin#grant_permission", as: "admin_grant_permission"

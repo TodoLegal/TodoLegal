@@ -98,17 +98,6 @@ class ApplicationController < ActionController::Base
     end
     return false
   end
-
-  def cancel_all_subscriptions customer
-    customer.subscriptions.data.each do |subscription|
-      Stripe::Subscription.update(
-        subscription.id,
-        {
-          cancel_at_period_end: true,
-        }
-      )
-    end
-  end
   
 protected
   

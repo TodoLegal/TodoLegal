@@ -1,5 +1,6 @@
 <% if !@is_onboarding %>
   <%= render 'layouts/logged_navbar' %> 
+  <% @is_onboarding = false%>
 <% end %>
 
 <section class="pricing">
@@ -54,7 +55,7 @@
             </ul>
           </div>
           <div class="card-bottom">
-            <%= button_to "Elegir Plan Pro", checkout_path, method: :get, remote: true, class:"btn btn-block btn-primary"%>
+            <%= button_to "Elegir Plan Pro", checkout_path, method: :get, params: {is_onboarding: @is_onboarding}, remote: true, class:"btn btn-block btn-primary"%>
             <p class="text-center py-2 change-plan-link" onclick="changePlan(2)">Cambiar a pago mensual</p>
           </div>
       </div>
@@ -76,7 +77,7 @@
             </ul>
           </div>
           <div class="card-bottom">
-            <%= button_to "Elegir Plan Pro", checkout_path, method: :get, params: {is_monthly: true}, remote: true, class:"btn btn-block btn-primary"%>
+            <%= button_to "Elegir Plan Pro", checkout_path, method: :get, params: {is_monthly: true, is_onboarding: @is_onboarding}, remote: true, class:"btn btn-block btn-primary"%>
             <p class="text-center py-2 change-plan-link" onclick="changePlan(1)">Cambiar a pago anual</p>
           </div>
         </div>

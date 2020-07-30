@@ -1,12 +1,18 @@
-<section class="pricing">
-  <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="image">
+<% if !@is_onboarding %>
+  <%= render 'layouts/logged_navbar' %> 
+<% end %>
 
-  <div class="alert alert-success alert-dismissible fade show" role="alert" id="savedArticle"> 
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-    </button>
-      La información de perfil ha sido guardada, procede a elegir un plan para tu cuenta.
-  </div>
+<section class="pricing">
+  <% if @is_onboarding %>
+    <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="image">
+
+    <div class="alert alert-success alert-dismissible fade show" role="alert" id="savedArticle"> 
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+      </button>
+        La información de perfil ha sido guardada, procede a elegir un plan para tu cuenta.
+    </div>
+  <% end %>
 
 
   <div class="card card--pricing">

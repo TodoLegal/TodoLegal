@@ -20,7 +20,7 @@ class BillingController < ApplicationController
       customer: customer.id,
       items: [{
         price: STRIPE_PRODUCT_PRICE,
-      }],
+      }]
     })
 
     user = User.find_by_email(params["email"])
@@ -34,5 +34,13 @@ class BillingController < ApplicationController
         format.html { redirect_to Law.find_by_id(params["go_to_law"]), notice: I18n.t(:charge_complete) }
       end
     end
+  end
+
+  def create_customer_portal_session
+    portal_session = Stripe::BillingPortal::Session.create({
+      customer: current_user.stripe_customer_id,
+      return_url: 'https://todolegal.app/users/edit',
+    })
+    redirect_to portal_session.url
   end
 end

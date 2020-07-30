@@ -11,15 +11,25 @@
     <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">
     <i class="fas fa-user" aria-hidden="true"></i>
     Tu cuenta</a>
-    <a class="nav-link disabled" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">
-    <i class="fas fa-gift" aria-hidden="true"></i>
-    Invitar a un amigo</a>
-    <a class="nav-link highlighted disabled" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">
-    <i class="fas fa-star" aria-hidden="true"></i>
-    Activa un nuevo Plan</a>
-    <a class="nav-link disabled" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">
-    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
-    Cerrar sesión</a>
+    <a class="nav-link" href="<%= invite_friends_path %>" role="tab" aria-controls="v-pills-profile" aria-selected="false">
+      <i class="fas fa-gift" aria-hidden="true"></i>
+      Invitar a un amigo
+    </a>
+    <%= link_to(destroy_user_session_path, {class: "nav-link", method: 'delete'}) do %>
+      <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+      Cerrar sesión
+    <% end %>
+    <% if @current_user_plan_is_active %>
+      <form method="POST" action="/create_customer_portal_session">
+        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+        <input type="submit" class="btn btn-primary" value="Manejar Suscripción Pro">
+      </form>
+    <% else %>
+      <a class="nav-link highlighted" href="<%= checkout_path %>" role="tab" aria-controls="v-pills-messages" aria-selected="false">
+        <i class="fas fa-star" aria-hidden="true"></i>
+        Activa un nuevo Plan
+      </a>
+    <% end %>
   </div>
   <div class="card">
     <div class="card-body">

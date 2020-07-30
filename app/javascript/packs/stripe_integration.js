@@ -1,4 +1,7 @@
-var stripe = Stripe(JSON.parse(document.getElementById('stripe_params').dataset.attrs).PUBLIC_KEY);
+var stripe = Stripe(JSON.parse(document.getElementById('stripe_params').dataset.attrs).PUBLIC_KEY, {
+  locale: 'es-419'
+});
+
 var elements = stripe.elements();
 
 
@@ -38,10 +41,14 @@ function stripeTokenHandler(token) {
 function createToken() {
   stripe.createToken(cardNumberElement).then(function(result) {
     if (result.error) {
+      document.getElementById('loading-spinner').style.display = 'none'
+      document.getElementById('processing-payment').style.display = 'none'
+      document.getElementById('checkout-fields').style.display = 'block'
       // Inform the user if there was an error
       var errorElement = document.getElementById('card-errors');
       errorElement.textContent = result.error.message;
     } else {
+      document.getElementById('payment-successful').style.display = 'block'
       // Send the token to your server
       stripeTokenHandler(result.token);
     }

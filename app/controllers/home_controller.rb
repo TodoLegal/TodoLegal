@@ -104,6 +104,7 @@ class HomeController < ApplicationController
 
   def pricing
     @is_onboarding = params[:is_onboarding]
+    @activate_pro_account = params[:activate_pro_account]
   end
   
   def invite_friends

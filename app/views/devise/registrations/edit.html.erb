@@ -19,17 +19,6 @@
       <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
       Cerrar sesión
     <% end %>
-    <% if @current_user_plan_is_active %>
-      <form method="POST" action="/create_customer_portal_session">
-        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-        <input type="submit" class="btn btn-primary" value="Manejar Suscripción Pro">
-      </form>
-    <% else %>
-      <a class="nav-link highlighted" href="<%= checkout_path %>" role="tab" aria-controls="v-pills-messages" aria-selected="false">
-        <i class="fas fa-star" aria-hidden="true"></i>
-        Activa un nuevo Plan
-      </a>
-    <% end %>
   </div>
   <div class="card">
     <div class="card-body">
@@ -48,14 +37,6 @@
         <!-- Edit name and Last name -->
           <div class = "row">
             <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-              <% if @current_user_plan_is_active %>
-                <p>Suscripción activa</p>
-              <% else %>
-                <p>Suscripción inactiva</p>
-              <% end %>
-              <% if @fin_del_periodo %>
-                Fecha de próximo pago: <%= @fin_del_periodo %>
-              <% end %>
               <div class = "user-name col-md-12">
                 <div id="name">
                   <% if current_user.first_name && current_user.last_name %>
@@ -196,21 +177,40 @@
       </div>
       <!-- End edition of user data-->
 
-      <% if !current_user_is_pro %>
-        <section class="change-plan" style="display: none;">
+      <!-- Subscription -->
+      <hr>
+      <p class = "titles">Suscripción</p>
+      <div class="form-group">
+        <% if @current_user_plan_is_active %>
+          <h5> Plan activo </h5>  
+          <p> Pro </p>
+          <% if @fin_del_periodo %>
+            <h5> Fecha de próximo pago </h5> 
+            <p> <%= @day %> <%= @mont %> <%= @year %>   </p>
+          <% end %>
+          <form method="POST" action="/create_customer_portal_session">
+            <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+            <input type="submit" class="btn btn-primary" value="Manejar Suscripción Pro">
+          </form>
+        <% else %>
+        <h5> Plan activo </h5>  
+        <p> Básico </p>
+        <a class="nav-link highlighted" href="<%= pricing_path(activate_pro_account: true) %>" role="tab" aria-controls="v-pills-messages" aria-selected="false">
+          <i class="fas fa-star" aria-hidden="true"></i>
+          Activa un nuevo Plan
+        </a>
+        <section class="change-plan">
           <div class="change-plan-content">
             <h5 id="change-plan-title">¿Listo para cambiar tu plan?</h5>
             <p id="change-plan-text">Tendrás acceso a más de 150 documentos de legislación hondureña.</p>
             <p id="change-plan-link"> Leer más sobre el Plan Pro</p>
           </div>
           <div class="form-group" id="change-plan-btn-form">
-            <button type="button" class="btn btn-primary" id="change-plan-button">
-              Cambiar Plan
-            </button>
+            <%= button_to "Cambiar Plan", pricing_path, method: :get, params: {activate_pro_account: true}, remote: true, class:"btn btn-primary",  id:"change-plan-button"%>
           </div>
         </section>
       <% end %>
-      
+      </div>
       <hr>
 
       <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>

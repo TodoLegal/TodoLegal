@@ -54,7 +54,7 @@ function onIndexElementClicked(section_id) {
                     </p>
                     </div>
                     <div class="col-md-12">
-                      <a href="<%= checkout_path %>?go_to_law=<%=@law.id%>">
+                      <a href="<%= pricing_path(activate_pro_account: true) %>?go_to_law=<%=@law.id%>">
                         <button type="button" class="btn btn-primary btn-block">Cambiar de plan</button>
                       </a>
                     </div>

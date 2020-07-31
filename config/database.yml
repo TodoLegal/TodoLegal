@@ -28,4 +28,4 @@ test:
 production:
   primary:
    <<: *default
-   url: <%= ENV.fetch("DB_URL") %>
+   url: <%= ENV.fetch("DB_URL") { "" } %>

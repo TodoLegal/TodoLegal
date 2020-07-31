@@ -10,6 +10,7 @@ class BillingController < ApplicationController
     end
 
     @is_monthly = params[:is_monthly]
+    @is_onboarding = params[:is_onboarding]
     @go_to_law = params["go_to_law"]
   end
 

@@ -1,9 +1,14 @@
+<% if !@is_onboarding %>
+  <%= render 'layouts/logged_navbar' %> 
+<% end %>
 <section class="checkout">
   <div class="container">
-  <a href="/">
-    <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="img-logo">
-  </a>
-  <div  class="card card--onboarding bg-white rounded">
+  <% if @is_onboarding %>
+    <a href="/">
+      <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="img-logo">
+    </a>
+  <% end %>
+  <div class="card card--onboarding bg-white rounded">
     <div class="card-body">
       <%= render '/home/loading_spinner' %>
       <div id="processing-payment" style="display: none;">

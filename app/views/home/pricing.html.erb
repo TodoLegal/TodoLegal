@@ -23,6 +23,8 @@
       <h2 class="title">Elige un Plan</h3>
       <p class="body">Si eliges el plan Pro, puedes pagar mensual o anualmente, cancelar o bajar al plan básico en cualquier momento.</p>
       </div>
+
+      <% if !@activate_pro_account %>
       <!-- Free Tier -->
         <div class="col-lg-6 card card--dark-100 mb-2 mb-lg-0">
           <div class="card-body">
@@ -39,7 +41,9 @@
           <div class="card-bottom">
             <%= button_to "Continuar con Plan Básico", root_path, method: :get, remote: true, class:"btn btn-block btn-outline-primary", id:"btnBasico" %>
           </div>
-      </div>
+        </div>
+      <% end %>
+
       <!-- Pro Tier -->
         <div class="col-lg-6 card card--dark-100" id="pro-tier">
           <div class="card-body">

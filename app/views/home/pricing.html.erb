@@ -18,12 +18,14 @@
 
   <div class="card card--pricing">
   <div class="container">
-    <div class="row row-eq-height">
+    <div class="row">
       <div class="pricing-heading col-12">
       <h2 class="title">Elige un Plan</h3>
       <p class="body">Si eliges el plan Pro, puedes pagar mensual o anualmente, cancelar o bajar al plan básico en cualquier momento.</p>
       </div>
+    </div>
 
+    <div class="row row-eq-height">
       <% if !@activate_pro_account %>
       <!-- Free Tier -->
         <div class="col-lg-6 card card--dark-100 mb-2 mb-lg-0">
@@ -86,6 +88,7 @@
           </div>
         </div>
       </div>
+      </div>
     </div>
   </div>
 </section>
@@ -133,6 +136,7 @@
   section.pricing small {
     display: inline-block;
     margin-bottom: 1rem;  
+    color: #505864;
   }
   
   .pricing .link {
@@ -151,6 +155,9 @@
   .change-plan-link{
     text-decoration: underline;
     color: #1A7FFA;
+    margin: 0;
+    padding-top: .5rem;
+
   }
 
   section.pricing .plan-description {
@@ -265,6 +272,15 @@
 
     ul li .fa-li {
       color: #1A7FFA;
+    }
+
+    .pricing  .row-eq-height {
+      justify-content: space-around;
+    }
+
+    .card-bottom .btn {
+      max-width: 360px;
+      margin: auto;
     }
 
 </style>

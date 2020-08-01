@@ -350,3 +350,58 @@ footer p a {
         margin-top: 20px;
     }
 }
+
+/* Billboard */
+
+.billboard {
+    height: auto;
+    padding: 1rem 2rem;
+    margin-top: 1rem;
+    background: #EFF3F8;
+    border-radius: 8px;
+  }
+
+  .billboard-content{
+    text-align: center;
+    line-height: 1.25rem;
+  }
+
+  .billboard-title{
+    font-style: normal;
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+
+  .billboard-text, .billboard-link{
+    font-family: -apple-system, sans-serif;
+    font-size: 1rem;
+  }
+
+  .billboard-body{
+    padding-top: .5em;
+    color: #505864;
+    margin-bottom: 0.2em;
+  }
+
+  .billboard-link{
+    color: #1A7FFA;
+  }
+
+  .billboard-link:hover{
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  .billboard-btn-form{
+    text-align: center;
+  }
+
+  .billboard-actions {
+      display: flex;
+      justify-content: space-around;
+      padding-top: 1rem;
+  }
+
+  .billboard .btn {
+    width: auto;
+  }

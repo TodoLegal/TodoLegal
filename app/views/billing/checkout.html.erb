@@ -15,8 +15,8 @@
         <h5 class="card-subtitle text-center">Espera un momento...</h5>
         <p class="text-center">Procesando pago</p>
       </div>
-      <div align="center" id="payment-successful" style="display: none;">
-        <svg width="66" height="66" viewBox="0 0 66 66" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <div id="payment-successful" style="display: none;">
+        <svg class="icon-success" width="66" height="66" viewBox="0 0 66 66" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="33" cy="33" r="33" fill="#FF5722"/>
           <path fill-rule="evenodd" clip-rule="evenodd" d="M55.3456 22.0289L28.7848 51.2457L11.1831 37.047L17.1029 29.7084L27.7869 38.3268L48.369 15.6865L55.3456 22.0289Z" fill="white"/>
         </svg>
@@ -29,8 +29,12 @@
           <h2 class="card-title text-center">L.250.00<small style="font-size: 1rem;">/mensual</small></h2>
         <% else %>
           <h2 class="card-title text-center">L.200.00<small style="font-size: 1rem;">/mensual</small></h2>
+          <small class="small-text">Facturado a <strong>L2,400.00</strong> anual</small>
         <% end %>
         <p class="body text-center">Agrega tu tarjeta de crédito o débito para completar el pago de la suscripción.</p>
+
+        <!-- Used to display Element errors. -->
+          <div id="card-errors" role="alert"></div>
 
         <form action="/charge" method="post" id="payment-form">
           <div class="form-group">
@@ -55,8 +59,7 @@
               </div>
             </div>
           </div>
-          <!-- Used to display Element errors. -->
-          <div id="card-errors" role="alert"></div>
+          
           <%= hidden_field_tag :go_to_law, @go_to_law %>
 
           <% if user_signed_in? %>
@@ -67,7 +70,7 @@
               Pagar suscripción
             </button>
           </div>
-          <p class="text-center">¿No estás seguro del plan? <%= link_to "Cambiar de plan", :back %> </p>
+          <p class="text-center">¿No estás seguro del plan? <%= link_to "Cambia de suscripción", :back %> </p>
           <p class="text-center"><small>Si tienes preguntas o necesitas ayuda contactanos a <a class="link" href="mailto:info@todolegal.app">info@todolegal.app</a></small></p>
         </form>
       </div>
@@ -88,10 +91,6 @@
     display: block;
   }
 
-  .card-title{
-    margin-bottom: 2rem;
-  }
-
   .card-subtitle {
     margin-top: 1.4rem;
   }
@@ -104,6 +103,24 @@
 
   .checkout .card-title {
     color: #505864;
+  }
+
+  .small-text {
+    color: #505864;
+    text-align: center;
+    display: block;
+    margin-bottom: 2rem;
+  }
+
+  #card-errors{
+    color: #eb1f29;
+    margin: .5rem auto;
+    text-align:center;
+  }
+  
+  .icon-success {
+    display: block;
+    margin: auto;
   }
 
   @media only screen and (max-width: 767.98px){

@@ -47,11 +47,17 @@
       <% end %>
 
       <!-- Pro Tier -->
-        <div class="col-lg-6 card card--dark-100" id="pro-tier">
+        <div class="col-lg-6 card card--dark-100 card--discount" id="pro-tier">
           <div class="card-body">
             <h5 class="card-title">Pro</h5>
+            <!-- Provitional code for discount><!-->
+            <h6 class="card-price">L125.00<span class="period">/mensual</span></h6>
+            <small>Facturado a <strong>L1,500.00</strong> anual</small>
+
+            <!-- Uncomment after Aug 17>
             <h6 class="card-price">L200.00<span class="period">/mensual</span></h6>
             <small>Facturado a <strong>L2,400.00</strong> anual</small>
+            <!-->
             <p class="body plan-description">Para profesionales que requieran información legal avanzada.</p>
             <hr>
             <ul class="fa-ul">
@@ -114,6 +120,38 @@
   .hide-plan{
     display: none;
   }
+
+  .pricing .card.card--discount {
+    border: 1px solid #1A7FFA;
+    border-radius: 0 0 4px 4px;
+  }
+
+  /* Remove selector after 17 Aug */
+  .pricing .card.card--discount:before {
+    background: #1A7FFA;
+    content: "50% Descuento valido hasta el 17 de Agosto";
+    display: block; 
+    position: absolute;
+    top: -40px;
+    left: -1px  ;
+    width: calc(100% + 2px);
+    height: 40px;
+    padding: .5rem;
+    color: white; 
+    border-radius: 4px 4px 0 0  ;
+    border: 1px solid #1A7FFA;
+    font-weight: bold;
+  }  
+
+  /* Remove media query after 17 Aug */
+  @media (max-width: 375.98px) {
+
+    .pricing .card.card--discount:before {
+      top: -60px;
+      height: 60px;
+    }  
+
+   }
 
   @media only screen and (max-width: 767.98px) {
     section.pricing {
@@ -276,7 +314,17 @@
 
     .pricing  .row-eq-height {
       justify-content: space-around;
+      padding-top: 2rem;/* Remove property after 17 Aug */
     }
+
+    /* Remove media query after 17 Aug */
+    @media (max-width: 375.98px) {
+
+    .pricing  .row-eq-height {
+        padding-top: 4rem;
+      }
+
+   }
 
     .card-bottom .btn {
       max-width: 360px;

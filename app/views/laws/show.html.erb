@@ -23,6 +23,9 @@ function onIndexElementClicked(section_id) {
       <div class="tab-pane fade show" id="modifications" role="tabpanel" aria-labelledby="modifications-tab">
         <%= render 'modifications_tab' %>
       </div>
+      <div class="tab-pane fade show" id="related" role="tabpanel" aria-labelledby="related-tab">
+        <%= render 'related_tab' %>
+      </div>
     </div>
 
     <div class="wrapper">
@@ -38,7 +41,10 @@ function onIndexElementClicked(section_id) {
               <div class="container col-md-12">
                 <div class="row">
                   <div class="col-md-12">
-                    <p style="font-size:22px; text-align:center;"><b>Regístrate y accede a esta ley.</b></p>
+                    <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, style:"font-size: 1.5rem; color:black;" %>
+                    <p  style="font-size:22px; text-align:center; display:inline; margin-left: 8%;">
+                    <b>Regístrate y accede a esta ley</b>
+                    </p>
                   </div>
                   <div class="col-md-12">
                     <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">

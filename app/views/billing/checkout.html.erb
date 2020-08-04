@@ -37,6 +37,7 @@
           <div id="card-errors" role="alert"></div>
 
         <form action="/charge" method="post" id="payment-form">
+          <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
           <div class="form-group">
             <label>Número de tarjeta </label>
             <div class="form-control" id="cardNumber-element">

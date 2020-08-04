@@ -8,7 +8,9 @@
       <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="img-logo">
     </a>
   <% end %>
-  <div class="card card--onboarding bg-white rounded">
+  <div class="row checkout-row">
+  <div class="col-12 col-lg-6">
+  <div class="card card--payment bg-white rounded">
     <div class="card-body">
       <%= render '/home/loading_spinner' %>
       <div id="processing-payment" style="display: none;">
@@ -23,20 +25,17 @@
         <h5 class="card-subtitle text-center">Pago exitoso</h5>
         <p class="text-center">Te redireccionaremos a donde estabas previamente.</p>
       </div>
-      <div id="checkout-fields">
-        <h5 class="card-subtitle text-center">Suscripción Pro</h5>
-        <% if @is_monthly %>
-          <h2 class="card-title text-center">L.250.00<small style="font-size: 1rem;">/mensual</small></h2>
-        <% else %>
-          <h2 class="card-title text-center">L.200.00<small style="font-size: 1rem;">/mensual</small></h2>
-          <small class="small-text">Facturado a <strong>L2,400.00</strong> anual</small>
-        <% end %>
-        <p class="body text-center">Agrega tu tarjeta de crédito o débito para completar el pago de la suscripción.</p>
 
+      <hgroup class="card__headline">
+        <h2 class="title">Información de pago</h2>
+        <p class="body text-left">Agrega tu tarjeta de crédito o débito para completar el pago de la suscripción.</p>
+      </hgroup>
+      <div id="checkout-fields" class="checkout-fields">
         <!-- Used to display Element errors. -->
           <div id="card-errors" role="alert"></div>
 
         <form action="/charge" method="post" id="payment-form">
+          <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
           <div class="form-group">
             <label>Número de tarjeta </label>
             <div class="form-control" id="cardNumber-element">
@@ -52,7 +51,7 @@
                 </div>
               </div>
               <div class="col-5 form-group">
-                <label>Código CVV</label>
+                <label>Código CVC</label>
                 <div class="form-control" id="cardCvc-element">
                   <!-- A Stripe Element will be inserted here. -->
                 </div>
@@ -70,8 +69,7 @@
               Pagar suscripción
             </button>
           </div>
-          <p class="text-center">¿No estás seguro del plan? <%= link_to "Cambia de suscripción", :back %> </p>
-          <p class="text-center"><small>Si tienes preguntas o necesitas ayuda contactanos a <a class="link" href="mailto:info@todolegal.app">info@todolegal.app</a></small></p>
+          <p class="text-left"><small>Si tienes preguntas o necesitas ayuda contactanos a <a class="link" href="mailto:info@todolegal.app">info@todolegal.app</a></small></p>
         </form>
       </div>
     </div>
@@ -79,8 +77,54 @@
       <%= javascript_pack_tag 'stripe_integration' %>
     </div>
   </div>
-</div>
 <div class="text-center img-fluid"><img class="img-fluid" src="/img/powered_by_stripe.svg" alt="El pago se realiza por medio de Stripe"></div>
+</div>
+
+<div class="col-12 col-lg-6">
+    <div class="card card--subscription bg-white rounded">
+      <div class="card-heading">
+        <% if @is_monthly %>
+          <h2 class="card-title">Suscripción mensual</h2>
+        <% else %>
+          <h2 class="card-title">Suscripción anual</h2>
+          <h2 class="card-title"><strong>50%</strong></h2>
+          <p class="full-width">Descuento valido hasta el 17 de Agosto</p>
+        <% end %>
+      </div>
+
+      <div class="card-body">
+      <% if @is_monthly %>
+        <div class="subscription-row">
+          <p class="subscription-row-label">Mensualidad</p>
+          <strong class="subscription-row-value">L250.00</strong>
+        </div>
+        <div class="subscription-row subscription-row-total">
+          <p class="subscription-row-label">Total</p>
+          <strong class="subscription-row-value">L250.00</strong>
+        </div>
+      <% else %>
+        <!-- Provitional code for discount><!-->
+        <div class="subscription-row">
+          <p class="subscription-row-label">Mensualidad</p>
+          <strong class="subscription-row-value">L125.00</strong>
+        </div>
+        <div class="subscription-row subscription-row-total">
+          <p class="subscription-row-label">Total</p>
+          <strong class="subscription-row-value">L1,500.00</strong>
+        </div>
+        <!-- Uncomment after Aug 17>
+        <p class="subscription-row-label">Mensualidad</p>
+          <strong class="subscription-row-value">L200.00</strong>
+        </div>
+        <div class="subscription-row subscription-row-total">
+          <p class="subscription-row-label">Total</p>
+          <strong class="subscription-row-value">L2,400.00</strong>
+        </div>
+        <!-->
+      <% end %>
+    </div>
+</div>
+<p class="text-left pt-2 pl-3 d-none d-md-block">Si no es lo que buscabas <%= link_to "cambia de suscripción", :back %> </p>
 </section>
 
 <style>
@@ -91,8 +135,12 @@
     display: block;
   }
 
-  .card-subtitle {
+  .checkout .card-subtitle {
     margin-top: 1.4rem;
+  }
+
+  .card--payment .body {
+    color: #505864;
   }
 
   .checkout .form-control {
@@ -101,15 +149,15 @@
     justify-content: center;
   }
 
-  .checkout .card-title {
-    color: #505864;
-  }
-
-  .small-text {
+  .checkout .small-text {
     color: #505864;
     text-align: center;
     display: block;
     margin-bottom: 2rem;
+  }
+
+  .checkout-fields {
+    margin-top: 1.5rem;
   }
 
   #card-errors{
@@ -123,11 +171,21 @@
     margin: auto;
   }
 
+  .checkout-row {
+    flex-direction: column-reverse;
+    padding-top: 2rem;
+  }
+
+  @media only screen and (max-width: 767.98px) {
+    .checkout-row {
+    padding-top: .5rem;
+    }
+  }
+
   @media only screen and (max-width: 767.98px){
 
     section{
       background: white;
-      height: 750px;
     }
     
     .card{
@@ -151,5 +209,11 @@
       margin-right: auto;
       display: block;
     }
+  }
+  @media only screen and (min-width: 992px){
+
+  .checkout-row {
+    flex-direction: row;
+  }
   }
 </style>

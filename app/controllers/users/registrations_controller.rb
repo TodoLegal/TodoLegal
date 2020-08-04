@@ -31,10 +31,18 @@ class Users::RegistrationsController < Devise::RegistrationsController
       @current_user_plan_is_active = current_user_plan_is_active @customer
       
       if @customer.subscriptions.data.size > 0
-        @fin_del_periodo = Time.at(@customer.subscriptions.data.first.current_period_end)
-        @year = @fin_del_periodo.year
-        @mont = @fin_del_periodo.month
-        @day = @fin_del_periodo.day
+        if @customer.subscriptions.data.first.cancel_at
+          @cancel_at = Time.at(@customer.subscriptions.data.first.cancel_at)
+          @cancel_at_year = @cancel_at.year
+          @cancel_at_month = @cancel_at.month
+          @cancel_at_day = @cancel_at.day
+        end
+        if @customer.subscriptions.data.first.current_period_end
+          @current_period_end = Time.at(@customer.subscriptions.data.first.current_period_end)
+          @current_period_end_year = @current_period_end.year
+          @current_period_end_month = @current_period_end.month
+          @current_period_end_day = @current_period_end.day
+        end
       end
     end
     super

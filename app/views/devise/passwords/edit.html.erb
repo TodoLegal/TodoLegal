@@ -25,41 +25,13 @@
                 content:"Complete todos los campos."},  onsubmit:"required()" %> 
           </em>
         </div>
+        <%= javascript_pack_tag "form_validator" %>
       <% end %>
     </div>
   </div>
 </div>
 
 <script>
-  bootstrapValidate('#password', 'min:8:Debes ingresar una contraseña válida',function (isValid){
-    if(isValid)
-    {
-      $('#submitButton').unbind();
-      $('#submitButton').popover('hide')
-    } else
-    {
-      $('#submitButton').click(function (e) {
-        $('#submitButton').popover('show')
-        e.preventDefault();
-        e.stopPropagation();
-      });
-    }
-  });
-  bootstrapValidate('#confirmPassword', 'matches:#password:Tus contraseñas deben ser iguales', function (isValid){
-    if(isValid)
-    {
-      $('#submitButton').unbind();
-      $('#submitButton').popover('hide')
-    } else
-    {
-      $('#submitButton').click(function (e) {
-        $('#submitButton').popover('show')
-        e.preventDefault();
-        e.stopPropagation();
-      });
-    }
-  });
-
   function required ()
   {
     var password = document.getElementById("password").value;

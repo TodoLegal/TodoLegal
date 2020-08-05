@@ -183,11 +183,14 @@
       <section class="subscription">
       <p class = "titles">Suscripción</p>
         <% if @current_user_plan_is_active %>
-          <h5> Plan activo </h5>  
-          <p> Pro </p>
-          <% if @fin_del_periodo %>
-            <h5> Fecha de próximo pago </h5> 
-            <p> <%= @day %> <%= @mont %> <%= @year %>   </p>
+          <h5>Plan activo</h5>
+          <p>Pro</p>
+          <% if @cancel_at %>
+            <h5>Tu plan estará activo hasta:</h5>
+            <p><%= @cancel_at_day %>/<%= @cancel_at_month %>/<%= @cancel_at_year %></p>
+          <% elsif @current_period_end %>
+            <h5>Tu proximo pago se realizará:</h5>
+            <p><%= @current_period_end_day %>/<%= @current_period_end_month %>/<%= @current_period_end_year %></p>
           <% end %>
           <form method="POST" action="/create_customer_portal_session">
             <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">

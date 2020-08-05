@@ -1,5 +1,6 @@
 class BillingController < ApplicationController
   layout 'billing'
+  before_action :user_plan_is_inactive!, only: [:charge, :checkout]
   
   def checkout
     if !current_user
@@ -15,7 +16,7 @@ class BillingController < ApplicationController
   end
 
   def charge
-    customer = Stripe::Customer.create(email: params["email"], source: params["stripeToken"])
+    customer = Stripe::Customer.create(email: current_user.email, source: params["stripeToken"])
     subscription = Stripe::Subscription.create({
       customer: customer.id,
       items: [{
@@ -42,5 +43,16 @@ class BillingController < ApplicationController
       return_url: 'https://todolegal.app/users/edit',
     })
     redirect_to portal_session.url
+  end
+
+protected
+  def user_plan_is_inactive!
+    if current_user.stripe_customer_id
+      customer = Stripe::Customer.retrieve(current_user.stripe_customer_id)
+      if current_user_plan_is_active customer
+        flash[:notice] = I18n.t(:plan_is_already_active)
+        redirect_to root_path
+      end
+    end
   end
 end

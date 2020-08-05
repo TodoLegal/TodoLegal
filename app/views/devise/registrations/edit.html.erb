@@ -125,7 +125,7 @@
                   </button>
                   <div class = "card-body">
                     <div class="form-group">
-                      <%= f.label :email %><br />
+                      <%= f.label :email %>
                       <%= f.email_field :email, autofocus: true, autocomplete: "email", class:"form-control" %>
                       <label class="confirm-pass-label">Contraseña</label>
                       <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control"%>
@@ -230,7 +230,10 @@
       </div>
       <hr>
       <!-- Cancel Button -->
-      <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#cancelAccountModal" id="delete-account-btn">Borrar tu cuenta</button>
+      <button type="button" class="btn btn-link btn-delete-account" data-toggle="modal" data-target="#cancelAccountModal" id="delete-account-btn">
+        <i class="fas fa-trash-alt" aria-hidden="true"></i>
+        <span class="">Borrar cuenta</span>
+      </button>
       <!-- End Cancel Button -->
 
       <!-- Start delet account Modal -->
@@ -378,7 +381,7 @@
   }
 
   .edit-text:hover{
-    color: #A6B9D3;
+    color: #505864;
     cursor: pointer;
   }
 
@@ -406,11 +409,18 @@
     line-height: 29px;
   }
 
-  #delete-account-btn{
-    border: 1px solid #FA1A35;
-    box-sizing: border-box;
-    width: 200px;
-    margin-bottom: 20px;
+  .btn-delete-account {
+    color: #A6B9D3;
+  }
+
+  .btn-delete-account:hover {
+    color: #FA1A35;
+    text-decoration: none;
+  }
+
+  .btn-delete-account span {
+    display: block;
+    margin-left: .35rem;
   }
 
   .submit-btn, .confirm-pass-label{

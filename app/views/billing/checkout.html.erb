@@ -26,14 +26,13 @@
         <p class="text-center">Te redireccionaremos a donde estabas previamente.</p>
       </div>
 
-      <hgroup class="card__headline">
-        <h2 class="title">Información de pago</h2>
-        <p class="body text-left">Agrega tu tarjeta de crédito o débito para completar el pago de la suscripción.</p>
-      </hgroup>
       <div id="checkout-fields" class="checkout-fields">
+        <hgroup class="card__headline">
+          <h2 class="title d-none d-sm-block">Información de pago</h2>
+          <p class="body text-left">Agrega tu tarjeta de crédito o débito para completar el pago de la suscripción.</p>
+        </hgroup>
         <!-- Used to display Element errors. -->
-          <div id="card-errors" role="alert"></div>
-
+        <div id="card-errors" role="alert"></div>
         <form action="/charge" method="post" id="payment-form">
           <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
           <% if @is_monthly %>
@@ -42,7 +41,7 @@
             <%= hidden_field_tag :is_monthly, false %>
           <% end %>
           <div class="form-group">
-            <label>Número de tarjeta </label>
+            <label class="d-none d-sm-block">Número de tarjeta </label>
             <div class="form-control" id="cardNumber-element">
               <!-- A Stripe Element will be inserted here. -->
             </div>
@@ -50,13 +49,13 @@
           <div class="form-group">
             <div class="row">
               <div class="col-7 form-group">
-                <label>Fecha de expiración </label>
+                <label class="d-none d-sm-block">Fecha de expiración </label>
                 <div class="form-control"  id="cardExpiry-element">
                   <!-- A Stripe Element will be inserted here. -->
                 </div>
               </div>
               <div class="col-5 form-group">
-                <label>Código CVC</label>
+                <label class="d-none d-sm-block">Código CVC</label>
                 <div class="form-control" id="cardCvc-element">
                   <!-- A Stripe Element will be inserted here. -->
                 </div>
@@ -161,14 +160,14 @@
     margin-bottom: 2rem;
   }
 
-  .checkout-fields {
-    margin-top: 1.5rem;
+  .checkout-fields hgroup {
+    margin-bottom: 1.5rem;
   }
 
   #card-errors{
     color: #eb1f29;
     margin: .5rem auto;
-    text-align:center;
+    text-align: left;
   }
   
   .icon-success {
@@ -179,6 +178,31 @@
   .checkout-row {
     flex-direction: column-reverse;
     padding-top: 2rem;
+  }
+
+  @media only screen and (max-height: 700px) {
+    .checkout {
+      transform: scale(.97);
+    }
+    
+    .checkout-row {
+      padding-top: 1vh;
+    }
+
+    .card--payment .card-body {
+      padding-top: 1.5rem
+    }
+
+    .card--payment .title {
+      font-size: 1.5rem;
+    }
+
+    .card--subscription .card-heading {
+      padding-top: 1.5rem
+    }
+    .card--subscription .card-title {
+      font-size: 1.5rem;
+    }
   }
 
   @media only screen and (max-width: 767.98px) {

@@ -11,15 +11,14 @@
     <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">
     <i class="fas fa-user" aria-hidden="true"></i>
     Tu cuenta</a>
-    <a class="nav-link disabled" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">
-    <i class="fas fa-gift" aria-hidden="true"></i>
-    Invitar a un amigo</a>
-    <a class="nav-link highlighted disabled" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">
-    <i class="fas fa-star" aria-hidden="true"></i>
-    Activa un nuevo Plan</a>
-    <a class="nav-link disabled" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">
-    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
-    Cerrar sesión</a>
+    <a class="nav-link" href="<%= invite_friends_path %>" role="tab" aria-controls="v-pills-profile" aria-selected="false">
+      <i class="fas fa-gift" aria-hidden="true"></i>
+      Invitar a un amigo
+    </a>
+    <%= link_to(destroy_user_session_path, {class: "nav-link", method: 'delete'}) do %>
+      <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+      Cerrar sesión
+    <% end %>
   </div>
   <div class="card">
     <div class="card-body">
@@ -126,7 +125,7 @@
                   </button>
                   <div class = "card-body">
                     <div class="form-group">
-                      <%= f.label :email %><br />
+                      <%= f.label :email %>
                       <%= f.email_field :email, autofocus: true, autocomplete: "email", class:"form-control" %>
                       <label class="confirm-pass-label">Contraseña</label>
                       <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control"%>
@@ -178,21 +177,39 @@
       </div>
       <!-- End edition of user data-->
 
-      <% if !current_user_is_pro %>
-        <section class="change-plan" style="display: none;">
-          <div class="change-plan-content">
-            <h5 id="change-plan-title">¿Listo para cambiar tu plan?</h5>
-            <p id="change-plan-text">Tendrás acceso a más de 150 documentos de legislación hondureña.</p>
-            <p id="change-plan-link"> Leer más sobre el Plan Pro</p>
-          </div>
-          <div class="form-group" id="change-plan-btn-form">
-            <button type="button" class="btn btn-primary" id="change-plan-button">
-              Cambiar Plan
-            </button>
-          </div>
-        </section>
-      <% end %>
+      <!-- Subscription -->
+      <hr>
       
+      <section class="subscription">
+      <p class = "titles">Suscripción</p>
+        <% if @current_user_plan_is_active %>
+          <h5>Plan activo</h5>
+          <p>Pro</p>
+          <% if @cancel_at %>
+            <h5>Tu plan estará activo hasta:</h5>
+            <p><%= @cancel_at_day %>/<%= @cancel_at_month %>/<%= @cancel_at_year %></p>
+          <% elsif @current_period_end %>
+            <h5>Tu proximo pago se realizará:</h5>
+            <p><%= @current_period_end_day %>/<%= @current_period_end_month %>/<%= @current_period_end_year %></p>
+          <% end %>
+          <form method="POST" action="/create_customer_portal_session">
+            <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+            <input type="submit" class="btn btn-primary" value="Manejar Suscripción Pro">
+          </form>
+        <% else %>
+        <h5> Plan activo </h5>  
+        <p> Básico </p>
+        <div class="billboard billboard--account">
+          <div class="billboard-content">
+            <h5 class="billboard-title">¿Listo para cambiar tu plan?</h5>
+            <p class="billboard-body">Tendrás acceso a <%= Law.count %> documentos de legislación hondureña.</p>
+          </div>
+          <div class="billboard-actions form-group" id="change-plan-btn-form">
+            <%= button_to "Adquirir Plan Pro", pricing_path, method: :get, params: {activate_pro_account: true}, remote: true, class:"btn btn-primary",  id:"change-plan-button"%>
+          </div>
+        </div>
+      <% end %>
+      </section>
       <hr>
 
       <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
@@ -216,7 +233,10 @@
       </div>
       <hr>
       <!-- Cancel Button -->
-      <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#cancelAccountModal" id="delete-account-btn">Borrar tu cuenta</button>
+      <button type="button" class="btn btn-link btn-delete-account" data-toggle="modal" data-target="#cancelAccountModal" id="delete-account-btn">
+        <i class="fas fa-trash-alt" aria-hidden="true"></i>
+        <span class="">Borrar cuenta</span>
+      </button>
       <!-- End Cancel Button -->
 
       <!-- Start delet account Modal -->
@@ -364,7 +384,7 @@
   }
 
   .edit-text:hover{
-    color: #A6B9D3;
+    color: #505864;
     cursor: pointer;
   }
 
@@ -392,61 +412,18 @@
     line-height: 29px;
   }
 
-  .change-plan{
-    height: 223px;
-    margin-top: 30px;
-    background: #EFF3F8;
-    border-radius: 8px;
+  .btn-delete-account {
+    color: #A6B9D3;
   }
 
-  .change-plan-content{
-    text-align: center;
-    padding-top: 25px;
+  .btn-delete-account:hover {
+    color: #FA1A35;
+    text-decoration: none;
   }
 
-  #change-plan-title{
-    font-style: normal;
-    font-weight: bold;
-    font-size: 22px;
-    line-height: 26px;
-  }
-
-  #change-plan-text, #change-plan-link{
-    font-family: -apple-system, sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 18px;
-    line-height: 21px;
-  }
-
-  #change-plan-text{
-    padding-top: 25px;
-    color: #505864;
-    margin-bottom: 0.2em;
-  }
-
-  #change-plan-link{
-    color: #1A7FFA;
-  }
-
-  #change-plan-link:hover{
-    cursor: pointer;
-    text-decoration: underline;
-  }
-
-  #change-plan-btn-form{
-    text-align: center;
-  }
-
-  #change-plan-button{
-    width: 65%;
-  }
-
-  #delete-account-btn{
-    border: 1px solid #FA1A35;
-    box-sizing: border-box;
-    width: 200px;
-    margin-bottom: 20px;
+  .btn-delete-account span {
+    display: block;
+    margin-left: .35rem;
   }
 
   .submit-btn, .confirm-pass-label{

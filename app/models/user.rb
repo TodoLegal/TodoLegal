@@ -4,7 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :confirmable,
          :recoverable, :rememberable, :validatable, :trackable
   
-  validate :email_uniqueness, on: create
+  # validate :email_uniqueness, on: create
 
   has_many :user_permissions, :dependent => :destroy
   has_many :permissions, through: :user_permissions

@@ -89,7 +89,7 @@ class ApplicationController < ActionController::Base
   def current_user_plan_is_active customer
     begin
       customer.subscriptions.data.each do |subscription|
-        if subscription.plan.product == STRIPE_PRODUCT and subscription.plan.active
+        if subscription.plan.product == STRIPE_SUBSCRIPTION_PRODUCT and subscription.plan.active
           return true
         end
       end

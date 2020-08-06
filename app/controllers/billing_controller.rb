@@ -17,12 +17,22 @@ class BillingController < ApplicationController
 
   def charge
     customer = Stripe::Customer.create(email: current_user.email, source: params["stripeToken"])
-    subscription = Stripe::Subscription.create({
-      customer: customer.id,
-      items: [{
-        price: STRIPE_PRODUCT_PRICE,
-      }]
-    })
+    if params["is_monthly"] == "true"
+      subscription = Stripe::Subscription.create({
+        customer: customer.id,
+        items: [{
+          price: STRIPE_MONTH_SUBSCRIPTION_PRICE,
+        }]
+      })
+    else
+      subscription = Stripe::Subscription.create({
+        customer: customer.id,
+        items: [{
+          price: STRIPE_YEAR_SUBSCRIPTION_PRICE
+        }],
+        coupon: STRIPE_LAUNCH_COUPON_ID
+      })
+    end
 
     user = User.find_by_email(params["email"])
     user.stripe_customer_id = customer.id
@@ -48,10 +58,13 @@ class BillingController < ApplicationController
 protected
   def user_plan_is_inactive!
     if current_user.stripe_customer_id
-      customer = Stripe::Customer.retrieve(current_user.stripe_customer_id)
-      if current_user_plan_is_active customer
-        flash[:notice] = I18n.t(:plan_is_already_active)
-        redirect_to root_path
+      begin
+        customer = Stripe::Customer.retrieve(current_user.stripe_customer_id)
+        if current_user_plan_is_active customer
+          flash[:notice] = I18n.t(:plan_is_already_active)
+          redirect_to root_path
+        end
+      rescue
       end
     end
   end

@@ -36,6 +36,11 @@
 
         <form action="/charge" method="post" id="payment-form">
           <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+          <% if @is_monthly %>
+            <%= hidden_field_tag :is_monthly, true %>
+          <% else %>
+            <%= hidden_field_tag :is_monthly, false %>
+          <% end %>
           <div class="form-group">
             <label>Número de tarjeta </label>
             <div class="form-control" id="cardNumber-element">
@@ -73,7 +78,7 @@
         </form>
       </div>
     </div>
-    <div data-attrs='{"PUBLIC_KEY": "pk_test_txfdiljergIpYg37zQPdSZT400FUwoSOay"}' id='stripe_params'>
+    <div data-attrs='{"PUBLIC_KEY": "<%= STRIPE_PUBLIC_KEY %>"}' id='stripe_params'>
       <%= javascript_pack_tag 'stripe_integration' %>
     </div>
   </div>

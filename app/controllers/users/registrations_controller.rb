@@ -18,6 +18,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # POST /resource
   def create
     validateOccupationParam (params)
+    $discord_bot.send_message($discord_bot_channel, "Se ha registrado un nuevo usuario :tada:")
     super
   end
 

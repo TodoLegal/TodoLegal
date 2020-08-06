@@ -18,7 +18,7 @@
   </div>
 
   <br/>
-  <%= render partial: 'search_law_input', locals: {target_url: '/search_law'} %>
+  <%= render partial: 'search_law_input', locals: {target_url: '/search_law', home_flag: true } %>
 
   <div class="row">
     <div class="col-sm-6 col-md-4 py-2">
@@ -44,7 +44,7 @@
           <div class="card card-body h-100" style="padding:0px">
             <a class="" href="<%= tag_path(tag) %>" style="padding:20px">
               <h5 class="card-title"><%= tag.name %></h5>
-              <p><%= tag.laws.count %> leyes</p>
+              <p><%= tag.laws.count %> documentos</p>
             </a>
           </div>
         </div>
@@ -52,6 +52,8 @@
     <% end %>
   </div>
 
-  <p class="resultinfo"><%= Law.count %> leyes ingresadas y creciendo</p>
+  <p class="resultinfo"><%= Law.count %> documentos ingresados y creciendo</p>
 
 </div>
+
+<%= javascript_pack_tag "help_card" %>

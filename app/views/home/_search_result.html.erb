@@ -13,6 +13,11 @@
   <p>Intenta tu búsqueda de nuevo cambiando las palabras o revisando la ortografía.</p>
 <% end %>
 
+<p class="resultinfo">
+  <%= @titles_result %>
+</p>
+
+
 <% if @laws %>
   <div class="row">
     <% i = 0 %>
@@ -35,7 +40,7 @@
         </div>
       </div>
     <% end %>
-    <button id="see_more_laws_link" class="btn btn-outline-primary btn-block" style="margin-top:2%;" onclick="showCollapsableLawCards();return false;">Ver más leyes</button>
+    <button id="see_more_laws_link" class="btn btn-outline-primary btn-block" style="margin-top:2%;" onclick="showCollapsableLawCards();return false;">Ver más documentos</button>
   </div>
 
   <br>
@@ -44,6 +49,10 @@
     <hr>
   <% end %>
 <% end %>
+
+<p class="resultinfo">
+  <%= @articles_result %>
+</p>
 
 <% if @grouped_laws && @grouped_laws.size > 0 %>
   <div class="list-group">

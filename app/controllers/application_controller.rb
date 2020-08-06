@@ -13,8 +13,19 @@ class ApplicationController < ActionController::Base
     current_user != nil && current_user.permissions.find_by_name("Admin") != nil
   end
 
-  def current_user_is_pro
-    current_user != nil && current_user.permissions.find_by_name("Pro") != nil
+  def user_is_pro user
+    if !user
+      return false
+    end
+    if !user.stripe_customer_id.blank?
+      customer = Stripe::Customer.retrieve(user.stripe_customer_id)
+      if current_user_plan_is_active customer
+        return true
+      end
+    elsif user.permissions.find_by_name("Pro") != nil
+      return true
+    end
+    return false
   end
 
   def authenticate_admin!
@@ -24,20 +35,34 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_pro!
-    if current_user_is_pro
+    if user_is_pro current_user
       redirect_to "/?error=Invalid+permissions"
     end
   end
 
   def is_redirect_pending
-    session[:redirect_to_law] || session[:user_just_signed_up]
+    session[:redirect_to_law] || session[:user_just_signed_up] || session[:redirect_to_checkout]
   end
 
   def handle_redirect
     redirect_to_law_id = session[:redirect_to_law]
     user_just_signed_up = session[:user_just_signed_up]
+    redirect_to_checkout = session[:redirect_to_checkout]
     session[:redirect_to_law] = nil
     session[:user_just_signed_up] = nil
+    session[:redirect_to_checkout] = nil
+
+    if redirect_to_checkout
+      respond_to do |format|
+        if redirect_to_law_id.blank?
+          format.html { redirect_to checkout_path }
+        else
+          format.html { redirect_to checkout_path + "?go_to_law=" + redirect_to_law_id }
+        end
+      end
+      return
+    end
+
     if redirect_to_law_id
       respond_to do |format|
         format.html { redirect_to Law.find_by_id(redirect_to_law_id) }
@@ -59,6 +84,19 @@ class ApplicationController < ActionController::Base
 
   def is_number string
     string.match(/^(\d)+$/)
+  end
+
+  def current_user_plan_is_active customer
+    begin
+      customer.subscriptions.data.each do |subscription|
+        if subscription.plan.product == STRIPE_SUBSCRIPTION_PRODUCT and subscription.plan.active
+          return true
+        end
+      end
+    rescue
+      puts "Todo: Handle Stripe customer error"
+    end
+    return false
   end
   
 protected
@@ -87,6 +125,6 @@ protected
 
   def configure_devise_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up) { |u| u.permit(:first_name, :last_name, :occupation, :receive_information_emails, :is_contributor, :email, :password, :password_confirmation)}
-    devise_parameter_sanitizer.permit(:account_update) { |u| u.permit(:first_name, :last_name, :occupation, :receive_information_emails, :is_contributor, :email, :password, :current_password)}
+    devise_parameter_sanitizer.permit(:account_update) { |u| u.permit(:first_name, :last_name, :occupation, :receive_information_emails, :is_contributor, :email, :stripe_customer_id, :password, :current_password)}
   end
 end

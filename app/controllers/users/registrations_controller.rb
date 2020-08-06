@@ -13,6 +13,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
     if params[:go_to_law]
       session[:redirect_to_law] = params[:go_to_law]
     end
+    if params[:go_to_checkout]
+      session[:redirect_to_checkout] = params[:go_to_checkout]
+    end
   end
 
   # POST /resource
@@ -22,9 +25,32 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   # GET /resource/edit
-  # def edit
-  #   super
-  # end
+  def edit
+    if current_user and current_user.stripe_customer_id
+      begin
+        @customer = Stripe::Customer.retrieve(current_user.stripe_customer_id)
+        @current_user_plan_is_active = current_user_plan_is_active @customer
+        if @customer.subscriptions.data.size > 0
+          if @customer.subscriptions.data.first.cancel_at
+            @cancel_at = Time.at(@customer.subscriptions.data.first.cancel_at)
+            @cancel_at_year = @cancel_at.year
+            @cancel_at_month = @cancel_at.month
+            @cancel_at_day = @cancel_at.day
+          end
+          if @customer.subscriptions.data.first.current_period_end
+            @current_period_end = Time.at(@customer.subscriptions.data.first.current_period_end)
+            @current_period_end_year = @current_period_end.year
+            @current_period_end_month = @current_period_end.month
+            @current_period_end_day = @current_period_end.day
+          end
+        end
+      rescue
+        @customer = nil
+        @current_user_plan_is_active = false
+      end
+    end
+    super
+  end
 
   # PUT /resource
   def update
@@ -61,8 +87,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # The path used after sign up.
   def after_sign_up_path_for(resource)
     session[:user_just_signed_up] = true
-    root_path
-    # invite_friends_path(is_onboarding:true)
+    pricing_path(is_onboarding:true)
   end
 
   def after_update_path_for(resource)

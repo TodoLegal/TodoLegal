@@ -4,6 +4,8 @@ body {
     background-color: #EFF3F7;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;   
 }
 
 .btn {
@@ -20,6 +22,10 @@ body {
 .btn-lg {
     font-size: 1.15rem;
     height: 3rem;
+}
+
+.btn-block {
+    margin: auto;
 }
 
 h2 {
@@ -237,7 +243,6 @@ input.form-control:focus {
     margin-bottom: 40px;
 }
 
-
 /* General styles for Cuenta */
 
 .container--cuenta .card .card {
@@ -350,3 +355,130 @@ footer p a {
         margin-top: 20px;
     }
 }
+
+/* Billboard */
+
+.billboard {
+    height: auto;
+    padding: 1rem 2rem;
+    margin-top: 1rem;
+    background: #EFF3F8;
+    border-radius: 8px;
+  }
+
+  .billboard-content{
+    text-align: center;
+    line-height: 1.25rem;
+  }
+
+  .billboard-title{
+    font-style: normal;
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+
+  .billboard-text, .billboard-link{
+    font-family: -apple-system, sans-serif;
+    font-size: 1rem;
+  }
+
+  .billboard-body{
+    padding-top: .5em;
+    color: #505864;
+    margin-bottom: 0.2em;
+  }
+
+  .billboard-link{
+    color: #1A7FFA;
+  }
+
+  .billboard-link:hover{
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  .billboard-btn-form{
+    text-align: center;
+  }
+
+  .billboard-actions {
+      display: flex;
+      justify-content: space-around;
+      padding-top: 1rem;
+  }
+
+  .billboard .btn {
+    width: auto;
+  }
+
+
+/* General styles for Checkout */
+
+.card--payment {
+    margin-bottom: .75rem;
+}
+
+.card--payment .card-body {
+    padding: 2.5rem 2rem 2rem;
+}
+
+
+/* General styles for Subscription info */
+
+.card--subscription {
+    padding: 0;
+}
+
+.card--subscription .card-heading {
+    background-color: #171F2A;
+    color: white;
+    padding: 2.5rem 1.5rem 1.15rem; 
+    border-radius: 4px 4px 0 0;
+    display: flex; 
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.card--subscription .card-title {
+    margin-bottom: .15rem;
+}
+
+.card--subscription .card-heading .full-width {
+    width: 100%;
+}
+
+.subscription-row {
+    display: flex; 
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 1.25rem;
+    color: #505864;
+    padding-top: .85rem;
+}
+
+.subscription-row-total {
+    padding-top: .5rem;
+    font-size: 1.75rem;
+    border-top: 1px solid #DFE7F1;
+    color: #171F2A;
+}
+
+.subscription-row-total .subscription-row-value {
+    color: #1A7FFA;
+}
+
+@media only screen and (max-width: 767.98px) {
+    .card--subscription .card-body {
+        padding: .25rem 1.5rem;
+    }
+
+    .card.card--subscription {
+        border-bottom: 1px solid #DFE7F1;
+    }
+
+    .card--subscription .card-heading {
+        padding: 1rem 1.5rem .25rem; 
+        
+    }
+}
+

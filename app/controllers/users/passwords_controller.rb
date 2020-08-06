@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Users::PasswordsController < Devise::PasswordsController
+  layout 'onboarding'
   include Devise::Controllers::Helpers
   # GET /resource/password/new
   # def new

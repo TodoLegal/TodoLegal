@@ -62,7 +62,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # The path used after sign up.
   def after_sign_up_path_for(resource)
     session[:user_just_signed_up] = true
-    invite_friends_path(is_onboarding:true)
+    root_path
+    # invite_friends_path(is_onboarding:true)
   end
 
   def after_update_path_for(resource)

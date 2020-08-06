@@ -12,20 +12,23 @@
           <form action="/refer" method="get">
             <div id="formGroup">
               <div class="form-group">
-                  <input type="email" class="form-control" name="email1" aria-describedby="emailHelp" placeholder="nombre@ejemplo.com">
+                  <input type="email" class="form-control" name="email1" aria-describedby="emailHelp" placeholder="nombre@ejemplo.com" id="email">
               </div>
               <div class="form-group" id="inputElement">
-                <input type="email" class="form-control" name="email2" aria-describedby="emailHelp" placeholder="nombre@ejemplo.com">
+                <input type="email" class="form-control" name="email2" aria-describedby="emailHelp" placeholder="nombre@ejemplo.com" id="email2">
               </div>  
               <button type="submit" class="btn btn-block btn-primary">Enviar</button>
+              <!--
               <% if @is_onboarding%>
                 <a href="/" id= "omitirPaso" class="text-center">Omitir este paso</a>
               <% end %>
+              -->
             </div>
           </form>
       </div>
     </div>
   </div>
+  <%= javascript_pack_tag "form_validator" %>
 </section>
 
 <style>
@@ -41,7 +44,6 @@
   }
 
   .btn{
-    border-radius: 8px;
     margin-top: 7%; 
   }
 

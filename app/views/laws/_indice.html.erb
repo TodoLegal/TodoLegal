@@ -1,10 +1,3 @@
-<style>
-  strong {font-weight:bold;}
-  .index-element {
-    font-family: 'Merriweather', serif;
-  }
-</style>
-
 <div class="container" style="">
   <table class="list-unstyled components">
     <% if @has_articles_only %>
@@ -20,13 +13,28 @@
         <% i+=1 %>
       <% end %>
     <% else %>
+      <% book_index_position = 0%>
+      <% title_index_position = 0 %>
+      <% chapter_index_position = 0%>
+      <% section_index_position = 0%>
+
       <% @index_items.each do |index_items|%>
+        <% title_display = 'block'%>
+        <% chapter_display = 'block'%>
+        <% section_display = 'block'%>
+        <% subsection_display = 'block'%>
+        
         <% if index_items.instance_of? Book %>
+          <% book_index_position = index_items.position %>
+          <% title_display = 'none'%>
           <tr class="index-element" style="font-size: 25px;padding-right: 50px;">
             <td class="index-book" style="white-space: nowrap;">
               <a class="uncolored_link" href="#book_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('book_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
                 <b>Libro <%= index_items.number %></b></br>
               </a>
+               <button type="button" id="btn-collapse-<%= book_index_position %>" class="btn btn-light btn-collapse" onclick="collapseElements('btn-collapse-<%= book_index_position %>', 'index-element-<%= book_index_position %>' )">
+                <i class="fas fa-chevron-down"></i>
+              </button>
             </td>
             <td class="index-book-name">
               <a class="uncolored_link" href="#book_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('book_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
@@ -36,12 +44,14 @@
           </tr>
         <% end %>
         <% if index_items.instance_of? Title %>
-          <tr class="index-element" style="font-size: 20px;padding-right: 50px;">
+          <% title_index_position = index_items.position %>
+          <% chapter_display = 'none'%>
+          <tr class="index-element-<%= book_index_position %>" style="font-size: 20px;padding-right: 50px;">
             <td class="index-title" style="white-space: nowrap;">
               <a class="uncolored_link" href="#title_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('title_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
                 Titulo <%= index_items.number %>
               </a>
-              <button type="button" id="btn-collapse-<%= index_items.position %>" class="btn btn-light btn-collapse" onclick="collapseChapter('btn-collapse-<%= index_items.position %>', 'index-element-chapter-<%= index_items.position + 1 %>' )">
+              <button type="button" id="btn-collapse-<%= title_index_position %>" class="btn btn-light btn-collapse" onclick="collapseElements('btn-collapse-<%= title_index_position %>', 'index-element-<%= title_index_position %>' )">
                 <i class="fas fa-chevron-down"></i>
               </button>
             </td>
@@ -53,11 +63,15 @@
           </tr>
         <% end %>
         <% if index_items.instance_of? Chapter %>
-          <tr class="index-element" id="index-element-chapter-<%= index_items.position %>" style="font-size: 15px;padding-right: 50px; display: none;">
+          <% chapter_index_position = index_items.position %>
+          <tr class="index-element-<%= title_index_position %>" style="font-size: 15px;padding-right: 50px; display: none;">
             <td class="index-chapter" style="white-space: nowrap;">
               <a class="uncolored_link" href="#chapter_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('chapter_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
                 Capítulo <%= index_items.number %></b>
               </a>
+               <button type="button" id="btn-collapse-<%= chapter_index_position %>" class="btn btn-light btn-collapse" onclick="collapseElements('btn-collapse-<%= chapter_index_position %>', 'index-element-<%= chapter_index_position %>' )">
+                <i class="fas fa-chevron-down"></i>
+              </button>
             </td>
             <td class="index-chapter-name">
               <a class="uncolored_link" href="#chapter_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('chapter_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
@@ -67,11 +81,15 @@
           </tr>
         <% end %>
         <% if index_items.instance_of? Section %>
-          <tr class="index-element" style="font-size: 12px;padding-right: 50px;">
+          <% section_index_position = index_items.position %>
+          <tr class="index-element-<%= chapter_index_position %>" style="font-size: 12px;padding-right: 50px; display: none;">
             <td class="index-section" style="white-space: nowrap;">
               <a class="uncolored_link" href="#section_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('section_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
                 <b>Sección <%= index_items.number %></b></br>
               </a>
+              <button type="button" id="btn-collapse-<%= section_index_position %>" class="btn btn-light btn-collapse" onclick="collapseElements('btn-collapse-<%= section_index_position %>', 'index-element-<%= section_index_position %>' )">
+                <i class="fas fa-chevron-down"></i>
+              </button>
             </td>
             <td class="index-section-name">
               <a class="uncolored_link" href="#section_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('section_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
@@ -81,7 +99,7 @@
           </tr>
         <% end %>
         <% if index_items.instance_of? Subsection %>
-          <tr class="index-element" style="font-size: 12px;padding-right: 50px;">
+          <tr class="index-element-<%= section_index_position %>" style="font-size: 12px;padding-right: 50px;">
             <td class="index-subsection" style="white-space: nowrap;">
               <a class="uncolored_link" href="#subsection_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('subsection_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
                 <b>Sección <%= index_items.number %></b></br>
@@ -101,21 +119,30 @@
 
 <script>
 
-  
-  function collapseChapter(btnId, chapterId){
-    var bntCollapse = document.getElementById(btnId);
-    var chapterElement = document.getElementById(chapterId);
-    if (chapterElement.style.display == "none"){
-      chapterElement.style.display = "block";
-    }else if (chapterElement.style.display == "block"){
-      chapterElement.style.display = "none";
+  try {
+    function collapseElements(btnId, elementsClass){
+      var bntCollapse = document.getElementById(btnId);
+      var elements = document.getElementsByClassName(elementsClass);
+      for(let i = 0; i < elements.length; i++){
+        if (elements[i].style.display == "none"){
+          elements[i].style.display = "block";
+        }else if (elements[i].style.display == "block"){
+          elements[i].style.display = "none";
+        }
+      }
     }
-
+  } catch (error) {
+    //something?
   }
 
 </script>
 
 <style>
+  strong {font-weight:bold;}
+  .index-element {
+    font-family: 'Merriweather', serif;
+  }
+  
   td{
     display: block;
   }
@@ -147,10 +174,6 @@
 
   .btn-collapse{
     display: inline;
-  }
-
-  #index-element-chapter{
-    /* display: none; */
   }
 
 </style>

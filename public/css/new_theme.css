@@ -28,6 +28,10 @@ body {
     margin: auto;
 }
 
+.btn-more-laws {
+    margin: 1rem auto;
+}
+
 h2 {
     font-weight: 600;
 }
@@ -482,3 +486,23 @@ footer p a {
     }
 }
 
+/* Footer */
+
+.footer-basic {
+    margin-top: 2rem;
+}
+
+
+/* Document */
+
+.tabs--document {
+    justify-content: space-between;
+    padding: 0 25px;
+}
+
+@media only screen and (max-width: 767.98px) {
+    .tabs--document {
+        justify-content: space-between;
+        padding: 1rem 0 0;
+    }
+}

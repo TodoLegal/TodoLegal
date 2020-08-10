@@ -4,11 +4,6 @@ class HomeController < ApplicationController
   require 'set'
   
   def index
-    if is_redirect_pending
-      handle_redirect
-      return
-    end
-
     @tags = Tag.where(tag_type: TagType.find_by_name("materia"))
 
     covid_drive_data_json_path = 'public/covid_drive_data.json'
@@ -104,6 +99,7 @@ class HomeController < ApplicationController
 
   def pricing
     @is_onboarding = params[:is_onboarding]
+    @go_to_law = params[:go_to_law]
     @activate_pro_account = params[:activate_pro_account]
   end
   

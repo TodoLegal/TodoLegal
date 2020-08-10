@@ -57,7 +57,7 @@ class BillingController < ApplicationController
 
 protected
   def user_plan_is_inactive!
-    if current_user.stripe_customer_id
+    if current_user && current_user.stripe_customer_id
       begin
         customer = Stripe::Customer.retrieve(current_user.stripe_customer_id)
         if current_user_plan_is_active customer

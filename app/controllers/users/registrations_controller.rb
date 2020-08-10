@@ -9,18 +9,15 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # GET /resource/sign_up
   def new
+    @go_to_law = params[:go_to_law]
+    @go_to_checkout = params[:go_to_checkout]
     super
-    if params[:go_to_law]
-      session[:redirect_to_law] = params[:go_to_law]
-    end
-    if params[:go_to_checkout]
-      session[:redirect_to_checkout] = params[:go_to_checkout]
-    end
   end
 
   # POST /resource
   def create
     validateOccupationParam (params)
+    validateEmailTaken (params)
     super
   end
 
@@ -87,7 +84,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # The path used after sign up.
   def after_sign_up_path_for(resource)
     session[:user_just_signed_up] = true
-    pricing_path(is_onboarding:true)
+    pricing_path(is_onboarding:true, go_to_law: params[:go_to_law], go_to_checkout: params[:go_to_checkout])
   end
 
   def after_update_path_for(resource)

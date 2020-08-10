@@ -3,7 +3,12 @@
 <section>
   <div class="container">
     <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-
+      <% if @go_to_law %>
+        <input type="hidden" id="go_to_law" name="go_to_law" value="<%= @go_to_law %>">
+      <% end %>
+      <% if @go_to_checkout %>
+        <input type="hidden" id="go_to_checkout" name="go_to_checkout" value="<%= @go_to_checkout %>">
+      <% end %>
       <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="false">
         <div class="carousel-inner">
           <div class="carousel-item active" id="account">

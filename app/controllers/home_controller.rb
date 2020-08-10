@@ -4,11 +4,6 @@ class HomeController < ApplicationController
   require 'set'
   
   def index
-    if is_redirect_pending
-      handle_redirect
-      return
-    end
-
     @tags = Tag.where(tag_type: TagType.find_by_name("materia"))
 
     covid_drive_data_json_path = 'public/covid_drive_data.json'
@@ -103,10 +98,12 @@ class HomeController < ApplicationController
   end
 
   def pricing
+    @is_onboarding = params[:is_onboarding]
+    @go_to_law = params[:go_to_law]
+    @activate_pro_account = params[:activate_pro_account]
   end
   
   def invite_friends
-    # @is_onboarding = params[:is_onboarding]
   end
   
   def drive_search
@@ -147,13 +144,9 @@ class HomeController < ApplicationController
     if !params["email2"].blank?
       SubscriptionsMailer.refer(current_user, params["email2"]).deliver
     end
-    if is_redirect_pending
-      handle_redirect
-      return
-    else
-      respond_to do |format|
-        format.html { redirect_to root_path, notice: I18n.t(:referal_sent) }
-      end
+
+    respond_to do |format|
+      format.html { redirect_to root_path, notice: I18n.t(:referal_sent) }
     end
   end
 

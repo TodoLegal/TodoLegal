@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   resources :subsections
   resources :sections
   resources :books
-  devise_for :users, controllers: { confirmations: 'users/confirmations', registrations: "users/registrations", sessions: "users/sessions" }
+  devise_for :users, controllers: { confirmations: 'users/confirmations', registrations: "users/registrations", sessions: "users/sessions", passwords: "users/passwords" }
   resources :law_tags
   resources :tags
   resources :tag_types

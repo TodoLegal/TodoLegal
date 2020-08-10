@@ -24,6 +24,14 @@ body {
     height: 3rem;
 }
 
+.btn-block {
+    margin: auto;
+}
+
+.btn-more-laws {
+    margin: 1rem auto;
+}
+
 h2 {
     font-weight: 600;
 }
@@ -418,6 +426,7 @@ footer p a {
     padding: 2.5rem 2rem 2rem;
 }
 
+
 /* General styles for Subscription info */
 
 .card--subscription {
@@ -425,7 +434,7 @@ footer p a {
 }
 
 .card--subscription .card-heading {
-    background-color: #1A7FFA;
+    background-color: #171F2A;
     color: white;
     padding: 2.5rem 1.5rem 1.15rem; 
     border-radius: 4px 4px 0 0;
@@ -477,3 +486,23 @@ footer p a {
     }
 }
 
+/* Footer */
+
+.footer-basic {
+    margin-top: 2rem;
+}
+
+
+/* Document */
+
+.tabs--document {
+    justify-content: space-between;
+    padding: 0 25px;
+}
+
+@media only screen and (max-width: 767.98px) {
+    .tabs--document {
+        justify-content: space-between;
+        padding: 1rem 0 0;
+    }
+}

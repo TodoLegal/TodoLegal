@@ -75,6 +75,15 @@
   <script src="https://js.stripe.com/v3/"></script>
   <%= tag :meta, :name => 'stripe-key', :content => STRIPE_PUBLIC_KEY %>
 
+  <% if notice %>
+    <div class="alert alert-primary alert-dismissible fade show" role="alert" id="notice">
+      <%= notice %>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  <% end %>
+ 
   <%= yield %>
   </body>
 </html>

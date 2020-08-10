@@ -50,7 +50,7 @@ function onIndexElementClicked(section_id) {
                     </div>
                     <div class="col-md-12">
                       <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
-                      Para leer esta ley cambiate a un plan Pro. Por <b>L200/mensuales</b> podrás acceder a este y más de <b>250 documentos</b>.
+                      Para leer esta ley cambiate a un plan Pro. Por <b>L200/mensuales</b> podrás acceder a este y otros <b><%= Law.count - 1%> documentos</b>.
                     </p>
                     </div>
                     <div class="col-md-12">
@@ -91,7 +91,7 @@ function onIndexElementClicked(section_id) {
                       </div>
                       <div class="col-md-12">
                         <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
-                        Crea una cuenta y accede a más de <b>150 documentos</b> de Legislación Hondureña y recibe boletines informativos.
+                        Crea una cuenta y accede a <%= Law.count%> documentos</b> de Legislación Hondureña y recibe boletines informativos.
                       </p>
                       </div>
                       <div class="col-md-12">

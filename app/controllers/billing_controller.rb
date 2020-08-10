@@ -24,6 +24,7 @@ class BillingController < ApplicationController
           price: STRIPE_MONTH_SUBSCRIPTION_PRICE,
         }]
       })
+      SubscriptionsMailer.welcome_pro_user(current_user).deliver
     else
       subscription = Stripe::Subscription.create({
         customer: customer.id,
@@ -32,6 +33,7 @@ class BillingController < ApplicationController
         }],
         coupon: STRIPE_LAUNCH_COUPON_ID
       })
+      SubscriptionsMailer.welcome_pro_user(current_user).deliver
     end
 
     user = User.find_by_email(params["email"])

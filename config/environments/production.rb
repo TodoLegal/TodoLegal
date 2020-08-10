@@ -2,7 +2,8 @@ require 'discordrb'
 
 puts '[Discord bot]: Initializing'
 $discord_bot = Discordrb::Bot.new token: ENV['EXCEPTION_BOT_TOKEN'], client_id: 717812663761240117
-$discord_bot_channel = 717989750421848115
+$discord_bot_channel_code = 717989750421848115
+$discord_bot_channel_notifications = 742414195928203296
 
 module ExceptionNotifier
   class DiscordNotifier
@@ -15,7 +16,7 @@ module ExceptionNotifier
 
     def call(exception, options={})
       puts '[Discord bot]: Exception found'
-      $discord_bot.send_message($discord_bot_channel, "Encontré un error! " + exception.to_s)
+      $discord_bot.send_message($discord_bot_channel_code, "Encontré un error! " + exception.to_s)
     end
   end
 end

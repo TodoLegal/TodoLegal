@@ -68,13 +68,7 @@ class ApplicationController < ActionController::Base
 protected
   
   def after_sign_in_path_for(resource)
-    redirect_to_law_id = session[:redirect_to_law]
-    if redirect_to_law_id
-      session[:redirect_to_law] = nil
-      Law.find_by_id(redirect_to_law_id)
-    else
-      signed_in_path
-    end
+    signed_in_path
   end
 
   def after_sign_out_path_for(resource)

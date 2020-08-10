@@ -24,6 +24,7 @@ class BillingController < ApplicationController
           price: STRIPE_MONTH_SUBSCRIPTION_PRICE,
         }]
       })
+      $discord_bot.send_message($discord_bot_channel_notifications, "Se ha registrado un usuario Pro por 1 mes :dancer:")
       SubscriptionsMailer.welcome_pro_user(current_user).deliver
     else
       subscription = Stripe::Subscription.create({
@@ -33,6 +34,7 @@ class BillingController < ApplicationController
         }],
         coupon: STRIPE_LAUNCH_COUPON_ID
       })
+      $discord_bot.send_message($discord_bot_channel_notifications, "Se ha registrado un usuario Pro por 1 año :dancer:")
       SubscriptionsMailer.welcome_pro_user(current_user).deliver
     end
 

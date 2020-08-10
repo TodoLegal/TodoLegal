@@ -37,11 +37,14 @@
             <ul class="fa-ul">
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Acceso a 20 documentos de legislación hondureña</li>
               <li class="d-none d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>Buscador de palabras clave por materia, ley o normas específicas.</li>
-              <li class="d-none d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>Servicio al cliente básico</li>
             </ul>
           </div>
           <div class="card-bottom">
-            <%= button_to "Continuar con Plan Básico", root_path, method: :get, remote: true, class:"btn btn-block btn-outline-primary", id:"btnBasico" %>
+            <% if !@go_to_law.blank? %>
+              <%= button_to "Continuar con Plan Básico", Law.find_by_id(@go_to_law), method: :get, remote: true, class:"btn btn-block btn-outline-primary", id:"btnBasico" %>
+            <% else %>
+              <%= button_to "Continuar con Plan Básico", root_path, method: :get, remote: true, class:"btn btn-block btn-outline-primary", id:"btnBasico" %>
+            <% end %>
           </div>
         </div>
       <% end %>
@@ -63,11 +66,10 @@
             <ul class="fa-ul">
               <li><span class="fa-li"><i class="fas fa-check"></i></span> Acceso a <%= Law.count %> documentos de legislación hondureña. Incluyendo todo los documentos nuevos que agreguemos.</li>
               <li class="d-none d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>Buscador de palabras clave por materia, ley o normas específicas.</li>
-              <li class="d-none d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>Servicio al cliente <strong>24/7</strong></li>
             </ul>
           </div>
           <div class="card-bottom">
-            <%= button_to "Elegir Plan Pro", checkout_path, method: :get, params: {is_onboarding: @is_onboarding}, remote: true, class:"btn btn-block btn-primary"%>
+            <%= button_to "Elegir Plan Pro", checkout_path, method: :get, params: {is_onboarding: @is_onboarding, go_to_law: @go_to_law}, remote: true, class:"btn btn-block btn-primary"%>
             <p class="text-center py-2 change-plan-link" onclick="changePlan(2)">Cambiar a pago mensual</p>
           </div>
       </div>
@@ -85,11 +87,10 @@
             <ul class="fa-ul">
               <li><span class="fa-li"><i class="fas fa-check"></i></span> Acceso a <%= Law.count %> documentos de legislación hondureña. Incluyendo todo los documentos nuevos que agreguemos.</li>
               <li class="d-none d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>Buscador de palabras clave por materia, ley o normas específicas.</li>
-              <li class="d-none d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>Servicio al cliente <strong>24/7</strong></li>
             </ul>
           </div>
           <div class="card-bottom">
-            <%= button_to "Elegir Plan Pro", checkout_path, method: :get, params: {is_monthly: true, is_onboarding: @is_onboarding}, remote: true, class:"btn btn-block btn-primary"%>
+            <%= button_to "Elegir Plan Pro", checkout_path, method: :get, params: {is_monthly: true, is_onboarding: @is_onboarding, go_to_law: @go_to_law}, remote: true, class:"btn btn-block btn-primary"%>
             <p class="text-center py-2 change-plan-link" onclick="changePlan(1)">Cambiar a pago anual</p>
           </div>
         </div>

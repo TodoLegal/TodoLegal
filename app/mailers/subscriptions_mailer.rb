@@ -14,4 +14,9 @@ class SubscriptionsMailer < ApplicationMailer
     end
     mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: email, subject: 'Te han invitado a TodoLegal')
   end
+
+  def welcome_pro_user user
+    @user = user
+    mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: user.email, subject: 'Cuenta Pro')
+  end
 end

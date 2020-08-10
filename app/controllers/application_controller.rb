@@ -40,40 +40,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def is_redirect_pending
-    session[:redirect_to_law] || session[:user_just_signed_up] || session[:redirect_to_checkout]
-  end
-
-  def handle_redirect
-    redirect_to_law_id = session[:redirect_to_law]
-    user_just_signed_up = session[:user_just_signed_up]
-    redirect_to_checkout = session[:redirect_to_checkout]
-    session[:redirect_to_law] = nil
-    session[:user_just_signed_up] = nil
-    session[:redirect_to_checkout] = nil
-
-    if redirect_to_checkout
-      respond_to do |format|
-        if redirect_to_law_id.blank?
-          format.html { redirect_to checkout_path }
-        else
-          format.html { redirect_to checkout_path + "?go_to_law=" + redirect_to_law_id }
-        end
-      end
-      return
-    end
-
-    if redirect_to_law_id
-      respond_to do |format|
-        format.html { redirect_to Law.find_by_id(redirect_to_law_id) }
-      end
-    elsif user_just_signed_up
-      respond_to do |format|
-        format.html { redirect_to signed_up_path }
-      end
-    end
-  end
-
   def redirectOnSpecialCode query
     @tokens = @query.scan(/\w+|\W/)
     if @tokens.first == '/'
@@ -102,13 +68,7 @@ class ApplicationController < ActionController::Base
 protected
   
   def after_sign_in_path_for(resource)
-    redirect_to_law_id = session[:redirect_to_law]
-    if redirect_to_law_id
-      session[:redirect_to_law] = nil
-      Law.find_by_id(redirect_to_law_id)
-    else
-      signed_in_path
-    end
+    signed_in_path
   end
 
   def after_sign_out_path_for(resource)

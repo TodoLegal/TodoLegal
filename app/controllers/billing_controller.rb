@@ -16,7 +16,21 @@ class BillingController < ApplicationController
   end
 
   def charge
-    customer = Stripe::Customer.create(email: current_user.email, source: params["stripeToken"])
+    begin
+      customer = Stripe::Customer.create(email: current_user.email, source: params["stripeToken"])
+    rescue
+      respond_to do |format|
+        redirect_path = checkout_path + "?"
+        if !params["go_to_law"].blank?
+          redirect_path += "go_to_law=" + params["go_to_law"] + "&"
+        end
+        if !params["is_monthly"].blank?
+          redirect_path += "is_monthly=" + params["is_monthly"]
+        end
+        format.html { redirect_to redirect_path, notice: I18n.t(:invalid_card) }
+      end
+      return
+    end
     if params["is_monthly"] == "true"
       subscription = Stripe::Subscription.create({
         customer: customer.id,
@@ -24,6 +38,10 @@ class BillingController < ApplicationController
           price: STRIPE_MONTH_SUBSCRIPTION_PRICE,
         }]
       })
+      if $discord_bot
+        $discord_bot.send_message($discord_bot_channel_notifications, "Se ha registrado un usuario Pro por 1 mes :dancer:")
+      end
+      SubscriptionsMailer.welcome_pro_user(current_user).deliver
     else
       subscription = Stripe::Subscription.create({
         customer: customer.id,
@@ -32,6 +50,10 @@ class BillingController < ApplicationController
         }],
         coupon: STRIPE_LAUNCH_COUPON_ID
       })
+      if $discord_bot
+        $discord_bot.send_message($discord_bot_channel_notifications, "Se ha registrado un usuario Pro por 1 año :dancer:")
+      end
+      SubscriptionsMailer.welcome_pro_user(current_user).deliver
     end
 
     user = User.find_by_email(params["email"])
@@ -57,7 +79,7 @@ class BillingController < ApplicationController
 
 protected
   def user_plan_is_inactive!
-    if current_user.stripe_customer_id
+    if current_user && current_user.stripe_customer_id
       begin
         customer = Stripe::Customer.retrieve(current_user.stripe_customer_id)
         if current_user_plan_is_active customer

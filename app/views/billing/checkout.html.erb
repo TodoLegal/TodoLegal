@@ -1,0 +1,248 @@
+<% if !@is_onboarding %>
+  <%= render 'layouts/logged_navbar' %> 
+<% end %>
+<section class="checkout">
+  <div class="container">
+  <% if @is_onboarding %>
+    <a href="/">
+      <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="img-logo">
+    </a>
+  <% end %>
+  <div class="row checkout-row">
+  <div class="col-12 col-lg-6">
+  <div class="card card--payment bg-white rounded">
+    <div class="card-body">
+      <%= render '/home/loading_spinner' %>
+      <div id="processing-payment" style="display: none;">
+        <h5 class="card-subtitle text-center">Espera un momento...</h5>
+        <p class="text-center">Procesando pago</p>
+      </div>
+      <div id="payment-successful" style="display: none;">
+        <svg class="icon-success" width="66" height="66" viewBox="0 0 66 66" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="33" cy="33" r="33" fill="#FF5722"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M55.3456 22.0289L28.7848 51.2457L11.1831 37.047L17.1029 29.7084L27.7869 38.3268L48.369 15.6865L55.3456 22.0289Z" fill="white"/>
+        </svg>
+        <h5 class="card-subtitle text-center">Pago exitoso</h5>
+        <p class="text-center">Te redireccionaremos a donde estabas previamente.</p>
+      </div>
+
+      <div id="checkout-fields" class="checkout-fields">
+        <hgroup class="card__headline">
+          <h2 class="title d-none d-sm-block">Información de pago</h2>
+          <p class="body text-left">Agrega tu tarjeta de crédito o débito para completar el pago de la suscripción.</p>
+        </hgroup>
+        <!-- Used to display Element errors. -->
+        <div id="card-errors" role="alert"></div>
+        <form action="/charge" method="post" id="payment-form">
+          <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+          <% if @is_monthly %>
+            <%= hidden_field_tag :is_monthly, true %>
+          <% else %>
+            <%= hidden_field_tag :is_monthly, false %>
+          <% end %>
+          <div class="form-group">
+            <label class="d-none d-sm-block">Número de tarjeta </label>
+            <div class="form-control" id="cardNumber-element">
+              <!-- A Stripe Element will be inserted here. -->
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-7 form-group">
+                <label class="d-none d-sm-block">Fecha de expiración </label>
+                <div class="form-control"  id="cardExpiry-element">
+                  <!-- A Stripe Element will be inserted here. -->
+                </div>
+              </div>
+              <div class="col-5 form-group">
+                <label class="d-none d-sm-block">Código CVC</label>
+                <div class="form-control" id="cardCvc-element">
+                  <!-- A Stripe Element will be inserted here. -->
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <%= hidden_field_tag :go_to_law, @go_to_law %>
+
+          <% if user_signed_in? %>
+            <%= hidden_field_tag :email, current_user.email %>
+          <% end %>
+          <div class="form-group">
+            <button  type="submit" class="btn btn-primary btn-block btn-next btn-lg" onclick="document.getElementById('loading-spinner').style.display = 'block';document.getElementById('processing-payment').style.display = 'block';document.getElementById('checkout-fields').style.display = 'none'">
+              Pagar suscripción
+            </button>
+          </div>
+          <p class="text-left"><small>Si tienes preguntas o necesitas ayuda contactanos a <a class="link" href="mailto:info@todolegal.app">info@todolegal.app</a></small></p>
+        </form>
+      </div>
+    </div>
+    <div data-attrs='{"PUBLIC_KEY": "<%= STRIPE_PUBLIC_KEY %>"}' id='stripe_params'>
+      <%= javascript_pack_tag 'stripe_integration' %>
+    </div>
+  </div>
+<div class="text-center img-fluid"><img class="img-fluid" src="/img/powered_by_stripe.svg" alt="El pago se realiza por medio de Stripe"></div>
+</div>
+
+<div class="col-12 col-lg-6">
+    <div class="card card--subscription bg-white rounded">
+      <div class="card-heading">
+        <% if @is_monthly %>
+          <h2 class="card-title">Suscripción mensual</h2>
+        <% else %>
+          <h2 class="card-title">Suscripción anual</h2>
+          <h2 class="card-title"><strong>50%</strong></h2>
+          <p class="full-width">Descuento valido hasta el 24 de agosto</p>
+        <% end %>
+      </div>
+
+      <div class="card-body">
+      <% if @is_monthly %>
+        <div class="subscription-row">
+          <p class="subscription-row-label">Mensualidad</p>
+          <strong class="subscription-row-value">$10.00</strong>
+        </div>
+        <div class="subscription-row subscription-row-total">
+          <p class="subscription-row-label">Total</p>
+          <strong class="subscription-row-value">$10.00</strong>
+        </div>
+      <% else %>
+        <!-- Provitional code for discount><!-->
+        <div class="subscription-row">
+          <p class="subscription-row-label">Mensualidad</p>
+          <strong class="subscription-row-value">$5.00</strong>
+        </div>
+        <div class="subscription-row subscription-row-total">
+          <p class="subscription-row-label">Total</p>
+          <strong class="subscription-row-value">$60.00</strong>
+        </div>
+        <!-- Uncomment after Aug 17>
+        <p class="subscription-row-label">Mensualidad</p>
+          <strong class="subscription-row-value">L200.00</strong>
+        </div>
+        <div class="subscription-row subscription-row-total">
+          <p class="subscription-row-label">Total</p>
+          <strong class="subscription-row-value">L2,400.00</strong>
+        </div>
+        <!-->
+      <% end %>
+    </div>
+</div>
+<p class="text-left pt-2 pl-3 d-none d-md-block">Si no es lo que buscabas <%= link_to "cambia de suscripción", :back %> </p>
+</section>
+
+<style>
+  .img-logo{
+    height: 15vh;
+    max-height: 110px;
+    margin: 2vh auto 0;
+    display: block;
+  }
+
+  .checkout .card-subtitle {
+    margin-top: 1.4rem;
+  }
+
+  .card--payment .body {
+    color: #505864;
+  }
+
+  .checkout .form-control {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .checkout .small-text {
+    color: #505864;
+    text-align: center;
+    display: block;
+    margin-bottom: 2rem;
+  }
+
+  .checkout-fields hgroup {
+    margin-bottom: 1.5rem;
+  }
+
+  #card-errors{
+    color: #eb1f29;
+    margin: .5rem auto;
+    text-align: left;
+  }
+  
+  .icon-success {
+    display: block;
+    margin: auto;
+  }
+
+  .checkout-row {
+    flex-direction: column-reverse;
+    padding-top: 2rem;
+  }
+
+  @media only screen and (max-height: 700px) {
+    .checkout {
+      transform: scale(.97);
+    }
+    
+    .checkout-row {
+      padding-top: 1vh;
+    }
+
+    .card--payment .card-body {
+      padding-top: 1.5rem
+    }
+
+    .card--payment .title {
+      font-size: 1.5rem;
+    }
+
+    .card--subscription .card-heading {
+      padding-top: 1.5rem
+    }
+    .card--subscription .card-title {
+      font-size: 1.5rem;
+    }
+  }
+
+  @media only screen and (max-width: 767.98px) {
+    .checkout-row {
+    padding-top: .5rem;
+    }
+  }
+
+  @media only screen and (max-width: 767.98px){
+
+    section{
+      background: white;
+    }
+    
+    .card{
+      width:100%;
+      margin-left: 0%;
+      padding: 0%;
+      border: none;
+    }
+    .card-body{
+      padding: 0%;
+    }
+
+    .card-title{
+      font-size: 28px;
+      line-height: 33px
+    }
+
+    .img-logo{
+      width: 70px;
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+    }
+  }
+  @media only screen and (min-width: 992px){
+
+  .checkout-row {
+    flex-direction: row;
+  }
+  }
+</style>

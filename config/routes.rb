@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   resources :subsections
   resources :sections
   resources :books
-  devise_for :users, controllers: { confirmations: 'users/confirmations', registrations: "users/registrations", sessions: "users/sessions" }
+  devise_for :users, controllers: { confirmations: 'users/confirmations', registrations: "users/registrations", sessions: "users/sessions", passwords: "users/passwords" }
   resources :law_tags
   resources :tags
   resources :tag_types
@@ -25,6 +25,9 @@ Rails.application.routes.draw do
   get '/refer', to: 'home#refer', as: "refer"
   get '/crash_tester', to: 'home#crash_tester', as: "crash_tester"
   get '/maintenance', to: 'home#maintenance', as: "maintenance"
+  get '/checkout', to: 'billing#checkout', as: "checkout"
+  post "/charge" => "billing#charge", as: "charge"
+  post "/create_customer_portal_session" => "billing#create_customer_portal_session", as: "create_customer_portal_session"
 
   get "admin/users" => "admin#users", as: "admin_users"
   post "admin/grant_permission" => "admin#grant_permission", as: "admin_grant_permission"

@@ -10,9 +10,6 @@ class Users::SessionsController < Devise::SessionsController
   # GET /resource/sign_in
   def new
     super
-    if params[:go_to_law]
-      session[:redirect_to_law] = params[:go_to_law]
-    end
   end
 
   # POST /resource/sign_in

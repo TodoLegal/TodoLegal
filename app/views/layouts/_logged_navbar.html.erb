@@ -59,7 +59,10 @@
                         Habilitar modo edición</a>
                     <% end %>
                 <% end %>
-                <%= link_to('Cerrar sesión', destroy_user_session_path, method: :delete, class:"dropdown-item") %>
+                <%= link_to(destroy_user_session_path, {class: "dropdown-item", method: 'delete' }) do %>
+                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                    Cerrar sesión
+                <% end %>
             </div>
         </div>
     </ul>
@@ -150,7 +153,7 @@
 
     #topNavbar{
       padding: 5px 10vw;
-  }
+    }
    }
 </style>
 

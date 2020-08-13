@@ -1,7 +1,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-light  sticky-top" id="topNavbar">
     <a href="/" class="navbar-brand text-primary" >
-        <img  src="/img/top_navbar/top_navbar.svg" alt="Card image cap" class="img-fluid" id="logo">
+        <img  src="/img/top_navbar/top_navbar.svg" alt="Card image cap" class="logo img-fluid">
          &nbsp;&nbsp;
         <img src="/img/top_navbar/Logo-letras-white.svg" alt="Card image cap" class="todolegal img-fluid">
     </a>
@@ -50,7 +50,10 @@
                         Habilitar modo edición</a>
                     <% end %>
                 <% end %>
-                <%= link_to('Cerrar sesión', destroy_user_session_path, method: :delete, class:"dropdown-item") %>
+                <%= link_to(destroy_user_session_path, {class: "dropdown-item", method: 'delete' }) do %>
+                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                    Cerrar sesión
+                <% end %>
             </div>
         </div>
     </ul>
@@ -65,7 +68,7 @@
         padding: 5px 20px;
     }
 
-    #logo{
+    .logo{
       background-color: #171F2A;
     }
 
@@ -142,8 +145,9 @@
 
    @media only screen and (min-width: 1200px){
 
-    #topNavbar{
-      padding: 5px 10vw;
-  }
+        #topNavbar{
+            padding: 5px 10vw;
+        }
+   }
 </style>
 

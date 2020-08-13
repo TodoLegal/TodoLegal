@@ -64,7 +64,8 @@ Add the following at the end of the file
 ```
 export TodoLegalDB_Password=MyPassword
 export RAILS_SERVE_STATIC_FILES=yes
-export EXCEPTION_BOT_TOKEN=DISCORDTOKEN
+export EXCEPTION_BOT_TOKEN=YOURDISCORDTOKEN
+export STRIPE_SECRET_KEY=YOURSTRIPEKEY
 ```
 
 And then back to the terminal

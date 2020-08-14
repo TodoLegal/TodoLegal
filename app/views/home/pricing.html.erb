@@ -1,6 +1,5 @@
 <% if !@is_onboarding %>
   <%= render 'layouts/logged_navbar' %> 
-  <% @is_onboarding = false%>
 <% end %>
 
 <section class="pricing">
@@ -91,7 +90,11 @@
             </ul>
           </div>
           <div class="card-bottom">
-            <%= button_to "Elegir Plan Pro", checkout_path, method: :get, params: {is_onboarding: @is_onboarding, go_to_law: @go_to_law}, remote: true, class:"btn btn-block btn-primary"%>
+            <% if @is_onboarding %>
+              <%= button_to "Elegir Plan Pro", checkout_path, method: :get, params: {is_onboarding: @is_onboarding, go_to_law: @go_to_law}, remote: true, class:"btn btn-block btn-primary"%>
+            <% else %>
+              <%= button_to "Elegir Plan Pro", checkout_path, method: :get, params: {go_to_law: @go_to_law}, remote: true, class:"btn btn-block btn-primary"%>
+            <% end %>
             <p class="text-center py-2 change-plan-link" onclick="changePlan(2)">Cambiar a pago mensual</p>
           </div>
       </div>
@@ -113,7 +116,11 @@
             </ul>
           </div>
           <div class="card-bottom">
-            <%= button_to "Elegir Plan Pro", checkout_path, method: :get, params: {is_monthly: true, is_onboarding: @is_onboarding, go_to_law: @go_to_law}, remote: true, class:"btn btn-block btn-primary"%>
+            <% if @is_onboarding %>
+              <%= button_to "Elegir Plan Pro", checkout_path, method: :get, params: {is_monthly: true, is_onboarding: @is_onboarding, go_to_law: @go_to_law}, remote: true, class:"btn btn-block btn-primary"%>
+            <% else %>
+              <%= button_to "Elegir Plan Pro", checkout_path, method: :get, params: {is_monthly: true, go_to_law: @go_to_law}, remote: true, class:"btn btn-block btn-primary"%>
+            <% end %>
             <p class="text-center py-2 change-plan-link" onclick="changePlan(1)">Cambiar a pago anual</p>
           </div>
         </div>
@@ -153,7 +160,7 @@
   /* Remove selector after 17 Aug */
   .pricing .card.card--discount:before {
     background: #1A7FFA;
-    content: "50% Descuento válido hasta el 24 de Agosto";
+    content: "50% Descuento válido hasta el 24 de agosto";
     display: block; 
     position: absolute;
     top: -40px;

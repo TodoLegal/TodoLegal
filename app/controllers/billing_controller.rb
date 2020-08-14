@@ -25,8 +25,9 @@ class BillingController < ApplicationController
           redirect_path += "go_to_law=" + params["go_to_law"] + "&"
         end
         if !params["is_monthly"].blank?
-          redirect_path += "is_monthly=" + params["is_monthly"]
+          redirect_path += "is_monthly=" + params["is_monthly"] + "&"
         end
+        redirect_path += "is_onboarding=true"
         format.html { redirect_to redirect_path, notice: I18n.t(:invalid_card) }
       end
       return

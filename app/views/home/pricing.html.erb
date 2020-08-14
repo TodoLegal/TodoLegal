@@ -1,11 +1,32 @@
 <% if !@is_onboarding %>
   <%= render 'layouts/logged_navbar' %> 
-  <% @is_onboarding = false%>
 <% end %>
 
 <section class="pricing">
   <% if @is_onboarding %>
+    <a href="/" class="back-image" data-toggle="modal" data-target="#cancelPricingModal">
     <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="image">
+    </a>
+
+     <!-- Start Cancel Modal -->
+        <div class="modal fade" id="cancelPricingModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-body">
+                <h5 class="modal-title" id="cancelModalLongTitle">¿Estás seguro que deseas salir?</h5>
+                <label id="labelBasico">
+                  Te recomendamos terminar el onboarding para una mejor experiencia.
+                </label>
+                <div class="form-group" id="bottonsGroup">
+                  <%= link_to 'Salir', root_path, id:"okButton", class:"btn btn-secondary", style:"padding-top: 10px;"%>
+                  &nbsp;&nbsp;&nbsp;
+                  <button type="button" id="dismissBtn" class="btn btn-primary" data-dismiss="modal">Terminar el onboarding</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--End Cancel modal -->
 
     <div class="alert alert-success alert-dismissible fade show" role="alert" id="savedArticle"> 
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -36,7 +57,7 @@
             <hr>
             <ul class="fa-ul">
               <li><span class="fa-li"><i class="fas fa-check"></i></span>Acceso a 20 documentos de legislación hondureña</li>
-              <li class="d-none d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>Buscador de palabras clave, por materia, ley o normas expecificas.</li>
+              <li class="d-none d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>Buscador de palabras clave por materia, ley o normas específicas.</li>
             </ul>
           </div>
           <div class="card-bottom">
@@ -54,22 +75,26 @@
           <div class="card-body">
             <h5 class="card-title">Pro</h5>
             <!-- Provitional code for discount><!-->
-            <h6 class="card-price">L125.00<span class="period">/mensual</span></h6>
-            <small>Facturado a <strong>L1,500.00</strong> anual</small>
+            <h6 class="card-price">$3.00<span class="period">/mensual</span></h6>
+            <small>Facturado a <strong>$36.00</strong> anual</small>
 
             <!-- Uncomment after Aug 17>
-            <h6 class="card-price">L200.00<span class="period">/mensual</span></h6>
-            <small>Facturado a <strong>L2,400.00</strong> anual</small>
+            <h6 class="card-price">$6.00<span class="period">/mensual</span></h6>
+            <small>Facturado a <strong>$72.00</strong> anual</small>
             <!-->
             <p class="body plan-description">Para profesionales que requieran información legal avanzada.</p>
             <hr>
             <ul class="fa-ul">
-              <li><span class="fa-li"><i class="fas fa-check"></i></span> Acceso a más de 150 documentos de legislación hondureña. Incluyendo todo los documentos nuevos que agreguemos.</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span> Acceso a más de <%= (Law.count/10)*10 %> documentos de legislación hondureña. Incluyendo todo los documentos nuevos que agreguemos.</li>
               <li class="d-none d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>Buscador de palabras clave, por materia, ley o normas especificas.</li>
             </ul>
           </div>
           <div class="card-bottom">
-            <%= button_to "Elegir Plan Pro", checkout_path, method: :get, params: {is_onboarding: @is_onboarding, go_to_law: @go_to_law}, remote: true, class:"btn btn-block btn-primary"%>
+            <% if @is_onboarding %>
+              <%= button_to "Elegir Plan Pro", checkout_path, method: :get, params: {is_onboarding: @is_onboarding, go_to_law: @go_to_law}, remote: true, class:"btn btn-block btn-primary"%>
+            <% else %>
+              <%= button_to "Elegir Plan Pro", checkout_path, method: :get, params: {go_to_law: @go_to_law}, remote: true, class:"btn btn-block btn-primary"%>
+            <% end %>
             <p class="text-center py-2 change-plan-link" onclick="changePlan(2)">Cambiar a pago mensual</p>
           </div>
       </div>
@@ -78,19 +103,24 @@
         <div class="col-lg-6 card card--dark-100 hide-plan" id="pro-mensual">
           <div class="card-body">
             <h5 class="card-title">Pro</h5>
-            <h6 class="card-price">L 250.00<span class="period">/mensual</span></h6>
-            <small>Podrás ahorrar <strong>L600.00</strong> si eliges el
+            <h6 class="card-price">$7.00<span class="period">/mensual</span></h6>
+            <!-- Provitional discount ><!-->
+            <small>Podrás ahorrar <strong>50%</strong> si eliges el
              <!-- Agregar el switch de mensual a anual tambien  -->
-             <label class="link" onclick="changePlan(1)">pago anual</label></small>
+             <label class="link" onclick="changePlan(1)">pago anual</label> antes del 24 de agosto.</small>
             <p class="body plan-description">Para profesionales que requieran información legal avanzada.</p>
             <hr>
             <ul class="fa-ul">
-              <li><span class="fa-li"><i class="fas fa-check"></i></span> Acceso a más de 150 documentos de legislación hondureña. Incluyendo todo los documentos nuevos que agreguemos.</li>
+              <li><span class="fa-li"><i class="fas fa-check"></i></span> Acceso a más de <%= (Law.count/10)*10 %> documentos de legislación hondureña. Incluyendo todo los documentos nuevos que agreguemos.</li>
               <li class="d-none d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>Buscador de palabras clave, por materia, ley o normas especificas.</li>
             </ul>
           </div>
           <div class="card-bottom">
-            <%= button_to "Elegir Plan Pro", checkout_path, method: :get, params: {is_monthly: true, is_onboarding: @is_onboarding, go_to_law: @go_to_law}, remote: true, class:"btn btn-block btn-primary"%>
+            <% if @is_onboarding %>
+              <%= button_to "Elegir Plan Pro", checkout_path, method: :get, params: {is_monthly: true, is_onboarding: @is_onboarding, go_to_law: @go_to_law}, remote: true, class:"btn btn-block btn-primary"%>
+            <% else %>
+              <%= button_to "Elegir Plan Pro", checkout_path, method: :get, params: {is_monthly: true, go_to_law: @go_to_law}, remote: true, class:"btn btn-block btn-primary"%>
+            <% end %>
             <p class="text-center py-2 change-plan-link" onclick="changePlan(1)">Cambiar a pago anual</p>
           </div>
         </div>
@@ -130,7 +160,7 @@
   /* Remove selector after 17 Aug */
   .pricing .card.card--discount:before {
     background: #1A7FFA;
-    content: "50% Descuento valido hasta el 24 de Agosto";
+    content: "50% Descuento válido hasta el 24 de agosto";
     display: block; 
     position: absolute;
     top: -40px;
@@ -331,5 +361,58 @@
       max-width: 360px;
       margin: auto;
     }
+
+ /* Move styles to general */
+  .modal-body{
+    text-align: center;
+  }
+
+  #okButton{
+    width: 150px;
+  }
+
+  #dismissBtn{
+    border:none;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .modal-title{
+    padding-top: 30px;
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 26px;
+  }
+
+  #labelBasico{
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 21px;
+    color: #505864;
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+
+  #bottonsGroup{
+    margin-bottom: 30px;
+  }
+
+  .more-info-text{
+    font-family: -apple-system, sans-serif;
+    color: #505864;
+    font-size: 18px;
+    line-height: 21px;
+    text-align: center;
+}
+
+  .modal-subtitle{
+    color: #fc5603;
+    font-family: -apple-system, sans-serif;
+    font-weight: bold;
+    margin: 2rem auto;
+    line-height: 1.25rem;
+    text-align: center;
+  }
 
 </style>

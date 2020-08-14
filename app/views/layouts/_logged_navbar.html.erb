@@ -33,7 +33,16 @@
                 <a href="/invite_friends" class="dropdown-item">
                 <i class="fas fa-gift" aria-hidden="true"></i>
                 Invitar amigos</a>
-                
+
+                <% if current_user_is_pro %>
+                    <form method="POST" action="/create_customer_portal_session">
+                        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                        <input type="submit" class="btn btn-primary" value="Manejar Suscripción Pro">
+                    </form>
+                <% else %>
+                    <%= button_to " Adquirir Plan Pro", pricing_path, method: :get, params: {activate_pro_account: true}, remote: true, class:"btn btn-primary btn-pro",  id:"change-plan-button"%>
+                <% end %>
+
                 <% if current_user_is_admin %>
                     <button class="dropdown-item disabled font-weight-bold " type="button" >
                         Administrar
@@ -50,7 +59,10 @@
                         Habilitar modo edición</a>
                     <% end %>
                 <% end %>
-                <%= link_to('Cerrar sesión', destroy_user_session_path, method: :delete, class:"dropdown-item") %>
+                <%= link_to(destroy_user_session_path, {class: "dropdown-item", method: 'delete' }) do %>
+                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                    Cerrar sesión
+                <% end %>
             </div>
         </div>
     </ul>
@@ -91,12 +103,9 @@
         color: #FFFFFF;
     }
 
-    .navbar-brand{
-        /* padding-left: 15%; */
-    }
-
-    #menu-botton{
-        
+    .btn-pro {
+    box-sizing: border-box;
+    margin: .5rem 23px;
     }
 
     .dropdown-menu .btn-avatar-large {
@@ -144,6 +153,7 @@
 
     #topNavbar{
       padding: 5px 10vw;
-  }
+    }
+   }
 </style>
 

@@ -58,7 +58,7 @@ p.body {
 
 .container--privacy,
 .container--terms {
-    margin: 1rem auto;
+    margin: 1.5rem auto 1rem;
 }
 
 /* General styles for cards */
@@ -506,3 +506,5 @@ footer p a {
         padding: 1rem 0 0;
     }
 }
+
+

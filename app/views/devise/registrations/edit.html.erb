@@ -202,7 +202,7 @@
         <div class="billboard billboard--account">
           <div class="billboard-content">
             <h5 class="billboard-title">¿Listo para cambiar tu plan?</h5>
-            <p class="billboard-body">Tendrás acceso a <%= Law.count %> documentos de legislación hondureña.</p>
+            <p class="billboard-body">Tendrás acceso a más de <%= (Law.count/10) * 10 %> documentos de legislación hondureña.</p>
           </div>
           <div class="billboard-actions form-group" id="change-plan-btn-form">
             <%= button_to "Adquirir Plan Pro", pricing_path, method: :get, params: {activate_pro_account: true}, remote: true, class:"btn btn-primary",  id:"change-plan-button"%>

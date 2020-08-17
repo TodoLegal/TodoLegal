@@ -45,12 +45,12 @@
                     </div>
                     <div class="col-md-12">
                       <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
-                      Para leer esta ley cambiate a un plan Pro. Por <b>L200/mensuales</b> podrás acceder a este y otros <b><%= Law.count - 1%> documentos</b>.
+                      Para leer esta ley adquiere el plan Pro, por <b>$3.5</b> podrás acceder a este y más de <b><%= (Law.count/10)*10 %> documentos</b>.
                     </p>
                     </div>
                     <div class="col-md-12">
                       <a href="<%= pricing_path(activate_pro_account: true, go_to_law: @law.id) %>">
-                        <button type="button" class="btn btn-primary btn-block">Cambiar de plan</button>
+                        <button type="button" class="btn btn-primary btn-block">Adquirir plan Pro</button>
                       </a>
                     </div>
                   <% else %>
@@ -64,7 +64,7 @@
                       </div>
                       <div class="col-md-12">
                         <p style="font-size:18px; text-align:center; padding-top: 22px;">
-                          Activa una suscripción de <b>L200 al mes</b> para acceder a todo el contenido.
+                          Activa una suscripción de <b>$3.5</b> para acceder a todo el contenido.
                         </p>
                         <p style="font-size:18px; text-align:center; padding-bottom: 22px">
                           <i>Puedes cancelar en cualquier momento.</i>
@@ -86,8 +86,8 @@
                       </div>
                       <div class="col-md-12">
                         <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
-                        Crea una cuenta y accede a <%= Law.count%> documentos</b> de Legislación Hondureña y recibe boletines informativos.
-                      </p>
+                        Crea una cuenta y accede a más de <b><%= (Law.count/10)*10 %> documentos</b> de Legislación Hondureña y recibe boletines informativos.
+                        </p>
                       </div>
                       <div class="col-md-12">
                         <a href="<%= new_user_registration_path %>?go_to_law=<%=@law.id%>">

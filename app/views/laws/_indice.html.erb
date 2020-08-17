@@ -33,9 +33,7 @@
           <% if index_items.instance_of? Book %>
             <% book_index_position = index_items.position %>
             <% title_display = 'none'%>
-            <% chapter_display = 'block'%>
-            <% section_display = 'block'%>
-            <% subsection_display = 'block'%>
+           
             <div class="card-header book-element index-element">
               <section class="index-book" style="white-space: nowrap;">
                 <a class="uncolored_link" href="#book_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('book_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
@@ -57,8 +55,7 @@
             <% if index_items.instance_of? Title %>
               <% title_index_position = index_items.position %>
               <% chapter_display = 'none'%>
-              <% section_display = 'block'%>
-              <% subsection_display = 'block'%>
+              
               <div class="card-header title-element">
                 <section class="index-title" style="white-space: nowrap;">
                   <a class="uncolored_link" href="#title_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('title_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
@@ -79,9 +76,8 @@
             <div class="index-element-<%= title_index_position %>" style="display: <%= chapter_display%>;">
               <% if index_items.instance_of? Chapter %>
                 <% chapter_index_position = index_items.position %>
-                <% section_display = 'none' %>
-                <% title_display = 'none' %>
-                <% subsection_display = 'block'%>
+                <% section_display = 'none' %> 
+                
                 <div class="card-header chapter-element">
                   <section class="index-chapter" style="white-space: nowrap;">
                     <a class="uncolored_link" href="#chapter_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('chapter_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">

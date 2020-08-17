@@ -3,20 +3,22 @@
     <% i = 0 %>
     <% @laws_array.each do |law| %>
       <% i+=1 %>
-      <div class="collapsable-law-cards col-sm-6 col-md-4 py-2" style="display:<%= i>6 ? 'none' : 'block' %>">
-        <div class="card card-body h-100" style="padding:0px">
-          <a class="" href="<%= law_path(law) %>" style="padding:20px">
-            <p style="font-size: 15px">
-              <% law.materia_names.each do |materia_name| %>
-                <span class="badge badge-light badge-secondary"><%= materia_name %></span>
-              <% end %>
-            </p>
-            <h5 class="card-title"><%= law.name %></h5>
-            <p class="primaryinfo">[<%= law.creation_number %>]</p>
-            <p class="primaryinfo"><%= law.articles.count %> artículos</p>
-          </a>
+      <%if i <= 3%>
+        <div class="collapsable-law-cards col-sm-6 col-md-4 py-2" style="display:<%= i>6 ? 'none' : 'block' %>">
+          <div class="card card-body h-100" style="padding:0px">
+            <a class="" href="<%= law_path(law) %>" style="padding:20px">
+              <p style="font-size: 15px">
+                <% law.materia_names.each do |materia_name| %>
+                  <span class="badge badge-light badge-secondary"><%= materia_name %></span>
+                <% end %>
+              </p>
+              <h5 class="card-title"><%= law.name %></h5>
+              <p class="primaryinfo">[<%= law.creation_number %>]</p>
+              <p class="primaryinfo"><%= law.articles.count %> artículos</p>
+            </a>
+          </div>
         </div>
-      </div>
+      <% end %>
     <% end %>
     <button id="see_more_laws_link" class="btn btn-outline-primary btn-more-laws" style="margin-top:2%;" onclick="showCollapsableLawCards();return false;">Ver más documentos</button>
   </div>

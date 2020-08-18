@@ -1,61 +1,43 @@
 <% content_for :title, @law.name + " - TodoLegal" %>
 
-<div class="container" data-spy="scroll" data-target="#myScrollspy" style="background-color: #FFF !important;">
-  <div class="law-header-desktop"><%= render 'law_header' %></div>
-
-  <div class="container-fluid" style="padding-top:60">
-    <%= render 'navbar_subbar' %>
-
-    <div class="tab-content" id="myTabContent">
-      <div class="tab-pane fade show active" id="articulos" role="tabpanel" aria-labelledby="articulos-tab">
-        <div class="law-header-mobile"><%= render 'law_header' %></div>
-        <%= render 'content' %>
-      </div>
-      <div class="tab-pane fade show" id="indice" role="tabpanel" aria-labelledby="indice-tab">
-        <%= render 'indice' %>
-      </div>
-      <div class="tab-pane fade show" id="modifications" role="tabpanel" aria-labelledby="modifications-tab">
-        <%= render 'modifications_tab' %>
-      </div>
-      <div class="tab-pane fade show" id="related" role="tabpanel" aria-labelledby="related-tab">
-        <%= render 'related_tab' %>
-      </div>
-    </div>
+  <div class="container container--visualizador" data-spy="scroll" data-target="#myScrollspy">
+    <div class="law-header-desktop"><%= render 'law_header' %></div>
     
+    <div class="container--documento">
+    <div class="inner-continer--visualizador" style="padding-top:60">
+      <%= render 'navbar_subbar' %>
 
-    <div class="wrapper">
-      <%= render 'sidebar_indice' %>
-    </div>
-    <% if !@user_can_access_law %>
-      <p>Crea una cuenta para acceder a esta ley</p>
-      <!-- Modal -->
-      <div class="modal fade" data-keyboard="false" data-backdrop="static" id="modalCreateBasicAccount" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-body">
-              <div class="container col-md-12">
-                <div class="row">
-                  <% if current_user %>
-                    <!-- Modal "Cambar a cuenta Pro" -->
-                    <div class="col-md-12">
-                      <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, style:"font-size: 1.5rem; color:black;" %>
-                      <p  style="font-size:22px; text-align:center; display:inline; margin-left: 8%;">
-                      <b>Suscríbete y obtén acceso ilimitado</b>
-                      </p>
-                    </div>
-                    <div class="col-md-12">
-                      <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
-                      Para leer esta ley adquiere el plan Pro, por <b>$3.5</b> podrás acceder a este y más de <b><%= (Law.count/10)*10 %> documentos</b>.
-                    </p>
-                    </div>
-                    <div class="col-md-12">
-                      <a href="<%= pricing_path(activate_pro_account: true, go_to_law: @law.id) %>">
-                        <button type="button" class="btn btn-primary btn-block">Adquirir plan Pro</button>
-                      </a>
-                    </div>
-                  <% else %>
-                    <% if @law.law_access.name == "Pro" %>
-                      <!-- Modal "Crear cuenta Pro" -->
+      <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="articulos" role="tabpanel" aria-labelledby="articulos-tab">
+          <div class="law-header-mobile"><%= render 'law_header' %></div>
+          <%= render 'content' %>
+        </div>
+        <div class="tab-pane fade show" id="indice" role="tabpanel" aria-labelledby="indice-tab">
+          <%= render 'indice' %>
+        </div>
+        <div class="tab-pane fade show" id="modifications" role="tabpanel" aria-labelledby="modifications-tab">
+          <%= render 'modifications_tab' %>
+        </div>
+        <div class="tab-pane fade show" id="related" role="tabpanel" aria-labelledby="related-tab">
+          <%= render 'related_tab' %>
+        </div>
+      </div>
+      
+
+      <div class="wrapper">
+        <%= render 'sidebar_indice' %>
+      </div>
+      <% if !@user_can_access_law %>
+        <p>Crea una cuenta para acceder a esta ley</p>
+        <!-- Modal -->
+        <div class="modal fade" data-keyboard="false" data-backdrop="static" id="modalCreateBasicAccount" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-body">
+                <div class="container col-md-12">
+                  <div class="row">
+                    <% if current_user %>
+                      <!-- Modal "Cambar a cuenta Pro" -->
                       <div class="col-md-12">
                         <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, style:"font-size: 1.5rem; color:black;" %>
                         <p  style="font-size:22px; text-align:center; display:inline; margin-left: 8%;">
@@ -63,65 +45,152 @@
                         </p>
                       </div>
                       <div class="col-md-12">
-                        <p style="font-size:18px; text-align:center; padding-top: 22px;">
-                          Activa una suscripción de <b>$3.5</b> para acceder a todo el contenido.
-                        </p>
-                        <p style="font-size:18px; text-align:center; padding-bottom: 22px">
-                          <i>Puedes cancelar en cualquier momento.</i>
-                        </p>
+                        <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
+                        Para leer esta ley adquiere el plan Pro, por <b>$3.5</b> podrás acceder a este y más de <b><%= (Law.count/10)*10 %> documentos</b>.
                       </p>
                       </div>
                       <div class="col-md-12">
-                        <a href="<%= new_user_registration_path %>?go_to_law=<%=@law.id%>&go_to_checkout=true">
-                          <button type="button" class="btn btn-primary btn-block">Crear cuenta Pro</button>
+                        <a href="<%= pricing_path(activate_pro_account: true, go_to_law: @law.id) %>">
+                          <button type="button" class="btn btn-primary btn-block">Adquirir plan Pro</button>
                         </a>
                       </div>
                     <% else %>
-                      <!-- Modal "Crear cuenta Básica" -->
-                      <div class="col-md-12">
-                        <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, style:"font-size: 1.5rem; color:black;" %>
-                        <p  style="font-size:22px; text-align:center; display:inline; margin-left: 8%;">
-                        <b>Regístrate y accede a esta ley</b>
+                      <% if @law.law_access.name == "Pro" %>
+                        <!-- Modal "Crear cuenta Pro" -->
+                        <div class="col-md-12">
+                          <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, style:"font-size: 1.5rem; color:black;" %>
+                          <p  style="font-size:22px; text-align:center; display:inline; margin-left: 8%;">
+                          <b>Suscríbete y obtén acceso ilimitado</b>
+                          </p>
+                        </div>
+                        <div class="col-md-12">
+                          <p style="font-size:18px; text-align:center; padding-top: 22px;">
+                            Activa una suscripción de <b>$3.5</b> para acceder a todo el contenido.
+                          </p>
+                          <p style="font-size:18px; text-align:center; padding-bottom: 22px">
+                            <i>Puedes cancelar en cualquier momento.</i>
+                          </p>
                         </p>
-                      </div>
+                        </div>
+                        <div class="col-md-12">
+                          <a href="<%= new_user_registration_path %>?go_to_law=<%=@law.id%>&go_to_checkout=true">
+                            <button type="button" class="btn btn-primary btn-block">Crear cuenta Pro</button>
+                          </a>
+                        </div>
+                      <% else %>
+                        <!-- Modal "Crear cuenta Básica" -->
+                        <div class="col-md-12">
+                          <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, style:"font-size: 1.5rem; color:black;" %>
+                          <p  style="font-size:22px; text-align:center; display:inline; margin-left: 8%;">
+                          <b>Regístrate y accede a esta ley</b>
+                          </p>
+                        </div>
+                        <div class="col-md-12">
+                          <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
+                          Crea una cuenta y accede a más de <b><%= (Law.count/10)*10 %> documentos</b> de Legislación Hondureña y recibe boletines informativos.
+                          </p>
+                        </div>
+                        <div class="col-md-12">
+                          <a href="<%= new_user_registration_path %>?go_to_law=<%=@law.id%>">
+                            <button type="button" class="btn btn-primary btn-block">Crear cuenta Básica</button>
+                          </a>
+                        </div>
+                      <% end %>
                       <div class="col-md-12">
-                        <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
-                        Crea una cuenta y accede a más de <b><%= (Law.count/10)*10 %> documentos</b> de Legislación Hondureña y recibe boletines informativos.
-                        </p>
-                      </div>
-                      <div class="col-md-12">
-                        <a href="<%= new_user_registration_path %>?go_to_law=<%=@law.id%>">
-                          <button type="button" class="btn btn-primary btn-block">Crear cuenta Básica</button>
-                        </a>
+                        <div with="100%" style="text-align:center; padding-top: 22px;">
+                          ¿Ya tienes cuenta?
+                        </div>
+                        <div with="100%" style="text-align:center;">
+                          <a style="font-size:18px;text-align:center;" href="<%= new_user_session_path %>?go_to_law=<%=@law.id%>">
+                            Inicia sesión
+                          </a>
+                        </div>
                       </div>
                     <% end %>
-                    <div class="col-md-12">
-                      <div with="100%" style="text-align:center; padding-top: 22px;">
-                        ¿Ya tienes cuenta?
-                      </div>
-                      <div with="100%" style="text-align:center;">
-                        <a style="font-size:18px;text-align:center;" href="<%= new_user_session_path %>?go_to_law=<%=@law.id%>">
-                          Inicia sesión
-                        </a>
-                      </div>
-                    </div>
-                  <% end %>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <!--End Modal-->
+        <!--End Modal-->
+      <% end %>
+    </div>
+
+    <div class="sidebar--relacionados d-none d-xl-block">
+    <h4>
+    <i class="fas fa-link"></i>
+    Relacionados</h4>
+    <% if @laws_array %>
+      <% i = 0 %>
+      <% @laws_array.each do |law| %>
+        <% i+=1 %>
+        <div class="collapsable-law-cards col" style="display:<%= i>6 ? 'none' : 'block' %>">
+          <div class="card card-body h-100" style="padding:0px">
+            <a class="" href="<%= law_path(law) %>" style="padding:20px">
+              <p style="font-size: 15px">
+                <% law.materia_names.each do |materia_name| %>
+                  <span class="badge badge-light badge-secondary"><%= materia_name %></span>
+                <% end %>
+              </p>
+              <h5 class="card-title"><%= law.name %></h5>
+              <p class="primaryinfo">[<%= law.creation_number %>]</p>
+              <p class="primaryinfo"><%= law.articles.count %> artículos</p>
+            </a>
+          </div>
+        </div>
+      <% end %>
+
+
+    <% if @laws_array.size > 0 %>
     <% end %>
+  <% end %>
+
   </div>
-</div>
+  </div>
+  </div>
+
   
+
 <script>
   function onIndexElementClicked(section_id) {
     console.log(section_id)
     document.getElementById(section_id).scrollIntoView({block:'center'});
   }
+</script>
+
+<script>
+visible_collapsable_law_cards = 6
+collapsable_law_cards_elements = document.getElementsByClassName("collapsable-law-cards")
+
+if(collapsable_law_cards_elements.length <= 6)
+{
+  hideSeeMoreLawsLink()
+}
+
+function showCards(cards, visible_cards)
+{
+  for(var i=0; i<visible_cards && i<cards.length; i++)
+  {
+    cards[i].style.display = "flex"
+  }
+}
+
+function showCollapsableLawCards() {
+  visible_collapsable_law_cards += 6
+  if(visible_collapsable_law_cards >= collapsable_law_cards_elements.length)
+  {
+    hideSeeMoreLawsLink()
+  }
+  showCards(collapsable_law_cards_elements, visible_collapsable_law_cards)
+}
+
+
+function hideSeeMoreLawsLink()
+{
+  document.getElementById("see_more_laws_link").style.display = "none"
+}
+
 </script>
 
 <style>

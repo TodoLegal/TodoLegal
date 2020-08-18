@@ -36,7 +36,7 @@
             <div class="card-header book-element index-element">
               <section class="index-book" style="white-space: nowrap;">
                 <a class="uncolored_link" href="#book_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('book_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
-                  <b>Libro <%= index_items.number %>
+                  Libro <%= index_items.number %></b>
                 </a>
                   <button type="button" id="btn-collapse-<%= book_index_position %>" class="btn btn-light btn-collapse" onclick="collapseElements('btn-collapse-<%= book_index_position %>', 'index-element-<%= book_index_position %>' )">
                   <i class="fas fa-chevron-down"></i>
@@ -49,32 +49,32 @@
               </section>
             </div>
           <% end %>
-          <% if index_items.instance_of? Title %>
-            <% title_index_position = index_items.position %>
-             <!-- Level 2 Title -->
-            <div class="index-element-<%= book_index_position %>" style="display: <%= title_display%>;">
-              <% chapter_display = 'none'%>
-              
-              <div class="card-header title-element">
-                <section class="index-title" style="white-space: nowrap;">
-                  <a class="uncolored_link" href="#title_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('title_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
-                    Titulo <%= index_items.number %>
-                  </a>
-                  <button type="button" id="btn-collapse-<%= title_index_position %>" class="btn btn-light btn-collapse" onclick="collapseElements('btn-collapse-<%= title_index_position %>', 'index-element-<%= title_index_position %>' )">
-                    <i class="fas fa-chevron-down"></i>
-                  </button>
-                </section>
-                <section class="index-title-name">
-                  <a class="uncolored_link" href="#title_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('title_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
-                    <%= index_items.name %>
-                  </a>
-                </section>
-              </div>
-          <% end %>
-          <% if index_items.instance_of? Chapter %>
-              <% chapter_index_position = index_items.position %>
+              <!-- Level 2 Title -->
+              <div class="index-element-<%= book_index_position %>" style="display: <%= title_display%>;">
+              <% if index_items.instance_of? Title %>
+                <% title_index_position = index_items.position %>
+                <% chapter_display = 'none'%>
+                
+                <div class="card-header title-element">
+                  <section class="index-title" style="white-space: nowrap;">
+                    <a class="uncolored_link" href="#title_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('title_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
+                      Titulo <%= index_items.number %></b>
+                    </a>
+                    <button type="button" id="btn-collapse-<%= title_index_position %>" class="btn btn-light btn-collapse" onclick="collapseElements('btn-collapse-<%= title_index_position %>', 'index-element-<%= title_index_position %>' )">
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                  </section>
+                  <section class="index-title-name">
+                    <a class="uncolored_link" href="#title_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('title_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
+                      <%= index_items.name %>
+                    </a>
+                  </section>
+                </div>
+              <% end %>
               <!-- Level 3 Chapter-->
               <div class="index-element-<%= title_index_position %>" style="display: <%= chapter_display%>;">
+              <% if index_items.instance_of? Chapter %>
+                <% chapter_index_position = index_items.position %>
                 <% section_display = 'none' %> 
                 
                 <div class="card-header chapter-element">
@@ -92,61 +92,53 @@
                     </a>
                   </section>
                 </div>
-          <% end %>
-          <% if index_items.instance_of? Section %>
+              <% end %>
+
+              <!-- Level 4 Section -->
+              <div class="index-element-<%= chapter_index_position %>" style="display: <%= section_display%>;">
+              <% if index_items.instance_of? Section %>
                 <% section_index_position = index_items.position %>
-                <!-- Level 4 Section -->
-                <div class="index-element-<%= chapter_index_position %>" style="display: <%= section_display%>;">
-                  <% subsection_display = 'none' %>
-                  <div class="card-header section-element">
-                    <section class="index-section" style="white-space: nowrap;">
-                      <a class="uncolored_link" href="#section_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('section_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
+                <% subsection_display = 'none' %>
+                <div class="card-header section-element">
+                  <section class="index-section" style="white-space: nowrap;">
+                    <a class="uncolored_link" href="#section_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('section_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
+                      <b>Sección <%= index_items.number %></b></br>
+                    </a>
+                    <button type="button" id="btn-collapse-<%= section_index_position %>" class="btn btn-light btn-collapse" onclick="collapseElements('btn-collapse-<%= section_index_position %>', 'index-element-<%= section_index_position %>' )">
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                  </section>
+                  <section class="index-section-name">
+                    <a class="uncolored_link" href="#section_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('section_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
+                      <%= index_items.name %>
+                    </a>
+                  </section>
+                </div>
+              <% end %>
+                <!-- Level 5 Subsection -->
+                <div class="index-element-<%= section_index_position %>" style="display: <%= subsection_display %>;">
+                <% if index_items.instance_of? Subsection %>
+                  <div class="card-header subsection-element">
+                    <section class="index-subsection" style="white-space: nowrap;">
+                      <a class="uncolored_link" href="#subsection_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('subsection_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
                         <b>Sección <%= index_items.number %></b></br>
                       </a>
-                      <button type="button" id="btn-collapse-<%= section_index_position %>" class="btn btn-light btn-collapse" onclick="collapseElements('btn-collapse-<%= section_index_position %>', 'index-element-<%= section_index_position %>' )">
-                        <i class="fas fa-chevron-down"></i>
-                      </button>
                     </section>
-                    <section class="index-section-name">
-                      <a class="uncolored_link" href="#section_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('section_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
+                    <section class="index-subsection-name">
+                      <a class="uncolored_link" href="#subsection_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('subsection_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
                         <%= index_items.name %>
                       </a>
                     </section>
                   </div>
-          <% end %>
-          <% if index_items.instance_of? Subsection %>
-                  <!-- Level 5 Subsection -->
-                  <div class="index-element-<%= section_index_position %>" style="display: <%= subsection_display %>;">
-                    <div class="card-header subsection-element">
-                      <section class="index-subsection" style="white-space: nowrap;">
-                        <a class="uncolored_link" href="#subsection_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('subsection_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
-                          <b>Sección <%= index_items.number %></b></br>
-                        </a>
-                      </section>
-                      <section class="index-subsection-name">
-                        <a class="uncolored_link" href="#subsection_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('subsection_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
-                          <%= index_items.name %>
-                        </a>
-                      </section>
-                    </div>
-          <% end %>
-                <% if index_items.instance_of? Subsection %>
-                  </div>
-                  <!-- End level 5 -->
                 <% end %>
-              <% if index_items.instance_of? Section %>  
                 </div>
-                <!-- End level 4-->
-              <% end %>
-            <% if index_items.instance_of? Chapter %>
+                <!-- End level 5 -->
               </div>
-              <!-- End level 3  -->
-            <% end %>
-          <% if index_items.instance_of? Title %>
+              <!-- End level 4-->
             </div>
-            <!-- End level 2-->
-          <% end %>
-
+            <!-- End level 3  -->
+          </div>
+          <!-- End level 2-->
         <% end %>
         <!-- End level 1 -->
       <% end %>

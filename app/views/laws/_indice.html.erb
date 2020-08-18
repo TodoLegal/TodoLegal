@@ -25,12 +25,11 @@
         <% title_display = 'block'%>
         <% chapter_display = 'block'%>
         <% section_display = 'block'%>
-        <% subsection_display = 'block'%>
 
         <% @index_items.each do |index_items|%>
-          
-          <!-- Level 1 Book -->
+            
           <% if index_items.instance_of? Book %>
+            <!-- Level 1 Book -->
             <% book_index_position = index_items.position %>
             <% title_display = 'none'%>
            
@@ -50,10 +49,10 @@
               </section>
             </div>
           <% end %>
-          <!-- Level 2 Title -->
-          <div class="index-element-<%= book_index_position %>" style="display: <%= title_display%>;">
-            <% if index_items.instance_of? Title %>
-              <% title_index_position = index_items.position %>
+          <% if index_items.instance_of? Title %>
+            <% title_index_position = index_items.position %>
+             <!-- Level 2 Title -->
+            <div class="index-element-<%= book_index_position %>" style="display: <%= title_display%>;">
               <% chapter_display = 'none'%>
               
               <div class="card-header title-element">
@@ -71,11 +70,11 @@
                   </a>
                 </section>
               </div>
-            <% end %>
-            <!-- Level 3 Chapter-->
-            <div class="index-element-<%= title_index_position %>" style="display: <%= chapter_display%>;">
-              <% if index_items.instance_of? Chapter %>
-                <% chapter_index_position = index_items.position %>
+          <% end %>
+          <% if index_items.instance_of? Chapter %>
+              <% chapter_index_position = index_items.position %>
+              <!-- Level 3 Chapter-->
+              <div class="index-element-<%= title_index_position %>" style="display: <%= chapter_display%>;">
                 <% section_display = 'none' %> 
                 
                 <div class="card-header chapter-element">
@@ -93,11 +92,11 @@
                     </a>
                   </section>
                 </div>
-              <% end %>
-              <!-- Level 4 Section -->
-              <div class="index-element-<%= chapter_index_position %>" style="display: <%= chapter_display%>;">
-                <% if index_items.instance_of? Section %>
-                  <% section_index_position = index_items.position %>
+          <% end %>
+          <% if index_items.instance_of? Section %>
+                <% section_index_position = index_items.position %>
+                <!-- Level 4 Section -->
+                <div class="index-element-<%= chapter_index_position %>" style="display: <%= section_display%>;">
                   <% subsection_display = 'none' %>
                   <div class="card-header section-element">
                     <section class="index-section" style="white-space: nowrap;">
@@ -114,10 +113,10 @@
                       </a>
                     </section>
                   </div>
-                <% end %>
-                <!-- Level 5 Subsection -->
-                <div class="index-element-<%= section_index_position %>" style="display: <%= subsection_display %>;">
-                  <% if index_items.instance_of? Subsection %>
+          <% end %>
+          <% if index_items.instance_of? Subsection %>
+                  <!-- Level 5 Subsection -->
+                  <div class="index-element-<%= section_index_position %>" style="display: <%= subsection_display %>;">
                     <div class="card-header subsection-element">
                       <section class="index-subsection" style="white-space: nowrap;">
                         <a class="uncolored_link" href="#subsection_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('subsection_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
@@ -130,15 +129,24 @@
                         </a>
                       </section>
                     </div>
-                  <% end %>
+          <% end %>
+                <% if index_items.instance_of? Subsection %>
+                  </div>
+                  <!-- End level 5 -->
+                <% end %>
+              <% if index_items.instance_of? Section %>  
                 </div>
-                <!-- End level 5 -->
+                <!-- End level 4-->
+              <% end %>
+            <% if index_items.instance_of? Chapter %>
               </div>
-              <!-- End level 4-->
+              <!-- End level 3  -->
+            <% end %>
+          <% if index_items.instance_of? Title %>
             </div>
-            <!-- End level 3  -->
-          </div>
-          <!-- End level 2-->
+            <!-- End level 2-->
+          <% end %>
+
         <% end %>
         <!-- End level 1 -->
       <% end %>
@@ -157,6 +165,7 @@
       for(let i = 0; i < elements.length; i++){
         if (elements[i].style.display == "none"){
           elements[i].style.display = "block";
+          
         }else if (elements[i].style.display == "block"){
           elements[i].style.display = "none";
         }

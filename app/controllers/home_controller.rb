@@ -99,8 +99,24 @@ class HomeController < ApplicationController
 
   def pricing
     @is_onboarding = params[:is_onboarding]
+    @pricing_onboarding = params[:pricing_onboarding]
     @go_to_law = params[:go_to_law]
     @activate_pro_account = params[:activate_pro_account]
+    @user_just_registered = params[:user_just_registered]
+
+    if @pricing_onboarding
+      @select_basic_plan_path = "/users/sign_up"
+    elsif !@go_to_law.blank?
+      @select_basic_plan_path = Law.find_by_id(@go_to_law)
+    else
+      @select_basic_plan_path = root_path
+    end
+
+    if @pricing_onboarding
+      @select_pro_plan_path = "/users/sign_up"
+    else
+      @select_pro_plan_path = checkout_path
+    end
   end
   
   def invite_friends

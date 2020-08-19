@@ -9,6 +9,12 @@
       <% if @go_to_checkout %>
         <input type="hidden" id="go_to_checkout" name="go_to_checkout" value="<%= @go_to_checkout %>">
       <% end %>
+      <% if @is_monthly %>
+        <input type="hidden" id="is_monthly" name="is_monthly" value="<%= @is_monthly %>">
+      <% end %>
+      <% if @pricing_onboarding %>
+        <input type="hidden" id="pricing_onboarding" name="pricing_onboarding" value="<%= @pricing_onboarding %>">
+      <% end %>
       <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="false">
         <div class="carousel-inner">
           <div class="carousel-item active" id="account">

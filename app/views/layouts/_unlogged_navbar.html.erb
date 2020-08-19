@@ -5,9 +5,16 @@
       <img src="/img/top_navbar/Logo-letras-white.svg" alt="Card image cap" class="todolegal img-fluid">
   </a>
   <form class="form-inline">
-    <a class="btn btn-outline-light" href="/users/sign_in" role="button">
-        Inicia Sesión
-    </a>
+    <div style="padding-left: 10px;">
+      <a class="" style="color:white;" href="<%= pricing_path(is_onboarding: true, pricing_onboarding: true) %>">
+        <u>Precio</u>
+      </a>
+    </div>
+    <div style="padding-left: 10px;">
+      <a class="btn btn-outline-light" href="/users/sign_in" role="button">
+          Inicia Sesión
+      </a>
+    </div>
     <div style="padding-left: 10px;">
       <a class="btn btn-primary" id="registerButton" href="/users/sign_up" role="button">
         Regístrate

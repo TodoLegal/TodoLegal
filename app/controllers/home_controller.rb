@@ -154,11 +154,13 @@ class HomeController < ApplicationController
       end
       return
     end
-    if !params["email1"].blank?
-      SubscriptionsMailer.refer(current_user, params["email1"]).deliver
-    end
-    if !params["email2"].blank?
-      SubscriptionsMailer.refer(current_user, params["email2"]).deliver
+    if ENV['GMAIL_USERNAME']
+      if !params["email1"].blank?
+        SubscriptionsMailer.refer(current_user, params["email1"]).deliver
+      end
+      if !params["email2"].blank?
+        SubscriptionsMailer.refer(current_user, params["email2"]).deliver
+      end
     end
 
     respond_to do |format|

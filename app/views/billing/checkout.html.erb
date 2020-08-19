@@ -169,7 +169,7 @@
       <% end %>
     </div>
 </div>
-<p class="text-left pt-2 pl-3 d-none d-md-block">Si no es lo que buscabas <%= link_to "cambia de suscripción", :back %> </p>
+<p class="text-left pt-2 pl-3 d-none d-md-block">Si no es lo que buscabas <%= link_to "cambia de suscripción", pricing_path(go_to_law: @go_to_law, is_onboarding: @is_onboarding) %> </p>
 </section>
 
 <style>

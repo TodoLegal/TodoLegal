@@ -1,15 +1,21 @@
-<nav class="navbar sticky-top" id="topNavbar">
+<nav class="navbar sticky-top navbar-expand-sm justify-content-between" id="topNavbar">
   <a href="/" class="navbar-brand text-primary" >
       <img src="/img/top_navbar/top_navbar.svg" alt="Card image cap" class="img-fluid" id="logo">
       &nbsp;&nbsp;
       <img src="/img/top_navbar/Logo-letras-white.svg" alt="Card image cap" class="todolegal img-fluid">
   </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+    <ul class="navbar-nav navbar-dark">
+      <li class="nav-item active">
+        <a class="nav-link" href="<%= pricing_path(is_onboarding: true, pricing_onboarding: true) %>">
+        Precio <span class="sr-only">(current)</span>
+        </a>
+      </li>
+    </ul>
   <form class="form-inline">
-    <div style="padding-left: 10px;">
-      <a class="" style="color:white;" href="<%= pricing_path(is_onboarding: true, pricing_onboarding: true) %>">
-        <u>Precio</u>
-      </a>
-    </div>
     <div style="padding-left: 10px;">
       <a class="btn btn-outline-light" href="/users/sign_in" role="button">
           Inicia Sesión
@@ -21,6 +27,7 @@
       </a>
     </div>
   </form>
+  </div>
 </nav>
 
 <style>
@@ -57,4 +64,25 @@
   }
 
   }
+
+  .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(0, 0, 0, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+    display: inline-block;
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: middle;
+    content: "";
+    background: no-repeat center center;
+        background-image: none;
+        background-size: auto;
+    background-size: 100% 100%;
+}
+
+.navbar-expand-sm .navbar-collapse {
+  flex-grow: 0;
+}
+
+nav .navbar-nav li a{
+  color: white !important;
+}
 </style>

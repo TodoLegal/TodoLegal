@@ -4,10 +4,17 @@
       &nbsp;&nbsp;
       <img src="/img/top_navbar/Logo-letras-white.svg" alt="Card image cap" class="todolegal img-fluid">
   </a>
+  <div class="right-nav">
+  <div style="padding-left: 10px;">
+    <a class="btn btn-primary d-xs d-sm-none" id="registerButton" href="/users/sign_up" role="button">
+      Regístrate
+    </a>
+  </div>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+  </div>  
+<div class="collapse navbar-collapse" id="navbarTogglerDemo02">
     <ul class="navbar-nav navbar-dark">
       <li class="nav-item active">
         <a class="nav-link" href="<%= pricing_path(is_onboarding: true, pricing_onboarding: true) %>">
@@ -22,7 +29,7 @@
       </a>
     </div>
     <div style="padding-left: 10px;">
-      <a class="btn btn-primary" id="registerButton" href="/users/sign_up" role="button">
+      <a class="btn btn-primary d-none d-sm-block" id="registerButton" href="/users/sign_up" role="button">
         Regístrate
       </a>
     </div>
@@ -66,8 +73,8 @@
   }
 
   .navbar-toggler-icon {
-    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(0, 0, 0, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
     display: inline-block;
+    position: relative;
     width: 1.5em;
     height: 1.5em;
     vertical-align: middle;
@@ -84,5 +91,51 @@
 
 nav .navbar-nav li a{
   color: white !important;
+}
+
+.navbar-toggler-icon:before,
+.navbar-toggler-icon:after {
+  position: absolute;
+  content: "";
+  margin: auto; 
+  width: 1.5rem;
+}
+
+.navbar-toggler-icon:before {
+  border-top: 2px solid white;
+  border-bottom: 2px solid white;
+  height: 20px; 
+  top: 0;
+  bottom: 0;
+}
+
+.navbar-toggler-icon:after {
+  background: white;
+  height: 2px; 
+  top: 0;
+  bottom: 0;
+}
+
+@media (max-width: 575.98px) {
+
+    .navbar .form-inline,
+    .navbar li {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-end;
+    }
+
+    .navbar .form-inline > div {
+      padding: 0!important; 
+      margin: .5rem 0;
+    }
+
+}
+
+.right-nav {
+  display: flex;
+flex-direction: row;
+align-items: center;
 }
 </style>

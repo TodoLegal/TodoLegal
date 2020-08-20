@@ -10,7 +10,11 @@
 
 <div>
   <% if @articles_count == 0 %>
-    <p>Intenta tu búsqueda de nuevo cambiando las palabras o revisando la ortografía.</p>
+      <p class="body">No se han encontrado documentos que contengan <%= @query.name %>.</p>
+    <img src="/img/img-search-doc.svg" />
+    <p class="body body--secondary">
+      Asegurate que hayas escrito correctamente, sino intenta con un término similar.  Recuerda que puedes refinar tu busqueda por título, palabra clave y número de artículo.
+    </p>
   <% end %>
   <% article_iterator = 0 %>
   <% bigger_section_iterator = 0 %>

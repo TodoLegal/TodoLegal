@@ -15,12 +15,12 @@
               <div class="modal-body">
                 <h5 class="modal-title" id="cancelModalLongTitle">¿Estás seguro que deseas salir?</h5>
                 <label id="labelBasico">
-                  Te recomendamos terminar el onboarding para una mejor experiencia.
+                  Para tener una mejor experiencia te recomendamos completar el proceso de creación de cuenta.
                 </label>
                 <div class="form-group" id="bottonsGroup">
-                  <%= link_to 'Salir', root_path, id:"okButton", class:"btn btn-secondary", style:"padding-top: 10px;"%>
+                  <%= link_to 'Salir', root_path, id:"okButton", class:"btn btn-secondary" %>
                   &nbsp;&nbsp;&nbsp;
-                  <button type="button" id="dismissBtn" class="btn btn-primary" data-dismiss="modal">Terminar el onboarding</button>
+                  <button type="button" id="dismissBtn" class="btn btn-primary" data-dismiss="modal">Continuar</button>
                 </div>
               </div>
             </div>
@@ -51,7 +51,7 @@
     <div class="row row-eq-height">
       <% if !@activate_pro_account %>
       <!-- Free Tier -->
-        <div class="col-lg-6 card card--dark-100 mb-2 mb-lg-0">
+        <div class="col-lg-6 card card--dark-100 mb-5 mb-lg-0 card--basic">
           <div class="card-body">
             <h5 class="card-title">Básico</h5>
             <h6 class="card-price">Grátis</h6>
@@ -254,6 +254,10 @@
      .card.col-lg-6 {
        margin: auto 1rem;
      }
+     .card--basic {
+        margin-bottom: 3rem;
+        border: 1px solid red;
+      }
   }
 
   @media only screen and (min-width: 992px) {
@@ -352,13 +356,15 @@
       margin: auto;
     }
 
+    
+
  /* Move styles to general */
   .modal-body{
     text-align: center;
   }
 
   #okButton{
-    width: 150px;
+    width: auto;
   }
 
   #dismissBtn{

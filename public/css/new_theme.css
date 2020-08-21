@@ -511,4 +511,17 @@ footer p a {
     min-height: calc(100vh - 360px)
 }
 
+.container--empty-results {
+    max-width: 820px;
+    margin: 2rem auto; 
+}
+
+.no-result-message {
+    display: flex;
+    flex-direction: row;
+}
+
+.no-result-message p {
+    color: #495057;
+}
 

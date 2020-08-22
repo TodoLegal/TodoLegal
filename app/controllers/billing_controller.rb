@@ -13,6 +13,9 @@ class BillingController < ApplicationController
     @is_monthly = params[:is_monthly]
     @is_onboarding = params[:is_onboarding]
     @go_to_law = params["go_to_law"]
+    if params["invalid_card"] == "true"
+      @stripe_backend_error = I18n.t(:invalid_card)
+    end
   end
 
   def charge
@@ -20,7 +23,7 @@ class BillingController < ApplicationController
       customer = Stripe::Customer.create(email: current_user.email, source: params["stripeToken"])
     rescue
       respond_to do |format|
-        redirect_path = checkout_path + "?"
+        redirect_path = checkout_path + "?invalid_card=true&"
         if !params["go_to_law"].blank?
           redirect_path += "go_to_law=" + params["go_to_law"] + "&"
         end
@@ -28,7 +31,7 @@ class BillingController < ApplicationController
           redirect_path += "is_monthly=" + params["is_monthly"] + "&"
         end
         redirect_path += "is_onboarding=true"
-        format.html { redirect_to redirect_path, notice: I18n.t(:invalid_card) }
+        format.html { redirect_to redirect_path }
       end
       return
     end

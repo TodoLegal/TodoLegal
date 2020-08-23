@@ -3,7 +3,7 @@
 <div class="jumbotron d-sm-block" align="center" style="padding-top: 0px; padding-bottom: 20px;background-color: #EFF3F8;margin: 0px">
   <a href="/"><img src="/img/logo_landing_mobile.png" class="img-fluid-vertical" height="300"></a>
 </div>
-<div class="container">
+<div class="container container--results">
   <form action="/drive_search" method="get">
     <div id="search-input" class="input-group input-group-lg mb-3 main-search">
       <input name="query" value="<%= @query %>" type="text" class="form-control" placeholder="Busca información sobre el COVID-19" aria-label="Recipient's username" aria-describedby="button-addon2">
@@ -20,8 +20,14 @@
     </button>
   </a>
   <% if @files == [] %>
-    <div class="row">
-      <p>Intenta tu búsqueda de nuevo cambiando las palabras o revisando la ortografía.</p>
+    <div class="container--empty-results">
+      <p class="body">No se han encontrado documentos que contengan <%= @query.name %>.</p>
+      <div class="no-result-message">
+        <img src="/img/img-search-doc.svg" />
+        <p class="body body--secondary">
+          Asegurate que hayas escrito correctamente, sino intenta con un término similar.  Recuerda que puedes refinar tu busqueda por título, palabra clave y número de artículo.
+        </p>
+      </div>
     </div>
   <% else %>
     <div class="row">

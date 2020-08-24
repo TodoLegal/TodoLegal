@@ -1,8 +1,10 @@
 
 <nav class="navbar navbar-expand-lg navbar-light  sticky-top" id="topNavbar">
+    <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, class:"navbar-back-arrow" %>
     <a href="/" class="navbar-brand text-primary" >
-        <img  src="/img/top_navbar/top_navbar.svg" alt="Card image cap" class="img-fluid" id="logo">
-         &nbsp;&nbsp;
+        <img  src="/img/top_navbar/law_top_navbar.svg" alt="Card image cap" class="gray-logo img-fluid">
+        <img  src="/img/top_navbar/top_navbar.svg" alt="Card image cap" class="white-logo img-fluid">
+         
         <img src="/img/top_navbar/Logo-letras-white.svg" alt="Card image cap" class="todolegal img-fluid">
     </a>
     <ul class="navbar-nav" >
@@ -65,8 +67,23 @@
         padding: 5px 20px;
     }
 
-    #logo{
+    .todolegal{
+        margin-left: 18px;
+    }
+
+    .white-logo{
       background-color: #171F2A;
+    }
+
+    .gray-logo{
+        display: none;
+    }
+
+    .navbar-back-arrow{
+        font-size: 1.5rem; 
+        color: black;
+        height: 24px;
+        display: none;
     }
 
     .circle{
@@ -120,8 +137,13 @@
 
     @media only screen and (max-width: 767.98px){
         .todolegal{
-        margin:0px;
-        display: none;
+            margin:0px;
+            display: none;
+        }
+
+        #topNavbar{
+            background: #F2F5F8;
+            justify-content:
         }
 
         .navbar-expand-lg .navbar-nav .dropdown-menu {
@@ -130,6 +152,19 @@
             left: 0;
             top: 62px;
             border-radius: 0 0 2px 2px;
+            background: #F2F5F8;
+        }
+
+        .white-logo{
+            display: none
+        }
+
+        .gray-logo{
+            display: block;
+        }
+
+        .navbar-back-arrow{
+            display: block;
         }
     }
 
@@ -142,8 +177,9 @@
 
    @media only screen and (min-width: 1200px){
 
-    #topNavbar{
-      padding: 5px 10vw;
-  }
+        #topNavbar{
+            padding: 5px 10vw;
+        }
+    }
 </style>
 

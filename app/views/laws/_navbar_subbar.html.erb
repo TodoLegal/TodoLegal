@@ -1,26 +1,46 @@
 <div id="myScrollspy" class="sticky-top" style="top:64px; padding: 0px; padding-top:5px; padding-bottom:5px; background-color: #fff;">
   <div class="row tabs--document p-0">
-    <div class="" style="padding-bottom: 10px;">
+    <div class="menu-bar" style="padding-bottom: 10px;">
       <ul class="nav" id="lawEditorTab" role="tablist">
         <li  class="nav-item active subbar-item" id="item1">
           <a class="nav-link subbar-text" id="articulos-tab" data-toggle="tab" href="#articulos" role="tab" aria-controls="articulos" aria-selected="true">
           <i class="far fa-file-alt subbar-icon"></i>
           Documento</a>
         </li>
-        <li class="nav-item subbar-item" id="item2" >
+        <li class="nav-item subbar-item desktop-menu-item" id="item2" >
           <a class="nav-link subbar-text" data-toggle="tab" href="#indice">
           <i class="far fa-list-alt subbar-icon" data-toggle="tab" href="#indice"></i>
           Índice</a>
         </li>
-        <li class="nav-item subbar-item" id="item3">
+        <li class="nav-item subbar-item desktop-menu-item" id="item3">
           <a class="nav-link subbar-text" data-toggle="tab" href="#modifications">
           <i class="far fa-clock subbar-icon" data-toggle="tab" href="#modifications"></i>
           Modificaciones</a>
         </li>
-        <li class="nav-item subbar-item d-block d-xl-none" id="item4">
+        <li class="nav-item subbar-item mobile-menu-item d-block d-xl-none" id="item4">
           <a class="nav-link subbar-text" data-toggle="tab" href="#related">
           <i class="fas fa-link subbar-icon" data-toggle="tab" href="#related" style="margin-left: 33px;"></i>
           Relacionados</a>
+        </li>
+        <li class="nav-item subbar-item mobile-menu-item" id="item5">
+          <a class="nav-link subbar-text" data-toggle="tab" href="#share">
+          <i class="fas fa-share subbar-icon" data-toggle="tab" href="#share" style="margin-left: 25px;"></i>
+          Compartir</a>
+        </li>
+        <li class="nav-item subbar-item mobile-menu-item" id="item6">
+          <div class="btn-group">
+            <a class="nav-link subbar-text" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+              <i class="fas fa-ellipsis-v subbar-icon" style="margin-left: 33px;"></i>
+              Más
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" style="background-color: white;">
+              <a class="dropdown-item" data-toggle="tab" href="#indice" style="color: black;">
+                <i class="far fa-list-alt" data-toggle="tab" href="#indice" style="margin-right: 10px;"></i>Índice
+              </a>
+              <a class="dropdown-item" data-toggle="tab" href="#modifications" style="color: black;">
+                <i class="far fa-clock" data-toggle="tab" href="#modifications" style="margin-right: 10px;"></i>Modificaciones
+              </a>
+            </div>
         </li>
       </ul>
     </div>
@@ -58,42 +78,63 @@
 </div>
 
 <style>
-br{content:' ';}
-br:after{content:' ';}
+  br{content:' ';}
+  br:after{content:' ';}
 
-.subbar-icon{
-  font-size: 20px;
-  display: block;
-}
-
-.subbar-text{
-  color: #505864;
-  text-align: center;
-  line-height: 1.7rem;
-}
-
-.subbar-text:hover{
-  color: #171F2A;
-}
-
-ul li.active a{
-  color: #171F2A;
-   border-bottom-style: solid;
-   border-bottom-color: #1A7FFA;
-}
-
-.subbar-item{
-  text-align: center;
-  line-height: 1.2rem;
-}
-@media only screen and (max-width: 767.98px){
-  .subbar-text{
-    font-size: 13px;
-    padding-right: 5px;
-    padding-left: 5px;
-    padding-top: 0px;
+  .subbar-icon{
+    font-size: 20px;
+    display: block;
   }
-}
+
+  .subbar-text{
+    color: #505864;
+    text-align: center;
+    line-height: 1.7rem;
+  }
+
+  .subbar-text:hover{
+    color: #171F2A;
+  }
+
+  ul li.active a{
+    color: #171F2A;
+    border-bottom-style: solid;
+    border-bottom-color: #1A7FFA;
+  }
+
+  .subbar-item{
+    text-align: center;
+    line-height: 1.2rem;
+  }
+
+  .desktop-menu-item{
+    display: block;
+  }
+
+  .mobile-menu-item{
+    display: none;
+  }
+
+  .menu-bar{
+
+  }
+  @media only screen and (max-width: 767.98px){
+    .subbar-text{
+      font-size: 13px;
+      padding-right: 5px;
+      padding-left: 5px;
+      padding-top: 0px;
+    }
+
+    .desktop-menu-item{
+      display: none;
+    }
+
+    .mobile-menu-item{
+      display: block;
+    }
+
+  }
 </style>
 
 <script>
@@ -101,12 +142,16 @@ ul li.active a{
   var item2 = document.getElementById("item2");
   var item3 = document.getElementById("item3");
   var item4 = document.getElementById("item4");
+  var item5 = document.getElementById("item5");
+  var item6 = document.getElementById("item6");
 
   item1.addEventListener("click", function () {
     item1.classList.add('active');
     item2.classList.remove('active');
     item3.classList.remove('active');
     item4.classList.remove('active');
+    item5.classList.remove('active');
+    item6.classList.remove('active');
   })
 
   item2.addEventListener("click", function () {
@@ -114,6 +159,8 @@ ul li.active a{
     item1.classList.remove('active');
     item3.classList.remove('active');
     item4.classList.remove('active');
+    item5.classList.remove('active');
+    item6.classList.remove('active');
   })
 
   item3.addEventListener("click", function () {
@@ -121,6 +168,8 @@ ul li.active a{
     item1.classList.remove('active');
     item2.classList.remove('active');
     item4.classList.remove('active');
+    item5.classList.remove('active');
+    item6.classList.remove('active');
   })
 
   item4.addEventListener("click", function () {
@@ -128,5 +177,23 @@ ul li.active a{
     item1.classList.remove('active');
     item2.classList.remove('active');
     item3.classList.remove('active');
+    item5.classList.remove('active');
+    item6.classList.remove('active');
+  })
+
+  item5.addEventListener("click", function () {
+    item4.classList.add('active');
+    item1.classList.remove('active');
+    item2.classList.remove('active');
+    item3.classList.remove('active');
+    item6.classList.remove('active');
+  })
+
+  item6.addEventListener("click", function () {
+    item4.classList.add('active');
+    item1.classList.remove('active');
+    item2.classList.remove('active');
+    item3.classList.remove('active');
+    item5.classList.remove('active');
   })
 </script>

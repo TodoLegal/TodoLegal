@@ -4,12 +4,12 @@
   <% content_for :title, @query + " - TodoLegal" %>
 <% end %>
 
-<div class="container">
+<div class="container container--results">
 
   <%= render partial: 'search_law_input', locals: {target_url: '/search_law', home_flag: false} %>
 
   <%= render 'search_result' %>
 
-  <%= link_to 'Ir al inicio', root_path %>
+  <%# <%= link_to 'Ir al inicio', root_path %>
 
 </div>

@@ -1,9 +1,9 @@
 <% content_for :title, @law.name + " - TodoLegal" %>
-  <%= render 'law_navbar' %>
-  <div class="container container--visualizador" data-spy="scroll" data-target="#myScrollspy">
-    <div class="law-header-desktop"><%= render 'law_header' %></div>
-    
-    <div class="container--documento">
+<%= render 'law_navbar' %>
+<div class="container container--visualizador" data-spy="scroll" data-target="#myScrollspy">
+  <div class="law-header-desktop"><%= render 'law_header' %></div>
+  
+  <div class="container--documento">
     <div class="inner-continer--visualizador" style="padding-top:60">
       <%= render 'navbar_subbar' %>
 
@@ -117,38 +117,42 @@
       <% end %>
     </div>
 
+    <!-- Sidebar -->
     <div class="sidebar--relacionados d-none d-xl-block">
-    <h4>
-    <i class="fas fa-link"></i>
-    Relacionados</h4>
-    <% if @laws_array %>
-      <% i = 0 %>
-      <% @laws_array.each do |law| %>
-        <% i+=1 %>
-        <div class="collapsable-law-cards col" style="display:<%= i>6 ? 'none' : 'block' %>">
-          <div class="card card-body h-100" style="padding:0px">
-            <a class="" href="<%= law_path(law) %>" style="padding:20px">
-              <p style="font-size: 15px">
-                <% law.materia_names.each do |materia_name| %>
-                  <span class="badge badge-light badge-secondary"><%= materia_name %></span>
-                <% end %>
-              </p>
-              <h5 class="card-title"><%= law.name %></h5>
-              <p class="primaryinfo">[<%= law.creation_number %>]</p>
-              <p class="primaryinfo"><%= law.articles.count %> artículos</p>
-            </a>
-          </div>
-        </div>
+      <h4>
+        <i class="fas fa-link"></i>
+        Relacionados
+      </h4>
+      <% if @laws_array %>
+        <% i = 0 %>
+        <% @laws_array.each do |law| %>
+          <%if  i <= 2%>
+            <% i+=1 %>
+            <div class="collapsable-law-cards col" style="display:<%= i>6 ? 'none' : 'block' %>">
+              <div class="card card-body h-100" style="padding:0px">
+                <a class="" href="<%= law_path(law) %>" style="padding:20px">
+                  <p style="font-size: 15px">
+                    <% law.materia_names.each do |materia_name| %>
+                      <span class="badge badge-light badge-secondary"><%= materia_name %></span>
+                    <% end %>
+                  </p>
+                  <h5 class="card-title"><%= law.name %></h5>
+                  <p class="primaryinfo">[<%= law.creation_number %>]</p>
+                  <p class="primaryinfo"><%= law.articles.count %> artículos</p>
+                </a>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+        <% if @laws_array.size > 3 %>
+          <%= button_to "Ver más documentos", tag_path(@tag), method: :get, remote: true, class:"btn btn-block btn-outline-primary see--more", style:"margin-top: 15px;width: auto;"%>
+        <% end %>
       <% end %>
-
-
-    <% if @laws_array.size > 0 %>
-    <% end %>
-  <% end %>
-
+    </div>
+    <!-- Sidebar end-->
+    
   </div>
-  </div>
-  </div>
+</div>
 
   
 
@@ -157,40 +161,6 @@
     console.log(section_id)
     document.getElementById(section_id).scrollIntoView({block:'center'});
   }
-</script>
-
-<script>
-visible_collapsable_law_cards = 6
-collapsable_law_cards_elements = document.getElementsByClassName("collapsable-law-cards")
-
-if(collapsable_law_cards_elements.length <= 6)
-{
-  hideSeeMoreLawsLink()
-}
-
-function showCards(cards, visible_cards)
-{
-  for(var i=0; i<visible_cards && i<cards.length; i++)
-  {
-    cards[i].style.display = "flex"
-  }
-}
-
-function showCollapsableLawCards() {
-  visible_collapsable_law_cards += 6
-  if(visible_collapsable_law_cards >= collapsable_law_cards_elements.length)
-  {
-    hideSeeMoreLawsLink()
-  }
-  showCards(collapsable_law_cards_elements, visible_collapsable_law_cards)
-}
-
-
-function hideSeeMoreLawsLink()
-{
-  document.getElementById("see_more_laws_link").style.display = "none"
-}
-
 </script>
 
 <style>
@@ -212,8 +182,8 @@ function hideSeeMoreLawsLink()
 
   .law-header-mobile{
     display: none;
-  }
-
+  } 
+  
   @media only screen and (max-width: 767.98px){
     .container-law{
       padding: 0px;
@@ -235,5 +205,6 @@ function hideSeeMoreLawsLink()
     .law-header-mobile{
       display: block;
     }
+
   }
 </style>

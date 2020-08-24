@@ -48,6 +48,8 @@ function createToken() {
       var errorElement = document.getElementById('card-errors');
       errorElement.textContent = result.error.message;
     } else {
+      document.getElementById('loading-spinner').style.display = 'none'
+      document.getElementById('processing-payment').style.display = 'none'
       document.getElementById('payment-successful').style.display = 'block'
       // Send the token to your server
       stripeTokenHandler(result.token);

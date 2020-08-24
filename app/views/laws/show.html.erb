@@ -1,6 +1,15 @@
 <% content_for :title, @law.name + " - TodoLegal" %>
 <%= render 'law_navbar' %>
 <div class="container container--visualizador" data-spy="scroll" data-target="#myScrollspy">
+
+  <!-- Copied to clipboard alert -->
+  <div class="alert alert-success alert-dismissible fade show" id="clipboard-alert" role="alert" style="display: none;"> 
+    <button type="button" class="close" onclick="hideAlert()">
+    <span aria-hidden="true">&times;</span>
+    </button>
+      La URL ha sido copiada, ahora puedes compartirlo con tus amigos.
+  </div>
+
   <div class="law-header-desktop"><%= render 'law_header' %></div>
   
   <div class="container--documento">

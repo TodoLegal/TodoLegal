@@ -525,3 +525,15 @@ footer p a {
     color: #495057;
 }
 
+@media only screen and (min-width: 767.98px) {
+    .modal--document .modal-body {
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+    }
+
+    .modal--document .btn {
+        max-width: 210px;
+        margin: 1rem auto;
+    }
+}
+

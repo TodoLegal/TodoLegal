@@ -1,6 +1,7 @@
 <% content_for :title, @law.name + " - TodoLegal" %>
-<%= render 'law_navbar' %>
-<div class="container container--visualizador" data-spy="scroll" data-target="#myScrollspy">
+
+<%= render 'law_navbar'%>
+<div class="container container--visualizador" data-spy="scroll" data-target="#myScrollspy" style="display: block;">
 
   <!-- Copied to clipboard alert -->
   <div class="alert alert-success alert-dismissible fade show" id="clipboard-alert" role="alert" style="display: none;"> 
@@ -159,16 +160,25 @@
       <% end %>
     </div>
     <!-- Sidebar end-->
-    
   </div>
 </div>
 
-  
+<!-- search container -->
+<div class="container search--container" style="display: none;">
+  <%= render 'search_in_document' %>
+</div>
 
 <script>
   function onIndexElementClicked(section_id) {
     console.log(section_id)
     document.getElementById(section_id).scrollIntoView({block:'center'});
+  }
+
+  function hideSearchContainer () {
+    console.log("hide search container");
+    document.getElementsByClassName("search--container")[0].style.display = "none";
+    document.getElementsByClassName("container--visualizador")[0].style.display = "block";
+    document.getElementById("topNavbar").style.display = "flex";
   }
 </script>
 

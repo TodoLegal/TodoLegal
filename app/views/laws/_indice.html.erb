@@ -48,6 +48,9 @@
           </div>
         <% end %>
         <!-- Level 2 Title -->
+        <%if book_index_position == 0 %>
+          <% book_index_position = 12777 %>
+        <% end %>
         <div class="index-element-<%= book_index_position %>" style="display: <%= title_display%>;">
           <% if index_items.instance_of? Title %>
             <% title_index_position = index_items.position %>
@@ -70,6 +73,9 @@
             </div>
           <% end %>
           <!-- Level 3 Chapter-->
+          <%if title_index_position == 0 %>
+            <% book_index_position = 24855 %>
+          <% end %>
           <div class="index-element-<%= title_index_position %>" style="display: <%= chapter_display%>;">
             <% if index_items.instance_of? Chapter %>
               <% chapter_index_position = index_items.position %>
@@ -93,6 +99,9 @@
             <% end %>
 
             <!-- Level 4 Section -->
+            <%if chapter_index_position == 0 %>
+              <% chapter_index_position = 34855 %>
+            <% end %>
             <div class="index-element-<%= chapter_index_position %>" style="display: <%= section_display%>;">
               <% if index_items.instance_of? Section %>
                 <% section_index_position = index_items.position %>

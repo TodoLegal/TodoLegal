@@ -69,17 +69,11 @@
       <% end %>
 
       <!-- Pro Tier -->
-        <div class="col-lg-6 card card--dark-100 card--discount" id="pro-tier">
+        <div class="col-lg-6 card card--dark-100" id="pro-tier">
           <div class="card-body">
             <h5 class="card-title">Pro</h5>
-            <!-- Provitional code for discount><!-->
-            <h6 class="card-price">$3.00<span class="period">/mensual</span></h6>
-            <small>Facturado a <strong>$36.00</strong> anual</small>
-
-            <!-- Uncomment after Aug 17>
             <h6 class="card-price">$6.00<span class="period">/mensual</span></h6>
             <small>Facturado a <strong>$72.00</strong> anual</small>
-            <!-->
             <p class="body plan-description">Para profesionales que requieran información legal avanzada.</p>
             <hr>
             <ul class="fa-ul">
@@ -98,10 +92,9 @@
           <div class="card-body">
             <h5 class="card-title">Pro</h5>
             <h6 class="card-price">$7.00<span class="period">/mensual</span></h6>
-            <!-- Provitional discount ><!-->
-            <small>Podrás ahorrar <strong>50%</strong> si eliges el
+            <small>Podrás ahorrar <strong>15%</strong> si eliges el
              <!-- Agregar el switch de mensual a anual tambien  -->
-             <label class="link" onclick="changePlan(1)">pago anual</label> antes del 24 de agosto.</small>
+             <label class="link" onclick="changePlan(1)">pago anual</label>.</small>
             <p class="body plan-description">Para profesionales que requieran información legal avanzada.</p>
             <hr>
             <ul class="fa-ul">
@@ -147,7 +140,7 @@
     border-radius: 0 0 4px 4px;
   }
 
-  /* Remove selector after 17 Aug */
+  /* Label discount
   .pricing .card.card--discount:before {
     background: #1A7FFA;
     content: "50% Descuento válido hasta el 24 de agosto";
@@ -163,8 +156,8 @@
     border: 1px solid #1A7FFA;
     font-weight: bold;
   }  
-
-  /* Remove media query after 17 Aug */
+*/
+  /* Remove media query after 17 Aug
   @media (max-width: 375.98px) {
 
     .pricing .card.card--discount:before {
@@ -173,7 +166,7 @@
     }  
 
    }
-
+*/
   @media only screen and (max-width: 767.98px) {
     section.pricing {
         background: white;

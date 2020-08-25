@@ -53,8 +53,7 @@ class BillingController < ApplicationController
         customer: customer.id,
         items: [{
           price: STRIPE_YEAR_SUBSCRIPTION_PRICE
-        }],
-        coupon: STRIPE_LAUNCH_COUPON_ID
+        }]
       })
       if $discord_bot
         $discord_bot.send_message($discord_bot_channel_notifications, "Se ha registrado un usuario Pro por 1 año :dancer:")

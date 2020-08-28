@@ -23,10 +23,11 @@
           Relacionados</a>
         </li>
         <li class="nav-item subbar-item mobile-menu-item" id="item5">
-          <a class="nav-link subbar-text" data-toggle="tab" href="#share">
+          <a class="nav-link subbar-text clipboard" data-toggle="tab" href="#share">
           <i class="fas fa-share subbar-icon" data-toggle="tab" href="#share" style="margin-left: 25px;"></i>
           Compartir</a>
         </li>
+        
         <li class="nav-item subbar-item mobile-menu-item" id="item6">
           <div class="btn-group">
             <a class="nav-link subbar-text" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
@@ -44,9 +45,12 @@
         </li>
       </ul>
     </div>
-    <div class="col-12 col-xl-4" style="padding-bottom: 10px;">
+    <div class="col-12 col-xl-5 desktop-menu-item" style="padding-bottom: 10px;">
       <form class="form-inline" action="<%= law_path(@law) %>" method="get" id="search-law-form">
         <div class="input-group">
+          <button type="button" class="btn btn-outline-secondary  desktop-menu-item clipboard btn-share">
+            <i class="fas fa-share subbar-icon"></i>
+          </button>
           <input type="text" class="form-control" name="query" type="search" placeholder="Buscar" value="<%= @query %>" aria-label="Buscar">
           <div class="input-group-append">
             <button class="btn btn-secondary" style="background-color: #FF5722;border-color: #FF5722;" type="submit" onclick="document.getElementById('loading-spinner').style.display = 'block';document.getElementById('search-law-form').style.display = 'none'">
@@ -115,9 +119,12 @@
     display: none;
   }
 
-  .menu-bar{
-
+  .btn-share{
+    margin-right: 8px;
+    border: 1px solid #DFE7F1;
   }
+
+  
   @media only screen and (max-width: 767.98px){
     .subbar-text{
       font-size: 13px;
@@ -196,4 +203,21 @@
     item3.classList.remove('active');
     item5.classList.remove('active');
   })
+
+  //Copy to clipboard
+  var $temp = $("<input>");
+  var $url = $(location).attr('href');
+
+  $('.clipboard').on('click', function() {
+    $("body").append($temp);
+    $temp.val($url).select();
+    document.execCommand("copy");
+    $temp.remove();
+    // $("p").text("URL copied!");
+    document.getElementById("clipboard-alert").style.display = "block";
+  })
+
+  function hideAlert(){
+    document.getElementById("clipboard-alert").style.display = "none";
+  }
 </script>

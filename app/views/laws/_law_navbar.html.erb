@@ -9,6 +9,9 @@
     </a>
     <ul class="navbar-nav" >
         <div class="btn-group">
+            <button type="button" class="btn btn-light search-button" onclick="hideDocumentContainer()">
+                <i class="fas fa-search"></i>
+            </button>
             <button type="button" class="btn btn-primary btn-lg btn-avatar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border-radius: 50%;"  data-display="static" id="menu-botton">
                 <% if current_user.first_name %>
                     <%= current_user.first_name[0]%>
@@ -57,6 +60,15 @@
         </div>
     </ul>
 </nav>
+
+<script>
+    function hideDocumentContainer () {
+        console.log("hide document container");
+        document.getElementsByClassName("container--visualizador")[0].style.display = "none";
+        document.getElementById("topNavbar").style.display = "none";
+        document.getElementsByClassName("search--container")[0].style.display = "block";
+    }
+</script>
 
 <style>
     #topNavbar{
@@ -112,8 +124,11 @@
         /* padding-left: 15%; */
     }
 
-    #menu-botton{
-        
+    .search-button{
+        display: none;
+        background: #F2F5F8;
+        /* border: none; */
+        /* outline: none; */
     }
 
     .dropdown-menu .btn-avatar-large {
@@ -161,9 +176,14 @@
 
         .gray-logo{
             display: block;
+            margin-left: 85%;
         }
 
         .navbar-back-arrow{
+            display: block;
+        }
+
+        .search-button{
             display: block;
         }
     }

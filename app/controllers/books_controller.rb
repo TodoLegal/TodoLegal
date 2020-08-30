@@ -1,12 +1,6 @@
 class BooksController < ApplicationController
   before_action :set_book, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_editor!, only: [:index, :show, :new, :edit, :create, :update, :destroy]
-
-  # GET /books
-  # GET /books.json
-  def index
-    @books = Book.all
-  end
+  before_action :authenticate_editor!, only: [:show, :new, :edit, :create, :update, :destroy]
 
   # GET /books/1
   # GET /books/1.json

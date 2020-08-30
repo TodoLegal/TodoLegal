@@ -1,12 +1,6 @@
 class LawModificationsController < ApplicationController
   before_action :set_law_modification, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_editor!, only: [:index, :show, :new, :edit, :create, :update, :destroy]
-
-  # GET /law_modifications
-  # GET /law_modifications.json
-  def index
-    @law_modifications = LawModification.all
-  end
+  before_action :authenticate_editor!, only: [:show, :new, :edit, :create, :update, :destroy]
 
   # GET /law_modifications/1
   # GET /law_modifications/1.json

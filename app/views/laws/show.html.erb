@@ -34,7 +34,7 @@ function onIndexElementClicked(section_id) {
     <% if !@user_can_access_law %>
       <p>Crea una cuenta para acceder a esta ley</p>
       <!-- Modal -->
-      <div class="modal fade" data-keyboard="false" data-backdrop="static" id="modalCreateBasicAccount" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal fade modal--document" data-keyboard="false" data-backdrop="static" id="modalCreateBasicAccount" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
             <div class="modal-body">
@@ -43,51 +43,54 @@ function onIndexElementClicked(section_id) {
                   <% if current_user %>
                     <!-- Modal "Cambar a cuenta Pro" -->
                     <div class="col-md-12">
-                      <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, style:"font-size: 1.5rem; color:black;" %>
-                      <p  style="font-size:22px; text-align:center; display:inline; margin-left: 8%;">
-                      <b>Suscríbete y obtén acceso ilimitado</b>
-                      </p>
+                      <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, style:"font-size: 1.5rem; color:#505864;" %>
+                      <h3 style="font-size:22px; text-align:center; margin-left: 8%;">
+                      Para consultar este documento requieres tener el Plan Pro
+                      </h3>
                     </div>
                     <div class="col-md-12">
                       <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
-                      Para leer esta ley adquiere el plan Pro, por <b>$3.5</b> podrás acceder a este y más de <b><%= (Law.count/10)*10 %> documentos</b>.
+                      Adquierelo por <b>$7.00 al mes</b> y podrás acceder a los más de<%= (Law.count/10)*10 %> dpcumentos legales y a lo que continuamente agregamos.
                     </p>
+                    <p style="font-size:18px; text-align:center;">
+                          <i class="text-muted">Puedes cancelar la suscripción en cualquier momento.</i>
+                        </p>
                     </div>
                     <div class="col-md-12">
                       <a href="<%= pricing_path(activate_pro_account: true, go_to_law: @law.id) %>">
-                        <button type="button" class="btn btn-primary btn-block">Adquirir plan Pro</button>
+                        <button type="button" class="btn btn-primary btn-block">Adquirir Plan Pro</button>
                       </a>
                     </div>
                   <% else %>
                     <% if @law.law_access.name == "Pro" %>
                       <!-- Modal "Crear cuenta Pro" -->
                       <div class="col-md-12">
-                        <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, style:"font-size: 1.5rem; color:black;" %>
-                        <p  style="font-size:22px; text-align:center; display:inline; margin-left: 8%;">
-                        <b>Suscríbete y obtén acceso ilimitado</b>
-                        </p>
+                        <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, style:"font-size: 1.5rem; color:#505864;" %>
+                        <h3 style="font-size:22px; text-align:center; margin-left: 8%;">
+                        Suscríbete y obtén acceso ilimitado
+                        </h3>
                       </div>
                       <div class="col-md-12">
-                        <p style="font-size:18px; text-align:center; padding-top: 22px;">
-                          Activa una suscripción de <b>$3.5</b> para acceder a todo el contenido.
+                        <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
+                      Adquiere el <b>Plan Pro</b> por <b>$7.00 al mes</b> y podrás acceder a más de <%= (Law.count/10)*10 %> documentos legales y a lo que continuamente agregamos.
+                        <p style="font-size:18px; text-align:center;">
+                          <i class="text-muted">Puedes cancelar la suscripción en cualquier momento.</i>
                         </p>
-                        <p style="font-size:18px; text-align:center; padding-bottom: 22px">
-                          <i>Puedes cancelar en cualquier momento.</i>
-                        </p>
+                        
                       </p>
                       </div>
                       <div class="col-md-12">
                         <a href="<%= new_user_registration_path %>?go_to_law=<%=@law.id%>&go_to_checkout=true">
-                          <button type="button" class="btn btn-primary btn-block">Crear cuenta Pro</button>
+                          <button type="button" class="btn btn-primary btn-block">Crear cuenta</button>
                         </a>
                       </div>
                     <% else %>
                       <!-- Modal "Crear cuenta Básica" -->
                       <div class="col-md-12">
-                        <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, style:"font-size: 1.5rem; color:black;" %>
-                        <p  style="font-size:22px; text-align:center; display:inline; margin-left: 8%;">
-                        <b>Regístrate y accede a esta ley</b>
-                        </p>
+                        <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, style:"font-size: 1.5rem; color:#505864;" %>
+                        <h3 style="font-size:22px; text-align:center; margin-left: 8%;">
+                        Regístrate y accede a este documento
+                        </h3>
                       </div>
                       <div class="col-md-12">
                         <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
@@ -101,7 +104,7 @@ function onIndexElementClicked(section_id) {
                       </div>
                     <% end %>
                     <div class="col-md-12">
-                      <div with="100%" style="text-align:center; padding-top: 22px;">
+                      <div with="100%" style="text-align:center;">
                         ¿Ya tienes cuenta?
                       </div>
                       <div with="100%" style="text-align:center;">

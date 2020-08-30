@@ -10,7 +10,15 @@
 <% end %>
 
 <% if @result_count == 0 %>
-  <p>Intenta tu búsqueda de nuevo cambiando las palabras o revisando la ortografía.</p>
+  <div class="container--empty-results">
+    <p class="body">No se han encontrado documentos que contengan <%= @query %>.</p>
+    <div class="no-result-message">
+      <img src="/img/img-search-doc.svg" />
+      <p class="body body--secondary">
+        Asegurate que hayas escrito correctamente, sino intenta con un término similar.  Recuerda que puedes refinar tu busqueda por título, palabra clave y número de artículo.
+      </p>
+    </div>
+  </div>
 <% end %>
 
 <p class="resultinfo">
@@ -46,7 +54,6 @@
   <br>
 
   <% if @laws.size > 0 %>
-    <hr>
   <% end %>
 <% end %>
 

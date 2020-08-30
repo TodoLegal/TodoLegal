@@ -34,6 +34,6 @@ en:
   referal_sent: 'Hemos enviado correos de invitación a tus amigos.'
   email_taken: 'Este email ya está registrado en TodoLegal.'
   charge_complete: 'Has activado tu membresía Pro exitosamente.'
-  invalid_card: 'Error: No pudimos procesar tu tarjeta.'
+  invalid_card: 'No pudimos procesar tu pago, revisa los datos e inténtalo de nuevo.'
   plan_is_already_active: 'No procesamos tu suscripción. Motivo: Tu plan ya está activo.'
   login_required: 'Debes iniciar sesión para realizar esta acción.'

@@ -3,7 +3,7 @@ class LawsController < ApplicationController
   layout 'application', only: [:index]
   before_action :set_law, only: [:show, :edit, :update, :destroy]
   before_action :set_materias, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_admin!, only: [:index, :new, :edit, :create, :update, :destroy]
+  before_action :authenticate_editor!, only: [:index, :new, :edit, :create, :update, :destroy]
 
   # GET /laws
   # GET /laws.json
@@ -136,7 +136,7 @@ class LawsController < ApplicationController
       @has_articles_only = book_iterator == 0 && title_iterator == 0 && chapter_iterator == 0 && subsection_iterator == 0 && section_iterator == 0
     end
 
-    @user_can_edit_law = current_user_is_admin
+    @user_can_edit_law = current_user_is_editor
     @user_can_access_law = user_can_access_law @law, current_user
     if !@user_can_access_law
       @stream = @stream.take(5)

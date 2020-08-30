@@ -15,12 +15,12 @@
               <div class="modal-body">
                 <h5 class="modal-title" id="cancelModalLongTitle">¿Estás seguro que deseas salir?</h5>
                 <label id="labelBasico">
-                  Te recomendamos terminar el onboarding para una mejor experiencia.
+                  Para tener una mejor experiencia te recomendamos completar el proceso de creación de cuenta.
                 </label>
                 <div class="form-group" id="bottonsGroup">
-                  <%= link_to 'Salir', root_path, id:"okButton", class:"btn btn-secondary", style:"padding-top: 10px;"%>
+                  <%= link_to 'Salir', root_path, id:"okButton", class:"btn btn-secondary" %>
                   &nbsp;&nbsp;&nbsp;
-                  <button type="button" id="dismissBtn" class="btn btn-primary" data-dismiss="modal">Terminar el onboarding</button>
+                  <button type="button" id="dismissBtn" class="btn btn-primary" data-dismiss="modal">Continuar</button>
                 </div>
               </div>
             </div>
@@ -28,12 +28,14 @@
         </div>
         <!--End Cancel modal -->
 
-    <div class="alert alert-success alert-dismissible fade show" role="alert" id="savedArticle"> 
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-      </button>
-        La información de perfil ha sido guardada, procede a elegir un plan para tu cuenta.
-    </div>
+    <% if @user_just_registered %>
+      <div class="alert alert-success alert-dismissible fade show" role="alert" id="savedArticle"> 
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+          La información de perfil ha sido guardada, procede a elegir un plan para tu cuenta.
+      </div>
+    <% end %>
   <% end %>
 
 
@@ -49,10 +51,10 @@
     <div class="row row-eq-height">
       <% if !@activate_pro_account %>
       <!-- Free Tier -->
-        <div class="col-lg-6 card card--dark-100 mb-2 mb-lg-0">
+        <div class="col-lg-6 card card--dark-100 mb-5 mb-lg-0 card--basic">
           <div class="card-body">
             <h5 class="card-title">Básico</h5>
-            <h6 class="card-price">Grátis</h6>
+            <h6 class="card-price">Gratis</h6>
             <p class="body plan-description">Abierto a cualquier persona para  consultas de la legislación hondureña.</p>
             <hr>
             <ul class="fa-ul">
@@ -61,27 +63,17 @@
             </ul>
           </div>
           <div class="card-bottom">
-            <% if !@go_to_law.blank? %>
-              <%= button_to "Continuar con Plan Básico", Law.find_by_id(@go_to_law), method: :get, remote: true, class:"btn btn-block btn-outline-primary", id:"btnBasico" %>
-            <% else %>
-              <%= button_to "Continuar con Plan Básico", root_path, method: :get, remote: true, class:"btn btn-block btn-outline-primary", id:"btnBasico" %>
-            <% end %>
+            <%= button_to "Continuar con Plan Básico", @select_basic_plan_path, method: :get, params: {pricing_onboarding: @pricing_onboarding}, class:"btn btn-block btn-outline-primary" %>
           </div>
         </div>
       <% end %>
 
       <!-- Pro Tier -->
-        <div class="col-lg-6 card card--dark-100 card--discount" id="pro-tier">
+        <div class="col-lg-6 card card--dark-100" id="pro-tier">
           <div class="card-body">
             <h5 class="card-title">Pro</h5>
-            <!-- Provitional code for discount><!-->
-            <h6 class="card-price">$3.00<span class="period">/mensual</span></h6>
-            <small>Facturado a <strong>$36.00</strong> anual</small>
-
-            <!-- Uncomment after Aug 17>
             <h6 class="card-price">$6.00<span class="period">/mensual</span></h6>
             <small>Facturado a <strong>$72.00</strong> anual</small>
-            <!-->
             <p class="body plan-description">Para profesionales que requieran información legal avanzada.</p>
             <hr>
             <ul class="fa-ul">
@@ -90,11 +82,7 @@
             </ul>
           </div>
           <div class="card-bottom">
-            <% if @is_onboarding %>
-              <%= button_to "Elegir Plan Pro", checkout_path, method: :get, params: {is_onboarding: @is_onboarding, go_to_law: @go_to_law}, remote: true, class:"btn btn-block btn-primary"%>
-            <% else %>
-              <%= button_to "Elegir Plan Pro", checkout_path, method: :get, params: {go_to_law: @go_to_law}, remote: true, class:"btn btn-block btn-primary"%>
-            <% end %>
+            <%= button_to "Elegir Plan Pro", @select_pro_plan_path, method: :get, params: {is_onboarding: @is_onboarding, pricing_onboarding: @pricing_onboarding, go_to_law: @go_to_law}, class:"btn btn-block btn-primary"%>
             <p class="text-center py-2 change-plan-link" onclick="changePlan(2)">Cambiar a pago mensual</p>
           </div>
       </div>
@@ -104,10 +92,9 @@
           <div class="card-body">
             <h5 class="card-title">Pro</h5>
             <h6 class="card-price">$7.00<span class="period">/mensual</span></h6>
-            <!-- Provitional discount ><!-->
-            <small>Podrás ahorrar <strong>50%</strong> si eliges el
+            <small>Podrás ahorrar <strong>15%</strong> si eliges el
              <!-- Agregar el switch de mensual a anual tambien  -->
-             <label class="link" onclick="changePlan(1)">pago anual</label> antes del 24 de agosto.</small>
+             <label class="link" onclick="changePlan(1)">pago anual</label>.</small>
             <p class="body plan-description">Para profesionales que requieran información legal avanzada.</p>
             <hr>
             <ul class="fa-ul">
@@ -116,11 +103,7 @@
             </ul>
           </div>
           <div class="card-bottom">
-            <% if @is_onboarding %>
-              <%= button_to "Elegir Plan Pro", checkout_path, method: :get, params: {is_monthly: true, is_onboarding: @is_onboarding, go_to_law: @go_to_law}, remote: true, class:"btn btn-block btn-primary"%>
-            <% else %>
-              <%= button_to "Elegir Plan Pro", checkout_path, method: :get, params: {is_monthly: true, go_to_law: @go_to_law}, remote: true, class:"btn btn-block btn-primary"%>
-            <% end %>
+            <%= button_to "Elegir Plan Pro", @select_pro_plan_path, method: :get, params: {is_monthly: true, is_onboarding: @is_onboarding, pricing_onboarding: @pricing_onboarding, go_to_law: @go_to_law}, class:"btn btn-block btn-primary"%>
             <p class="text-center py-2 change-plan-link" onclick="changePlan(1)">Cambiar a pago anual</p>
           </div>
         </div>
@@ -157,7 +140,7 @@
     border-radius: 0 0 4px 4px;
   }
 
-  /* Remove selector after 17 Aug */
+  /* Label discount
   .pricing .card.card--discount:before {
     background: #1A7FFA;
     content: "50% Descuento válido hasta el 24 de agosto";
@@ -173,8 +156,8 @@
     border: 1px solid #1A7FFA;
     font-weight: bold;
   }  
-
-  /* Remove media query after 17 Aug */
+*/
+  /* Remove media query after 17 Aug
   @media (max-width: 375.98px) {
 
     .pricing .card.card--discount:before {
@@ -183,7 +166,7 @@
     }  
 
    }
-
+*/
   @media only screen and (max-width: 767.98px) {
     section.pricing {
         background: white;
@@ -264,6 +247,10 @@
      .card.col-lg-6 {
        margin: auto 1rem;
      }
+     .card--basic {
+        margin-bottom: 3rem;
+        border: 1px solid red;
+      }
   }
 
   @media only screen and (min-width: 992px) {
@@ -362,13 +349,15 @@
       margin: auto;
     }
 
+    
+
  /* Move styles to general */
   .modal-body{
     text-align: center;
   }
 
   #okButton{
-    width: 150px;
+    width: auto;
   }
 
   #dismissBtn{

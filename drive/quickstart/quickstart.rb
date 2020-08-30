@@ -86,8 +86,8 @@ data.each do |file|
     file_count += 1
   end
 end
-covid_drive_data = {file_count: file_count, datetime: Time.now.to_s, data: data}
+google_drive_data = {file_count: file_count, datetime: Time.now.to_s, data: data}
 
-open('public/covid_drive_data.json', 'w') { |f|
-  f.write(covid_drive_data.to_json)
+open('public/google_drive_data.json', 'w') { |f|
+  f.write(google_drive_data.to_json)
 }

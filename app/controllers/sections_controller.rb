@@ -1,12 +1,6 @@
 class SectionsController < ApplicationController
   before_action :set_section, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_editor!, only: [:index, :show, :new, :edit, :create, :update, :destroy]
-
-  # GET /sections
-  # GET /sections.json
-  def index
-    @sections = Section.all
-  end
+  before_action :authenticate_editor!, only: [:show, :new, :edit, :create, :update, :destroy]
 
   # GET /sections/1
   # GET /sections/1.json

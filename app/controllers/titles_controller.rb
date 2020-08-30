@@ -1,12 +1,6 @@
 class TitlesController < ApplicationController
   before_action :set_title, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_editor!, only: [:index, :show, :new, :edit, :create, :update, :destroy]
-
-  # GET /titles
-  # GET /titles.json
-  def index
-    @titles = Title.all
-  end
+  before_action :authenticate_editor!, only: [:show, :new, :edit, :create, :update, :destroy]
 
   # GET /titles/1
   # GET /titles/1.json

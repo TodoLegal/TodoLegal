@@ -31,6 +31,10 @@
         <% if index_items.instance_of? Book %>
           <!-- Level 1 Book -->
           <% book_index_position = index_items.position %>
+          <% title_index_position = index_items.position %>
+          <% chapter_index_position = index_items.position %>
+          <% section_index_position = index_items.position %>
+
           <% title_display = 'none'%>
           
           <div class="card-header book-element index-element">
@@ -49,11 +53,14 @@
         <% end %>
         <!-- Level 2 Title -->
         <%if book_index_position == 0 %>
-          <% book_index_position = 12777 %>
+          <% book_index_position += 12777 %>
         <% end %>
         <div class="index-element-<%= book_index_position %>" style="display: <%= title_display%>;">
           <% if index_items.instance_of? Title %>
             <% title_index_position = index_items.position %>
+            <% chapter_index_position = index_items.position %>
+            <% section_index_position = index_items.position %>
+          
             <% chapter_display = 'none'%>
             
             <div class="card-header title-element">
@@ -79,6 +86,7 @@
           <div class="index-element-<%= title_index_position %>" style="display: <%= chapter_display%>;">
             <% if index_items.instance_of? Chapter %>
               <% chapter_index_position = index_items.position %>
+              <% section_index_position = index_items.position %>
               <% section_display = 'none' %> 
               
               <div class="card-header chapter-element">
@@ -100,7 +108,7 @@
 
             <!-- Level 4 Section -->
             <%if chapter_index_position == 0 %>
-              <% chapter_index_position = 34855 %>
+              <% chapter_index_position = 32211 %>
             <% end %>
             <div class="index-element-<%= chapter_index_position %>" style="display: <%= section_display%>;">
               <% if index_items.instance_of? Section %>
@@ -122,7 +130,11 @@
                   </section>
                 </div>
               <% end %>
+
               <!-- Level 5 Subsection -->
+              <%if section_index_position == 0 %>
+                <% section_index_position = 7947 %>
+              <% end %>
               <div class="index-element-<%= section_index_position %>" style="display: <%= subsection_display %>;">
                 <% if index_items.instance_of? Subsection %>
                   <div class="card-header subsection-element">

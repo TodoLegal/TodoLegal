@@ -72,12 +72,12 @@ def update_files drive_service, folder_id
 end
 
 response = drive_service.list_files(page_size: 1000,
-                                        q: "'15WjHMcU2_QOukmbOyRJAFmOPxZpa0O9k' in parents",
+                                        q: "'1R46K1k5vMKdIDV7VyaXrXgk5ScF5uBvX' in parents",
                                         fields: "files")
 puts "Files:"
 puts "No files found" if response.files.empty?
 
-data = update_files drive_service, '15WjHMcU2_QOukmbOyRJAFmOPxZpa0O9k'
+data = update_files drive_service, '1R46K1k5vMKdIDV7VyaXrXgk5ScF5uBvX'
 file_count = 0
 data.each do |file|
   if file[:type] == 'application/vnd.google-apps.folder'

@@ -25,12 +25,24 @@
       <% title_display = 'block'%>
       <% chapter_display = 'block'%>
       <% section_display = 'block'%>
+      <% subsection_display = 'block' %>
+
+      <% is_title_blocked = true %>
+      <% is_chapter_blocked = true %>
+      <% is_section_blocked = true %>
+      <% is_subsection_blocked = true %>
 
       <% @index_items.each do |index_items|%>
           
         <% if index_items.instance_of? Book %>
           <!-- Level 1 Book -->
           <% book_index_position = index_items.position %>
+          <% title_index_position = index_items.position %>
+          <% chapter_index_position = index_items.position %>
+          <% section_index_position = index_items.position %>
+
+          <% is_title_blocked = false%>
+
           <% title_display = 'none'%>
           
           <div class="card-header book-element index-element">
@@ -48,12 +60,17 @@
           </div>
         <% end %>
         <!-- Level 2 Title -->
-        <%if book_index_position == 0 %>
-          <% book_index_position = 12777 %>
+        <% if is_title_blocked %>
+          <%if book_index_position == 0 %>
+              <% book_index_position += 12777 %>
+          <% end %>
         <% end %>
         <div class="index-element-<%= book_index_position %>" style="display: <%= title_display%>;">
           <% if index_items.instance_of? Title %>
             <% title_index_position = index_items.position %>
+            <% chapter_index_position = index_items.position %>
+            <% section_index_position = index_items.position %>
+            <% is_chapter_blocked = false %>
             <% chapter_display = 'none'%>
             
             <div class="card-header title-element">
@@ -73,12 +90,16 @@
             </div>
           <% end %>
           <!-- Level 3 Chapter-->
-          <%if title_index_position == 0 %>
-            <% book_index_position = 24855 %>
+          <% if is_chapter_blocked %>
+            <%if title_index_position == 0 %>
+              <% title_index_position += 24855 %>
+            <% end %>
           <% end %>
           <div class="index-element-<%= title_index_position %>" style="display: <%= chapter_display%>;">
             <% if index_items.instance_of? Chapter %>
               <% chapter_index_position = index_items.position %>
+              <% section_index_position = index_items.position %>
+              <% is_section_blocked = false %>
               <% section_display = 'none' %> 
               
               <div class="card-header chapter-element">
@@ -99,12 +120,15 @@
             <% end %>
 
             <!-- Level 4 Section -->
-            <%if chapter_index_position == 0 %>
-              <% chapter_index_position = 34855 %>
+            <% if is_section_blocked %>
+              <%if chapter_index_position == 0 %>
+                <% chapter_index_position = 32211 %>
+              <% end %>
             <% end %>
             <div class="index-element-<%= chapter_index_position %>" style="display: <%= section_display%>;">
               <% if index_items.instance_of? Section %>
                 <% section_index_position = index_items.position %>
+                <% is_subsection_blocked = false %>
                 <% subsection_display = 'none' %>
                 <div class="card-header section-element">
                   <section class="index-section" style="white-space: nowrap;">
@@ -122,7 +146,13 @@
                   </section>
                 </div>
               <% end %>
+
               <!-- Level 5 Subsection -->
+              <% if is_subsection_blocked %>
+                <%if section_index_position == 0 %>
+                  <% section_index_position = 7947 %>
+                <% end %>
+              <% end %>
               <div class="index-element-<%= section_index_position %>" style="display: <%= subsection_display %>;">
                 <% if index_items.instance_of? Subsection %>
                   <div class="card-header subsection-element">

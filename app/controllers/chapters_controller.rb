@@ -1,12 +1,6 @@
 class ChaptersController < ApplicationController
   before_action :set_chapter, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_admin!, only: [:index, :show, :new, :edit, :create, :update, :destroy]
-
-  # GET /chapters
-  # GET /chapters.json
-  def index
-    @chapters = Chapter.all
-  end
+  before_action :authenticate_editor!, only: [:show, :new, :edit, :create, :update, :destroy]
 
   # GET /chapters/1
   # GET /chapters/1.json

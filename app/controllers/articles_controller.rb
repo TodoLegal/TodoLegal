@@ -1,12 +1,6 @@
 class ArticlesController < ApplicationController
   before_action :set_article, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_admin!, only: [:index, :show, :new, :edit, :create, :update, :destroy]
-
-  # GET /articles
-  # GET /articles.json
-  def index
-    @articles = Article.all
-  end
+  before_action :authenticate_editor!, only: [:show, :new, :edit, :create, :update, :destroy]
 
   # GET /articles/1
   # GET /articles/1.json

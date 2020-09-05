@@ -28,4 +28,5 @@ test:
 production:
   primary:
    <<: *default
+   checkout_timeout: 6
    url: <%= ENV.fetch("DB_URL") { "" } %>

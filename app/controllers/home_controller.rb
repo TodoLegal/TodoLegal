@@ -10,7 +10,7 @@ class HomeController < ApplicationController
     if File.file?(google_drive_data_json_path)
       file = File.read(google_drive_data_json_path)
       data_hash = JSON.parse(file)
-      @files_count = data_hash['file_count']
+      @google_drive_files_count =  data_hash['file_count']
     end
   end
 

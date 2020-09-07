@@ -1,5 +1,5 @@
-<div id="myScrollspy" class="sticky-top" style="top:64px; padding: 0px; padding-top:5px; padding-bottom:5px; background-color: #fff;">
-  <div class="row tabs--document p-0">
+<div id="" class="sticky-top sticky-top--tabs">
+  <div class="tabs--document p-0">
     <div class="menu-bar" style="padding-bottom: 10px;">
       <ul class="nav" id="lawEditorTab" role="tablist">
         <li  class="nav-item active subbar-item" id="item1">
@@ -19,33 +19,33 @@
         </li>
         <li class="nav-item subbar-item mobile-menu-item d-block d-xl-none" id="item4">
           <a class="nav-link subbar-text" data-toggle="tab" href="#related">
-          <i class="fas fa-link subbar-icon" data-toggle="tab" href="#related" style="margin-left: 33px;"></i>
+          <i class="fas fa-link subbar-icon" data-toggle="tab" href="#related"></i>
           Relacionados</a>
         </li>
         <li class="nav-item subbar-item mobile-menu-item" id="item5">
           <a class="nav-link subbar-text clipboard" data-toggle="tab" href="#share">
-          <i class="fas fa-share subbar-icon" data-toggle="tab" href="#share" style="margin-left: 25px;"></i>
+          <i class="fas fa-share subbar-icon" data-toggle="tab" href="#share"></i>
           Compartir</a>
         </li>
         
         <li class="nav-item subbar-item mobile-menu-item" id="item6">
           <div class="btn-group">
             <a class="nav-link subbar-text" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
-              <i class="fas fa-ellipsis-v subbar-icon" style="margin-left: 33px;"></i>
+              <i class="fas fa-ellipsis-v subbar-icon"></i>
               Más
             </a>
-            <div class="dropdown-menu dropdown-menu-right" style="background-color: white;">
-              <a class="dropdown-item" data-toggle="tab" href="#indice" style="color: black;">
-                <i class="far fa-list-alt" data-toggle="tab" href="#indice" style="margin-right: 10px;"></i>Índice
+            <div class="dropdown-menu dropdown-menu-right">
+              <a class="dropdown-item" data-toggle="tab" href="#indice">
+                <i class="far fa-list-alt" data-toggle="tab" href="#indice"></i>Índice
               </a>
-              <a class="dropdown-item" data-toggle="tab" href="#modifications" style="color: black;">
-                <i class="far fa-clock" data-toggle="tab" href="#modifications" style="margin-right: 10px;"></i>Modificaciones
+              <a class="dropdown-item" data-toggle="tab" href="#modifications">
+                <i class="far fa-clock" data-toggle="tab" href="#modifications"></i>Modificaciones
               </a>
             </div>
         </li>
       </ul>
     </div>
-    <div class="col-12 col-xl-5 desktop-menu-item" style="padding-bottom: 10px;">
+    <div class="desktop-menu-item" style="padding-bottom: 10px;">
       <form class="form-inline" action="<%= law_path(@law) %>" method="get" id="search-law-form">
         <div class="input-group">
           <button type="button" class="btn btn-outline-secondary  desktop-menu-item clipboard btn-share">
@@ -112,7 +112,7 @@
   }
 
   .desktop-menu-item{
-    display: block;
+    display: inline-flex;
   }
 
   .mobile-menu-item{

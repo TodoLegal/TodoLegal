@@ -18,7 +18,7 @@
     <button type="button" class="close" onclick="hideAlert()">
     <span aria-hidden="true">&times;</span>
     </button>
-      Enlace copiado en el portapapeles, ahora puedes compartir la ley.
+      Enlace copiado en el portapapeles, ahora puedes compartir este documento pegando el enlace.
   </div>
 
   <div class="law-header-desktop"><%= render 'law_header' %></div>
@@ -190,6 +190,8 @@
     document.getElementsByClassName("container--visualizador")[0].style.display = "block";
     document.getElementById("topNavbar").style.display = "flex";
   }
+
+  
 </script>
 
 <style>
@@ -215,6 +217,14 @@
 
   #topNavbar{
     display: flex;
+  }
+
+  .container--visualizador{
+    display: block;
+  }
+
+  .search--container{
+    display: none;
   }
   
   @media only screen and (max-width: 767.98px){
@@ -243,7 +253,7 @@
       display: <%= display_container_visualizador %>;
     }  
 
-    .search-container{
+    .search--container{
       display: <%= display_search_container %>;
     }
 

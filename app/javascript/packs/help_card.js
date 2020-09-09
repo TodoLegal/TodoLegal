@@ -19,4 +19,12 @@ for(i=0; i<inputFields.length; i++)
       helpCards[j].style.display = 'none';
     }
   });
+
+  inputFields[i].addEventListener('keypress', function (e) {
+    for(j=0; j<helpCards.length; j++) {
+      if (e.key === 'Enter') {
+          helpCards[j].style.display = 'none';
+      }
+    }
+  });
 }

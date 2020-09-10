@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   resources :laws
   resources :titles
   resources :chapters
-  resources :articles
+  resources :articles, only: [:edit, :update]
 
   root :to => "home#index"
   get '/search_law', to: 'home#search_law'

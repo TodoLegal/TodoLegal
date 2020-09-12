@@ -7,10 +7,11 @@ class HomeController < ApplicationController
     @tags = Tag.where(tag_type: TagType.find_by_name("materia"))
 
     google_drive_data_json_path = 'public/google_drive_data.json'
+    @google_drive_files_count = 0
     if File.file?(google_drive_data_json_path)
       file = File.read(google_drive_data_json_path)
       data_hash = JSON.parse(file)
-      @files_count = data_hash['file_count']
+      @google_drive_files_count =  data_hash['file_count']
     end
   end
 

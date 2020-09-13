@@ -3,16 +3,16 @@ Rails.application.routes.draw do
   resources :user_permissions
   resources :permissions
   resources :law_modifications
-  resources :subsections
-  resources :sections
-  resources :books
   devise_for :users, controllers: { confirmations: 'users/confirmations', registrations: "users/registrations", sessions: "users/sessions", passwords: "users/passwords" }
   resources :law_tags
   resources :tags
   resources :tag_types
   resources :laws
-  resources :titles
-  resources :chapters
+  resources :titles, only: [:edit, :update]
+  resources :books, only: [:edit, :update]
+  resources :chapters, only: [:edit, :update]
+  resources :sections, only: [:edit, :update]
+  resources :subsections, only: [:edit, :update]
   resources :articles, only: [:edit, :update]
 
   root :to => "home#index"

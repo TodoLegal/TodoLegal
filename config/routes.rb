@@ -17,8 +17,8 @@ Rails.application.routes.draw do
 
   root :to => "home#index"
   get '/search_law', to: 'home#search_law'
-  get '/terms', to: 'home#terms_and_conditions'
-  get '/privacy', to: 'home#privacy_policy', as: "privacy_policy"
+  get '/terms', to: 'home#terms', as: "terms"
+  get '/privacy', to: 'home#privacy', as: "privacy"
   get '/pricing', to: 'home#pricing'
   get '/invite_friends', to: 'home#invite_friends'
   get '/google_drive_search', to: 'home#google_drive_search', as: "google_drive_search"

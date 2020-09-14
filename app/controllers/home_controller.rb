@@ -92,10 +92,10 @@ class HomeController < ApplicationController
     end
   end
 
-  def terms_and_conditions
+  def terms
   end
 
-  def privacy_policy
+  def privacy
   end
 
   def pricing

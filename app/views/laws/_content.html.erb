@@ -103,19 +103,21 @@
       <% bigger_section_iterator += 1 %>
     <% end %>
     <% if stream.instance_of? Article %>
-      <div align="justify" style="color: #444; padding: 10px" onclick="onClickArticle(<%= article_iterator %>)" class="article" article_id="<%= article_iterator %>" last_bigger_section="<%= bigger_section_iterator - 1 %>" next_bigger_section="<%= bigger_section_iterator %>" id="article_count_<%= article_iterator %>">
-        <b class="article-name" align="justify" style="color: #111;font-weight:bold; display: block;``">Artículo <%= stream.number %><br>
-          <% if @user_can_edit_law && is_editor_mode_enabled %>
-            <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_article_path(stream) %>
+      
+        <div align="justify" style="color: #444; padding: 10px" onclick="onClickArticle(<%= article_iterator %>)" class="article" article_id="<%= article_iterator %>" last_bigger_section="<%= bigger_section_iterator - 1 %>" next_bigger_section="<%= bigger_section_iterator %>" id="article_count_<%= article_iterator %>">
+          <b class="article-name" align="justify" style="color: #111;font-weight:bold; display: block;``">Artículo <%= stream.number %><br>
+            <% if @user_can_edit_law && is_editor_mode_enabled %>
+              <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_article_path(stream) %>
+            <% end %>
+          </b>
+          <% if @highlight_enabled %>
+            <%= stream.pg_search_highlight.html_safe %>.
+          <% else %>
+            <%= stream.class.markdown.render(stream.body).html_safe %>
           <% end %>
-        </b>
-        <% if @highlight_enabled %>
-          <%= stream.pg_search_highlight.html_safe %>.
-        <% else %>
-          <%= stream.class.markdown.render(stream.body).html_safe %>
-        <% end %>
-      </div>
-      <% article_iterator += 1 %>
+        </div>
+        <% article_iterator += 1 %>
+      
     <% end %>
   <% end %>
 </div>

@@ -1,32 +1,48 @@
 <% content_for :title, @law.name + " - TodoLegal" %>
 
-<script>
-function onIndexElementClicked(section_id) {
-  console.log(section_id)
-  document.getElementById(section_id).scrollIntoView({block:'center'});
-}
-</script>
+<%= render 'law_navbar'%>
+<%if @info_is_searched %>
+  <% display_search_container = "block" %>
+  <% display_container_visualizador = "none" %>
+  <% display_topNavbar = "none" %>
+<% else %>
+  <% display_search_container = "none" %>
+  <% display_container_visualizador = "block" %>
+  <% display_topNavbar = "flex" %>
+<% end %>
 
-<div class="container" data-spy="scroll" data-target="#myScrollspy" style="background-color: #FFF !important;">
-  <%= render 'law_header' %>
+<div class="container container--visualizador" data-spy="scroll" data-target="#myScrollspy">
 
-  <div class="container-fluid" style="padding-top:60">
-    <%= render 'navbar_subbar' %>
+  <!-- Copied to clipboard alert -->
+  <div class="alert alert-success alert-dismissible fade show" id="clipboard-alert" role="alert" style="display: none;"> 
+    <button type="button" class="close" onclick="hideAlert()">
+    <span aria-hidden="true">&times;</span>
+    </button>
+      Enlace copiado en el portapapeles, ahora puedes compartir la ley.
+  </div>
+
+  <div class="law-header-desktop"><%= render 'law_header' %></div>
+  
+  <div class="container--documento">
+    <div class="inner-continer--visualizador" style="padding-top:60">
+      <%= render 'navbar_subbar' %>
+
+      <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="articulos" role="tabpanel" aria-labelledby="articulos-tab">
+          <div class="law-header-mobile"><%= render 'law_header' %></div>
+          <%= render 'content' %>
+        </div>
+        <div class="tab-pane fade show" id="indice" role="tabpanel" aria-labelledby="indice-tab">
+          <%= render 'indice' %>
+        </div>
+        <div class="tab-pane fade show" id="modifications" role="tabpanel" aria-labelledby="modifications-tab">
+          <%= render 'modifications_tab' %>
+        </div>
+        <div class="tab-pane fade show" id="related" role="tabpanel" aria-labelledby="related-tab">
+          <%= render 'related_tab' %>
+        </div>
+      </div>
       
-    <div class="tab-content" id="myTabContent">
-      <div class="tab-pane fade show active" id="articulos" role="tabpanel" aria-labelledby="articulos-tab">
-        <%= render 'content' %>
-      </div>
-      <div class="tab-pane fade show" id="indice" role="tabpanel" aria-labelledby="indice-tab">
-        <%= render 'indice' %>
-      </div>
-      <div class="tab-pane fade show" id="modifications" role="tabpanel" aria-labelledby="modifications-tab">
-        <%= render 'modifications_tab' %>
-      </div>
-      <div class="tab-pane fade show" id="related" role="tabpanel" aria-labelledby="related-tab">
-        <%= render 'related_tab' %>
-      </div>
-    </div>
 
     <div class="wrapper">
       <%= render 'sidebar_indice' %>
@@ -93,14 +109,14 @@ function onIndexElementClicked(section_id) {
                         </h3>
                       </div>
                       <div class="col-md-12">
-                        <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
-                        Crea una cuenta y accede a más de <b><%= (Law.count/10)*10 %> documentos</b> de Legislación Hondureña y recibe boletines informativos.
-                        </p>
-                      </div>
-                      <div class="col-md-12">
-                        <a href="<%= new_user_registration_path %>?go_to_law=<%=@law.id%>">
-                          <button type="button" class="btn btn-primary btn-block">Crear cuenta Básica</button>
-                        </a>
+                        <div with="100%" style="text-align:center; padding-top: 22px;">
+                          ¿Ya tienes cuenta?
+                        </div>
+                        <div with="100%" style="text-align:center;">
+                          <a style="font-size:18px;text-align:center;" href="<%= new_user_session_path %>?go_to_law=<%=@law.id%>">
+                            Inicia sesión
+                          </a>
+                        </div>
                       </div>
                     <% end %>
                     <div class="col-md-12">
@@ -119,8 +135,122 @@ function onIndexElementClicked(section_id) {
             </div>
           </div>
         </div>
-      </div>
-      <!--End Modal-->
-    <% end %>
+        <!--End Modal-->
+      <% end %>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar--relacionados d-none d-xl-block">
+      <h4>
+        <i class="fas fa-link"></i>
+        Relacionados
+      </h4>
+      <% if @laws_array %>
+        <% i = 0 %>
+        <% @laws_array.each do |law| %>
+          <%if  i <= 2%>
+            <% i+=1 %>
+            <div class="collapsable-law-cards col" style="display:<%= i>6 ? 'none' : 'block' %>">
+              <div class="card card-body h-100" style="padding:0px">
+                <a class="" href="<%= law_path(law) %>" style="padding:20px">
+                  <p style="font-size: 15px">
+                    <% law.materia_names.each do |materia_name| %>
+                      <span class="badge badge-light badge-secondary"><%= materia_name %></span>
+                    <% end %>
+                  </p>
+                  <h5 class="card-title"><%= law.name %></h5>
+                  <p class="primaryinfo">[<%= law.creation_number %>]</p>
+                  <p class="primaryinfo"><%= law.articles.count %> artículos</p>
+                </a>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+        <% if @laws_array.size > 3 %>
+          <%= button_to "Ver más documentos", tag_path(@tag), method: :get, remote: true, class:"btn btn-block btn-outline-primary see--more", style:"margin-top: 15px;width: auto;"%>
+        <% end %>
+      <% end %>
+    </div>
+    <!-- Sidebar end-->
   </div>
 </div>
+
+<!-- search container -->
+<div class="container search--container">
+  <%= render 'search_in_document' %>
+</div>
+
+<script>
+  function onIndexElementClicked(section_id) {
+    console.log(section_id)
+    document.getElementById(section_id).scrollIntoView({block:'center'});
+  }
+
+  function hideSearchContainer () {
+    console.log("hide search container");
+    document.getElementsByClassName("search--container")[0].style.display = "none";
+    document.getElementsByClassName("container--visualizador")[0].style.display = "block";
+    document.getElementById("topNavbar").style.display = "flex";
+  }
+</script>
+
+<style>
+  .container-law{
+    max-width: 1090px;
+    margin: 5vh auto;
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: 860px auto;
+  }
+
+  .container-law .nav-pills {
+    background-color: #EFF3F8;
+  }
+
+  .law-header-desktop{
+    display: block;
+  }
+
+  .law-header-mobile{
+    display: none;
+  } 
+
+  #topNavbar{
+    display: flex;
+  }
+  
+  @media only screen and (max-width: 767.98px){
+    .container-law{
+      padding: 0px;
+    }
+
+    .container-law {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container-law .nav-pills {
+      display: none;
+    }
+
+    .law-header-desktop{
+      display: none;
+    }
+
+    .law-header-mobile{
+      display: block;
+    }
+
+    .container--visualizador{
+      display: <%= display_container_visualizador %>;
+    }  
+
+    .search-container{
+      display: <%= display_search_container %>;
+    }
+
+    #topNavbar{
+      display: <%= display_topNavbar %>;
+    }
+  }
+</style>

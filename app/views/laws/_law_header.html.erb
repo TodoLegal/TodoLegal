@@ -1,4 +1,4 @@
-<h1>
+<h1 class="law-name">
   <%= @law.name %>
   <% if @user_can_edit_law && is_editor_mode_enabled %>
     <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_law_path(@law) %>
@@ -7,12 +7,12 @@
 
 <p>
 <% if @law.creation_number && @law.creation_number != "" %>
-  <span class="badge badge badge-secondary"><%= @law.creation_number %></span>
+  <span class="badge badge-creation badge-secondary"><i class="fas fa-file-alt"></i> <%= @law.creation_number %></span>
 <% end %>
 <% if !@highlight_enabled %>
-  <span class="badge badge badge-secondary"><%= @articles_count %> artículos en total</span>
+  <span class="badge badge-articles"><%= @articles_count %> artículos en total</span>
 <% else %>
-  <span class="badge badge badge-secondary"><%= @articles_count %> resultados encontrados</span>
+  <span class="badge badge-secondary"><%= @articles_count %> resultados encontrados</span>
 <% end %>
 
 </p>
@@ -23,3 +23,34 @@
 </p>
 <% end %>
 -->
+<style>
+  .badge-creation{
+    background: #F2F5F8;
+    border: 1px solid rgba(166, 185, 211, 0.5);
+    box-sizing: border-box;
+    border-radius: 4px;
+    color: #505864;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 18px;
+  }
+
+  .badge-articles{
+    font-style: normal;
+    font-weight: normal;
+    color: #505864;
+    font-size: 14px;
+    line-height: 19px;
+  }
+
+  @media only screen and (max-width: 767.98px){
+    .law-name{
+      font-weight: 600;
+      font-size: 24px;
+      line-height: 29px;
+      color: #171F2A;
+    }
+  } 
+
+</style>

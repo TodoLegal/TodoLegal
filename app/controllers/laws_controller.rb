@@ -1,6 +1,6 @@
 class LawsController < ApplicationController
   layout 'law'
-  layout 'application', only: [:index]
+  # layout 'application', only: [:index]
   before_action :set_law, only: [:show, :edit, :update, :destroy]
   before_action :set_materias, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_editor!, only: [:index, :new, :edit, :create, :update, :destroy]
@@ -20,6 +20,7 @@ class LawsController < ApplicationController
     @query = ""
     @articles_count = 0
     @has_articles_only = true
+    @info_is_searched = false
 
     if params[:query]
       @tokens = params[:query].scan(/\w+|\W/)
@@ -39,6 +40,7 @@ class LawsController < ApplicationController
       @highlight_enabled = true
       @query = params[:query]
       @stream = @law.articles.search_by_body(params[:query]).with_pg_search_highlight.order(:position).sort_by { |article| article.position }
+      @info_is_searched  = true
       @articles_count = @stream.size
     else
       i = 0

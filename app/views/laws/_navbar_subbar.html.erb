@@ -1,32 +1,56 @@
 <div id="myScrollspy" class="sticky-top" style="top:64px; padding: 0px; padding-top:5px; padding-bottom:5px; background-color: #fff;">
-  <div class="row tabs--document">
-    <div class="" style="padding-bottom: 10px;">
+  <div class="row tabs--document p-0">
+    <div class="menu-bar" style="padding-bottom: 10px;">
       <ul class="nav" id="lawEditorTab" role="tablist">
         <li  class="nav-item active subbar-item" id="item1">
           <a class="nav-link subbar-text" id="articulos-tab" data-toggle="tab" href="#articulos" role="tab" aria-controls="articulos" aria-selected="true">
           <i class="far fa-file-alt subbar-icon"></i>
           Documento</a>
         </li>
-        <li class="nav-item subbar-item" id="item2" >
+        <li class="nav-item subbar-item desktop-menu-item" id="item2" >
           <a class="nav-link subbar-text" data-toggle="tab" href="#indice">
           <i class="far fa-list-alt subbar-icon" data-toggle="tab" href="#indice"></i>
           Índice</a>
         </li>
-        <li class="nav-item subbar-item" id="item3">
+        <li class="nav-item subbar-item desktop-menu-item" id="item3">
           <a class="nav-link subbar-text" data-toggle="tab" href="#modifications">
           <i class="far fa-clock subbar-icon" data-toggle="tab" href="#modifications"></i>
           Modificaciones</a>
         </li>
-        <li class="nav-item subbar-item" id="item4">
+        <li class="nav-item subbar-item mobile-menu-item d-block d-xl-none" id="item4">
           <a class="nav-link subbar-text" data-toggle="tab" href="#related">
           <i class="fas fa-link subbar-icon" data-toggle="tab" href="#related" style="margin-left: 33px;"></i>
           Relacionados</a>
         </li>
+        <li class="nav-item subbar-item mobile-menu-item" id="item5">
+          <a class="nav-link subbar-text clipboard" data-toggle="tab" href="#share">
+          <i class="fas fa-share subbar-icon" data-toggle="tab" href="#share" style="margin-left: 25px;"></i>
+          Compartir</a>
+        </li>
+        
+        <li class="nav-item subbar-item mobile-menu-item" id="item6">
+          <div class="btn-group">
+            <a class="nav-link subbar-text" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+              <i class="fas fa-ellipsis-v subbar-icon" style="margin-left: 33px;"></i>
+              Más
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" style="background-color: white;">
+              <a class="dropdown-item" data-toggle="tab" href="#indice" style="color: black;">
+                <i class="far fa-list-alt" data-toggle="tab" href="#indice" style="margin-right: 10px;"></i>Índice
+              </a>
+              <a class="dropdown-item" data-toggle="tab" href="#modifications" style="color: black;">
+                <i class="far fa-clock" data-toggle="tab" href="#modifications" style="margin-right: 10px;"></i>Modificaciones
+              </a>
+            </div>
+        </li>
       </ul>
     </div>
-    <div class="col-12 col-xl-4" style="padding-bottom: 10px;">
+    <div class="col-12 col-xl-5 desktop-menu-item" style="padding-bottom: 10px;">
       <form class="form-inline" action="<%= law_path(@law) %>" method="get" id="search-law-form">
         <div class="input-group">
+          <button type="button" class="btn btn-outline-secondary  desktop-menu-item clipboard btn-share">
+            <i class="fas fa-share subbar-icon"></i>
+          </button>
           <input type="text" class="form-control" name="query" type="search" placeholder="Buscar" value="<%= @query %>" aria-label="Buscar">
           <div class="input-group-append">
             <button class="btn btn-secondary" style="background-color: #FF5722;border-color: #FF5722;" type="submit" onclick="document.getElementById('loading-spinner').style.display = 'block';document.getElementById('search-law-form').style.display = 'none'">
@@ -47,6 +71,13 @@
     </div>
     <% end %>
   </div>
+  <% if @highlight_enabled %>
+    <div class="row">
+      <div class="col-12">
+        <span style="font-size: 15px; padding: 0px;"><a class="" style="font-size: 12px;" href="<%= law_path(@law) %>">Ver ley completa</a></span>
+      </div>
+    </div>
+  <% end %>
 </div>
 
 <style>
@@ -91,12 +122,57 @@ ul li.active a{
 }
 @media only screen and (max-width: 767.98px){
   .subbar-text{
-    font-size: 13px;
-    padding-right: 5px;
-    padding-left: 5px;
-    padding-top: 0px;
+    color: #505864;
+    text-align: center;
+    line-height: 1.7rem;
   }
-}
+
+  .subbar-text:hover{
+    color: #171F2A;
+  }
+
+  ul li.active a{
+    color: #171F2A;
+    border-bottom-style: solid;
+    border-bottom-color: #1A7FFA;
+  }
+
+  .subbar-item{
+    text-align: center;
+    line-height: 1.2rem;
+  }
+
+  .desktop-menu-item{
+    display: block;
+  }
+
+  .mobile-menu-item{
+    display: none;
+  }
+
+  .btn-share{
+    margin-right: 8px;
+    border: 1px solid #DFE7F1;
+  }
+
+  
+  @media only screen and (max-width: 767.98px){
+    .subbar-text{
+      font-size: 13px;
+      padding-right: 5px;
+      padding-left: 5px;
+      padding-top: 0px;
+    }
+
+    .desktop-menu-item{
+      display: none;
+    }
+
+    .mobile-menu-item{
+      display: block;
+    }
+
+  }
 </style>
 
 <script>
@@ -104,12 +180,16 @@ ul li.active a{
   var item2 = document.getElementById("item2");
   var item3 = document.getElementById("item3");
   var item4 = document.getElementById("item4");
+  var item5 = document.getElementById("item5");
+  var item6 = document.getElementById("item6");
 
   item1.addEventListener("click", function () {
     item1.classList.add('active');
     item2.classList.remove('active');
     item3.classList.remove('active');
     item4.classList.remove('active');
+    item5.classList.remove('active');
+    item6.classList.remove('active');
   })
 
   item2.addEventListener("click", function () {
@@ -117,6 +197,8 @@ ul li.active a{
     item1.classList.remove('active');
     item3.classList.remove('active');
     item4.classList.remove('active');
+    item5.classList.remove('active');
+    item6.classList.remove('active');
   })
 
   item3.addEventListener("click", function () {
@@ -124,6 +206,8 @@ ul li.active a{
     item1.classList.remove('active');
     item2.classList.remove('active');
     item4.classList.remove('active');
+    item5.classList.remove('active');
+    item6.classList.remove('active');
   })
 
   item4.addEventListener("click", function () {
@@ -131,5 +215,40 @@ ul li.active a{
     item1.classList.remove('active');
     item2.classList.remove('active');
     item3.classList.remove('active');
+    item5.classList.remove('active');
+    item6.classList.remove('active');
   })
+
+  item5.addEventListener("click", function () {
+    item4.classList.add('active');
+    item1.classList.remove('active');
+    item2.classList.remove('active');
+    item3.classList.remove('active');
+    item6.classList.remove('active');
+  })
+
+  item6.addEventListener("click", function () {
+    item4.classList.add('active');
+    item1.classList.remove('active');
+    item2.classList.remove('active');
+    item3.classList.remove('active');
+    item5.classList.remove('active');
+  })
+
+  //Copy to clipboard
+  var $temp = $("<input>");
+  var $url = $(location).attr('href');
+
+  $('.clipboard').on('click', function() {
+    $("body").append($temp);
+    $temp.val($url).select();
+    document.execCommand("copy");
+    $temp.remove();
+    // $("p").text("URL copied!");
+    document.getElementById("clipboard-alert").style.display = "block";
+  })
+
+  function hideAlert(){
+    document.getElementById("clipboard-alert").style.display = "none";
+  }
 </script>

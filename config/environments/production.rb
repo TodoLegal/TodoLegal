@@ -1,7 +1,9 @@
 require 'discordrb'
 
 puts '[Discord bot]: Initializing'
-$discord_bot = Discordrb::Bot.new token: ENV['EXCEPTION_BOT_TOKEN'], client_id: 717812663761240117
+if !ENV['EXCEPTION_BOT_TOKEN'].blank?
+  $discord_bot = Discordrb::Bot.new token: ENV['EXCEPTION_BOT_TOKEN'], client_id: 717812663761240117
+end
 $discord_bot_channel_code = 717989750421848115
 $discord_bot_channel_notifications = 742414195928203296
 

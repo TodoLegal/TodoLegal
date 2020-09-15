@@ -6,11 +6,12 @@ class HomeController < ApplicationController
   def index
     @tags = Tag.where(tag_type: TagType.find_by_name("materia"))
 
-    covid_drive_data_json_path = 'public/covid_drive_data.json'
-    if File.file?(covid_drive_data_json_path)
-      file = File.read(covid_drive_data_json_path)
+    google_drive_data_json_path = 'public/google_drive_data.json'
+    @google_drive_files_count = 0
+    if File.file?(google_drive_data_json_path)
+      file = File.read(google_drive_data_json_path)
       data_hash = JSON.parse(file)
-      @covid_files_count = data_hash['file_count']
+      @google_drive_files_count =  data_hash['file_count']
     end
   end
 
@@ -91,42 +92,58 @@ class HomeController < ApplicationController
     end
   end
 
-  def terms_and_conditions
+  def terms
   end
 
-  def privacy_policy
+  def privacy
   end
 
   def pricing
     @is_onboarding = params[:is_onboarding]
+    @pricing_onboarding = params[:pricing_onboarding]
     @go_to_law = params[:go_to_law]
     @activate_pro_account = params[:activate_pro_account]
+    @user_just_registered = params[:user_just_registered]
+
+    if @pricing_onboarding
+      @select_basic_plan_path = "/users/sign_up"
+    elsif !@go_to_law.blank?
+      @select_basic_plan_path = Law.find_by_id(@go_to_law)
+    else
+      @select_basic_plan_path = root_path
+    end
+
+    if @pricing_onboarding
+      @select_pro_plan_path = "/users/sign_up"
+    else
+      @select_pro_plan_path = checkout_path
+    end
   end
   
   def invite_friends
   end
   
-  def drive_search
+  def google_drive_search
     @query = params[:query]
     @folder = params[:folder]
     @get_parent_files = params[:get_parent_files] == 'true'
     @files = []
 
-    if File.file?('public/covid_drive_data.json')
-      covid_drive_data = File.read('public/covid_drive_data.json')
+    if File.file?('public/google_drive_data.json')
+      google_drive_data = File.read('public/google_drive_data.json')
       if @query && @query!=""
-        @files = get_files_like_name(JSON.parse(covid_drive_data)["data"], @query).sort_by { |v| v["name"] }
+        @files = get_files_like_name(JSON.parse(google_drive_data)["data"], @query).sort_by { |v| v["name"] }
       elsif @folder && @folder!=""
         if @get_parent_files
-          @folder = get_parrent_folder_name JSON.parse(covid_drive_data)["data"], @folder
+          @folder = get_parrent_folder_name JSON.parse(google_drive_data)["data"], @folder
         end
         if @folder == ""
-          @files = JSON.parse(covid_drive_data)["data"].sort_by { |v| v["name"] }
+          @files = JSON.parse(google_drive_data)["data"].sort_by { |v| v["name"] }
         else
-          @files = get_folder_files JSON.parse(covid_drive_data)["data"], @folder
+          @files = get_folder_files JSON.parse(google_drive_data)["data"], @folder
         end
       else
-        @files = JSON.parse(covid_drive_data)["data"].sort_by { |v| v["name"] }
+        @files = JSON.parse(google_drive_data)["data"].sort_by { |v| v["name"] }
       end
     end
   end
@@ -138,11 +155,13 @@ class HomeController < ApplicationController
       end
       return
     end
-    if !params["email1"].blank?
-      SubscriptionsMailer.refer(current_user, params["email1"]).deliver
-    end
-    if !params["email2"].blank?
-      SubscriptionsMailer.refer(current_user, params["email2"]).deliver
+    if ENV['GMAIL_USERNAME']
+      if !params["email1"].blank?
+        SubscriptionsMailer.refer(current_user, params["email1"]).deliver
+      end
+      if !params["email2"].blank?
+        SubscriptionsMailer.refer(current_user, params["email2"]).deliver
+      end
     end
 
     respond_to do |format|
@@ -154,8 +173,8 @@ class HomeController < ApplicationController
   end
 
 protected
-  def get_folder_files covid_drive_data, folder_name
-    covid_drive_data.each do |file|
+  def get_folder_files google_drive_data, folder_name
+    google_drive_data.each do |file|
       if file['type'] == 'application/vnd.google-apps.folder'
         if file['name'] == folder_name
           return file['files'].sort_by { |v| v["name"] }
@@ -169,8 +188,8 @@ protected
     return []
   end
 
-  def get_parrent_folder_name covid_drive_data, folder_name
-    covid_drive_data.each do |file|
+  def get_parrent_folder_name google_drive_data, folder_name
+    google_drive_data.each do |file|
       if file['type'] == 'application/vnd.google-apps.folder'
         file['files'].each do |sub_file|
           if sub_file['name'] == folder_name

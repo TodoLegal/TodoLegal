@@ -30,7 +30,7 @@
       <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="articulos" role="tabpanel" aria-labelledby="articulos-tab">
           <div class="law-header-mobile"><%= render 'law_header' %></div>
-          <%= render 'content' %>
+          <%= render  partial:'content', locals:{is_mobile: false} %>
         </div>
         <div class="tab-pane fade show" id="indice" role="tabpanel" aria-labelledby="indice-tab">
           <%= render 'indice' %>

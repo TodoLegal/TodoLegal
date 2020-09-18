@@ -38,6 +38,25 @@
                 <a href="/invite_friends" class="dropdown-item">
                 <i class="fas fa-gift" aria-hidden="true"></i>
                 Invitar amigos</a>
+
+                 <% if current_user_is_pro %>
+                    <!--
+                    <form method="POST" action="/create_customer_portal_session">
+                        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                        <input type="submit" class="btn btn-primary" value="Manejar Suscripción Pro">
+                    </form>-->
+                    <a href="/users/edit" class="dropdown-item dropdown-item--suscription">
+                    
+                    <i class="fas fa-star" aria-hidden="true"></i>
+                    <div class="suscription-type">
+                    <small>Plan activo</small> <span>Pro</span>
+                    </div>
+                    </a>
+                <% else %>
+                    <a href="/pricing" class="dropdown-item">
+                    <i class="fas fa-star" aria-hidden="true"></i>
+                    Precios</a>
+                <% end %>
                 
                 <% if current_user_is_admin %>
                     <button class="dropdown-item disabled font-weight-bold " type="button" >
@@ -150,6 +169,25 @@
         margin-bottom: 1em;
     }
 
+    .dropdown-item--suscription {
+        display: flex; 
+        flex-direction: row;
+        align-content: center;
+        align-items: center;
+    }
+
+    .dropdown-item--suscription svg{
+        margin-right: 6px;
+    }
+
+    .dropdown-item--suscription small{
+        text-transform: uppercase;
+        font-size: .65rem;
+        line-height: .3rem;
+        display: block;
+        padding-top: .5rem;
+    }
+
     @media only screen and (max-width: 767.98px){
         .todolegal{
             margin:0px;
@@ -187,13 +225,6 @@
             display: block;
         }
     }
-
-    @media only screen and (max-width: 767.98px){
-    .todolegal{
-      margin:0px;
-      display: none;
-    }
-  }
 
    @media only screen and (min-width: 1200px){
 

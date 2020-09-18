@@ -13,6 +13,9 @@ class BillingController < ApplicationController
     @is_monthly = params[:is_monthly]
     @is_onboarding = params[:is_onboarding]
     @go_to_law = params["go_to_law"]
+    if params["invalid_card"] == "true"
+      @stripe_backend_error = I18n.t(:invalid_card)
+    end
   end
 
   def charge
@@ -20,14 +23,15 @@ class BillingController < ApplicationController
       customer = Stripe::Customer.create(email: current_user.email, source: params["stripeToken"])
     rescue
       respond_to do |format|
-        redirect_path = checkout_path + "?"
+        redirect_path = checkout_path + "?invalid_card=true&"
         if !params["go_to_law"].blank?
           redirect_path += "go_to_law=" + params["go_to_law"] + "&"
         end
         if !params["is_monthly"].blank?
-          redirect_path += "is_monthly=" + params["is_monthly"]
+          redirect_path += "is_monthly=" + params["is_monthly"] + "&"
         end
-        format.html { redirect_to redirect_path, notice: I18n.t(:invalid_card) }
+        redirect_path += "is_onboarding=true"
+        format.html { redirect_to redirect_path }
       end
       return
     end
@@ -41,19 +45,22 @@ class BillingController < ApplicationController
       if $discord_bot
         $discord_bot.send_message($discord_bot_channel_notifications, "Se ha registrado un usuario Pro por 1 mes :dancer:")
       end
-      SubscriptionsMailer.welcome_pro_user(current_user).deliver
+      if ENV['GMAIL_USERNAME']
+        SubscriptionsMailer.welcome_pro_user(current_user).deliver
+      end
     else
       subscription = Stripe::Subscription.create({
         customer: customer.id,
         items: [{
           price: STRIPE_YEAR_SUBSCRIPTION_PRICE
-        }],
-        coupon: STRIPE_LAUNCH_COUPON_ID
+        }]
       })
       if $discord_bot
         $discord_bot.send_message($discord_bot_channel_notifications, "Se ha registrado un usuario Pro por 1 año :dancer:")
       end
-      SubscriptionsMailer.welcome_pro_user(current_user).deliver
+      if ENV['GMAIL_USERNAME']
+        SubscriptionsMailer.welcome_pro_user(current_user).deliver
+      end
     end
 
     user = User.find_by_email(params["email"])

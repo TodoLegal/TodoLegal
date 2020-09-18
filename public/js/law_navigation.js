@@ -65,12 +65,14 @@ function filterIndice() {
 var currrent_highlighted = 0;
 var highlighted_count = document.getElementsByClassName('highlighted').length;
 
-if(highlighted_count > 0)
+if(highlighted_count > 0){
+  highlighted_count = highlighted_count / 2; 
   updateHighlightedView()
+}
 
 function updateHighlightedView()
 {
-  document.getElementById("result-count-big").innerText = (currrent_highlighted + 1) +"/"+highlighted_count
+  document.getElementById("result-count-big").innerText = (currrent_highlighted + 1) +" de "+highlighted_count
   element_highlighted = document.getElementsByClassName('highlighted')[currrent_highlighted]
   console.log(currrent_highlighted)
   console.log(element_highlighted)

@@ -9,28 +9,6 @@
     </a>
   <% end %>
 
-  <!-- Start Cancel Modal -->
-        <div class="modal fade" id="cancelCheckoutModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalCenterTitle" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-body">
-                <h5 class="modal-title" id="cancelModalLongTitle">¿Estás seguro que deseas salir?</h5>
-                <label id="labelBasico">
-                  Si sales no se guardará la información que ingresaste para el pago. 
-                  <br>
-                </label>
-                <p class="body p-1" ><small>Siempre puedes adquirir el plan pro desde las secciones de tu cuenta.</small></p>
-                <div class="form-group" id="bottonsGroup">
-                  <%= link_to 'Salir', root_path, id:"okButton", class:"btn btn-secondary", style:"padding-top: 10px;"%>
-                  &nbsp;&nbsp;&nbsp;
-                  <button type="button" id="dismissBtn" class="btn btn-primary" data-dismiss="modal">Terminar el pago</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!--End Cancel modal -->
-
   <div class="row checkout-row">
   <div class="col-12 col-lg-6">
   <div class="card card--payment bg-white rounded">
@@ -56,6 +34,7 @@
         </hgroup>
         <!-- Used to display Element errors. -->
         <div id="card-errors" role="alert"></div>
+        <div id="card-errors" role="alert"><%= @stripe_backend_error %></div>
         <form action="/charge" method="post" id="payment-form">
           <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
           <% if @is_monthly %>
@@ -92,20 +71,6 @@
             <%= hidden_field_tag :email, current_user.email %>
           <% end %>
 
-          <section class="payment-cards">
-             <p class="text-left">Aceptamos tarjetas de crédito o débito</p>
-            <ul>
-              <li>
-                <img class="icon-payment" src="/img/payment_amex.png">
-              </li>
-                <li>
-                <img class="icon-payment" src="/img/payment_mastercard.png">
-              </li>
-                <li>
-                <img class="icon-payment" src="/img/payment_visa.png">
-              </li>
-            </ul>
-          </section>
           <div class="form-group">
             <button  type="submit" class="btn btn-primary btn-block btn-next btn-lg" onclick="document.getElementById('loading-spinner').style.display = 'block';document.getElementById('processing-payment').style.display = 'block';document.getElementById('checkout-fields').style.display = 'none'">
               Pagar suscripción
@@ -121,7 +86,24 @@
       <%= javascript_pack_tag 'stripe_integration' %>
     </div>
   </div>
-<div class="text-center img-fluid"><img class="img-fluid" src="/img/powered_by_stripe.svg" alt="El pago se realiza por medio de Stripe"></div>
+  <div class="powered-line">
+    <div class="text-left img-fluid">
+      <img class="img-fluid" src="/img/powered_by_stripe.svg" alt="El pago se realiza por medio de Stripe">
+    </div>
+    <section class="payment-cards">
+      <ul>
+        <li>
+          <img class="icon-payment" src="/img/payment_amex.png">
+        </li>
+          <li>
+          <img class="icon-payment icon-payment--mastercard" src="/img/payment_mastercard.png">
+        </li>
+          <li>
+          <img class="icon-payment" src="/img/payment_visa.png">
+        </li>
+      </ul>
+    </section>
+  </div>
 </div>
 
 <div class="col-12 col-lg-6">
@@ -131,8 +113,7 @@
           <h2 class="card-title">Suscripción mensual</h2>
         <% else %>
           <h2 class="card-title">Suscripción anual</h2>
-          <h2 class="card-title"><strong>50%</strong></h2>
-          <p class="full-width">Descuento válido hasta el 24 de agosto</p>
+          <p style="font-size: 14px;"><i>Dependiendo de tu tarjeta de crédito o debito, el cobro puede reflejarse en lempiras o dólares.</i></p>
         <% end %>
       </div>
 
@@ -147,29 +128,41 @@
           <strong class="subscription-row-value">$7.00</strong>
         </div>
       <% else %>
-        <!-- Provitional code for discount><!-->
         <div class="subscription-row">
           <p class="subscription-row-label">Mensualidad</p>
-          <strong class="subscription-row-value">$3.00</strong>
-        </div>
-        <div class="subscription-row subscription-row-total">
-          <p class="subscription-row-label">Total</p>
-          <strong class="subscription-row-value">$36.00</strong>
-        </div>
-        <!-- Uncomment after Aug 17>
-        <p class="subscription-row-label">Mensualidad</p>
           <strong class="subscription-row-value">$6.00</strong>
         </div>
         <div class="subscription-row subscription-row-total">
           <p class="subscription-row-label">Total</p>
           <strong class="subscription-row-value">$72.00</strong>
         </div>
-        <!-->
       <% end %>
     </div>
 </div>
-<p class="text-left pt-2 pl-3 d-none d-md-block">Si no es lo que buscabas <%= link_to "cambia de suscripción", :back %> </p>
+<p class="text-left pt-2 pl-3 d-none d-md-block">Si no es lo que buscabas <%= link_to "cambia de suscripción", pricing_path(go_to_law: @go_to_law, is_onboarding: @is_onboarding) %> </p>
 </section>
+
+<!-- Start Cancel Modal -->
+        <div class="modal fade" id="cancelCheckoutModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-body">
+                <h5 class="modal-title" id="cancelModalLongTitle">¿Estás seguro que deseas salir?</h5>
+                <label id="labelBasico">
+                  Si sales no se guardará la información que ingresaste para el pago. 
+                  <br>
+                </label>
+                <p class="body p-1" ><small>Siempre puedes adquirir el plan pro desde las secciones de tu cuenta.</small></p>
+                <div class="form-group" id="bottonsGroup">
+                  <%= link_to 'Salir', root_path, id:"okButton", class:"btn btn-secondary"%>
+                  &nbsp;&nbsp;&nbsp;
+                  <button type="button" id="dismissBtn" class="btn btn-primary" data-dismiss="modal">Terminar el pago</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--End Cancel modal -->
 
 <style>
   .img-logo{
@@ -292,6 +285,7 @@
     display: flex;
     flex-direction: row;
     padding: 0;
+    margin: 0;
 }
 
 .payment-cards li {
@@ -299,7 +293,12 @@
 }
 
 .payment-cards img {
-    width: 48px;
+    width: auto;
+    height: 30px;
+}
+
+.payment-cards .icon-payment--mastercard {
+  height: 26px;
 }
 
 /* Move styles to general */
@@ -353,6 +352,15 @@
     margin: 2rem auto;
     line-height: 1.25rem;
     text-align: center;
+  }
+
+  .powered-line {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 2rem;
+    margin-bottom: 2rem;
   }
 
 </style>

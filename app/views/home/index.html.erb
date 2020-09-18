@@ -23,18 +23,16 @@
   <div class="row">
     <div class="col-sm-6 col-md-4 py-2">
       <div class="card card-body h-100" style="padding:0px">
-        <a class="" href="<%= drive_search_path %>" style="padding:20px">
-          <table>
+        <a class="" href="<%= google_drive_search_path %>" style="padding:20px">
+        <img style="position: absolute;top: 0px;right: 0px; padding: 10px" src="/img/google_drive_logo.png"/>
+          <table width="100%">
             <tr>
               <td>
-                <h5 class="card-title">Repositorio COVID-19</h5>
-              </td>
-              <td>
-                <img src="/img/google_drive_logo.png" style="padding-bottom: 10px"/>
+                <h5 class="card-title">Gacetas</h5>
               </td>
             </tr>
           </table>
-          <p><%= @covid_files_count %> documentos</p>
+          <p><%= @google_drive_files_count %> documentos</p>
         </a>
       </div>
     </div>
@@ -52,7 +50,7 @@
     <% end %>
   </div>
 
-  <p class="resultinfo"><%= Law.count %> documentos ingresados y creciendo</p>
+  <p class="resultinfo"><%= Law.count + @google_drive_files_count %> documentos ingresados y creciendo</p>
 
 </div>
 

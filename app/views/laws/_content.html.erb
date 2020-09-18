@@ -29,7 +29,15 @@
 
 <div>
   <% if @articles_count == 0 %>
-    <p>Intenta tu búsqueda de nuevo cambiando las palabras o revisando la ortografía.</p>
+    <div class="container--empty-results">
+      <p class="body">No se han encontrado documentos que coincidan con <strong><%= @query %></strong>.</p>
+      <div class="no-result-message">
+        <img src="/img/img-search-doc.svg" />
+        <p class="body body--secondary">
+          Asegurate de haber escrito la busqueda correctamente, sino intenta con un término similar. Recuerda que puedes refinar tu busqueda por título, palabra clave y número de artículo.
+        </p>
+      </div>
+    </div>
   <% end %>
   <% article_iterator = 0 %>
   <% bigger_section_iterator = 0 %>
@@ -95,19 +103,39 @@
       <% bigger_section_iterator += 1 %>
     <% end %>
     <% if stream.instance_of? Article %>
-      <div align="justify" style="color: #444; padding: 10px" onclick="onClickArticle(<%= article_iterator %>)" class="article" article_id="<%= article_iterator %>" last_bigger_section="<%= bigger_section_iterator - 1 %>" next_bigger_section="<%= bigger_section_iterator %>" id="article_count_<%= article_iterator %>">
-        <b class="article-name" align="justify" style="color: #111;font-weight:bold; display: block;``">Artículo <%= stream.number %><br>
-          <% if @user_can_edit_law && is_editor_mode_enabled %>
-            <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_article_path(stream) %>
+      <% if is_mobile == false %>
+        <div align="justify" style="color: #444; padding: 10px" onclick="onClickArticle(<%= article_iterator %>)" class="article" article_id="<%= article_iterator %>" last_bigger_section="<%= bigger_section_iterator - 1 %>" next_bigger_section="<%= bigger_section_iterator %>" id="article_count_<%= article_iterator %>">
+          <b class="article-name" align="justify" style="color: #111;font-weight:bold; display: block;">Artículo <%= stream.number %><br>
+            <% if @user_can_edit_law && is_editor_mode_enabled %>
+              <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_article_path(stream) %>
+            <% end %>
+          </b>
+          <% if @highlight_enabled %>
+            <%= stream.pg_search_highlight.html_safe %>.
+          <% else %>
+            <%= stream.class.markdown.render(stream.body).html_safe %>
           <% end %>
-        </b>
-        <% if @highlight_enabled %>
-          <%= stream.pg_search_highlight.html_safe %>.
-        <% else %>
-          <%= stream.class.markdown.render(stream.body).html_safe %>
-        <% end %>
-      </div>
-      <% article_iterator += 1 %>
+        </div>
+      <% end %>
+      <!-- highlited search for serch results preview in mobile version -->
+      <% if is_mobile %>
+        <div align="justify" style="color: #444; padding: 10px" onclick="onClickArticle(<%= article_iterator %>)" class="article" article_id="<%= article_iterator %>" last_bigger_section="<%= bigger_section_iterator - 1 %>" next_bigger_section="<%= bigger_section_iterator %>" id="article_count_<%= article_iterator %>">
+          <b class="article-name" align="justify" style="color: #111;font-weight:bold; display: block;">Artículo <%= stream.number %><br>
+            <% if @user_can_edit_law && is_editor_mode_enabled %>
+              <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_article_path(stream) %>
+            <% end %>
+          </b>
+          <% if @highlight_enabled %>
+            <a class="uncolored_link" href="#article_<%= stream.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onPreviewElementClicked('article_count_<%= article_iterator %>', <%= article_iterator %>)}, 500)" aria-controls="articulos" aria-selected="true">
+              <%= (stream.pg_search_highlight).html_safe %>
+            </a>
+            <hr>
+          <% else %>
+            <%= stream.class.markdown.render(stream.body).html_safe %>
+          <% end %>
+        </div>
+      <% end %>
+    <% article_iterator += 1 %>
     <% end %>
   <% end %>
 </div>

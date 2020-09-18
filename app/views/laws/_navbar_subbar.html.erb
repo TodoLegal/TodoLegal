@@ -62,34 +62,63 @@
       <%= render '/home/loading_spinner' %>
     </div>
   </div>
-  <div class="row">
-    <div class="col-<%= @highlight_enabled ? '2' : '12' %>">
-      <span class="resultinfo d-inline-block text-truncate" style="width: 100%; width: 100vw;" id="sticky_nav_header"><%= @highlight_enabled ? @query : '' %></span>
+  <% if @highlight_enabled %>
+    <div class="row row-counter">
+      <div class="col-12 col-counter">
+        <button class="btn btn-sm" style="padding-left:4;" onclick="browseHighlightedUp()"><i class="fa fa-chevron-left"></i></button>
+        <span>Resultado </span>&nbsp;<span id="result-count-big"></span>
+        <button class="btn btn-sm" style="padding-left:4;" onclick="browseHighlightedDown()"><i class="fa fa-chevron-right"></i></button>
+      </div>
     </div>
-    <% if @highlight_enabled %>
-    <div class="col-5">
-      <span style="font-size: 15px; padding: 0px;"><a class="" style="font-size: 12px;" href="<%= law_path(@law) %>">Ver ley completa</a></span>
+    <div class="row">
+      <div class="col-12">
+        <span style="font-size: 15px; padding: 0px;"><a class="" style="font-size: 12px;" href="<%= law_path(@law) %>">Ver ley completa</a></span>
+      </div>
     </div>
-    <div class="col-1" style="padding-top:2px;">
-      <span id="result-count-big"></span>
-    </div>
-    <div class="col-4" style="display: inline-flex;">
-      <button class="btn btn-sm" style="padding-left:4;" onclick="browseHighlightedUp()"><i class="fa fa-chevron-left"></i></button>
-      <button class="btn btn-sm" style="padding-left:4;" onclick="browseHighlightedDown()"><i class="fa fa-chevron-right"></i></button>
-    </div>
-    <% end %>
-  </div>
+  <% end %>
 </div>
 
 <style>
-  br{content:' ';}
-  br:after{content:' ';}
+br{content:' ';}
+br:after{content:' ';}
 
-  .subbar-icon{
-    font-size: 20px;
-    display: block;
-  }
+.subbar-icon{
+  font-size: 20px;
+  display: block;
+}
 
+.subbar-text{
+  color: #505864;
+  text-align: center;
+  line-height: 1.7rem;
+}
+
+.subbar-text:hover{
+  color: #171F2A;
+}
+
+ul li.active a{
+  color: #171F2A;
+   border-bottom-style: solid;
+   border-bottom-color: #1A7FFA;
+}
+
+.subbar-item{
+  text-align: center;
+  line-height: 1.2rem;
+}
+
+.row-counter {
+  background-color: #EFEFEF;
+  padding: .5rem;
+}
+
+.col-counter {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+/* @media only screen and (max-width: 767.98px){ */
   .subbar-text{
     color: #505864;
     text-align: center;
@@ -126,12 +155,12 @@
 
   
   @media only screen and (max-width: 767.98px){
-    .subbar-text{
+    /* .subbar-text{
       font-size: 13px;
       padding-right: 5px;
       padding-left: 5px;
       padding-top: 0px;
-    }
+    } */
 
     .desktop-menu-item{
       display: none;
@@ -142,6 +171,7 @@
     }
 
   }
+  
 </style>
 
 <script>

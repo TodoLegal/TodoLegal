@@ -12,14 +12,15 @@
   <%= render partial: 'home/search_law_input', locals: {target_url: tag_path(@tag), home_flag: true} %>
 </nav>
 
-<div class="container" style="">
+<div class="container container--results" style="">
   <div class="d-none d-sm-block">
     <%= render partial: 'home/search_law_input', locals: {target_url: tag_path(@tag), home_flag: true} %>
   </div>
   
   <%= render 'home/search_result.html.erb' %>
 
-  <%= link_to 'Ir al inicio', root_path %>
+  <!--
+  <%= link_to 'Ir al inicio', root_path %>-->
 </div>
 
 <%= javascript_pack_tag "help_card" %>

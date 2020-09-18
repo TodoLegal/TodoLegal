@@ -1,40 +1,9 @@
 class ChaptersController < ApplicationController
-  before_action :set_chapter, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_admin!, only: [:index, :show, :new, :edit, :create, :update, :destroy]
-
-  # GET /chapters
-  # GET /chapters.json
-  def index
-    @chapters = Chapter.all
-  end
-
-  # GET /chapters/1
-  # GET /chapters/1.json
-  def show
-  end
-
-  # GET /chapters/new
-  def new
-    @chapter = Chapter.new
-  end
+  before_action :set_chapter, only: [:edit, :update]
+  before_action :authenticate_editor!, only: [:edit, :update]
 
   # GET /chapters/1/edit
   def edit
-  end
-
-  # POST /chapters
-  # POST /chapters.json
-  def create
-    @chapter = Chapter.new(chapter_params)
-    respond_to do |format|
-      if @chapter.save
-        format.html { redirect_to @chapter, notice: 'Chapter was successfully created.' }
-        format.json { render :show, status: :created, location: @chapter }
-      else
-        format.html { render :new }
-        format.json { render json: @chapter.errors, status: :unprocessable_entity }
-      end
-    end
   end
 
   # PATCH/PUT /chapters/1
@@ -48,16 +17,6 @@ class ChaptersController < ApplicationController
         format.html { render :edit }
         format.json { render json: @chapter.errors, status: :unprocessable_entity }
       end
-    end
-  end
-
-  # DELETE /chapters/1
-  # DELETE /chapters/1.json
-  def destroy
-    @chapter.destroy
-    respond_to do |format|
-      format.html { redirect_to chapters_url, notice: 'Chapter was successfully destroyed.' }
-      format.json { head :no_content }
     end
   end
 

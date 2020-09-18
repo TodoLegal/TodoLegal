@@ -7,15 +7,15 @@
 
 <p>
 <% if @law.creation_number && @law.creation_number != "" %>
-  <span class="badge badge-creation badge-secondary"><i class="fas fa-file-alt"></i> <%= @law.creation_number %></span>
+  <span class="badge-creation badge-secondary"><i class="fas fa-file-alt"></i> <%= @law.creation_number %></span>
 <% end %>
 <% if !@highlight_enabled %>
   <span class="badge badge-articles"><%= @articles_count %> artículos en total</span>
 <% else %>
   <span class="badge badge-secondary"><%= @articles_count %> resultados encontrados</span>
 <% end %>
-</p>
 
+</p>
 <!--
 <% if @highlight_enabled %>
 <p>
@@ -34,6 +34,7 @@
     font-weight: normal;
     font-size: 14px;
     line-height: 18px;
+    padding: .25em .4em;
   }
 
   .badge-articles{

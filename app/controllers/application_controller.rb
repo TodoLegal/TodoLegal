@@ -13,6 +13,10 @@ class ApplicationController < ActionController::Base
     current_user != nil && current_user.permissions.find_by_name("Admin") != nil
   end
 
+  def current_user_is_editor
+    current_user != nil && (current_user.permissions.find_by_name("Editor") != nil || current_user.permissions.find_by_name("Admin") != nil)
+  end
+
   def user_is_pro user
     if !user
       return false
@@ -30,6 +34,12 @@ class ApplicationController < ActionController::Base
 
   def authenticate_admin!
     if !current_user_is_admin
+      redirect_to "/?error=Invalid+permissions"
+    end
+  end
+
+  def authenticate_editor!
+    if !current_user_is_editor
       redirect_to "/?error=Invalid+permissions"
     end
   end

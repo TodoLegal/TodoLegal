@@ -117,7 +117,7 @@
           <% end %>
         </div>
       <% end %>
-      
+      <!-- highlited search for serch results preview in mobile version -->
       <% if is_mobile %>
         <div align="justify" style="color: #444; padding: 10px" onclick="onClickArticle(<%= article_iterator %>)" class="article" article_id="<%= article_iterator %>" last_bigger_section="<%= bigger_section_iterator - 1 %>" next_bigger_section="<%= bigger_section_iterator %>" id="article_count_<%= article_iterator %>">
           <b class="article-name" align="justify" style="color: #111;font-weight:bold; display: block;">Artículo <%= stream.number %><br>

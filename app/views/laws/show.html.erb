@@ -1,6 +1,10 @@
 <% content_for :title, @law.name + " - TodoLegal" %>
+<% if user_signed_in? %>
+  <%= render 'law_navbar'%>
+<% else %>
+  <%= render 'law_unlogged_navbar'%>
+<% end %>
 
-<%= render 'law_navbar'%>
 <%if @info_is_searched %>
   <% display_search_container = "block" %>
   <% display_container_visualizador = "none" %>
@@ -99,6 +103,9 @@
       <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="articulos" role="tabpanel" aria-labelledby="articulos-tab">
           <div class="law-header-mobile"><%= render 'law_header' %></div>
+          <div class="col-12">
+            <span class="resultinfo sticky-top d-inline-block text-truncate" style="width: 100%;" id="sticky_nav_header"></span>
+          </div>
           <%= render  partial:'content', locals:{is_mobile: false} %>
         </div>
         <div class="tab-pane fade show" id="indice" role="tabpanel" aria-labelledby="indice-tab">

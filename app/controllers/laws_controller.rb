@@ -228,7 +228,10 @@ class LawsController < ApplicationController
       @laws_array = []
       counter = 0
       while counter < lawTags.size
-        @laws_array[counter] = Law.find_by(id: lawTags[counter].law_id)
+        law = Law.find_by(id: lawTags[counter].law_id)
+        if law
+          @laws_array[counter] = law
+        end
         counter+=1
       end
 

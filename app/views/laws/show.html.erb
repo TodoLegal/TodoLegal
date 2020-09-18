@@ -253,6 +253,26 @@
   function onIndexElementClicked(section_id) {
     console.log(section_id)
     document.getElementById(section_id).scrollIntoView({block:'center'});
+
+  }
+
+  //This function handles the logic to show the highlited section and current_highlated word based on the preview element clicked
+  function onPreviewElementClicked (section_id, highlited_section){
+    console.log("Id del articulo: " + section_id);
+    document.getElementById(section_id).scrollIntoView({block:'center'});
+    var c;
+    var elementId = "";
+    var acumulator = 0;
+
+    for (c = 0  ; c < highlited_section ; c++){
+      elementId = "article_count_" + c.toString();
+      var element = document.getElementById(elementId);
+      acumulator += element.getElementsByClassName('highlighted').length;
+      
+    }
+    currrent_highlighted = acumulator;
+    updateHighlightedView();
+    hideSearchContainer();
   }
 
   function hideSearchContainer () {
@@ -263,4 +283,6 @@
   }
   
 </script>
+
+
 

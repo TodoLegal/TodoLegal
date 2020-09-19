@@ -11,6 +11,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def new
     @go_to_law = params[:go_to_law]
     @go_to_checkout = params[:go_to_checkout]
+    @is_monthly = params[:is_monthly]
+    @pricing_onboarding = params[:pricing_onboarding]
     super
   end
 
@@ -86,7 +88,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
       $discord_bot.send_message($discord_bot_channel_notifications, "Se ha registrado un nuevo usuario :tada:")
     end
     session[:user_just_signed_up] = true
-    pricing_path(is_onboarding:true, go_to_law: params[:go_to_law], go_to_checkout: params[:go_to_checkout])
+    if params[:pricing_onboarding]
+      checkout_path(is_onboarding:true, go_to_law: params[:go_to_law], is_monthly: params[:is_monthly])
+    else
+      pricing_path(is_onboarding:true, go_to_law: params[:go_to_law], go_to_checkout: params[:go_to_checkout], user_just_registered: true)
+    end
   end
 
   def after_update_path_for(resource)

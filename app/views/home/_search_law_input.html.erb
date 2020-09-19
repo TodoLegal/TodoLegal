@@ -2,7 +2,7 @@
   <form action="<%= target_url %>" method="get">
     <div id="search-input" class="input-group input-group-lg mb-3 main-search">
       <% if home_flag == false %>
-        <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, style:"font-size: 1.5rem; color: #171F2A; margin-top: 10px;" %>
+        <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, class:"btn btn-back", style:"font-size: 1.5rem; color: #171F2A; margin-top: 10px;" %>
       <% end %>
       <input name="query" id="searchInput" value="<%= @query %>" type="text" class="form-control search-input" placeholder="Ej. Ad-litem, despido, prórroga" aria-label="Recipient's username" aria-describedby="button-addon2" autocomplete="off">
       <div class="input-group-append">

@@ -52,6 +52,7 @@ law_access_todos = LawAccess.create(name: "Todos")
 # Permissions
 
 permissions_admin = Permission.create(name: "Admin")
+permissions_editor = Permission.create(name: "Editor")
 permissions_pro = Permission.create(name: "Pro")
 
 # Law Samples

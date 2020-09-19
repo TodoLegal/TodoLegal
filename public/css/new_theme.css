@@ -201,7 +201,7 @@ input.form-control:focus {
 
 .main-search {
     max-width: 640px;
-    margin: auto;
+    margin: 1rem auto;
 }
 
 .main-search .form-control {
@@ -546,13 +546,6 @@ footer p a {
     margin-right: .5rem;
 }
 
-@media only screen and (max-width: 767.98px) {
-    .tabs--document {
-        justify-content: space-between;
-        padding: 1rem 0 0;
-    }
-}
-
 @media only screen and (min-width: 767.98px) {
 
     .tabs--document {
@@ -572,7 +565,47 @@ footer p a {
     color: #171F2A;
     padding: .5rem 1rem;
 }
+.container--results {
+    min-height: calc(100vh - 200px);
+}
 
+.container--empty-results {
+    max-width: 640px;
+    margin: 4rem auto; 
+}
+
+.container--empty-results p {
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+}
+
+.no-result-message {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.container--empty-results .no-result-message p {
+    color: #495057; 
+    font-size: 1.15rem;
+}
+
+@media only screen and (min-width: 767.98px) {
+    .modal--document .modal-body {
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+    }
+
+    .modal--document .btn {
+        max-width: 210px;
+        margin: 1rem auto;
+    }
+}
+
+.no-result-message img {
+    width: 310px;
+    margin: 1rem;
+}
 /* Index */
 
 .card-header {
@@ -649,3 +682,18 @@ footer p a {
      width: 100%;
      padding: 1rem;
  }
+@media only screen and (max-width: 767.98px) {
+    .container--empty-results {
+        text-align:center; 
+    }
+    
+    .no-result-message img {
+       max-height: 90px;
+    }
+
+    .no-result-message {
+        display: flex;
+        flex-direction: column  ;
+        align-items: center;
+    }
+}

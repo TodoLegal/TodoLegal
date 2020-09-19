@@ -1,6 +1,10 @@
 <% content_for :title, @law.name + " - TodoLegal" %>
+<% if user_signed_in? %>
+  <%= render 'law_navbar'%>
+<% else %>
+  <%= render 'law_unlogged_navbar'%>
+<% end %>
 
-<%= render 'law_navbar'%>
 <%if @info_is_searched %>
   <% display_search_container = "block" %>
   <% display_container_visualizador = "none" %>
@@ -11,6 +15,75 @@
   <% display_topNavbar = "flex" %>
 <% end %>
 
+<style>
+  .container-law{
+    max-width: 1090px;
+    margin: 5vh auto;
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: 860px auto;
+  }
+
+  .container-law .nav-pills {
+    background-color: #EFF3F8;
+  }
+
+  .law-header-desktop{
+    display: block;
+  }
+
+  .law-header-mobile{
+    display: none;
+  } 
+
+  #topNavbar{
+    display: flex;
+  }
+
+  .container--visualizador{
+    display: block;
+  }
+
+  .search--container{
+    display: none;
+  }
+  
+  @media only screen and (max-width: 767.98px){
+    .container-law{
+      padding: 0px;
+    }
+
+    .container-law {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container-law .nav-pills {
+      display: none;
+    }
+
+    .law-header-desktop{
+      display: none;
+    }
+
+    .law-header-mobile{
+      display: block;
+    }
+
+    .container--visualizador{
+      display: <%= display_container_visualizador %>;
+    }  
+
+    .search--container{
+      display: <%= display_search_container %>;
+    }
+
+    #topNavbar{
+      display: <%= display_topNavbar %>;
+    }
+  }
+</style>
+
 <div class="container container--visualizador" data-spy="scroll" data-target="#myScrollspy">
 
   <!-- Copied to clipboard alert -->
@@ -18,7 +91,7 @@
     <button type="button" class="close" onclick="hideAlert()">
     <span aria-hidden="true">&times;</span>
     </button>
-      Enlace copiado en el portapapeles, ahora puedes compartir la ley.
+      Enlace copiado en el portapapeles, ahora puedes compartir este documento pegando el enlace.
   </div>
 
   <div class="law-header-desktop"><%= render 'law_header' %></div>
@@ -30,7 +103,10 @@
       <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="articulos" role="tabpanel" aria-labelledby="articulos-tab">
           <div class="law-header-mobile"><%= render 'law_header' %></div>
-          <%= render 'content' %>
+          <div class="col-12">
+            <span class="resultinfo sticky-top d-inline-block text-truncate" style="width: 100%;" id="sticky_nav_header"></span>
+          </div>
+          <%= render  partial:'content', locals:{is_mobile: false} %>
         </div>
         <div class="tab-pane fade show" id="indice" role="tabpanel" aria-labelledby="indice-tab">
           <%= render 'indice' %>
@@ -43,78 +119,70 @@
         </div>
       </div>
       
-
-      <div class="wrapper">
-        <%= render 'sidebar_indice' %>
-      </div>
-      <% if !@user_can_access_law %>
-        <!-- Modal -->
-        <div class="modal fade" data-keyboard="false" data-backdrop="static" id="modalCreateBasicAccount" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-body">
-                <div class="container col-md-12">
-                  <div class="row">
-                    <% if current_user %>
-                      <!-- Modal "Cambar a cuenta Pro" -->
-                      <div class="col-md-12">
-                        <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, style:"font-size: 1.5rem; color:black;" %>
-                        <p  style="font-size:22px; text-align:center; display:inline; margin-left: 8%;">
-                        <b>Suscríbete y obtén acceso ilimitado</b>
+    <div class="wrapper">
+      <%= render 'sidebar_indice' %>
+    </div>
+    <% if !@user_can_access_law %>
+      <p>Crea una cuenta para acceder a esta ley</p>
+      <!-- Modal -->
+      <div class="modal fade modal--document" data-keyboard="false" data-backdrop="static" id="modalCreateBasicAccount" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-body">
+              <div class="container col-md-12">
+                <div class="row">
+                  <% if current_user %>
+                    <!-- Modal "Cambar a cuenta Pro" -->
+                    <div class="col-md-12">
+                      <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, style:"font-size: 1.5rem; color:#505864;" %>
+                      <h3 style="font-size:22px; text-align:center; margin-left: 8%;">
+                      Para consultar este documento requieres tener el Plan Pro
+                      </h3>
+                    </div>
+                    <div class="col-md-12">
+                      <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
+                      Adquiérelo por <b>$7.00 al mes</b> y podrás acceder a los más de<%= (Law.count/10)*10 %> documentos legales y a lo que continuamente agregamos.
+                    </p>
+                    <p style="font-size:18px; text-align:center;">
+                          <i class="text-muted">Puedes cancelar la suscripción en cualquier momento.</i>
                         </p>
+                    </div>
+                    <div class="col-md-12">
+                      <a href="<%= pricing_path(activate_pro_account: true, go_to_law: @law.id) %>">
+                        <button type="button" class="btn btn-primary btn-block">Adquirir Plan Pro</button>
+                      </a>
+                    </div>
+                  <% else %>
+                    <% if @law.law_access.name == "Pro" %>
+                      <!-- Modal "Crear cuenta Pro" -->
+                      <div class="col-md-12">
+                        <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, style:"font-size: 1.5rem; color:#505864;" %>
+                        <h3 style="font-size:22px; text-align:center; margin-left: 8%;">
+                        Suscríbete y obtén acceso ilimitado
+                        </h3>
                       </div>
                       <div class="col-md-12">
                         <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
-                        Para leer esta ley adquiere el plan Pro, por <b>$3.5</b> podrás acceder a este y más de <b><%= (Law.count/10)*10 %> documentos</b>.
+                      Adquiere el <b>Plan Pro</b> por <b>$7.00 al mes</b> y podrás acceder a más de <%= (Law.count/10)*10 %> documentos legales y a lo que continuamente agregamos.
+                        <p style="font-size:18px; text-align:center;">
+                          <i class="text-muted">Puedes cancelar la suscripción en cualquier momento.</i>
+                        </p>
+                        
                       </p>
                       </div>
                       <div class="col-md-12">
-                        <a href="<%= pricing_path(activate_pro_account: true, go_to_law: @law.id) %>">
-                          <button type="button" class="btn btn-primary btn-block">Adquirir plan Pro</button>
+                        <a href="<%= new_user_registration_path %>?go_to_law=<%=@law.id%>&go_to_checkout=true">
+                          <button type="button" class="btn btn-primary btn-block">Crear cuenta</button>
                         </a>
                       </div>
                     <% else %>
-                      <% if @law.law_access.name == "Pro" %>
-                        <!-- Modal "Crear cuenta Pro" -->
-                        <div class="col-md-12">
-                          <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, style:"font-size: 1.5rem; color:black;" %>
-                          <p  style="font-size:22px; text-align:center; display:inline; margin-left: 8%;">
-                          <b>Suscríbete y obtén acceso ilimitado</b>
-                          </p>
-                        </div>
-                        <div class="col-md-12">
-                          <p style="font-size:18px; text-align:center; padding-top: 22px;">
-                            Activa una suscripción de <b>$3.5</b> para acceder a todo el contenido.
-                          </p>
-                          <p style="font-size:18px; text-align:center; padding-bottom: 22px">
-                            <i>Puedes cancelar en cualquier momento.</i>
-                          </p>
-                        </p>
-                        </div>
-                        <div class="col-md-12">
-                          <a href="<%= new_user_registration_path %>?go_to_law=<%=@law.id%>&go_to_checkout=true">
-                            <button type="button" class="btn btn-primary btn-block">Crear cuenta Pro</button>
-                          </a>
-                        </div>
-                      <% else %>
-                        <!-- Modal "Crear cuenta Básica" -->
-                        <div class="col-md-12">
-                          <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, style:"font-size: 1.5rem; color:black;" %>
-                          <p  style="font-size:22px; text-align:center; display:inline; margin-left: 8%;">
-                          <b>Regístrate y accede a esta ley</b>
-                          </p>
-                        </div>
-                        <div class="col-md-12">
-                          <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
-                          Crea una cuenta y accede a más de <b><%= (Law.count/10)*10 %> documentos</b> de Legislación Hondureña y recibe boletines informativos.
-                          </p>
-                        </div>
-                        <div class="col-md-12">
-                          <a href="<%= new_user_registration_path %>?go_to_law=<%=@law.id%>">
-                            <button type="button" class="btn btn-primary btn-block">Crear cuenta Básica</button>
-                          </a>
-                        </div>
-                      <% end %>
+                      <!-- Modal "Crear cuenta Básica" -->
+                      <div class="col-md-12">
+                        <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, style:"font-size: 1.5rem; color:#505864;" %>
+                        <h3 style="font-size:22px; text-align:center; margin-left: 8%;">
+                        Regístrate y accede a este documento
+                        </h3>
+                      </div>
                       <div class="col-md-12">
                         <div with="100%" style="text-align:center; padding-top: 22px;">
                           ¿Ya tienes cuenta?
@@ -126,7 +194,17 @@
                         </div>
                       </div>
                     <% end %>
-                  </div>
+                    <div class="col-md-12">
+                      <div with="100%" style="text-align:center;">
+                        ¿Ya tienes cuenta?
+                      </div>
+                      <div with="100%" style="text-align:center;">
+                        <a style="font-size:18px;text-align:center;" href="<%= new_user_session_path %>?go_to_law=<%=@law.id%>">
+                          Inicia sesión
+                        </a>
+                      </div>
+                    </div>
+                  <% end %>
                 </div>
               </div>
             </div>
@@ -181,6 +259,26 @@
   function onIndexElementClicked(section_id) {
     console.log(section_id)
     document.getElementById(section_id).scrollIntoView({block:'center'});
+
+  }
+
+  //This function handles the logic to show the highlited section and current_highlated word based on the preview element clicked
+  function onPreviewElementClicked (section_id, highlited_section){
+    console.log("Id del articulo: " + section_id);
+    document.getElementById(section_id).scrollIntoView({block:'center'});
+    var c;
+    var elementId = "";
+    var acumulator = 0;
+
+    for (c = 0  ; c < highlited_section ; c++){
+      elementId = "article_count_" + c.toString();
+      var element = document.getElementById(elementId);
+      acumulator += element.getElementsByClassName('highlighted').length;
+      
+    }
+    currrent_highlighted = acumulator;
+    updateHighlightedView();
+    hideSearchContainer();
   }
 
   function hideSearchContainer () {
@@ -189,65 +287,8 @@
     document.getElementsByClassName("container--visualizador")[0].style.display = "block";
     document.getElementById("topNavbar").style.display = "flex";
   }
+  
 </script>
 
-<style>
-  .container-law{
-    max-width: 1090px;
-    margin: 5vh auto;
-    display: grid;
-    grid-gap: 10px;
-    grid-template-columns: 860px auto;
-  }
 
-  .container-law .nav-pills {
-    background-color: #EFF3F8;
-  }
 
-  .law-header-desktop{
-    display: block;
-  }
-
-  .law-header-mobile{
-    display: none;
-  } 
-
-  #topNavbar{
-    display: flex;
-  }
-  
-  @media only screen and (max-width: 767.98px){
-    .container-law{
-      padding: 0px;
-    }
-
-    .container-law {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .container-law .nav-pills {
-      display: none;
-    }
-
-    .law-header-desktop{
-      display: none;
-    }
-
-    .law-header-mobile{
-      display: block;
-    }
-
-    .container--visualizador{
-      display: <%= display_container_visualizador %>;
-    }  
-
-    .search-container{
-      display: <%= display_search_container %>;
-    }
-
-    #topNavbar{
-      display: <%= display_topNavbar %>;
-    }
-  }
-</style>

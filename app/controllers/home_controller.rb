@@ -13,6 +13,14 @@ class HomeController < ApplicationController
       data_hash = JSON.parse(file)
       @google_drive_files_count =  data_hash['file_count']
     end
+
+    google_drive_covid_data_json_path = 'public/google_drive_covid_data.json'
+    @google_drive_covid_files_count = 0
+    if File.file?(google_drive_covid_data_json_path)
+      file = File.read(google_drive_covid_data_json_path)
+      data_hash = JSON.parse(file)
+      @google_drive_covid_files_count =  data_hash['file_count']
+    end
   end
 
   def search_law

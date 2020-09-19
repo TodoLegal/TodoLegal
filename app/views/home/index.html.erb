@@ -36,6 +36,21 @@
         </a>
       </div>
     </div>
+    <div class="col-sm-6 col-md-4 py-2">
+      <div class="card card-body h-100" style="padding:0px">
+        <a class="" href="<%= google_drive_covid_search_path %>" style="padding:20px">
+        <img style="position: absolute;top: 0px;right: 0px; padding: 10px" src="/img/google_drive_logo.png"/>
+          <table width="100%">
+            <tr>
+              <td>
+                <h5 class="card-title">Repositorio COVID-19</h5>
+              </td>
+            </tr>
+          </table>
+          <p><%= @google_drive_covid_files_count %> documentos</p>
+        </a>
+      </div>
+    </div>
     <% @tags.each do |tag| %>
       <% if tag.laws.count != 0 %>
         <div class="col-sm-6 col-md-4 py-2">

@@ -35,7 +35,7 @@
         <% if file['type'] == 'application/vnd.google-apps.folder' %>
           <div class="collapsable-law-cards col-sm-6 col-md-4 py-2">
             <div class="card card-body h-100" style="padding:0px">
-              <a class="" href="<%= google_drive_covid_search_path '?folder=' + file['name'] %>" target="_self" style="padding:20px">
+              <a class="" href="<%= google_drive_covid_search_path + '?folder=' + file['name'] %>" target="_self" style="padding:20px">
                 <i class="fas fa-folder"></i>
                 <h5 class="card-title"><%= file['name'] %></h5>
                 <p class="primaryinfo">[<%= file['file_count'] %> archivos]</p>

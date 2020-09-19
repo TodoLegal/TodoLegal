@@ -4,7 +4,7 @@
   <a href="/"><img src="/img/logo_landing_mobile.png" class="img-fluid-vertical" height="300"></a>
 </div>
 <div class="container container--results">
-  <form action="/google_drive_search" method="get">
+  <form action="<%= google_drive_search_path %>" method="get">
     <div id="search-input" class="input-group input-group-lg mb-3 main-search">
       <input name="query" value="<%= @query %>" type="text" class="form-control" placeholder="Busca gacetas publicadas" aria-label="Recipient's username" aria-describedby="button-addon2">
       <div class="input-group-append">
@@ -35,7 +35,7 @@
         <% if file['type'] == 'application/vnd.google-apps.folder' %>
           <div class="collapsable-law-cards col-sm-6 col-md-4 py-2">
             <div class="card card-body h-100" style="padding:0px">
-              <a class="" href="<%= '/google_drive_search?folder=' + file['name'] %>" target="_self" style="padding:20px">
+              <a class="" href="<%= '<%= google_drive_search_path %>?folder=' + file['name'] %>" target="_self" style="padding:20px">
                 <i class="fas fa-folder"></i>
                 <h5 class="card-title"><%= file['name'] %></h5>
                 <p class="primaryinfo">[<%= file['file_count'] %> archivos]</p>

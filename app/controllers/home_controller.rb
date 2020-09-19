@@ -139,7 +139,7 @@ class HomeController < ApplicationController
         files = get_files_like_name(JSON.parse(google_drive_data)["data"], query).sort_by { |v| v["name"] }
       elsif folder && folder!=""
         if get_parent_files
-          folder = get_parrent_folder_name JSON.parse(google_drive_data)["data"], folder
+          folder.replace(get_parrent_folder_name JSON.parse(google_drive_data)["data"], folder)
         end
         if folder == ""
           files = JSON.parse(google_drive_data)["data"].sort_by { |v| v["name"] }

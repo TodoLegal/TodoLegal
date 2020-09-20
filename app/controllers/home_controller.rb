@@ -5,22 +5,6 @@ class HomeController < ApplicationController
   
   def index
     @tags = Tag.where(tag_type: TagType.find_by_name("materia"))
-
-    google_drive_data_json_path = 'public/google_drive_data.json'
-    @google_drive_files_count = 0
-    if File.file?(google_drive_data_json_path)
-      file = File.read(google_drive_data_json_path)
-      data_hash = JSON.parse(file)
-      @google_drive_files_count =  data_hash['file_count']
-    end
-
-    google_drive_covid_data_json_path = 'public/google_drive_covid_data.json'
-    @google_drive_covid_files_count = 0
-    if File.file?(google_drive_covid_data_json_path)
-      file = File.read(google_drive_covid_data_json_path)
-      data_hash = JSON.parse(file)
-      @google_drive_covid_files_count =  data_hash['file_count']
-    end
   end
 
   def search_law

@@ -32,7 +32,7 @@
               </td>
             </tr>
           </table>
-          <p><%= @google_drive_files_count %> documentos</p>
+          <p><%= google_drive_documents_count %> documentos</p>
         </a>
       </div>
     </div>
@@ -47,7 +47,7 @@
               </td>
             </tr>
           </table>
-          <p><%= @google_drive_covid_files_count %> documentos</p>
+          <p><%= google_drive_covid_documents_count %> documentos</p>
         </a>
       </div>
     </div>
@@ -65,7 +65,7 @@
     <% end %>
   </div>
 
-  <p class="resultinfo"><%= Law.count + @google_drive_files_count %> documentos ingresados y creciendo</p>
+  <p class="resultinfo"><%= all_document_count %> documentos ingresados y creciendo</p>
 
 </div>
 

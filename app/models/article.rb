@@ -11,7 +11,7 @@ class Article < ApplicationRecord
 
   #pg_search_scope :search_by_body, against: :body
 
-  pg_search_scope :search_by_body,
+  pg_search_scope :search_by_body_highlighted,
                   against: :body,
                   ignoring: :accents,
                   using: {
@@ -42,6 +42,25 @@ pg_search_scope :search_by_body_trimmed,
                         MaxWords: 20,
                         MinWords: 465,
                         ShortWord: 1,
+                        HighlightAll: true,
+                        MaxFragments: 3,
+                        FragmentDelimiter: '&hellip;'
+                      }
+                    }
+                  }
+
+pg_search_scope :search_by_body_highlighted_and_trimmed,
+                  against: :body,
+                  ignoring: :accents,
+                  using: {
+                    tsearch: {
+                      dictionary: "tl_config",
+                      highlight: {
+                        StartSel: '<b style="color: var(--c-highlight); background-color: var(--c-highlight-background)" class="highlighted">',
+                        StopSel: '</b>',
+                        MaxWords: 20,
+                        MinWords: 456,
+                        ShortWord: 0,
                         HighlightAll: true,
                         MaxFragments: 3,
                         FragmentDelimiter: '&hellip;'

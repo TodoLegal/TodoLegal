@@ -38,7 +38,7 @@ class LawsController < ApplicationController
     if params[:query] && params[:query] != ""
       @highlight_enabled = true
       @query = params[:query]
-      @stream = @law.articles.search_by_body(params[:query]).with_pg_search_highlight.order(:position).sort_by { |article| article.position }
+      @stream = @law.articles.search_by_body_highlighted_and_trimmed(params[:query]).with_pg_search_highlight.order(:position).sort_by { |article| article.position }
       @articles_count = @stream.size
     else
       i = 0

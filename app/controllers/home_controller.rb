@@ -5,14 +5,6 @@ class HomeController < ApplicationController
   
   def index
     @tags = Tag.where(tag_type: TagType.find_by_name("materia"))
-
-    google_drive_data_json_path = 'public/google_drive_data.json'
-    @google_drive_files_count = 0
-    if File.file?(google_drive_data_json_path)
-      file = File.read(google_drive_data_json_path)
-      data_hash = JSON.parse(file)
-      @google_drive_files_count =  data_hash['file_count']
-    end
   end
 
   def search_law
@@ -122,30 +114,42 @@ class HomeController < ApplicationController
   
   def invite_friends
   end
+
+  def getGoogleDriveFiles file_path, get_parent_files, folder, query
+    files = []
+    if File.file?(file_path)
+      google_drive_data = File.read(file_path)
+      if query && query!=""
+        files = get_files_like_name(JSON.parse(google_drive_data)["data"], query).sort_by { |v| v["name"] }
+      elsif folder && folder!=""
+        if get_parent_files
+          folder.replace(get_parrent_folder_name JSON.parse(google_drive_data)["data"], folder)
+        end
+        if folder == ""
+          files = JSON.parse(google_drive_data)["data"].sort_by { |v| v["name"] }
+        else
+          files = get_folder_files JSON.parse(google_drive_data)["data"], folder
+        end
+      else
+        files = JSON.parse(google_drive_data)["data"].sort_by { |v| v["name"] }
+      end
+    end
+    return files
+  end
+
   
   def google_drive_search
     @query = params[:query]
     @folder = params[:folder]
     @get_parent_files = params[:get_parent_files] == 'true'
-    @files = []
+    @files = getGoogleDriveFiles 'public/google_drive_data.json', @get_parent_files, @folder, @query
+  end
 
-    if File.file?('public/google_drive_data.json')
-      google_drive_data = File.read('public/google_drive_data.json')
-      if @query && @query!=""
-        @files = get_files_like_name(JSON.parse(google_drive_data)["data"], @query).sort_by { |v| v["name"] }
-      elsif @folder && @folder!=""
-        if @get_parent_files
-          @folder = get_parrent_folder_name JSON.parse(google_drive_data)["data"], @folder
-        end
-        if @folder == ""
-          @files = JSON.parse(google_drive_data)["data"].sort_by { |v| v["name"] }
-        else
-          @files = get_folder_files JSON.parse(google_drive_data)["data"], @folder
-        end
-      else
-        @files = JSON.parse(google_drive_data)["data"].sort_by { |v| v["name"] }
-      end
-    end
+  def google_drive_covid_search
+    @query = params[:query]
+    @folder = params[:folder]
+    @get_parent_files = params[:get_parent_files] == 'true'
+    @files = getGoogleDriveFiles 'public/google_drive_covid_data.json', @get_parent_files, @folder, @query
   end
 
   def refer

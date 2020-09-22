@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :law_accesses
   resources :user_permissions
   resources :permissions
   resources :law_modifications
@@ -21,7 +20,9 @@ Rails.application.routes.draw do
   get '/privacy', to: 'home#privacy', as: "privacy"
   get '/pricing', to: 'home#pricing'
   get '/invite_friends', to: 'home#invite_friends'
-  get '/google_drive_search', to: 'home#google_drive_search', as: "google_drive_search"
+  get '/gacetas', to: 'home#google_drive_search', as: "google_drive_search"
+  get '/covid', to: 'home#google_drive_covid_search', as: "google_drive_covid_search"
+  get '/drive_search', to: 'home#google_drive_covid_search', as: "drive_search"
   get '/refer', to: 'home#refer', as: "refer"
   get '/crash_tester', to: 'home#crash_tester', as: "crash_tester"
   get '/maintenance', to: 'home#maintenance', as: "maintenance"

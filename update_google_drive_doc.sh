@@ -1,2 +1,3 @@
 cd /root/TodoLegal/
-ruby drive/quickstart/quickstart.rb
+ruby drive/quickstart/gacetas_google_drive.rb
+ruby drive/quickstart/covid_google_drive.rb

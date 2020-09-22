@@ -1,20 +1,20 @@
-<% content_for :title, "Gacetas - TodoLegal" %>
+<% content_for :title, "Repositorio COVID-19 - TodoLegal" %>
 
 <div class="jumbotron d-sm-block" align="center" style="padding-top: 0px; padding-bottom: 20px;background-color: #EFF3F8;margin: 0px">
   <a href="/"><img src="/img/logo_landing_mobile.png" class="img-fluid-vertical" height="300"></a>
 </div>
 <div class="container container--results">
-  <form action="<%= google_drive_search_path %>" method="get">
+  <form action="<%= google_drive_covid_search_path %>" method="get">
     <div id="search-input" class="input-group input-group-lg mb-3 main-search">
-      <input name="query" value="<%= @query %>" type="text" class="form-control" placeholder="Busca gacetas publicadas" aria-label="Recipient's username" aria-describedby="button-addon2">
+      <input name="query" value="<%= @query %>" type="text" class="form-control" placeholder="Busca información sobre el COVID-19" aria-label="Recipient's username" aria-describedby="button-addon2">
       <div class="input-group-append">
         <button type="submit" onclick="document.getElementById('loading-spinner').style.display = 'block';document.getElementById('search-input').style.display = 'none';" class="btn btn-outline-secondary buscar" type="button" id="button-addon2">Buscar</button>
       </div>
     </div>
   </form>
-  <h1>Repositorio de Gacetas</h1>
+  <h1>Repositorio de COVID-19</h1>
   <%= render '/home/loading_spinner' %>
-  <a href="<%= get_google_drive_search_back_link_path %>">
+  <a href="<%= get_google_drive_covid_search_back_link_path %>">
     <button type="button" class="btn btn-outline-primary">
       <i class="fas fa-arrow-left"></i>
     </button>
@@ -35,7 +35,7 @@
         <% if file['type'] == 'application/vnd.google-apps.folder' %>
           <div class="collapsable-law-cards col-sm-6 col-md-4 py-2">
             <div class="card card-body h-100" style="padding:0px">
-              <a class="" href="<%= google_drive_search_path + '?folder=' + file['name'] %>" target="_self" style="padding:20px">
+              <a class="" href="<%= google_drive_covid_search_path + '?folder=' + file['name'] %>" target="_self" style="padding:20px">
                 <i class="fas fa-folder"></i>
                 <h5 class="card-title"><%= file['name'] %></h5>
                 <p class="primaryinfo">[<%= file['file_count'] %> archivos]</p>

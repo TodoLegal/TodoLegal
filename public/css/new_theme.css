@@ -61,6 +61,11 @@ p.body {
     margin: 1.5rem auto 1rem;
 }
 
+.container--visualizador {
+    padding: 0;
+    background-color: #FFF;
+}
+
 /* General styles for cards */
 
 .card--dark-100 {
@@ -495,18 +500,71 @@ footer p a {
 
 /* Document */
 
+.law-header-mobile {
+    padding: 0 1rem;
+}
+
+.law-header-desktop {
+    padding: 2rem 1rem 0 ;
+}
+
 .tabs--document {
     justify-content: space-between;
     padding: 0 25px;
 }
 
-@media only screen and (max-width: 767.98px) {
+.tabs--document .nav {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: nowrap;
+}
+
+.tabs--document .nav a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: .85rem;
+}
+
+.tabs--document .dropdown-menu {
+    background: white;
+}
+
+.tabs--document .dropdown-menu a {
+    display: flex;
+    flex-direction: row;
+    color: #171F2A;
+    padding: 1rem;
+}
+
+.tabs--document a[aria-expanded="true"] {
+    background: white;
+    border-bottom: 4px solid #007bff;
+}
+
+.tabs--document .dropdown-menu i {
+    margin-right: .5rem;
+}
+
+@media only screen and (min-width: 767.98px) {
+
     .tabs--document {
+        display: flex;
         justify-content: space-between;
-        padding: 1rem 0 0;
+    }
+    
+    .tabs--document .menu-bar {
+        display: inline-flex; 
+        flex: 1;
     }
 }
 
+.article-p {
+    font-family: 'Merriweather', serif;
+    font-size: 1rem; 
+    color: #171F2A;
+    padding: .5rem 1rem;
+}
 .container--results {
     min-height: calc(100vh - 200px);
 }
@@ -548,7 +606,82 @@ footer p a {
     width: 310px;
     margin: 1rem;
 }
+/* Index */
 
+.card-header {
+    position: relative;
+}
+
+.title--libro {
+    color: #171F2A;
+    font-size: 1.4rem;
+    font-weight: bold;
+    display: block;
+    width: max-content;
+}
+
+.btn-collapse {
+    background-color: transparent;
+    border: none;
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    transition: all .4s;
+    padding: .5rem;
+}
+
+.btn-collapse:hover {
+    background-color: #A6B9D3;
+}
+
+.btn-collapse.opened {
+    transform: rotate(180deg);
+}
+
+
+@media (min-width: 1200px) {
+
+    .container--visualizador {
+        display: flex;
+        flex-direction: column;
+        background-color: transparent;
+    }
+
+    .sidebar--relacionados {
+        display: flex;
+        flex-direction: column;
+        min-width: 260px;
+    }
+
+    .sidebar--relacionados h4{
+        color: #A6B9D3;
+        font-size: 1.1rem;
+        margin-left: 1rem;
+    }
+    
+    .inner-continer--visualizador {
+        max-width: 810px; 
+        padding: 1rem;
+        background-color: #FFF;
+    }
+    .container--documento {
+        display: flex;
+        flex-direction: row;
+        
+    }
+ }
+
+ /* Sticky top -- tabs */
+
+ .sticky-top--tabs {
+     top: 64px;
+     background: white;
+     width: 100%;
+     padding: 1rem;
+ }
 @media only screen and (max-width: 767.98px) {
     .container--empty-results {
         text-align:center; 

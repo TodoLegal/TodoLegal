@@ -4,8 +4,11 @@
       <% if home_flag == false %>
         <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, class:"btn btn-back", style:"font-size: 1.5rem; color: #171F2A; margin-top: 10px;" %>
       <% end %>
-      <input name="query" id="searchInput" value="<%= @query %>" type="text" class="form-control search-input" placeholder="Ej. Ad-litem, despido, prórroga" aria-label="Recipient's username" aria-describedby="button-addon2" autocomplete="off">
+      <input name="query" id="searchInput" value="<%= @query %>" type="search" class="form-control search-input" placeholder="Ej. Ad-litem, despido, prórroga" aria-label="Recipient's username" aria-describedby="button-addon2" autocomplete="off">
       <div class="input-group-append">
+        <button type="button" class="close clear--text" id="clearButton" aria-label="Close" onclick="clearText()">
+          <span aria-hidden="true">&times;</span>
+        </button>
         <% if home_flag %>
           <button type="submit" onclick="document.getElementById('loading-spinner').style.display = 'block';document.getElementById('search-input').style.display = 'none';" class="btn btn-primary buscar" type="button" id="button-addon2">
           Buscar
@@ -34,6 +37,22 @@
 </section>
 <%= render '/home/loading_spinner' %>
 
+<script>
+  var input_field = document.getElementById("searchInput");
+  var cler_button = document.getElementById("clearButton");
+  function clearText() {
+    input_field.value = "";
+    cler_button.style.display = "none";
+  }
+  input_field.addEventListener('input', (event) => {
+    if(input_field.value != ""){
+      cler_button.style.display = "block";
+    }else{
+      cler_button.style.d isplay = "none";
+    }
+  });
+</script>
+
 <style>
   #search-example{
     background: #EFF3F8;
@@ -59,5 +78,11 @@
     line-height: 21px;
     color: #505864;
   }
+
+  .clear--text{
+    cursor: pointer;
+    display: none;
+  }
+
 
 </style>

@@ -91,7 +91,7 @@
     <button type="button" class="close" onclick="hideAlert()">
     <span aria-hidden="true">&times;</span>
     </button>
-      Enlace copiado en el portapapeles, ahora puedes compartir este documento pegando el enlace.
+      Enlace copiado en el portapapeles, ahora puedes compartir este documento al pegar el enlace.
   </div>
 
   <div class="law-header-desktop"><%= render 'law_header' %></div>
@@ -141,7 +141,7 @@
                     </div>
                     <div class="col-md-12">
                       <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
-                      Adquiérelo por <b>$7.00 al mes</b> y podrás acceder a los más de<%= (Law.count/10)*10 %> documentos legales y a lo que continuamente agregamos.
+                      Adquiérelo por <b>$7.00 al mes</b> y podrás acceder a los más de<%= (all_document_count/10)*10 %> documentos legales y a lo que continuamente agregamos.
                     </p>
                     <p style="font-size:18px; text-align:center;">
                           <i class="text-muted">Puedes cancelar la suscripción en cualquier momento.</i>
@@ -163,7 +163,7 @@
                       </div>
                       <div class="col-md-12">
                         <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
-                      Adquiere el <b>Plan Pro</b> por <b>$7.00 al mes</b> y podrás acceder a más de <%= (Law.count/10)*10 %> documentos legales y a lo que continuamente agregamos.
+                      Adquiere el <b>Plan Pro</b> por <b>$7.00 al mes</b> y podrás acceder a más de <%= (all_document_count/10)*10 %> documentos legales y a lo que continuamente agregamos.
                         <p style="font-size:18px; text-align:center;">
                           <i class="text-muted">Puedes cancelar la suscripción en cualquier momento.</i>
                         </p>

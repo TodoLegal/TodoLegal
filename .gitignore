@@ -8,6 +8,7 @@
 /public/confirmed.csv
 /public/pending.csv
 public/google_drive_data.json
+public/google_drive_covid_data.json
 token.yaml
 
 Gemfile.lock

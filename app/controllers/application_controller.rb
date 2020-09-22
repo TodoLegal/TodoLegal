@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :null_session
   before_action :configure_devise_permitted_parameters, if: :devise_controller?
+  before_action :miniprofiler
 
   def after_sign_in_remember_me(resource)
     remember_me resource
@@ -96,5 +97,9 @@ protected
   def configure_devise_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up) { |u| u.permit(:first_name, :last_name, :occupation, :receive_information_emails, :is_contributor, :email, :password, :password_confirmation)}
     devise_parameter_sanitizer.permit(:account_update) { |u| u.permit(:first_name, :last_name, :occupation, :receive_information_emails, :is_contributor, :email, :stripe_customer_id, :password, :current_password)}
+  end
+
+  def miniprofiler
+    Rack::MiniProfiler.authorize_request if current_user_is_admin
   end
 end

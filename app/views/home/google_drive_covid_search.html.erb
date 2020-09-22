@@ -6,6 +6,9 @@
 <div class="container container--results">
   <form action="<%= google_drive_covid_search_path %>" method="get">
     <div id="search-input" class="input-group input-group-lg mb-3 main-search">
+      <a href="<%= get_google_drive_covid_search_back_link_path %>" class="btn btn-light search-button">
+        <i class="fas fa-arrow-left"></i>
+      </a>
       <input name="query" value="<%= @query %>" type="text" class="form-control" placeholder="Busca información sobre el COVID-19" aria-label="Recipient's username" aria-describedby="button-addon2">
       <div class="input-group-append">
         <button type="submit" onclick="document.getElementById('loading-spinner').style.display = 'block';document.getElementById('search-input').style.display = 'none';" class="btn btn-outline-secondary buscar" type="button" id="button-addon2">Buscar</button>
@@ -14,11 +17,6 @@
   </form>
   <h1>Repositorio de COVID-19</h1>
   <%= render '/home/loading_spinner' %>
-  <a href="<%= get_google_drive_covid_search_back_link_path %>">
-    <button type="button" class="btn btn-outline-primary">
-      <i class="fas fa-arrow-left"></i>
-    </button>
-  </a>
   <% if @files == [] %>
     <div class="container--empty-results">
       <p class="body">No se han encontrado documentos que coincidan con <strong><%= @query %></strong>.</p>

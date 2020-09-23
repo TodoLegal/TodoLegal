@@ -14,6 +14,8 @@ gem 'google-api-client'
 gem 'whenever', require: false
 gem 'exception_notification'
 gem 'discordrb'
+gem 'stripe'
+gem 'rack-mini-profiler'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.0.0'

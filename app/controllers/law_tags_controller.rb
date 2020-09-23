@@ -1,12 +1,6 @@
 class LawTagsController < ApplicationController
   before_action :set_law_tag, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_admin!, only: [:index, :show, :new, :edit, :create, :update, :destroy]
-
-  # GET /law_tags
-  # GET /law_tags.json
-  def index
-    @law_tags = LawTag.all
-  end
+  before_action :authenticate_admin!, only: [:show, :new, :edit, :create, :update, :destroy]
 
   # GET /law_tags/1
   # GET /law_tags/1.json
@@ -28,7 +22,7 @@ class LawTagsController < ApplicationController
     @law_tag = LawTag.new(law_tag_params)
     respond_to do |format|
       if @law_tag.save
-        format.html { redirect_to edit_law_path(@law_tag.law), notice: 'Law tag was successfully created.' }
+        format.html { redirect_to edit_law_path(@law_tag.law), notice: 'Se ha añadido a la materia exitosamente.' }
         format.json { render :show, status: :created, location: @law_tag.law }
       else
         format.html { render :new }
@@ -42,7 +36,7 @@ class LawTagsController < ApplicationController
   def update
     respond_to do |format|
       if @law_tag.update(law_tag_params)
-        format.html { redirect_to @law_tag, notice: 'Law tag was successfully updated.' }
+        format.html { redirect_to @law_tag, notice: 'Se ha actualizado la materia exitosamente.' }
         format.json { render :show, status: :ok, location: @law_tag }
       else
         format.html { render :edit }
@@ -57,7 +51,7 @@ class LawTagsController < ApplicationController
     law = @law_tag.law
     @law_tag.destroy
     respond_to do |format|
-      format.html { redirect_to edit_law_path(law), notice: 'Law tag was successfully destroyed.' }
+      format.html { redirect_to edit_law_path(law), notice: 'Se ha quitado de la materia exitosamente.' }
       format.json { head :no_content }
     end
   end

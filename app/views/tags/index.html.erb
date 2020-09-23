@@ -6,7 +6,7 @@
 <div class="container">
 
   <div class="input-group input-group-lg mb-3">
-    <input type="text" class="form-control" placeholder="Ej. Ad-litem, despido, prórroga" aria-label="Recipient's username" aria-describedby="button-addon2">
+    <input type="text" class="form-control" placeholder="qqqqEj. Ad-litem, despido, prórroga" aria-label="Recipient's username" aria-describedby="button-addon2" autocomplete="off">
     <div class="input-group-append">
       <button class="btn btn-outline-secondary" type="button" id="button-addon2">Buscar</button>
     </div>
@@ -18,13 +18,13 @@
         <div class="card card-body h-100" style="padding:0px">
           <a href="/tags/<%= tag.id %>" style="padding:20px">
             <h5 class="card-title"><%= tag.name %></h5>
-            <%= link_to 'Ver ' + tag.laws.count.to_s + ' leyes', tag, class: 'card-link' %>
+            <%= link_to 'Ver ' + tag.laws.count.to_s + ' documentos', tag, class: 'card-link' %>
           </a>
         </div>
       </div>
     <% end %>
   </div>
 
-  <p><%= Law.count %> leyes ingresadas y creciendo</p>
+  <p><%= Law.count %> documentos ingresadas y creciendo</p>
 
 </div>

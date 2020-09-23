@@ -5,14 +5,14 @@
 #   gem 'sqlite3'
 #
 default: &default
-  adapter: sqlite3
+  adapter: postgresql
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  timeout: 5000
+  timeout: 7000
 
 development:
   adapter: postgresql
   encoding: unicode
-  database: TodoLegalDB_Development
+  database: todolegaldb_development
   host: localhost
   pool: 5
   username: postgres
@@ -26,11 +26,8 @@ test:
   database: db/test.sqlite3
 
 production:
-  adapter: postgresql
-  encoding: unicode
-  database: TodoLegalDB_Production
-  host: localhost
-  pool: 5
-  username: postgres
-  password: <%= ENV['TodoLegalDB_Password'] %>
-  role: TodoLegal
+  primary:
+   <<: *default
+   pool: 10
+   checkout_timeout: 6
+   url: <%= ENV.fetch("DB_URL") { "" } %>

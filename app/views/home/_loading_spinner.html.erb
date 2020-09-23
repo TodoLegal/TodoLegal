@@ -1,7 +1,56 @@
 <div id="loading-spinner" style="display: none;">
-  <div class="d-flex justify-content-center input-group input-group-lg mb-3" style="display: none;">
-    <div style="color: #FD8100;" class="spinner-grow" role="status">
-      <span class="sr-only">Loading...</span>
-    </div>
+  <div class="container-loader"> 
+    <div class="loader"></div>
+    <span class="sr-only">Loading...</span>
   </div>
 </div>
+
+<style>
+  
+.container-loader {
+  width: 100px;
+  height: 100px;
+  margin: auto;
+}
+
+.loader {
+  border: 14px solid #A6B9D3;
+  height: 80px;
+  width: 80px;
+  border-radius: 80px;
+  margin: auto;
+  animation: loader 1.2s cubic-bezier(0.17, 0.67, 0.61, 0.99) infinite;
+}
+
+@keyframes loader {
+  0% {
+    border-width: 40px;
+    opacity: 0;
+    transform: scale(0.1);
+  }
+  20% {
+    opacity: .5;
+    border-color: #A6B9D3;
+  }
+  40% {
+    border-width: 40px;
+    opacity: 1;
+  }
+  60% {
+    border-width: 12px;
+    opacity: 1;
+  }
+  75% {
+    opacity: .5;
+  }
+  85% {
+    opacity: .25;
+    transform: scale(0.4);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+}
+
+</style>

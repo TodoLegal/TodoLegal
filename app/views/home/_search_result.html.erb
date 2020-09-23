@@ -1,5 +1,5 @@
 <p class="resultinfo">
-  <%= @result_info_text %>
+  <%= @result_info_text if @result_count > 0 %>
   <% if @tag && @query %>
     Buscar en <a href="/search_law?query=<%= @query%>">todas las materias</a>
   <% end %>
@@ -10,8 +10,21 @@
 <% end %>
 
 <% if @result_count == 0 %>
-  <p>Intenta tu búsqueda de nuevo cambiando las palabras o revisando la ortografía.</p>
+  <div class="container--empty-results">
+    <p class="body">No se han encontrado documentos que coincidan con <strong><%= @query %></strong>.</p>
+    <div class="no-result-message">
+      <img src="/img/img-search-doc.svg" />
+      <p class="body body--secondary">
+        Asegurate de haber escrito la busqueda correctamente, sino intenta con un término similar. Recuerda que puedes refinar tu busqueda por título, palabra clave y número de artículo.
+      </p>
+    </div>
+  </div>
 <% end %>
+
+<p class="resultinfo">
+  <%= @titles_result %>
+</p>
+
 
 <% if @laws %>
   <div class="row">
@@ -35,15 +48,18 @@
         </div>
       </div>
     <% end %>
-    <button id="see_more_laws_link" class="btn btn-outline-primary btn-block" style="margin-top:2%;" onclick="showCollapsableLawCards();return false;">Ver más leyes</button>
+    <button id="see_more_laws_link" class="btn btn-outline-primary btn-more-laws" style="margin-top:2%;" onclick="showCollapsableLawCards();return false;">Ver más documentos</button>
   </div>
 
   <br>
 
   <% if @laws.size > 0 %>
-    <hr>
   <% end %>
 <% end %>
+
+<p class="resultinfo">
+  <%= @articles_result if (@result_count - @laws.size) > 0 %>
+</p>
 
 <% if @grouped_laws && @grouped_laws.size > 0 %>
   <div class="list-group">

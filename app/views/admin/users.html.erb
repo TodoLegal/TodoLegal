@@ -1,9 +1,13 @@
+<% content_for :title, "Usuarios - TodoLegal" %>
+
 <h1>Usuarios</h1>
 
 <h3>Descarga</h3>
 
 <ul>
-  <li><a href="/users.csv" download>Descargar usuarios</a></li>
+  <li><%= link_to 'Descargar usuarios', admin_users_path(format: :csv) %></li>
+  <li><%= link_to 'Descargar suscritos a información', download_recieve_information_users_path(format: :csv) %></li>
+  <li><%= link_to 'Descargar contribuyentes', download_contributor_users_path(format: :csv) %></li>
 </ul>
 
 <form action="<%= admin_users_url %>" method="get">
@@ -20,6 +24,7 @@
 <table border="1">
   <tr>
     <th>email</th>
+    <th>created at</th>
     <th>last sign in</th>
     <% @permissions.each do |permission| %>
       <th><%= permission.name %></th>
@@ -28,6 +33,7 @@
   <% @users.each do |user| %>
     <tr>
       <td><%= user.email %></td>
+      <td><%= user.created_at %> ago</td>
       <td><%= user.last_sign_in_at ? time_ago_in_words(user.last_sign_in_at) : "" %> ago</td>
       <% @permissions.each do |permission| %>
         <% if UserPermission.find_by(user: user, permission: permission) %>

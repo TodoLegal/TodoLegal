@@ -64,7 +64,8 @@ Add the following at the end of the file
 ```
 export TodoLegalDB_Password=MyPassword
 export RAILS_SERVE_STATIC_FILES=yes
-export EXCEPTION_BOT_TOKEN=DISCORDTOKEN
+export EXCEPTION_BOT_TOKEN=YOURDISCORDTOKEN
+export STRIPE_SECRET_KEY=YOURSTRIPEKEY
 ```
 
 And then back to the terminal
@@ -141,6 +142,9 @@ Finally, fill the form with
 sudo -u postgres psql
 postgres=# create database TodoLegalDB_Development;
 postgres=# alter user postgres with encrypted password 'MyPassword';
+postgres=# CREATE TEXT SEARCH CONFIGURATION public.tl_config ( COPY = pg_catalog.spanish );
+postgres=# CREATE TEXT SEARCH DICTIONARY public.tl_dict ( TEMPLATE = pg_catalog.simple, STOPWORDS = russian);
+postgres=# ALTER TEXT SEARCH CONFIGURATION public.tl_config ALTER MAPPING FOR asciiword, asciihword, hword_asciipart, hword, hword_part, word WITH tl_dict;
 \q
 ```
 
@@ -158,6 +162,9 @@ pg_ctl -D /usr/local/var/postgres start
 sudo -u postgres psql
 postgres=# create database TodoLegalDB_Production;
 postgres=# alter user postgres with encrypted password 'MyPassword';
+postgres=# CREATE TEXT SEARCH CONFIGURATION public.tl_config ( COPY = pg_catalog.spanish );
+postgres=# CREATE TEXT SEARCH DICTIONARY public.tl_dict ( TEMPLATE = pg_catalog.simple, STOPWORDS = russian);
+postgres=# ALTER TEXT SEARCH CONFIGURATION public.tl_config ALTER MAPPING FOR asciiword, asciihword, hword_asciipart, hword, hword_part, word WITH tl_dict;
 \q
 ```
 

@@ -1,23 +1,35 @@
 /* Basics */
 
 body {
-    background-color: #F2F5F8;
+    background-color: #EFF3F7;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-}
-
-.card--onboarding {
-    border: none;
-    margin: 2vh auto 1rem;
-    max-width: 580px;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;   
 }
 
 .btn {
-    height: 46px;
-    border-radius: 8px;
-    font-size: 18px;
+    height: auto;
+    border-radius: 4px;
+    font-size: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: .25rem 1rem;
+    transition: all .4s ease-in-out;
+}
+
+.btn-lg {
+    font-size: 1.15rem;
+    height: 3rem;
+}
+
+.btn-block {
+    margin: auto;
+}
+
+.btn-more-laws {
+    margin: 1rem auto;
 }
 
 h2 {
@@ -26,12 +38,39 @@ h2 {
 
 .content {
     line-height: 1.25rem;
+    font-size: 1rem;
 }
 
-.card--onboarding .content {
-    margin-bottom: 40px;
+.img-fluid-vertical {
+    height: 5vh;
+    min-height: 170px;
+    width: auto;
 }
 
+p.body {
+    line-height: 1.2rem;
+    margin-bottom: .75rem;
+}
+
+.container--home {
+    min-height: calc(100vh - 400px)
+}
+
+.container--privacy,
+.container--terms {
+    margin: 1.5rem auto 1rem;
+}
+
+/* General styles for cards */
+
+.card--dark-100 {
+    background-color: #F2F5F8;
+}
+
+.card--pricing {
+    max-width: 1068px;
+    margin: 0 auto;
+}
 
 /* General styles for forms */
 
@@ -54,7 +93,7 @@ h2 {
 
 .form-group .form-check label,
 .form-group .form-check label {
-    padding: 1em 1em 1em 2em;
+    padding: .5em 1em .5em 2em;
     display: flex;
     cursor: pointer;
 }
@@ -65,8 +104,8 @@ h2 {
 
 .form-control {
     background-color: #EFF3F8;
-    height: 50px;
-    border-radius: 8px;
+    height: 3rem;
+    border-radius: 4px;
     border: none;
 }
 
@@ -88,14 +127,14 @@ input.form-control:focus {
 
 .custom-form {
     position: relative;
-    min-height: 60px;
+    min-height: 2rem;
     margin-bottom: 1rem;
 }
 
 .custom-form:before {
     position: absolute;
     left: 10px;
-    top: 1.5em;
+    top: .85em;
     content: "";
     height: 20px;
     width: 20px;
@@ -110,7 +149,7 @@ input.form-control:focus {
 .custom-form:after {
     position: absolute;
     left: 14px;
-    top: 1.9em;
+    top: 1.3em;
     content: "";
     height: 6px;
     width: 12px;
@@ -125,14 +164,15 @@ input.form-control:focus {
 }
 
 .custom-form label {
-    background-color: #F2F5F8;
-    border-radius: 8px;
+    background-color: #EFF3F7;
+    border-radius: 4px;
     color: #171F2A;
     box-sizing: border-box;
-    min-height: 60px;
+    min-height: 2rem;
 }
 
-.custom-form input:focus+label {
+.custom-form input:focus+label,
+.custom-form label:hover {
     box-shadow: 0 0 0 2px #A6B9D3;
 }
 
@@ -142,7 +182,7 @@ input.form-control:focus {
 }
 
 .btn-next {
-    margin-top: 3em;
+    margin-top: 2rem;
 }
 
 .navbar-expand-lg .navbar-nav .dropdown-menu {
@@ -152,6 +192,11 @@ input.form-control:focus {
 .btn-avatar {
     background: linear-gradient(145deg, #1A7FFA 50%, #033FF5 50.1%);
     font-weight: bold;
+}
+
+.main-search {
+    max-width: 640px;
+    margin: 1rem auto;
 }
 
 .main-search .form-control {
@@ -178,6 +223,29 @@ input.form-control:focus {
     box-shadow: 0 0 40px rgba(0, 0, 0, .12);
 }
 
+.modal-body .form-group {
+    display: flex;
+    justify-content: center;
+}
+
+@media only screen and (max-width: 767.98px) {
+    .modal-body .form-group {
+        flex-wrap: wrap;
+    }
+}
+
+
+/* General styles for Onboarding */
+
+.card--onboarding {
+    border: none;
+    margin: 2vh auto 1rem;
+    max-width: 580px;
+}
+
+.card--onboarding .content {
+    margin-bottom: 40px;
+}
 
 /* General styles for Cuenta */
 
@@ -224,4 +292,275 @@ input.form-control:focus {
 .nav-pills .nav-link.highlighted,
 .nav-pills .nav-link.highlighted {
     color: #007bff;
+}
+
+
+/* General styles for footer */
+
+footer .container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-top: 1px solid #A6B9D3;
+    padding: 1em 15px;
+    font-size: 14px;
+}
+
+footer p a {
+    color: #505864;
+}
+
+.footer-basic p {
+    color: #505864;
+    margin-bottom: .5em;
+}
+
+.footer-basic .social {
+    text-align: center;
+}
+
+.footer-basic .social>a {
+    font-size: 16px;
+    width: 2rem;
+    height: 2rem;
+    padding: .25rem;
+    display: inline-block;
+    text-align: center;
+    border-radius: 4px;
+    background-color: #505864;
+    color: white;
+    margin-left: 10px;
+    transition: all .4s ease-in-out;
+}
+
+.footer-basic .social>a:hover {
+    opacity: 0.9;
+}
+
+.footer-basic .copyright {
+    text-align: left;
+    font-size: 13px;
+    margin-bottom: 0;
+}
+
+@media only screen and (max-width: 767.98px) {
+    footer .container {
+        flex-direction: column;
+        padding: 20px;
+    }
+    .footer-basic .social {
+        text-align: left;
+    }
+    .footer-basic .social>a {
+        margin-right: 10px;
+        margin-left: 0;
+    }
+    .footer-basic .social {
+        margin-top: 20px;
+    }
+}
+
+/* Billboard */
+
+.billboard {
+    height: auto;
+    padding: 1rem 2rem;
+    margin-top: 1rem;
+    background: #EFF3F8;
+    border-radius: 8px;
+  }
+
+  .billboard-content{
+    text-align: center;
+    line-height: 1.25rem;
+  }
+
+  .billboard-title{
+    font-style: normal;
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+
+  .billboard-text, .billboard-link{
+    font-family: -apple-system, sans-serif;
+    font-size: 1rem;
+  }
+
+  .billboard-body{
+    padding-top: .5em;
+    color: #505864;
+    margin-bottom: 0.2em;
+  }
+
+  .billboard-link{
+    color: #1A7FFA;
+  }
+
+  .billboard-link:hover{
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  .billboard-btn-form{
+    text-align: center;
+  }
+
+  .billboard-actions {
+      display: flex;
+      justify-content: space-around;
+      padding-top: 1rem;
+  }
+
+  .billboard .btn {
+    width: auto;
+  }
+
+
+/* General styles for Checkout */
+
+.card--payment {
+    margin-bottom: .75rem;
+}
+
+.card--payment .card-body {
+    padding: 2.5rem 2rem 2rem;
+}
+
+
+/* General styles for Subscription info */
+
+.card--subscription {
+    padding: 0;
+}
+
+.card--subscription .card-heading {
+    background-color: #171F2A;
+    color: white;
+    padding: 2.5rem 1.5rem 1.15rem; 
+    border-radius: 4px 4px 0 0;
+    display: flex; 
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.card--subscription .card-title {
+    margin-bottom: .15rem;
+}
+
+.card--subscription .card-heading .full-width {
+    width: 100%;
+}
+
+.subscription-row {
+    display: flex; 
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 1.25rem;
+    color: #505864;
+    padding-top: .85rem;
+}
+
+.subscription-row-total {
+    padding-top: .5rem;
+    font-size: 1.75rem;
+    border-top: 1px solid #DFE7F1;
+    color: #171F2A;
+}
+
+.subscription-row-total .subscription-row-value {
+    color: #1A7FFA;
+}
+
+@media only screen and (max-width: 767.98px) {
+    .card--subscription .card-body {
+        padding: .25rem 1.5rem;
+    }
+
+    .card.card--subscription {
+        border-bottom: 1px solid #DFE7F1;
+    }
+
+    .card--subscription .card-heading {
+        padding: 1rem 1.5rem .25rem; 
+        
+    }
+}
+
+/* Footer */
+
+.footer-basic {
+    margin-top: 2rem;
+}
+
+
+/* Document */
+
+.tabs--document {
+    justify-content: space-between;
+    padding: 0 25px;
+}
+
+@media only screen and (max-width: 767.98px) {
+    .tabs--document {
+        justify-content: space-between;
+        padding: 1rem 0 0;
+    }
+}
+
+.container--results {
+    min-height: calc(100vh - 200px);
+}
+
+.container--empty-results {
+    max-width: 640px;
+    margin: 4rem auto; 
+}
+
+.container--empty-results p {
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+}
+
+.no-result-message {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.container--empty-results .no-result-message p {
+    color: #495057; 
+    font-size: 1.15rem;
+}
+
+@media only screen and (min-width: 767.98px) {
+    .modal--document .modal-body {
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+    }
+
+    .modal--document .btn {
+        max-width: 210px;
+        margin: 1rem auto;
+    }
+}
+
+.no-result-message img {
+    width: 310px;
+    margin: 1rem;
+}
+
+@media only screen and (max-width: 767.98px) {
+    .container--empty-results {
+        text-align:center; 
+    }
+    
+    .no-result-message img {
+       max-height: 90px;
+    }
+
+    .no-result-message {
+        display: flex;
+        flex-direction: column  ;
+        align-items: center;
+    }
 }

@@ -12,7 +12,13 @@
 
   <%= render 'layouts/favicons' %>
 
-  <title>TodoLegal - El buscador de leyes de Honduras</title>
+  <title>
+    <% if yield(:title).blank? %>
+      TodoLegal
+    <% else %>
+      <%= yield(:title) %>
+    <% end %>
+  </title>
   <meta name="description" content="En TodoLegal tú puedes navegar las leyes hondureñas artículo por artículo y realizar búsquedas por palabras clave.">
   <meta name="keywords" content="constitución, constitución de la república, ley, poder judicial, ley de procedimiento administrativo">
 
@@ -26,6 +32,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
   <!--Bootstrap form validator-->
   <script src="https://cdn.rawgit.com/PascaleBeier/bootstrap-validate/v2.2.0/dist/bootstrap-validate.js"></script>
+
+  <!-- Cookie Alert -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Wruczek/Bootstrap-Cookie-Alert@gh-pages/cookiealert.css">
 
   <!-- Font Awesome JS -->
   <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
@@ -58,6 +67,17 @@
   <%= yield %>
   
   <div class="overlay"></div>
+
+  <!-- START Bootstrap-Cookie-Alert -->
+  <div class="alert text-center cookiealert" role="alert">
+    <b>Te gustan las cookies?</b> &#x1F36A; Usamos cookies para ofrecerte una mejor experienca de navegación.
+    <a href="https://cookiesandyou.com/" target="_blank">Leer más</a>
+    <button type="button" class=" btn-primary btn-sm acceptcookies">
+      Acepto
+    </button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/gh/Wruczek/Bootstrap-Cookie-Alert@gh-pages/cookiealert.js"></script>
+  <!-- END Bootstrap-Cookie-Alert -->
 
   <!-- jQuery CDN - Slim version (=without AJAX) -->
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

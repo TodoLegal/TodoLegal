@@ -1,3 +1,5 @@
+<% content_for :title, @law.name + " - TodoLegal" %>
+
 <script>
 function onIndexElementClicked(section_id) {
   console.log(section_id)
@@ -21,6 +23,9 @@ function onIndexElementClicked(section_id) {
       <div class="tab-pane fade show" id="modifications" role="tabpanel" aria-labelledby="modifications-tab">
         <%= render 'modifications_tab' %>
       </div>
+      <div class="tab-pane fade show" id="related" role="tabpanel" aria-labelledby="related-tab">
+        <%= render 'related_tab' %>
+      </div>
     </div>
 
     <div class="wrapper">
@@ -29,27 +34,77 @@ function onIndexElementClicked(section_id) {
     <% if !@user_can_access_law %>
       <p>Crea una cuenta para acceder a esta ley</p>
       <!-- Modal -->
-      <div class="modal fade" data-backdrop="static" id="modalCreateBasicAccount" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal fade modal--document" data-keyboard="false" data-backdrop="static" id="modalCreateBasicAccount" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content" style="padding-top: 66px; padding-bottom: 66px; padding-left: 33; padding-right:33">
+          <div class="modal-content">
             <div class="modal-body">
               <div class="container col-md-12">
                 <div class="row">
-                  <div class="col-md-12">
-                    <p style="font-size:22px; text-align:center;"><b>Regístrate y accede a esta ley.</b></p>
-                  </div>
-                  <div class="col-md-12">
-                    <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
-                    Crea una cuenta y accede a más de <b>150 documentos</b> de Legislación Hondureña y recibe boletines informativos sobre cambios que están sucediendo.
-                  </p>
-                  </div>
-                  <div class="col-md-12">
-                    <a href="<%= new_user_registration_path %>?go_to_law=<%=@law.id%>">
-                      <button type="button" class="btn btn-primary btn-block">Crear cuenta básica</button>
-                    </a>
-                  </div>
-                  <div class="col-md-12">
-                      <div with="100%" style="text-align:center; padding-top: 22px;">
+                  <% if current_user %>
+                    <!-- Modal "Cambar a cuenta Pro" -->
+                    <div class="col-md-12">
+                      <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, style:"font-size: 1.5rem; color:#505864;" %>
+                      <h3 style="font-size:22px; text-align:center; margin-left: 8%;">
+                      Para consultar este documento requieres tener el Plan Pro
+                      </h3>
+                    </div>
+                    <div class="col-md-12">
+                      <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
+                      Adquiérelo por <b>$7.00 al mes</b> y podrás acceder a los más de<%= (Law.count/10)*10 %> documentos legales y a lo que continuamente agregamos.
+                    </p>
+                    <p style="font-size:18px; text-align:center;">
+                          <i class="text-muted">Puedes cancelar la suscripción en cualquier momento.</i>
+                        </p>
+                    </div>
+                    <div class="col-md-12">
+                      <a href="<%= pricing_path(activate_pro_account: true, go_to_law: @law.id) %>">
+                        <button type="button" class="btn btn-primary btn-block">Adquirir Plan Pro</button>
+                      </a>
+                    </div>
+                  <% else %>
+                    <% if @law.law_access.name == "Pro" %>
+                      <!-- Modal "Crear cuenta Pro" -->
+                      <div class="col-md-12">
+                        <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, style:"font-size: 1.5rem; color:#505864;" %>
+                        <h3 style="font-size:22px; text-align:center; margin-left: 8%;">
+                        Suscríbete y obtén acceso ilimitado
+                        </h3>
+                      </div>
+                      <div class="col-md-12">
+                        <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
+                      Adquiere el <b>Plan Pro</b> por <b>$7.00 al mes</b> y podrás acceder a más de <%= (Law.count/10)*10 %> documentos legales y a lo que continuamente agregamos.
+                        <p style="font-size:18px; text-align:center;">
+                          <i class="text-muted">Puedes cancelar la suscripción en cualquier momento.</i>
+                        </p>
+                        
+                      </p>
+                      </div>
+                      <div class="col-md-12">
+                        <a href="<%= new_user_registration_path %>?go_to_law=<%=@law.id%>&go_to_checkout=true">
+                          <button type="button" class="btn btn-primary btn-block">Crear cuenta</button>
+                        </a>
+                      </div>
+                    <% else %>
+                      <!-- Modal "Crear cuenta Básica" -->
+                      <div class="col-md-12">
+                        <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, style:"font-size: 1.5rem; color:#505864;" %>
+                        <h3 style="font-size:22px; text-align:center; margin-left: 8%;">
+                        Regístrate y accede a este documento
+                        </h3>
+                      </div>
+                      <div class="col-md-12">
+                        <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
+                        Crea una cuenta y accede a más de <b><%= (Law.count/10)*10 %> documentos</b> de Legislación Hondureña y recibe boletines informativos.
+                        </p>
+                      </div>
+                      <div class="col-md-12">
+                        <a href="<%= new_user_registration_path %>?go_to_law=<%=@law.id%>">
+                          <button type="button" class="btn btn-primary btn-block">Crear cuenta Básica</button>
+                        </a>
+                      </div>
+                    <% end %>
+                    <div class="col-md-12">
+                      <div with="100%" style="text-align:center;">
                         ¿Ya tienes cuenta?
                       </div>
                       <div with="100%" style="text-align:center;">
@@ -57,7 +112,8 @@ function onIndexElementClicked(section_id) {
                           Inicia sesión
                         </a>
                       </div>
-                  </div>
+                    </div>
+                  <% end %>
                 </div>
               </div>
             </div>

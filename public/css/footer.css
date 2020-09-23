@@ -1,16 +1,18 @@
 /* Sticky footer styles
 -------------------------------------------------- */
-  html {
+
+html {
     position: relative;
     min-height: 100%;
-  }
-  
-  /* Custom page CSS
+}
+
+
+/* Custom page CSS
   -------------------------------------------------- */
-  /* Not required for template or sticky footer method. */
-  
-  .container {
+
+
+/* Not required for template or sticky footer method. */
+
+.container {
     width: auto;
-    max-width: 680px;
-    padding: 0 15px;
-  }
+}

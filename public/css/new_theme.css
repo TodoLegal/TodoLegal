@@ -77,6 +77,14 @@ p.body {
     margin: 0 auto;
 }
 
+.card .icon-drive {
+    position: absolute;
+    top: 1.5rem;
+    right: 1rem; 
+    width: 20px;
+    height: auto;
+}
+
 /* General styles for forms */
 
 .form-group label {
@@ -663,6 +671,7 @@ footer p a {
     }
     
     .inner-continer--visualizador {
+        width: 100%;
         max-width: 810px; 
         padding: 1rem;
         background-color: #FFF;

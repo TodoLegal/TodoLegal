@@ -66,6 +66,15 @@ p.body {
     background-color: #FFF;
 }
 
+.navbar .btn-primary{
+    background: #1A7FFA;
+    border: 1px solid #1A7FFA;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    margin: 0 .75rem;
+}
+
 /* General styles for cards */
 
 .card--dark-100 {

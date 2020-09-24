@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light  sticky-top" id="topNavbar">
+<nav class="navbar navbar-expand-md navbar-light  sticky-top" id="topNavbar">
     <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, class:"navbar-back-arrow" %>
     <a href="/" class="navbar-brand text-primary" >
         <img  src="/img/top_navbar/law_top_navbar.svg" alt="Card image cap" class="gray-logo img-fluid">
@@ -15,33 +15,15 @@
         </button>
     </div>  
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-        <ul class="navbar-nav navbar-dark">
-            <li class="nav-item active">
-                <a class="price nav-link" href="<%= pricing_path(is_onboarding: true, pricing_onboarding: true) %>">
-                    Precio <span class="sr-only">(current)</span>
-                </a>
-            </li>
-        </ul>
-        <form class="form-inline">
-            <div style="padding-left: 10px;">
-                <a class="btn btn-outline-light  d-none d-sm-block" href="/users/sign_in" role="button">
-                    Inicia Sesión
-                </a>
-                <a class="btn btn-outline-dark d-xs d-sm-none" href="/users/sign_in" role="button">
-                    Inicia Sesión
-                </a>
-            </div>
-            <div style="padding-left: 10px;">
-                <a class="btn btn-primary d-xs d-sm-none" id="registerButton" href="/users/sign_up" role="button">
-                    Regístrate
-                </a>
-            </div>
-            <div style="padding-left: 10px;">
-                <a class="btn btn-primary d-none d-sm-block" id="registerButton" href="/users/sign_up" role="button">
-                    Regístrate
-                </a>
-            </div>
-        </form>
+            <a class="price nav-link nav-link-mobile" href="<%= pricing_path(is_onboarding: true, pricing_onboarding: true) %>">
+                Precio <span class="sr-only">(current)</span>
+            </a>
+            <a class="btn btn-outline-light d-none d-sm-block" href="/users/sign_in" role="button">
+                Inicia Sesión
+            </a>
+            <a class="btn btn-primary nav-link-mobile" id="registerButton" href="/users/sign_up" role="button">
+            Regístrate
+            </a>
     </div>
 </nav>
 
@@ -66,14 +48,6 @@
         background-color: #171F2A;
     }
 
-    #registerButton{
-        background: #1A7FFA;
-        border: 1px solid #1A7FFA;
-        box-sizing: border-box;
-        display: flex;
-        align-items: center;
-    }
-
     .navbar-toggler-icon {
         display: inline-block;
         position: relative;
@@ -87,7 +61,7 @@
         background-size: 100% 100%;
     }
 
-    .navbar-expand-sm .navbar-collapse {
+    .navbar-expand-md .navbar-collapse {
         flex-grow: 0;
     }
 
@@ -102,6 +76,11 @@
         margin: auto; 
         width: 1.5rem;
     } */
+
+    .navbar-toggler {
+        margin-left: .5rem;
+        border: none;
+    }
 
     .navbar-toggler-icon:before {
         border-top: 2px solid black;
@@ -203,4 +182,37 @@
         flex-direction: row;
         align-items: center;
     }
+
+    @media (max-width: 768px) {
+
+    .navbar .form-inline,
+    .navbar li {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-end;
+    }
+
+    .navbar .form-inline > div {
+      padding: 0!important; 
+      margin: .5rem 0;
+    }
+
+    .navbar-expand-md .navbar-collapse {
+      min-height: 100vh;
+      padding-top: 30vh;
+    }
+
+    .navbar .nav-link-mobile {
+      text-align: center; 
+      width: 100%;
+      background: none;
+      color: #171F2A;
+      padding: .5rem;
+      border: none;
+      margin: auto;
+      font-size: 1.5rem;
+    }
+
+}
 </style>

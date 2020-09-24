@@ -250,6 +250,8 @@ a.article:hover {
 .primaryinfo {
     color: #666;
     font-size: 17px;
+    text-align: right;
+    margin-bottom: 0;
 }
 
 

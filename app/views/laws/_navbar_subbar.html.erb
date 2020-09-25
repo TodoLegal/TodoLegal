@@ -38,15 +38,20 @@
       <%= render '/home/loading_spinner' %>
     </div>
   </div>
-  <div class="row row-counter">
-    <% if @highlight_enabled %>
-    <div class="col-12 col-counter">
-      <button class="btn btn-sm" style="padding-left:4;" onclick="browseHighlightedUp()"><i class="fa fa-chevron-left"></i></button>
-      <span>Resultado </span><span id="result-count-big"></span>
-      <button class="btn btn-sm" style="padding-left:4;" onclick="browseHighlightedDown()"><i class="fa fa-chevron-right"></i></button>
+  <% if @highlight_enabled %>
+    <div class="row row-counter">
+      <div class="col-12 col-counter">
+        <button class="btn btn-sm" style="padding-left:4;" onclick="browseHighlightedUp()"><i class="fa fa-chevron-left"></i></button>
+        <span>Resultado </span>&nbsp;<span id="result-count-big"></span>
+        <button class="btn btn-sm" style="padding-left:4;" onclick="browseHighlightedDown()"><i class="fa fa-chevron-right"></i></button>
+      </div>
     </div>
-    <% end %>
-  </div>
+    <div class="row">
+      <div class="col-12">
+        <span style="font-size: 15px; padding: 0px;"><a class="" style="font-size: 12px;" href="<%= law_path(@law) %>">Ver ley completa</a></span>
+      </div>
+    </div>
+  <% end %>
 </div>
 
 <style>

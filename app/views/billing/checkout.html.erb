@@ -177,16 +177,17 @@
               <%= hidden_field_tag :is_monthly, @is_monthly %>
             <% end %>
             <%= hidden_field_tag :go_to_law, @go_to_law %>
-            <div id="search-input" class="input-group input-group-lg mb-6 main-search">
-              <input name="coupon" value="<%= @coupon %>" type="text" class="form-control" placeholder="Cupón" aria-label="Recipient's username" aria-describedby="button-addon2">
+            <div id="coupon-form" class="input-group input-group-lg mb-6" style="margin: 1rem auto;">
+              <input name="coupon" value="<%= @coupon %>" type="text" class="form-control" style="border: 1px solid;" placeholder="Cupón">
               <div class="input-group-append">
-                <button type="submit" onclick="document.getElementById('loading-spinner').style.display = 'block';document.getElementById('search-input').style.display = 'none';" class="btn btn-outline-secondary buscar" type="button" id="button-addon2">Aplicar</button>
+                <button type="submit" onclick="document.getElementById('coupon-loading').style.display = 'block';document.getElementById('coupon-error').style.display = 'none';document.getElementById('coupon-form').style.display = 'none';" class="btn btn-outline-secondary buscar" type="button">Aplicar</button>
               </div>
             </div>
           </form>
         </div>
       </div>
-      <div style="color: #eb1f29;"><%= @coupon_error_message %></div>
+      <div id="coupon-loading" style="display: none;">Verificando cupón...</div>
+      <div id="coupon-error" style="color: #eb1f29;"><%= @coupon_error_message %></div>
     </div>
 </div>
 <p class="text-left pt-2 pl-3 d-none d-md-block">Si no es lo que buscabas <%= link_to "cambia de suscripción", pricing_path(go_to_law: @go_to_law, is_onboarding: @is_onboarding) %> </p>

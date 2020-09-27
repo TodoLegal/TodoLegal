@@ -42,6 +42,9 @@
           <% else %>
             <%= hidden_field_tag :is_monthly, false %>
           <% end %>
+          <% if @is_coupon_valid %>
+            <%= hidden_field_tag :coupon, @coupon %>
+          <% end %>
           <div class="form-group">
             <label class="d-none d-sm-block">Número de tarjeta </label>
             <div class="form-control" id="cardNumber-element">
@@ -121,22 +124,69 @@
       <% if @is_monthly %>
         <div class="subscription-row">
           <p class="subscription-row-label">Mensualidad</p>
-          <strong class="subscription-row-value">$7.00</strong>
+          <strong class="subscription-row-value">$<%= number_with_precision(@base_price_monthly, :precision => 2) %></strong>
         </div>
         <div class="subscription-row subscription-row-total">
           <p class="subscription-row-label">Total</p>
-          <strong class="subscription-row-value">$7.00</strong>
+          <strong class="subscription-row-value">
+            <% if @is_coupon_valid %>
+              <del>
+                $<%= number_with_precision(@base_price_monthly, :precision => 2) %>
+              </del>
+            <% else %>
+              $<%= number_with_precision(@base_price_monthly, :precision => 2) %>
+            <% end %>
+          </strong>
         </div>
       <% else %>
         <div class="subscription-row">
           <p class="subscription-row-label">Mensualidad</p>
-          <strong class="subscription-row-value">$6.00</strong>
+          <strong class="subscription-row-value">$<%= number_with_precision(@monthly_price_annually, :precision => 2) %></strong>
         </div>
         <div class="subscription-row subscription-row-total">
           <p class="subscription-row-label">Total</p>
-          <strong class="subscription-row-value">$72.00</strong>
+          <strong class="subscription-row-value">
+            <% if @is_coupon_valid %>
+              <del>
+                $<%= number_with_precision(@base_price_annually, :precision => 2) %>
+              </del>
+            <% else %>
+              $<%= number_with_precision(@base_price_annually, :precision => 2) %>
+            <% end %>
         </div>
       <% end %>
+      <% if @is_coupon_valid %>
+        <div class="subscription-row">
+          <p class="subscription-row-label">Descuento</p>
+          <strong class="subscription-row-value">-$<%= number_with_precision(@discount, :precision => 2) %></strong>
+        </div>
+        <div class="subscription-row subscription-row-total">
+          <p class="subscription-row-label">Total</p>
+          <strong class="subscription-row-value">$<%= number_with_precision(@total_after_discount, :precision => 2) %></strong>
+        </div>
+      <% end %>
+      <div class="subscription-row subscription-row-total">
+        <div class="col-7 form-group">
+          <form class="form-inline" action="<%= checkout_path %>" method="get" id="search-law-form">
+            <% if @is_onboarding %>
+              <%= hidden_field_tag :is_onboarding, true %>
+            <% else %>
+              <%= hidden_field_tag :is_onboarding, false %>
+            <% end %>
+            <% if @is_monthly %>
+              <%= hidden_field_tag :is_monthly, @is_monthly %>
+            <% end %>
+            <%= hidden_field_tag :go_to_law, @go_to_law %>
+            <div id="search-input" class="input-group input-group-lg mb-6 main-search">
+              <input name="coupon" value="<%= @coupon %>" type="text" class="form-control" placeholder="Cupón" aria-label="Recipient's username" aria-describedby="button-addon2">
+              <div class="input-group-append">
+                <button type="submit" onclick="document.getElementById('loading-spinner').style.display = 'block';document.getElementById('search-input').style.display = 'none';" class="btn btn-outline-secondary buscar" type="button" id="button-addon2">Aplicar</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div style="color: #eb1f29;"><%= @coupon_error_message %></div>
     </div>
 </div>
 <p class="text-left pt-2 pl-3 d-none d-md-block">Si no es lo que buscabas <%= link_to "cambia de suscripción", pricing_path(go_to_law: @go_to_law, is_onboarding: @is_onboarding) %> </p>

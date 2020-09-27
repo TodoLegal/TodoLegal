@@ -1,0 +1,94 @@
+<div class="col-12 search-bar">
+  <form class="form-inline" action="<%= law_path(@law) %>" method="get" id="search-law-form">
+    <div class="input-group">
+      <%if @info_is_searched %>
+        <a class="btn btn-light search-button" style="font-size: 16px;padding-top: 11px;" href="<%= law_path(@law) %>">
+          <i class="fas fa-arrow-left"></i>
+        </a>
+      <% else %>
+        <button type="button" class="btn btn-light search-button" onclick="hideSearchContainer()">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+      <% end %>
+      <input type="text" class="form-control" name="query" type="search" placeholder="Buscar en el documento" value="<%= @query %>" aria-label="Buscar">
+      <div class="input-group-append">
+        <button class="btn btn-secondary" style="background-color: #FF5722;border-color: #FF5722;" type="submit" onclick="document.getElementById('loading-spinner').style.display = 'block';document.getElementById('search-law-form').style.display = 'none';">
+          <i class="fa fa-search"></i>
+        </button>
+      </div>
+    </div>
+  </form>
+  <%= render '/home/loading_spinner' %>
+</div>
+<hr>
+<div class="row">
+  <!-- searched word 
+  <div class="col-<%= @highlight_enabled ? '2' : '12' %>">
+    <span class="resultinfo d-inline-block text-truncate" style="width: 100%; width: 100vw;" id="sticky_nav_header"><%= @highlight_enabled ? @query : '' %></span>
+  </div>
+  -->
+<% if @highlight_enabled %>
+  <div class="col-12">
+    <p>
+      <%= @articles_count %> resultados encontrados en <b><%=@law.name%></b>.
+    </p>
+  </div>
+</div>
+<div class = "row">
+  <div class = "col-12">
+    <span style="font-size: 15px; padding: 0px;"><a class="" style="font-size: 15px;" href="<%= law_path(@law) %>">Ver ley completa</a></span>
+  </div>
+</div>
+<hr>
+<% end %>
+
+<div class="help-card">
+  <% if !@info_is_searched %>
+    <div class = "card-body">
+      <p class="help-card-text" style="color: #A6B9D3; font-size: 16px; line-height: 19px;">Busca por:</p>
+      <p class="help-card-text">1. Título de documento o número de publicación.</p>
+      <p class="help-card-text">2. Palabra clave.</p>
+      <p class="help-card-text">3. Artículos específicos. Para esta opción escribe un símbolo de pleca <strong>/</strong> al inicio, 
+      seguido por el o los números, y finalmente el término, cada uno separado por pleca. Cómo el ejemplo a continuación:
+      </p>
+      <a href="#" id="search-example" class="btn btn-block btn-primary disabled" tabindex="-1" role="button" aria-disabled="true">/12/14/civil </a>
+      <p class="help-card-text" style="color: #A6B9D3; font-size: 14px; line-height: 17px;">Equivale a la busqueda de artículos <i>12</i> y <i>14</i> que contengan el término <i>civil</i>.</p>
+    </div>
+  <% end %>
+  <% if @info_is_searched %>
+    <%= render partial: 'content', locals: {is_mobile: true} %>
+  <% end %>
+</div>
+
+<style>
+  br{content:' ';}
+  br:after{content:' ';}
+
+  .search--container{
+    background-color: #FFF;
+    min-height: 850px;
+  }
+
+  .search-bar{
+    padding-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .search-button{
+    background-color: #FFF;
+  }
+
+    #search-example{
+    background: #EFF3F8;
+    border-style: none;
+    color: black;
+    line-height: 19px;
+    justify-content: left;
+  }
+
+  .help-card-text{
+    font-size: 18px;
+    line-height: 21px;
+    color: #A6B9D3;
+  }
+</style>

@@ -1,6 +1,6 @@
 class LawsController < ApplicationController
   layout 'law'
-  layout 'application', only: [:index]
+  # layout 'application', only: [:index]
   before_action :set_law, only: [:show, :edit, :update, :destroy]
   before_action :set_materias, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_editor!, only: [:index, :new, :edit, :create, :update, :destroy]
@@ -20,6 +20,7 @@ class LawsController < ApplicationController
     @query = ""
     @articles_count = 0
     @has_articles_only = true
+    @info_is_searched = false
 
     if params[:query]
       @tokens = params[:query].scan(/\w+|\W/)
@@ -38,7 +39,8 @@ class LawsController < ApplicationController
     if params[:query] && params[:query] != ""
       @highlight_enabled = true
       @query = params[:query]
-      @stream = @law.articles.search_by_body(params[:query]).with_pg_search_highlight.order(:position).sort_by { |article| article.position }
+      @stream = @law.articles.search_by_body_highlighted_and_trimmed(params[:query]).with_pg_search_highlight.order(:position).sort_by { |article| article.position }
+      @info_is_searched  = true
       @articles_count = @stream.size
     else
       i = 0
@@ -226,7 +228,10 @@ class LawsController < ApplicationController
       @laws_array = []
       counter = 0
       while counter < lawTags.size
-        @laws_array[counter] = Law.find_by(id: lawTags[counter].law_id)
+        law = Law.find_by(id: lawTags[counter].law_id)
+        if law
+          @laws_array[counter] = law
+        end
         counter+=1
       end
 

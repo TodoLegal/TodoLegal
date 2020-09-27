@@ -1,0 +1,218 @@
+<nav class="navbar navbar-expand-md navbar-light  sticky-top" id="topNavbar">
+    <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, class:"navbar-back-arrow" %>
+    <a href="/" class="navbar-brand text-primary" >
+        <img  src="/img/top_navbar/law_top_navbar.svg" alt="Card image cap" class="gray-logo img-fluid">
+        <img  src="/img/top_navbar/top_navbar.svg" alt="Card image cap" class="white-logo img-fluid">
+         
+        <img src="/img/top_navbar/Logo-letras-white.svg" alt="Card image cap" class="todolegal img-fluid">
+    </a>
+    <div class="right-nav">
+        <button type="button" class="btn btn-light search-button" onclick="hideDocumentContainer()">
+            <i class="fas fa-search"></i>
+        </button>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>  
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <a class="price nav-link nav-link-mobile" href="<%= pricing_path(is_onboarding: true, pricing_onboarding: true) %>">
+                Precio <span class="sr-only">(current)</span>
+            </a>
+            <a class="btn btn-outline-light d-none d-sm-block" href="/users/sign_in" role="button">
+                Inicia Sesión
+            </a>
+            <a class="btn btn-primary nav-link-mobile" id="registerButton" href="/users/sign_up" role="button">
+            Regístrate
+            </a>
+    </div>
+</nav>
+
+<style>
+   #topNavbar{
+        margin-bottom: 0px; 
+        z-index: 1000; 
+        justify-content: space-between;
+        background: #171F2A;
+        padding: 5px 20px;
+    }
+
+    .todolegal{
+        margin-left: 18px;
+    }
+
+    .white-logo{
+      background-color: #171F2A;
+    }
+
+    #logo{
+        background-color: #171F2A;
+    }
+
+    .navbar-toggler-icon {
+        display: inline-block;
+        position: relative;
+        width: 1.5em;
+        height: 1.5em;
+        vertical-align: middle;
+        content: "";
+        background: no-repeat center center;
+        background-image: none;
+        background-size: auto;
+        background-size: 100% 100%;
+    }
+
+    .navbar-expand-md .navbar-collapse {
+        flex-grow: 0;
+    }
+
+    .navbar-collapse{
+        justify-content: flex-end;
+    }
+
+    /* .navbar-toggler-icon:before,
+    .navbar-toggler-icon:after {
+        position: absolute;
+        content: "";
+        margin: auto; 
+        width: 1.5rem;
+    } */
+
+    .navbar-toggler {
+        margin-left: .5rem;
+        border: none;
+    }
+
+    .navbar-toggler-icon:before {
+        border-top: 2px solid black;
+        border-bottom: 2px solid black;
+        height: 20px; 
+        top: 0;
+        bottom: 0;
+    }
+
+    .navbar-toggler-icon:after {
+        background: black;
+        height: 2px; 
+        top: 0;
+        bottom: 0;
+    }
+
+    .navbar-back-arrow{
+        font-size: 1.5rem; 
+        color: black;
+        height: 24px;
+        display: none;
+    }
+    
+    .gray-logo{
+        display: none;
+    }
+
+    .search-button{
+        display: none;
+        background: #F2F5F8;
+        /* border: none; */
+        /* outline: none; */
+    }
+
+    
+    @media (max-width: 575.98px) {
+
+        .navbar .form-inline,
+        .navbar li {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-end;
+        }
+
+        .navbar .form-inline > div {
+            padding: 0!important; 
+            margin: .5rem 0;
+        }
+
+    }
+
+    .price{
+        color: white !important;
+    }
+
+   @media only screen and (max-width: 767.98px){
+        .todolegal{
+            margin:0px;
+            display: none;
+        }
+
+        #topNavbar{
+            background: #F2F5F8;
+            justify-content:
+        }
+
+        .white-logo{
+            display: none
+        }
+
+        .gray-logo{
+            display: block;
+            margin-left: 95%;
+        }
+
+        .navbar-back-arrow{
+            display: block;
+        }
+
+        .search-button{
+            display: block;
+        }
+
+        .price{
+            color: black !important;
+        }
+    }
+
+    @media only screen and (min-width: 1200px){
+
+        #topNavbar{
+            padding: 5px 10vw;
+        }
+    }
+
+    .right-nav {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    @media (max-width: 768px) {
+
+    .navbar .form-inline,
+    .navbar li {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-end;
+    }
+
+    .navbar .form-inline > div {
+      padding: 0!important; 
+      margin: .5rem 0;
+    }
+
+    .navbar-expand-md .navbar-collapse {
+      min-height: 100vh;
+      padding-top: 30vh;
+    }
+
+    .navbar .nav-link-mobile {
+      text-align: center; 
+      width: 100%;
+      background: none;
+      color: #171F2A;
+      padding: .5rem;
+      border: none;
+      margin: auto;
+      font-size: 1.5rem;
+    }
+
+}
+</style>

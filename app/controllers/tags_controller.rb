@@ -25,7 +25,7 @@ class TagsController < ApplicationController
     if @query
       @query = params[:query]
       @laws = @tag.laws.search_by_name(@query).with_pg_search_highlight
-      @stream = Article.where(law: @tag.laws).search_by_body(@query).group_by(&:law_id)
+      @stream = Article.where(law: @tag.laws).search_by_body_highlighted(@query).group_by(&:law_id)
       @result_count = @laws.size
       @articles_count = @stream.size
       legal_documents = Set[]

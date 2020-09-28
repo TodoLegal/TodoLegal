@@ -29,7 +29,7 @@ class BillingController < ApplicationController
         @coupon_data = Stripe::Coupon.retrieve(@coupon)
         @is_coupon_valid = @coupon_data.valid
         if !@is_coupon_valid
-          @coupon_error_message = "El cupón que has ingresado es inválido."
+          @coupon_error_message = I18n.t(:stripe_coupon_invalid)
         end
         if @is_monthly
           @discount = @base_price_monthly * @coupon_data.percent_off/100.0
@@ -39,7 +39,7 @@ class BillingController < ApplicationController
           @total_after_discount = @base_price_annually - @discount
         end
       rescue
-        @coupon_error_message = "El cupón que has ingresado es inválido."
+        @coupon_error_message = I18n.t(:stripe_coupon_error)
       end
     end
   end

@@ -81,7 +81,7 @@
           </div>
 
 
-          <p class="text-left"><small>Si tienes preguntas o necesitas ayuda contactanos a <a class="link" href="mailto:info@todolegal.app">info@todolegal.app</a></small></p>
+          <p class="text-left"><small>Si tienes preguntas o necesitas ayuda contáctanos a <a class="link" href="mailto:info@todolegal.app">info@todolegal.app</a></small></p>
         </form>
       </div>
     </div>
@@ -166,7 +166,7 @@
         </div>
       <% end %>
       <div class="subscription-row subscription-row-total">
-        <div class="col-7 form-group">
+        <div class="form-group">
           <form class="form-inline" action="<%= checkout_path %>" method="get" id="search-law-form">
             <% if @is_onboarding %>
               <%= hidden_field_tag :is_onboarding, true %>
@@ -190,7 +190,7 @@
       <div id="coupon-error" style="color: #eb1f29;"><%= @coupon_error_message %></div>
     </div>
 </div>
-<p class="text-left pt-2 pl-3 d-none d-md-block">Si no es lo que buscabas <%= link_to "cambia de suscripción", pricing_path(go_to_law: @go_to_law, is_onboarding: @is_onboarding) %> </p>
+<p class="text-left pt-2 pl-3 d-none d-md-block">Si no es lo que buscabas <%= link_to "cambia de suscripción", pricing_path(go_to_law: @go_to_law, is_onboarding: @is_onboarding) %>. </p>
 </section>
 
 <!-- Start Cancel Modal -->

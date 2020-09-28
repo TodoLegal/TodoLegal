@@ -706,3 +706,45 @@ footer p a {
         align-items: center;
     }
 }
+
+
+/* Badges */
+
+.badge-creation{
+    display: inline-block;
+    background: #F2F5F8;
+    border: 1px solid rgba(166, 185, 211, 0.5);
+    box-sizing: border-box;
+    border-radius: 4px;
+    color: #505864;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 18px;
+    padding: .25em .4em;
+}
+
+.badge--materia{
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 12px;
+    line-height: 13px;  
+    font-style: normal;
+    font-weight: normal;
+    text-transform: uppercase;
+    color: #505864;
+    padding: 2px 8px;
+    height: 17px;
+    left: 16px;
+    top: 22px;
+    background: #F2F5F8;
+}
+
+.link-google-drive {    
+    position: absolute;
+    right: 1.5rem;
+}
+
+.container--home .card-title,
+.container--results .card-title {
+    padding-right: 20px;
+}

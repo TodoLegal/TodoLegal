@@ -42,13 +42,9 @@
               </p>
               <% end %>
             <h5 class="card-title"><%= law.name %></h5>
-            <div class="row document-result-info">
-              <div class="col-6">
+            <div class="d-flex justify-content-between document-result-info">
                 <span class="badge-creation badge-secondary"><i class="fas fa-file-alt"></i> <%= law.creation_number %></span>
-              </div>
-              <div class="col-6">
                 <p class="primaryinfo"><%= law.articles.count %> artículos</p>
-              </div>
             </div>
           </a>
         </div>
@@ -161,6 +157,7 @@ function hideSeeMoreSpecificResultsLink()
 
 <style>
   .badge-creation{
+    display: inline-block;
     background: #F2F5F8;
     border: 1px solid rgba(166, 185, 211, 0.5);
     box-sizing: border-box;

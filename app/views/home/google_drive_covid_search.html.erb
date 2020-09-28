@@ -26,11 +26,12 @@
       <div class="no-result-message">
         <img src="/img/img-search-doc.svg" />
         <p class="body body--secondary">
-          Asegurate de haber escrito la busqueda correctamente, sino intenta con un término similar. Recuerda que puedes refinar tu busqueda por título, palabra clave y número de artículo.
+          Asegurate de haber escrito la busqueda correctamente, sino intenta con un término similar. Recuerda que solamente puedes buscar por número de publicación o número de gaceta.
         </p>
       </div>
     </div>
   <% else %>
+  <p style="font-family: -apple-system, sans-serif;">Estas búsquedas se hacen en un repositorio de Google Drive, solamente puedes buscar por número de publicación o número de gaceta.</p>
     <div class="row">
       <% @files.each do |file| %>
         <% if file['type'] == 'application/vnd.google-apps.folder' %>

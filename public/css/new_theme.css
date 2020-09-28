@@ -75,6 +75,11 @@ p.body {
     margin: 0 .75rem;
 }
 
+.section-title {
+    font-size: 2rem;
+    margin: 1rem 0;
+}
+
 /* General styles for cards */
 
 .card--dark-100 {

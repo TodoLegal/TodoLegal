@@ -1,5 +1,4 @@
 <p class="resultinfo">
-  <%= @result_info_text if @result_count > 0 %>
   <% if @tag && @query %>
     Buscar en <a href="/search_law?query=<%= @query%>">todas las materias</a>
   <% end %>
@@ -21,12 +20,11 @@
   </div>
 <% end %>
 
-<p class="resultinfo">
-  <%= @titles_result %>
-</p>
-
-
 <% if @laws %>
+  <section class="d-flex justify-content-between">
+    <label class="resultinfo-label"> LEYES</label>
+    <span class="resultinfo-articles"> <%= @titles_result %></span>
+  </section>
   <div class="row">
     <% i = 0 %>
     <% @laws.each do |law| %>
@@ -37,14 +35,13 @@
             <% if @is_search_law %>
               <p style="font-size: 15px">
                 <% law.materia_names.each do |materia_name| %>
-                  <span class="badge badge-light badge-secondary"><%= materia_name %></span>
+                  <span class="badge badge--materia"><%= materia_name %></span>
                 <% end %>
               </p>
               <% end %>
-            <h5 class="card-title"><%= law.name %></h5>
-            <div class="d-flex justify-content-between document-result-info">
+            <h5 class="result-card-title"><%= law.name %></h5>
+            <div class="d-flex document-result-info">
                 <span class="badge-creation badge-secondary"><i class="fas fa-file-alt"></i> <%= law.creation_number %></span>
-                <p class="primaryinfo"><%= law.articles.count %> artículos</p>
             </div>
           </a>
         </div>
@@ -52,45 +49,37 @@
     <% end %>
     <button id="see_more_laws_link" class="btn btn-outline-primary btn-more-laws" style="margin-top:2%;" onclick="showCollapsableLawCards();return false;">Ver más documentos</button>
   </div>
-
+  <hr>
   <br>
-
-  <% if @laws.size > 0 %>
-  <% end %>
 <% end %>
 
-<p class="resultinfo">
-  <%= @articles_result if (@result_count - @laws.size) > 0 %>
-</p>
-
 <% if @grouped_laws && @grouped_laws.size > 0 %>
+  <section class="d-flex justify-content-between">
+    <label class="resultinfo-label"> ARTÍCULOS</label>
+    <span class="resultinfo-articles"> <%= @articles_result %></span>
+  </section>
   <div class="list-group">
     <% i = 0 %>
     <% @grouped_laws.each do |grouped_law| %>
       <% i += 1 %>
-      <div class="collapsable-specific-results-cards list-group-item col-sm-12" style="display:<%= i>6 ? 'none' : 'block' %>">
+      <div class="collapsable-specific-results-cards list-group-item col-sm-12" style="display:<%= i>6 ? 'none' : 'block' %>; margin-bottom: 10px;">
         <a class="" href="<%= law_path(grouped_law[:law]) + '?query='+@query %>">
         <p style="font-size: 15px">
           <% grouped_law[:materia_names].each do |materia_name| %>
             <span class="badge badge--materia"><%= materia_name %></span>
           <% end %>
         </p>
-        <h5 class="card-title"><%= grouped_law[:law].name %></h5>
-        <p class="primaryinfo"><%= grouped_law[:preview] %></p>
-        <div class="row">
-          <div class="col-4">
-           <span class="badge badge-creation badge-secondary"><i class="fas fa-file-alt"></i> <%= grouped_law[:law].creation_number %></span>
-          </div>
-          <div class="col-8">
-          <p class="resultinfo">
-            <%= grouped_law[:count] %>
-            <% if grouped_law[:count] == 1 %>
-              artículo relacionado
-            <% else %>
-              artículos relacionados
-            <% end %>
-          </p>
-          </div>
+        <h5 class="result-card-title"><%= grouped_law[:law].name %></h5>
+        <p class="resultinfo-content"><%= grouped_law[:preview] %></p>
+        <div class="d-flex justify-content-between document-result-info">
+            <span class="badge-creation badge-secondary"><i class="fas fa-file-alt"></i> <%= grouped_law[:law].creation_number %></span>
+            <span class="resultinfo-article-count">
+              <% if grouped_law[:count] == 1 %>
+               <%= grouped_law[:count] %>  artículo
+              <% else %>
+                +<%= grouped_law[:count] %> artículos
+              <% end %>
+            </span>
         </div>
         </a>
       </div>

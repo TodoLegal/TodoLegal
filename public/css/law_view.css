@@ -242,9 +242,58 @@ a.article:hover {
     right: 0;
 }
 
-.resultinfo {
+.resultinfo{
     color: #888;
     font-size: 15px;
+}
+
+.resultinfo-label{
+    font-family: -apple-system, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    color: #505864;
+}
+
+.resultinfo-articles{
+    font-family: -apple-system, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 17px;
+    text-align: right;
+    color: #A6B9D3;
+}
+
+.resultinfo-article-count{
+    font-family: -apple-system, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 15px;
+    line-height: 17px;
+    /* identical to box height */
+
+    display: flex;
+    align-items: center;
+    text-align: right;
+
+    color: #1A7FFA;
+}
+
+.result-card-title{
+    font-family: -apple-system, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 24px;
+    color: #171F2A;
+}
+
+.resultinfo-content {
+    color: #666;
+    font-size: 17px;
+    margin-bottom: 0;
 }
 
 .primaryinfo {

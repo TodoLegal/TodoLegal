@@ -748,3 +748,10 @@ footer p a {
 .container--results .card-title {
     padding-right: 20px;
 }
+
+/* Clear button style */
+
+.clear--text{
+    cursor: pointer;
+    display: none;
+}

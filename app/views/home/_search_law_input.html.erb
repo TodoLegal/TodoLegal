@@ -6,7 +6,7 @@
       <% end %>
       <input name="query" id="searchInput" value="<%= @query %>" type="text" class="form-control search-input" placeholder="Ej. Ad-litem, despido, prórroga" aria-label="Recipient's username" aria-describedby="button-addon2" autocomplete="off">
       <div class="input-group-append">
-        <button type="button" class="close clear--text" id="clearButton" onclick="clearText()"aria-label="Close">
+        <button type="button" class="close clear--text" id="clearButton" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
         <% if home_flag %>
@@ -33,27 +33,9 @@
       </div>
     </div>
   </form> 
-  
+  <%= javascript_pack_tag "clear_searchInput" %>
 </section>
 <%= render '/home/loading_spinner' %>
-
-<script>
-  var input_field = document.getElementById("searchInput");
-  var clear_button = document.getElementById("clearButton");
-
-  function clearText() {
-    input_field.value = "";
-    clear_button.style.display = "none";
-  }
-
-  input_field.addEventListener('input', (event) => {
-    if(input_field.value != ""){
-      clear_button.style.display = "block";
-    }else{
-      clear_button.style.display = "none";
-    }
-  });
-</script>
 
 <style>
   #search-example{
@@ -80,11 +62,4 @@
     line-height: 21px;
     color: #505864;
   }
-
-  .clear--text{
-    cursor: pointer;
-    display: none;
-  }
-
-
 </style>

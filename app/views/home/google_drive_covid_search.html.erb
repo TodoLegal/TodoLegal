@@ -11,7 +11,7 @@
       </a>
       <input name="query" id="searchInput" value="<%= @query %>" type="text" class="form-control" placeholder="Busca información sobre el COVID-19" aria-label="Recipient's username" aria-describedby="button-addon2">
       <div class="input-group-append">
-        <button type="button" class="close clear--text" id="clearButton" onclick="clearText()"aria-label="Close">
+        <button type="button" class="close clear--text" id="clearButton" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
         <button type="submit" onclick="document.getElementById('loading-spinner').style.display = 'block';document.getElementById('search-input').style.display = 'none';" class="btn btn-outline-secondary buscar" type="button" id="button-addon2">Buscar</button>
@@ -64,30 +64,6 @@
       <% end %>
     </div>
   <% end %>
+  <%= javascript_pack_tag "clear_searchInput" %>
   <%= link_to 'Ir al inicio', root_path %>
 </div>
-
-<script>
-  var input_field = document.getElementById("searchInput");
-  var clear_button = document.getElementById("clearButton");
-
-  function clearText() {
-    input_field.value = "";
-    clear_button.style.display = "none";
-  }
-
-  input_field.addEventListener('input', (event) => {
-    if(input_field.value != ""){
-      clear_button.style.display = "block";
-    }else{
-      clear_button.style.display = "none";
-    }
-  });
-</script>
-
-<style>
-  .clear--text{
-    cursor: pointer;
-    display: none;
-  }
-</style>

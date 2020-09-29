@@ -10,14 +10,18 @@
             <i class="fas fa-arrow-left"></i>
         </button>
       <% end %>
-      <input type="text" class="form-control" name="query" type="search" placeholder="Buscar en el documento" value="<%= @query %>" aria-label="Buscar">
+      <input type="text" id="searchInput" class="form-control" name="query" type="search" placeholder="Buscar en el documento" value="<%= @query %>" aria-label="Buscar">
       <div class="input-group-append">
+        <button type="button" class="close clear--text" id="clearButton" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
         <button class="btn btn-secondary" style="background-color: #FF5722;border-color: #FF5722;" type="submit" onclick="document.getElementById('loading-spinner').style.display = 'block';document.getElementById('search-law-form').style.display = 'none';">
           <i class="fa fa-search"></i>
         </button>
       </div>
     </div>
   </form>
+  <%= javascript_pack_tag "clear_searchInput" %>
   <%= render '/home/loading_spinner' %>
 </div>
 <hr>

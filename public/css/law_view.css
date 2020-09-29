@@ -282,12 +282,12 @@ a.article:hover {
 }
 
 .result-card-title{
-    font-family: -apple-system, sans-serif;
+    /* font-family: -apple-system, sans-serif;
     font-style: normal;
     font-weight: normal;
     font-size: 18px;
     line-height: 24px;
-    color: #171F2A;
+    color: #171F2A; */
 }
 
 .resultinfo-content {

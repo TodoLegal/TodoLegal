@@ -739,6 +739,21 @@ footer p a {
     background: #F2F5F8;
 }
 
+
+.badge-creation{
+    display: inline-block;
+    background: #F2F5F8;
+    border: 1px solid rgba(166, 185, 211, 0.5);
+    box-sizing: border-box;
+    border-radius: 4px;
+    color: #505864;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 18px;
+    padding: .25em .4em;
+}
+
 .link-google-drive {    
     position: absolute;
     right: 1.5rem;
@@ -754,4 +769,7 @@ footer p a {
 .clear--text{
     cursor: pointer;
     display: none;
+}
+.document-result-info{
+    margin-top: 25px;
 }

@@ -91,13 +91,13 @@
     <button type="button" class="close" onclick="hideAlert()">
     <span aria-hidden="true">&times;</span>
     </button>
-      Enlace copiado en el portapapeles, ahora puedes compartir este documento pegando el enlace.
+      Enlace copiado en el portapapeles, ahora puedes compartir este documento al pegar el enlace.
   </div>
 
   <div class="law-header-desktop"><%= render 'law_header' %></div>
   
   <div class="container--documento">
-    <div class="inner-continer--visualizador" style="padding-top:60">
+    <div class="inner-continer--visualizador">
       <%= render 'navbar_subbar' %>
 
       <div class="tab-content" id="myTabContent">
@@ -141,7 +141,7 @@
                     </div>
                     <div class="col-md-12">
                       <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
-                      Adquiérelo por <b>$7.00 al mes</b> y podrás acceder a los más de<%= (Law.count/10)*10 %> documentos legales y a lo que continuamente agregamos.
+                      Adquiérelo por <b>$7.00 al mes</b> y podrás acceder a los más de<%= (all_document_count/10)*10 %> documentos legales y a lo que continuamente agregamos.
                     </p>
                     <p style="font-size:18px; text-align:center;">
                           <i class="text-muted">Puedes cancelar la suscripción en cualquier momento.</i>
@@ -163,7 +163,7 @@
                       </div>
                       <div class="col-md-12">
                         <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
-                      Adquiere el <b>Plan Pro</b> por <b>$7.00 al mes</b> y podrás acceder a más de <%= (Law.count/10)*10 %> documentos legales y a lo que continuamente agregamos.
+                      Adquiere el <b>Plan Pro</b> por <b>$7.00 al mes</b> y podrás acceder a más de <%= (all_document_count/10)*10 %> documentos legales y a lo que continuamente agregamos.
                         <p style="font-size:18px; text-align:center;">
                           <i class="text-muted">Puedes cancelar la suscripción en cualquier momento.</i>
                         </p>
@@ -230,12 +230,20 @@
                 <a class="" href="<%= law_path(law) %>" style="padding:20px">
                   <p style="font-size: 15px">
                     <% law.materia_names.each do |materia_name| %>
-                      <span class="badge badge-light badge-secondary"><%= materia_name %></span>
+                      <span class="badge badge--materia"><%= materia_name %></span>
                     <% end %>
                   </p>
                   <h5 class="card-title"><%= law.name %></h5>
-                  <p class="primaryinfo">[<%= law.creation_number %>]</p>
-                  <p class="primaryinfo"><%= law.articles.count %> artículos</p>
+                  <div class="d-flex justify-content-between document-result-info">
+                    <span class="badge-creation badge-secondary"><i class="fas fa-file-alt"></i> <%= law.creation_number %></span>
+                    <span class="resultinfo-article-count">
+                      <% if @articles_count == 1 %>
+                        <%= law.articles.count %>  artículo
+                      <% else %>
+                        +<%= law.articles.count %> artículos
+                      <% end %>
+                    </span>
+                  </div>
                 </a>
               </div>
             </div>

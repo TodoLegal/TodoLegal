@@ -40,8 +40,9 @@
               </p>
               <% end %>
             <h5 class="result-card-title"><%= law.name %></h5>
-            <div class="d-flex document-result-info">
+            <div class="d-flex justify-content-between document-result-info">
                 <span class="badge-creation badge-secondary"><i class="fas fa-file-alt"></i> <%= law.creation_number %></span>
+                <p class="primaryinfo"><%= law.articles.count %> artículos</p>
             </div>
           </a>
         </div>
@@ -143,38 +144,3 @@ function hideSeeMoreSpecificResultsLink()
   document.getElementById("see_more_specific_results_link").style.display = "none"
 }
 </script>
-
-<style>
-  .badge-creation{
-    display: inline-block;
-    background: #F2F5F8;
-    border: 1px solid rgba(166, 185, 211, 0.5);
-    box-sizing: border-box;
-    border-radius: 4px;
-    color: #505864;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 14px;
-    line-height: 18px;
-    padding: .25em .4em;
-  }
-
-  .badge--materia{
-    font-family: -apple-system, sans-serif;
-    font-size: 12px;
-    line-height: 13px;  
-    font-style: normal;
-    font-weight: normal;
-    text-transform: uppercase;
-    color: #505864;
-    padding: 2px 8px;
-    height: 17px;
-    left: 16px;
-    top: 22px;
-    background: #F2F5F8;
-  }
-
-  .document-result-info{
-    margin-top: 25px;
-  }
-</style>

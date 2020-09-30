@@ -29,16 +29,18 @@
       </div>
     </div>
   <% else %>
-  <p style="font-family: -apple-system, sans-serif;">Estas búsquedas se hacen en un repositorio de Google Drive, solamente puedes buscar por número de publicación o número de gaceta.</p>
+  <p class = "primaryinfo" style="font-family: -apple-system, sans-serif; text-align: left; margin-bottom: 15px;">Estas búsquedas se hacen en un repositorio de Google Drive, solamente puedes buscar por número de publicación o número de gaceta.</p>
     <div class="row">
       <% @files.each do |file| %>
         <% if file['type'] == 'application/vnd.google-apps.folder' %>
           <div class="collapsable-law-cards col-sm-6 col-md-4 py-2">
             <div class="card card-body h-100" style="padding:0px">
               <a class="" href="<%= google_drive_covid_search_path + '?folder=' + file['name'] %>" target="_self" style="padding:20px">
-                <i class="fas fa-folder"></i>
                 <h5 class="card-title"><%= file['name'] %></h5>
-                <p class="primaryinfo">[<%= file['file_count'] %> archivos]</p>
+                <div class="d-flex justify-content-between document-result-info">
+                  <i class="fas fa-folder"></i>
+                  <p class="primaryinfo"><%= file['file_count'] %> archivos</p>
+                </div>
               </a>
             </div>
           </div>
@@ -53,8 +55,16 @@
               <a class="" href="<%= file['link'] %>" target="_blank" style="padding:20px">
                 <img class="icon-drive" src="/img/google_drive_logo.png"/>
                 <h5 class="card-title"><%= file['name'] %></h5>
-                <p class="badge">[<%= file['type'] %>]</p>
-                <span class="link-google-drive">Abrir en google drive</span>
+                <div class="container-fluid document-result-info">
+                  <div class="row justify-content-between">
+                    <div class="col-xs-6">
+                      <p class="badge-creation badge-secondary"><%= file['type'] %></p>
+                    </div>
+                    <div class="col-xs-6">
+                      <span class="primaryinfo">Abrir en google drive</span>
+                    </div>
+                  </div>
+                </div>
               </a>
             </div>
           </div>

@@ -6,39 +6,41 @@
 <div class="container container--results">
   <form action="<%= google_drive_covid_search_path %>" method="get">
     <div id="search-input" class="input-group input-group-lg mb-3 main-search">
-      <input name="query" value="<%= @query %>" type="text" class="form-control" placeholder="Busca información sobre el COVID-19" aria-label="Recipient's username" aria-describedby="button-addon2">
+      <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, get_google_drive_covid_search_back_link_path, class:"btn btn-back", style:"font-size: 1.5rem; color: #171F2A; padding-left: 0px;" %>
+      <input name="query" id="searchInput" value="<%= @query %>" type="text" class="form-control" placeholder="Busca información sobre el COVID-19" aria-label="Recipient's username" aria-describedby="button-addon2">
       <div class="input-group-append">
+        <button type="button" class="close clear--text" id="clearButton" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
         <button type="submit" onclick="document.getElementById('loading-spinner').style.display = 'block';document.getElementById('search-input').style.display = 'none';" class="btn btn-outline-secondary buscar" type="button" id="button-addon2">Buscar</button>
       </div>
     </div>
   </form>
   <h1>Repositorio de COVID-19</h1>
   <%= render '/home/loading_spinner' %>
-  <a href="<%= get_google_drive_covid_search_back_link_path %>">
-    <button type="button" class="btn btn-outline-primary">
-      <i class="fas fa-arrow-left"></i>
-    </button>
-  </a>
   <% if @files == [] %>
     <div class="container--empty-results">
       <p class="body">No se han encontrado documentos que coincidan con <strong><%= @query %></strong>.</p>
       <div class="no-result-message">
         <img src="/img/img-search-doc.svg" />
         <p class="body body--secondary">
-          Asegurate de haber escrito la busqueda correctamente, sino intenta con un término similar. Recuerda que puedes refinar tu busqueda por título, palabra clave y número de artículo.
+          Asegurate de haber escrito la busqueda correctamente, sino intenta con un término similar. Recuerda que solamente puedes buscar por número de publicación o número de gaceta.
         </p>
       </div>
     </div>
   <% else %>
+  <p class = "primaryinfo" style="font-family: -apple-system, sans-serif; text-align: left; margin-bottom: 15px;">Estas búsquedas se hacen en un repositorio de Google Drive, solamente puedes buscar por número de publicación o número de gaceta.</p>
     <div class="row">
       <% @files.each do |file| %>
         <% if file['type'] == 'application/vnd.google-apps.folder' %>
           <div class="collapsable-law-cards col-sm-6 col-md-4 py-2">
             <div class="card card-body h-100" style="padding:0px">
               <a class="" href="<%= google_drive_covid_search_path + '?folder=' + file['name'] %>" target="_self" style="padding:20px">
-                <i class="fas fa-folder"></i>
                 <h5 class="card-title"><%= file['name'] %></h5>
-                <p class="primaryinfo">[<%= file['file_count'] %> archivos]</p>
+                <div class="d-flex justify-content-between document-result-info">
+                  <i class="fas fa-folder"></i>
+                  <p class="primaryinfo"><%= file['file_count'] %> archivos</p>
+                </div>
               </a>
             </div>
           </div>
@@ -51,10 +53,18 @@
           <div class="collapsable-law-cards col-sm-6 col-md-4 py-2">
             <div class="card card-body h-100" style="padding:0px">
               <a class="" href="<%= file['link'] %>" target="_blank" style="padding:20px">
-                <img src="/img/google_drive_logo.png"/>
+                <img class="icon-drive" src="/img/google_drive_logo.png"/>
                 <h5 class="card-title"><%= file['name'] %></h5>
-                <p class="primaryinfo">[<%= file['type'] %>]</p>
-                <i>Abrir en google drive</i>
+                <div class="container-fluid document-result-info">
+                  <div class="row justify-content-between">
+                    <div class="col-xs-6">
+                      <p class="badge-creation badge-secondary"><%= file['type'] %></p>
+                    </div>
+                    <div class="col-xs-6">
+                      <span class="primaryinfo">Abrir en google drive</span>
+                    </div>
+                  </div>
+                </div>
               </a>
             </div>
           </div>
@@ -62,5 +72,6 @@
       <% end %>
     </div>
   <% end %>
+  <%= javascript_pack_tag "clear_searchInput" %>
   <%= link_to 'Ir al inicio', root_path %>
 </div>

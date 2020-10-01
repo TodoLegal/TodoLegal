@@ -58,7 +58,7 @@ class LawsController < ApplicationController
       @subsections = @law.subsections.order(:position)
       @articles = @law.articles.order(:position)
 
-      @articles_count = @articles.count
+      @articles_count = @law.cached_articles_count
 
       go_to_position = nil
 
@@ -72,55 +72,55 @@ class LawsController < ApplicationController
           end
         end
 
-        stream_size = @books.size + @titles.size + @chapters.size + @subsections.size + @sections.size + @articles.size
+        stream_size = @law.cached_books_count + @law.cached_titles_count + @law.cached_chapters_count + @law.cached_sections_count + @law.cached_subsections_count + @law.cached_articles_count
         while i < stream_size
-          if book_iterator < @books.size &&
-              (@titles.size == 0 ||
-              (title_iterator < @titles.size && @books[book_iterator].position < @titles[title_iterator].position)) &&
-              (@chapters.size == 0 ||
-              (chapter_iterator < @chapters.size && @books[book_iterator].position < @chapters[chapter_iterator].position)) &&
-              (@sections.size == 0 ||
-              (section_iterator < @sections.size && @books[book_iterator].position < @sections[section_iterator].position)) &&
-              (@subsections.size == 0 ||
-              (subsection_iterator < @subsections.size && @books[book_iterator].position < @subsections[subsection_iterator].position)) &&
-              (@articles.size == 0 ||
-              (article_iterator < @articles.size && @books[book_iterator].position < @articles[article_iterator].position))
+          if book_iterator < @law.cached_books_count &&
+              (@law.cached_titles_count == 0 ||
+              (title_iterator < @law.cached_titles_count && @books[book_iterator].position < @titles[title_iterator].position)) &&
+              (@law.cached_chapters_count == 0 ||
+              (chapter_iterator < @law.cached_chapters_count && @books[book_iterator].position < @chapters[chapter_iterator].position)) &&
+              (@law.cached_sections_count == 0 ||
+              (section_iterator < @law.cached_sections_count && @books[book_iterator].position < @sections[section_iterator].position)) &&
+              (@law.cached_subsections_count == 0 ||
+              (subsection_iterator < @law.cached_subsections_count && @books[book_iterator].position < @subsections[subsection_iterator].position)) &&
+              (@law.cached_articles_count == 0 ||
+              (article_iterator < @law.cached_articles_count && @books[book_iterator].position < @articles[article_iterator].position))
             @stream.push @books[book_iterator]
             @index_items.push @books[book_iterator]
             book_iterator+=1
-          elsif title_iterator < @titles.size &&
-              (@chapters.size == 0 ||
-              (chapter_iterator < @chapters.size && @titles[title_iterator].position < @chapters[chapter_iterator].position)) &&
-              (@sections.size == 0 ||
-              (section_iterator < @sections.size && @titles[title_iterator].position < @sections[section_iterator].position)) &&
-              (@subsections.size == 0 ||
-              (subsection_iterator < @subsections.size && @titles[title_iterator].position < @subsections[subsection_iterator].position)) &&
-              (@articles.size == 0 ||
-              (article_iterator < @articles.size && @titles[title_iterator].position < @articles[article_iterator].position))
+          elsif title_iterator < @law.cached_titles_count &&
+              (@law.cached_chapters_count == 0 ||
+              (chapter_iterator < @law.cached_chapters_count && @titles[title_iterator].position < @chapters[chapter_iterator].position)) &&
+              (@law.cached_sections_count == 0 ||
+              (section_iterator < @law.cached_sections_count && @titles[title_iterator].position < @sections[section_iterator].position)) &&
+              (@law.cached_subsections_count == 0 ||
+              (subsection_iterator < @law.cached_subsections_count && @titles[title_iterator].position < @subsections[subsection_iterator].position)) &&
+              (@law.cached_articles_count == 0 ||
+              (article_iterator < @law.cached_articles_count && @titles[title_iterator].position < @articles[article_iterator].position))
             @stream.push @titles[title_iterator]
             @index_items.push @titles[title_iterator]
             title_iterator+=1
-          elsif chapter_iterator < @chapters.size &&
-              (@sections.size == 0 ||
-              (section_iterator < @sections.size && @chapters[chapter_iterator].position < @sections[section_iterator].position)) &&
-              (@subsections.size == 0 ||
-              (subsection_iterator < @subsections.size && @chapters[chapter_iterator].position < @subsections[subsection_iterator].position)) &&
-              (@articles.size == 0 ||
-              (article_iterator < @articles.size && @chapters[chapter_iterator].position < @articles[article_iterator].position))
+          elsif chapter_iterator < @law.cached_chapters_count &&
+              (@law.cached_sections_count == 0 ||
+              (section_iterator < @law.cached_sections_count && @chapters[chapter_iterator].position < @sections[section_iterator].position)) &&
+              (@law.cached_subsections_count == 0 ||
+              (subsection_iterator < @law.cached_subsections_count && @chapters[chapter_iterator].position < @subsections[subsection_iterator].position)) &&
+              (@law.cached_articles_count == 0 ||
+              (article_iterator < @law.cached_articles_count && @chapters[chapter_iterator].position < @articles[article_iterator].position))
             @stream.push @chapters[chapter_iterator]
             @index_items.push @chapters[chapter_iterator]
             chapter_iterator+=1
-          elsif section_iterator < @sections.size &&
-              (@subsections.size == 0 ||
-              (subsection_iterator < @subsections.size && @sections[section_iterator].position < @subsections[subsection_iterator].position)) &&
-              (@articles.size == 0 ||
-              (article_iterator < @articles.size && @sections[section_iterator].position < @articles[article_iterator].position))
+          elsif section_iterator < @law.cached_sections_count &&
+              (@law.cached_subsections_count == 0 ||
+              (subsection_iterator < @law.cached_subsections_count && @sections[section_iterator].position < @subsections[subsection_iterator].position)) &&
+              (@law.cached_articles_count == 0 ||
+              (article_iterator < @law.cached_articles_count && @sections[section_iterator].position < @articles[article_iterator].position))
             @stream.push @sections[section_iterator]
             @index_items.push @sections[section_iterator]
             section_iterator+=1
-          elsif subsection_iterator < @subsections.size &&
-              (@articles.size == 0 ||
-              (article_iterator < @articles.size && @subsections[subsection_iterator].position < @articles[article_iterator].position))
+          elsif subsection_iterator < @law.cached_subsections_count &&
+              (@law.cached_articles_count == 0 ||
+              (article_iterator < @law.cached_articles_count && @subsections[subsection_iterator].position < @articles[article_iterator].position))
             @stream.push @subsections[subsection_iterator]
             @index_items.push @subsections[subsection_iterator]
             subsection_iterator+=1

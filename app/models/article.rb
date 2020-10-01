@@ -7,7 +7,7 @@ end
 class Article < ApplicationRecord
   include PgSearch
 
-  belongs_to :law
+  belongs_to :law, touch: true
 
   #pg_search_scope :search_by_body, against: :body
 

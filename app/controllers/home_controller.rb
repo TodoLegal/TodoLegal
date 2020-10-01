@@ -229,7 +229,11 @@ protected
       if query_word.length == 5 && query_word.scan(/\D/).empty?
         query_word.insert(2, ',')
       end
-      result_query += query_word + ' '
+      if result_query.blank?
+        result_query += query_word
+      else
+        result_query += query_word + ' '
+      end
     end
     return result_query
   end

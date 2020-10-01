@@ -49,11 +49,21 @@ class TagsController < ApplicationController
       else
         @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' resultados encontrados en la materia ' + @tag.name
       end
-      if @legal_documents_count > 1
-        @result_info_text += " en " + @legal_documents_count.to_s + " documentos legales."
-      elsif @legal_documents_count == 1
-        @result_info_text += " en " + @legal_documents_count.to_s + " documento legal."
-      end
+      # if @legal_documents_count > 1
+      #   @result_info_text += " en " + @legal_documents_count.to_s + " documentos legales."
+      # elsif @legal_documents_count == 1
+      #   @result_info_text += " en " + @legal_documents_count.to_s + " documento legal."
+      # end
+      if @laws.size == 1
+        @titles_result = number_with_delimiter(@laws.size, :delimiter => ',').to_s + ' resultado'
+      else
+        @titles_result = number_with_delimiter(@laws.size, :delimiter => ',').to_s + ' resultados'
+      end 
+      if @result_count == 1
+        @articles_result = number_with_delimiter(@result_count - @laws.size, :delimiter => ',').to_s + ' resultado'
+      else
+        @articles_result = number_with_delimiter(@result_count - @laws.size, :delimiter => ',').to_s + ' resultados'
+      end 
     else
       @laws = @tag.laws
         .left_joins(:articles)

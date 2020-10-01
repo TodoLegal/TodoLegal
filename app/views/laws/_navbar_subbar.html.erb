@@ -98,10 +98,22 @@ br:after{content:' ';}
 }
 
 ul li.active a{
-  color: #171F2A;
-   border-bottom-style: solid;
-   border-bottom-color: #1A7FFA;
-}
+    color: #171F2A;
+    position: relative;
+  }
+
+  ul li.active a:after{
+    content: '';
+    display: block;
+    position: absolute;
+    margin: auto;
+    bottom: 0;
+    height: 2px;
+    width: 40px;
+    left: 0;
+    right: 0;
+    background-color: #007bff;
+  }
 
 .subbar-item{
   text-align: center;
@@ -127,12 +139,6 @@ ul li.active a{
 
   .subbar-text:hover{
     color: #171F2A;
-  }
-
-  ul li.active a{
-    color: #171F2A;
-    border-bottom-style: solid;
-    border-bottom-color: #1A7FFA;
   }
 
   .subbar-item{

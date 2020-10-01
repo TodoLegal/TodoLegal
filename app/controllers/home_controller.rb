@@ -221,6 +221,9 @@ protected
   end
 
   def sanitize_gaceta_query original_query
+    if params[:query].blank?
+      return nil
+    end
     result_query = ""
     original_query.split.each do |query_word|
       if query_word.length == 5 && query_word.scan(/\D/).empty?

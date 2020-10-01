@@ -137,9 +137,8 @@ class HomeController < ApplicationController
     return files
   end
 
-  
   def google_drive_search
-    @query = params[:query]
+    @query = sanitize_gaceta_query params[:query]
     @folder = params[:folder]
     @get_parent_files = params[:get_parent_files] == 'true'
     @files = getGoogleDriveFiles 'public/google_drive_data.json', @get_parent_files, @folder, @query
@@ -219,5 +218,16 @@ protected
       end
     end
     return result
+  end
+
+  def sanitize_gaceta_query original_query
+    result_query = ""
+    original_query.split.each do |query_word|
+      if query_word.length == 5 && query_word.scan(/\D/).empty?
+        query_word.insert(2, ',')
+      end
+      result_query += query_word + ' '
+    end
+    return result_query
   end
 end

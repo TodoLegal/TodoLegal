@@ -88,8 +88,8 @@
 
   <!-- Copied to clipboard alert -->
   <div class="alert alert-success alert-dismissible fade show" id="clipboard-alert" role="alert" style="display: none;"> 
-    <button type="button" class="close" onclick="hideAlert()">
-    <span aria-hidden="true">&times;</span>
+    <button type="button" class="close" id="clipboard-button">
+      <span aria-hidden="true">&times;</span>
     </button>
       Enlace copiado en el portapapeles, ahora puedes compartir este documento al pegar el enlace.
   </div>
@@ -103,9 +103,7 @@
       <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="articulos" role="tabpanel" aria-labelledby="articulos-tab">
           <div class="law-header-mobile"><%= render 'law_header' %></div>
-          <div class="col-12">
-            <span class="resultinfo sticky-top d-inline-block text-truncate" style="width: 100%;" id="sticky_nav_header"></span>
-          </div>
+          <span class="resultinfo sticky-top d-inline-block text-truncate" style="width: 100%;" id="sticky_nav_header"></span>
           <%= render  partial:'content', locals:{is_mobile: false} %>
         </div>
         <div class="tab-pane fade show" id="indice" role="tabpanel" aria-labelledby="indice-tab">

@@ -244,7 +244,14 @@ a.article:hover {
 
 .resultinfo{
     color: #888;
-    font-size: 15px;
+    font-size: .9rem;
+}
+
+.resultinfo.sticky-top {
+    position: sticky;
+    top: 143px;
+    background: white;
+    padding: .5rem 1.5rem;
 }
 
 .resultinfo-label{

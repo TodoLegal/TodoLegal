@@ -1,5 +1,7 @@
 <nav class="navbar navbar-expand-md navbar-light  sticky-top" id="topNavbar">
-    <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, class:"navbar-back-arrow" %>
+    <a class="btn navbar-back-arrow" id="navbar-back-button" style="font-size: 1.5rem; color: #171F2A; padding-left: 0px;"> 
+        <i class="fas fa-arrow-left"></i>
+    </a>
     <a href="/" class="navbar-brand text-primary" >
         <img  src="/img/top_navbar/law_top_navbar.svg" alt="Card image cap" class="gray-logo img-fluid">
         <img  src="/img/top_navbar/top_navbar.svg" alt="Card image cap" class="white-logo img-fluid">
@@ -226,3 +228,10 @@
 
 }
 </style>
+
+<script>
+    var back_button = document.getElementById("navbar-back-button");
+    back_button.addEventListener("click", function () {
+        window.history.back();
+    })
+</script>

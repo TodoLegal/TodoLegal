@@ -6,7 +6,7 @@
 <div class="container container--results">
   <form action="<%= google_drive_search_path %>" method="get">
     <div id="search-input" class="input-group input-group-lg mb-3 main-search">
-    <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, get_google_drive_search_back_link_path, class:"btn btn-back", style:"font-size: 1.5rem; color: #171F2A; padding-left: 0px;" %>
+      <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, get_google_drive_search_back_link_path, class:"btn btn-back", style:"font-size: 1.5rem; color: #171F2A; padding-left: 0px;" %>
       <input name="query" id="searchInput" value="<%= @query %>" type="text" class="form-control" placeholder="Busca gacetas publicadas" aria-label="Recipient's username" aria-describedby="button-addon2">
       <div class="input-group-append">
         <button type="button" class="close clear--text" id="clearButton" aria-label="Close">

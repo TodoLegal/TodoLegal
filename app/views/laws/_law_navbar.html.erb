@@ -1,6 +1,8 @@
 
 <nav class="navbar navbar-expand-lg navbar-light  sticky-top" id="topNavbar">
-    <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, class:"navbar-back-arrow" %>
+    <a class="btn navbar-back-arrow" id="navbar-back-button" style="font-size: 1.5rem; color: #171F2A; padding-left: 0px;"> 
+        <i class="fas fa-arrow-left"></i>
+    </a>
     <a href="/" class="navbar-brand text-primary" >
         <img  src="/img/top_navbar/law_top_navbar.svg" alt="Card image cap" class="gray-logo img-fluid">
         <img  src="/img/top_navbar/top_navbar.svg" alt="Card image cap" class="white-logo img-fluid">
@@ -9,7 +11,7 @@
     </a>
     <ul class="navbar-nav" >
         <div class="btn-group">
-            <button type="button" class="btn btn-light search-button" onclick="hideDocumentContainer()">
+            <button type="button" class="btn btn-light search-button" id="hideDocumentContainer-button">
                 <i class="fas fa-search"></i>
             </button>
             <button type="button" class="btn btn-primary btn-lg btn-avatar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border-radius: 50%;"  data-display="static" id="menu-botton">
@@ -81,12 +83,26 @@
 </nav>
 
 <script>
-    function hideDocumentContainer () {
+    var hide_document_container = document.getElementById("hideDocumentContainer-button");
+
+    hide_document_container.addEventListener('click', (event) => {
         console.log("hide document container");
         document.getElementsByClassName("container--visualizador")[0].style.display = "none";
         document.getElementById("topNavbar").style.display = "none";
         document.getElementsByClassName("search--container")[0].style.display = "block";
-    }
+    })
+
+    // function hideDocumentContainer () {
+    //     console.log("hide document container");
+    //     document.getElementsByClassName("container--visualizador")[0].style.display = "none";
+    //     document.getElementById("topNavbar").style.display = "none";
+    //     document.getElementsByClassName("search--container")[0].style.display = "block";
+    // }
+
+    var back_button = document.getElementById("navbar-back-button");
+    back_button.addEventListener("click", function () {
+        window.history.back();
+    })
 </script>
 
 <style>
@@ -107,6 +123,10 @@
     }
 
     .gray-logo{
+        display: none;
+    }
+
+    .btn-back {
         display: none;
     }
 

@@ -697,7 +697,10 @@ footer p a {
     .sidebar--relacionados {
         display: flex;
         flex-direction: column;
-        min-width: 260px;
+        width: 30%;
+        max-width: 260px;
+        top: -30px;
+        position: relative;
     }
 
     .sidebar--relacionados h4{

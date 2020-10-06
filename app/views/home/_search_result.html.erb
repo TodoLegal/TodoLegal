@@ -1,11 +1,14 @@
 <p class="resultinfo">
+  <% if @result_count > 0 %>
+    <%= @result_info_text %>
+  <% end %>
   <% if @tag && @query %>
     Buscar en <a href="/search_law?query=<%= @query%>">todas las materias</a>
   <% end %>
 </p>
 
 <% if @tag && !@query %>
-  <h1><%= @tag.name %></h1>
+  <h4><%= @tag.name %></h4>
 <% end %>
 
 <% if @result_count == 0 %>

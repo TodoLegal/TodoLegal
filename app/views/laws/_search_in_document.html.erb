@@ -2,7 +2,7 @@
   <form class="form-inline" action="<%= law_path(@law) %>" method="get" id="search-law-form">
     <div class="input-group">
       <%if @info_is_searched %>
-        <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, class:"btn btn-back", style:"font-size: 1.5rem; color: #171F2A; padding-left: 0px;" %>
+        <%= render '/home/back_button'%>
       <% else %>
         <button type="button" class="btn btn-light search-button" onclick="hideSearchContainer()">
             <i class="fas fa-arrow-left"></i>

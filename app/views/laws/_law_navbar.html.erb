@@ -11,7 +11,7 @@
     </a>
     <ul class="navbar-nav" >
         <div class="btn-group">
-            <button type="button" class="btn btn-light search-button" onclick="hideDocumentContainer()">
+            <button type="button" class="btn btn-light search-button" id="hideDocumentContainer-button">
                 <i class="fas fa-search"></i>
             </button>
             <button type="button" class="btn btn-primary btn-lg btn-avatar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border-radius: 50%;"  data-display="static" id="menu-botton">
@@ -83,12 +83,22 @@
 </nav>
 
 <script>
-    function hideDocumentContainer () {
+    var hide_document_container = document.getElementById("hideDocumentContainer-button");
+
+    hide_document_container.addEventListener('click', (event) => {
         console.log("hide document container");
         document.getElementsByClassName("container--visualizador")[0].style.display = "none";
         document.getElementById("topNavbar").style.display = "none";
         document.getElementsByClassName("search--container")[0].style.display = "block";
-    }
+    })
+
+    // function hideDocumentContainer () {
+    //     console.log("hide document container");
+    //     document.getElementsByClassName("container--visualizador")[0].style.display = "none";
+    //     document.getElementById("topNavbar").style.display = "none";
+    //     document.getElementsByClassName("search--container")[0].style.display = "block";
+    // }
+
     var back_button = document.getElementById("navbar-back-button");
     back_button.addEventListener("click", function () {
         window.history.back();

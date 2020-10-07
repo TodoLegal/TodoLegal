@@ -42,5 +42,16 @@ Rails.application.routes.draw do
   get "download_contributor_users" => "admin#download_contributor_users", as: "download_contributor_users"
   get "download_recieve_information_users" => "admin#download_recieve_information_users", as: "download_recieve_information_users"
   get '/gacetas', to: redirect('https://drive.google.com/drive/folders/1R46K1k5vMKdIDV7VyaXrXgk5ScF5uBvX'), as: "gacetas"
+
+  namespace :api, defaults: {format: :json} do
+    namespace :v1 do
+      devise_for :users, controllers: { registrations: 'api/v1/registrations', sessions: 'api/v1/sessions' }
+      resource :examples do
+        member do
+          get :action_test
+        end
+      end
+    end
+  end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

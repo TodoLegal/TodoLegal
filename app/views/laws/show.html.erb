@@ -88,24 +88,22 @@
 
   <!-- Copied to clipboard alert -->
   <div class="alert alert-success alert-dismissible fade show" id="clipboard-alert" role="alert" style="display: none;"> 
-    <button type="button" class="close" onclick="hideAlert()">
-    <span aria-hidden="true">&times;</span>
+    <button type="button" class="close" id="clipboard-button">
+      <span aria-hidden="true">&times;</span>
     </button>
-      Enlace copiado en el portapapeles, ahora puedes compartir este documento pegando el enlace.
+      Enlace copiado en el portapapeles, ahora puedes compartir este documento al pegar el enlace.
   </div>
 
   <div class="law-header-desktop"><%= render 'law_header' %></div>
   
   <div class="container--documento">
-    <div class="inner-continer--visualizador" style="padding-top:60">
+    <div class="inner-continer--visualizador">
       <%= render 'navbar_subbar' %>
 
       <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="articulos" role="tabpanel" aria-labelledby="articulos-tab">
           <div class="law-header-mobile"><%= render 'law_header' %></div>
-          <div class="col-12">
-            <span class="resultinfo sticky-top d-inline-block text-truncate" style="width: 100%;" id="sticky_nav_header"></span>
-          </div>
+          <span class="resultinfo sticky-top d-inline-block text-truncate" style="width: 100%;" id="sticky_nav_header"></span>
           <%= render  partial:'content', locals:{is_mobile: false} %>
         </div>
         <div class="tab-pane fade show" id="indice" role="tabpanel" aria-labelledby="indice-tab">
@@ -141,7 +139,7 @@
                     </div>
                     <div class="col-md-12">
                       <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
-                      Adquiérelo por <b>$7.00 al mes</b> y podrás acceder a los más de<%= (Law.count/10)*10 %> documentos legales y a lo que continuamente agregamos.
+                      Adquiérelo por <b>$7.00 al mes</b> y podrás acceder a los más de<%= (all_document_count/10)*10 %> documentos legales y a lo que continuamente agregamos.
                     </p>
                     <p style="font-size:18px; text-align:center;">
                           <i class="text-muted">Puedes cancelar la suscripción en cualquier momento.</i>
@@ -163,7 +161,7 @@
                       </div>
                       <div class="col-md-12">
                         <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
-                      Adquiere el <b>Plan Pro</b> por <b>$7.00 al mes</b> y podrás acceder a más de <%= (Law.count/10)*10 %> documentos legales y a lo que continuamente agregamos.
+                      Adquiere el <b>Plan Pro</b> por <b>$7.00 al mes</b> y podrás acceder a más de <%= (all_document_count/10)*10 %> documentos legales y a lo que continuamente agregamos.
                         <p style="font-size:18px; text-align:center;">
                           <i class="text-muted">Puedes cancelar la suscripción en cualquier momento.</i>
                         </p>
@@ -182,16 +180,6 @@
                         <h3 style="font-size:22px; text-align:center; margin-left: 8%;">
                         Regístrate y accede a este documento
                         </h3>
-                      </div>
-                      <div class="col-md-12">
-                        <div with="100%" style="text-align:center; padding-top: 22px;">
-                          ¿Ya tienes cuenta?
-                        </div>
-                        <div with="100%" style="text-align:center;">
-                          <a style="font-size:18px;text-align:center;" href="<%= new_user_session_path %>?go_to_law=<%=@law.id%>">
-                            Inicia sesión
-                          </a>
-                        </div>
                       </div>
                     <% end %>
                     <div class="col-md-12">
@@ -230,12 +218,20 @@
                 <a class="" href="<%= law_path(law) %>" style="padding:20px">
                   <p style="font-size: 15px">
                     <% law.materia_names.each do |materia_name| %>
-                      <span class="badge badge-light badge-secondary"><%= materia_name %></span>
+                      <span class="badge badge--materia"><%= materia_name %></span>
                     <% end %>
                   </p>
                   <h5 class="card-title"><%= law.name %></h5>
-                  <p class="primaryinfo">[<%= law.creation_number %>]</p>
-                  <p class="primaryinfo"><%= law.articles.count %> artículos</p>
+                  <div class="d-flex justify-content-between document-result-info">
+                    <span class="badge-creation badge-secondary"><i class="fas fa-file-alt"></i> <%= law.creation_number %></span>
+                    <span class="resultinfo-article-count">
+                      <% if @articles_count == 1 %>
+                        <%= law.articles.count %>  artículo
+                      <% else %>
+                        +<%= law.articles.count %> artículos
+                      <% end %>
+                    </span>
+                  </div>
                 </a>
               </div>
             </div>
@@ -262,31 +258,40 @@
 
   }
 
-  //This function handles the logic to show the highlited section and current_highlated word based on the preview element clicked
-  function onPreviewElementClicked (section_id, highlited_section){
-    console.log("Id del articulo: " + section_id);
-    document.getElementById(section_id).scrollIntoView({block:'center'});
-    var c;
-    var elementId = "";
-    var acumulator = 0;
+  //This function handles the logic to show the highlited section and current_highlated word number, based on the preview element clicked
+  // function onPreviewElementClicked (section_id, highlited_section){
+  //   console.log("Id del articulo: " + section_id);
+  //   document.getElementById(section_id).scrollIntoView({block:'center'});
+  //   var c;
+  //   var elementId = "";
+  //   var acumulator = 0;
 
-    for (c = 0  ; c < highlited_section ; c++){
-      elementId = "article_count_" + c.toString();
-      var element = document.getElementById(elementId);
-      acumulator += element.getElementsByClassName('highlighted').length;
+  //   for (c = 0  ; c < highlited_section ; c++){
+  //     elementId = "article_count_" + c.toString();
+  //     var element = document.getElementById(elementId);
+  //     acumulator += element.getElementsByClassName('highlighted').length;
       
-    }
-    currrent_highlighted = acumulator;
-    updateHighlightedView();
-    hideSearchContainer();
-  }
+  //   }
+  //   currrent_highlighted = acumulator;
+  //   updateHighlightedView();
+  //   hideSearchContainer();
+  // }
 
-  function hideSearchContainer () {
+  // function hideSearchContainer () {
+  //   console.log("hide search container");
+  //   document.getElementsByClassName("search--container")[0].style.display = "none";
+  //   document.getElementsByClassName("container--visualizador")[0].style.display = "block";
+  //   document.getElementById("topNavbar").style.display = "flex";
+  // }
+
+  var hide_search_container = document.getElementById('hideSearchContainer-button');
+
+  hide_search_container.addEventListener('click', (event) => {
     console.log("hide search container");
     document.getElementsByClassName("search--container")[0].style.display = "none";
     document.getElementsByClassName("container--visualizador")[0].style.display = "block";
     document.getElementById("topNavbar").style.display = "flex";
-  }
+  })
   
 </script>
 

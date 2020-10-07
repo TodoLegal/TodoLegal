@@ -1,4 +1,4 @@
-<% if @laws_array %>
+<% if @laws_array.size > 0 %>
   <div class="row">
     <% i = 0 %>
     <% @laws_array.each do |law| %>
@@ -8,12 +8,20 @@
           <a class="" href="<%= law_path(law) %>" style="padding:20px">
             <p style="font-size: 15px">
               <% law.materia_names.each do |materia_name| %>
-                <span class="badge badge-light badge-secondary"><%= materia_name %></span>
+                <span class="badge badge--materia"><%= materia_name %></span>
               <% end %>
             </p>
             <h5 class="card-title"><%= law.name %></h5>
-            <p class="primaryinfo">[<%= law.creation_number %>]</p>
-            <p class="primaryinfo"><%= law.articles.count %> artículos</p>
+            <div class="d-flex justify-content-between document-result-info">
+              <span class="badge-creation badge-secondary"><i class="fas fa-file-alt"></i> <%= law.creation_number %></span>
+              <span class="resultinfo-article-count">
+                <% if @articles_count == 1 %>
+                  <%= law.articles.count %>  artículo
+                <% else %>
+                  +<%= law.articles.count %> artículos
+                <% end %>
+              </span>
+            </div>
           </a>
         </div>
       </div>

@@ -2,43 +2,43 @@
   <div class="tabs--document p-0">
     <div class="menu-bar" style="padding-bottom: 10px;">
       <ul class="nav" id="lawEditorTab" role="tablist">
-        <li  class="nav-item active subbar-item" id="item1">
+        <li  class="nav-item active subbar-item" id="doc-item">
           <a class="nav-link subbar-text" id="articulos-tab" data-toggle="tab" href="#articulos" role="tab" aria-controls="articulos" aria-selected="true">
           <i class="far fa-file-alt subbar-icon"></i>
           Documento</a>
         </li>
-        <li class="nav-item subbar-item desktop-menu-item" id="item2" >
+        <li class="nav-item subbar-item desktop-menu-item" id="index-item" >
           <a class="nav-link subbar-text" data-toggle="tab" href="#indice">
           <i class="far fa-list-alt subbar-icon" data-toggle="tab" href="#indice"></i>
           Índice</a>
         </li>
-        <li class="nav-item subbar-item desktop-menu-item" id="item3">
+        <li class="nav-item subbar-item desktop-menu-item" id="modifications-item">
           <a class="nav-link subbar-text" data-toggle="tab" href="#modifications">
           <i class="far fa-clock subbar-icon" data-toggle="tab" href="#modifications"></i>
           Modificaciones</a>
         </li>
-        <li class="nav-item subbar-item mobile-menu-item d-block d-xl-none" id="item4">
+        <li class="nav-item subbar-item mobile-menu-item d-block d-xl-none" id="related-item">
           <a class="nav-link subbar-text" data-toggle="tab" href="#related">
           <i class="fas fa-link subbar-icon" data-toggle="tab" href="#related"></i>
           Relacionados</a>
         </li>
-        <li class="nav-item subbar-item mobile-menu-item" id="item5">
+        <li class="nav-item subbar-item mobile-menu-item" id="share-item">
           <a class="nav-link subbar-text clipboard" data-toggle="tab" href="#share">
           <i class="fas fa-share subbar-icon" data-toggle="tab" href="#share"></i>
           Compartir</a>
         </li>
         
-        <li class="nav-item subbar-item mobile-menu-item" id="item6">
+        <li class="nav-item subbar-item mobile-menu-item" id="more-item">
           <div class="btn-group">
             <a class="nav-link subbar-text" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
               <i class="fas fa-ellipsis-v subbar-icon"></i>
               Más
             </a>
-            <div class="dropdown-menu dropdown-menu-right">
-              <a class="dropdown-item" data-toggle="tab" href="#indice">
+            <div class="dropdown dropdown-menu dropdown-menu-right">
+              <a class="dropdown-item" id="dropdown-index-item" data-toggle="tab" href="#indice" style="border-bottom: none;">
                 <i class="far fa-list-alt" data-toggle="tab" href="#indice"></i>Índice
               </a>
-              <a class="dropdown-item" data-toggle="tab" href="#modifications">
+              <a class="dropdown-item" id="dropdown-modifications-item" data-toggle="tab" href="#modifications" style="border-bottom: none;">
                 <i class="far fa-clock" data-toggle="tab" href="#modifications"></i>Modificaciones
               </a>
             </div>
@@ -98,10 +98,22 @@ br:after{content:' ';}
 }
 
 ul li.active a{
-  color: #171F2A;
-   border-bottom-style: solid;
-   border-bottom-color: #1A7FFA;
-}
+    color: #171F2A;
+    position: relative;
+  }
+
+  ul li.active a:after{
+    content: '';
+    display: block;
+    position: absolute;
+    margin: auto;
+    bottom: 0;
+    height: 2px;
+    width: 40px;
+    left: 0;
+    right: 0;
+    background-color: #007bff;
+  }
 
 .subbar-item{
   text-align: center;
@@ -127,12 +139,6 @@ ul li.active a{
 
   .subbar-text:hover{
     color: #171F2A;
-  }
-
-  ul li.active a{
-    color: #171F2A;
-    border-bottom-style: solid;
-    border-bottom-color: #1A7FFA;
   }
 
   .subbar-item{
@@ -171,83 +177,6 @@ ul li.active a{
     }
 
   }
-  
 </style>
 
-<script>
-  var item1 = document.getElementById("item1");
-  var item2 = document.getElementById("item2");
-  var item3 = document.getElementById("item3");
-  var item4 = document.getElementById("item4");
-  var item5 = document.getElementById("item5");
-  var item6 = document.getElementById("item6");
-
-  item1.addEventListener("click", function () {
-    item1.classList.add('active');
-    item2.classList.remove('active');
-    item3.classList.remove('active');
-    item4.classList.remove('active');
-    item5.classList.remove('active');
-    item6.classList.remove('active');
-  })
-
-  item2.addEventListener("click", function () {
-    item2.classList.add('active');
-    item1.classList.remove('active');
-    item3.classList.remove('active');
-    item4.classList.remove('active');
-    item5.classList.remove('active');
-    item6.classList.remove('active');
-  })
-
-  item3.addEventListener("click", function () {
-    item3.classList.add('active');
-    item1.classList.remove('active');
-    item2.classList.remove('active');
-    item4.classList.remove('active');
-    item5.classList.remove('active');
-    item6.classList.remove('active');
-  })
-
-  item4.addEventListener("click", function () {
-    item4.classList.add('active');
-    item1.classList.remove('active');
-    item2.classList.remove('active');
-    item3.classList.remove('active');
-    item5.classList.remove('active');
-    item6.classList.remove('active');
-  })
-
-  item5.addEventListener("click", function () {
-    item4.classList.add('active');
-    item1.classList.remove('active');
-    item2.classList.remove('active');
-    item3.classList.remove('active');
-    item6.classList.remove('active');
-  })
-
-  item6.addEventListener("click", function () {
-    item4.classList.add('active');
-    item1.classList.remove('active');
-    item2.classList.remove('active');
-    item3.classList.remove('active');
-    item5.classList.remove('active');
-  })
-
-  //Copy to clipboard
-  var $temp = $("<input>");
-  var $url = $(location).attr('href');
-
-  $('.clipboard').on('click', function() {
-    $("body").append($temp);
-    $temp.val($url).select();
-    document.execCommand("copy");
-    $temp.remove();
-    // $("p").text("URL copied!");
-    document.getElementById("clipboard-alert").style.display = "block";
-  })
-
-  function hideAlert(){
-    document.getElementById("clipboard-alert").style.display = "none";
-  }
-</script>
+<%= javascript_pack_tag "law_subbar_actions.js" %>

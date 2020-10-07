@@ -3,6 +3,7 @@
   .bigger-section {
     font-family: 'Montserrat', sans-serif;
     color: #505864;
+    padding: 0 1.5rem;
   }
 
   .title, .chapter, .section, .subsection{
@@ -26,7 +27,6 @@
     font-family: 'Merriweather', serif;
   }
 </style>
-
 <div>
   <% if @articles_count == 0 %>
     <div class="container--empty-results">
@@ -104,6 +104,26 @@
     <% end %>
     <% if stream.instance_of? Article %>
       <% if is_mobile == false %>
+        
+      <% end %>
+      <!-- highlited search for serch results preview in mobile version -->
+      <% if is_mobile %>
+        <div align="justify" style="color: #444; padding: 10px" onclick="onClickArticle(<%= article_iterator %>)" class="article" article_id="<%= article_iterator %>" last_bigger_section="<%= bigger_section_iterator - 1 %>" next_bigger_section="<%= bigger_section_iterator %>" id="article_count_<%= article_iterator %>">
+          <b class="article-name" align="justify" style="color: #111;font-weight:bold; display: block;">Artículo <%= stream.number %><br>
+            <% if @user_can_edit_law && is_editor_mode_enabled %>
+              <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_article_path(stream) %>
+            <% end %>
+          </b>
+          <% if @highlight_enabled %>
+            <a class="uncolored_link articles-preview" id="link_article_count_<%= article_iterator %>" href="<%= law_path(@law) + '?query=/'+@query+"/"+(stream.number.lstrip)%>"  aria-controls="articulos" aria-selected="true">
+              <%= stream.pg_search_highlight.html_safe %>
+            </a>
+            <hr>
+          <% else %>
+            <%= stream.class.markdown.render(stream.body).html_safe %>
+          <% end %>
+        </div>
+      <% else %>
         <div align="justify" onclick="onClickArticle(<%= article_iterator %>)" class="article-p" article_id="<%= article_iterator %>" last_bigger_section="<%= bigger_section_iterator - 1 %>" next_bigger_section="<%= bigger_section_iterator %>" id="article_count_<%= article_iterator %>">
           <b class="article-name" align="justify" style="color: #111;font-weight:bold; display: block;">Artículo <%= stream.number %><br>
             <% if @user_can_edit_law && is_editor_mode_enabled %>
@@ -117,25 +137,8 @@
           <% end %>
         </div>
       <% end %>
-      <!-- highlited search for serch results preview in mobile version -->
-      <% if is_mobile %>
-        <div align="justify" style="color: #444; padding: 10px" onclick="onClickArticle(<%= article_iterator %>)" class="article" article_id="<%= article_iterator %>" last_bigger_section="<%= bigger_section_iterator - 1 %>" next_bigger_section="<%= bigger_section_iterator %>" id="article_count_<%= article_iterator %>">
-          <b class="article-name" align="justify" style="color: #111;font-weight:bold; display: block;">Artículo <%= stream.number %><br>
-            <% if @user_can_edit_law && is_editor_mode_enabled %>
-              <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_article_path(stream) %>
-            <% end %>
-          </b>
-          <% if @highlight_enabled %>
-            <a class="uncolored_link" href="#article_<%= stream.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onPreviewElementClicked('article_count_<%= article_iterator %>', <%= article_iterator %>)}, 500)" aria-controls="articulos" aria-selected="true">
-              <%= (stream.pg_search_highlight).html_safe %>
-            </a>
-            <hr>
-          <% else %>
-            <%= stream.class.markdown.render(stream.body).html_safe %>
-          <% end %>
-        </div>
-      <% end %>
     <% article_iterator += 1 %>
     <% end %>
   <% end %>
 </div>
+<%= javascript_pack_tag "trim_articles_for_preview" %>

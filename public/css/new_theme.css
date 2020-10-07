@@ -75,6 +75,10 @@ p.body {
     margin: 0 .75rem;
 }
 
+.navbar .btn-avatar{
+    margin-right: 0;
+}
+
 .section-title {
     font-size: 2rem;
     margin: 1rem 0;
@@ -89,6 +93,14 @@ p.body {
 .card--pricing {
     max-width: 1068px;
     margin: 0 auto;
+}
+
+.card .icon-drive {
+    position: absolute;
+    top: 1.5rem;
+    right: 1rem; 
+    width: 20px;
+    height: auto;
 }
 
 /* General styles for forms */
@@ -227,6 +239,23 @@ input.form-control:focus {
     background-color: white;
 }
 
+.navbar .main-search .btn-primary {
+    margin: 0; 
+    background-color: #FF5722;
+    border-color: #FF5722;
+}
+
+.input-group-append {
+    position: relative;
+}
+
+.input-group-append .close {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -1rem;
+    z-index: 3;
+}
 
 /* General styles for modal */
 
@@ -515,7 +544,7 @@ footer p a {
 /* Document */
 
 .law-header-mobile {
-    padding: 0 1rem;
+    padding: 0 1.5rem;
 }
 
 .law-header-desktop {
@@ -577,7 +606,8 @@ footer p a {
     font-family: 'Merriweather', serif;
     font-size: 1rem; 
     color: #171F2A;
-    padding: .5rem 1rem;
+    padding: .5rem 1.5rem;
+    word-break: break-word;
 }
 .container--results {
     min-height: calc(100vh - 200px);
@@ -667,7 +697,10 @@ footer p a {
     .sidebar--relacionados {
         display: flex;
         flex-direction: column;
-        min-width: 260px;
+        width: 30%;
+        max-width: 260px;
+        top: -30px;
+        position: relative;
     }
 
     .sidebar--relacionados h4{
@@ -677,6 +710,7 @@ footer p a {
     }
     
     .inner-continer--visualizador {
+        width: 100%;
         max-width: 810px; 
         padding: 1rem;
         background-color: #FFF;
@@ -710,4 +744,71 @@ footer p a {
         flex-direction: column  ;
         align-items: center;
     }
+}
+
+
+/* Badges */
+
+.badge-creation{
+    display: inline-block;
+    background: #F2F5F8;
+    border: 1px solid rgba(166, 185, 211, 0.5);
+    box-sizing: border-box;
+    border-radius: 4px;
+    color: #505864;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 18px;
+    padding: .25em .4em;
+}
+
+.badge--materia{
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 12px;
+    line-height: 13px;  
+    font-style: normal;
+    font-weight: normal;
+    text-transform: uppercase;
+    color: #505864;
+    padding: 2px 8px;
+    height: 17px;
+    left: 16px;
+    top: 22px;
+    background: #F2F5F8;
+}
+
+
+.badge-creation{
+    display: inline-block;
+    background: #F2F5F8;
+    border: 1px solid rgba(166, 185, 211, 0.5);
+    box-sizing: border-box;
+    border-radius: 4px;
+    color: #505864;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 18px;
+    padding: .25em .4em;
+}
+
+.link-google-drive {    
+    position: absolute;
+    right: 1.5rem;
+}
+
+.container--home .card-title,
+.container--results .card-title {
+    padding-right: 20px;
+}
+
+/* Clear button style */
+
+.clear--text{
+    cursor: pointer;
+    display: none;
+}
+.document-result-info{
+    margin-top: 25px;
 }

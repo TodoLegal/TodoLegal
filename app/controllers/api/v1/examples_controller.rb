@@ -1,4 +1,4 @@
-class Api::V1::ExamplesController < Api::V1::ApplicationController
+class Api::V1::ExamplesController < ApplicationController
   protect_from_forgery with: :null_session
 
   def action_test

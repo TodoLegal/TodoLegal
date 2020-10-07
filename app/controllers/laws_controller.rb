@@ -1,6 +1,5 @@
 class LawsController < ApplicationController
-  layout 'law'
-  # layout 'application', only: [:index]
+  layout 'law', only: [:show, :new, :edit]
   before_action :set_law, only: [:show, :edit, :update, :destroy]
   before_action :set_materias, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_editor!, only: [:index, :new, :edit, :create, :update, :destroy]

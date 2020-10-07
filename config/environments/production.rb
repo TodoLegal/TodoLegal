@@ -14,6 +14,7 @@ module ExceptionNotifier
         puts "[Discord bot]: Starting bot thread"
         $discord_bot.run
       }
+      $discord_bot.send_message($discord_bot_channel_code, "Se ha reiniciado el ambiente de producción :rocket:" + exception.to_s)
     end
 
     def call(exception, options={})

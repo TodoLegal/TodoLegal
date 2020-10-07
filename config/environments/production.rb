@@ -10,11 +10,11 @@ $discord_bot_channel_notifications = 742414195928203296
 module ExceptionNotifier
   class DiscordNotifier
     def initialize(options)
-      Thread.new {
-        puts "[Discord bot]: Starting bot thread"
-        $discord_bot.run
-      }
       if $discord_bot
+        Thread.new {
+          puts "[Discord bot]: Starting bot thread"
+          $discord_bot.run
+        }
         $discord_bot.send_message($discord_bot_channel_code, "Se ha reiniciado el ambiente de producción :rocket:" + exception.to_s)
       end
     end

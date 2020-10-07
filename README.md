@@ -20,7 +20,7 @@ source /usr/local/rvm/scripts/rvm
 brew install postgresql yarn
 ```
 
-## 2. Repo setup
+## 2. Repo
 
 ```
 mkdir TodoLegal
@@ -31,9 +31,9 @@ git pull origin master
 bundle install
 ```
 
-## 3. Database setup
+## 3. Database
 
-#### Linux
+### Linux
 
 ```
 sudo -u postgres psql

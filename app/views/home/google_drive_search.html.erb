@@ -1,13 +1,17 @@
 <% content_for :title, "Gacetas - TodoLegal" %>
 
-<div class="jumbotron d-sm-block" align="center" style="padding-top: 0px; padding-bottom: 20px;background-color: #EFF3F8;margin: 0px">
-  <a href="/"><img src="/img/logo_landing_mobile.png" class="img-fluid-vertical" height="300"></a>
+<div class="jumbotron d-none d-sm-block" align="center" style="padding-top: 0px; padding-bottom: 20px;background-color: #EFF3F8;margin: 0px">
+  <a href="/"><img align="center" src="/img/logo_landing_mobile.png" class="img-fluid-vertical" height="300"></a>
+</div>
+
+<div class="jumbotron d-block d-sm-none" style="padding-top: 0px; padding-bottom: 0px;background-color: #EFF3F8;margin: 0px">
+  <a href="/"><img align="center" src="/img/logo_landing_mobile.png" class="img-fluid" height="300"></a>
 </div>
 <div class="container container--results">
   <form action="<%= google_drive_search_path %>" method="get">
     <div id="search-input" class="input-group input-group-lg mb-3 main-search">
       <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, get_google_drive_search_back_link_path, class:"btn btn-back", style:"font-size: 1.5rem; color: #171F2A; padding-left: 0px;" %>
-      <input name="query" id="searchInput" value="<%= @query %>" type="text" class="form-control" placeholder="Busca gacetas publicadas" aria-label="Recipient's username" aria-describedby="button-addon2">
+      <input name="query" id="searchInput" value="<%= @query %>" type="text" class="form-control search-input" placeholder="Busca gacetas publicadas" aria-label="Recipient's username" aria-describedby="button-addon2">
       <div class="input-group-append">
         <button type="button" class="close clear--text" id="clearButton" aria-label="Close">
           <span aria-hidden="true">&times;</span>

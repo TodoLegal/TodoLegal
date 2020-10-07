@@ -8,9 +8,9 @@
             <i class="fas fa-arrow-left"></i>
         </button>
       <% end %>
-      <input type="text" id="searchInput" class="form-control" name="query" type="search" placeholder="Buscar en el documento" value="<%= @query %>" aria-label="Buscar">
+      <input type="text" id="searchInput" class="form-control search-input" name="query" type="search" placeholder="Buscar en el documento" value="<%= @query %>" aria-label="Buscar">
       <div class="input-group-append">
-        <button type="button" class="close clear--text" id="clearButton" aria-label="Close">
+        <button type="button" class="close clear--text sid-clear-text" id="clearButton" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
         <button class="btn btn-secondary" style="background-color: #FF5722;border-color: #FF5722;" type="submit" onclick="document.getElementById('loading-spinner').style.display = 'block';document.getElementById('search-law-form').style.display = 'none';">
@@ -100,5 +100,10 @@
     font-size: 18px;
     line-height: 21px;
     color: #A6B9D3;
+  }
+
+  .sid-clear-text{
+    background-color: #EFF3F8!important;
+    display: none;
   }
 </style>

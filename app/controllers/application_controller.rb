@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :null_session
   before_action :configure_devise_permitted_parameters, if: :devise_controller?
   before_action :miniprofiler
+  acts_as_token_authentication_handler_for User, if: :json_request?
+  skip_before_action :configure_devise_permitted_parameters, if: :json_request?
 
   def after_sign_in_remember_me(resource)
     remember_me resource
@@ -101,5 +103,9 @@ protected
 
   def miniprofiler
     Rack::MiniProfiler.authorize_request if current_user_is_admin
+  end
+
+  def json_request?
+    request.format.json?
   end
 end

@@ -4,6 +4,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :confirmable,
          :recoverable, :rememberable, :validatable, :trackable
   
+  acts_as_token_authenticatable
+
   # validate :email_uniqueness, on: create
 
   has_many :user_permissions, :dependent => :destroy

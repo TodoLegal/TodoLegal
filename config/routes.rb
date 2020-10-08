@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :law_accesses
   resources :user_permissions
   resources :permissions
   resources :law_modifications
@@ -21,7 +20,9 @@ Rails.application.routes.draw do
   get '/privacy', to: 'home#privacy', as: "privacy"
   get '/pricing', to: 'home#pricing'
   get '/invite_friends', to: 'home#invite_friends'
-  get '/google_drive_search', to: 'home#google_drive_search', as: "google_drive_search"
+  get '/gacetas', to: 'home#google_drive_search', as: "google_drive_search"
+  get '/covid', to: 'home#google_drive_covid_search', as: "google_drive_covid_search"
+  get '/drive_search', to: 'home#google_drive_covid_search', as: "drive_search"
   get '/refer', to: 'home#refer', as: "refer"
   get '/crash_tester', to: 'home#crash_tester', as: "crash_tester"
   get '/maintenance', to: 'home#maintenance', as: "maintenance"
@@ -41,5 +42,16 @@ Rails.application.routes.draw do
   get "download_contributor_users" => "admin#download_contributor_users", as: "download_contributor_users"
   get "download_recieve_information_users" => "admin#download_recieve_information_users", as: "download_recieve_information_users"
   get '/gacetas', to: redirect('https://drive.google.com/drive/folders/1R46K1k5vMKdIDV7VyaXrXgk5ScF5uBvX'), as: "gacetas"
+
+  namespace :api, defaults: {format: :json} do
+    namespace :v1 do
+      devise_for :users, controllers: { registrations: 'api/v1/registrations', sessions: 'api/v1/sessions' }
+      resource :examples do
+        member do
+          get :action_test
+        end
+      end
+    end
+  end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

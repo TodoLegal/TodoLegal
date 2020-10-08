@@ -1,6 +1,8 @@
 
 <nav class="navbar navbar-expand-lg navbar-light  sticky-top" id="topNavbar">
-    <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, class:"navbar-back-arrow" %>
+    <a class="btn navbar-back-arrow" id="navbar-back-button" style="font-size: 1.5rem; color: #171F2A; padding-left: 0px;"> 
+        <i class="fas fa-arrow-left"></i>
+    </a>
     <a href="/" class="navbar-brand text-primary" >
         <img  src="/img/top_navbar/law_top_navbar.svg" alt="Card image cap" class="gray-logo img-fluid">
         <img  src="/img/top_navbar/top_navbar.svg" alt="Card image cap" class="white-logo img-fluid">
@@ -9,7 +11,7 @@
     </a>
     <ul class="navbar-nav" >
         <div class="btn-group">
-            <button type="button" class="btn btn-light search-button" onclick="hideDocumentContainer()">
+            <button type="button" class="btn btn-light search-button" id="hideDocumentContainer-button">
                 <i class="fas fa-search"></i>
             </button>
             <button type="button" class="btn btn-primary btn-lg btn-avatar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border-radius: 50%;"  data-display="static" id="menu-botton">
@@ -38,6 +40,25 @@
                 <a href="/invite_friends" class="dropdown-item">
                 <i class="fas fa-gift" aria-hidden="true"></i>
                 Invitar amigos</a>
+
+                 <% if current_user_is_pro %>
+                    <!--
+                    <form method="POST" action="/create_customer_portal_session">
+                        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                        <input type="submit" class="btn btn-primary" value="Manejar Suscripción Pro">
+                    </form>-->
+                    <a href="/users/edit" class="dropdown-item dropdown-item--suscription">
+                    
+                    <i class="fas fa-star" aria-hidden="true"></i>
+                    <div class="suscription-type">
+                    <small>Plan activo</small> <span>Pro</span>
+                    </div>
+                    </a>
+                <% else %>
+                    <a href="/pricing" class="dropdown-item">
+                    <i class="fas fa-star" aria-hidden="true"></i>
+                    Precios</a>
+                <% end %>
                 
                 <% if current_user_is_admin %>
                     <button class="dropdown-item disabled font-weight-bold " type="button" >
@@ -62,18 +83,32 @@
 </nav>
 
 <script>
-    function hideDocumentContainer () {
+    var hide_document_container = document.getElementById("hideDocumentContainer-button");
+
+    hide_document_container.addEventListener('click', (event) => {
         console.log("hide document container");
         document.getElementsByClassName("container--visualizador")[0].style.display = "none";
         document.getElementById("topNavbar").style.display = "none";
         document.getElementsByClassName("search--container")[0].style.display = "block";
-    }
+    })
+
+    // function hideDocumentContainer () {
+    //     console.log("hide document container");
+    //     document.getElementsByClassName("container--visualizador")[0].style.display = "none";
+    //     document.getElementById("topNavbar").style.display = "none";
+    //     document.getElementsByClassName("search--container")[0].style.display = "block";
+    // }
+
+    var back_button = document.getElementById("navbar-back-button");
+    back_button.addEventListener("click", function () {
+        window.history.back();
+    })
 </script>
 
 <style>
     #topNavbar{
         margin-bottom: 0px; 
-        z-index: 1000; 
+        z-index: 1040; 
         justify-content: space-between;
         background: #171F2A;
         padding: 5px 20px;
@@ -90,6 +125,10 @@
     .gray-logo{
         display: none;
     }
+
+    /* .btn-back {
+        display: none;
+    } */
 
     .navbar-back-arrow{
         font-size: 1.5rem; 
@@ -150,6 +189,25 @@
         margin-bottom: 1em;
     }
 
+    .dropdown-item--suscription {
+        display: flex; 
+        flex-direction: row;
+        align-content: center;
+        align-items: center;
+    }
+
+    .dropdown-item--suscription svg{
+        margin-right: 6px;
+    }
+
+    .dropdown-item--suscription small{
+        text-transform: uppercase;
+        font-size: .65rem;
+        line-height: .3rem;
+        display: block;
+        padding-top: .5rem;
+    }
+
     @media only screen and (max-width: 767.98px){
         .todolegal{
             margin:0px;
@@ -159,6 +217,16 @@
         #topNavbar{
             background: #F2F5F8;
             justify-content:
+        }
+
+        .navbar-light .btn-primary {
+            background: #505864;
+            border: 1px solid #505864;
+        }
+
+        .navbar-light .dropdown-item,
+        .navbar-light .name-container {
+            color: #505864;
         }
 
         .navbar-expand-lg .navbar-nav .dropdown-menu {
@@ -187,13 +255,6 @@
             display: block;
         }
     }
-
-    @media only screen and (max-width: 767.98px){
-    .todolegal{
-      margin:0px;
-      display: none;
-    }
-  }
 
    @media only screen and (min-width: 1200px){
 

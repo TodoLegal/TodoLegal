@@ -24,7 +24,7 @@
     <div class="col-sm-6 col-md-4 py-2">
       <div class="card card-body h-100" style="padding:0px">
         <a class="" href="<%= google_drive_search_path %>" style="padding:20px">
-        <img style="position: absolute;top: 0px;right: 0px; padding: 10px" src="/img/google_drive_logo.png"/>
+        <img class="icon-drive" src="/img/google_drive_logo.png"/>
           <table width="100%">
             <tr>
               <td>
@@ -32,7 +32,22 @@
               </td>
             </tr>
           </table>
-          <p><%= @google_drive_files_count %> documentos</p>
+          <p><%= google_drive_documents_count %> documentos</p>
+        </a>
+      </div>
+    </div>
+    <div class="col-sm-6 col-md-4 py-2">
+      <div class="card card-body h-100" style="padding:0px">
+        <a class="" href="<%= google_drive_covid_search_path %>" style="padding:20px">
+        <img class="icon-drive" src="/img/google_drive_logo.png"/>
+          <table width="100%">
+            <tr>
+              <td>
+                <h5 class="card-title">Repositorio COVID-19</h5>
+              </td>
+            </tr>
+          </table>
+          <p><%= google_drive_covid_documents_count %> documentos</p>
         </a>
       </div>
     </div>
@@ -50,8 +65,22 @@
     <% end %>
   </div>
 
-  <p class="resultinfo"><%= Law.count + @google_drive_files_count %> documentos ingresados y creciendo</p>
+  <p class="resultinfo"><%= all_document_count %> documentos ingresados y creciendo</p>
+
+  <div class="billboard billboard--home">
+    <div class="billboard-content">
+      <h5 class="billboard-title">Suscríbete y obtén acceso ilimitado</h5>
+      <p class="billboard-body">
+        Adquiere el <b>Plan Pro</b> por <b>$7.00 al mes</b> y podrás acceder a más de <%= (all_document_count/10)*10 %> documentos legales y a lo que continuamente agregamos.
+        <i class="text-muted d-block">Puedes cancelar la suscripción en cualquier momento.</i>
+      </p>
+    </div>
+    <div class="billboard-actions form-group" id="change-plan-btn-form">
+      <%= button_to "Adquirir Plan Pro", pricing_path, method: :get, params: {activate_pro_account: true}, remote: true, class:"btn btn-primary",  id:"change-plan-button"%>
+    </div>
+  </div>
 
 </div>
+
 
 <%= javascript_pack_tag "help_card" %>

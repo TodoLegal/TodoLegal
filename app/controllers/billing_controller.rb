@@ -13,12 +13,39 @@ class BillingController < ApplicationController
     @is_monthly = params[:is_monthly]
     @is_onboarding = params[:is_onboarding]
     @go_to_law = params["go_to_law"]
+    @coupon = params["coupon"]
+    @base_price_monthly = 7.00
+    @monthly_price_annually = 6.00
+    @base_price_annually = 72.00
     if params["invalid_card"] == "true"
       @stripe_backend_error = I18n.t(:invalid_card)
+    end
+
+    @is_coupon_valid = false
+    @discount = 0
+    @coupon_error_message = nil
+    if !@coupon.blank?
+      begin
+        @coupon_data = Stripe::Coupon.retrieve(@coupon)
+        @is_coupon_valid = @coupon_data.valid
+        if !@is_coupon_valid
+          @coupon_error_message = I18n.t(:stripe_coupon_invalid)
+        end
+        if @is_monthly
+          @discount = @base_price_monthly * @coupon_data.percent_off/100.0
+          @total_after_discount = @base_price_monthly - @discount
+        else
+          @discount = @base_price_annually * @coupon_data.percent_off/100.0
+          @total_after_discount = @base_price_annually - @discount
+        end
+      rescue
+        @coupon_error_message = I18n.t(:stripe_coupon_error)
+      end
     end
   end
 
   def charge
+    coupon = params["coupon"]
     begin
       customer = Stripe::Customer.create(email: current_user.email, source: params["stripeToken"])
     rescue
@@ -36,12 +63,22 @@ class BillingController < ApplicationController
       return
     end
     if params["is_monthly"] == "true"
-      subscription = Stripe::Subscription.create({
-        customer: customer.id,
-        items: [{
-          price: STRIPE_MONTH_SUBSCRIPTION_PRICE,
-        }]
-      })
+      if coupon.blank?
+        subscription = Stripe::Subscription.create({
+          customer: customer.id,
+          items: [{
+            price: STRIPE_MONTH_SUBSCRIPTION_PRICE,
+          }]
+        })
+      else
+        subscription = Stripe::Subscription.create({
+          customer: customer.id,
+          items: [{
+            price: STRIPE_MONTH_SUBSCRIPTION_PRICE,
+          }],
+          coupon: coupon
+        })
+      end
       if $discord_bot
         $discord_bot.send_message($discord_bot_channel_notifications, "Se ha registrado un usuario Pro por 1 mes :dancer:")
       end
@@ -49,12 +86,22 @@ class BillingController < ApplicationController
         SubscriptionsMailer.welcome_pro_user(current_user).deliver
       end
     else
-      subscription = Stripe::Subscription.create({
-        customer: customer.id,
-        items: [{
-          price: STRIPE_YEAR_SUBSCRIPTION_PRICE
-        }]
-      })
+      if coupon.blank?
+        subscription = Stripe::Subscription.create({
+          customer: customer.id,
+          items: [{
+            price: STRIPE_YEAR_SUBSCRIPTION_PRICE
+          }]
+        })
+      else
+        subscription = Stripe::Subscription.create({
+          customer: customer.id,
+          items: [{
+            price: STRIPE_YEAR_SUBSCRIPTION_PRICE
+          }],
+          coupon: coupon
+        })
+      end
       if $discord_bot
         $discord_bot.send_message($discord_bot_channel_notifications, "Se ha registrado un usuario Pro por 1 año :dancer:")
       end

@@ -46,4 +46,28 @@ class Law < ApplicationRecord
     end
     return materia_names
   end
+
+  def cached_books_count
+    Rails.cache.fetch([self, "books_count"]) { books.size }
+  end
+
+  def cached_titles_count
+    Rails.cache.fetch([self, "titles_count"]) { titles.size }
+  end
+
+  def cached_chapters_count
+    Rails.cache.fetch([self, "chapters_count"]) { chapters.size }
+  end
+
+  def cached_sections_count
+    Rails.cache.fetch([self, "sections_count"]) { sections.size }
+  end
+
+  def cached_subsections_count
+    Rails.cache.fetch([self, "subsections_count"]) { subsections.size }
+  end
+
+  def cached_articles_count
+    Rails.cache.fetch([self, "articles_count"]) { articles.size }
+  end
 end

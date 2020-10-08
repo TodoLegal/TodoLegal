@@ -65,8 +65,10 @@ function filterIndice() {
 var currrent_highlighted = 0;
 var highlighted_count = document.getElementsByClassName('highlighted').length;
 
-if(highlighted_count > 0)
+if(highlighted_count > 0){
+  highlighted_count = highlighted_count / 2; 
   updateHighlightedView()
+}
 
 function updateHighlightedView()
 {
@@ -173,7 +175,6 @@ function gotoArticle(article_number)
   
   article_focused = document.getElementById('article_count_' + current_article)
   article_focused.scrollIntoView({block: 'center'})
-  console.log(23)
   article_focused.style['background-color'] = "var(--c-selected-article-background)"
   article_focused.style['color'] = "var(--c-selected-article-text)"
 }

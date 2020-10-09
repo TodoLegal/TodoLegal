@@ -18,7 +18,7 @@ TodoLegal democratizes legal information for lawyers and citizens. See the webap
 
 # Code contributions
 
-Contributions welcome! Check out our [Issues](https://github.com/TodoLegal/TodoLegal/issues) or just send your pull request:
+Contributions welcome!
 
 1. Fork it
 2. Add new features
@@ -27,6 +27,9 @@ git checkout -b my-new-feature
 git commit -am 'Add some feature'
 git push origin my-new-feature
 ```
+
+Check out the [issues](https://github.com/TodoLegal/TodoLegal/issues) for ideas of where to contribute.
+
 3. Create a pull request
 
 
@@ -92,8 +95,6 @@ rails db:migrate
 
 
 ## 4. Launch the server
-
-### In development mode
 
 ```bash
 rails s

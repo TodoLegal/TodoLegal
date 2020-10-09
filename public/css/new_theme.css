@@ -253,8 +253,9 @@ input.form-control:focus {
     position: absolute;
     top: 0;
     bottom: 0;
-    left: -1rem;
+    left: -40px;
     z-index: 3;
+    width: 40px;
 }
 
 /* General styles for modal */
@@ -461,6 +462,17 @@ footer p a {
 
   .billboard .btn {
     width: auto;
+  }
+
+  .billboard--home {
+      background-color: #171F2A;
+      color: white;
+      padding: 2rem;
+      margin-top: 2rem;
+  }
+
+  .billboard--home .billboard-body{
+    color: white;
   }
 
 
@@ -728,7 +740,8 @@ footer p a {
      top: 64px;
      background: white;
      width: 100%;
-     padding: 1rem;
+     padding: 1rem 1rem 0;
+     z-index: 1030;
  }
 @media only screen and (max-width: 767.98px) {
     .container--empty-results {

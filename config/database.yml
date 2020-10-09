@@ -28,6 +28,6 @@ test:
 production:
   primary:
    <<: *default
-   pool: 10
+   pool: 22
    checkout_timeout: 6
    url: <%= ENV.fetch("DB_URL") { "" } %>

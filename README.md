@@ -2,17 +2,6 @@
 
 TodoLegal democratizes legal information for lawyers and citizens. See the webapp [live on production](https://todolegal.app/).
 
-# Code contributions
-
-1. Fork it
-2. Add new features
-```bash
-git checkout -b my-new-feature
-git commit -am 'Add some feature'
-git push origin my-new-feature
-```
-3. Create a pull request
-
 # Stack
 
 |  | Development | Production |
@@ -26,6 +15,17 @@ git push origin my-new-feature
 | Thin + nginx + SSL |   | ✔ |
 | Discord bot |   | ✔ |
 | Stripe | ✔ | ✔ |
+
+# Code contributions
+
+1. Fork it
+2. Add new features
+```bash
+git checkout -b my-new-feature
+git commit -am 'Add some feature'
+git push origin my-new-feature
+```
+3. Create a pull request
 
 
 # Running

@@ -1,6 +1,6 @@
 # TodoLegal
 
-TodoLegal democratizes legal information for lawyers and citizens. See the webapp [live on production](https://todolegal.app/).
+TodoLegal makes legal information accessible to lawyers and citizens. See the webapp [live on production](https://todolegal.app/).
 
 # Stack
 

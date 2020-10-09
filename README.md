@@ -18,6 +18,8 @@ TodoLegal democratizes legal information for lawyers and citizens. See the webap
 
 # Code contributions
 
+Contributions welcome! Check out our [Issues](https://github.com/TodoLegal/TodoLegal/issues) or just send your pull request:
+
 1. Fork it
 2. Add new features
 ```bash

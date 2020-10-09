@@ -16,9 +16,7 @@ TodoLegal democratizes legal information for lawyers and citizens. See the webap
 | Discord bot |   | ✔ |
 | Stripe | ✔ | ✔ |
 
-# Code contributions
-
-Contributions welcome!
+# Code contributions welcome
 
 1. Fork it
 2. Add new features
@@ -27,11 +25,9 @@ git checkout -b my-new-feature
 git commit -am 'Add some feature'
 git push origin my-new-feature
 ```
-
-Check out the [issues](https://github.com/TodoLegal/TodoLegal/issues) for ideas of where to contribute.
-
 3. Create a pull request
 
+Feel free to start a conversation via [issue tracker](https://github.com/TodoLegal/TodoLegal/issues) if you want to make a contribution.
 
 # Running
 

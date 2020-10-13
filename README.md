@@ -1,6 +1,6 @@
 # TodoLegal
 
-TodoLegal democratizes legal information for lawyers and citizens. See the webapp [live on production](https://todolegal.app/).
+TodoLegal makes legal information accessible to lawyers and citizens. See the webapp [live on production](https://todolegal.app/).
 
 # Stack
 
@@ -16,9 +16,7 @@ TodoLegal democratizes legal information for lawyers and citizens. See the webap
 | Discord bot |   | ✔ |
 | Stripe | ✔ | ✔ |
 
-# Code contributions
-
-Contributions welcome! Check out our [Issues](https://github.com/TodoLegal/TodoLegal/issues) or just send your pull request:
+# Code contributions welcome
 
 1. Fork it
 2. Add new features
@@ -29,6 +27,7 @@ git push origin my-new-feature
 ```
 3. Create a pull request
 
+Feel free to start a conversation via [issue tracker](https://github.com/TodoLegal/TodoLegal/issues) if you want to make a contribution.
 
 # Running
 
@@ -92,8 +91,6 @@ rails db:migrate
 
 
 ## 4. Launch the server
-
-### In development mode
 
 ```bash
 rails s

@@ -66,11 +66,6 @@ class HomeController < ApplicationController
       else
         @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' resultados encontrados'
       end
-      # if @legal_documents_count > 1
-      #   @result_info_text += " en " + @legal_documents_count.to_s + " documentos legales."
-      # elsif @legal_documents_count == 1
-      #   @result_info_text += " en " + @legal_documents_count.to_s + " documento legal."
-      # end
       titles_result = number_with_delimiter(@laws.size, :delimiter => ',')
       if @laws.size == 1
         @titles_result_text = titles_result.to_s + ' resultado'

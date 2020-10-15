@@ -88,7 +88,7 @@ class HomeController < ApplicationController
     if current_user
       # TODO: Move this to a separate script
       $tracker.people.set(current_user.id, {
-        '$email'            => 'jsmith@example.com',    # only special properties need the $
+        '$email'            => current_user.email,
         'first_name'      => current_user.first_name,
         'last_name'      => current_user.last_name,
         'occupation'      => current_user.occupation,

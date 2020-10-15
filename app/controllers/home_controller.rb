@@ -71,16 +71,40 @@ class HomeController < ApplicationController
       # elsif @legal_documents_count == 1
       #   @result_info_text += " en " + @legal_documents_count.to_s + " documento legal."
       # end
+      titles_result = number_with_delimiter(@laws.size, :delimiter => ',')
       if @laws.size == 1
-        @titles_result = number_with_delimiter(@laws.size, :delimiter => ',').to_s + ' resultado'
+        @titles_result_text = titles_result.to_s + ' resultado'
       else
-        @titles_result = number_with_delimiter(@laws.size, :delimiter => ',').to_s + ' resultados'
+        @titles_result_text = titles_result.to_s + ' resultados'
       end 
+      articles_result = number_with_delimiter(@result_count - @laws.size, :delimiter => ',')
       if @result_count == 1
-        @articles_result = number_with_delimiter(@result_count - @laws.size, :delimiter => ',').to_s + ' resultado'
+        @articles_result_text = articles_result.to_s + ' resultado'
       else
-        @articles_result = number_with_delimiter(@result_count - @laws.size, :delimiter => ',').to_s + ' resultados'
+        @articles_result_text = articles_result.to_s + ' resultados'
       end 
+    end
+
+    if current_user
+      #$tracker.people.set(current_user.id, {
+      #  '$email'            => 'jsmith@example.com',    # only special properties need the $
+      #  'first_name'      => current_user.first_name,
+      #  'last_name'      => current_user.last_name,
+      #  'occupation'      => current_user.occupation,
+      #  'is_contributor'      => current_user.is_contributor,
+      #  'current_sign_in_at'      => current_user.current_sign_in_at,
+      #  'last_sign_in_at'      => current_user.last_sign_in_at,
+      #  'current_sign_in_ip'      => current_user.current_sign_in_ip,
+      #  'last_sign_in_ip'      => current_user.last_sign_in_ip,
+      #  'receive_information_emails'      => current_user.receive_information_emails,
+      #  'first_name'      => current_user.first_name
+      #}, ip = current_user.current_sign_in_ip, {'$ignore_time' => 'true'});
+
+      $tracker.track(current_user.id, 'Search submitted', {
+        'query' => @query,
+        'titles_result' => titles_result,
+        'articles_result' => articles_result
+      })
     end
   end
 

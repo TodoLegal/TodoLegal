@@ -17,6 +17,7 @@ gem 'discordrb'
 gem 'stripe'
 gem 'rack-mini-profiler'
 gem 'simple_token_authentication'
+gem 'mixpanel-ruby'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.0.0'

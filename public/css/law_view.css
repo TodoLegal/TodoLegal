@@ -325,3 +325,7 @@ a.article:hover {
     height: 60%;
     border: none;
 }
+
+.articles-result-info{
+    margin-bottom: 10px;
+}

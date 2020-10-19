@@ -74,9 +74,9 @@ class TagsController < ApplicationController
         .order('COUNT(articles.id) DESC')
       @result_count = @laws.count.values.size
       if @result_count == 1
-        @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' documento legal.'
+        @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' ley.'
       else
-        @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' documentos legales.'
+        @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' leyes.'
       end
     end
   end

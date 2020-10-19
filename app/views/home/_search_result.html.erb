@@ -23,10 +23,10 @@
   </div>
 <% end %>
 
-<% if @laws %>
+<% if @laws.size > 0 %>
   <section class="d-flex justify-content-between">
-    <label class="resultinfo-label"> LEYES</label>
-    <span class="resultinfo-articles"> <%= @titles_result %></span>
+    <label class="resultinfo-label">Resultados en títulos de leyes</label>
+    <span class="resultinfo-articles"> <%= @titles_result_text %></span>
   </section>
   <div class="row">
     <% i = 0 %>
@@ -58,8 +58,8 @@
 <% end %>
 
 <% if @grouped_laws && @grouped_laws.size > 0 %>
-  <section class="d-flex justify-content-between">
-    <label class="resultinfo-label"> ARTÍCULOS</label>
+  <section class="d-flex justify-content-between articles-result-info">
+    <label class="resultinfo-label">Resultados en el contenido de leyes</label>
     <span class="resultinfo-articles"> <%= @articles_result_text %></span>
   </section>
   <div class="list-group">

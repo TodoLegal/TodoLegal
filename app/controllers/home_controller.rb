@@ -81,21 +81,6 @@ class HomeController < ApplicationController
     end
 
     if current_user
-      # TODO: Move this to a separate script
-      $tracker.people.set(current_user.id, {
-        '$email'            => current_user.email,
-        'first_name'      => current_user.first_name,
-        'last_name'      => current_user.last_name,
-        'occupation'      => current_user.occupation,
-        'is_contributor'      => current_user.is_contributor,
-        'current_sign_in_at'      => current_user.current_sign_in_at,
-        'last_sign_in_at'      => current_user.last_sign_in_at,
-        'current_sign_in_ip'      => current_user.current_sign_in_ip,
-        'last_sign_in_ip'      => current_user.last_sign_in_ip,
-        'receive_information_emails'      => current_user.receive_information_emails,
-        'first_name'      => current_user.first_name
-      }, ip = current_user.current_sign_in_ip, {'$ignore_time' => 'true'});
-
       $tracker.track(current_user.id, 'Search submitted', {
         'query' => @query,
         'titles_result' => titles_result,

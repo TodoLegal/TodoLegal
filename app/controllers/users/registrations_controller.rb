@@ -138,8 +138,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       'last_sign_in_at'      => user.last_sign_in_at,
       'current_sign_in_ip'      => user.current_sign_in_ip,
       'last_sign_in_ip'      => user.last_sign_in_ip,
-      'receive_information_emails'      => user.receive_information_emails,
-      'first_name'      => user.first_name
+      'receive_information_emails'      => user.receive_information_emails
     }, ip = user.current_sign_in_ip, {'$ignore_time' => 'true'});
   end
 end

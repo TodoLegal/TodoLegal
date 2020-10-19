@@ -17,6 +17,8 @@ class SubscriptionsMailer < ApplicationMailer
 
   def welcome_pro_user user
     @user = user
+    # TODO: make this auto calculated again
+    @rounded_all_document_count = 1130
     mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: user.email, subject: 'Cuenta Pro')
   end
 end

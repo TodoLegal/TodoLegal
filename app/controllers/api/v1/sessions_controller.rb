@@ -12,9 +12,7 @@ class Api::V1::SessionsController < Devise::SessionsController
     respond_to do |format|
       format.json do
         render json: {
-          user: current_user,
-          status: :ok,
-          authentication_token: current_user.authentication_token
+          user: current_user
         }
       end
     end
@@ -28,9 +26,9 @@ class Api::V1::SessionsController < Devise::SessionsController
           user.authentication_token = nil
           user.save
           sign_out(user)
-          render nothing: true, status: :ok
+          render json: {'message': 'You are now logged out.'}, status: :ok
         else
-          render json: nil, status: :unprocesable_entity
+          render json: {'error': 'Invalid authentication token.'}, status: :unprocesable_entity
         end
       end
     end

@@ -66,21 +66,26 @@ class HomeController < ApplicationController
       else
         @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' resultados encontrados'
       end
-      # if @legal_documents_count > 1
-      #   @result_info_text += " en " + @legal_documents_count.to_s + " documentos legales."
-      # elsif @legal_documents_count == 1
-      #   @result_info_text += " en " + @legal_documents_count.to_s + " documento legal."
-      # end
+      titles_result = number_with_delimiter(@laws.size, :delimiter => ',')
       if @laws.size == 1
-        @titles_result = number_with_delimiter(@laws.size, :delimiter => ',').to_s + ' resultado'
+        @titles_result_text = titles_result.to_s + ' resultado'
       else
-        @titles_result = number_with_delimiter(@laws.size, :delimiter => ',').to_s + ' resultados'
+        @titles_result_text = titles_result.to_s + ' resultados'
       end 
+      articles_result = number_with_delimiter(@result_count - @laws.size, :delimiter => ',')
       if @result_count == 1
-        @articles_result = number_with_delimiter(@result_count - @laws.size, :delimiter => ',').to_s + ' resultado'
+        @articles_result_text = articles_result.to_s + ' resultado'
       else
-        @articles_result = number_with_delimiter(@result_count - @laws.size, :delimiter => ',').to_s + ' resultados'
+        @articles_result_text = articles_result.to_s + ' resultados'
       end 
+    end
+
+    if current_user
+      $tracker.track(current_user.id, 'Search submitted', {
+        'query' => @query,
+        'titles_result' => titles_result,
+        'articles_result' => articles_result
+      })
     end
   end
 

@@ -62,11 +62,13 @@ class TagsController < ApplicationController
         @articles_result_text = articles_result.to_s + ' resultados'
       end
 
-      $tracker.track(current_user.id, 'Tag search submitted', {
-        'query' => @query,
-        'titles_result' => titles_result,
-        'articles_result' => articles_result
-      })
+      if current_user
+        $tracker.track(current_user.id, 'Tag search submitted', {
+          'query' => @query,
+          'titles_result' => titles_result,
+          'articles_result' => articles_result
+        })
+      end
     else
       @laws = @tag.laws
         .left_joins(:articles)

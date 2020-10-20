@@ -10,7 +10,7 @@
     <%= render partial: 'search_law_input', locals: {target_url: '/search_law', home_flag: false} %>
   </section>
 
-  <%= render 'search_result' %>
+  <%= render partial: 'search_result', locals:{home_flag: false} %>
 
   <%# <%= link_to 'Ir al inicio', root_path %>
 

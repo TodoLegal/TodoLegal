@@ -57,7 +57,7 @@
           <div class="card card-body h-100" style="padding:0px">
             <a class="" href="<%= tag_path(tag) %>" style="padding:20px">
               <h5 class="card-title"><%= tag.name %></h5>
-              <p><%= tag.laws.count %> documentos</p>
+              <p><%= tag.laws.count %> leyes</p>
             </a>
           </div>
         </div>
@@ -65,14 +65,14 @@
     <% end %>
   </div>
 
-  <p class="resultinfo"><%= all_document_count %> documentos ingresados y creciendo</p>
+  <p class="resultinfo"><%= all_document_count %> leyes y documentos ingresados</p>
 
   <% if !@current_user_plan_is_active %>
     <div class="billboard billboard--home">
       <div class="billboard-content">
         <h5 class="billboard-title">Suscríbete y obtén acceso ilimitado</h5>
         <p class="billboard-body">
-          Adquiere el <b>Plan Pro</b> por <b>$7.00 al mes</b> y podrás acceder a más de <%= (all_document_count/10)*10 %> documentos legales y a lo que continuamente agregamos.
+          Adquiere el <b>Plan Pro</b> por <b>$7.00 al mes</b> y podrás acceder a más de <%= (all_document_count/10)*10 %> leyes y documentos legales y a lo que continuamente agregamos.
           <i class="text-muted d-block">Puedes cancelar la suscripción en cualquier momento.</i>
         </p>
       </div>

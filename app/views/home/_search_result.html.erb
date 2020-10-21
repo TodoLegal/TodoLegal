@@ -1,6 +1,8 @@
 <p class="resultinfo">
-  <% if @result_count > 0 %>
-    <%= @result_info_text %>
+  <% if home_flag %>
+    <% if @result_count > 0 %>
+      <%= @result_info_text %>
+    <% end %>
   <% end %>
   <% if @tag && @query %>
     Buscar en <a href="/search_law?query=<%= @query%>">todas las materias</a>
@@ -13,7 +15,7 @@
 
 <% if @result_count == 0 %>
   <div class="container--empty-results">
-    <p class="body">No se han encontrado documentos que coincidan con <strong><%= @query %></strong>.</p>
+    <p class="body">No se han encontrado leyes que coincidan con <strong><%= @query %></strong>.</p>
     <div class="no-result-message">
       <img src="/img/img-search-doc.svg" />
       <p class="body body--secondary">
@@ -24,10 +26,12 @@
 <% end %>
 
 <% if @laws %>
-  <section class="d-flex justify-content-between">
-    <label class="resultinfo-label"> LEYES</label>
-    <span class="resultinfo-articles"> <%= @titles_result %></span>
-  </section>
+  <% if !home_flag %>
+    <section class="d-flex justify-content-between">
+      <label class="resultinfo-articles">En títulos de leyes</label>
+      <span class="resultinfo-articles"> <%= @titles_result_text %></span>
+    </section>
+  <% end %>
   <div class="row">
     <% i = 0 %>
     <% @laws.each do |law| %>
@@ -58,8 +62,8 @@
 <% end %>
 
 <% if @grouped_laws && @grouped_laws.size > 0 %>
-  <section class="d-flex justify-content-between">
-    <label class="resultinfo-label"> ARTÍCULOS</label>
+  <section class="d-flex justify-content-between articles-result-info">
+    <label class="resultinfo-articles">En el contenido de leyes</label>
     <span class="resultinfo-articles"> <%= @articles_result_text %></span>
   </section>
   <div class="list-group">

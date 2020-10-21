@@ -251,11 +251,11 @@
                 <h5 class="modal-title" id="cancelModalLongTitle">¿Estás seguro?</h5>
                 <% if current_user_is_pro %>
                   <label id="labelPro">
-                    Si borras tu cuenta ya no podras accesar a los documentos exclusivos para cuentas Pro.<br>
+                    Si borras tu cuenta ya no podras accesar a las leyes y documentos exclusivos para cuentas Pro.<br>
                     También puedes modificar tu suscripción si decides <a href="/" style="text-decoration: underline;">bajar a la cuenta básica.<a>
                   </label>
                 <% else %>
-                  <label id="labelBasico">Si borras tu cuenta ya no podras accesar a los documentos exclusivos para cuentas básicas.</label>
+                  <label id="labelBasico">Si borras tu cuenta ya no podras accesar a las leyes y documentos exclusivos para cuentas básicas.</label>
                 <% end %>
                 <div class="form-group" id="bottonsGroup">
                   <%= button_to "Borrar cuenta", registration_path(resource), method: :delete, remote: true, id:"deleteAccount", class:"btn btn-outline-danger"%>

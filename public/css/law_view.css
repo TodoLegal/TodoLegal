@@ -256,15 +256,6 @@ a.article:hover {
     display: block!important;
 }
 
-.resultinfo-label{
-    font-family: -apple-system, sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 16px;
-    line-height: 19px;
-    color: #505864;
-}
-
 .resultinfo-articles{
     font-family: -apple-system, sans-serif;
     font-style: normal;
@@ -272,7 +263,7 @@ a.article:hover {
     font-size: 16px;
     line-height: 17px;
     text-align: right;
-    color: #A6B9D3;
+    color: #70757a;
 }
 
 .resultinfo-article-count{
@@ -324,4 +315,8 @@ a.article:hover {
 .modal-content {
     height: 60%;
     border: none;
+}
+
+.articles-result-info{
+    margin-bottom: 10px;
 }

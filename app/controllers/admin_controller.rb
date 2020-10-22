@@ -7,7 +7,7 @@ class AdminController < ApplicationController
     if @email
       @users = User.where('email LIKE ?', "%#{@email}%")
     else
-      @users = User.all
+      @users = User.all.limit(10)
     end
     @permissions = Permission.all
 

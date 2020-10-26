@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :documents
   resources :user_permissions
   resources :permissions
   resources :law_modifications

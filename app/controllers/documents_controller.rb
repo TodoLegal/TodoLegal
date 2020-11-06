@@ -12,7 +12,6 @@ class DocumentsController < ApplicationController
   def show
     file = File.read(Rails.root.join("public", "gazettes",@document.id.to_s,"data.json").to_s)
     @json_data = JSON.parse(file)
-    #@json_data = JSON.parse('/home/turupawn/Projects/TodoLegal/master/public/gazettes/1/data.json')
   end
 
   # GET /documents/new
@@ -31,7 +30,7 @@ class DocumentsController < ApplicationController
 
     respond_to do |format|
       if @document.save
-        run_gazette_script @document.original_file_path, @document.id
+        run_gazette_script @document.id
         format.html { redirect_to @document, notice: 'Document was successfully created.' }
         format.json { render :show, status: :created, location: @document }
       else
@@ -46,7 +45,7 @@ class DocumentsController < ApplicationController
   def update
     respond_to do |format|
       if @document.update(document_params)
-        run_gazette_script @document.original_file_path, @document.id
+        run_gazette_script @document.id
         format.html { redirect_to @document, notice: 'Document was successfully updated.' }
         format.json { render :show, status: :ok, location: @document }
       else
@@ -77,8 +76,15 @@ class DocumentsController < ApplicationController
       params.require(:document).permit(:name, :original_file)
     end
 
-    def run_gazette_script gazette_path, document_id
-      python_return_value = `python3 ~/GazetteSlicer/gazette.py '#{gazette_path}' '#{ Rails.root.join("public", "gazettes") }' '#{document_id}'`
+    def run_gazette_script document_id
+      # download file
+      require "google/cloud/storage"
+      storage = Google::Cloud::Storage.new(project_id:"testground", credentials: Rails.root.join("gcs.keyfile"))
+      bucket = storage.bucket "testground"
+      file = bucket.file @document.original_file.key
+      file.download "tmp/gazette.pdf"
+      # run brazilian script
+      python_return_value = `python3 ~/GazetteSlicer/gazette.py tmp/gazette.pdf '#{ Rails.root.join("public", "gazettes") }' '#{document_id}'`
       output = JSON.parse(python_return_value)
       json_data = JSON.parse(File.read(output[0]))
       json_data["files"].each do |file|

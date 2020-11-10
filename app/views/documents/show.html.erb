@@ -1,0 +1,21 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @document.name %>
+</p>
+
+<p>
+  <%= link_to "Descargar", @document.original_file %>
+</p>
+
+<ul>
+  <% @json_data["files"].each do |file| %>
+    <li>
+      <%= link_to file['name'], "/gazettes/" + @document.id.to_s + "/" + file['path'] %>
+    </li>
+  <% end %>
+</ul>
+
+<%= link_to 'Edit', edit_document_path(@document) %> |
+<%= link_to 'Back', documents_path %>

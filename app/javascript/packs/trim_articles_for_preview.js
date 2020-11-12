@@ -7,6 +7,14 @@ function trimArticlesforPreview() {
     for (i = 0 ; i < link_elements.length; i++){
       nodes = link_elements[i].childNodes;
       for( j = 0 ; j < nodes.length; j++){
+        if(nodes[j].tagName == "H6") {
+          resultText = "";
+          break;
+        }
+        if(nodes.length == 1) {
+          resultText = nodes[j].textContent;
+          break;
+        }
         if (nodes[j].nodeType == Node.ELEMENT_NODE){
           if (nodes[j].previousSibling.nodeType == Node.TEXT_NODE){
             left = nodes[j].previousSibling.textContent.slice(-67);
@@ -19,7 +27,8 @@ function trimArticlesforPreview() {
           resultText += left + nodes[j].outerHTML + right;
         }
       }
-      link_elements[i].innerHTML = resultText;
+      if(resultText)
+        link_elements[i].innerHTML = resultText;
       resultText = "";
     }
 }

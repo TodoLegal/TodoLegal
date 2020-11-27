@@ -52,6 +52,12 @@ Rails.application.routes.draw do
           get :action_test
         end
       end
+      resource :documents do
+        member do
+          get "/:id", to: 'documents#get_document'
+          get "/", to: 'documents#get_documents'
+        end
+      end
       resource :laws do
         member do
           get "/:id", to: 'laws#get_law'

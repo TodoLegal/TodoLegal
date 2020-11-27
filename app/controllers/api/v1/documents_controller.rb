@@ -1,9 +1,9 @@
-class API::V1::DocumentsController < ApplicationController
+class Api::V1::DocumentsController < ApplicationController
   protect_from_forgery with: :null_session
   
-  def get_dummy_document
+  def get_dummy_document document_id
     document = {}
-    document["id"] = params[:id]
+    document["id"] = document_id
     document["url"] = "https://todolegal.app/documents/1-ejemplo"
     document["title"] = "Delegacion director IDECOAS"
     document["publication_date"] = "2020-11-27T10:22:39.070+00:00"
@@ -19,17 +19,17 @@ class API::V1::DocumentsController < ApplicationController
   
   def get_document
     #@document = Document.find_by_id(params[:id])
-    document = get_dummy_document
+    document = get_dummy_document params[:id]
     document_group = []
-    documnet_group.push("document": document, "relation": "belongs_to")
-    documnet_group.push("document": document, "relation": "is_sibling")
-    render json: {"document": document, "related_document": documnet_group}
+    document_group.push({ "document": document, "relation": "belongs_to" })
+    document_group.push({ "document": document, "relation": "is_sibling" })
+    render json: {"document": document, "related_document": document_group}
   end
   
   def get_documents
     documents = []
-    documents.push(get_dummy_document)
-    documents.push(get_dummy_document)
-    render json: {"documents" documents}
+    documents.push(get_dummy_document 1)
+    documents.push(get_dummy_document 2)
+    render json: {"documents": documents}
   end
 end

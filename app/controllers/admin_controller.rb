@@ -20,6 +20,24 @@ class AdminController < ApplicationController
     end
   end
 
+  def download_all_users
+    @users = User.all
+    @users.each do |user|
+      if user.first_name == nil
+        user.first_name = ""
+      end
+      if user.last_name == nil
+        user.last_name = ""
+      end
+    end
+    respond_to do |format|
+      format.csv do
+        headers['Content-Disposition'] = "attachment; filename=\"contributors_users\""
+        headers['Content-Type'] ||= 'text/csv'
+      end
+    end
+  end
+
   def download_contributor_users
     @users = User.where(is_contributor: true)
     @users.each do |user|

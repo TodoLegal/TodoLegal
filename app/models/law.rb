@@ -32,6 +32,10 @@ class Law < ApplicationRecord
                   }
 
   def to_param
+    friendly_url
+  end
+  
+  def friendly_url
     [id, name.parameterize].join('-')
   end
 

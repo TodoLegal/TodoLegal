@@ -13,10 +13,6 @@ class AdminController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.csv do
-        headers['Content-Disposition'] = "attachment; filename=\"users\""
-        headers['Content-Type'] ||= 'text/csv'
-      end
     end
   end
 
@@ -32,7 +28,7 @@ class AdminController < ApplicationController
     end
     respond_to do |format|
       format.csv do
-        headers['Content-Disposition'] = "attachment; filename=\"contributors_users\""
+        headers['Content-Disposition'] = "attachment; filename=\"TL_all_users\""
         headers['Content-Type'] ||= 'text/csv'
       end
     end
@@ -50,7 +46,7 @@ class AdminController < ApplicationController
     end
     respond_to do |format|
       format.csv do
-        headers['Content-Disposition'] = "attachment; filename=\"contributors_users\""
+        headers['Content-Disposition'] = "attachment; filename=\"TL_contributors_users\""
         headers['Content-Type'] ||= 'text/csv'
       end
     end
@@ -68,7 +64,7 @@ class AdminController < ApplicationController
     end
     respond_to do |format|
       format.csv do
-        headers['Content-Disposition'] = "attachment; filename=\"recieve_information_users\""
+        headers['Content-Disposition'] = "attachment; filename=\"TL_recieve_information_users\""
         headers['Content-Type'] ||= 'text/csv'
       end
     end

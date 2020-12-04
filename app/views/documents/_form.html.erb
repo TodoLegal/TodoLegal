@@ -17,6 +17,26 @@
   </div>
 
   <div class="field">
+    <%= form.label :url %>
+    <%= form.text_field :url %>
+  </div>
+
+  <div class="field">
+    <%= form.label :publication_date %>
+    <%= form.date_select :publication_date %>
+  </div>
+
+  <div class="field">
+    <%= form.label :publication_number %>
+    <%= form.text_field :publication_number %>
+  </div>
+
+  <div class="field">
+    <%= form.label :description %>
+    <%= form.text_area :description %>
+  </div>
+
+  <div class="field">
     <%= form.label :original_file %>
     <%= form.file_field :original_file %>
   </div>

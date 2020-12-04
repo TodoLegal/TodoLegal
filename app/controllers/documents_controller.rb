@@ -45,7 +45,9 @@ class DocumentsController < ApplicationController
   def update
     respond_to do |format|
       if @document.update(document_params)
-        run_gazette_script @document.id
+        if params[:original_file]
+          run_gazette_script @document.id
+        end
         format.html { redirect_to @document, notice: 'Document was successfully updated.' }
         format.json { render :show, status: :ok, location: @document }
       else
@@ -73,7 +75,7 @@ class DocumentsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def document_params
-      params.require(:document).permit(:name, :original_file)
+      params.require(:document).permit(:name, :original_file, :url, :publication_date, :publication_number, :description)
     end
 
     def run_gazette_script document_id

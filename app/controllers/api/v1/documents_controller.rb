@@ -11,11 +11,10 @@ class Api::V1::DocumentsController < ApplicationController
     document.tags.each do |tag|
       document_tags.push({"name": tag.name, "type": tag.tag_type.name})
     end
-    document["tags"] = document_tags
     document_group = []
     document_group.push({ "document": document, "relation": "belongs_to" })
     document_group.push({ "document": document, "relation": "is_sibling" })
-    render json: {"document": document, "related_document": document_group}
+    render json: {"document": document, "tags": document_tags, "related_document": document_group}
   end
   
   def get_documents
@@ -30,6 +29,11 @@ class Api::V1::DocumentsController < ApplicationController
     end
     if params["offset"]
       documents = documents.offset(params["offset"])
+    end
+
+    document_tags = []
+    document.tags.each do |tag|
+      document_tags.push({"name": tag.name, "tags": document_tags,"type": tag.tag_type.name})
     end
 
     render json: { "documents": documents }

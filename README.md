@@ -68,9 +68,9 @@ bundle install
 **Linux**
 ```bash
 sudo -u postgres psql
-postgres=# create database TodoLegalDB_Development;
+postgres=# create database todolegaldb_development;
 postgres=# alter user postgres with encrypted password 'MyPassword';
-postgres=# \c TodoLegalDB_Development;
+postgres=# \c todolegaldb_development;
 postgres=# CREATE TEXT SEARCH CONFIGURATION public.tl_config ( COPY = pg_catalog.spanish );
 postgres=# CREATE TEXT SEARCH DICTIONARY public.tl_dict ( TEMPLATE = pg_catalog.simple, STOPWORDS = russian);
 postgres=# ALTER TEXT SEARCH CONFIGURATION public.tl_config ALTER MAPPING FOR asciiword, asciihword, hword_asciipart, hword, hword_part, word WITH tl_dict;

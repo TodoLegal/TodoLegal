@@ -170,3 +170,5 @@ document_b = Document.create(
 
 DocumentTag.create({document_id: document_b.id, tag_id: Tag.find_by_name("El Presidente de la Republica").id})
 DocumentTag.create({document_id: document_b.id, tag_id: Tag.find_by_name("Civil").id})
+
+DocumentRelationship.create({document_1_id: document_a.id, document_2_id: document_b.id, relationship: "belongs to"})

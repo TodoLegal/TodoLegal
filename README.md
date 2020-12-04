@@ -8,15 +8,16 @@ TodoLegal makes legal information accessible to lawyers and citizens. See the we
 
 |  | Development | Production |
 |----------|------------ |------------ |
-| Linux | ✔ | ✔ |
-| MacOS | ✔ |   |
-| Rails 6 | ✔ | ✔ |
-| PostgreSQL | ✔ | ✔ |
+| Linux                | ✔ | ✔ |
+| MacOS                | ✔ |   |
+| Rails 6              | ✔ | ✔ |
+| PostgreSQL           | ✔ | ✔ |
 | Posrgres Text Search | ✔ | ✔ |
-| Puma | ✔ |   |
-| Thin + nginx + SSL |   | ✔ |
-| Discord bot |   | ✔ |
-| Stripe | ✔ | ✔ |
+| Puma                 | ✔ |   |
+| Thin + nginx + SSL   |   | ✔ |
+| Discord bot          |   | ✔ |
+| Stripe               | ✔ | ✔ |
+| Google Storage       | ✔ | ✔ |
 
 # Code contributions welcome
 
@@ -37,11 +38,11 @@ Feel free to start a conversation via [issue tracker](https://github.com/TodoLeg
 
 **Linux**
 ```bash
-apt update
-apt install curl git libpq-dev gnupg2 postgresql-11
+sudo apt update
+sudo apt install curl git libpq-dev gnupg2 postgresql libsodium-dev
 gpg2 --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
 \curl -sSL https://get.rvm.io | bash -s stable --rails
-source /usr/local/rvm/scripts/rvm
+source /usr/local/rvm/scripts/rvm # depends on your linux distro
 ```
 
 **MacOS**
@@ -69,6 +70,7 @@ bundle install
 sudo -u postgres psql
 postgres=# create database TodoLegalDB_Development;
 postgres=# alter user postgres with encrypted password 'MyPassword';
+postgres=# \c TodoLegalDB_Development;
 postgres=# CREATE TEXT SEARCH CONFIGURATION public.tl_config ( COPY = pg_catalog.spanish );
 postgres=# CREATE TEXT SEARCH DICTIONARY public.tl_dict ( TEMPLATE = pg_catalog.simple, STOPWORDS = russian);
 postgres=# ALTER TEXT SEARCH CONFIGURATION public.tl_config ALTER MAPPING FOR asciiword, asciihword, hword_asciipart, hword, hword_part, word WITH tl_dict;

@@ -1,21 +1,64 @@
-<p id="notice"><%= notice %></p>
+<div class="container">
+  <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @document.name %>
-</p>
+  <%confirm = false%>
+  <script>
+    function myFunction() {
+    confirm = confirm("¿Seguro que lo desea eliminar?");
+    }
+  </script>
 
-<p>
-  <%= link_to "Descargar", @document.original_file %>
-</p>
+  <p>
+    <strong>Url:</strong>
+    <%= @document.url %>
+  </p>
 
-<ul>
-  <% @json_data["files"].each do |file| %>
-    <li>
-      <%= link_to file['name'], "/gazettes/" + @document.id.to_s + "/" + file['path'] %>
-    </li>
-  <% end %>
-</ul>
+  <p>
+    <strong>Name:</strong>
+    <%= @document.name %>
+  </p>
 
-<%= link_to 'Edit', edit_document_path(@document) %> |
-<%= link_to 'Back', documents_path %>
+  <p>
+    <strong>Publication Date:</strong>
+    <%= @document.publication_date %>
+  </p>
+
+  <p>
+    <strong>Publication Number:</strong>
+    <%= @document.publication_number %>
+  </p>
+
+  <p>
+    <strong>Description:</strong>
+    <%= @document.description %>
+  </p>
+
+
+  <p>
+    <strong>Tags:</strong>
+  </p>
+  <p>
+    <% if @document.original_file.attached? %>
+      <%= link_to "Descargar", @document.original_file %>
+    <% end %>
+  </p>
+
+  <ul>
+    <% @document.tags.each do |tag| %>
+      <li>
+        <%= tag.name %> (<%= tag.tag_type.name %>)
+      </li>
+    <% end %>
+  </ul>
+
+  <ul>
+    <% @json_data["files"].each do |file| %>
+      <li>
+        <%= link_to file['name'], "/gazettes/" + @document.id.to_s + "/" + file['path'] %>
+      </li>
+    <% end %>
+  </ul>
+
+  <%= link_to 'Edit', edit_document_path(@document) %> |
+  <%= link_to 'Back', documents_path %>
+</div>

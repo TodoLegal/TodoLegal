@@ -10,8 +10,12 @@ class DocumentsController < ApplicationController
   # GET /documents/1
   # GET /documents/1.json
   def show
-    file = File.read(Rails.root.join("public", "gazettes",@document.id.to_s,"data.json").to_s)
-    @json_data = JSON.parse(file)
+    @json_data = {}
+    @json_data["files"] = []
+    if File.exist?("gazettes/" + @document.id.to_s + "/data.json")
+      file = File.read(Rails.root.join("public", "gazettes",@document.id.to_s,"data.json").to_s)
+      @json_data = JSON.parse(file)
+    end
   end
 
   # GET /documents/new

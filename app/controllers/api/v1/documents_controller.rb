@@ -7,6 +7,11 @@ class Api::V1::DocumentsController < ApplicationController
       render json: {"error": "Document not found."}
       return
     end
+    document_tags = []
+    document.tags.each do |tag|
+      document_tags.push({"name": tag.name, "type": tag.tag_type.name})
+    end
+    document["tags"] = document_tags
     document_group = []
     document_group.push({ "document": document, "relation": "belongs_to" })
     document_group.push({ "document": document, "relation": "is_sibling" })

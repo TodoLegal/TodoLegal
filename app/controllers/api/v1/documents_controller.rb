@@ -34,10 +34,6 @@ class Api::V1::DocumentsController < ApplicationController
     if params["offset"]
       documents = documents.offset(params["offset"])
     end
-    document_tags = []
-    document.tags.each do |tag|
-      document_tags.push({"name": tag.name, "tags": document_tags,"type": tag.tag_type.name})
-    end
     render json: { "documents": documents }
   end
 end

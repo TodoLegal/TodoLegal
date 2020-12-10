@@ -48,6 +48,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       end
     end
     super
+    update_mixpanel_user current_user
   end
 
   # PUT /resource
@@ -84,6 +85,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # The path used after sign up.
   def after_sign_up_path_for(resource)
+    update_mixpanel_user current_user
     if $discord_bot
       $discord_bot.send_message($discord_bot_channel_notifications, "Se ha registrado un nuevo usuario :tada:")
     end
@@ -123,5 +125,20 @@ class Users::RegistrationsController < Devise::RegistrationsController
     if params[:user][:occupation] && params[:user][:occupation] == ""
       params[:user][:occupation].replace("Otro")
     end
+  end
+
+  def update_mixpanel_user user
+    $tracker.people.set(user.id, {
+      '$email'            => user.email,
+      'first_name'      => user.first_name,
+      'last_name'      => user.last_name,
+      'occupation'      => user.occupation,
+      'is_contributor'      => user.is_contributor,
+      'current_sign_in_at'      => user.current_sign_in_at,
+      'last_sign_in_at'      => user.last_sign_in_at,
+      'current_sign_in_ip'      => user.current_sign_in_ip,
+      'last_sign_in_ip'      => user.last_sign_in_ip,
+      'receive_information_emails'      => user.receive_information_emails
+    }, ip = user.current_sign_in_ip, {'$ignore_time' => 'true'});
   end
 end

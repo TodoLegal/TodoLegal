@@ -17,7 +17,7 @@
     <%= render partial: 'home/search_law_input', locals: {target_url: tag_path(@tag), home_flag: true} %>
   </div>
   
-  <%= render 'home/search_result.html.erb' %>
+  <%= render partial: 'home/search_result.html.erb', locals: {home_flag: true} %>
 
   <!--
   <%= link_to 'Ir al inicio', root_path %>-->

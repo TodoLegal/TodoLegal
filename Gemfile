@@ -18,6 +18,8 @@ gem 'stripe'
 gem 'rack-mini-profiler'
 gem 'simple_token_authentication'
 gem 'mixpanel-ruby'
+gem "google-cloud-storage", "~> 1.11", require: false
+gem 'rack-cors'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.0', '>= 6.0.3.4'

@@ -8,8 +8,8 @@ class Law < ApplicationRecord
   has_many :sections, :dependent => :destroy
   has_many :subsections, :dependent => :destroy
   has_many :articles, :dependent => :destroy
-  has_many :law_tags, :dependent => :destroy
   has_many :law_modifications, :dependent => :destroy
+  has_many :law_tags, :dependent => :destroy
   has_many :tags, through: :law_tags, :dependent => :destroy
 
   pg_search_scope :search_by_name,
@@ -32,6 +32,10 @@ class Law < ApplicationRecord
                   }
 
   def to_param
+    friendly_url
+  end
+  
+  def friendly_url
     [id, name.parameterize].join('-')
   end
 

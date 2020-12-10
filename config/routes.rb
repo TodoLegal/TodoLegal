@@ -1,9 +1,11 @@
 Rails.application.routes.draw do
+  resources :documents
   resources :user_permissions
   resources :permissions
   resources :law_modifications
   devise_for :users, controllers: { confirmations: 'users/confirmations', registrations: "users/registrations", sessions: "users/sessions", passwords: "users/passwords" }
   resources :law_tags
+  resources :document_tags
   resources :tags
   resources :tag_types
   resources :laws
@@ -41,6 +43,7 @@ Rails.application.routes.draw do
   get "signed_out" => "home#index", as: "signed_out"
   get "download_contributor_users" => "admin#download_contributor_users", as: "download_contributor_users"
   get "download_recieve_information_users" => "admin#download_recieve_information_users", as: "download_recieve_information_users"
+  get "download_all_users" => "admin#download_all_users", as: "download_all_users"
   get '/gacetas', to: redirect('https://drive.google.com/drive/folders/1R46K1k5vMKdIDV7VyaXrXgk5ScF5uBvX'), as: "gacetas"
 
   namespace :api, defaults: {format: :json} do
@@ -49,6 +52,12 @@ Rails.application.routes.draw do
       resource :examples do
         member do
           get :action_test
+        end
+      end
+      resource :documents do
+        member do
+          get "/:id", to: 'documents#get_document'
+          get "/", to: 'documents#get_documents'
         end
       end
       resource :laws do

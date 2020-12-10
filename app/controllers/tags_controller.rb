@@ -62,11 +62,13 @@ class TagsController < ApplicationController
         @articles_result_text = articles_result.to_s + ' resultados'
       end
 
-      $tracker.track(current_user.id, 'Tag search submitted', {
-        'query' => @query,
-        'titles_result' => titles_result,
-        'articles_result' => articles_result
-      })
+      if current_user
+        $tracker.track(current_user.id, 'Tag search submitted', {
+          'query' => @query,
+          'titles_result' => titles_result,
+          'articles_result' => articles_result
+        })
+      end
     else
       @laws = @tag.laws
         .left_joins(:articles)
@@ -74,9 +76,9 @@ class TagsController < ApplicationController
         .order('COUNT(articles.id) DESC')
       @result_count = @laws.count.values.size
       if @result_count == 1
-        @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' documento legal.'
+        @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' ley.'
       else
-        @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' documentos legales.'
+        @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' leyes.'
       end
     end
   end

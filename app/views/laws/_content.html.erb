@@ -30,7 +30,7 @@
 <div>
   <% if @articles_count == 0 %>
     <div class="container--empty-results">
-      <p class="body">No se han encontrado documentos que coincidan con <strong><%= @query %></strong>.</p>
+      <p class="body">No se han encontrado leyes que coincidan con <strong><%= @query %></strong>.</p>
       <div class="no-result-message">
         <img src="/img/img-search-doc.svg" />
         <p class="body body--secondary">
@@ -108,12 +108,14 @@
       <% end %>
       <!-- highlited search for serch results preview in mobile version -->
       <% if is_mobile %>
-        <div align="justify" style="color: #444; padding: 10px" onclick="onClickArticle(<%= article_iterator %>)" class="article" article_id="<%= article_iterator %>" last_bigger_section="<%= bigger_section_iterator - 1 %>" next_bigger_section="<%= bigger_section_iterator %>" id="article_count_<%= article_iterator %>">
-          <b class="article-name" align="justify" style="color: #111;font-weight:bold; display: block;">Artículo <%= stream.number %><br>
+        <div style="color: #444; padding: 10px" onclick="onClickArticle(<%= article_iterator %>)" class="article" article_id="<%= article_iterator %>" last_bigger_section="<%= bigger_section_iterator - 1 %>" next_bigger_section="<%= bigger_section_iterator %>" id="article_count_<%= article_iterator %>">
+          <a class="uncolored_link articles-preview" id="link_article_count_<%= article_iterator %>" href="<%= law_path(@law) + '?query=/'+@query+"/"+(stream.number.lstrip)%>"  aria-controls="articulos" aria-selected="true">
+          <h6 class="article-name" style="color: #111;font-weight:bold; display: block;">Artículo <%= stream.number %><br>
             <% if @user_can_edit_law && is_editor_mode_enabled %>
               <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_article_path(stream) %>
             <% end %>
-          </b>
+          </h6>
+          </a>
           <% if @highlight_enabled %>
             <a class="uncolored_link articles-preview" id="link_article_count_<%= article_iterator %>" href="<%= law_path(@law) + '?query=/'+@query+"/"+(stream.number.lstrip)%>"  aria-controls="articulos" aria-selected="true">
               <%= stream.pg_search_highlight.html_safe %>

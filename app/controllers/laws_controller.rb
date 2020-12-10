@@ -13,6 +13,9 @@ class LawsController < ApplicationController
   # GET /laws/1
   # GET /laws/1.json
   def show
+    if params[:id] != @law.friendly_url
+      redirect_to "/?error=Invalid+law+name"
+    end
     get_raw_law
   end
 

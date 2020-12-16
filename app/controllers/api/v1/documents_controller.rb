@@ -11,14 +11,16 @@ class Api::V1::DocumentsController < ApplicationController
     document.tags.each do |tag|
       document_tags.push({"name": tag.name, "type": tag.tag_type.name})
     end
-    related_documents = []
-    DocumentRelationship.where(document_1_id: document.id).or(DocumentRelationship.where(document_2_id: document.id)).each do |document_relationship|
-      if document_relationship.document_1_id == document.id
-        related_documents.push({"document": Document.find_by_id(document_relationship.document_2_id), "relationship": document_relationship.relationship})
-      else
-        related_documents.push({"document": Document.find_by_id(document_relationship.document_1_id), "relationship": document_relationship.relationship})
-      end
-    end
+    #related_documents = []
+    #DocumentRelationship.where(document_1_id: document.id).or(DocumentRelationship.where(document_2_id: document.id)).each do |document_relationship|
+    #  if document_relationship.document_1_id == document.id
+    #    related_documents.push({"document": Document.find_by_id(document_relationship.document_2_id), "relationship": document_relationship.relationship})
+    #  else
+    #    related_documents.push({"document": Document.find_by_id(document_relationship.document_1_id), "relationship": document_relationship.relationship})
+    #  end
+    #end
+    related_documents = Document.where(publication_number: document.publication_number)
+    related_documents.delete(document)
     render json: {"document": document, "tags": document_tags, "related_documents": related_documents}
   end
   

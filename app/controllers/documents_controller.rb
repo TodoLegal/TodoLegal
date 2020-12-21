@@ -31,7 +31,6 @@ class DocumentsController < ApplicationController
   # POST /documents.json
   def create
     @document = Document.new(document_params)
-    @document.url = @document.name + "-" + @document.publication_number
     respond_to do |format|
       if @document.save
         # download file
@@ -92,6 +91,15 @@ class DocumentsController < ApplicationController
     document.publication_date = first_element["publication_date"].to_date
     document.url = document.name + "-" + document.publication_number
     document.save
+    document.original_file.attach(
+      io: File.open(
+        Rails.root.join(
+          "public",
+          "gazettes",
+          document.id.to_s, json_data["files"][0]["path"]).to_s
+      ),
+      filename: 'file.pdf'
+    )
     # create the related documents
     puts "Creating related documents"
     json_data["files"].drop(1).each do |file|

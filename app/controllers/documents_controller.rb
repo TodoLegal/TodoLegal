@@ -121,6 +121,10 @@ class DocumentsController < ApplicationController
       )
       puts "File uploaded"
     end
+    json_data["errors"].each do |error|
+      puts "Error found!!!"
+      puts error.to_s
+    end
     puts "Created related documents"
   end
 

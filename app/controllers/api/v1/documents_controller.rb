@@ -20,8 +20,11 @@ class Api::V1::DocumentsController < ApplicationController
     #  end
     #end
     related_documents = Document.where(publication_number: document.publication_number)
-    related_documents.delete(document)
-    render json: {"document": document, "tags": document_tags, "related_documents": related_documents}
+    json_document = document.as_json
+    if document.original_file.attached?
+      json_document = json_document.merge(file: url_for(document.original_file))
+    end
+    render json: {"document": json_document, "tags": document_tags, "related_documents": related_documents}
   end
   
   def get_documents

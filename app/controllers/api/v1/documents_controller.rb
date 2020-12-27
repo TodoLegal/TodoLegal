@@ -29,9 +29,9 @@ class Api::V1::DocumentsController < ApplicationController
   
   def get_documents
     if params["query"]
-      documents = Document.all.search_by_all(params["query"]).limit(100)
+      documents = Document.all.order('publication_date DESC').search_by_all(params["query"]).limit(100)
     else
-      documents = Document.all.limit(100)
+      documents = Document.all.order('publication_date DESC').limit(100)
     end
     if params["limit"]
       documents = documents.limit(params["limit"])

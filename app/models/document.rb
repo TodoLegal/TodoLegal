@@ -14,4 +14,8 @@ class Document < ApplicationRecord
                       dictionary: "tl_config"
                     }
                   }
+
+  def generate_friendly_url
+    [name.parameterize, publication_number.parameterize , id].join('-')
+  end
 end

@@ -29,9 +29,15 @@ class Api::V1::DocumentsController < ApplicationController
   
   def get_documents
     if params["query"]
-      documents = Document.all.order('publication_date DESC').search_by_all(params["query"]).limit(100)
+      documents = Document.all.order('publication_date DESC').search_by_all(params["query"])
     else
-      documents = Document.all.order('publication_date DESC').limit(100)
+      documents = Document.all.order('publication_date DESC')
+    end
+    if params["from"]
+      documents = documents.where('publication_date >= ?', params["from"])
+    end
+    if params["to"]
+      documents = documents.where('publication_date <= ?', params["to"])
     end
     if params["limit"]
       documents = documents.limit(params["limit"])
@@ -39,6 +45,7 @@ class Api::V1::DocumentsController < ApplicationController
     if params["offset"]
       documents = documents.offset(params["offset"])
     end
+    documents = documents.limit(100)
     render json: { "documents": documents }
   end
 end

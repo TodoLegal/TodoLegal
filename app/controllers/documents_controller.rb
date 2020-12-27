@@ -89,7 +89,12 @@ class DocumentsController < ApplicationController
     document.description = first_element["description"].truncate(50)
     document.publication_number = first_element["publication_number"]
     document.publication_date = first_element["publication_date"].to_date
-    document.url = document.name + "-" + document.publication_number
+    document.save
+    tag = Tag.find_by_name(first_element["tag"])
+    if tag
+      DocumentTag.create(document_id: document.id, tag_id: tag.id)
+    end
+    document.url = document.generate_friendly_url
     document.save
     document.original_file.attach(
       io: File.open(
@@ -109,6 +114,12 @@ class DocumentsController < ApplicationController
         description: file["description"].truncate(50),
         publication_number: document.publication_number,
         publication_date: document.publication_date)
+      tag = Tag.find_by_name(file["tag"])
+      if tag
+        DocumentTag.create(document_id: new_document.id, tag_id: tag.id)
+      end
+      new_document.url = new_document.generate_friendly_url
+      document.save
       puts "Uploading file"
       new_document.original_file.attach(
         io: File.open(

@@ -119,7 +119,7 @@ class DocumentsController < ApplicationController
         DocumentTag.create(document_id: new_document.id, tag_id: tag.id)
       end
       new_document.url = new_document.generate_friendly_url
-      document.save
+      new_document.save
       puts "Uploading file"
       new_document.original_file.attach(
         io: File.open(

@@ -18,6 +18,7 @@ TodoLegal makes legal information accessible to lawyers and citizens. See the we
 | Discord bot          |   | ✔ |
 | Stripe               | ✔ | ✔ |
 | Google Storage       | ✔ | ✔ |
+| Mixpanel             | ✔ | ✔ |
 
 # Code contributions welcome
 

@@ -1,8 +1,8 @@
 class LawsController < ApplicationController
-  layout 'law'
-  layout 'application', only: [:index]
+  layout 'law', only: [:show, :new, :edit]
   before_action :set_law, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_admin!, only: [:index, :new, :edit, :create, :update, :destroy]
+  before_action :set_materias, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_editor!, only: [:index, :new, :edit, :create, :update, :destroy]
 
   # GET /laws
   # GET /laws.json
@@ -13,133 +13,10 @@ class LawsController < ApplicationController
   # GET /laws/1
   # GET /laws/1.json
   def show
-    @stream = []
-    @index_items = []
-    @highlight_enabled = false
-    @query = ""
-    @articles_count = 0
-    @has_articles_only = true
-
-    if params[:query]
-      @tokens = params[:query].scan(/\w+|\W/)
-      if @tokens.first == '/'
-        articles = []
-        @tokens.each do |token|
-          if is_number token
-            articles.push(token)
-          end
-        end
-        params[:articles] = articles
-        params[:query] = nil
-      end
+    if params[:id] != @law.friendly_url
+      redirect_to "/?error=Invalid+law+name"
     end
-    
-    if params[:query] && params[:query] != ""
-      @highlight_enabled = true
-      @query = params[:query]
-      @stream = @law.articles.search_by_body(params[:query]).with_pg_search_highlight.order(:position).sort_by { |article| article.position }
-      @articles_count = @stream.size
-    else
-      i = 0
-      book_iterator = 0
-      title_iterator = 0
-      chapter_iterator = 0
-      section_iterator = 0
-      subsection_iterator = 0
-      article_iterator = 0
-
-      @books = @law.books.order(:position)
-      @titles = @law.titles.order(:position)
-      @chapters = @law.chapters.order(:position)
-      @sections = @law.sections.order(:position)
-      @subsections = @law.subsections.order(:position)
-      @articles = @law.articles.order(:position)
-
-      @articles_count = @articles.count
-
-      go_to_position = nil
-
-      if params[:articles] && params[:articles].size != 1
-        @stream = @articles.where(number: params[:articles])
-      else
-        if params[:articles] && params[:articles].size == 1
-          article = @articles.where('number LIKE ?', "%#{params[:articles].first}%").first
-          if article
-            go_to_position = @articles.where('number LIKE ?', "%#{params[:articles].first}%").first.position
-          end
-        end
-
-        stream_size = @books.size + @titles.size + @chapters.size + @subsections.size + @sections.size + @articles.size
-        while i < stream_size
-          if book_iterator < @books.size &&
-              (@titles.size == 0 ||
-              (title_iterator < @titles.size && @books[book_iterator].position < @titles[title_iterator].position)) &&
-              (@chapters.size == 0 ||
-              (chapter_iterator < @chapters.size && @books[book_iterator].position < @chapters[chapter_iterator].position)) &&
-              (@sections.size == 0 ||
-              (section_iterator < @sections.size && @books[book_iterator].position < @sections[section_iterator].position)) &&
-              (@subsections.size == 0 ||
-              (subsection_iterator < @subsections.size && @books[book_iterator].position < @subsections[subsection_iterator].position)) &&
-              (@articles.size == 0 ||
-              (article_iterator < @articles.size && @books[book_iterator].position < @articles[article_iterator].position))
-            @stream.push @books[book_iterator]
-            @index_items.push @books[book_iterator]
-            book_iterator+=1
-          elsif title_iterator < @titles.size &&
-              (@chapters.size == 0 ||
-              (chapter_iterator < @chapters.size && @titles[title_iterator].position < @chapters[chapter_iterator].position)) &&
-              (@sections.size == 0 ||
-              (section_iterator < @sections.size && @titles[title_iterator].position < @sections[section_iterator].position)) &&
-              (@subsections.size == 0 ||
-              (subsection_iterator < @subsections.size && @titles[title_iterator].position < @subsections[subsection_iterator].position)) &&
-              (@articles.size == 0 ||
-              (article_iterator < @articles.size && @titles[title_iterator].position < @articles[article_iterator].position))
-            @stream.push @titles[title_iterator]
-            @index_items.push @titles[title_iterator]
-            title_iterator+=1
-          elsif chapter_iterator < @chapters.size &&
-              (@sections.size == 0 ||
-              (section_iterator < @sections.size && @chapters[chapter_iterator].position < @sections[section_iterator].position)) &&
-              (@subsections.size == 0 ||
-              (subsection_iterator < @subsections.size && @chapters[chapter_iterator].position < @subsections[subsection_iterator].position)) &&
-              (@articles.size == 0 ||
-              (article_iterator < @articles.size && @chapters[chapter_iterator].position < @articles[article_iterator].position))
-            @stream.push @chapters[chapter_iterator]
-            @index_items.push @chapters[chapter_iterator]
-            chapter_iterator+=1
-          elsif section_iterator < @sections.size &&
-              (@subsections.size == 0 ||
-              (subsection_iterator < @subsections.size && @sections[section_iterator].position < @subsections[subsection_iterator].position)) &&
-              (@articles.size == 0 ||
-              (article_iterator < @articles.size && @sections[section_iterator].position < @articles[article_iterator].position))
-            @stream.push @sections[section_iterator]
-            @index_items.push @sections[section_iterator]
-            section_iterator+=1
-          elsif subsection_iterator < @subsections.size &&
-              (@articles.size == 0 ||
-              (article_iterator < @articles.size && @subsections[subsection_iterator].position < @articles[article_iterator].position))
-            @stream.push @subsections[subsection_iterator]
-            @index_items.push @subsections[subsection_iterator]
-            subsection_iterator+=1
-          else
-            @stream.push @articles[article_iterator]
-            if go_to_position && @articles[article_iterator] && go_to_position == @articles[article_iterator].position
-              @go_to_article = article_iterator
-            end
-            article_iterator+=1
-          end
-          i+=1
-        end
-      end
-
-      @has_articles_only = book_iterator == 0 && title_iterator == 0 && chapter_iterator == 0 && subsection_iterator == 0 && section_iterator == 0
-    end
-
-    @user_can_edit_law = current_user_is_admin
-    @user_can_access_law = user_can_access_law @law
-    if !@user_can_access_law
-      @stream = @stream.take(5)
-    end
+    get_raw_law
   end
 
   # GET /laws/new
@@ -156,10 +33,10 @@ class LawsController < ApplicationController
       @article = @law.articles.first
     end
 
-    @law_materias = []
-    materia_tag_type = TagType.find_by_name("materia")
-    @all_materias = Tag.where(tag_type: materia_tag_type)
-    @law_materias = LawTag.where(law_id: @law.id, tag_id: @all_materias)
+    # @law_materias = []
+    # materia_tag_type = TagType.find_by_name("materia")
+    # @all_materias = Tag.where(tag_type: materia_tag_type)
+    # @law_materias = LawTag.where(law_id: @law.id, tag_id: @all_materias)
 
     creacion_tag_type = TagType.find_by_name("creacion")
     @all_creacions = Tag.where(tag_type: creacion_tag_type)
@@ -213,34 +90,29 @@ class LawsController < ApplicationController
       @law = Law.find(params[:id])
     end
 
+    def set_materias
+      @law_materias = []
+      materia_tag_type = TagType.find_by_name("materia")
+      @all_materias = Tag.where(tag_type: materia_tag_type)
+      @law_materias = LawTag.where(law_id: @law.id, tag_id: @all_materias)
+
+      @tag = Tag.find_by(id: @law_materias[0].tag_id)
+      lawTags = LawTag.where(tag_id: @tag.id)
+      
+      @laws_array = []
+      counter = 0
+      while counter < lawTags.size
+        law = Law.find_by(id: lawTags[counter].law_id)
+        if law
+          @laws_array[counter] = law
+        end
+        counter+=1
+      end
+
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def law_params
       params.require(:law).permit(:name, :modifications, :creation_number)
-    end
-
-    def user_can_access_law law
-      law_access = law.law_access
-      if current_user
-        return true
-      end
-      if !law_access
-        return true
-      end
-      return law_access.name == "Todos"
-      
-      #law_access = law.law_access
-      #if law_access
-      #  if law_access.name == "Pro"
-      #    if !current_user_is_pro
-      #      return false
-      #    end
-      #  end
-      #  if law_access.name == "Básica"
-      #    if !current_user
-      #      return false
-      #    end
-      #  end
-      #end
-      #return true
     end
 end

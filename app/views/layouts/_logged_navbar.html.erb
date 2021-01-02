@@ -1,7 +1,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-light  sticky-top" id="topNavbar">
     <a href="/" class="navbar-brand text-primary" >
-        <img  src="/img/top_navbar/top_navbar.svg" alt="Card image cap" class="img-fluid" id="logo">
+        <img  src="/img/top_navbar/top_navbar.svg" alt="Card image cap" class="logo img-fluid">
          &nbsp;&nbsp;
         <img src="/img/top_navbar/Logo-letras-white.svg" alt="Card image cap" class="todolegal img-fluid">
     </a>
@@ -33,7 +33,26 @@
                 <a href="/invite_friends" class="dropdown-item">
                 <i class="fas fa-gift" aria-hidden="true"></i>
                 Invitar amigos</a>
-                
+
+                <% if current_user_is_pro %>
+                    <!--
+                    <form method="POST" action="/create_customer_portal_session">
+                        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                        <input type="submit" class="btn btn-primary" value="Manejar Suscripción Pro">
+                    </form>-->
+                    <a href="/users/edit" class="dropdown-item dropdown-item--suscription">
+                    
+                    <i class="fas fa-star" aria-hidden="true"></i>
+                    <div class="suscription-type">
+                    <small>Plan activo</small> <span>Pro</span>
+                    </div>
+                    </a>
+                <% else %>
+                    <a href="/pricing" class="dropdown-item">
+                    <i class="fas fa-star" aria-hidden="true"></i>
+                    Precios</a>
+                <% end %>
+
                 <% if current_user_is_admin %>
                     <button class="dropdown-item disabled font-weight-bold " type="button" >
                         Administrar
@@ -41,6 +60,8 @@
                     <div class="dropdown-divider"></div>
                     <%= link_to('-> Usuarios', admin_users_path, class:"dropdown-item") %>
                     <%= link_to('-> Documentos', laws_path, class:"dropdown-item")%>
+                <% end %>
+                <% if current_user_is_editor %>
                     <div class="dropdown-divider"></div>
                     <% if is_editor_mode_enabled %>
                         <a href="/admin/disable_edit_mode" class="dropdown-item">
@@ -50,7 +71,10 @@
                         Habilitar modo edición</a>
                     <% end %>
                 <% end %>
-                <%= link_to('Cerrar sesión', destroy_user_session_path, method: :delete, class:"dropdown-item") %>
+                <%= link_to(destroy_user_session_path, {class: "dropdown-item", method: 'delete' }) do %>
+                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                    Cerrar sesión
+                <% end %>
             </div>
         </div>
     </ul>
@@ -59,13 +83,13 @@
 <style>
     #topNavbar{
         margin-bottom: 0px; 
-        z-index: 1000; 
+        z-index: 1040; 
         justify-content: space-between;
         background: #171F2A;
         padding: 5px 20px;
     }
 
-    #logo{
+    .logo{
       background-color: #171F2A;
     }
 
@@ -91,12 +115,9 @@
         color: #FFFFFF;
     }
 
-    .navbar-brand{
-        /* padding-left: 15%; */
-    }
-
-    #menu-botton{
-        
+    .btn-pro {
+    box-sizing: border-box;
+    margin: .5rem 23px;
     }
 
     .dropdown-menu .btn-avatar-large {
@@ -116,6 +137,25 @@
         align-items: center;
         border-bottom: 1px solid rgba(255,255,255,.2);
         margin-bottom: 1em;
+    }
+
+    .dropdown-item--suscription {
+        display: flex; 
+        flex-direction: row;
+        align-content: center;
+        align-items: center;
+    }
+
+    .dropdown-item--suscription svg{
+        margin-right: 6px;
+    }
+
+    .dropdown-item--suscription small{
+        text-transform: uppercase;
+        font-size: .65rem;
+        line-height: .3rem;
+        display: block;
+        padding-top: .5rem;
     }
 
     @media only screen and (max-width: 767.98px){
@@ -144,6 +184,7 @@
 
     #topNavbar{
       padding: 5px 10vw;
-  }
+    }
+   }
 </style>
 

@@ -1,0 +1,266 @@
+
+<nav class="navbar navbar-expand-lg navbar-light  sticky-top" id="topNavbar">
+    <a class="btn navbar-back-arrow" id="navbar-back-button" style="font-size: 1.5rem; color: #171F2A; padding-left: 0px;"> 
+        <i class="fas fa-arrow-left"></i>
+    </a>
+    <a href="/" class="navbar-brand text-primary" >
+        <img  src="/img/top_navbar/law_top_navbar.svg" alt="Card image cap" class="gray-logo img-fluid">
+        <img  src="/img/top_navbar/top_navbar.svg" alt="Card image cap" class="white-logo img-fluid">
+         
+        <img src="/img/top_navbar/Logo-letras-white.svg" alt="Card image cap" class="todolegal img-fluid">
+    </a>
+    <ul class="navbar-nav" >
+        <div class="btn-group">
+            <button type="button" class="btn btn-light search-button" id="hideDocumentContainer-button">
+                <i class="fas fa-search"></i>
+            </button>
+            <button type="button" class="btn btn-primary btn-lg btn-avatar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border-radius: 50%;"  data-display="static" id="menu-botton">
+                <% if current_user.first_name %>
+                    <%= current_user.first_name[0]%>
+                <% end %>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right">
+                <div class="name-container">
+                <div class="circle btn-avatar btn-avatar-large">
+                    <% if current_user.first_name.present? && current_user.last_name.present? %>
+                        <%= current_user.first_name[0].upcase + current_user.last_name[0].upcase%>
+                    <% end %>
+                </div>
+                <% if current_user.first_name && current_user.last_name %>
+                    <%= current_user.first_name + " " + current_user.last_name %>
+                <% end %>
+                <div>
+                    
+                </div>
+                </div>
+
+                <a href="/users/edit" class="dropdown-item">
+                <i class="fas fa-user" aria-hidden="true"></i>
+                Tu cuenta</a>
+                <a href="/invite_friends" class="dropdown-item">
+                <i class="fas fa-gift" aria-hidden="true"></i>
+                Invitar amigos</a>
+
+                 <% if current_user_is_pro %>
+                    <!--
+                    <form method="POST" action="/create_customer_portal_session">
+                        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                        <input type="submit" class="btn btn-primary" value="Manejar Suscripción Pro">
+                    </form>-->
+                    <a href="/users/edit" class="dropdown-item dropdown-item--suscription">
+                    
+                    <i class="fas fa-star" aria-hidden="true"></i>
+                    <div class="suscription-type">
+                    <small>Plan activo</small> <span>Pro</span>
+                    </div>
+                    </a>
+                <% else %>
+                    <a href="/pricing" class="dropdown-item">
+                    <i class="fas fa-star" aria-hidden="true"></i>
+                    Precios</a>
+                <% end %>
+                
+                <% if current_user_is_admin %>
+                    <button class="dropdown-item disabled font-weight-bold " type="button" >
+                        Administrar
+                    </button>
+                    <div class="dropdown-divider"></div>
+                    <%= link_to('-> Usuarios', admin_users_path, class:"dropdown-item") %>
+                    <%= link_to('-> Documentos', laws_path, class:"dropdown-item")%>
+                    <div class="dropdown-divider"></div>
+                    <% if is_editor_mode_enabled %>
+                        <a href="/admin/disable_edit_mode" class="dropdown-item">
+                        Deshabilitar modo edición</a>
+                    <% else %>
+                        <a href="/admin/enable_edit_mode" class="dropdown-item">
+                        Habilitar modo edición</a>
+                    <% end %>
+                <% end %>
+                <%= link_to('Cerrar sesión', destroy_user_session_path, method: :delete, class:"dropdown-item") %>
+            </div>
+        </div>
+    </ul>
+</nav>
+
+<script>
+    var hide_document_container = document.getElementById("hideDocumentContainer-button");
+
+    hide_document_container.addEventListener('click', (event) => {
+        console.log("hide document container");
+        document.getElementsByClassName("container--visualizador")[0].style.display = "none";
+        document.getElementById("topNavbar").style.display = "none";
+        document.getElementsByClassName("search--container")[0].style.display = "block";
+    })
+
+    // function hideDocumentContainer () {
+    //     console.log("hide document container");
+    //     document.getElementsByClassName("container--visualizador")[0].style.display = "none";
+    //     document.getElementById("topNavbar").style.display = "none";
+    //     document.getElementsByClassName("search--container")[0].style.display = "block";
+    // }
+
+    var back_button = document.getElementById("navbar-back-button");
+    back_button.addEventListener("click", function () {
+        window.history.back();
+    })
+</script>
+
+<style>
+    #topNavbar{
+        margin-bottom: 0px; 
+        z-index: 1040; 
+        justify-content: space-between;
+        background: #171F2A;
+        padding: 5px 20px;
+    }
+
+    .todolegal{
+        margin-left: 18px;
+    }
+
+    .white-logo{
+      background-color: #171F2A;
+    }
+
+    .gray-logo{
+        display: none;
+    }
+
+    /* .btn-back {
+        display: none;
+    } */
+
+    .navbar-back-arrow{
+        font-size: 1.5rem; 
+        color: black;
+        height: 24px;
+        display: none;
+    }
+
+    .circle{
+        height: 60px;
+        width: 60px;
+        color: white; 
+        border-radius: 50%;
+        font-weight: 800;
+        font-size: 40px;
+        line-height: 48px;
+        display: flex;
+        align-items: center;
+        padding-left: 20px;
+    }
+
+    .dropdown-menu{
+        background: #171F2A;
+        min-width: 18em;
+    }
+
+    .dropdown-item{
+        color: #FFFFFF;
+    }
+
+    .navbar-brand{
+        /* padding-left: 15%; */
+    }
+
+    .search-button{
+        display: none;
+        background: #F2F5F8;
+        /* border: none; */
+        /* outline: none; */
+    }
+
+    .dropdown-menu .btn-avatar-large {
+    height: 60px;
+    width: 60px;
+    font-size: 22px;
+    margin: 0.25em .85em 1em;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    }
+
+    .name-container {
+        color: white;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        border-bottom: 1px solid rgba(255,255,255,.2);
+        margin-bottom: 1em;
+    }
+
+    .dropdown-item--suscription {
+        display: flex; 
+        flex-direction: row;
+        align-content: center;
+        align-items: center;
+    }
+
+    .dropdown-item--suscription svg{
+        margin-right: 6px;
+    }
+
+    .dropdown-item--suscription small{
+        text-transform: uppercase;
+        font-size: .65rem;
+        line-height: .3rem;
+        display: block;
+        padding-top: .5rem;
+    }
+
+    @media only screen and (max-width: 767.98px){
+        .todolegal{
+            margin:0px;
+            display: none;
+        }
+
+        #topNavbar{
+            background: #F2F5F8;
+            justify-content:
+        }
+
+        .navbar-light .btn-primary {
+            background: #505864;
+            border: 1px solid #505864;
+        }
+
+        .navbar-light .dropdown-item,
+        .navbar-light .name-container {
+            color: #505864;
+        }
+
+        .navbar-expand-lg .navbar-nav .dropdown-menu {
+            width: 100%;
+            position: fixed;
+            left: 0;
+            top: 62px;
+            border-radius: 0 0 2px 2px;
+            background: #F2F5F8;
+        }
+
+        .white-logo{
+            display: none
+        }
+
+        .gray-logo{
+            display: block;
+            margin-left: 85%;
+        }
+
+        .navbar-back-arrow{
+            display: block;
+        }
+
+        .search-button{
+            display: block;
+        }
+    }
+
+   @media only screen and (min-width: 1200px){
+
+        #topNavbar{
+            padding: 5px 10vw;
+        }
+    }
+</style>
+

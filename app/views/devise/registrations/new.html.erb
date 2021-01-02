@@ -3,7 +3,18 @@
 <section>
   <div class="container">
     <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-
+      <% if @go_to_law %>
+        <input type="hidden" id="go_to_law" name="go_to_law" value="<%= @go_to_law %>">
+      <% end %>
+      <% if @go_to_checkout %>
+        <input type="hidden" id="go_to_checkout" name="go_to_checkout" value="<%= @go_to_checkout %>">
+      <% end %>
+      <% if @is_monthly %>
+        <input type="hidden" id="is_monthly" name="is_monthly" value="<%= @is_monthly %>">
+      <% end %>
+      <% if @pricing_onboarding %>
+        <input type="hidden" id="pricing_onboarding" name="pricing_onboarding" value="<%= @pricing_onboarding %>">
+      <% end %>
       <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="false">
         <div class="carousel-inner">
           <div class="carousel-item active" id="account">
@@ -47,14 +58,14 @@
                   <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", id:"confirmPassword"%>
                 </div>
                 <div class="form-group">
-                  <button type="button" class="btn btn-primary btn-block btn-next" id="nextButton" data-target="#carouselExampleIndicators" 
+                  <button type="button" class="btn btn-primary btn-block btn-next btn-lg" id="nextButton" data-target="#carouselExampleIndicators" 
                   data-slide-to="1" data-container="body" data-toggle="popover" data-placement="top" data-trigger="focus"
                   data-content="Complete todos los campos." onclick="required()">Siguiente</button>
                 </div>
               </div>
               <!-------------------------------- End of Card Body ------------------------------------------->
             </div>
-            <p class="content text-center">Al crear una cuenta, accedes a los <a href="/terms">Términos y condiciones</a></p>
+            <p class="content text-center">Al crear una cuenta, accedes a los <a href="/terms" target="_blank">Términos y condiciones</a></p>
           <!-------------------------------- End of Register Card ------------------------------------------->
           </div>
           <div class="carousel-item">
@@ -62,7 +73,7 @@
             <div class="containter" id="back-icon-container">
               <i class="fas fa-arrow-left" id="back-icon" data-target="#carouselExampleIndicators"  data-slide-to="0"></i>
               <a href="/" class="back-image" data-toggle="modal" data-target="#cancelRegistrationModal">
-                <img src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" id="logo">
+                <img src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="img-fluid">
               </a>
             </div>
 
@@ -73,7 +84,7 @@
                   <div class="modal-body">
                     <h5 class="modal-title" id="cancelModalLongTitle">¿Estás seguro que deseas salir?</h5>
                     <label id="labelBasico">
-                      Una vez que regreses a la página inicial no se guardará la información que llenaste aquí.
+                      Una vez que regreses a la página inicial no se guardará la información que ingresaste.
                     </label>
                     <div class="form-group" id="bottonsGroup">
                       <%= link_to 'Salir', root_path, id:"okButton", class:"btn btn-primary", style:"padding-top: 10px;"%>
@@ -127,7 +138,7 @@
                 <i class="fas fa-info-circle"></i>
                 Más información</a>
                 <div class="form-group">
-                  <%= f.submit "Crear cuenta", class: 'btn btn-primary btn-block btn-next', id:"registerButton", onclick:"sendParameter()"%>
+                  <%= f.submit "Crear cuenta", class: 'btn btn-primary btn-block btn-next btn-lg', id:"registerButton", onclick:"sendParameter()"%>
                 </div>
               </div>
               <!-------------------------------- End of Card Body ------------------------------------------->
@@ -146,19 +157,11 @@
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
-              <h5 class="modal-title" id="cancelModalLongTitle">¿Cómo contribuir?</h5>
-              <h5 class="modal-subtitle" style="margin-top: 30px;"> 1. Regístrate</h5> 
-              <label class="more-info-text">
-                Termina de crear tu cuenta para tener como ponernos en contacto.
-              </label>
-              <h5 class="modal-subtitle"> 2. Participa</h5> 
-              <label class="more-info-text">
-                Recibirás invitación cuando tengamos una entrevista y/o prueba de usuario para ti (Te daremos más información junto a la invitación).
-              </label>
-              <h5 class="modal-subtitle"> 3. Contribuye</h5> 
-              <label class="more-info-text" style="margin-bottom: 20px;">
-                Tu participación nos ayudará al continuo desarrollo y mejoras del producto. Construimos TodoLegal en conjunto.
-              </label>
+              <h2 class="modal-title" id="cancelModalLongTitle">¿Cómo Funciona?</h2>
+              <h5 class="modal-subtitle" style="margin-top: 30px;"> TodoLegal es un producto en constante mejora </h5> 
+              <p class="more-info-text">
+                Si seleccionas está opción, un miembro de nuestro equipo te contactará para que formes parte del panel de usuarios. Y puedas darnos retroalimentación sobre ideas futuras que estén en nuestro plan de desarrollo; o para informarnos sobre errores que experimentes en el sistema.
+              </p>
               <div class="form-group" id="bottonsGroup">
                 <button type="button" id="dismissBtn" class="btn btn-secondary" data-dismiss="modal">Entendido</button>
               </div>
@@ -167,85 +170,12 @@
         </div>
       </div>
       <!--End More info modal -->
-
+      <%= javascript_pack_tag "form_validator" %>
     <% end %>
   </div>
 </section>
 
 <script>
-  //validate if input fields were filled with the right format and activates the popover when needed
-  bootstrapValidate('#name', 'required:Debes ingresar tu nombre', function (isValid){
-    if(isValid)
-    {
-      $('#nextButton').unbind();
-      $('#nextButton').popover('hide')
-    } else
-    {
-      $('#nextButton').click(function (e) {
-        $('#nextButton').popover('show')
-        e.preventDefault();
-        e.stopPropagation();
-      });
-    }
-  });
-  bootstrapValidate('#lastName', 'required:Debes ingresar tu apellido', function (isValid){
-    if(isValid)
-    {
-      $('#nextButton').unbind();
-      $('#nextButton').popover('hide')
-    } else
-    {
-      $('#nextButton').click(function (e) {
-        $('#nextButton').popover('show');
-        e.preventDefault();
-        e.stopPropagation();
-      });
-    }
-
-  });
-  bootstrapValidate('#email', 'email:Debes ingresar un correo válido', function (isValid){
-    if(isValid)
-    {
-      $('#nextButton').unbind();
-      $('#nextButton').popover('hide')
-    } else
-    {
-      $('#nextButton').click(function (e) {
-        $('#nextButton').popover('show')
-        e.preventDefault();
-        e.stopPropagation();
-      });
-    }
-
-  });
-  bootstrapValidate('#password', 'min:6:Debes ingresar una contraseña válida',function (isValid){
-    if(isValid)
-    {
-      $('#nextButton').unbind();
-      $('#nextButton').popover('hide')
-    } else
-    {
-      $('#nextButton').click(function (e) {
-        $('#nextButton').popover('show')
-        e.preventDefault();
-        e.stopPropagation();
-      });
-    }
-  });
-  bootstrapValidate('#confirmPassword', 'matches:#password:Tus contraseñas deben ser iguales', function (isValid){
-    if(isValid)
-    {
-      $('#nextButton').unbind();
-      $('#nextButton').popover('hide')
-    } else
-    {
-      $('#nextButton').click(function (e) {
-        $('#nextButton').popover('show')
-        e.preventDefault();
-        e.stopPropagation();
-      });
-    }
-  });
 
   //prevent nextButton click is input fields are empty
   function required ()
@@ -360,27 +290,39 @@
   }
 
   .img-fluid{
-    height: 15vh;
+    height: 12vh;
+    max-height: 110px;
     margin: 2vh auto 0;
     display: block;
   }
-  
-  .back-image{
-    margin-left: 28%;
-    margin-right: auto;
-  }
 
-  #logo{
-    width: 130px;
-  }
-
-  #back-icon{
-    font-size: 2rem;
+  .back-image {
+    width: 30%;
+    display: block;
+    margin: auto;
   }
 
   #back-icon-container{
     width: 75%;
-    margin-left: 12.5%;
+    margin: auto;
+    position: relative;
+  }
+
+   #back-icon{
+    font-size: 1.5rem;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: auto; 
+    margin: auto;
+    color: #495057;
+    transition: color .2s ease-in-out;
+    cursor: pointer;
+  }
+
+   #back-icon:hover {
+    color: #171F2A;
   }
 
   .content{
@@ -411,16 +353,12 @@
     text-align: center;
   }
 
-  #dismissBtn, #okButton{
-    border-radius: 8px;
-  }
-
   #okButton{
     width: 150px;
   }
 
   #dismissBtn{
-    background: #F2F5F8; 
+    background: #EFF3F7; 
     color: #505864; 
     border:none;
     padding-left: 10px;
@@ -451,18 +389,18 @@
   .more-info-text{
     font-family: -apple-system, sans-serif;
     color: #505864;
-    text-align: left;
     font-size: 18px;
     line-height: 21px;
+    text-align: center;
 }
 
   .modal-subtitle{
     color: #fc5603;
-    text-align: left;
     font-family: -apple-system, sans-serif;
     font-weight: bold;
-    margin-top: 15px;
-    line-height: 10px;
+    margin: 2rem auto;
+    line-height: 1.25rem;
+    text-align: center;
   }
 
   @media only screen and (max-width: 767.98px){
@@ -490,11 +428,6 @@
       margin-left: auto;
       margin-right: auto;
       display: block;
-    }
-    
-    .back-image{
-      margin-left: 27.5%;
-      margin-right: auto;
     }
 
     #logo{

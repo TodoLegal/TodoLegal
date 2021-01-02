@@ -65,12 +65,14 @@ function filterIndice() {
 var currrent_highlighted = 0;
 var highlighted_count = document.getElementsByClassName('highlighted').length;
 
-if(highlighted_count > 0)
+if(highlighted_count > 0){
+  highlighted_count = highlighted_count / 2; 
   updateHighlightedView()
+}
 
 function updateHighlightedView()
 {
-  document.getElementById("result-count-big").innerText = (currrent_highlighted + 1) +"/"+highlighted_count
+  document.getElementById("result-count-big").innerText = (currrent_highlighted + 1) +" de "+highlighted_count
   element_highlighted = document.getElementsByClassName('highlighted')[currrent_highlighted]
   console.log(currrent_highlighted)
   console.log(element_highlighted)
@@ -173,7 +175,6 @@ function gotoArticle(article_number)
   
   article_focused = document.getElementById('article_count_' + current_article)
   article_focused.scrollIntoView({block: 'center'})
-  console.log(23)
   article_focused.style['background-color'] = "var(--c-selected-article-background)"
   article_focused.style['color'] = "var(--c-selected-article-text)"
 }

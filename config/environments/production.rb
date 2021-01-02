@@ -1,24 +1,27 @@
 require 'discordrb'
 
+puts '[Discord bot]: Initializing'
+if !ENV['EXCEPTION_BOT_TOKEN'].blank?
+  $discord_bot = Discordrb::Bot.new token: ENV['EXCEPTION_BOT_TOKEN'], client_id: 717812663761240117
+end
+$discord_bot_channel_code = 717989750421848115
+$discord_bot_channel_notifications = 742414195928203296
+
 module ExceptionNotifier
   class DiscordNotifier
     def initialize(options)
-      puts '[Discord bot]: Initializing'
-      if options[:token] && options[:client_id] && options[:channel_id]
-        @@channel_id = options[:channel_id]
-
-        @@bot = Discordrb::Bot.new token: options[:token], client_id: options[:client_id]
-
+      if $discord_bot
         Thread.new {
           puts "[Discord bot]: Starting bot thread"
-          @@bot.run
+          $discord_bot.run
         }
+        $discord_bot.send_message($discord_bot_channel_code, "Se ha reiniciado el ambiente de producción :rocket:")
       end
     end
 
     def call(exception, options={})
       puts '[Discord bot]: Exception found'
-      @@bot.send_message(@@channel_id, "Encontré un error! " + exception.to_s)
+      $discord_bot.send_message($discord_bot_channel_code, "Encontré un error! " + exception.to_s)
     end
   end
 end
@@ -61,7 +64,7 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
-  config.active_storage.service = :local
+  config.active_storage.service = :google
 
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
@@ -80,6 +83,7 @@ Rails.application.configure do
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
+  config.cache_store = :memory_store
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter     = :resque

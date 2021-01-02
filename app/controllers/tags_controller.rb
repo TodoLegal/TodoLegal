@@ -25,7 +25,7 @@ class TagsController < ApplicationController
     if @query
       @query = params[:query]
       @laws = @tag.laws.search_by_name(@query).with_pg_search_highlight
-      @stream = Article.where(law: @tag.laws).search_by_body(@query).group_by(&:law_id)
+      @stream = Article.where(law: @tag.laws).search_by_body_highlighted(@query).group_by(&:law_id)
       @result_count = @laws.size
       @articles_count = @stream.size
       legal_documents = Set[]
@@ -49,10 +49,26 @@ class TagsController < ApplicationController
       else
         @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' resultados encontrados en la materia ' + @tag.name
       end
-      if @legal_documents_count > 1
-        @result_info_text += " en " + @legal_documents_count.to_s + " documentos legales."
-      elsif @legal_documents_count == 1
-        @result_info_text += " en " + @legal_documents_count.to_s + " documento legal."
+      titles_result = number_with_delimiter(@laws.size, :delimiter => ',')
+      if @laws.size == 1
+        @titles_result_text = titles_result.to_s + ' resultado'
+      else
+        @titles_result_text = titles_result.to_s + ' resultados'
+      end
+      articles_result = number_with_delimiter(@result_count - @laws.size, :delimiter => ',')
+      if @result_count == 1
+        @articles_result_text = articles_result.to_s + ' resultado'
+      else
+        @articles_result_text = articles_result.to_s + ' resultados'
+      end
+
+      if current_user
+        $tracker.track(current_user.id, 'Site Search', {
+          'query' => @query,
+          'tag' => @tag.name,
+          'titles_result' => titles_result,
+          'articles_result' => articles_result
+        })
       end
     else
       @laws = @tag.laws
@@ -61,9 +77,9 @@ class TagsController < ApplicationController
         .order('COUNT(articles.id) DESC')
       @result_count = @laws.count.values.size
       if @result_count == 1
-        @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' documento legal.'
+        @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' ley.'
       else
-        @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' documentos legales.'
+        @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' leyes.'
       end
     end
   end

@@ -57,12 +57,11 @@
 
   <!-- Page Content  -->
   <div id="content" style="padding: 0px">
-
-  <%= yield %>
+    <%= yield %>
   </div>
 
   <div class="overlay"></div>
-
+  <script src="/js/law_navigation.js"></script>
   <style>
     .customButton{
       display: block;
@@ -75,5 +74,6 @@
     }
   </style>
   <script src="/menu_control.js"></script>
+  <%= render 'laws/law_postscripts' %>
 </body>
 </html>

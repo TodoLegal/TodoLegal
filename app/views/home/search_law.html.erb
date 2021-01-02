@@ -4,20 +4,14 @@
   <% content_for :title, @query + " - TodoLegal" %>
 <% end %>
 
-<div class="jumbotron d-none d-sm-block" align="center" style="padding-top: 0px; padding-bottom: 20px;background-color: #EFF3F8;margin: 0px">
-  <a href="/"><img src="/img/logo_header.png" class="img-fluid-vertical" height="300"></a>
-</div>
+<div class="container container--results">
 
-<div class="jumbotron d-block d-sm-none" style="padding-top: 0px; padding-bottom: 40px;background-color: #EFF3F8;margin: 0px">
-  <a href="/"><img align="center" src="/img/logo_landing_mobile.png" class="img-fluid" height="300"></a>
-</div>
+  <section style="margin-bottom: 40px;">
+    <%= render partial: 'search_law_input', locals: {target_url: '/search_law', home_flag: false} %>
+  </section>
 
-<div class="container">
+  <%= render partial: 'search_result', locals:{home_flag: false} %>
 
-  <%= render partial: 'search_law_input', locals: {target_url: '/search_law'} %>
-
-  <%= render 'search_result' %>
-
-  <%= link_to 'Ir a inicio', root_path %>
+  <%# <%= link_to 'Ir al inicio', root_path %>
 
 </div>

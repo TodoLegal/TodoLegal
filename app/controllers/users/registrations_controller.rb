@@ -9,10 +9,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # GET /resource/sign_up
   def new
+    @go_to_law = params[:go_to_law]
+    @go_to_checkout = params[:go_to_checkout]
+    @is_monthly = params[:is_monthly]
+    @pricing_onboarding = params[:pricing_onboarding]
     super
-    if params[:go_to_law]
-      session[:redirect_to_law] = params[:go_to_law]
-    end
   end
 
   # POST /resource
@@ -22,9 +23,33 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   # GET /resource/edit
-  # def edit
-  #   super
-  # end
+  def edit
+    if current_user and current_user.stripe_customer_id
+      begin
+        @customer = Stripe::Customer.retrieve(current_user.stripe_customer_id)
+        @current_user_plan_is_active = current_user_plan_is_active @customer
+        if @customer.subscriptions.data.size > 0
+          if @customer.subscriptions.data.first.cancel_at
+            @cancel_at = Time.at(@customer.subscriptions.data.first.cancel_at)
+            @cancel_at_year = @cancel_at.year
+            @cancel_at_month = @cancel_at.month
+            @cancel_at_day = @cancel_at.day
+          end
+          if @customer.subscriptions.data.first.current_period_end
+            @current_period_end = Time.at(@customer.subscriptions.data.first.current_period_end)
+            @current_period_end_year = @current_period_end.year
+            @current_period_end_month = @current_period_end.month
+            @current_period_end_day = @current_period_end.day
+          end
+        end
+      rescue
+        @customer = nil
+        @current_user_plan_is_active = false
+      end
+    end
+    super
+    update_mixpanel_user current_user
+  end
 
   # PUT /resource
   def update
@@ -60,9 +85,19 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # The path used after sign up.
   def after_sign_up_path_for(resource)
+    update_mixpanel_user current_user
+    if current_user
+      $tracker.track(current_user.id, 'Sign Up', {})
+    end
+    if $discord_bot
+      $discord_bot.send_message($discord_bot_channel_notifications, "Se ha registrado un nuevo usuario :tada:")
+    end
     session[:user_just_signed_up] = true
-    root_path
-    # invite_friends_path(is_onboarding:true)
+    if params[:pricing_onboarding]
+      checkout_path(is_onboarding:true, go_to_law: params[:go_to_law], is_monthly: params[:is_monthly])
+    else
+      pricing_path(is_onboarding:true, go_to_law: params[:go_to_law], go_to_checkout: params[:go_to_checkout], user_just_registered: true)
+    end
   end
 
   def after_update_path_for(resource)
@@ -93,5 +128,20 @@ class Users::RegistrationsController < Devise::RegistrationsController
     if params[:user][:occupation] && params[:user][:occupation] == ""
       params[:user][:occupation].replace("Otro")
     end
+  end
+
+  def update_mixpanel_user user
+    $tracker.people.set(user.id, {
+      '$email'            => user.email,
+      'first_name'      => user.first_name,
+      'last_name'      => user.last_name,
+      'occupation'      => user.occupation,
+      'is_contributor'      => user.is_contributor,
+      'current_sign_in_at'      => user.current_sign_in_at,
+      'last_sign_in_at'      => user.last_sign_in_at,
+      'current_sign_in_ip'      => user.current_sign_in_ip,
+      'last_sign_in_ip'      => user.last_sign_in_ip,
+      'receive_information_emails'      => user.receive_information_emails
+    }, ip = user.current_sign_in_ip, {'$ignore_time' => 'true'});
   end
 end

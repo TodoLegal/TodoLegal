@@ -8,8 +8,8 @@ class Law < ApplicationRecord
   has_many :sections, :dependent => :destroy
   has_many :subsections, :dependent => :destroy
   has_many :articles, :dependent => :destroy
-  has_many :law_tags, :dependent => :destroy
   has_many :law_modifications, :dependent => :destroy
+  has_many :law_tags, :dependent => :destroy
   has_many :tags, through: :law_tags, :dependent => :destroy
 
   pg_search_scope :search_by_name,
@@ -32,6 +32,10 @@ class Law < ApplicationRecord
                   }
 
   def to_param
+    friendly_url
+  end
+  
+  def friendly_url
     [id, name.parameterize].join('-')
   end
 
@@ -45,5 +49,29 @@ class Law < ApplicationRecord
       materia_names.push(materia.name)
     end
     return materia_names
+  end
+
+  def cached_books_count
+    Rails.cache.fetch([self, "books_count"]) { books.size }
+  end
+
+  def cached_titles_count
+    Rails.cache.fetch([self, "titles_count"]) { titles.size }
+  end
+
+  def cached_chapters_count
+    Rails.cache.fetch([self, "chapters_count"]) { chapters.size }
+  end
+
+  def cached_sections_count
+    Rails.cache.fetch([self, "sections_count"]) { sections.size }
+  end
+
+  def cached_subsections_count
+    Rails.cache.fetch([self, "subsections_count"]) { subsections.size }
+  end
+
+  def cached_articles_count
+    Rails.cache.fetch([self, "articles_count"]) { articles.size }
   end
 end

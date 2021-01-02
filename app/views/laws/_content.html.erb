@@ -2,15 +2,42 @@
   strong {font-weight:bold;}
   .bigger-section {
     font-family: 'Montserrat', sans-serif;
+    color: #505864;
+    padding: 0 1.5rem;
   }
+
+  .title, .chapter, .section, .subsection{
+    font-family: SF Pro Display;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    margin-top: 18px;
+  }
+
+  .title-name, .chapter-name, .section-name, .subsection-name{ 
+    font-family: SF Pro Display;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 21px;
+  }
+
   .article {
     font-family: 'Merriweather', serif;
   }
 </style>
-
 <div>
   <% if @articles_count == 0 %>
-    <p>Intenta tu búsqueda de nuevo cambiando las palabras o revisando la ortografía.</p>
+    <div class="container--empty-results">
+      <p class="body">No se han encontrado leyes que coincidan con <strong><%= @query %></strong>.</p>
+      <div class="no-result-message">
+        <img src="/img/img-search-doc.svg" />
+        <p class="body body--secondary">
+          Asegurate de haber escrito la busqueda correctamente, sino intenta con un término similar. Recuerda que puedes refinar tu busqueda por título, palabra clave y número de artículo.
+        </p>
+      </div>
+    </div>
   <% end %>
   <% article_iterator = 0 %>
   <% bigger_section_iterator = 0 %>
@@ -29,66 +56,91 @@
     <% end %>
     <% if stream.instance_of? Title %>
       <div class="bigger-section" id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
-        <h2 id="title_<%= stream.position %>">
+        <h2 class="title" id="title_<%= stream.position %>">
           Título <%= stream.number %>
           <% if @user_can_edit_law && is_editor_mode_enabled %>
             <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_title_path(stream) %>
           <% end %>
         </h2>
-        <h3><%= stream.name %></h3>
+        <h3 class="title-name"><%= stream.name %></h3>
       </div>
       <% bigger_section_iterator += 1 %>
     <% end %>
     <% if stream.instance_of? Chapter %>
       <div class="bigger-section" id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
-        <h3 id="chapter_<%= stream.position %>">
+        <h3 class="chapter" id="chapter_<%= stream.position %>">
           Capítulo <%= stream.number %>
           <% if @user_can_edit_law && is_editor_mode_enabled %>
             <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_chapter_path(stream) %>
           <% end %>
         </h3>
-        <h4><%= stream.name %></h4>
+        <h4 class="chapter-name" ><%= stream.name %></h4>
       </div>
       <% bigger_section_iterator += 1 %>
     <% end %>
     <% if stream.instance_of? Section %>
       <div class="bigger-section" id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
-        <h4 id="section_<%= stream.position %>">
+        <h4 class="section" id="section_<%= stream.position %>">
           Sección <%= stream.number %>
           <% if @user_can_edit_law && is_editor_mode_enabled %>
             <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_section_path(stream) %>
           <% end %>
         </h4>
-        <h5><%= stream.name %></h5>
+        <h5 class="section-name"><%= stream.name %></h5>
       </div>
       <% bigger_section_iterator += 1 %>
     <% end %>
     <% if stream.instance_of? Subsection %>
       <div class="bigger-section" id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
-        <h5 id="subsection_<%= stream.position %>">
+        <h5 class="subsection" id="subsection_<%= stream.position %>">
           <%= stream.number %>
           <% if @user_can_edit_law && is_editor_mode_enabled %>
             <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_subsection_path(stream) %>
           <% end %>
         </h5>
-        <h5><%= stream.name %></h5>
+        <h5 class="subsection-name"><%= stream.name %></h5>
       </div>
       <% bigger_section_iterator += 1 %>
     <% end %>
     <% if stream.instance_of? Article %>
-      <div align="justify" style="color: #444; padding: 10px" onclick="onClickArticle(<%= article_iterator %>)" class="article" article_id="<%= article_iterator %>" last_bigger_section="<%= bigger_section_iterator - 1 %>" next_bigger_section="<%= bigger_section_iterator %>" id="article_count_<%= article_iterator %>">
-        <b class="article-name" align="justify" style="color: #111;font-weight:bold;">Artículo <%= stream.number %><br>
-          <% if @user_can_edit_law && is_editor_mode_enabled %>
-            <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_article_path(stream) %>
+      <% if is_mobile == false %>
+        
+      <% end %>
+      <!-- highlited search for serch results preview in mobile version -->
+      <% if is_mobile %>
+        <div style="color: #444; padding: 10px" onclick="onClickArticle(<%= article_iterator %>)" class="article" article_id="<%= article_iterator %>" last_bigger_section="<%= bigger_section_iterator - 1 %>" next_bigger_section="<%= bigger_section_iterator %>" id="article_count_<%= article_iterator %>">
+          <a class="uncolored_link articles-preview" id="link_article_count_<%= article_iterator %>" href="<%= law_path(@law) + '?query=/'+@query+"/"+(stream.number.lstrip)%>"  aria-controls="articulos" aria-selected="true">
+          <h6 class="article-name" style="color: #111;font-weight:bold; display: block;">Artículo <%= stream.number %><br>
+            <% if @user_can_edit_law && is_editor_mode_enabled %>
+              <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_article_path(stream) %>
+            <% end %>
+          </h6>
+          </a>
+          <% if @highlight_enabled %>
+            <a class="uncolored_link articles-preview" id="link_article_count_<%= article_iterator %>" href="<%= law_path(@law) + '?query=/'+@query+"/"+(stream.number.lstrip)%>"  aria-controls="articulos" aria-selected="true">
+              <%= stream.pg_search_highlight.html_safe %>
+            </a>
+            <hr>
+          <% else %>
+            <%= stream.class.markdown.render(stream.body).html_safe %>
           <% end %>
-        </b>
-        <% if @highlight_enabled %>
-          <%= stream.pg_search_highlight.html_safe %>.
-        <% else %>
-          <%= stream.class.markdown.render(stream.body).html_safe %>
-        <% end %>
-      </div>
-      <% article_iterator += 1 %>
+        </div>
+      <% else %>
+        <div align="justify" onclick="onClickArticle(<%= article_iterator %>)" class="article-p" article_id="<%= article_iterator %>" last_bigger_section="<%= bigger_section_iterator - 1 %>" next_bigger_section="<%= bigger_section_iterator %>" id="article_count_<%= article_iterator %>">
+          <b class="article-name" align="justify" style="color: #111;font-weight:bold; display: block;">Artículo <%= stream.number %><br>
+            <% if @user_can_edit_law && is_editor_mode_enabled %>
+              <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_article_path(stream) %>
+            <% end %>
+          </b>
+          <% if @highlight_enabled %>
+            <%= stream.pg_search_highlight.html_safe %>.
+          <% else %>
+            <%= stream.class.markdown.render(stream.body).html_safe %>
+          <% end %>
+        </div>
+      <% end %>
+    <% article_iterator += 1 %>
     <% end %>
   <% end %>
 </div>
+<%= javascript_pack_tag "trim_articles_for_preview" %>

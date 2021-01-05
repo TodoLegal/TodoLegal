@@ -76,6 +76,13 @@ class DocumentsController < ApplicationController
     end
   end
 
+  def getCleanDescription description
+    description = description.truncate(400)
+    while description.size > 0 and description[0] =~ /[A-Za-z]/
+      description[0] = ''
+    end
+  end
+
   def run_gazette_script document, document_pdf_path
     # run brazilian script
     puts "Starting python script"
@@ -86,7 +93,7 @@ class DocumentsController < ApplicationController
     # set original document values
     puts "Setting original document values"
     document.name = first_element["name"]
-    document.description = first_element["description"].truncate(50)
+    document.description = getCleanDescription first_element["description"]
     document.publication_number = first_element["publication_number"]
     document.publication_date = first_element["publication_date"].to_date
     document.save
@@ -111,7 +118,7 @@ class DocumentsController < ApplicationController
       puts "Creating: " + file["name"]
       new_document = Document.create(
         name: file["name"],
-        description: file["description"].truncate(50),
+        description: getCleanDescription file["description"],
         publication_number: document.publication_number,
         publication_date: document.publication_date)
       tag = Tag.find_by_name(file["tag"])

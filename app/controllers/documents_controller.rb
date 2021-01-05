@@ -114,11 +114,12 @@ class DocumentsController < ApplicationController
     )
     # create the related documents
     puts "Creating related documents"
+    description = getCleanDescription file["description"]
     json_data["files"].drop(1).each do |file|
       puts "Creating: " + file["name"]
       new_document = Document.create(
         name: file["name"],
-        description: getCleanDescription file["description"],
+        description: description,
         publication_number: document.publication_number,
         publication_date: document.publication_date)
       tag = Tag.find_by_name(file["tag"])

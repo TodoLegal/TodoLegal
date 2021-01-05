@@ -78,7 +78,7 @@ class DocumentsController < ApplicationController
 
   def getCleanDescription description
     description = description.truncate(400)
-    while description.size > 0 and description[0] =~ /[A-Za-z]/
+    while description.size > 0 and !(description[0] =~ /[A-Za-z]/)
       description[0] = ''
     end
   end

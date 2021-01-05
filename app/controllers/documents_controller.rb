@@ -81,6 +81,7 @@ class DocumentsController < ApplicationController
     while description.size > 0 and !(description[0] =~ /[A-Za-z]/)
       description[0] = ''
     end
+    return description
   end
 
   def run_gazette_script document, document_pdf_path

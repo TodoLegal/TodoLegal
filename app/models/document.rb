@@ -16,6 +16,6 @@ class Document < ApplicationRecord
                   }
 
   def generate_friendly_url
-    [id, name.parameterize, publication_number.parameterize].join('-')
+    [id, name.parameterize, publication_number.parameterize.tr('-','')].join('-')
   end
 end

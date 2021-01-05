@@ -114,9 +114,9 @@ class DocumentsController < ApplicationController
     )
     # create the related documents
     puts "Creating related documents"
-    description = getCleanDescription file["description"]
     json_data["files"].drop(1).each do |file|
       puts "Creating: " + file["name"]
+      description = getCleanDescription file["description"]
       new_document = Document.create(
         name: file["name"],
         description: description,

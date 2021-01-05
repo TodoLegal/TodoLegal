@@ -39,6 +39,10 @@ class Api::V1::DocumentsController < ApplicationController
     if params["to"]
       documents = documents.where('publication_date <= ?', params["to"])
     end
+
+    documents_count = documents.count
+
+    # limit and offset setup
     documents = documents.limit(100)
     if params["limit"]
       documents = documents.limit(params["limit"])
@@ -46,6 +50,6 @@ class Api::V1::DocumentsController < ApplicationController
     if params["offset"]
       documents = documents.offset(params["offset"])
     end
-    render json: { "documents": documents }
+    render json: { "documents": documents, "count": documents_count }
   end
 end

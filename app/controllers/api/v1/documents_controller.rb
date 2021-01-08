@@ -24,7 +24,12 @@ class Api::V1::DocumentsController < ApplicationController
     if document.original_file.attached?
       json_document = json_document.merge(file: url_for(document.original_file))
     end
-    render json: {"document": json_document, "tags": document_tags, "related_documents": related_documents}
+    fingerprint = (request.remote_ip +
+      browser.to_s +
+      browser.device.name +
+      browser.device.id.to_s +
+      browser.platform.name).hash
+    render json: {"document": json_document, "tags": document_tags, "related_documents": related_documents, "fingerprint": fingerprint}
   end
   
   def get_documents

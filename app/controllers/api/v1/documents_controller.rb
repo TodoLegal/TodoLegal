@@ -28,8 +28,29 @@ class Api::V1::DocumentsController < ApplicationController
       browser.to_s +
       browser.device.name +
       browser.device.id.to_s +
-      browser.platform.name).hash
-    render json: {"document": json_document, "tags": document_tags, "related_documents": related_documents, "fingerprint": fingerprint}
+      browser.platform.name).hash.to_s
+    user_document_visit_tracker = UserDocumentVisitTracker.find_by_fingerprint(fingerprint)
+    if !user_document_visit_tracker
+      user_document_visit_tracker = UserDocumentVisitTracker.create(fingerprint: fingerprint, visits: 0, period_start: DateTime.now)
+    end
+    user_document_visit_tracker.visits += 1
+    if user_document_visit_tracker.period_start <= 1.minutes.ago # TODO set time window
+      user_document_visit_tracker.period_start = DateTime.now
+      user_document_visit_tracker.visits = 1
+    end
+    user_document_visit_tracker.save
+
+    todo_visits = user_document_visit_tracker.visits
+    todo_can_access = true
+    if user_document_visit_tracker.visits > 3 # TODO set amount of visits
+      todo_can_access = false
+    end
+    render json: {"document": json_document,
+      "tags": document_tags,
+      "related_documents": related_documents,
+      "visits": todo_visits,
+      "can_access": todo_can_access
+    }
   end
   
   def get_documents

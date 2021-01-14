@@ -11,13 +11,15 @@
     </div>
   <% end %>
 
+  <br>
+  
   <div class="field">
-    <%= form.label :original_file %>
     <%= form.file_field :original_file %>
   </div>
 
-  <div class="actions">
-    <%= form.submit %>
-  </div>
+  <br>
 
+  <div class="actions">
+    <%= form.submit "Subir", class: 'btn btn-primary' %>
+  </div>
 <% end %>

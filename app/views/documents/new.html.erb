@@ -1,7 +1,5 @@
 <div class="container">
-  <h1>New Document</h1>
-
+  <h1>Nueva gaceta</h1>
+  <%= link_to 'Atrás', documents_path %>
   <%= render 'new_form', document: @document %>
-
-  <%= link_to 'Back', documents_path %>
 </div>

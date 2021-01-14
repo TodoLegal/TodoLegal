@@ -38,8 +38,10 @@ class DocumentsController < ApplicationController
         storage = Google::Cloud::Storage.new(project_id:"testground", credentials: Rails.root.join("gcs.keyfile"))
         bucket = storage.bucket "testground"
         file = bucket.file @document.original_file.key
-        file.download "tmp/gazette.pdf"
-        run_gazette_script @document, "tmp/gazette.pdf"
+        if params["document"]["process_gazette"]
+          file.download "tmp/gazette.pdf"
+          run_gazette_script @document, "tmp/gazette.pdf"
+        end
         format.html { redirect_to @document, notice: 'Document was successfully created.' }
         format.json { render :show, status: :created, location: @document }
       else

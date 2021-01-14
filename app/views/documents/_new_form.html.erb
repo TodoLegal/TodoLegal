@@ -12,7 +12,12 @@
   <% end %>
 
   <br>
-  
+
+  <div class="field">
+    <%= form.label :procesar_gaceta %>
+    <%= form.check_box :process_gazette %>
+  </div>
+
   <div class="field">
     <%= form.file_field :original_file %>
   </div>

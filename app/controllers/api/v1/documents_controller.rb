@@ -22,7 +22,7 @@ class Api::V1::DocumentsController < ApplicationController
     related_documents = Document.where(publication_number: document.publication_number)
     json_document = document.as_json
     if document.original_file.attached?
-      json_document = json_document.merge(file: url_for(document.original_file))
+      json_document = json_document.merge(file: rails_blob_path(document.original_file, disposition: "attachment"))
     end
     fingerprint = (request.remote_ip +
       browser.to_s +

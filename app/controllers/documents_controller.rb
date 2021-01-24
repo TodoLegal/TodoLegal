@@ -36,7 +36,7 @@ class DocumentsController < ApplicationController
         # download file
         require "google/cloud/storage"
         storage = Google::Cloud::Storage.new(project_id:"docs-tl", credentials: Rails.root.join("gcs.keyfile"))
-        bucket = storage.bucket "docsbytodolegal"
+        bucket = storage.bucket GCS_BUCKET
         file = bucket.file @document.original_file.key
         if params["document"]["process_gazette"] == true
           file.download "tmp/gazette.pdf"

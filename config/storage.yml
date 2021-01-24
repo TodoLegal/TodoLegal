@@ -19,7 +19,7 @@ google:
   service: GCS
   project: docs-tl
   credentials: <%= Rails.root.join("gcs.keyfile") %>
-  bucket: docsbytodolegal
+  bucket: <%= GCS_BUCKET %>
 
 #google:
 #  service: GCS

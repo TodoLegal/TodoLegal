@@ -1,12 +1,16 @@
+<%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
 <div class="container">
   <p id="notice"><%= notice %></p>
 
-  <h1>Documents</h1>
+  <h1>Documentos</h1>
+
+  <%= link_to 'Subir documento', new_document_path %>
 
   <table>
     <thead>
       <tr>
-        <th>Name</th>
+        <th>Nombre</th>
+        <th>Número de publicación</th>
         <th colspan="3"></th>
       </tr>
     </thead>
@@ -25,6 +29,4 @@
   </table>
 
   <br>
-
-  <%= link_to 'New Document', new_document_path %>
 </div>

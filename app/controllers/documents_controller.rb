@@ -35,11 +35,13 @@ class DocumentsController < ApplicationController
       if @document.save
         # download file
         require "google/cloud/storage"
-        storage = Google::Cloud::Storage.new(project_id:"testground", credentials: Rails.root.join("gcs.keyfile"))
-        bucket = storage.bucket "testground"
+        storage = Google::Cloud::Storage.new(project_id:"docs-tl", credentials: Rails.root.join("gcs.keyfile"))
+        bucket = storage.bucket GCS_BUCKET
         file = bucket.file @document.original_file.key
-        file.download "tmp/gazette.pdf"
-        run_gazette_script @document, "tmp/gazette.pdf"
+        if params["document"]["process_gazette"] == true
+          file.download "tmp/gazette.pdf"
+          run_gazette_script @document, "tmp/gazette.pdf"
+        end
         format.html { redirect_to @document, notice: 'Document was successfully created.' }
         format.json { render :show, status: :created, location: @document }
       else
@@ -76,6 +78,14 @@ class DocumentsController < ApplicationController
     end
   end
 
+  def getCleanDescription description
+    description = description.truncate(400)
+    while description.size > 0 and !(description[0] =~ /[A-Za-z]/)
+      description[0] = ''
+    end
+    return description
+  end
+
   def run_gazette_script document, document_pdf_path
     # run brazilian script
     puts "Starting python script"
@@ -86,7 +96,7 @@ class DocumentsController < ApplicationController
     # set original document values
     puts "Setting original document values"
     document.name = first_element["name"]
-    document.description = first_element["description"].truncate(50)
+    document.description = getCleanDescription first_element["description"]
     document.publication_number = first_element["publication_number"]
     document.publication_date = first_element["publication_date"].to_date
     document.save
@@ -109,9 +119,10 @@ class DocumentsController < ApplicationController
     puts "Creating related documents"
     json_data["files"].drop(1).each do |file|
       puts "Creating: " + file["name"]
+      description = getCleanDescription file["description"]
       new_document = Document.create(
         name: file["name"],
-        description: file["description"].truncate(50),
+        description: description,
         publication_number: document.publication_number,
         publication_date: document.publication_date)
       tag = Tag.find_by_name(file["tag"])

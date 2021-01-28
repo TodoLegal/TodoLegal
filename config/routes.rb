@@ -22,7 +22,6 @@ Rails.application.routes.draw do
   get '/privacy', to: 'home#privacy', as: "privacy"
   get '/pricing', to: 'home#pricing'
   get '/invite_friends', to: 'home#invite_friends'
-  get '/gacetas', to: 'home#google_drive_search', as: "google_drive_search"
   get '/covid', to: 'home#google_drive_covid_search', as: "google_drive_covid_search"
   get '/drive_search', to: 'home#google_drive_covid_search', as: "drive_search"
   get '/refer', to: 'home#refer', as: "refer"
@@ -44,7 +43,7 @@ Rails.application.routes.draw do
   get "download_contributor_users" => "admin#download_contributor_users", as: "download_contributor_users"
   get "download_recieve_information_users" => "admin#download_recieve_information_users", as: "download_recieve_information_users"
   get "download_all_users" => "admin#download_all_users", as: "download_all_users"
-  get '/gacetas', to: redirect('https://drive.google.com/drive/folders/1R46K1k5vMKdIDV7VyaXrXgk5ScF5uBvX'), as: "gacetas"
+  get '/gacetas', to: redirect('https://valid.todolegal.app'), as: "google_drive_search"
 
   namespace :api, defaults: {format: :json} do
     namespace :v1 do

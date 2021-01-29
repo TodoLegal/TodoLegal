@@ -63,6 +63,15 @@
 
 <%= javascript_pack_tag "clear_searchInput" %>
 
+<script>
+  //hides the document container using solution 1, using the 'onclick' attribute in the button to call this function
+  function hideDocumentContainer () {
+      document.getElementsByClassName("container--visualizador")[0].style.display = "none";
+      document.getElementById("topNavbar").style.display = "none";
+      document.getElementsByClassName("search--container")[0].style.display = "block";
+    }
+</script>
+
 <style>
   br{content:' ';}
   br:after{content:' ';}

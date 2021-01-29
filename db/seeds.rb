@@ -43,6 +43,14 @@ tag_asamblea_constituyente = Tag.create({ name: 'Asamblea Constituyente', tag_ty
 tag_resolucion = Tag.create({ name: 'Resolucion', tag_type_id: tag_type_creacion.id })
 tag_acuerdo_ministerial = Tag.create({ name: 'Acuerdo Ministerial', tag_type_id: tag_type_creacion.id })
 tag_acuerdo_ministerial = Tag.create({ name: 'Acto Municipal', tag_type_id: tag_type_creacion.id })
+# New creation tags
+tag_acuerdo = Tag.create({ name: 'Acuerdo', tag_type_id: tag_type_creacion.id })
+tag_acuerdo_delegacion = Tag.create({ name: 'Acuerdo de Delegación', tag_type_id: tag_type_creacion.id })
+tag_acuerdo_administrativo = Tag.create({ name: 'Acuerdo Administrativo', tag_type_id: tag_type_creacion.id })
+tag_acuerdo_aduana = Tag.create({ name: 'Acuerdo Aduanas', tag_type_id: tag_type_creacion.id })
+tag_acuerdo_certificacion = Tag.create({ name: 'Certificación', tag_type_id: tag_type_creacion.id })
+tag_acuerdo_ejecutivo = Tag.create({ name: 'Acuerdo Ejecutivo', tag_type_id: tag_type_creacion.id })
+tag_acuerdo_decreto = Tag.create({ name: 'Decreto', tag_type_id: tag_type_creacion.id })
 
 # Tags de Institucion
 

@@ -9,6 +9,9 @@ class BillingController < ApplicationController
       end
       return
     end
+    if current_user
+      $tracker.track(current_user.id, 'Checkout Visited', { })
+    end
 
     @is_monthly = params[:is_monthly]
     @is_onboarding = params[:is_onboarding]
@@ -70,6 +73,13 @@ class BillingController < ApplicationController
             price: STRIPE_MONTH_SUBSCRIPTION_PRICE,
           }]
         })
+        if current_user
+          $tracker.track(current_user.id, 'Upgrade Plan', {
+            'plan' => 'Pro',
+            'payment' => 'Monthly',
+            'coupon' => false
+          })
+        end
       else
         subscription = Stripe::Subscription.create({
           customer: customer.id,
@@ -78,6 +88,13 @@ class BillingController < ApplicationController
           }],
           coupon: coupon
         })
+        if current_user
+          $tracker.track(current_user.id, 'Upgrade Plan', {
+            'plan' => 'Pro',
+            'payment' => 'Monthly',
+            'coupon' => true
+          })
+        end
       end
       if $discord_bot
         $discord_bot.send_message($discord_bot_channel_notifications, "Se ha registrado un usuario Pro por 1 mes :dancer:")
@@ -93,6 +110,13 @@ class BillingController < ApplicationController
             price: STRIPE_YEAR_SUBSCRIPTION_PRICE
           }]
         })
+        if current_user
+          $tracker.track(current_user.id, 'Upgrade Plan', {
+            'plan' => 'Pro',
+            'payment' => 'Yearly',
+            'coupon' => false
+          })
+        end
       else
         subscription = Stripe::Subscription.create({
           customer: customer.id,
@@ -101,6 +125,13 @@ class BillingController < ApplicationController
           }],
           coupon: coupon
         })
+        if current_user
+          $tracker.track(current_user.id, 'Upgrade Plan', {
+            'plan' => 'Pro',
+            'payment' => 'Yearly',
+            'coupon' => true
+          })
+        end
       end
       if $discord_bot
         $discord_bot.send_message($discord_bot_channel_notifications, "Se ha registrado un usuario Pro por 1 año :dancer:")

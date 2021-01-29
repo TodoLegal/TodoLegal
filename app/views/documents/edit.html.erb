@@ -1,8 +1,6 @@
 <div class="container">
-  <h1>Editing Document</h1>
+  <h1>Editando Documento</h1>
+  <%= link_to 'Atrás', documents_path %>
 
   <%= render 'edit_form', document: @document %>
-
-  <%= link_to 'Show', @document %> |
-  <%= link_to 'Back', documents_path %>
 </div>

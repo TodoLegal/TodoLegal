@@ -81,8 +81,9 @@ class HomeController < ApplicationController
     end
 
     if current_user
-      $tracker.track(current_user.id, 'Search submitted', {
+      $tracker.track(current_user.id, 'Site Search', {
         'query' => @query,
+        'tag' => nil,
         'titles_result' => titles_result,
         'articles_result' => articles_result
       })
@@ -96,6 +97,9 @@ class HomeController < ApplicationController
   end
 
   def pricing
+    if current_user
+      $tracker.track(current_user.id, 'Pricing Visited', { })
+    end
     @is_onboarding = params[:is_onboarding]
     @pricing_onboarding = params[:pricing_onboarding]
     @go_to_law = params[:go_to_law]

@@ -1,11 +1,21 @@
-<a class="btn btn-back" id="back-button" style="font-size: 1.5rem; color: #171F2A; padding-left: 0px;"> 
+<a onclick="goBack()" class="btn btn-back" id="back-button" style="font-size: 1.5rem; color: #171F2A; padding-left: 0px;"> 
     <i class="fas fa-arrow-left"></i>
 </a>
 
 <script>
-    var back_button = document.getElementById("back-button");
+    
+    //Solution 1, using onclick attribute to call this function
+    function  goBack () {
+        window.history.back();
+    }
+
+    //Solution 2, using event listener.
+    /*
+    const back_button = document.getElementById("back-button");
     
     back_button.addEventListener('click', (event) => {
+        console.log("Hola back button");
         window.history.back();
     });
+    */
 </script>

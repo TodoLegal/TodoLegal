@@ -104,6 +104,12 @@ class DocumentsController < ApplicationController
     if tag
       DocumentTag.create(document_id: document.id, tag_id: tag.id)
     end
+    first_element["institutions"].each do | institution |
+      institution_tag = Tag.find_by_name(institution)
+      if institution_tag
+        DocumentTag.create(document_id: document.id, tag_id: institution_tag.id)
+      end
+    end
     document.url = document.generate_friendly_url
     document.save
     document.original_file.attach(
@@ -128,6 +134,12 @@ class DocumentsController < ApplicationController
       tag = Tag.find_by_name(file["tag"])
       if tag
         DocumentTag.create(document_id: new_document.id, tag_id: tag.id)
+      end
+      file["institutions"].each do |institution|
+        institution_tag = Tag.find_by_name(institution)
+        if institution_tag
+          DocumentTag.create(document_id: document.id, tag_id: institution_tag.id)
+        end
       end
       new_document.url = new_document.generate_friendly_url
       new_document.save

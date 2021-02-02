@@ -138,7 +138,7 @@ class DocumentsController < ApplicationController
       file["institutions"].each do |institution|
         institution_tag = Tag.find_by_name(institution)
         if institution_tag
-          DocumentTag.create(document_id: document.id, tag_id: institution_tag.id)
+          DocumentTag.create(document_id: new_document.id, tag_id: institution_tag.id)
         end
       end
       new_document.url = new_document.generate_friendly_url

@@ -4,7 +4,7 @@
 <ul>
 <% @documents.each do |document| %>
 <li>
-    <%= link_to document.name, document %>
+    <%= link_to document.name, edit_document_path(document) %>
 </li>
 <% end %>
 </ul>

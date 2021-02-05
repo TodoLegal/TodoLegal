@@ -1,0 +1,20 @@
+<p>
+<strong>Gacetas faltantes:</strong>
+</p>
+<p>
+    <% @missing_gazettes.each do |missing_gazette| %>
+        <%= missing_gazette %>,
+    <% end %>  
+</p>
+
+<p>
+<strong>Gacetas:</strong>
+</p>
+<ul>
+<% @gazettes.each do |gazette| %>
+<li>
+    <%= link_to gazette.first, gazette_path(gazette.first) %>
+</li>
+<% end %>
+</ul>
+<p>

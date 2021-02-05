@@ -4,17 +4,16 @@ class DocumentsController < ApplicationController
   # GET /documents
   # GET /documents.json
   def index
-    @documents = Document.all
+    @documents = Document.all.order('publication_number DESC')
   end
 
   # GET /documents/1
   # GET /documents/1.json
   def show
-    @json_data = {}
-    @json_data["files"] = []
-    if File.exist?("gazettes/" + @document.id.to_s + "/data.json")
-      file = File.read(Rails.root.join("public", "gazettes",@document.id.to_s,"data.json").to_s)
-      @json_data = JSON.parse(file)
+    if @document.publication_number
+      @documents_in_same_gazette =
+        Document.where(publication_number: @document.publication_number)
+        .where.not(id: @document.id)
     end
   end
 
@@ -38,9 +37,9 @@ class DocumentsController < ApplicationController
         storage = Google::Cloud::Storage.new(project_id:"docs-tl", credentials: Rails.root.join("gcs.keyfile"))
         bucket = storage.bucket GCS_BUCKET
         file = bucket.file @document.original_file.key
-        if params["document"]["process_gazette"] == true
+        if params["document"]["process_gazette"] == "1"
           file.download "tmp/gazette.pdf"
-          run_gazette_script @document, "tmp/gazette.pdf"
+          run_gazette_script @document, Rails.root.join("tmp") + "gazette.pdf"
         end
         format.html { redirect_to @document, notice: 'Document was successfully created.' }
         format.json { render :show, status: :created, location: @document }

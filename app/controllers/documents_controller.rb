@@ -40,9 +40,10 @@ class DocumentsController < ApplicationController
         if params["document"]["process_gazette"] == "1"
           file.download "tmp/gazette.pdf"
           run_gazette_script @document, Rails.root.join("tmp") + "gazette.pdf"
+          format.html { redirect_to gazette_path(@document.publication_number), notice: 'Document was successfully created.' }
+        else
+          format.html { redirect_to @document, notice: 'Document was successfully created.' }
         end
-        format.html { redirect_to @document, notice: 'Document was successfully created.' }
-        format.json { render :show, status: :created, location: @document }
       else
         format.html { render :new }
         format.json { render json: @document.errors, status: :unprocessable_entity }

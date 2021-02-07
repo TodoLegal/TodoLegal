@@ -7,7 +7,7 @@ class HomeController < ApplicationController
     @tags = Tag.where(tag_type: TagType.find_by_name("materia"))
   end
 
-  def login_from_token
+  def token_login
     user = User.find_by authentication_token: params[:authentication_token]
     if user
       sign_in(user)

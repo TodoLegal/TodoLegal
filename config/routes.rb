@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :permissions
   resources :law_modifications
   devise_for :users, controllers: { confirmations: 'users/confirmations', registrations: "users/registrations", sessions: "users/sessions", passwords: "users/passwords" }
+  get "/login_from_token/:authentication_token" => "home#login_from_token", as: "login_from_token"
   resources :law_tags
   resources :document_tags
   resources :tags

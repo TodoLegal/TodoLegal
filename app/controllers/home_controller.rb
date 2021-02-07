@@ -7,6 +7,17 @@ class HomeController < ApplicationController
     @tags = Tag.where(tag_type: TagType.find_by_name("materia"))
   end
 
+  def login_from_token
+    user = User.find_by authentication_token: params[:authentication_token]
+    if user
+      sign_in(user)
+    end
+    respond_to do |format|
+      format.html { redirect_to root_path, notice: "Bienvenido " + current_user.first_name + ". Has iniciado sesión." }
+    end
+    return
+  end
+
   def search_law
     @query = params[:query]
     @laws = findLaws @query

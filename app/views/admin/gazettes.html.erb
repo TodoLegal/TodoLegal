@@ -13,7 +13,7 @@
 <ul>
 <% @gazettes.each do |gazette| %>
 <li>
-    <%= link_to gazette.first, edit_gazette_path(gazette.first) %>
+    <%= link_to gazette.first, gazette_path(gazette.first) %>
 </li>
 <% end %>
 </ul>

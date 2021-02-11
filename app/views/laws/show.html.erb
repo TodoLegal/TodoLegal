@@ -277,22 +277,23 @@
   //   hideSearchContainer();
   // }
 
-  // function hideSearchContainer () {
-  //   console.log("hide search container");
-  //   document.getElementsByClassName("search--container")[0].style.display = "none";
-  //   document.getElementsByClassName("container--visualizador")[0].style.display = "block";
-  //   document.getElementById("topNavbar").style.display = "flex";
-  // }
+  //hides the search container using solution 1, using the 'onclick' attribute in the button to call this function
+  function hideSearchContainer () {
+      document.getElementsByClassName("search--container")[0].style.display = "none";
+      document.getElementsByClassName("container--visualizador")[0].style.display = "block";
+      document.getElementById("topNavbar").style.display = "flex";
+  }
 
-  var hide_search_container = document.getElementById('hideSearchContainer-button');
-
+  //hides the search container using solution 2, using an event listener on the 'click' event of the button
+  /*
+  const hide_search_container = document.getElementById('hideSearchContainer-button');
   hide_search_container.addEventListener('click', (event) => {
     console.log("hide search container");
     document.getElementsByClassName("search--container")[0].style.display = "none";
     document.getElementsByClassName("container--visualizador")[0].style.display = "block";
     document.getElementById("topNavbar").style.display = "flex";
   })
-  
+  */
 </script>
 
 

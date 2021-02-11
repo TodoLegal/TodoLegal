@@ -4,7 +4,7 @@
       <%if @info_is_searched %>
         <%= render '/home/back_button'%>
       <% else %>
-        <button type="button" class="btn btn-light search-button" id="hideSearchContainer-button">
+        <button type="button" onclick="hideSearchContainer()" class="btn btn-light search-button" id="hideSearchContainer-button">
             <i class="fas fa-arrow-left"></i>
         </button>
       <% end %>
@@ -19,7 +19,6 @@
       </div>
     </div>
   </form>
-  <%= javascript_pack_tag "clear_searchInput" %>
   <%= render '/home/loading_spinner' %>
 </div>
 <hr>
@@ -61,6 +60,17 @@
     <%= render partial: 'content', locals: {is_mobile: true} %>
   <% end %>
 </div>
+
+<%= javascript_pack_tag "clear_searchInput" %>
+
+<script>
+  //hides the document container using solution 1, using the 'onclick' attribute in the button to call this function
+  function hideDocumentContainer () {
+      document.getElementsByClassName("container--visualizador")[0].style.display = "none";
+      document.getElementById("topNavbar").style.display = "none";
+      document.getElementsByClassName("search--container")[0].style.display = "block";
+    }
+</script>
 
 <style>
   br{content:' ';}

@@ -10,7 +10,7 @@
 
 tag_type_materia = TagType.create({ name: 'materia' })
 tag_type_creacion = TagType.create({ name: 'creacion' })
-tag_type_institucion = TagType.create({ name: 'institucion' })
+tag_type_institution = TagType.create({ name: 'institucion' })
 
 # Tags de Materias
 
@@ -51,11 +51,6 @@ tag_acuerdo_aduana = Tag.create({ name: 'Acuerdo Aduanas', tag_type_id: tag_type
 tag_acuerdo_certificacion = Tag.create({ name: 'Certificación', tag_type_id: tag_type_creacion.id })
 tag_acuerdo_ejecutivo = Tag.create({ name: 'Acuerdo Ejecutivo', tag_type_id: tag_type_creacion.id })
 tag_acuerdo_decreto = Tag.create({ name: 'Decreto', tag_type_id: tag_type_creacion.id })
-
-# Tags de Institucion
-
-tag_el_congreso_nacional = Tag.create({ name: 'El Congreso Nacional', tag_type_id: tag_type_institucion.id })
-tag_el_presidente_de_la_republica = Tag.create({ name: 'El Presidente de la Republica', tag_type_id: tag_type_institucion.id })
 
 # Law Accesses
 

@@ -1,6 +1,24 @@
 class AdminController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_action :authenticate_admin!, only: [:users, :download_contributor_users, :download_recieve_information_users, :grant_permission, :revoke_permission, :set_law_access]
+  before_action :authenticate_admin!, only: [:gazettes, :gazette, :users, :download_contributor_users, :download_recieve_information_users, :grant_permission, :revoke_permission, :set_law_access]
+
+  def gazettes
+    @gazettes = Document.all.group_by(&:publication_number).sort_by { |x | [ x ] }.reverse
+    gazette_temp = @gazettes.first
+    @missing_gazettes = []
+    @gazettes.drop(1).each do |gazette|
+      if gazette.first.delete(',').to_i + 1 != gazette_temp.first.delete(',').to_i
+        for missing_gazette in gazette.first.delete(',').to_i+1..gazette_temp.first.delete(',').to_i-1
+          @missing_gazettes.push(missing_gazette)
+        end
+      end
+      gazette_temp = gazette
+    end
+  end
+
+  def gazette
+    @documents = Document.where(publication_number: params[:publication_number])
+  end
 
   def users
     @email = params[:email]

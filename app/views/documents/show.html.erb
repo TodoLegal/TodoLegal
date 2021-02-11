@@ -9,11 +9,6 @@
   </script>
 
   <p>
-    <strong>Url:</strong>
-    <%= @document.url %>
-  </p>
-
-  <p>
     <strong>Name:</strong>
     <%= @document.name %>
   </p>
@@ -33,16 +28,21 @@
     <%= @document.description %>
   </p>
 
-
+  <p>
+    <strong>Otros documentos de la misma gaceta:</strong>
+  </p>
+  <ul>
+    <% if @documents_in_same_gazette %>
+      <% @documents_in_same_gazette.each do |document| %>
+        <li>
+          <%= link_to document.name, document %>
+        </li>
+      <% end %>
+    <% end %>
+  </ul>
   <p>
     <strong>Tags:</strong>
   </p>
-  <p>
-    <% if @document.original_file.attached? %>
-      <%= link_to "Descargar", @document.original_file %>
-    <% end %>
-  </p>
-
   <ul>
     <% @document.tags.each do |tag| %>
       <li>
@@ -51,13 +51,11 @@
     <% end %>
   </ul>
 
-  <ul>
-    <% @json_data["files"].each do |file| %>
-      <li>
-        <%= link_to file['name'], "/gazettes/" + @document.id.to_s + "/" + file['path'] %>
-      </li>
+  <p>
+    <% if @document.original_file.attached? %>
+      <%= link_to "Descargar", @document.original_file %>
     <% end %>
-  </ul>
+  </p>
 
   <%= link_to 'Edit', edit_document_path(@document) %> |
   <%= link_to 'Back', documents_path %>

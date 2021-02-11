@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :permissions
   resources :law_modifications
   devise_for :users, controllers: { confirmations: 'users/confirmations', registrations: "users/registrations", sessions: "users/sessions", passwords: "users/passwords" }
+  get "/token_login/:authentication_token" => "home#token_login", as: "token_login"
   resources :law_tags
   resources :document_tags
   resources :tags
@@ -37,6 +38,8 @@ Rails.application.routes.draw do
   post "admin/set_law_access" => "admin#set_law_access", as: "admin_set_law_access"
   get 'admin/enable_edit_mode', to: 'admin#enable_edit_mode', as: "enable_edit_mode"
   get 'admin/disable_edit_mode', to: 'admin#disable_edit_mode', as: "disable_edit_mode"
+  get 'admin/gazettes', to: 'admin#gazettes', as: "gazettes"
+  get 'admin/gazettes/:publication_number', to: 'admin#gazette', as: "gazette"
   get "signed_in" => "home#index", as: "signed_in"
   get "signed_up" => "home#index", as: "signed_up"
   get "signed_out" => "home#index", as: "signed_out"

@@ -120,7 +120,7 @@ class DocumentsController < ApplicationController
           "gazettes",
           document.id.to_s, json_data["files"][0]["path"]).to_s
       ),
-      filename: 'file.pdf'
+      filename: document.name + ".pdf"
     )
     # create the related documents
     puts "Creating related documents"
@@ -152,7 +152,7 @@ class DocumentsController < ApplicationController
             "gazettes",
             document.id.to_s, file["path"]).to_s
         ),
-        filename: 'file.pdf'
+        filename: document.name + ".pdf"
       )
       puts "File uploaded"
     end

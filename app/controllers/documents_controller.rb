@@ -1,5 +1,6 @@
 class DocumentsController < ApplicationController
   before_action :set_document, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_editor!, only: [:show, :new, :edit, :create, :update, :destroy]
 
   # GET /documents
   # GET /documents.json
@@ -119,7 +120,7 @@ class DocumentsController < ApplicationController
           "gazettes",
           document.id.to_s, json_data["files"][0]["path"]).to_s
       ),
-      filename: 'file.pdf'
+      filename: document.name + ".pdf"
     )
     # create the related documents
     puts "Creating related documents"
@@ -151,7 +152,7 @@ class DocumentsController < ApplicationController
             "gazettes",
             document.id.to_s, file["path"]).to_s
         ),
-        filename: 'file.pdf'
+        filename: document.name + ".pdf"
       )
       puts "File uploaded"
     end

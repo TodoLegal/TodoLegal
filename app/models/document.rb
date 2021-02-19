@@ -7,11 +7,11 @@ class Document < ApplicationRecord
   has_one_attached :original_file
 
   pg_search_scope :search_by_all,
-                  against: [:name, :description],
+                  against: [:name, :description, :publication_number],
                   ignoring: :accents,
                   using: {
                     tsearch: {
-                      dictionary: "tl_config"
+                      dictionary: "spanish"
                     }
                   }
 

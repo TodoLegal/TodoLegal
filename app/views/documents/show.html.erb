@@ -7,7 +7,7 @@
     confirm = confirm("¿Seguro que lo desea eliminar?");
     }
   </script>
-  <h3 clas="mb-2" >
+  <h3 class="mb-3" >
     <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, documents_path%>
     <strong> Detalles del documento </strong>
   </h2>
@@ -57,11 +57,11 @@
     
     <div class="btn-group mt-3" role="group" aria-label="Basic mixed styles example">
       <%= button_to(edit_document_path(@document), {class:"btn btn-outline-secondary mr-2", method: :get}) do %>
-          <i class="fas fa-edit"></i>
+          Editar
       <% end %>
       <% if @document.original_file.attached? %>
         <%= button_to(@document.original_file, {class:"btn btn-outline-primary", method: :get}) do %>
-          <i class="fas fa-download"></i>
+          Descargar archivo
         <% end %>
       <% end %>
     </div>

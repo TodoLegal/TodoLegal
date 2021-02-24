@@ -1,6 +1,6 @@
 class DocumentsController < ApplicationController
   before_action :set_document, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_editor!, only: [:show, :new, :edit, :create, :update, :destroy]
+  before_action :authenticate_editor!, only: [:index, :show, :new, :edit, :create, :update, :destroy]
 
   # GET /documents
   # GET /documents.json

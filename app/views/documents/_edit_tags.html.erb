@@ -13,12 +13,12 @@
             <% if document_tag.tag.tag_type.name == "materia" %>
                 <tr>
                     <td>
-                    <%= document_tag.tag.name %> (<%= document_tag.tag.tag_type.name %> )
+                        <%= document_tag.tag.name %>
                     </td>
                     <td>
-                    <%= button_to document_tag, method: :delete, data: { confirm: 'Are you sure?', toggle:"modal", target:"#modal-center"}, class:"btn btn-outline-danger", onclick:"myFunction()"  do %>
-                        <i class="fas fa-trash-alt"></i>
-                    <% end %>
+                        <%= button_to document_tag, method: :delete, data: { confirm: 'Are you sure?', toggle:"modal", target:"#modal-center"}, class:"btn btn-outline-danger", onclick:"myFunction()"  do %>
+                            <i class="fas fa-trash-alt"></i>
+                        <% end %>
                     </td>
                 </tr>
             <% end %>
@@ -39,7 +39,7 @@
             <td>
                 <% tag_type = TagType.find_by(name: "materia") %>
                 <%= form.hidden_field :document_id, value: @document.id %>
-                <%= form.collection_select(:tag_id, Tag.where(tag_type_id: tag_type.id), :id, :name, {:prompt=>true}, {:class=>'form-control'}) %>
+                <%= form.collection_select(:tag_id, Tag.where(tag_type_id: tag_type.id), :id, :name, {:prompt=>true}, {:class=>'form-control select2'}) %>
             <td>
             <%= form.submit "Agregar tag", class: 'btn btn-primary' %>
             </td>
@@ -62,12 +62,12 @@
             <% if document_tag.tag.tag_type.name == "creacion" %>
                 <tr>
                     <td>
-                    <%= document_tag.tag.name %> (<%= document_tag.tag.tag_type.name %> )
+                        <%= document_tag.tag.name %>
                     </td>
                     <td>
-                    <%= button_to document_tag, method: :delete, data: { confirm: 'Are you sure?', toggle:"modal", target:"#modal-center"}, class:"btn btn-outline-danger", onclick:"myFunction()"  do %>
-                        <i class="fas fa-trash-alt"></i>
-                    <% end %>
+                        <%= button_to document_tag, method: :delete, data: { confirm: 'Are you sure?', toggle:"modal", target:"#modal-center"}, class:"btn btn-outline-danger", onclick:"myFunction()"  do %>
+                            <i class="fas fa-trash-alt"></i>
+                        <% end %>
                     </td>
                 </tr>
             <% end %>
@@ -88,7 +88,7 @@
             <td>
                 <% tag_type = TagType.find_by(name: "creacion") %>
                 <%= form.hidden_field :document_id, value: @document.id %>
-                <%= form.collection_select(:tag_id, Tag.where(tag_type_id: tag_type.id), :id, :name, {:prompt=>true}, {:class=>'form-control'}) %>
+                <%= form.collection_select(:tag_id, Tag.where(tag_type_id: tag_type.id), :id, :name, {:prompt=>true}, {:class=>'form-control select2'}) %>
             <td>
             <%= form.submit "Agregar tag", class: 'btn btn-primary' %>
             </td>
@@ -96,3 +96,16 @@
         </tr>
     </tbody>
 </table>
+
+
+
+<script>
+    $('.select2').select2();
+</script>
+
+<style>
+
+    .select2{
+        width:100% !important;
+    }
+</style>

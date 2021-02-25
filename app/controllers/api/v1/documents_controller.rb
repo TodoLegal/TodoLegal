@@ -55,11 +55,15 @@ class Api::V1::DocumentsController < ApplicationController
   
   def get_documents
     limit = 100
-    if params["limit"]
+    if !params["limit"].blank?
       limit = params["limit"]
     end
+    query = "*"
+    if !params["query"].blank?
+      query = params["query"]
+    end
     documents = Document.search(
-      params["query"],
+      query,
       fields: [:name, :brand],
       where:
       {

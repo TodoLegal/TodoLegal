@@ -54,28 +54,21 @@ class Api::V1::DocumentsController < ApplicationController
   end
   
   def get_documents
-    if params["query"]
-      documents = Document.all.order('publication_date DESC').search_by_all(params["query"])
-    else
-      documents = Document.all.order('publication_date DESC')
-    end
-    if params["from"]
-      documents = documents.where('publication_date >= ?', params["from"])
-    end
-    if params["to"]
-      documents = documents.where('publication_date <= ?', params["to"])
-    end
-
-    documents_count = documents.count
-
-    # limit and offset setup
-    documents = documents.limit(100)
+    limit = 100
     if params["limit"]
-      documents = documents.limit(params["limit"])
+      limit = params["limit"]
     end
-    if params["offset"]
-      documents = documents.offset(params["offset"])
-    end
-    render json: { "documents": documents, "count": documents_count }
+    documents = Document.search(
+      params["query"],
+      fields: [:name, :brand],
+      where:
+      {
+        publication_date: {gte: params["from"], lte: params["to"]}
+      },
+      limit: limit,
+      offset: params["offset"].to_i,
+      order: {publication_date: :desc})
+
+    render json: { "documents": documents, "count": documents.total_count }
   end
 end

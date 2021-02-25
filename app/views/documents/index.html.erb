@@ -4,6 +4,15 @@
 
   <h1>Documentos</h1>
 
+  <form action="<%= documents_path %>" method="get">
+    <div>
+      <input name="query" value="<%= @query %>" type="text" placeholder="">
+      <div>
+        <button type="submit" type="button">Buscar</button>
+      </div>
+    </div>
+  </form>
+
   <%= link_to 'Subir documento', new_document_path %>
 
   <table>

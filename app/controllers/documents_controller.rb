@@ -5,7 +5,15 @@ class DocumentsController < ApplicationController
   # GET /documents
   # GET /documents.json
   def index
-    @documents = Document.all.order('publication_number DESC')
+    @query = params["query"]
+    if !@query.blank?
+      if @query && @query.length == 5 && @query[1] != ','
+        @query.insert(2, ",")
+      end
+      @documents = Document.where(publication_number: @query).order('publication_number DESC')
+    else
+      @documents = Document.all.order('publication_number DESC').limit(100)
+    end
   end
 
   # GET /documents/1

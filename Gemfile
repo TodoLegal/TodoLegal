@@ -21,6 +21,7 @@ gem 'mixpanel-ruby'
 gem "google-cloud-storage", "~> 1.11", require: false
 gem 'rack-cors'
 gem 'browser'
+gem 'kaminari'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.0', '>= 6.0.3.4'

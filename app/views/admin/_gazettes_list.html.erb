@@ -1,0 +1,20 @@
+<table class="table table-sm"">
+    <thead>
+        <tr>
+            <th class="table--headers" scope="col">Numero de gaceta</th>
+            <th class="table--headers"scope="col">Fecha de publicación</th>
+        </tr>
+    </thead>
+    <tbody>
+    <% gazettes.each do |gazette| %>
+        <tr>
+            <td>
+                <%= link_to gazette.first, gazette_path(gazette.first) %>
+            </td>
+            <td> 
+                2020-10-10
+            </td>
+        </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -1,11 +1,14 @@
-<p>
-<strong>Gacetas:</strong>
-</p>
-<ul>
-<% @documents.each do |document| %>
-<li>
-    <%= link_to document.name, edit_document_path(document) %>
-</li>
-<% end %>
-</ul>
-<p>
+<div class="container">
+    <p> Fecha de publicacion: </p>
+    <p> Descripcion: </p>
+    <p>
+        <strong>Fraccionados de esta gaceta:</strong>
+    </p>
+    <ul>
+        <% @documents.each do |document| %>
+            <li>
+                <%= link_to document.name, edit_document_path(document) %>
+            </li>
+        <% end %>
+    </ul>
+</div>

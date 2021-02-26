@@ -4,7 +4,9 @@
 <ul>
 <% @documents.each do |document| %>
 <li>
-    <%= link_to document.name, edit_document_path(document) %>
+  <%= document.name %>
+  <%= link_to "Ediar", edit_document_path(document) %>
+  <%= link_to "Ver", "https://valid.todolegal.app/documents/" + document.id.to_s %>
 </li>
 <% end %>
 </ul>

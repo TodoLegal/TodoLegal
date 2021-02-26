@@ -104,6 +104,9 @@ class DocumentsController < ApplicationController
     first_element = json_data["files"].first
     # set original document values
     puts "Setting original document values"
+    if !first_element
+      return
+    end
     document.name = first_element["name"]
     document.description = getCleanDescription first_element["description"]
     document.publication_number = first_element["publication_number"]

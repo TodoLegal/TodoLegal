@@ -2,7 +2,7 @@
 lock "~> 3.15.0"
 
 set :application, "TodoLegal"
-set :repo_url, "git@github.com:TodoLegal/TodoLegal.git"
+set :repo_url, "https://github.com/TodoLegal/TodoLegal.git"
 
 # Deploy to the user's home directory
 set :deploy_to, "/home/deploy/#{fetch :application}"

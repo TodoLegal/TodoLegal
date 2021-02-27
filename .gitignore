@@ -14,7 +14,7 @@ public/gazettes/
 gcs.keyfile
 .rbenv-vars
 
-Gemfile.lock
+#Gemfile.lock
 /config/credentials.yml.enc
 
 # Ignore bundler config.

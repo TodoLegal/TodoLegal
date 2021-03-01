@@ -62,12 +62,24 @@ class Api::V1::DocumentsController < ApplicationController
     if !params["query"].blank?
       query = params["query"]
     end
+    begin
+      Date.parse(params["from"])
+      from = params["from"]
+    rescue ArgumentError
+      from = nil
+    end
+    begin
+      Date.parse(params["to"])
+      to = params["to"]
+    rescue ArgumentError
+      to = nil
+    end
     documents = Document.search(
       query,
       fields: [:name, :brand],
       where:
       {
-        publication_date: {gte: params["from"], lte: params["to"]}
+        publication_date: {gte: from, lte: to}
       },
       limit: limit,
       offset: params["offset"].to_i,

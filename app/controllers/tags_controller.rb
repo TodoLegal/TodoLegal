@@ -65,9 +65,9 @@ class TagsController < ApplicationController
       if current_user
         $tracker.track(current_user.id, 'Site Search', {
           'query' => @query,
-          'tag' => @tag.name,
-          'titles_result' => titles_result,
-          'articles_result' => articles_result
+          'location' => @tag.name,
+          'location_type' => "Tag",
+          'results' => titles_result + articles_result
         })
       end
     else

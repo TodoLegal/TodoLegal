@@ -1,11 +1,19 @@
 class DocumentsController < ApplicationController
   before_action :set_document, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_editor!, only: [:show, :new, :edit, :create, :update, :destroy]
+  before_action :authenticate_editor!, only: [:index, :show, :new, :edit, :create, :update, :destroy]
 
   # GET /documents
   # GET /documents.json
   def index
-    @documents = Document.all.order('publication_number DESC')
+    @query = params["query"]
+    if !@query.blank?
+      if @query && @query.length == 5 && @query[1] != ','
+        @query.insert(2, ",")
+      end
+      @documents = Document.where(publication_number: @query).order('publication_number DESC')
+    else
+      @documents = Document.all.order('publication_number DESC').page params[:page]
+    end
   end
 
   # GET /documents/1
@@ -97,6 +105,9 @@ class DocumentsController < ApplicationController
     first_element = json_data["files"].first
     # set original document values
     puts "Setting original document values"
+    if !first_element
+      return
+    end
     document.name = first_element["name"]
     document.description = getCleanDescription first_element["description"]
     document.publication_number = first_element["publication_number"]

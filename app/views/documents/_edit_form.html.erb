@@ -12,115 +12,65 @@
   <% end %>
 
   <div class="card">
-  <div class="card-body">
-    <div class="row">
-      <div class="col-md-8">
-        <div class="form-group">
-          <%= form.label :nombre %>
-          <%= form.text_field :name, class: "form-control" %>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="form-group">
+            <%= form.label :Numero_de_Emisión %>
+            <%= form.text_field :name, class: "form-control" %>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!--
-    <div class="row">
-      <div class="col-md-8">
-        <div class="form-group">
-          <%= form.label :url %>
-          <%= form.text_field :url, class: "form-control" %>
+      <!--
+      <div class="row">
+        <div class="col-md-8">
+          <div class="form-group">
+            <%= form.label :url %>
+            <%= form.text_field :url, class: "form-control" %>
+          </div>
         </div>
       </div>
-    </div>
-    -->
+      -->
 
-    <div class="row">
-      <div class="col-md-8">
-        <div class="form-group">
+      <div class="row">
+
+        <div class="form-group col-md-4">
           <%= form.label :fecha_de_publicación %>
-          <%= form.date_select :publication_date, {:order => [:day, :month, :year]}, {:class => 'form-control'} %>
+          <div class="form-inline">
+            <%= form.date_select :publication_date, {:order => [:day, :month, :year]}, {:class => 'form-control mr-2'} %>
+          </div>
         </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-8">
-        <div class="form-group">
+        
+        <div class="form-group col-md-4">
           <%= form.label :número_de_publicación %>
           <%= form.text_field :publication_number, class: "form-control" %>
         </div>
-      </div>
-    </div>
 
-    <div class="row">
-      <div class="col-md-8">
-        <div class="form-group">
-          <%= form.label :descripción %>
-          <%= form.text_area :description, class: "form-control" %>
+      </div>
+
+      <div class="row">
+        <div class="col-md-8">
+          <div class="form-group">
+            <%= form.label :descripción %>
+            <%= form.text_area :description, class: "form-control" %>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="row">
-      <div class="col-md-8">
-        <div class="form-group">
-          <%= form.label :original_file %>
-          <%= form.file_field :original_file, class: "form-control" %>
+      <div class="row">
+        <div class="col-md-8">
+          <div class="form-group">
+            <%= form.label :original_file %>
+            <%= form.file_field :original_file, class: "form-control" %>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="actions">
-      <%= form.submit "Modificar", class: "d-inline p-2 btn btn-primary" %>
+      <div class="actions">
+        <%= form.submit "Guardar cambios", class: "d-inline p-2 btn btn-primary" %>
+      </div>
     </div>
   </div>
 
-<% end %>
-
-<h2>Edición de tags</h2>
-  
-<table class="table table-bordered" id="edit_table">
-  <thead>
-    <tr>
-      <th scope="col">Tag</th>
-      <th scope="col">Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @document.document_tags.each do |document_tag| %>
-      <tr>
-        <td>
-          <%= document_tag.tag.name %> (<%= document_tag.tag.tag_type.name %> )
-        </td>
-        <td>
-          <%= button_to document_tag, method: :delete, data: { confirm: 'Are you sure?', toggle:"modal", target:"#modal-center"}, class:"btn btn-outline-danger", onclick:"myFunction()"  do %>
-            <i class="fas fa-trash-alt"></i>
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
-    <tr>
-    </tr>
-  </tbody>
-</table>
-
-<h3>Agregar nuevo tag</h3>
-
-<% document_tag = DocumentTag.new %>
-<%= form_with(model: document_tag, local: true) do |form|%>
-  <% if document_tag.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(document_tag.errors.count, "error") %> prohibited this document_tag from being saved:</h2>
-        <ul>
-          <% document_tag.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-        </ul>
-    </div>
-  <% end %>
-  <td>
-    <%= form.hidden_field :document_id, value: @document.id %>
-    <%= form.collection_select(:tag_id, Tag.all, :id, :name, {:prompt=>true}, {:class=>'form-control'}) %>
-  <td>
-  <%= form.submit "Agregar tag", class: 'btn btn-primary' %>
-  </td>
 <% end %>

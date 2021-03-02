@@ -1,14 +1,17 @@
+
+<%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
 <div class="container">
-    <p> Fecha de publicacion: </p>
-    <p> Descripcion: </p>
-    <p>
-        <strong>Fraccionados de esta gaceta:</strong>
-    </p>
-    <ul>
-        <% @documents.each do |document| %>
-            <li>
-                <%= link_to document.name, edit_document_path(document) %>
-            </li>
-        <% end %>
-    </ul>
+<p>
+<strong>Gacetas:</strong>
+</p>
+<ul>
+<% @documents.each do |document| %>
+<li>
+  <%= document.name %>
+  <%= link_to "Ediar", edit_document_path(document) %>
+  <%= link_to "Ver", "https://valid.todolegal.app/documents/" + document.id.to_s %>
+  <%= link_to 'Borrar', document, method: :delete, data: { confirm: 'Seguro?' } %>
+</li>
+<% end %>
+</ul>
 </div>

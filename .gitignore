@@ -12,8 +12,9 @@ public/google_drive_covid_data.json
 token.yaml
 public/gazettes/
 gcs.keyfile
+.rbenv-vars
 
-Gemfile.lock
+#Gemfile.lock
 /config/credentials.yml.enc
 
 # Ignore bundler config.

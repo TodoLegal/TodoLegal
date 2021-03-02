@@ -3,7 +3,17 @@ class AdminController < ApplicationController
   before_action :authenticate_admin!, only: [:gazettes, :gazette, :users, :download_contributor_users, :download_recieve_information_users, :grant_permission, :revoke_permission, :set_law_access]
 
   def gazettes
-    @gazettes = Document.all.group_by(&:publication_number).sort_by { |x | [ x ] }.reverse
+    @query = params["query"]
+    if !@query.blank?
+      if @query && @query.length == 5 && @query[1] != ','
+        @query.insert(2, ",")
+      end
+      @gazettes = Document.where(publication_number: @query)
+        .group_by(&:publication_number)
+        .sort_by { |x | [ x ] }.reverse
+    else
+      @gazettes = Document.all.group_by(&:publication_number).sort_by { |x | [ x ] }.reverse
+    end
     gazette_temp = @gazettes.first
     @missing_gazettes = []
     @gazettes.drop(1).each do |gazette|

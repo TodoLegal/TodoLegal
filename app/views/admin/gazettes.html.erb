@@ -1,20 +1,36 @@
-<p>
-<strong>Gacetas faltantes:</strong>
-</p>
-<p>
-    <% @missing_gazettes.each do |missing_gazette| %>
-        <%= missing_gazette %>,
-    <% end %>  
-</p>
 
-<p>
-<strong>Gacetas:</strong>
-</p>
-<ul>
-<% @gazettes.each do |gazette| %>
-<li>
-    <%= link_to gazette.first, gazette_path(gazette.first) %>
-</li>
-<% end %>
-</ul>
-<p>
+<div class="container"> 
+    <h1>Gacetas</h1>
+    
+    <%= link_to 'Subir documento', new_document_path(comes_from_gazette: true) %>
+
+    <ul class="nav nav-tabs mt-3" id="gazettesView" role="tablist">
+        <li  class="nav-item">
+        <a class="nav-link active" id="gazettes-tab" data-toggle="tab" href="#gazettes" role="tab" aria-controls="gazettes" aria-selected="true">Gacetas ingresadas</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" id="missing-gazettes-tab" data-toggle="tab" href="#missing-gazettes" role="tab" aria-controls="missing-gazettes" aria-selected="false">Gacetas faltantes</a>
+        </li>
+    </ul>
+
+    <div class="tab-content mt-4" id="myTabContent">
+
+        <div class="tab-pane fade show active" id="gazettes" role="tabpanel" aria-labelledby="gazettes-tab">
+            <form action="<%= gazettes_url %>" method="get">
+              <div>
+                <input name="query" value="<%= @query %>" type="text" placeholder="">
+                <div>
+                  <button type="submit" type="button">Buscar</button>
+                </div>
+              </div>
+            </form>
+            <%= render partial: 'gazettes_list', locals: {gazettes: @gazettes} %>
+        </div>
+        
+        <div class="tab-pane fade" id="missing-gazettes" role="tabpanel" aria-labelledby="missing-gazettes-tab">
+            <%= render partial: 'missing_gazettes', locals: {gazettes: @missing_gazettes} %>
+        </div>
+
+    </div>
+
+</div>

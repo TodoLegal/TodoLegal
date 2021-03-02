@@ -62,17 +62,21 @@ class Api::V1::DocumentsController < ApplicationController
     if !params["query"].blank?
       query = params["query"]
     end
-    begin
-      Date.parse(params["from"])
-      from = params["from"]
-    rescue ArgumentError
-      from = nil
+    from = nil
+    to = nil
+    if !params["from"].blank?
+      begin
+        Date.parse(params["from"])
+        from = params["from"]
+      rescue ArgumentError
+      end
     end
-    begin
-      Date.parse(params["to"])
-      to = params["to"]
-    rescue ArgumentError
-      to = nil
+    if !params["to"].blank?
+      begin
+        Date.parse(params["to"])
+        to = params["to"]
+      rescue ArgumentError
+      end
     end
     documents = Document.search(
       query,

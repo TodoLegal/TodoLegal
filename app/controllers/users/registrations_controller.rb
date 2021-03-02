@@ -85,9 +85,20 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # The path used after sign up.
   def after_sign_up_path_for(resource)
-    update_mixpanel_user current_user
     if current_user
-      $tracker.track(current_user.id, 'Sign Up', {})
+      update_mixpanel_user current_user
+      $tracker.track(current_user.id, 'Sign Up', {
+      '$email'            => current_user.user.email,
+      'first_name'      => current_user.user.first_name,
+      'last_name'      => current_user.user.last_name,
+      'occupation'      => current_user.user.occupation,
+      'is_contributor'      => current_user.user.is_contributor,
+      'current_sign_in_at'      => current_user.user.current_sign_in_at,
+      'last_sign_in_at'      => current_user.user.last_sign_in_at,
+      'current_sign_in_ip'      => current_user.user.current_sign_in_ip,
+      'last_sign_in_ip'      => current_user.user.last_sign_in_ip,
+      'receive_information_emails'      => current_user.user.receive_information_emails
+      })
     end
     if $discord_bot
       $discord_bot.send_message($discord_bot_channel_notifications, "Se ha registrado un nuevo usuario :tada:")

@@ -29,6 +29,7 @@ class DocumentsController < ApplicationController
   # GET /documents/new
   def new
     @document = Document.new
+    @comes_from_gazettes = params[:comes_from_gazette];
   end
 
   # GET /documents/1/edit

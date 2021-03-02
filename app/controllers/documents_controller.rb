@@ -12,7 +12,7 @@ class DocumentsController < ApplicationController
       end
       @documents = Document.where(publication_number: @query).order('publication_number DESC')
     else
-      @documents = Document.all.order('publication_number DESC').limit(100)
+      @documents = Document.all.order('publication_number DESC').page params[:page]
     end
   end
 

@@ -15,5 +15,7 @@
 
   <%= link_to 'Subir documento', new_document_path %>
   <%= render partial:'edit_table', locals: {documents: @documents}%>
+
+  <%=paginate @documents %>
   <br>
 </div>

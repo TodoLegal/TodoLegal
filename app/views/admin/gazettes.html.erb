@@ -1,3 +1,4 @@
+
 <div class="container"> 
     <h1>Gacetas</h1>
     
@@ -15,6 +16,14 @@
     <div class="tab-content mt-4" id="myTabContent">
 
         <div class="tab-pane fade show active" id="gazettes" role="tabpanel" aria-labelledby="gazettes-tab">
+            <form action="<%= gazettes_url %>" method="get">
+              <div>
+                <input name="query" value="<%= @query %>" type="text" placeholder="">
+                <div>
+                  <button type="submit" type="button">Buscar</button>
+                </div>
+              </div>
+            </form>
             <%= render partial: 'gazettes_list', locals: {gazettes: @gazettes} %>
         </div>
         
@@ -25,9 +34,3 @@
     </div>
 
 </div>
-
-
-
-
-
-

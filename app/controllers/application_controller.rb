@@ -203,6 +203,18 @@ class ApplicationController < ActionController::Base
       @has_articles_only = book_iterator == 0 && title_iterator == 0 && chapter_iterator == 0 && subsection_iterator == 0 && section_iterator == 0
     end
 
+    if current_user && !@query.blank?
+      if @stream
+        results = @stream.count
+      end
+      $tracker.track(current_user.id, 'Site Search', {
+        'query' => @query,
+        'location' => @law.name,
+        'location_type' => "Law",
+        'results' => results
+      })
+    end
+
     @user_can_edit_law = current_user_is_editor
     @user_can_access_law = user_can_access_law @law, current_user
     if !@user_can_access_law

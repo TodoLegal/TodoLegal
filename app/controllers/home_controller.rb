@@ -94,9 +94,9 @@ class HomeController < ApplicationController
     if current_user
       $tracker.track(current_user.id, 'Site Search', {
         'query' => @query,
-        'tag' => nil,
-        'titles_result' => titles_result,
-        'articles_result' => articles_result
+        'location' => "Home",
+        'location_type' => "Global",
+        'results' => titles_result + articles_result
       })
     end
   end

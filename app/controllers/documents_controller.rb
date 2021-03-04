@@ -10,7 +10,7 @@ class DocumentsController < ApplicationController
       if @query && @query.length == 5 && @query[1] != ','
         @query.insert(2, ",")
       end
-      @documents = Document.where(publication_number: @query).order('publication_number DESC')
+      @documents = Document.where(publication_number: @query).order('publication_number DESC').page params[:page]
     else
       @documents = Document.all.order('publication_number DESC').page params[:page]
     end

@@ -52,7 +52,7 @@ class DocumentsController < ApplicationController
           run_gazette_script @document, Rails.root.join("tmp") + "gazette.pdf"
           format.html { redirect_to gazette_path(@document.publication_number), notice: 'Document was successfully created.' }
         else
-          format.html { redirect_to @document, notice: 'Document was successfully created.' }
+          format.html { redirect_to edit_document_path(@document), notice: 'Document was successfully created.' }
         end
       else
         format.html { render :new }

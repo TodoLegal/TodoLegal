@@ -43,9 +43,7 @@ class DocumentsController < ApplicationController
     respond_to do |format|
       if @document.save
         # download file
-        require "google/cloud/storage"
-        storage = Google::Cloud::Storage.new(project_id:"docs-tl", credentials: Rails.root.join("gcs.keyfile"))
-        bucket = storage.bucket GCS_BUCKET
+        bucket = get_bucket
         file = bucket.file @document.original_file.key
         if params["document"]["process_gazette"] == "1"
           file.download "tmp/gazette.pdf"
@@ -96,6 +94,15 @@ class DocumentsController < ApplicationController
     return description
   end
 
+  def set_content_disposition_attachment key, file_name
+    bucket = get_bucket
+    file = bucket.file key
+    file.update do |file|
+      file.content_type = "application/pdf"
+      file.content_disposition = "attachment; filename=" + file_name
+    end
+  end
+
   def run_gazette_script document, document_pdf_path
     # run brazilian script
     puts "Starting python script"
@@ -132,8 +139,10 @@ class DocumentsController < ApplicationController
           "gazettes",
           document.id.to_s, json_data["files"][0]["path"]).to_s
       ),
-      filename: document.name + ".pdf"
+      filename: document.name + ".pdf",
+      content_type: "application/pdf"
     )
+    set_content_disposition_attachment document.original_file.key, document.name + ".pdf"
     # create the related documents
     puts "Creating related documents"
     json_data["files"].drop(1).each do |file|
@@ -164,8 +173,10 @@ class DocumentsController < ApplicationController
             "gazettes",
             document.id.to_s, file["path"]).to_s
         ),
-        filename: document.name + ".pdf"
+        filename: document.name + ".pdf",
+        content_type: "application/pdf"
       )
+      set_content_disposition_attachment new_document.original_file.key, new_document.name + ".pdf"
       puts "File uploaded"
     end
     json_data["errors"].each do |error|
@@ -184,5 +195,11 @@ class DocumentsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def document_params
       params.require(:document).permit(:name, :original_file, :url, :publication_date, :publication_number, :description)
+    end
+
+    def get_bucket
+      require "google/cloud/storage"
+      storage = Google::Cloud::Storage.new(project_id:"docs-tl", credentials: Rails.root.join("gcs.keyfile"))
+      return storage.bucket GCS_BUCKET
     end
 end

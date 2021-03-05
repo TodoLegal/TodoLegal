@@ -1,0 +1,44 @@
+<% if documents.length >= 1 %>
+    <p class="mt-3">
+        <strong> Numero de publicacion: </strong> <%= documents[0].publication_number %> 
+    </p>
+<% end %>
+
+<p>
+    <strong>Fraccionados de la gaceta:</strong>
+</p>
+
+<table class="table table-sm"">
+  <thead>
+    <tr>
+      <th class="table--headers" scope="col">Nombre</th>
+      <th class="acciones--tableHeader" scope="col">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% documents.each do |document| %>
+        <tr>
+            <td>
+                <%= document.name %>
+            </td>
+            <td>
+                <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                    <%= link_to "https://valid.todolegal.app/documents/" + document.id.to_s, class:"btn btn-outline-primary" do %>
+                        <i class="far fa-eye"></i>
+                    <% end %>
+                    <%= button_to(edit_document_path(document), {class:"btn btn-outline-secondary", method: :get}) do %>
+                        <i class="fas fa-edit"></i>
+                    <% end %>
+                    <%= button_to document, method: :delete, data: { confirm: '¿Estás Seguro que deseas eliminarlo?' }, class:"btn btn-outline-danger" do %>
+                        <i class="fas fa-trash-alt"></i>
+                    <% end %>
+                </div>
+            </td>
+        </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<style>
+    tr:hover {background-color:#c8ced4;}
+</style>

@@ -2,6 +2,7 @@
   <thead>
     <tr>
       <th class="table--headers" scope="col">Nombre</th>
+      <th class="table--headers"scope="col">Fecha de publicación</th>
       <th class="table--headers"scope="col">Número de publicación</th>
       <th class="acciones--tableHeader" scope="col">Acciones</th>
     </tr>
@@ -11,6 +12,9 @@
         <tr>
             <td>
                 <%= document.name %>
+            </td>
+            <td>
+                <%= document.publication_date %>
             </td>
             <td> 
                 <%= document.publication_number %>

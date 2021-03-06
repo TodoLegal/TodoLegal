@@ -80,7 +80,7 @@ class Api::V1::DocumentsController < ApplicationController
     end
     documents = Document.search(
       query,
-      fields: [:name, :brand],
+      fields: [:name, :publication_number, :description],
       where:
       {
         publication_date: {gte: from, lte: to}

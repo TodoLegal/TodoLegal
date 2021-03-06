@@ -16,15 +16,20 @@
     <div class="tab-content mt-4" id="myTabContent">
 
         <div class="tab-pane fade show active" id="gazettes" role="tabpanel" aria-labelledby="gazettes-tab">
-            <form action="<%= gazettes_url %>" method="get">
-              <div>
-                <input name="query" value="<%= @query %>" type="text" placeholder="">
-                <div>
-                  <button type="submit" type="button">Buscar</button>
+
+          <div class="row justify-content-end mb-3">
+            <div class="col-6">
+              <form action="<%= gazettes_url %>" method="get">
+                <div class="input-group">
+                  <input name="query" class="form-control search-input" value="<%= @query %>" type="text" aria-describedby="buttonSubmit" placeholder="">
+                  <button type="submit" class="btn btn-outline-primary" id="buttonSubmit">Buscar</button>
                 </div>
-              </div>
-            </form>
-            <%= render partial: 'gazettes_list', locals: {gazettes: @gazettes} %>
+              </form>
+            </div>
+          </div>
+
+          <%= render partial: 'gazettes_list', locals: {gazettes: @gazettes} %>
+
         </div>
         
         <div class="tab-pane fade" id="missing-gazettes" role="tabpanel" aria-labelledby="missing-gazettes-tab">
@@ -34,3 +39,14 @@
     </div>
 
 </div>
+
+<style>
+  .search-input{
+    background-color: white;
+  }
+
+  .search-input:focus{
+    background-color: white;
+  }
+</style>
+

@@ -17,7 +17,8 @@
         <div class="col-md-8">
           <div class="form-group">
             <%= form.label :Numero_de_Emisión %>
-            <%= form.text_field :name, class: "form-control" %>
+            <small> (Máximo 50 caracteres) </small>
+            <%= form.text_field :name, class: "form-control", maxlength: "50" %>
           </div>
         </div>
       </div>

@@ -3,15 +3,16 @@
   <p id="notice"><%= notice %></p>
 
   <h1>Documentos</h1>
-
-  <form action="<%= documents_path %>" method="get">
-    <div>
-      <input name="query" value="<%= @query %>" type="text" placeholder="">
-      <div>
-        <button type="submit" type="button">Buscar</button>
-      </div>
+  <div class="row justify-content-end">
+    <div class="col-6">
+      <form action="<%= documents_path %>" method="get">
+        <div class="input-group">
+          <input name="query"  class="form-control search-input" value="<%= @query %>" type="text" placeholder="" aria-describedby="buttonSubmit">
+          <button type="submit" class="btn btn-outline-primary" id="buttonSubmit">Buscar</button>
+        </div>
+      </form>
     </div>
-  </form>
+  </div>
 
   <%= link_to 'Subir documento', new_document_path %>
   <%= render partial:'edit_table', locals: {documents: @documents}%>
@@ -19,3 +20,13 @@
   <%=paginate @documents %>
   <br>
 </div>
+
+<style>
+  .search-input{
+    background-color: white;
+  }
+
+  .search-input:focus{
+    background-color: white;
+  }
+</style>

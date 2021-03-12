@@ -6,6 +6,7 @@ set :repo_url, "https://github.com/TodoLegal/TodoLegal.git"
 
 append :linked_files, "config/master.key"
 append :linked_files, "config/credentials.yml.enc"
+append :linked_files, "gcs.keyfile"
 
 namespace :deploy do
   namespace :check do
@@ -16,6 +17,9 @@ namespace :deploy do
         end
         unless test("[ -f #{shared_path}/config/credentials.yml.enc ]")
             upload! 'config/credentials.yml.enc', "#{shared_path}/config/credentials.yml.enc"
+        end
+        unless test("[ -f #{shared_path}/gcs.keyfile ]")
+          upload! 'gcs.keyfile', "#{shared_path}/gcs.keyfile"
         end
       end
     end

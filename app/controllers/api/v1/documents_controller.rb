@@ -80,7 +80,7 @@ class Api::V1::DocumentsController < ApplicationController
     end
     documents = Document.search(
       query,
-      fields: [:name, :brand],
+      fields: [:name, :publication_number, :description],
       where:
       {
         publication_date: {gte: from, lte: to}
@@ -89,6 +89,24 @@ class Api::V1::DocumentsController < ApplicationController
       offset: params["offset"].to_i,
       order: {publication_date: :desc})
 
-    render json: { "documents": documents, "count": documents.total_count }
+    total_count = documents.total_count
+    documents = documents.to_json
+    documents = JSON.parse(documents)
+
+    documents.each do | document |
+      tags = []
+      document_tags = DocumentTag.where(document_id: document["id"].to_i)
+      if document_tags.first
+        puts document_tags.first.tag.name
+      end
+      document_tags.each do |document_tag|
+        if document_tag
+          tags.push({"name": document_tag.tag.name, "type": document_tag.tag.tag_type.name})
+        end
+      end
+      document["tags"] = tags
+    end
+
+    render json: { "documents": documents, "count": total_count }
   end
 end

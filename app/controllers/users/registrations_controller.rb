@@ -88,16 +88,16 @@ class Users::RegistrationsController < Devise::RegistrationsController
     if current_user
       update_mixpanel_user current_user
       $tracker.track(current_user.id, 'Sign Up', {
-      '$email'            => current_user.user.email,
-      'first_name'      => current_user.user.first_name,
-      'last_name'      => current_user.user.last_name,
-      'occupation'      => current_user.user.occupation,
-      'is_contributor'      => current_user.user.is_contributor,
-      'current_sign_in_at'      => current_user.user.current_sign_in_at,
-      'last_sign_in_at'      => current_user.user.last_sign_in_at,
-      'current_sign_in_ip'      => current_user.user.current_sign_in_ip,
-      'last_sign_in_ip'      => current_user.user.last_sign_in_ip,
-      'receive_information_emails'      => current_user.user.receive_information_emails
+      '$email'            => current_user.email,
+      'first_name'      => current_user.first_name,
+      'last_name'      => current_user.last_name,
+      'occupation'      => current_user.occupation,
+      'is_contributor'      => current_user.is_contributor,
+      'current_sign_in_at'      => current_user.current_sign_in_at,
+      'last_sign_in_at'      => current_user.last_sign_in_at,
+      'current_sign_in_ip'      => current_user.current_sign_in_ip,
+      'last_sign_in_ip'      => current_user.last_sign_in_ip,
+      'receive_information_emails'      => current_user.receive_information_emails
       })
     end
     if $discord_bot

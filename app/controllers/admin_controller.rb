@@ -12,12 +12,12 @@ class AdminController < ApplicationController
         .group_by(&:publication_number)
         .sort_by { |x | [ x ] }.reverse
     else
-      @gazettes = Document.all.group_by(&:publication_number).sort_by { |x | [ x ] }.reverse
+      @gazettes = Document.all.group_by(&:publication_number).sort_by { | x | [ x ] }.reverse
     end
     gazette_temp = @gazettes.first
     @missing_gazettes = []
     @gazettes.drop(1).each do |gazette|
-      if gazette.first.delete(',').to_i + 1 != gazette_temp.first.delete(',').to_i
+      if gazette.first and gazette_temp.first and gazette.first.delete(',').to_i + 1 != gazette_temp.first.delete(',').to_i
         for missing_gazette in gazette.first.delete(',').to_i+1..gazette_temp.first.delete(',').to_i-1
           @missing_gazettes.push(missing_gazette)
         end

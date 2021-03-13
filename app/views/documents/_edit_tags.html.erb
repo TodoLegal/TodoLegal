@@ -9,11 +9,18 @@
 <h4> Tags de Institución </h4>
 <%= render partial:'edit_tag_table', locals: {tag_name: "institucion"}%>
 
+<h4> Tags de Tema </h4>
+<%= render partial:'edit_tag_table', locals: {tag_name: "tema"}%>
+
 
 
 <script>
-    $('.select2').select2();
+    $('.js-example-basic-single').select2();
+    $(".js-example-tags").select2({
+        tags: true
+    });
 </script>
+
 
 <style>
 

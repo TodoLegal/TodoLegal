@@ -21,7 +21,7 @@
             </td>
             <td>
                 <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                    <%= button_to document, method: :get, class:"btn btn-outline-primary" do %>
+                    <%=button_to document, method: :get, class:"btn btn-outline-primary" do %>
                         <i class="far fa-eye"></i>
                     <% end %>
                     <%= button_to(edit_document_path(document), {class:"btn btn-outline-secondary", method: :get}) do %>

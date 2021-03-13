@@ -44,10 +44,23 @@
         </div>
         
         <div class="form-group col-md-4">
-          <%= form.label :número_de_publicación %>
-          <%= form.text_field :publication_number, class: "form-control" %>
+          <%= form.label :número_de_gaceta %> 
+          <%= form.text_field :publication_number, class: "form-control", disabled:true, id:"gazetteNumber" %>
+          <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="inputSwitch" onclick="toggleEdition()">
+            <label class="custom-control-label" for="inputSwitch">Habilitar edición</label>
+          </div>
         </div>
 
+      </div>
+
+      <div class="row">
+        <div class="col-md-8">
+          <div class="form-group">
+            <%= form.label :resumen %>
+            <%= form.text_area :short_description, class: "form-control" %>
+          </div>
+        </div>
       </div>
 
       <div class="row">
@@ -75,3 +88,17 @@
   </div>
 
 <% end %>
+
+<script>
+  function toggleEdition(){
+    const enabled = document.getElementById("inputSwitch").checked;
+    const textInput = document.getElementById("gazetteNumber").disabled = !enabled;
+  }
+</script>
+
+<style>
+  .custom-control-label{
+    font-weight: normal!important;
+    color: #696c6f!important;
+  }
+</style>

@@ -36,7 +36,11 @@
             <td>
                 <% tag_type = TagType.find_by(name: tag_name) %>
                 <%= form.hidden_field :document_id, value: @document.id %>
-                <%= form.collection_select(:tag_id, Tag.where(tag_type_id: tag_type.id), :id, :name, {:prompt=>true}, {:class=>'form-control select2'}) %>
+                <% if tag_name == "tema" %>
+                    <%= form.collection_select(:tag_id, Tag.where(tag_type_id: tag_type.id), :id, :name, {:prompt=>true}, {:class=>'form-control js-example-tags', :id=>tag_type.id}) %>
+                <% else %>
+                    <%= form.collection_select(:tag_id, Tag.where(tag_type_id: tag_type.id), :id, :name, {:prompt=>true}, {:class=>'form-control js-example-basic-single', :id=>tag_type.id}) %>
+                <% end %>
             <td>
             <%= form.submit "Agregar tag", class: 'btn btn-primary' %>
             </td>

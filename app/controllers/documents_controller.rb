@@ -124,7 +124,7 @@ class DocumentsController < ApplicationController
   def run_slice_gazette_script document, document_pdf_path
     # run slice script
     puts "Starting python script"
-    python_return_value = `python3 ~/GazetteSlicer/gazette.py #{ document_pdf_path } '#{ Rails.root.join("public", "gazettes") }' '#{document.id}'`
+    python_return_value = `python3 ~/GazetteSlicer/slice_gazette.py #{ document_pdf_path } '#{ Rails.root.join("public", "gazettes") }' '#{document.id}'`
     puts "Starting pyton script"
     json_data = JSON.parse(python_return_value)
     first_element = json_data["files"].first

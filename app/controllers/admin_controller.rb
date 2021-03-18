@@ -12,7 +12,7 @@ class AdminController < ApplicationController
         .group_by(&:publication_number)
         .sort_by { |x | [ x ] }.reverse
     else
-      @gazettes = Document.all.group_by(&:publication_number).sort_by { | x | [ x ] }.reverse
+      @gazettes = Document.where.not(publication_number: nil).group_by(&:publication_number).sort_by { | x | [ x ] }.reverse
     end
     gazette_temp = @gazettes.first
     @missing_gazettes = []
@@ -23,6 +23,22 @@ class AdminController < ApplicationController
         end
       end
       gazette_temp = gazette
+    end
+    @has_original_gazette = []
+    @has_been_sliced = []
+    @gazettes.each do |gazette|
+      documents = gazette.second
+      has_original = false
+      is_sliced = false
+      documents.each do |document|
+        if document.name == "Gaceta"
+          has_original = true
+        else
+          is_sliced = true
+        end
+      end
+      additional_data = {'has_original': has_original, 'is_sliced': is_sliced }
+      gazette.push(additional_data)
     end
   end
 

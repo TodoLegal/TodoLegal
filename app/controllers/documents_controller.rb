@@ -45,12 +45,16 @@ class DocumentsController < ApplicationController
         # download file
         bucket = get_bucket
         file = bucket.file @document.original_file.key
-        if params["document"]["process_gazette"] == "1"
+        if params["document"]["auto_process_type"] == "slice"
           file.download "tmp/gazette.pdf"
-          run_gazette_script @document, Rails.root.join("tmp") + "gazette.pdf"
-          format.html { redirect_to gazette_path(@document.publication_number), notice: 'Document was successfully created.' }
+          run_slice_gazette_script @document, Rails.root.join("tmp") + "gazette.pdf"
+          format.html { redirect_to gazette_path(@document.publication_number), notice: 'La gaceta se ha partido exitósamente.' }
+        elsif params["document"]["auto_process_type"] == "process"
+          file.download "tmp/gazette.pdf"
+          run_process_gazette_script @document, Rails.root.join("tmp") + "gazette.pdf"
+          format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido una gaceta.' }
         else
-          format.html { redirect_to edit_document_path(@document), notice: 'Document was successfully created.' }
+          format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido un documento.' }
         end
       else
         format.html { render :new }
@@ -103,8 +107,22 @@ class DocumentsController < ApplicationController
     end
   end
 
-  def run_gazette_script document, document_pdf_path
-    # run brazilian script
+  def run_process_gazette_script document, document_pdf_path
+    # run slice script
+    puts "Starting process python script"
+    python_return_value = `python3 ~/GazetteSlicer/process_gazette.py #{ document_pdf_path }`
+    puts "Starting process pyton script"
+    json_data = JSON.parse(python_return_value)
+    gazette_date = json_data["gazette"]["date"]
+    gazette_number = json_data["gazette"]["number"]
+    document.publication_date = gazette_date
+    document.publication_number = gazette_number
+    document.name = "Gaceta"
+    document.save
+  end
+
+  def run_slice_gazette_script document, document_pdf_path
+    # run slice script
     puts "Starting python script"
     python_return_value = `python3 ~/GazetteSlicer/gazette.py #{ document_pdf_path } '#{ Rails.root.join("public", "gazettes") }' '#{document.id}'`
     puts "Starting pyton script"

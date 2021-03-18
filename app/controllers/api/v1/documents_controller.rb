@@ -83,7 +83,8 @@ class Api::V1::DocumentsController < ApplicationController
       fields: [:name, :publication_number, :description],
       where:
       {
-        publication_date: {gte: from, lte: to}
+        publication_date: {gte: from, lte: to},
+        name: {not: "Gaceta"},
       },
       limit: limit,
       offset: params["offset"].to_i,

@@ -1,11 +1,13 @@
 <table class="table table-sm"">
-    <thead>
+    <thead align="center">
         <tr>
             <th class="table--headers" scope="col">Numero de gaceta</th>
             <th class="table--headers"scope="col">Fecha de publicación</th>
+            <th class="table--headers"scope="col">Contiene gaceta original</th>
+            <th class="table--headers"scope="col">Fraccionada</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody align="center">
     <% gazettes.each do |gazette| %>
         <tr>
             <td>
@@ -13,9 +15,23 @@
                     <%= link_to gazette.first, gazette_path(gazette.first) %>
                 <% end %>
             </td>
-            <td> 
+            <td>
                 <% if gazette.second %>
                     <%= gazette.second.first.publication_date %>
+                <% end %>
+            </td>
+            <td>
+                <% if gazette.third %>
+                    <% if gazette.third[:has_original] %>
+                        <i class="fas fa-check"></i>
+                    <% end %>
+                <% end %>
+            </td>
+            <td>
+                <% if gazette.third %>
+                    <% if gazette.third[:is_sliced] %>
+                        <i class="fas fa-check"></i>
+                    <% end %>
                 <% end %>
             </td>
         </tr>

@@ -3,16 +3,42 @@ class AdminController < ApplicationController
   before_action :authenticate_admin!, only: [:gazettes, :gazette, :users, :download_contributor_users, :download_recieve_information_users, :grant_permission, :revoke_permission, :set_law_access]
 
   def gazettes
-    @gazettes = Document.all.group_by(&:publication_number).sort_by { |x | [ x ] }.reverse
+    @query = params["query"]
+    if !@query.blank?
+      if @query && @query.length == 5 && @query[1] != ','
+        @query.insert(2, ",")
+      end
+      @gazettes = Document.where(publication_number: @query)
+        .group_by(&:publication_number)
+        .sort_by { |x | [ x ] }.reverse
+    else
+      @gazettes = Document.where.not(publication_number: nil).group_by(&:publication_number).sort_by { | x | [ x ] }.reverse
+    end
     gazette_temp = @gazettes.first
     @missing_gazettes = []
     @gazettes.drop(1).each do |gazette|
-      if gazette.first.delete(',').to_i + 1 != gazette_temp.first.delete(',').to_i
+      if gazette.first and gazette_temp.first and gazette.first.delete(',').to_i + 1 != gazette_temp.first.delete(',').to_i
         for missing_gazette in gazette.first.delete(',').to_i+1..gazette_temp.first.delete(',').to_i-1
           @missing_gazettes.push(missing_gazette)
         end
       end
       gazette_temp = gazette
+    end
+    @has_original_gazette = []
+    @has_been_sliced = []
+    @gazettes.each do |gazette|
+      documents = gazette.second
+      has_original = false
+      is_sliced = false
+      documents.each do |document|
+        if document.name == "Gaceta"
+          has_original = true
+        else
+          is_sliced = true
+        end
+      end
+      additional_data = {'has_original': has_original, 'is_sliced': is_sliced }
+      gazette.push(additional_data)
     end
   end
 

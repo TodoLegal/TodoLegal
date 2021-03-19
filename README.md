@@ -43,13 +43,22 @@ sudo apt install curl git libpq-dev gnupg2 postgresql libsodium-dev
 gpg2 --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
 \curl -sSL https://get.rvm.io | bash -s stable --rails
 source /usr/local/rvm/scripts/rvm # depends on your linux distro
+# elasticsearch
+wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.11.1-amd64.deb
+wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.11.1-amd64.deb.sha512
+shasum -a 512 -c elasticsearch-7.11.1-amd64.deb.sha512 
+sudo dpkg -i elasticsearch-7.11.1-amd64.deb
+sudo /bin/systemctl daemon-reload
+sudo /bin/systemctl enable elasticsearch.service
+sudo systemctl start elasticsearch.service
 ```
 
 **MacOS**
 ```bash
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 \curl -sSL https://get.rvm.io | bash -s stable --rails
-brew install postgresql yarn
+brew tap elastic/tap
+brew install postgresql yarn elastic/tap/elasticsearch-full
 ```
 
 ## 2. Repo

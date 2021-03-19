@@ -1,11 +1,5 @@
-<p>
-<strong>Gacetas:</strong>
-</p>
-<ul>
-<% @documents.each do |document| %>
-<li>
-    <%= link_to document.name, edit_document_path(document) %>
-</li>
-<% end %>
-</ul>
-<p>
+
+<%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+<div class="container">
+  <%= render partial:'gazettes_table', locals: {documents: @documents}%>
+</div>

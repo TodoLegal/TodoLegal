@@ -14,8 +14,8 @@
   <br>
 
   <div class="field">
-    <%= form.label :procesar_gaceta %>
-    <%= form.check_box :process_gazette %>
+    <%= form.label :proceso_automático %>
+    <%= form.select(:auto_process_type, options_for_select([['Ninguno', "none"], ['Procesar Una Gaceta', "process"], ['Partir Gaceta', "slice"]])) %>
   </div>
 
   <div class="field">

@@ -7,56 +7,66 @@
     confirm = confirm("¿Seguro que lo desea eliminar?");
     }
   </script>
+  <h3 class="mb-3" >
+    <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, documents_path%>
+    <strong> Detalles del documento </strong>
+  </h2>
+  <div class="document--info  ml-4">
+    <p>
+      <strong>Name:</strong>
+      <%= @document.name %>
+    </p>
 
-  <p>
-    <strong>Name:</strong>
-    <%= @document.name %>
-  </p>
+    <p>
+      <strong>Publication Date:</strong>
+      <%= @document.publication_date %>
+    </p>
 
-  <p>
-    <strong>Publication Date:</strong>
-    <%= @document.publication_date %>
-  </p>
+    <p>
+      <strong>Publication Number:</strong>
+      <%= @document.publication_number %>
+    </p>
 
-  <p>
-    <strong>Publication Number:</strong>
-    <%= @document.publication_number %>
-  </p>
+    <p>
+      <strong>Description:</strong>
+      <%= @document.description %>
+    </p>
 
-  <p>
-    <strong>Description:</strong>
-    <%= @document.description %>
-  </p>
-
-  <p>
-    <strong>Otros documentos de la misma gaceta:</strong>
-  </p>
-  <ul>
-    <% if @documents_in_same_gazette %>
-      <% @documents_in_same_gazette.each do |document| %>
+    <p>
+      <strong>Otros documentos de la misma gaceta:</strong>
+    </p>
+    <ul>
+      <% if @documents_in_same_gazette %>
+        <% @documents_in_same_gazette.each do |document| %>
+          <li>
+            <%= link_to document.name, document %>
+          </li>
+        <% end %>
+      <% end %>
+    </ul>
+    <p>
+      <strong>Tags:</strong>
+    </p>
+    <ul>
+      <% @document.tags.each do |tag| %>
         <li>
-          <%= link_to document.name, document %>
+          <%= tag.name %> (<%= tag.tag_type.name %>)
         </li>
       <% end %>
-    <% end %>
-  </ul>
-  <p>
-    <strong>Tags:</strong>
-  </p>
-  <ul>
-    <% @document.tags.each do |tag| %>
-      <li>
-        <%= tag.name %> (<%= tag.tag_type.name %>)
-      </li>
-    <% end %>
-  </ul>
+    </ul>
+    
+    <div class="btn-group mt-3" role="group" aria-label="Basic mixed styles example">
+      <%= button_to(edit_document_path(@document), {class:"btn btn-outline-secondary mr-2", method: :get}) do %>
+          Editar
+      <% end %>
+      <% if @document.original_file.attached? %>
+        <%= button_to(@document.original_file, {class:"btn btn-outline-primary", method: :get}) do %>
+          Descargar archivo
+        <% end %>
+      <% end %>
+    </div>
 
-  <p>
-    <% if @document.original_file.attached? %>
-      <%= link_to "Descargar", @document.original_file %>
-    <% end %>
-  </p>
+   
 
-  <%= link_to 'Edit', edit_document_path(@document) %> |
-  <%= link_to 'Back', documents_path %>
+  </div>
 </div>

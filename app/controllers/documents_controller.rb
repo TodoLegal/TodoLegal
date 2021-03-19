@@ -5,7 +5,15 @@ class DocumentsController < ApplicationController
   # GET /documents
   # GET /documents.json
   def index
-    @documents = Document.all.order('publication_number DESC')
+    @query = params["query"]
+    if !@query.blank?
+      if @query && @query.length == 5 && @query[1] != ','
+        @query.insert(2, ",")
+      end
+      @documents = Document.where(publication_number: @query).order('publication_number DESC').page params[:page]
+    else
+      @documents = Document.all.order('publication_number DESC').page params[:page]
+    end
   end
 
   # GET /documents/1
@@ -21,6 +29,7 @@ class DocumentsController < ApplicationController
   # GET /documents/new
   def new
     @document = Document.new
+    @comes_from_gazettes = params[:comes_from_gazette];
   end
 
   # GET /documents/1/edit
@@ -34,16 +43,18 @@ class DocumentsController < ApplicationController
     respond_to do |format|
       if @document.save
         # download file
-        require "google/cloud/storage"
-        storage = Google::Cloud::Storage.new(project_id:"docs-tl", credentials: Rails.root.join("gcs.keyfile"))
-        bucket = storage.bucket GCS_BUCKET
+        bucket = get_bucket
         file = bucket.file @document.original_file.key
-        if params["document"]["process_gazette"] == "1"
+        if params["document"]["auto_process_type"] == "slice"
           file.download "tmp/gazette.pdf"
-          run_gazette_script @document, Rails.root.join("tmp") + "gazette.pdf"
-          format.html { redirect_to gazette_path(@document.publication_number), notice: 'Document was successfully created.' }
+          run_slice_gazette_script @document, Rails.root.join("tmp") + "gazette.pdf"
+          format.html { redirect_to gazette_path(@document.publication_number), notice: 'La gaceta se ha partido exitósamente.' }
+        elsif params["document"]["auto_process_type"] == "process"
+          file.download "tmp/gazette.pdf"
+          run_process_gazette_script @document, Rails.root.join("tmp") + "gazette.pdf"
+          format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido una gaceta.' }
         else
-          format.html { redirect_to @document, notice: 'Document was successfully created.' }
+          format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido un documento.' }
         end
       else
         format.html { render :new }
@@ -87,15 +98,41 @@ class DocumentsController < ApplicationController
     return description
   end
 
-  def run_gazette_script document, document_pdf_path
-    # run brazilian script
+  def set_content_disposition_attachment key, file_name
+    bucket = get_bucket
+    file = bucket.file key
+    file.update do |file|
+      file.content_type = "application/pdf"
+      file.content_disposition = "attachment; filename=" + file_name
+    end
+  end
+
+  def run_process_gazette_script document, document_pdf_path
+    # run slice script
+    puts "Starting process python script"
+    python_return_value = `python3 ~/GazetteSlicer/process_gazette.py #{ document_pdf_path }`
+    puts "Starting process pyton script"
+    json_data = JSON.parse(python_return_value)
+    gazette_date = json_data["gazette"]["date"]
+    gazette_number = json_data["gazette"]["number"]
+    document.publication_date = gazette_date
+    document.publication_number = gazette_number
+    document.name = "Gaceta"
+    document.save
+  end
+
+  def run_slice_gazette_script document, document_pdf_path
+    # run slice script
     puts "Starting python script"
-    python_return_value = `python3 ~/GazetteSlicer/gazette.py #{ document_pdf_path } '#{ Rails.root.join("public", "gazettes") }' '#{document.id}'`
+    python_return_value = `python3 ~/GazetteSlicer/slice_gazette.py #{ document_pdf_path } '#{ Rails.root.join("public", "gazettes") }' '#{document.id}'`
     puts "Starting pyton script"
     json_data = JSON.parse(python_return_value)
     first_element = json_data["files"].first
     # set original document values
     puts "Setting original document values"
+    if !first_element
+      return
+    end
     document.name = first_element["name"]
     document.description = getCleanDescription first_element["description"]
     document.publication_number = first_element["publication_number"]
@@ -120,8 +157,10 @@ class DocumentsController < ApplicationController
           "gazettes",
           document.id.to_s, json_data["files"][0]["path"]).to_s
       ),
-      filename: document.name + ".pdf"
+      filename: document.name + ".pdf",
+      content_type: "application/pdf"
     )
+    set_content_disposition_attachment document.original_file.key, document.name + ".pdf"
     # create the related documents
     puts "Creating related documents"
     json_data["files"].drop(1).each do |file|
@@ -152,8 +191,10 @@ class DocumentsController < ApplicationController
             "gazettes",
             document.id.to_s, file["path"]).to_s
         ),
-        filename: document.name + ".pdf"
+        filename: document.name + ".pdf",
+        content_type: "application/pdf"
       )
+      set_content_disposition_attachment new_document.original_file.key, new_document.name + ".pdf"
       puts "File uploaded"
     end
     json_data["errors"].each do |error|
@@ -171,6 +212,12 @@ class DocumentsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def document_params
-      params.require(:document).permit(:name, :original_file, :url, :publication_date, :publication_number, :description)
+      params.require(:document).permit(:name, :original_file, :url, :publication_date, :publication_number, :description, :short_description)
+    end
+
+    def get_bucket
+      require "google/cloud/storage"
+      storage = Google::Cloud::Storage.new(project_id:"docs-tl", credentials: Rails.root.join("gcs.keyfile"))
+      return storage.bucket GCS_BUCKET
     end
 end

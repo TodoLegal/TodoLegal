@@ -1,0 +1,34 @@
+<h2 class="mb-3 mt-3">Edición de tags</h2>
+
+<h4> Tags de Materia </h4>
+<%= render partial:'edit_tag_table', locals: {tag_name: "materia"}%>
+
+<h4> Tags de Tipo </h4>
+<%= render partial:'edit_tag_table', locals: {tag_name: "creacion"}%>
+
+<h4> Tags de Institución </h4>
+<%= render partial:'edit_tag_table', locals: {tag_name: "institucion"}%>
+
+<h4> Tags de Tema </h4>
+<%= render partial:'edit_tag_table', locals: {tag_name: "tema"}%>
+
+
+
+<script>
+    $('.js-example-basic-single').select2();
+    $(".js-example-tags").select2({
+        tags: true
+    });
+</script>
+
+
+<style>
+
+    .select2{
+        width:100% !important;
+    }
+
+    .table{
+        background-color: white;
+    }
+</style>

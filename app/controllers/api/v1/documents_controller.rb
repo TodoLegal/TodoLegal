@@ -54,28 +54,60 @@ class Api::V1::DocumentsController < ApplicationController
   end
   
   def get_documents
-    if params["query"]
-      documents = Document.all.order('publication_date DESC').search_by_all(params["query"])
-    else
-      documents = Document.all.order('publication_date DESC')
+    limit = 100
+    if !params["limit"].blank?
+      limit = params["limit"]
     end
-    if params["from"]
-      documents = documents.where('publication_date >= ?', params["from"])
+    query = "*"
+    if !params["query"].blank?
+      query = params["query"]
     end
-    if params["to"]
-      documents = documents.where('publication_date <= ?', params["to"])
+    from = nil
+    to = nil
+    if !params["from"].blank?
+      begin
+        Date.parse(params["from"])
+        from = params["from"]
+      rescue ArgumentError
+      end
+    end
+    if !params["to"].blank?
+      begin
+        Date.parse(params["to"])
+        to = params["to"]
+      rescue ArgumentError
+      end
+    end
+    documents = Document.search(
+      query,
+      fields: [:name, :publication_number, :description],
+      where:
+      {
+        publication_date: {gte: from, lte: to},
+        name: {not: "Gaceta"},
+      },
+      limit: limit,
+      offset: params["offset"].to_i,
+      order: {publication_date: :desc})
+
+    total_count = documents.total_count
+    documents = documents.to_json
+    documents = JSON.parse(documents)
+
+    documents.each do | document |
+      tags = []
+      document_tags = DocumentTag.where(document_id: document["id"].to_i)
+      if document_tags.first
+        puts document_tags.first.tag.name
+      end
+      document_tags.each do |document_tag|
+        if document_tag
+          tags.push({"name": document_tag.tag.name, "type": document_tag.tag.tag_type.name})
+        end
+      end
+      document["tags"] = tags
     end
 
-    documents_count = documents.count
-
-    # limit and offset setup
-    documents = documents.limit(100)
-    if params["limit"]
-      documents = documents.limit(params["limit"])
-    end
-    if params["offset"]
-      documents = documents.offset(params["offset"])
-    end
-    render json: { "documents": documents, "count": documents_count }
+    render json: { "documents": documents, "count": total_count }
   end
 end

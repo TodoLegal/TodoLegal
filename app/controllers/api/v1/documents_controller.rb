@@ -20,10 +20,6 @@ class Api::V1::DocumentsController < ApplicationController
     #  end
     #end
     related_documents = Document.where(publication_number: document.publication_number)
-    json_document = document.as_json
-    if document.original_file.attached?
-      json_document = json_document.merge(file: url_for(document.original_file))
-    end
     fingerprint = (request.remote_ip +
       browser.to_s +
       browser.device.name +
@@ -44,6 +40,12 @@ class Api::V1::DocumentsController < ApplicationController
     todo_can_access = true
     if user_document_visit_tracker.visits > 3 # TODO set amount of visits
       todo_can_access = false
+    end
+    json_document = document.as_json
+    if todo_can_access and document.original_file.attached?
+      json_document = json_document.merge(file: url_for(document.original_file))
+    else
+      json_document = json_document.merge(file: "")
     end
     render json: {"document": json_document,
       "tags": document_tags,

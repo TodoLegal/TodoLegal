@@ -48,6 +48,8 @@ Rails.application.routes.draw do
   get "download_all_users" => "admin#download_all_users", as: "download_all_users"
   get '/gacetas', to: redirect('https://valid.todolegal.app'), as: "google_drive_search"
 
+  get '/rails/active_storage/blobs/redirect/:signed_id/*filename', to: 'active_storage_redirect#show'
+
   namespace :api, defaults: {format: :json} do
     namespace :v1 do
       devise_for :users, controllers: { registrations: 'api/v1/registrations', sessions: 'api/v1/sessions' }

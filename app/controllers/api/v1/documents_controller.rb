@@ -35,7 +35,7 @@ class Api::V1::DocumentsController < ApplicationController
     render json: {"document": json_document,
       "tags": document_tags,
       "related_documents": related_documents,
-      "visits": user_document_visit_tracker.visits,
+      "downloads": user_document_visit_tracker.visits,
       "can_access": can_access
     }
   end

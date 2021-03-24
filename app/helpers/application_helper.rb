@@ -43,7 +43,7 @@ module ApplicationHelper
     if !user_document_visit_tracker
       user_document_visit_tracker = UserDocumentVisitTracker.create(fingerprint: fingerprint, visits: 0, period_start: DateTime.now)
     end
-    if user_document_visit_tracker.period_start <= 1.minutes.ago # TODO set time window
+    if user_document_visit_tracker.period_start <= 5.minutes.ago # TODO set time window
       user_document_visit_tracker.period_start = DateTime.now
       user_document_visit_tracker.visits = 0
       user_document_visit_tracker.save

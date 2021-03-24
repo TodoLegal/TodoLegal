@@ -119,6 +119,8 @@ GEM
       rest-client (>= 2.1.0.rc1)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
+    doorkeeper (5.5.0)
+      railties (>= 5)
     elasticsearch (7.11.2)
       elasticsearch-api (= 7.11.2)
       elasticsearch-transport (= 7.11.2)
@@ -412,6 +414,7 @@ DEPENDENCIES
   capybara (>= 2.15)
   devise
   discordrb
+  doorkeeper
   exception_notification
   google-api-client
   google-cloud-storage (~> 1.11)

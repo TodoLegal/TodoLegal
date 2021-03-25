@@ -2,20 +2,38 @@ class Api::V1::DocumentsController < ApplicationController
   protect_from_forgery with: :null_session
   include ApplicationHelper
   before_action :doorkeeper_authorize!, :document_exists!, only: [:get_document]
+  skip_before_action :doorkeeper_authorize!, unless: :has_access_token?
   
   def get_document
-    user = User.find_by_id(doorkeeper_token.resource_owner_id)
     json_document = get_document_json
+    can_access_document = true
+    if params[:access_token]
+      user = User.find_by_id(doorkeeper_token.resource_owner_id)
+    else
+      user_document_visit_tracker = get_user_document_visit_tracker
+      can_access_document = can_access_documents user_document_visit_tracker
+    end
 
-    if @document.original_file.attached?
+
+    if can_access_document and @document.original_file.attached?
       json_document = json_document.merge(file: url_for(@document.original_file))
     else
       json_document = json_document.merge(file: "")
     end
-    render json: {"document": json_document,
-      "tags": get_document_tags,
-      "related_documents": get_related_documents
-    }
+
+    if user
+      render json: {"document": json_document,
+        "tags": get_document_tags,
+        "related_documents": get_related_documents
+      }
+    else
+      render json: {"document": json_document,
+        "tags": get_document_tags,
+        "related_documents": get_related_documents,
+        "downloads": user_document_visit_tracker.visits,
+        "can_access": can_access_document
+      }
+    end
   end
   
   def get_documents
@@ -76,26 +94,6 @@ class Api::V1::DocumentsController < ApplicationController
     render json: { "documents": documents, "count": total_count }
   end
 
-  def doorkeeper_unauthorized_render_options(error: nil)
-    @document = Document.find_by_id(params[:id])
-    user_document_visit_tracker = get_user_document_visit_tracker
-    can_access = can_access_documents user_document_visit_tracker
-
-    json_document = get_document_json
-    if can_access and @document.original_file.attached?
-      json_document = json_document.merge(file: url_for(@document.original_file))
-    else
-      json_document = json_document.merge(file: "")
-    end
-
-    {json: {"document": json_document,
-        "tags": get_document_tags,
-        "related_documents": get_related_documents,
-        "downloads": user_document_visit_tracker.visits,
-        "can_access": can_access
-      }}
-  end
-
 protected
   def get_document_json
     related_documents = Document.where(publication_number: @document.publication_number)
@@ -121,5 +119,9 @@ protected
       render json: {"error": "Document not found."}
       return
     end
+  end
+
+  def has_access_token?
+    return params[:access_token]
   end
 end

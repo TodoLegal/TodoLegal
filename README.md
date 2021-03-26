@@ -18,6 +18,8 @@ TodoLegal makes legal information accessible to lawyers and citizens. See the we
 | Discord bot          |   | ✔ |
 | Stripe               | ✔ | ✔ |
 | Google Storage       | ✔ | ✔ |
+| Elastic Search       | ✔ | ✔ |
+| OAuth IdM            | ✔ | ✔ |
 
 # Code contributions welcome
 
@@ -39,18 +41,31 @@ Feel free to start a conversation via [issue tracker](https://github.com/TodoLeg
 **Linux**
 ```bash
 sudo apt update
-sudo apt install curl git libpq-dev gnupg2 postgresql libsodium-dev
+sudo apt install curl git libpq-dev gnupg2 postgresql libsodium-dev gnupg2
 gpg2 --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
 \curl -sSL https://get.rvm.io | bash -s stable --rails
 source /usr/local/rvm/scripts/rvm # depends on your linux distro
 # elasticsearch
 wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.11.1-amd64.deb
 wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.11.1-amd64.deb.sha512
-shasum -a 512 -c elasticsearch-7.11.1-amd64.deb.sha512 
+shasum -a 512 -c elasticsearch-7.11.1-amd64.deb.sha512
 sudo dpkg -i elasticsearch-7.11.1-amd64.deb
 sudo /bin/systemctl daemon-reload
 sudo /bin/systemctl enable elasticsearch.service
 sudo systemctl start elasticsearch.service
+```
+
+You will also need node
+
+```bash
+sudo snap install node --classic --channel=8
+```
+
+And yarn
+
+```
+wget https://yarnpkg.com/install.sh
+sh install.sh
 ```
 
 **MacOS**
@@ -70,6 +85,7 @@ git init
 git remote add origin https://github.com/TodoLegal/TodoLegal.git
 git pull origin master
 bundle install
+yarn install --check-files
 ```
 
 ## 3. Run the Database
@@ -83,7 +99,7 @@ postgres=# \c todolegaldb_development;
 postgres=# CREATE TEXT SEARCH CONFIGURATION public.tl_config ( COPY = pg_catalog.spanish );
 postgres=# CREATE TEXT SEARCH DICTIONARY public.tl_dict ( TEMPLATE = pg_catalog.simple, STOPWORDS = russian);
 postgres=# ALTER TEXT SEARCH CONFIGURATION public.tl_config ALTER MAPPING FOR asciiword, asciihword, hword_asciipart, hword, hword_part, word WITH tl_dict;
-\q
+postgres=# \q
 ```
 
 **MacOS**

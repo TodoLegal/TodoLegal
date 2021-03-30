@@ -29,4 +29,28 @@ module ApplicationHelper
   def all_document_count
     Law.count + Document.count + google_drive_covid_documents_count
   end
+
+  def get_fingerprint
+    return (request.remote_ip +
+      browser.to_s +
+      browser.device.name +
+      browser.device.id.to_s +
+      browser.platform.name).hash.to_s
+  end
+  def get_user_document_visit_tracker
+    fingerprint = get_fingerprint
+    user_document_visit_tracker = UserDocumentVisitTracker.find_by_fingerprint(fingerprint)
+    if !user_document_visit_tracker
+      user_document_visit_tracker = UserDocumentVisitTracker.create(fingerprint: fingerprint, visits: 0, period_start: DateTime.now)
+    end
+    if user_document_visit_tracker.period_start <= 5.minutes.ago # TODO set time window
+      user_document_visit_tracker.period_start = DateTime.now
+      user_document_visit_tracker.visits = 0
+      user_document_visit_tracker.save
+    end
+    return user_document_visit_tracker
+  end
+  def can_access_documents user_document_visit_tracker
+    return user_document_visit_tracker.visits <= 3 # TODO set amount of visits
+  end
 end

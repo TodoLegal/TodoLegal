@@ -10,8 +10,10 @@ class Api::V1::DocumentsController < ApplicationController
     current_user_type = "not logged"
     if params[:access_token]
       user = User.find_by_id(doorkeeper_token.resource_owner_id)
-      customer = Stripe::Customer.retrieve(user.stripe_customer_id)
-      if current_user_plan_is_active customer
+      if !user.stripe_customer_id.blank?
+        customer = Stripe::Customer.retrieve(user.stripe_customer_id)
+      end
+      if customer and current_user_plan_is_active customer
         current_user_type = "basic"
       else
         current_user_type = "pro"

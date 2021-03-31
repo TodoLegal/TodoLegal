@@ -14,9 +14,9 @@ class Api::V1::DocumentsController < ApplicationController
         customer = Stripe::Customer.retrieve(user.stripe_customer_id)
       end
       if customer and current_user_plan_is_active customer
-        current_user_type = "basic"
-      else
         current_user_type = "pro"
+      else
+        current_user_type = "basic"
       end
     end
     

@@ -70,6 +70,11 @@ Rails.application.routes.draw do
           get "/:id", to: 'laws#get_law'
         end
       end
+      resource :sessions do
+        member do
+          get "/me", to: 'sessions#me'
+        end
+      end
     end
   end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html

@@ -54,6 +54,9 @@ Rails.application.routes.draw do
   namespace :api, defaults: {format: :json} do
     namespace :v1 do
       devise_for :users, controllers: { registrations: 'api/v1/registrations', sessions: 'api/v1/sessions' }
+      devise_scope :user do
+        get "/me", to: 'sessions#me'
+      end
       resource :examples do
         member do
           get :action_test
@@ -68,11 +71,6 @@ Rails.application.routes.draw do
       resource :laws do
         member do
           get "/:id", to: 'laws#get_law'
-        end
-      end
-      resource :sessions do
-        member do
-          get "/me", to: 'sessions#me'
         end
       end
     end

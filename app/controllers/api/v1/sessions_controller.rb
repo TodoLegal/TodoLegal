@@ -43,9 +43,9 @@ class Api::V1::SessionsController < Devise::SessionsController
     end
     current_user_type = "not logged"
     if customer and current_user_plan_is_active customer
-      current_user_type = "basic"
-    else
       current_user_type = "pro"
+    else
+      current_user_type = "basic"
     end
     render json: {"document": json_document,
       "tags": get_document_tags,

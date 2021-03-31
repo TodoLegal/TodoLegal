@@ -47,11 +47,7 @@ class Api::V1::SessionsController < Devise::SessionsController
     else
       current_user_type = "basic"
     end
-    render json: {"document": json_document,
-      "tags": get_document_tags,
-      "related_documents": get_related_documents,
-      "downloads": user_document_visit_tracker.visits,
-      "can_access": can_access_document,
+    render json: {"user": user,
       "user_type": current_user_type
     }
   end

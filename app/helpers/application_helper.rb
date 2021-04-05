@@ -53,4 +53,7 @@ module ApplicationHelper
   def can_access_documents user_document_visit_tracker
     return user_document_visit_tracker.visits <= 3 # TODO set amount of visits
   end
+  def ley_abierta_url
+    "https://pod.link/LeyAbierta/"
+  end
 end

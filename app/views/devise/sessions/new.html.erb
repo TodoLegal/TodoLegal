@@ -14,6 +14,7 @@
         </p>
         <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
           <%= render "devise/shared/flash_and_notice", resource: resource%>
+          <%= hidden_field_tag :go_to_document, @go_to_document %>
           <div class="form-group">
             <%= f.label :Correo_eléctronico %><br />
             <%= f.email_field :email, autofocus: true, autocomplete: "email", class: 'form-control', id:"email" %>

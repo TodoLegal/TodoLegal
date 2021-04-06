@@ -225,7 +225,12 @@ class ApplicationController < ActionController::Base
 protected
   
   def after_sign_in_path_for(resource)
-    signed_in_path
+    if session[:return_to]
+      redirect_to session[:return_to]
+      session[:return_to] = nil
+    else
+      signed_in_path
+    end
   end
 
   def after_sign_out_path_for(resource)

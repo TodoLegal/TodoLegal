@@ -9,6 +9,8 @@ class Users::SessionsController < Devise::SessionsController
 
   # GET /resource/sign_in
   def new
+    @go_to_document = params["go_to_document"]
+    session[:return_to] = params[:return_to] if params[:return_to]
     super
   end
 

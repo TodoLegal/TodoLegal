@@ -9,7 +9,7 @@ Doorkeeper.configure do
   resource_owner_authenticator do
     # Put your resource owner authentication logic here.
     # Example implementation:
-    current_user || redirect_to(new_user_session_url)
+    current_user || redirect_to(new_user_session_url(return_to: request.fullpath))
   end
 
   # If you didn't skip applications controller from Doorkeeper routes in your application routes.rb

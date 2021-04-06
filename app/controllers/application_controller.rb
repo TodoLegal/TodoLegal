@@ -226,9 +226,9 @@ protected
   
   def after_sign_in_path_for(resource)
     if session[:return_to]
-      redirect_to session[:return_to]
+      return_to_path session[:return_to]
       session[:return_to] = nil
-      return
+      return return_to_path
     else
       signed_in_path
     end

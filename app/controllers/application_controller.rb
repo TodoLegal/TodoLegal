@@ -228,6 +228,7 @@ protected
     if session[:return_to]
       redirect_to session[:return_to]
       session[:return_to] = nil
+      return
     else
       signed_in_path
     end

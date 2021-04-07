@@ -53,7 +53,16 @@ module ApplicationHelper
   def can_access_documents user_document_visit_tracker
     return user_document_visit_tracker.visits <= 3 # TODO set amount of visits
   end
+<<<<<<< HEAD
   def ley_abierta_url
     "https://pod.link/LeyAbierta/"
   end
+=======
+
+  def user_browser_language_is_english
+    browser_locale = request.env['HTTP_ACCEPT_LANGUAGE'].try(:scan, /^[a-z]{2}/).try(:first) 
+    return browser_locale.eql? "en"
+  end
+
+>>>>>>> policies
 end

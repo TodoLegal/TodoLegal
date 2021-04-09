@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Users::SessionsController < Devise::SessionsController
+  require 'uri'
   layout "onboarding"
   include Devise::Controllers::Helpers
   skip_before_action :verify_authenticity_token
@@ -10,7 +11,12 @@ class Users::SessionsController < Devise::SessionsController
   # GET /resource/sign_in
   def new
     @go_to_document = params["go_to_document"]
-    session[:return_to] = params[:return_to] if params[:return_to]
+
+    @sign_up_path = new_registration_path(resource_name)
+    if params[:return_to]
+      session[:return_to] = params[:return_to]
+      @sign_up_path += "?return_to=" + CGI.escape(params[:return_to])
+    end
     super
   end
 

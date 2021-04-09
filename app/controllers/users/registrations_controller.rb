@@ -110,8 +110,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
       return_to_path = session[:return_to]
       session[:return_to] = nil
       return return_to_path
-    else
-      signed_in_path
     end
 
     session[:user_just_signed_up] = true

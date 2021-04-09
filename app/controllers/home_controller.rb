@@ -101,12 +101,6 @@ class HomeController < ApplicationController
     end
   end
 
-  def terms
-  end
-
-  def privacy
-  end
-
   def pricing
     if current_user
       $tracker.track(current_user.id, 'Pricing Visited', { })

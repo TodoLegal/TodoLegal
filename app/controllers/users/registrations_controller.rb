@@ -13,8 +13,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
     @go_to_checkout = params[:go_to_checkout]
     @is_monthly = params[:is_monthly]
     @pricing_onboarding = params[:pricing_onboarding]
-
-    session[:return_to] = params[:return_to] if params[:return_to]
     super
   end
 

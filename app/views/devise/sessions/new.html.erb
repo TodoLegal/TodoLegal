@@ -10,7 +10,7 @@
         <h2 class="card-title text-center" id="title">Inicia sesión</h2>
         <p class="card-text text-center content">
           ¿No tienes una cuenta aún?<br/>
-          <%= link_to "Regístrate", @sign_up_path %><br />
+          <%= link_to "Regístrate", new_registration_path(resource_name) %><br />
         </p>
         <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
           <%= render "devise/shared/flash_and_notice", resource: resource%>

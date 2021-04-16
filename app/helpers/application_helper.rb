@@ -65,9 +65,9 @@ module ApplicationHelper
         customer = Stripe::Customer.retrieve(user.stripe_customer_id)
       end
       if customer and current_user_plan_is_active customer
-        current_user_type = "pro"
+        return "pro"
       else
-        current_user_type = "basic"
+        return "basic"
       end
     end
     return "not logged"

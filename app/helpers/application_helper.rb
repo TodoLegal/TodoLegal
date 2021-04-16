@@ -43,16 +43,36 @@ module ApplicationHelper
     if !user_document_visit_tracker
       user_document_visit_tracker = UserDocumentVisitTracker.create(fingerprint: fingerprint, visits: 0, period_start: DateTime.now)
     end
-    if user_document_visit_tracker.period_start <= 5.minutes.ago # TODO set time window
+    if user_document_visit_tracker.period_start <= 1.month.ago # TODO set time window
       user_document_visit_tracker.period_start = DateTime.now
       user_document_visit_tracker.visits = 0
       user_document_visit_tracker.save
     end
     return user_document_visit_tracker
   end
-  def can_access_documents user_document_visit_tracker
-    return user_document_visit_tracker.visits <= 3 # TODO set amount of visits
+  def can_access_documents(user_document_visit_tracker, current_user_type)
+    if current_user_type == "pro"
+      return true
+    elsif current_user_type == "basic"
+      return user_document_visit_tracker.visits <= 10 # TODO set amount of visits
+    else
+      return user_document_visit_tracker.visits <= 5 # TODO set amount of visits
+    end
   end
+  def current_user_type user
+    if user
+      if !user.stripe_customer_id.blank?
+        customer = Stripe::Customer.retrieve(user.stripe_customer_id)
+      end
+      if customer and current_user_plan_is_active customer
+        current_user_type = "pro"
+      else
+        current_user_type = "basic"
+      end
+    end
+    return "not logged"
+  end
+
   def ley_abierta_url
     "https://pod.link/LeyAbierta/"
   end

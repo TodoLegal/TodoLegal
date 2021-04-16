@@ -54,9 +54,9 @@ module ApplicationHelper
     if current_user_type == "pro"
       return true
     elsif current_user_type == "basic"
-      return user_document_visit_tracker.visits <= 10 # TODO set amount of visits
+      return user_document_visit_tracker.visits < 10 # TODO set amount of visits
     else
-      return user_document_visit_tracker.visits <= 5 # TODO set amount of visits
+      return user_document_visit_tracker.visits < 5 # TODO set amount of visits
     end
   end
   def current_user_type user
@@ -71,6 +71,19 @@ module ApplicationHelper
       end
     end
     return "not logged"
+  end
+
+  def current_user_plan_is_active customer
+    begin
+      customer.subscriptions.data.each do |subscription|
+        if subscription.plan.product == STRIPE_SUBSCRIPTION_PRODUCT and subscription.plan.active
+          return true
+        end
+      end
+    rescue
+      puts "Todo: Handle Stripe customer error"
+    end
+    return false
   end
 
   def ley_abierta_url

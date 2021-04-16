@@ -65,19 +65,6 @@ class ApplicationController < ActionController::Base
     string.match(/^(\d)+$/)
   end
 
-  def current_user_plan_is_active customer
-    begin
-      customer.subscriptions.data.each do |subscription|
-        if subscription.plan.product == STRIPE_SUBSCRIPTION_PRODUCT and subscription.plan.active
-          return true
-        end
-      end
-    rescue
-      puts "Todo: Handle Stripe customer error"
-    end
-    return false
-  end
-
   def get_raw_law
     @stream = []
     @index_items = []

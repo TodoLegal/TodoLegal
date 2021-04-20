@@ -146,9 +146,11 @@ class BillingController < ApplicationController
     user.save
 
     if session[:return_to]
-      return_to_path = session[:return_to]
-      session[:return_to] = nil
-      format.html { redirect_to return_to_path }
+      respond_to do |format|
+        return_to_path = session[:return_to]
+        session[:return_to] = nil
+        format.html { redirect_to return_to_path }
+      end
       return
     end
 

@@ -102,6 +102,8 @@ class HomeController < ApplicationController
   end
 
   def pricing
+    session[:return_to] = params[:return_to] if params[:return_to]
+
     if current_user
       $tracker.track(current_user.id, 'Pricing Visited', { })
     end

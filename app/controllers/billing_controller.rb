@@ -145,6 +145,13 @@ class BillingController < ApplicationController
     user.stripe_customer_id = customer.id
     user.save
 
+    if session[:return_to]
+      return_to_path = session[:return_to]
+      session[:return_to] = nil
+      format.html { redirect_to return_to_path }
+      return
+    end
+
     respond_to do |format|
       if params["go_to_law"].blank?
         format.html { redirect_to root_path, notice: I18n.t(:charge_complete) }

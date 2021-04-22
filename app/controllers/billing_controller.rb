@@ -17,9 +17,9 @@ class BillingController < ApplicationController
     @is_onboarding = params[:is_onboarding]
     @go_to_law = params["go_to_law"]
     @coupon = params["coupon"]
-    @base_price_monthly = 7.00
-    @monthly_price_annually = 6.00
-    @base_price_annually = 72.00
+    @base_price_monthly = BASE_PRICE_MONTHLY
+    @monthly_price_annually = MONTHLY_PRICE_ANNUALLY
+    @base_price_annually = BASE_PRICE_ANNUALLY
     if params["invalid_card"] == "true"
       @stripe_backend_error = I18n.t(:invalid_card)
     end

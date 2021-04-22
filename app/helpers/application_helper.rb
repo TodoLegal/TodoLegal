@@ -54,9 +54,9 @@ module ApplicationHelper
     if current_user_type == "pro"
       return true
     elsif current_user_type == "basic"
-      return user_document_visit_tracker.visits < 10 # TODO set amount of visits
+      return user_document_visit_tracker.visits < MAXIMUM_BASIC_MONTHLY_DOCUMENTS
     else
-      return user_document_visit_tracker.visits < 5 # TODO set amount of visits
+      return user_document_visit_tracker.visits < MAXIMUM_NOT_LOGGGED_MONTHLY_DOCUMENTS
     end
   end
   def current_user_type user
@@ -88,6 +88,24 @@ module ApplicationHelper
 
   def ley_abierta_url
     "https://pod.link/LeyAbierta/"
+  end
+
+  def non_pro_law_count
+    todos_law_count = LawAccess.find_by_name("Todos").laws.count
+    basica_law_count = LawAccess.find_by_name("Básica").laws.count
+    return todos_law_count + basica_law_count
+  end
+
+  def maximum_basic_monthly_documents
+    MAXIMUM_BASIC_MONTHLY_DOCUMENTS
+  end
+
+  def law_count
+    Law.count
+  end
+
+  def valid_document_count
+    Document.where.not(name: "Gaceta").count
   end
 
   def user_browser_language_is_english

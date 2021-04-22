@@ -67,8 +67,8 @@
         <div class="col-lg-6 card card--dark-100" id="pro-tier">
           <div class="card-body">
             <h5 class="card-title">Pro</h5>
-            <h6 class="card-price">$10.00<span class="period">/mensual</span></h6>
-            <small>Facturado a <strong>$8.50</strong> anual -15%</small>
+            <h6 class="card-price">$ <%= MONTHLY_PRICE_ANNUALLY %><span class="period">/mensual</span></h6>
+            <small>Facturado a <strong>$<%= BASE_PRICE_ANNUALLY %></strong> anual -15%</small>
             <%= render 'pro_pricing_description' %>
           </div>
           <div class="card-bottom">
@@ -81,7 +81,7 @@
         <div class="col-lg-6 card card--dark-100 hide-plan" id="pro-mensual">
           <div class="card-body">
             <h5 class="card-title">Pro</h5>
-            <h6 class="card-price">$7.00<span class="period">/mensual</span></h6>
+            <h6 class="card-price">$<%= BASE_PRICE_MONTHLY %><span class="period">/mensual</span></h6>
             <small>Podrás ahorrar <strong>15%</strong> si eliges el
              <!-- Agregar el switch de mensual a anual tambien  -->
              <label class="link" onclick="changePlan(1)">pago anual</label>.</small>

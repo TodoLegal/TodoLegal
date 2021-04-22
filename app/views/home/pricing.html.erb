@@ -44,7 +44,7 @@
     <div class="row">
       <div class="pricing-heading col-12">
       <h2 class="title">Elige un Plan</h3>
-      <p class="body">Si eliges el plan Pro, puedes pagar mensual o anualmente, cancelar o bajar al plan básico en cualquier momento.</p>
+      <p class="body">Si eliges el plan Pro, puedes pagar mensual o anualmente, cancelar o bajar al plan básico en cualquier momento. Con ambas cuentas puedes acceder a <a href="https://todolegal.app/">TodoLegal</a> y a <a href="https://valid.todolegal.app/">Valid</a>, lo que cambia es el tipo de acceso a la información: limitado o ilimitado.</p>
       </div>
     </div>
 
@@ -55,12 +55,7 @@
           <div class="card-body">
             <h5 class="card-title">Básico</h5>
             <h6 class="card-price">Gratis</h6>
-            <p class="body plan-description">Abierto a cualquier persona para  consultas de la legislación hondureña.</p>
-            <hr>
-            <ul class="fa-ul">
-              <li><span class="fa-li"><i class="fas fa-check"></i></span>Acceso a 20 documentos de legislación hondureña</li>
-              <li class="d-none d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>Buscador de palabras clave por materia, ley o normas específicas.</li>
-            </ul>
+            <%= render 'basic_pricing_description' %>
           </div>
           <div class="card-bottom">
             <%= button_to "Continuar con Plan Básico", @select_basic_plan_path, method: :get, params: {pricing_onboarding: @pricing_onboarding}, class:"btn btn-block btn-outline-primary" %>
@@ -72,14 +67,9 @@
         <div class="col-lg-6 card card--dark-100" id="pro-tier">
           <div class="card-body">
             <h5 class="card-title">Pro</h5>
-            <h6 class="card-price">$6.00<span class="period">/mensual</span></h6>
-            <small>Facturado a <strong>$72.00</strong> anual</small>
-            <p class="body plan-description">Para profesionales que requieran información legal avanzada.</p>
-            <hr>
-            <ul class="fa-ul">
-              <li><span class="fa-li"><i class="fas fa-check"></i></span> Acceso a más de <%= (all_document_count/10)*10 %> documentos de legislación hondureña. Incluyendo todo los documentos nuevos que agreguemos.</li>
-              <li class="d-none d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>Buscador de palabras clave, por materia, ley o normas especificas.</li>
-            </ul>
+            <h6 class="card-price">$10.00<span class="period">/mensual</span></h6>
+            <small>Facturado a <strong>$8.50</strong> anual -15%</small>
+            <%= render 'pro_pricing_description' %>
           </div>
           <div class="card-bottom">
             <%= button_to "Elegir Plan Pro", @select_pro_plan_path, method: :get, params: {is_onboarding: @is_onboarding, pricing_onboarding: @pricing_onboarding, go_to_law: @go_to_law}, class:"btn btn-block btn-primary"%>
@@ -95,12 +85,7 @@
             <small>Podrás ahorrar <strong>15%</strong> si eliges el
              <!-- Agregar el switch de mensual a anual tambien  -->
              <label class="link" onclick="changePlan(1)">pago anual</label>.</small>
-            <p class="body plan-description">Para profesionales que requieran información legal avanzada.</p>
-            <hr>
-            <ul class="fa-ul">
-              <li><span class="fa-li"><i class="fas fa-check"></i></span> Acceso a más de <%= (all_document_count/10)*10 %> documentos de legislación hondureña. Incluyendo todo los documentos nuevos que agreguemos.</li>
-              <li class="d-none d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>Buscador de palabras clave, por materia, ley o normas especificas.</li>
-            </ul>
+             <%= render 'pro_pricing_description' %>
           </div>
           <div class="card-bottom">
             <%= button_to "Elegir Plan Pro", @select_pro_plan_path, method: :get, params: {is_monthly: true, is_onboarding: @is_onboarding, pricing_onboarding: @pricing_onboarding, go_to_law: @go_to_law}, class:"btn btn-block btn-primary"%>

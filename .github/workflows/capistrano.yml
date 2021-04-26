@@ -27,5 +27,5 @@ jobs:
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
     - uses: miloserdow/capistrano-deploy@master
       with:
-        target: development # Defines the environment that will be used for the deployment
+        target: production # Defines the environment that will be used for the deployment
         deploy_key: ${{ secrets.DEPLOY_ENC_KEY }} # Name of the variable configured in Settings/Secrets of your github project

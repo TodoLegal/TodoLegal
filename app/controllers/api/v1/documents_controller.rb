@@ -7,8 +7,12 @@ class Api::V1::DocumentsController < ApplicationController
   def get_document
     json_document = get_document_json
     can_access_document = true
+    access_token = "semino"
     if params[:access_token]
       user = User.find_by_id(doorkeeper_token.resource_owner_id)
+      #access_token = Doorkeeper::AccessToken.find_or_create_for(application: "cSCC0MsHX5_UCJR8q7Az6ERruw8R6qPumcLnZp03QtA", resource_owner_id: user.id, scope: "test", resource_owner:)
+      #access_token = doorkeeper_token.refresh!
+      #access_token = access_token.token
     end
     user_document_visit_tracker = get_user_document_visit_tracker
     can_access_document = can_access_documents(user_document_visit_tracker, current_user_type(user))
@@ -24,7 +28,8 @@ class Api::V1::DocumentsController < ApplicationController
       "related_documents": get_related_documents,
       "downloads": user_document_visit_tracker.visits,
       "can_access": can_access_document,
-      "user_type": current_user_type(user)
+      "user_type": current_user_type(user),
+      "access_token": access_token
     }
   end
   

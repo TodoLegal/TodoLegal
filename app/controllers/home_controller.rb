@@ -102,8 +102,7 @@ class HomeController < ApplicationController
   end
 
   def pricing
-    if !params[:return_to].blank?
-      session[:return_to] = params[:return_to]
+    if session[:return_to]
       @return_to = session[:return_to]
     end
 

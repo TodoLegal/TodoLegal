@@ -37,7 +37,7 @@ module ApplicationHelper
       browser.to_s +
       browser.device.name +
       browser.device.id.to_s +
-      browser.platform.name).hash.to_s
+      browser.platform.name
     hashed_fingerprint = BCrypt::Engine.hash_secret( raw_fingerprint, "$2a$10$ThisIsTheSalt22CharsX." )
     return hashed_fingerprint
   end

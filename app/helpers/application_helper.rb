@@ -1,4 +1,6 @@
 module ApplicationHelper
+  require 'bcrypt'
+
   def current_user_is_admin
     current_user && current_user.permissions.find_by_name("Admin")
   end
@@ -31,11 +33,13 @@ module ApplicationHelper
   end
 
   def get_fingerprint
-    return (request.remote_ip +
+    raw_fingerprint = request.remote_ip +
       browser.to_s +
       browser.device.name +
       browser.device.id.to_s +
-      browser.platform.name).hash.to_s # TODO: Prevent reseting the download count on each restart (salt hash?)
+      browser.platform.name).hash.to_s
+    hashed_fingerprint = BCrypt::Engine.hash_secret( raw_fingerprint, "$2a$10$ThisIsTheSalt22CharsX." )
+    return hashed_fingerprint
   end
   def get_user_document_visit_tracker
     fingerprint = get_fingerprint

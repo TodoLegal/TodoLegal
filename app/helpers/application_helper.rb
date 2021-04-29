@@ -35,7 +35,7 @@ module ApplicationHelper
       browser.to_s +
       browser.device.name +
       browser.device.id.to_s +
-      browser.platform.name).hash.to_s
+      browser.platform.name).hash.to_s # TODO: Prevent reseting the download count on each restart (salt hash?)
   end
   def get_user_document_visit_tracker
     fingerprint = get_fingerprint

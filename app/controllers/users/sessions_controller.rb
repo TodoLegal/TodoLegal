@@ -12,10 +12,6 @@ class Users::SessionsController < Devise::SessionsController
   def new
     @go_to_document = params["go_to_document"]
     session[:return_to] = params[:return_to] if params[:return_to]
-    if params[:go_to_signup]
-      redirect_to new_user_registration_path
-      return
-    end
     super
   end
 

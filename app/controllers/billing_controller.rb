@@ -145,12 +145,7 @@ class BillingController < ApplicationController
     user.stripe_customer_id = customer.id
     user.save
 
-    if session[:return_to]
-      respond_to do |format|
-        return_to_path = session[:return_to]
-        session[:return_to] = nil
-        format.html { redirect_to return_to_path }
-      end
+    if process_doorkeeper_redirect_to
       return
     end
 

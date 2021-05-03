@@ -4,6 +4,9 @@ class HomeController < ApplicationController
   require 'set'
   
   def index
+    if process_doorkeeper_redirect_to
+      return
+    end
     @tags = Tag.where(tag_type: TagType.find_by_name("materia"))
   end
 
@@ -102,10 +105,6 @@ class HomeController < ApplicationController
   end
 
   def pricing
-    if session[:return_to]
-      @return_to = session[:return_to]
-    end
-
     if current_user
       $tracker.track(current_user.id, 'Pricing Visited', { })
     end

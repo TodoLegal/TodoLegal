@@ -8,6 +8,18 @@ class ApplicationController < ActionController::Base
   #acts_as_token_authentication_handler_for User, if: :json_request?
   skip_before_action :configure_devise_permitted_parameters, if: :json_request?
 
+  def process_doorkeeper_redirect_to
+    if session[:return_to]
+      respond_to do |format|
+        return_to_path = session[:return_to]
+        session[:return_to] = nil
+        format.html { redirect_to return_to_path }
+      end
+      return true
+    end
+    return false
+  end
+
   def after_sign_in_remember_me(resource)
     remember_me resource
   end

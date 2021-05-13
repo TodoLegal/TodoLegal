@@ -11,7 +11,9 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
     end
     user_document_visit_tracker = get_user_document_visit_tracker
     can_access_document = can_access_documents(user_document_visit_tracker, current_user_type(user))
-    user_document_visit_tracker.visits += 1
+    if user_is_pro user
+      user_document_visit_tracker.visits += 1
+    end
     if can_access_document
       user_document_visit_tracker.save
       super

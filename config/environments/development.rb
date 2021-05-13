@@ -1,4 +1,12 @@
 Rails.application.configure do
+  #haguilar - Allow to run on External Domains
+  config.hosts = [
+    IPAddr.new("0.0.0.0/0"), # All IPv4 addresses.
+    IPAddr.new("::/0"),      # All IPv6 addresses.
+    "localhost",              # The localhost reserved domain.
+    "ubuntu",
+    /[a-z0-9]+\.chunches\.net/
+  ]
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded on
@@ -52,6 +60,7 @@ Rails.application.configure do
 
   # Suppress logger output for asset requests.
   config.assets.quiet = true
+
 
   # Raises error for missing translations.
   # config.action_view.raise_on_missing_translations = true

@@ -41,8 +41,8 @@ module ApplicationHelper
     hashed_fingerprint = BCrypt::Engine.hash_secret( raw_fingerprint, "$2a$10$ThisIsTheSalt22CharsX." )
     return hashed_fingerprint
   end
-  def get_user_document_visit_tracker(user_id_str)
-    fingerprint = get_fingerprint + user_id_str
+  def get_user_document_visit_tracker
+    fingerprint = get_fingerprint
     user_document_visit_tracker = UserDocumentVisitTracker.find_by_fingerprint(fingerprint)
     if !user_document_visit_tracker
       user_document_visit_tracker = UserDocumentVisitTracker.create(fingerprint: fingerprint, visits: 0, period_start: DateTime.now)

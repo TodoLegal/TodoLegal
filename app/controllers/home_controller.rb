@@ -108,6 +108,7 @@ class HomeController < ApplicationController
     if current_user
       $tracker.track(current_user.id, 'Pricing Visited', { })
     end
+    session[:return_to] = params[:return_to] if params[:return_to]
     @is_onboarding = params[:is_onboarding]
     @pricing_onboarding = params[:pricing_onboarding]
     @go_to_law = params[:go_to_law]

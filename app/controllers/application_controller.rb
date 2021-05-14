@@ -32,6 +32,19 @@ class ApplicationController < ActionController::Base
     current_user != nil && (current_user.permissions.find_by_name("Editor") != nil || current_user.permissions.find_by_name("Admin") != nil)
   end
 
+  def current_user_plan_is_active customer #TODO: remove duplicated code
+    begin
+      customer.subscriptions.data.each do |subscription|
+        if subscription.plan.product == STRIPE_SUBSCRIPTION_PRODUCT and subscription.plan.active
+          return true
+        end
+      end
+    rescue
+      puts "Todo: Handle Stripe customer error"
+    end
+    return false
+  end
+
   def user_is_pro user
     if !user
       return false

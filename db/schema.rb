@@ -227,6 +227,13 @@ ActiveRecord::Schema.define(version: 2021_03_24_154032) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "tokens", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "token"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "user_document_visit_trackers", force: :cascade do |t|
     t.string "fingerprint"
     t.integer "visits"

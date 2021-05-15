@@ -13,6 +13,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     @go_to_checkout = params[:go_to_checkout]
     @is_monthly = params[:is_monthly]
     @pricing_onboarding = params[:pricing_onboarding]
+    session[:return_to] = params[:return_to] if params[:return_to]
     super
   end
 
@@ -103,6 +104,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     if $discord_bot
       $discord_bot.send_message($discord_bot_channel_notifications, "Se ha registrado un nuevo usuario :tada:")
     end
+
     session[:user_just_signed_up] = true
     if params[:pricing_onboarding]
       checkout_path(is_onboarding:true, go_to_law: params[:go_to_law], is_monthly: params[:is_monthly])

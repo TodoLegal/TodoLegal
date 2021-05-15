@@ -139,7 +139,7 @@
                     </div>
                     <div class="col-md-12">
                       <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
-                      Adquiérelo por <b>$7.00 al mes</b> y podrás acceder a los más de<%= (all_document_count/10)*10 %> leyes y documentos legales y a lo que continuamente agregamos.
+                      Adquiérelo por <b>$<%= BASE_PRICE_MONTHLY %> al mes</b> y podrás acceder a los más de<%= (all_document_count/10)*10 %> leyes y documentos legales y a lo que continuamente agregamos.
                     </p>
                     <p style="font-size:18px; text-align:center;">
                           <i class="text-muted">Puedes cancelar la suscripción en cualquier momento.</i>
@@ -161,7 +161,7 @@
                       </div>
                       <div class="col-md-12">
                         <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
-                      Adquiere el <b>Plan Pro</b> por <b>$7.00 al mes</b> y podrás acceder a más de <%= (all_document_count/10)*10 %> leyes y documentos legales y a lo que continuamente agregamos.
+                      Adquiere el <b>Plan Pro</b> por <b>$<%= BASE_PRICE_MONTHLY %> al mes</b> y podrás acceder a más de <%= (all_document_count/10)*10 %> leyes y documentos legales y a lo que continuamente agregamos.
                         <p style="font-size:18px; text-align:center;">
                           <i class="text-muted">Puedes cancelar la suscripción en cualquier momento.</i>
                         </p>
@@ -244,7 +244,7 @@
       <% if @show_laboral_related_podcast %>
         <div class="collapsable-law-cards col" style="display:<%= i>6 ? 'none' : 'block' %>">
           <div class="card card-body h-100" style="padding:0px">
-            <a class="" href="https://pod.link/LeyAbierta/episode/498a178377610ccf0c7ccf559d1fdf4d?tlclick=<%= @law.name %>" style="padding:20px">
+            <a class="" href="https://pod.link/LeyAbierta/episode/498a178377610ccf0c7ccf559d1fdf4d?tlclick=<%= @law.name %>" style="padding:20px" target="_blank">
               <p style="font-size: 15px">
                 <span class="badge badge--materia">Podcast</span>
               </p>
@@ -259,7 +259,7 @@
       <% if @show_mercantil_related_podcast %>
         <div class="collapsable-law-cards col" style="display:<%= i>6 ? 'none' : 'block' %>">
           <div class="card card-body h-100" style="padding:0px">
-            <a class="" href="https://pod.link/LeyAbierta/episode/77e3ca84c654c4d709124bf69103d128?tlclick=<%= @law.name %>" style="padding:20px">
+            <a class="" href="https://pod.link/LeyAbierta/episode/77e3ca84c654c4d709124bf69103d128?tlclick=<%= @law.name %>" style="padding:20px" target="_blank">
               <p style="font-size: 15px">
                 <span class="badge badge--materia">Podcast</span>
               </p>

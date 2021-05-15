@@ -8,6 +8,18 @@ class ApplicationController < ActionController::Base
   #acts_as_token_authentication_handler_for User, if: :json_request?
   skip_before_action :configure_devise_permitted_parameters, if: :json_request?
 
+  def process_doorkeeper_redirect_to
+    if session[:return_to]
+      respond_to do |format|
+        return_to_path = session[:return_to]
+        session[:return_to] = nil
+        format.html { redirect_to return_to_path }
+      end
+      return true
+    end
+    return false
+  end
+
   def after_sign_in_remember_me(resource)
     remember_me resource
   end
@@ -18,6 +30,19 @@ class ApplicationController < ActionController::Base
 
   def current_user_is_editor
     current_user != nil && (current_user.permissions.find_by_name("Editor") != nil || current_user.permissions.find_by_name("Admin") != nil)
+  end
+
+  def current_user_plan_is_active customer #TODO: remove duplicated code
+    begin
+      customer.subscriptions.data.each do |subscription|
+        if subscription.plan.product == STRIPE_SUBSCRIPTION_PRODUCT and subscription.plan.active
+          return true
+        end
+      end
+    rescue
+      puts "Todo: Handle Stripe customer error"
+    end
+    return false
   end
 
   def user_is_pro user
@@ -63,19 +88,6 @@ class ApplicationController < ActionController::Base
 
   def is_number string
     string.match(/^(\d)+$/)
-  end
-
-  def current_user_plan_is_active customer
-    begin
-      customer.subscriptions.data.each do |subscription|
-        if subscription.plan.product == STRIPE_SUBSCRIPTION_PRODUCT and subscription.plan.active
-          return true
-        end
-      end
-    rescue
-      puts "Todo: Handle Stripe customer error"
-    end
-    return false
   end
 
   def get_raw_law
@@ -225,7 +237,13 @@ class ApplicationController < ActionController::Base
 protected
   
   def after_sign_in_path_for(resource)
-    signed_in_path
+    if session[:return_to]
+      return_to_path = session[:return_to]
+      session[:return_to] = nil
+      return return_to_path
+    else
+      signed_in_path
+    end
   end
 
   def after_sign_out_path_for(resource)

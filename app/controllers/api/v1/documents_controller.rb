@@ -7,21 +7,13 @@ class Api::V1::DocumentsController < ApplicationController
   def get_document
     json_document = get_document_json
     can_access_document = true
-    current_user_type = "not logged"
+    user_id_str = ""
     if params[:access_token]
       user = User.find_by_id(doorkeeper_token.resource_owner_id)
-      if !user.stripe_customer_id.blank?
-        customer = Stripe::Customer.retrieve(user.stripe_customer_id)
-      end
-      if customer and current_user_plan_is_active customer
-        current_user_type = "pro"
-      else
-        current_user_type = "basic"
-      end
+      user_id_str = user.id.to_s
     end
-    
-    user_document_visit_tracker = get_user_document_visit_tracker
-    can_access_document = can_access_documents user_document_visit_tracker
+    user_document_visit_tracker = get_user_document_visit_tracker(user_id_str)
+    can_access_document = can_access_documents(user_document_visit_tracker, current_user_type(user))
 
     if can_access_document and @document.original_file.attached?
       json_document = json_document.merge(file: url_for(@document.original_file))
@@ -34,7 +26,7 @@ class Api::V1::DocumentsController < ApplicationController
       "related_documents": get_related_documents,
       "downloads": user_document_visit_tracker.visits,
       "can_access": can_access_document,
-      "user_type": current_user_type
+      "user_type": current_user_type(user),
     }
   end
   

@@ -13,7 +13,7 @@ token.yaml
 public/gazettes/
 gcs.keyfile
 .rbenv-vars
-/config/application.yml
+config/application.yml
 
 #Gemfile.lock
 /config/credentials.yml.enc

@@ -1,2 +1,0 @@
-class UserDocumentVisitTracker < ApplicationRecord
-end

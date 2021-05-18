@@ -2,10 +2,10 @@
 
 one:
   fingerprint: 1
-  visits: 1
+  downloads: 1
   period_start: 2021-01-08 22:41:52
 
 two:
   fingerprint: 1
-  visits: 1
+  downloads: 1
   period_start: 2021-01-08 22:41:52

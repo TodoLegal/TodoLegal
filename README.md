@@ -126,3 +126,4 @@ rails s
 ```
 
 Stop the server with `Ctrl + C`.
+x

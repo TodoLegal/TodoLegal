@@ -48,10 +48,16 @@ class DocumentsController < ApplicationController
         if params["document"]["auto_process_type"] == "slice"
           file.download "tmp/gazette.pdf"
           run_slice_gazette_script @document, Rails.root.join("tmp") + "gazette.pdf"
+          if $discord_bot
+            $discord_bot.send_message($discord_bot_channel_notifications, "Nueva gaceta seccionada en Valid! " + @document.publication_number + " :scroll:")
+          end
           format.html { redirect_to gazette_path(@document.publication_number), notice: 'La gaceta se ha partido exitósamente.' }
         elsif params["document"]["auto_process_type"] == "process"
           file.download "tmp/gazette.pdf"
           run_process_gazette_script @document, Rails.root.join("tmp") + "gazette.pdf"
+          if $discord_bot
+            $discord_bot.send_message($discord_bot_channel_notifications, "Nueva gaceta en Valid! " + @document.publication_number + " :scroll:")
+          end
           format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido una gaceta.' }
         else
           format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido un documento.' }
@@ -127,27 +133,7 @@ class DocumentsController < ApplicationController
     python_return_value = `python3 ~/GazetteSlicer/slice_gazette.py #{ document_pdf_path } '#{ Rails.root.join("public", "gazettes") }' '#{document.id}'`
     puts "Starting pyton script"
     json_data = JSON.parse(python_return_value)
-    first_element = json_data["files"].first
-    # set original document values
-    puts "Setting original document values"
-    if !first_element
-      return
-    end
-    document.name = first_element["name"]
-    document.description = getCleanDescription first_element["description"]
-    document.publication_number = first_element["publication_number"]
-    document.publication_date = first_element["publication_date"].to_date
-    document.save
-    tag = Tag.find_by_name(first_element["tag"])
-    if tag
-      DocumentTag.create(document_id: document.id, tag_id: tag.id)
-    end
-    first_element["institutions"].each do | institution |
-      institution_tag = Tag.find_by_name(institution)
-      if institution_tag
-        DocumentTag.create(document_id: document.id, tag_id: institution_tag.id)
-      end
-    end
+    run_process_gazette_script document, document_pdf_path
     document.url = document.generate_friendly_url
     document.save
     document.original_file.attach(
@@ -163,7 +149,7 @@ class DocumentsController < ApplicationController
     set_content_disposition_attachment document.original_file.key, document.name + ".pdf"
     # create the related documents
     puts "Creating related documents"
-    json_data["files"].drop(1).each do |file|
+    json_data["files"].each do |file|
       puts "Creating: " + file["name"]
       description = getCleanDescription file["description"]
       new_document = Document.create(

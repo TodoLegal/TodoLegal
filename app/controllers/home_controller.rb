@@ -4,9 +4,9 @@ class HomeController < ApplicationController
   require 'set'
   
   def index
-    if process_doorkeeper_redirect_to
-      return
-    end
+    #if process_doorkeeper_redirect_to
+    #  return
+    #end
     @tags = Tag.where(tag_type: TagType.find_by_name("materia"))
   end
 
@@ -105,15 +105,18 @@ class HomeController < ApplicationController
   end
 
   def pricing
-    if current_user
-      $tracker.track(current_user.id, 'Pricing Visited', { })
-    end
     session[:return_to] = params[:return_to] if params[:return_to]
     @is_onboarding = params[:is_onboarding]
     @pricing_onboarding = params[:pricing_onboarding]
     @go_to_law = params[:go_to_law]
     @activate_pro_account = params[:activate_pro_account]
     @user_just_registered = params[:user_just_registered]
+    if current_user
+      $tracker.track(current_user.id, 'Pricing Visited', { })
+    else
+      @is_onboarding = true
+      @pricing_onboarding = true
+    end
 
     if @pricing_onboarding
       @select_basic_plan_path = "/users/sign_up"

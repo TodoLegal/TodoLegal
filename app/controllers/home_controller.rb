@@ -111,6 +111,9 @@ class HomeController < ApplicationController
     @go_to_law = params[:go_to_law]
     @activate_pro_account = params[:activate_pro_account]
     @user_just_registered = params[:user_just_registered]
+    if session[:return_to]
+      @return_to = session[:return_to]
+    end
     if current_user
       $tracker.track(current_user.id, 'Pricing Visited', { })
     else

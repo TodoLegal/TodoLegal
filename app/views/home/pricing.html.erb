@@ -59,9 +59,9 @@
           </div>
           <div class="card-bottom">
             <% if @return_to %>
-              <%= button_to "Continuar con Plan Básico", @return_to, method: :get, params: {pricing_onboarding: @pricing_onboarding}, class:"btn btn-block btn-outline-primary" %>
+              <%= link_to "Continuar con Plan Básico", @return_to, params: {pricing_onboarding: @pricing_onboarding}, class:"btn btn-block btn-outline-primary" %>
             <% else %>
-              <%= button_to "Continuar con Plan Básico", @select_basic_plan_path, method: :get, params: {pricing_onboarding: @pricing_onboarding}, class:"btn btn-block btn-outline-primary" %>
+              <%= link_to "Continuar con Plan Básico", @select_basic_plan_path, params: {pricing_onboarding: @pricing_onboarding}, class:"btn btn-block btn-outline-primary" %>
             <% end %>
           </div>
         </div>

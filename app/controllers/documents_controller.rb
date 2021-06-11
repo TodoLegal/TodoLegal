@@ -158,8 +158,12 @@ class DocumentsController < ApplicationController
         publication_number: document.publication_number,
         publication_date: document.publication_date)
       tag = Tag.find_by_name(file["tag"])
+      issuer = Tag.find_by_name(file["issuer"])
       if tag
         DocumentTag.create(document_id: new_document.id, tag_id: tag.id)
+      end
+      if issuer
+        IssuerDocumentTag.create(document_id: new_document.id, tag_id: issuer.id)
       end
       file["institutions"].each do |institution|
         institution_tag = Tag.find_by_name(institution)

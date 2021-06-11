@@ -1,0 +1,2 @@
+class InstitutionIssuerDocumentTag < ApplicationRecord
+end

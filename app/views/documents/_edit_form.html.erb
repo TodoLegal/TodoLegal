@@ -57,10 +57,10 @@
       
       <div class="row">
         <div class="col-md-4">
-         <span> Páginas incluídas <%= document.start_page %>-<%= document.end_page %> </span>
+         <span> Páginas incluídas <%= document.start_page + 1 %>-<%= document.end_page + 1 %> </span>
         </div>
         <div class="col-md-4">
-          <span> Posición en Gaceta <%=document.position %> </span>
+          <span> Posición en Gaceta <%=document.position + 1 %> de <%= @documents_count %> </span>
         </div>
       </div>
 
@@ -97,7 +97,11 @@
 
       <div class="actions">
         <%= form.submit "Guardar cambios", class: "d-inline p-2 btn btn-primary" %>
-        <button type="button" class="d-inline p-2 btn btn-secondary">Siguiente</button>
+        <% if @is_next_document_valid %>
+          <%= link_to 'Siguiente', edit_document_path(@next_document), class:"d-inline p-2 btn btn-secondary"%>
+        <% else %>
+           <button type="button" class="d-inline p-2 btn btn-secondary" disabled="true">Siguiente</button>
+        <% end %>
       </div>
     </div>
   </div>

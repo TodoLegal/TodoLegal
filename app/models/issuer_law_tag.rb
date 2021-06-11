@@ -1,0 +1,2 @@
+class IssuerLawTag < ApplicationRecord
+end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_18_171358) do
+ActiveRecord::Schema.define(version: 2021_06_11_083625) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -99,6 +99,9 @@ ActiveRecord::Schema.define(version: 2021_05_18_171358) do
     t.text "description"
     t.text "short_description"
     t.text "full_text"
+    t.integer "start_page"
+    t.integer "end_page"
+    t.integer "position"
   end
 
   create_table "email_subscriptions", force: :cascade do |t|

@@ -34,6 +34,7 @@ class DocumentsController < ApplicationController
 
   # GET /documents/1/edit
   def edit
+    @document_type = params[:doc_type]
   end
 
   # POST /documents

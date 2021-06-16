@@ -10,6 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+
 ActiveRecord::Schema.define(version: 2021_06_11_083625) do
 
   # These are extensions that must be enabled in order to support this database
@@ -110,6 +111,22 @@ ActiveRecord::Schema.define(version: 2021_06_11_083625) do
     t.string "status"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "issuer_document_tags", force: :cascade do |t|
+    t.integer "document_id"
+    t.integer "tag_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["document_id", "tag_id"], name: "index_issuer_document_tags_on_document_id_and_tag_id", unique: true
+  end
+
+  create_table "issuer_law_tags", force: :cascade do |t|
+    t.integer "law_id"
+    t.integer "tag_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["law_id", "tag_id"], name: "index_issuer_law_tags_on_law_id_and_tag_id", unique: true
   end
 
   create_table "law_accesses", force: :cascade do |t|

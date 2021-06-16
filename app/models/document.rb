@@ -2,7 +2,8 @@ class Document < ApplicationRecord
   include PgSearch
   searchkick
 
-  has_many :document_tags
+  has_many :issuer_document_tags, :dependent => :destroy
+  has_many :document_tags, :dependent => :destroy
   has_many :tags, through: :document_tags, :dependent => :destroy
 
   has_one_attached :original_file

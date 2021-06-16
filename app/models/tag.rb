@@ -4,6 +4,8 @@ class Tag < ApplicationRecord
   has_many :laws, through: :law_tags
   has_many :document_tags
   has_many :documents, through: :document_tags
+  has_many :issuer_law_tags
+  has_many :issuer_document_tags
 
   def to_param
     [id, name.parameterize].join("-")

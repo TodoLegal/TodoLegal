@@ -9,16 +9,10 @@
 
 
   <p></p>
-  <% tag = @law_creacions %>
-
-  <% if tag_type == "creacion" %>
-    <% tag = @law_creacions %>
-  <% elsif tag_type == "materia" %>
+  <% if tag_type == "materia" %>
     <% tag = @law_materias %>
   <% elsif tag_type == "modificacion"  %>
     <% tag = @law_modifications %>
-  <% else %>
-    <% tag = @law_creacions %>
   <% end %>
 
   <table class="table table-bordered" id="edit_table">

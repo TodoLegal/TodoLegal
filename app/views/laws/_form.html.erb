@@ -25,15 +25,6 @@
         <div class="row">
           <div class="col-md-8">
             <div class="form-group">
-              <%= form.label :forma_de_creacion %>
-              <%= form.hidden_field :law_id, value: @law.id %>
-              <%= form.collection_select(:tag_id, (@all_creacions), :id, :name, {:prompt=>true}, {:class=>'form-control'}) %>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-8">
-            <div class="form-group">
               <%= form.label :numero_de_creacion %>
               <%= form.text_field :creation_number, class: "form-control" %>
             </div>

@@ -57,10 +57,14 @@
       
       <div class="row">
         <div class="col-md-4">
-         <span> Páginas incluídas <%= document.start_page + 1 %>-<%= document.end_page + 1 %> </span>
+          <% if document.end_page %>
+            <span>Páginas incluídas <%= document.start_page + 1 %>-<%= document.end_page + 1 %> </span>
+          <% end %>
         </div>
         <div class="col-md-4">
-          <span> Posición en Gaceta <%=document.position + 1 %> de <%= @documents_count %> </span>
+          <% if document.position %>
+            <span> Posición en Gaceta <%=document.position + 1 %> de <%= @documents_count %> </span>
+          <% end %>
         </div>
       </div>
 

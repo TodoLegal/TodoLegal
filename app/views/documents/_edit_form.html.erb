@@ -54,8 +54,8 @@
             </label>
           <% end %>
         </div>
-        <div class="col-md-3">
-          
+        <div class="col-md-3 see--document--btn">
+          <%= link_to 'Ver documento', document, class:"btn btn-outline-secondary"%>
         </div>
         <div class="col-md-4">
           <label class="d-inline"> <strong> Posición en Gaceta </strong> </label>
@@ -156,6 +156,11 @@
     color: white;
     display: block;
     font-size: 1rem;
-    padding: 10px;
+    padding: 5px;
   }
+
+  .see--document--btn{
+    align-self: center;
+  }
+
 </style>

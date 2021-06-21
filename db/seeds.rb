@@ -9,7 +9,6 @@
 # Tip de tags
 
 tag_type_materia = TagType.create({ name: 'materia' })
-tag_type_creacion = TagType.create({ name: 'creacion' })
 tag_type_institution = TagType.create({ name: 'institucion' })
 
 # Tags de Materias
@@ -30,27 +29,6 @@ tag_militar = Tag.create({ name: 'Militar', tag_type_id: tag_type_materia.id })
 tag_judicial = Tag.create({ name: 'Judicial', tag_type_id: tag_type_materia.id })
 tag_familia = Tag.create({ name: 'Familia', tag_type_id: tag_type_materia.id })
 tag_derechos_humanos = Tag.create({ name: 'Derechos Humanos', tag_type_id: tag_type_materia.id })
-
-
-# Tags de Creacion
-
-tag_acuerdo_ejecutivo = Tag.create({ name: 'Acuerdo Ejecutivo', tag_type_id: tag_type_creacion.id })
-tag_decreto_ejecutivo = Tag.create({ name: 'Decreto Ejecutivo', tag_type_id: tag_type_creacion.id })
-tag_decreto_legislativo = Tag.create({ name: 'Decreto Legislativo', tag_type_id: tag_type_creacion.id })
-tag_decreto_junta_militar = Tag.create({ name: 'Decreto Junta Militar', tag_type_id: tag_type_creacion.id })
-tag_tratado_internacional = Tag.create({ name: 'Tratado Internacional', tag_type_id: tag_type_creacion.id })
-tag_asamblea_constituyente = Tag.create({ name: 'Asamblea Constituyente', tag_type_id: tag_type_creacion.id })
-tag_resolucion = Tag.create({ name: 'Resolucion', tag_type_id: tag_type_creacion.id })
-tag_acuerdo_ministerial = Tag.create({ name: 'Acuerdo Ministerial', tag_type_id: tag_type_creacion.id })
-tag_acuerdo_ministerial = Tag.create({ name: 'Acto Municipal', tag_type_id: tag_type_creacion.id })
-# New creation tags
-tag_acuerdo = Tag.create({ name: 'Acuerdo', tag_type_id: tag_type_creacion.id })
-tag_acuerdo_delegacion = Tag.create({ name: 'Acuerdo de Delegación', tag_type_id: tag_type_creacion.id })
-tag_acuerdo_administrativo = Tag.create({ name: 'Acuerdo Administrativo', tag_type_id: tag_type_creacion.id })
-tag_acuerdo_aduana = Tag.create({ name: 'Acuerdo Aduanas', tag_type_id: tag_type_creacion.id })
-tag_acuerdo_certificacion = Tag.create({ name: 'Certificación', tag_type_id: tag_type_creacion.id })
-tag_acuerdo_ejecutivo = Tag.create({ name: 'Acuerdo Ejecutivo', tag_type_id: tag_type_creacion.id })
-tag_acuerdo_decreto = Tag.create({ name: 'Decreto', tag_type_id: tag_type_creacion.id })
 
 # Law Accesses
 

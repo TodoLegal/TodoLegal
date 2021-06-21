@@ -6,12 +6,21 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-# Tip de tags
+##################
+#### TagTypes ####
+##################
 
 tag_type_materia = TagType.create({ name: 'materia' })
-tag_type_institution = TagType.create({ name: 'institucion' })
+tag_institucion = TagType.create(name: "Institución")
+tag_forma_de_publicacion = TagType.create(name: "Forma de Publicación")
+tag_tipo_de_acto = TagType.create(name: "Tipo de Acto")
+tag_tema = TagType.create(name: "Tema")
 
-# Tags de Materias
+##############
+#### Tags ####
+##############
+
+# Materias
 
 tag_constitucional = Tag.create({ name: 'Constitucional', tag_type_id: tag_type_materia.id })
 tag_penal = Tag.create({ name: 'Penal', tag_type_id: tag_type_materia.id })
@@ -30,19 +39,52 @@ tag_judicial = Tag.create({ name: 'Judicial', tag_type_id: tag_type_materia.id }
 tag_familia = Tag.create({ name: 'Familia', tag_type_id: tag_type_materia.id })
 tag_derechos_humanos = Tag.create({ name: 'Derechos Humanos', tag_type_id: tag_type_materia.id })
 
-# Law Accesses
+# Institución
+
+tag_poder_ejecutivo = Tag.create(name: "Poder Ejecutivo", tag_type_id: tag_institucion.id)
+tag_congreso_nacional = Tag.create(name: "Congreso Nacional", tag_type_id: tag_institucion.id)
+tag_junta_militar = Tag.create(name: "Junta Militar", tag_type_id: tag_institucion.id)
+tag_asamblea_constituyente = Tag.create(name: "Asamblea Constituyente", tag_type_id: tag_institucion.id)
+tag_cnbs = Tag.create(name: "CNBS", tag_type_id: tag_institucion.id)
+tag_municipalidad_de_sps = Tag.create(name: "Municipalidad de SPS", tag_type_id: tag_institucion.id)
+tag_senasa = Tag.create(name: "SENASA", tag_type_id: tag_institucion.id)
+tag_aduana = Tag.create(name: "Aduana", tag_type_id: tag_institucion.id)
+tag_cree = Tag.create(name: "CREE", tag_type_id: tag_institucion.id)
+
+# Forma de Publicación
+tag_gaceta = Tag.create(name: "Gaceta", tag_type_id: tag_forma_de_publicacion.id)
+tag_gaceta_municipal = Tag.create(name: "Gaceta Municipal", tag_type_id: tag_forma_de_publicacion.id)
+tag_circular = Tag.create(name: "Circular", tag_type_id: tag_forma_de_publicacion.id)
+tag_oficio = Tag.create(name: "Oficio", tag_type_id: tag_forma_de_publicacion.id)
+
+# Tipo de Acto
+tag_decreto = Tag.create(name: "Decreto", tag_type_id: tipo_de_acto.id)
+tag_acuerdo = Tag.create(name: "Acuerdo", tag_type_id: tipo_de_acto.id)
+tag_tratado_internacional = Tag.create(name: "Tratado Internacional", tag_type_id: tipo_de_acto.id)
+tag_resolucion = Tag.create(name: "Resolución", tag_type_id: tipo_de_acto.id)
+tag_sentencia = Tag.create(name: "Sentencia", tag_type_id: tipo_de_acto.id)
+
+###################
+#### LawAccess ####
+###################
 
 law_access_pro = LawAccess.create(name: "Pro")
 law_access_basic = LawAccess.create(name: "Básica")
 law_access_todos = LawAccess.create(name: "Todos")
 
-# Permissions
+#####################
+#### Permissions ####
+#####################
 
 permissions_admin = Permission.create(name: "Admin")
 permissions_editor = Permission.create(name: "Editor")
 permissions_pro = Permission.create(name: "Pro")
 
-# Law Samples
+##############
+#### Laws ####
+##############
+
+# Demo
 
 law_demo = Law.create({ name: "Demo", creation_number: "2018-04", law_access_id: law_access_todos.id })
 LawTag.create({law_id: law_demo.id, tag_id: Tag.find_by_name("Especiales y Otras").id})
@@ -62,6 +104,8 @@ Article.create(position: 11, number: "1", law_id: law_demo.id, body: "Ejemplo ar
 Section.create(position: 12, number: "b", law_id: law_demo.id, name: "Ejemplo sección")
 Article.create(position: 13, number: "2", law_id: law_demo.id, body: "Otro ejemplo artículo.")
 
+# Lorem Ipsum
+
 law_lorem_ipsum = Law.create({ name: "Lorem Ipsum", creation_number: "2019-06", law_access_id: law_access_basic.id })
 LawTag.create({law_id: law_lorem_ipsum.id, tag_id: Tag.find_by_name("Civil").id})
 LawTag.create({law_id: law_lorem_ipsum.id, tag_id: Tag.find_by_name("Decreto Legislativo").id})
@@ -69,6 +113,8 @@ Article.create(position: 0, number: "1", law_id: law_lorem_ipsum.id, body: "Lore
 Article.create(position: 1, number: "2", law_id: law_lorem_ipsum.id, body: "Al contrario del pensamiento popular, el texto de Lorem Ipsum no es simplemente texto aleatorio. Tiene sus raices en una pieza cl´sica de la literatura del Latin, que data del año 45 antes de Cristo, haciendo que este adquiera mas de 2000 años de antiguedad. Richard McClintock, un profesor de Latin de la Universidad de Hampden-Sydney en Virginia, encontró una de las palabras más oscuras de la lengua del latín, 'consecteur', en un pasaje de Lorem Ipsum, y al seguir leyendo distintos textos del latín, descubrió la fuente indudable. Lorem Ipsum viene de las secciones 1.10.32 y 1.10.33 de 'de Finnibus Bonorum et Malorum' (Los Extremos del Bien y El Mal) por Cicero, escrito en el año 45 antes de Cristo. Este libro es un tratado de teoría de éticas, muy popular durante el Renacimiento. La primera linea del Lorem Ipsum, 'Lorem ipsum dolor sit amet..', viene de una linea en la sección 1.10.32")
 Article.create(position: 2, number: "3", law_id: law_lorem_ipsum.id, body: "Es un hecho establecido hace demasiado tiempo que un lector se distraerá con el contenido del texto de un sitio mientras que mira su diseño. El punto de usar Lorem Ipsum es que tiene una distribución más o menos normal de las letras, al contrario de usar textos como por ejemplo 'Contenido aquí, contenido aquí'. Estos textos hacen parecerlo un español que se puede leer. Muchos paquetes de autoedición y editores de páginas web usan el Lorem Ipsum como su texto por defecto, y al hacer una búsqueda de 'Lorem Ipsum' va a dar por resultado muchos sitios web que usan este texto si se encuentran en estado de desarrollo. Muchas versiones han evolucionado a través de los años, algunas veces por accidente, otras veces a propósito (por ejemplo insertándole humor y cosas por el estilo).")
 Article.create(position: 3, number: "4", law_id: law_lorem_ipsum.id, body: "Hay muchas variaciones de los pasajes de Lorem Ipsum disponibles, pero la mayoría sufrió alteraciones en alguna manera, ya sea porque se le agregó humor, o palabras aleatorias que no parecen ni un poco creíbles. Si vas a utilizar un pasaje de Lorem Ipsum, necesitás estar seguro de que no hay nada avergonzante escondido en el medio del texto. Todos los generadores de Lorem Ipsum que se encuentran en Internet tienden a repetir trozos predefinidos cuando sea necesario, haciendo a este el único generador verdadero (válido) en la Internet. Usa un diccionario de mas de 200 palabras provenientes del latín, combinadas con estructuras muy útiles de sentencias, para generar texto de Lorem Ipsum que parezca razonable. Este Lorem Ipsum generado siempre estará libre de repeticiones, humor agregado o palabras no características del lenguaje, etc.")
+
+# Las Reglas
 
 law_las_reglas = Law.create({ name: "Las Reglas", creation_number: "2020-02", law_access_id: law_access_pro.id })
 LawTag.create({law_id: law_las_reglas.id, tag_id: Tag.find_by_name("Constitucional").id})
@@ -128,7 +174,11 @@ Article.create(position: 51, number: "52", law_id: law_las_reglas.id, body: "Si 
 Article.create(position: 52, number: "53", law_id: law_las_reglas.id, body: "El Ahijado puede desear que los padrinos le concedan deseos a alguien más. Siempre y cuando no se pase de las 24 horas")
 Article.create(position: 53, number: "54", law_id: law_las_reglas.id, body: "Sí existiera un niño llamado Timmy Turner que hubiera conservado y amado a sus padrinos por trece años; haber salvado el Mundo Mágico en más de una ocasión; y si prometiere pedir deseos, sólo para los demás y nunca para propósitos egoístas, entonces él podía quedarse con sus padrinos.")
 
-## Documents API ###
+###################
+#### Documents ####
+###################
+
+# Ejemplo Titulo Prueba A
 
 document_a = Document.create(
   url: "https://todolegal.app/documents/1-ejemplo-a",
@@ -137,6 +187,8 @@ document_a = Document.create(
   publication_number: "Acuerdo No. CN-006-2018",
   description: "Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera que logró hacer un libro de textos especimen. No sólo sobrevivió 500 años, sino que tambien ingresó como texto de relleno en documentos electrónicos, quedando esencialmente igual al original. Fue popularizado en los 60s con la creación de las hojas 'Letraset', las cuales contenian pasajes de Lorem Ipsum, y más recientemente con software de autoedición, como por ejemplo Aldus PageMaker, el cual incluye versiones de Lorem Ipsum."
 )
+
+# Ejemplo Titulo Prueba B
 
 #DocumentTag.create({document_id: document_a.id, tag_id: Tag.find_by_name("El Congreso Nacional").id})
 #DocumentTag.create({document_id: document_a.id, tag_id: Tag.find_by_name("Laboral").id})

@@ -34,6 +34,17 @@ class DocumentsController < ApplicationController
 
   # GET /documents/1/edit
   def edit
+    @document_type = params[:doc_type]
+    @documents_count = Document.where(publication_number: @document.publication_number).count
+    if @document.position
+      @next_document = Document.where(publication_number: @document.publication_number).find_by(position: @document.position + 1 )
+    end
+    if @next_document
+      @is_next_document_valid = true
+    else
+      @is_next_document_valid = false
+    end
+
   end
 
   # POST /documents

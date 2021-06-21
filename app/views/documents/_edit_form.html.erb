@@ -16,9 +16,10 @@
       <div class="row">
         <div class="col-md-8">
           <div class="form-group">
-            <%= form.label :Numero_de_Emisión %>
-            <small> (Máximo 50 caracteres) </small>
-            <%= form.text_field :name, class: "form-control", maxlength: "50" %>
+            <%= form.label :identificador_de_Emisión %>
+            <%= form.text_field :name, class: "form-control", maxlength: "50",
+                onkeyup:"charCountUpdate(this.value, 'identifier', 50)" %>
+            <span id="identifier">0 de 50 caracteres</span>
           </div>
         </div>
       </div>
@@ -53,12 +54,27 @@
         </div>
 
       </div>
+      
+      <div class="row">
+        <div class="col-md-4">
+          <% if document.end_page %>
+            <span>Páginas incluídas <%= document.start_page + 1 %>-<%= document.end_page + 1 %> </span>
+          <% end %>
+        </div>
+        <div class="col-md-4">
+          <% if document.position %>
+            <span> Posición en Gaceta <%=document.position + 1 %> de <%= @documents_count %> </span>
+          <% end %>
+        </div>
+      </div>
 
       <div class="row">
         <div class="col-md-8">
           <div class="form-group">
-            <%= form.label :resumen %>
-            <%= form.text_area :short_description, class: "form-control" %>
+            <%= form.label :descripción_corta %>
+            <%= form.text_area :short_description, class: "form-control", maxlength: "250", 
+                onkeyup:"charCountUpdate(this.value, 'shortDescription', 250)" %>
+            <span id="shortDescription">0 de 250 caracteres</span>
           </div>
         </div>
       </div>
@@ -66,8 +82,10 @@
       <div class="row">
         <div class="col-md-8">
           <div class="form-group">
-            <%= form.label :descripción %>
-            <%= form.text_area :description, class: "form-control" %>
+            <%= form.label :descripcion_larga %>
+            <%= form.text_area :description, class: "form-control", maxlength: "1000",
+                onkeyup:"charCountUpdate(this.value, 'longDescription', 1000)" %>
+            <span id="longDescription">0 de 1000 caracteres</span>
           </div>
         </div>
       </div>
@@ -83,6 +101,11 @@
 
       <div class="actions">
         <%= form.submit "Guardar cambios", class: "d-inline p-2 btn btn-primary" %>
+        <% if @is_next_document_valid %>
+          <%= link_to 'Siguiente', edit_document_path(@next_document), class:"d-inline p-2 btn btn-secondary"%>
+        <% else %>
+           <button type="button" class="d-inline p-2 btn btn-secondary" disabled="true">Siguiente</button>
+        <% end %>
       </div>
     </div>
   </div>
@@ -93,6 +116,11 @@
   function toggleEdition(){
     const enabled = document.getElementById("inputSwitch").checked;
     const textInput = document.getElementById("gazetteNumber").disabled = !enabled;
+  }
+
+  function charCountUpdate(str, elementId, maxLength){
+    const element = document.getElementById( elementId );
+    element.innerHTML= str.length + ' de ' + maxLength + ' caracteres'; 
   }
 </script>
 

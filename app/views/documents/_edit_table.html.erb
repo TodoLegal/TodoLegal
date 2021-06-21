@@ -4,6 +4,7 @@
       <th class="table--headers" scope="col">Nombre</th>
       <th class="table--headers"scope="col">Fecha de publicación</th>
       <th class="table--headers"scope="col">Número de publicación</th>
+      <th class="table--headers"scope="col">Posicion</th>
       <th class="acciones--tableHeader" scope="col">Acciones</th>
     </tr>
   </thead>
@@ -19,12 +20,15 @@
             <td> 
                 <%= document.publication_number %>
             </td>
+            <td> 
+                <%= document.position %>
+            </td>
             <td>
                 <div class="btn-group" role="group" aria-label="Basic mixed styles example">
                     <%=button_to document, method: :get, class:"btn btn-outline-primary" do %>
                         <i class="far fa-eye"></i>
                     <% end %>
-                    <%= button_to(edit_document_path(document), {class:"btn btn-outline-secondary", method: :get}) do %>
+                    <%= button_to(edit_document_path(document), {class:"btn btn-outline-secondary", method: :get, params:{doc_type: document.name}}) do %>
                         <i class="fas fa-edit"></i>
                     <% end %>
                     <%= button_to document, method: :delete, data: { confirm: '¿Estás Seguro que deseas eliminarlo?' }, class:"btn btn-outline-danger" do %>

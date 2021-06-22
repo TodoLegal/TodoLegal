@@ -19,21 +19,11 @@
             <%= form.label :identificador_de_Emisión %>
             <%= form.text_field :name, class: "form-control", maxlength: "50",
                 onkeyup:"charCountUpdate(this.value, 'identifier', 50)" %>
-            <span id="identifier">0 de 50 caracteres</span>
+            <small id="identifier">0 de 50 caracteres</small>
           </div>
         </div>
       </div>
 
-      <!--
-      <div class="row">
-        <div class="col-md-8">
-          <div class="form-group">
-            <%= form.label :url %>
-            <%= form.text_field :url, class: "form-control" %>
-          </div>
-        </div>
-      </div>
-      -->
 
       <div class="row">
 
@@ -56,14 +46,35 @@
       </div>
       
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-2">
           <% if document.end_page %>
-            <span>Páginas incluídas <%= document.start_page + 1 %>-<%= document.end_page + 1 %> </span>
+            <label> 
+              <strong>Páginas incluídas </strong> 
+              <span class="badge bg-primary document--pages"> <%= document.start_page + 1 %>-<%= document.end_page + 1 %> </span>
+            </label>
           <% end %>
         </div>
+        <div class="col-md-3 see--document--btn">
+          <%= link_to 'Ver documento', document, class:"btn btn-outline-secondary"%>
+        </div>
         <div class="col-md-4">
+          <label class="d-inline"> <strong> Posición en Gaceta </strong> </label>
           <% if document.position %>
-            <span> Posición en Gaceta <%=document.position + 1 %> de <%= @documents_count %> </span>
+            <nav aria-label="...">
+              <ul class="pagination pagination-sm">
+                <% for i in 1..@documents_count %>
+                  <% if i === document.position + 1 %>
+                    <li class="page-item active" aria-current="page">
+                      <span class="page-link"><%= i %></span>
+                    </li>
+                  <% else %>
+                    <li class="page-item" aria-current="page">
+                      <span class="page-link"><%= i %></span>
+                    </li>
+                  <% end %>
+                  
+                <% end %>
+            </nav>
           <% end %>
         </div>
       </div>
@@ -74,7 +85,7 @@
             <%= form.label :descripción_corta %>
             <%= form.text_area :short_description, class: "form-control", maxlength: "250", 
                 onkeyup:"charCountUpdate(this.value, 'shortDescription', 250)" %>
-            <span id="shortDescription">0 de 250 caracteres</span>
+            <small id="shortDescription">0 de 250 caracteres</small>
           </div>
         </div>
       </div>
@@ -85,7 +96,7 @@
             <%= form.label :descripcion_larga %>
             <%= form.text_area :description, class: "form-control", maxlength: "1000",
                 onkeyup:"charCountUpdate(this.value, 'longDescription', 1000)" %>
-            <span id="longDescription">0 de 1000 caracteres</span>
+            <small id="longDescription">0 de 1000 caracteres</small>
           </div>
         </div>
       </div>
@@ -100,12 +111,23 @@
       </div>
 
       <div class="actions">
-        <%= form.submit "Guardar cambios", class: "d-inline p-2 btn btn-primary" %>
-        <% if @is_next_document_valid %>
-          <%= link_to 'Siguiente', edit_document_path(@next_document), class:"d-inline p-2 btn btn-secondary"%>
-        <% else %>
-           <button type="button" class="d-inline p-2 btn btn-secondary" disabled="true">Siguiente</button>
-        <% end %>
+        <div class="row">
+          <div class="col-md-5">
+            <%= form.submit "Guardar cambios", class: "d-inline p-2 btn btn-primary" %>
+            <% if @is_next_document_valid %>
+              <%= link_to 'Siguiente', edit_document_path(@next_document), class:"d-inline p-2 btn btn-secondary"%>
+            <% else %>
+              <button type="button" class="d-inline p-2 btn btn-secondary" disabled="true">Siguiente</button>
+            <% end %>
+          </div>
+          <div class="col-md-3">
+            <% if @document.original_file.attached? %>
+              <%= button_to(@document.original_file, {class:"btn btn-outline-primary", method: :get}) do %>
+                Descargar archivo
+              <% end %>
+            <% end %>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -129,4 +151,16 @@
     font-weight: normal!important;
     color: #696c6f!important;
   }
+
+  .document--pages{
+    color: white;
+    display: block;
+    font-size: 1rem;
+    padding: 5px;
+  }
+
+  .see--document--btn{
+    align-self: center;
+  }
+
 </style>

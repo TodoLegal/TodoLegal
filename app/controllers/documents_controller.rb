@@ -162,12 +162,14 @@ class DocumentsController < ApplicationController
     puts "Creating related documents"
     json_data["files"].each do |file|
       puts "Creating: " + file["name"]
-      description = getCleanDescription file["description"]
       new_document = Document.create(
         name: file["name"],
-        description: description,
+        description: getCleanDescription(file["description"]),
         publication_number: document.publication_number,
-        publication_date: document.publication_date)
+        publication_date: document.publication_date,
+        start_page: file["start_page"],
+        end_page: file["end_page"],
+        position: file["position"])
       tag = Tag.find_by_name(file["tag"])
       issuer = Tag.find_by_name(file["issuer"])
       if tag

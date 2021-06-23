@@ -30,8 +30,7 @@ tag_especiales_y_otras = Tag.create({ name: 'Especiales y Otras', tag_type_id: t
 tag_internacional_publico = Tag.create({ name: 'Internacional Público', tag_type_id: tag_type_materia.id })
 tag_civil = Tag.create({ name: 'Civil', tag_type_id: tag_type_materia.id })
 tag_mercantil = Tag.create({ name: 'Mercantil', tag_type_id: tag_type_materia.id })
-tag_bancario = Tag.create({ name: 'Bancario', tag_type_id: tag_type_materia.id })
-tag_monetario = Tag.create({ name: 'Monetario', tag_type_id: tag_type_materia.id })
+tag_financiero = Tag.create({ name: 'Financiero', tag_type_id: tag_type_materia.id })
 tag_administrativo = Tag.create({ name: 'Administrativo', tag_type_id: tag_type_materia.id })
 tag_ambiental = Tag.create({ name: 'Ambiental', tag_type_id: tag_type_materia.id })
 tag_militar = Tag.create({ name: 'Militar', tag_type_id: tag_type_materia.id })
@@ -50,6 +49,7 @@ tag_municipalidad_de_sps = Tag.create(name: "Municipalidad de SPS", tag_type_id:
 tag_senasa = Tag.create(name: "SENASA", tag_type_id: tag_institucion.id)
 tag_aduana = Tag.create(name: "Aduana", tag_type_id: tag_institucion.id)
 tag_cree = Tag.create(name: "CREE", tag_type_id: tag_institucion.id)
+tag_enag = Tag.create(name: "ENAG", tag_type_id: tag_institucion.id)
 
 # Forma de Publicación
 tag_gaceta = Tag.create(name: "Gaceta", tag_type_id: tag_forma_de_publicacion.id)

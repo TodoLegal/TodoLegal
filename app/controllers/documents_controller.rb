@@ -164,9 +164,11 @@ class DocumentsController < ApplicationController
       puts "Creating: " + file["name"]
       new_document = Document.create(
         name: file["name"],
-        description: getCleanDescription(file["description"]),
-        publication_number: document.publication_number,
         publication_date: document.publication_date,
+        publication_number: document.publication_number,
+        description: getCleanDescription(file["description"]),
+        short_description: getCleanDescription(file["short_description"]),
+        full_text: getCleanDescription(file["full_text"]),
         start_page: file["start_page"],
         end_page: file["end_page"],
         position: file["position"])

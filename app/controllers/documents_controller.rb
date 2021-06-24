@@ -107,12 +107,11 @@ class DocumentsController < ApplicationController
     end
   end
 
-  def getCleanDescription description
-    description = description.truncate(400)
-    while description.size > 0 and !(description[0] =~ /[A-Za-z]/)
-      description[0] = ''
+  def cleanText text
+    while text.size > 0 and !(text[0] =~ /[A-Za-z]/)
+      text[0] = ''
     end
-    return description
+    return text
   end
 
   def set_content_disposition_attachment key, file_name
@@ -166,9 +165,9 @@ class DocumentsController < ApplicationController
         name: file["name"],
         publication_date: document.publication_date,
         publication_number: document.publication_number,
-        description: getCleanDescription(file["description"]),
-        short_description: getCleanDescription(file["short_description"]),
-        full_text: getCleanDescription(file["full_text"]),
+        description: cleanText(file["description"]),
+        short_description: cleanText(file["short_description"]),
+        full_text: cleanText(file["full_text"]),
         start_page: file["start_page"],
         end_page: file["end_page"],
         position: file["position"])
@@ -184,6 +183,14 @@ class DocumentsController < ApplicationController
         institution_tag = Tag.find_by_name(institution)
         if institution_tag
           DocumentTag.create(document_id: new_document.id, tag_id: institution_tag.id)
+        end
+      end
+      full_text_lower = file["full_text"].downcase
+      AlternativeTagName.each do |alternative_tag_name|
+        if full_text.include? alternative_tag_name.alternative_name
+          if !DocumentTag.exists?(document_id: new_document.id, tag_id: alternative_tag_name.tag_id)
+            DocumentTag.create(document_id: new_document.id, tag_id: alternative_tag_name.tag_id)
+          end
         end
       end
       new_document.url = new_document.generate_friendly_url

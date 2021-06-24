@@ -108,7 +108,7 @@ class DocumentsController < ApplicationController
   end
 
   def cleanText text
-    while text.size > 0 and !(text[0] =~ /[A-Za-z]/)
+    while text && !text.blank? and !(text[0] =~ /[A-Za-z]/)
       text[0] = ''
     end
     return text

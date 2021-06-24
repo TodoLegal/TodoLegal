@@ -187,7 +187,7 @@ class DocumentsController < ApplicationController
       end
       full_text_lower = file["full_text"].downcase
       AlternativeTagName.all.each do |alternative_tag_name|
-        if full_text.include? alternative_tag_name.alternative_name
+        if full_text_lower.include? alternative_tag_name.alternative_name
           if !DocumentTag.exists?(document_id: new_document.id, tag_id: alternative_tag_name.tag_id)
             DocumentTag.create(document_id: new_document.id, tag_id: alternative_tag_name.tag_id)
           end

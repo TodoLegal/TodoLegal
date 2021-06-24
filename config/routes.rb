@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :alternative_tag_names
   use_doorkeeper
   resources :documents
   resources :user_permissions

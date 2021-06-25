@@ -1,0 +1,27 @@
+<%= form_with(model: alternative_tag_name) do |form| %>
+  <% if alternative_tag_name.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(alternative_tag_name.errors.count, "error") %> prohibited this alternative_tag_name from being saved:</h2>
+
+      <ul>
+        <% alternative_tag_name.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :tag_id %>
+    <%= form.number_field :tag_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :alternative_name %>
+    <%= form.text_field :alternative_name %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

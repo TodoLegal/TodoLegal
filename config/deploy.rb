@@ -2,7 +2,7 @@
 lock "~> 3.16.0"
 
 set :application, "TodoLegal"
-set :repo_url, "https://github.com/TodoLegal/TodoLegal.git"
+set :repo_url, "https://github.com/Haguilar91/TodoLegal/TodoLegal.git"
 
 append :linked_files, "config/master.key"
 append :linked_files, "config/credentials.yml.enc"

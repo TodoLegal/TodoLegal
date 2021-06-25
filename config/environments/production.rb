@@ -28,7 +28,7 @@ end
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
-
+  config.hosts << "143.198.77.148"
   # Code is not reloaded between requests.
   config.cache_classes = true
 

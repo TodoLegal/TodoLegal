@@ -26,6 +26,7 @@ class AdminController < ApplicationController
     end
     @has_original_gazette = []
     @has_been_sliced = []
+    @sliced_count = 0
     @gazettes.each do |gazette|
       documents = gazette.second
       has_original = false
@@ -37,6 +38,7 @@ class AdminController < ApplicationController
           is_sliced = true
         end
       end
+      @sliced_count += 1 if is_sliced
       additional_data = {'has_original': has_original, 'is_sliced': is_sliced }
       gazette.push(additional_data)
     end

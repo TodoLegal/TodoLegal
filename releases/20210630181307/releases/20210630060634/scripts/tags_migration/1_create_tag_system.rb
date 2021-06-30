@@ -1,0 +1,5 @@
+tipo_de_acto = TagType.create(name: "Tipo de Acto")
+tema = TagType.create(name: "Tema")
+forma_de_publicacion = TagType.create(name: "Forma de Publicación")
+institucion = TagType.create(name: "Institución")
+#TagType.create(name: "Territorio")

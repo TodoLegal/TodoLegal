@@ -1,0 +1,65 @@
+<% content_for :title, "Usuarios - TodoLegal" %>
+
+<h1>Usuarios</h1>
+
+<h3>Descarga</h3>
+
+<ul>
+  <li><%= link_to 'Descargar todos los usuarios', download_all_users_path(format: :csv) %></li>
+  <li><%= link_to 'Descargar suscritos a información', download_recieve_information_users_path(format: :csv) %></li>
+  <li><%= link_to 'Descargar contribuyentes', download_contributor_users_path(format: :csv) %></li>
+</ul>
+
+<form action="<%= admin_users_url %>" method="get">
+  <div>
+    <input name="email" value="<%= @email %>" type="text" placeholder="usuario@correo.com">
+    <div>
+      <button type="submit" onclick="document.getElementById('loading-spinner').style.display = 'block'" type="button">Buscar</button>
+    </div>
+  </div>
+</form>
+
+<p><%= User.all.count %> usuarios registrados</p>
+
+<table border="1">
+  <tr>
+    <th>email</th>
+    <th>created at</th>
+    <th>last sign in</th>
+    <% @permissions.each do |permission| %>
+      <th><%= permission.name %></th>
+    <% end %>
+  </tr>
+  <% @users.each do |user| %>
+    <tr>
+      <td><%= user.email %></td>
+      <td><%= user.created_at %> ago</td>
+      <td><%= user.last_sign_in_at ? time_ago_in_words(user.last_sign_in_at) : "" %> ago</td>
+      <% @permissions.each do |permission| %>
+        <% if UserPermission.find_by(user: user, permission: permission) %>
+          <td>yes
+            <form action="/admin/revoke_permission" method="post">
+              <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+              <%= hidden_field_tag :user_id, user.id %>
+              <%= hidden_field_tag :permission_id, permission.id %>
+              <div class="form-inline">
+                <button type="submit">Revcoar</button>
+              </div>
+            </form>
+          </td>
+        <% else %>
+          <td>no
+            <form action="/admin/grant_permission" method="post">
+              <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+              <%= hidden_field_tag :user_id, user.id %>
+              <%= hidden_field_tag :permission_id, permission.id %>
+              <div class="form-inline">
+                <button type="submit">Otorgar</button>
+              </div>
+            </form>
+          </td>
+        <% end %>
+      <% end %>
+    </tr>
+  <% end %>
+</table>

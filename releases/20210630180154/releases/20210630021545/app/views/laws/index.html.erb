@@ -1,0 +1,49 @@
+<% content_for :title, "Leyes - TodoLegal" %>
+
+<div class="container">
+  <h1>Administrar documentos</h1>
+  
+  <input type="text"/>
+  <button type="button" class="btn btn-primary" text="Buscar">Buscar</button>
+
+  <table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th>Name</th>
+        <th>Materia</th>
+        <th>Acceso</th>
+        <th colspan="3"></th>
+      </tr>
+    </thead>
+  <%i=0%>
+    <tbody>
+      <% @laws.each do |law| %>
+        <tr>
+          <% i=i+1 %>
+          <td><%=i%>. <%= law.name %>
+            <%= link_to 'Editar Documento', edit_law_path(law) %>
+          </td>
+          <% if law.materias.first %>
+            <td><%= law.materias.first.name %></td>
+          <% else %>
+            <td></td>
+          <% end %>
+          <td>
+            <%= form_for(law, url: admin_set_law_access_url, html: { method: :post }) do |form| %>
+              <%= form.hidden_field :law_id, value: law.id %>
+              <div class="row">
+                <div class="col">
+                  <%= form.collection_select(:law_access_id, LawAccess.all, :id, :name, {:prompt=>true}, {:class=>'form-control'}) %>
+                </div> 
+                <div class="col">
+                  <%= form.submit 'Guardar', class: 'btn btn-primary' %>
+                </div> 
+              </div> 
+            <% end %>
+          </td>
+
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

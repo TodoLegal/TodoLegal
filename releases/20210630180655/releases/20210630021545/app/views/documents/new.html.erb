@@ -1,0 +1,9 @@
+<div class="container">
+  <h1>Nuevo documento</h1>
+  <% if @comes_from_gazettes %>
+    <%= link_to 'Atrás', gazettes_path %>
+  <% else %>
+    <%= link_to 'Atrás', documents_path %>
+  <% end %>
+  <%= render 'new_form', document: @document %>
+</div>

@@ -1,0 +1,6 @@
+tipo_de_acto = TagType.find_by_name("Tipo de Acto")
+Tag.create(name: "Decreto", tag_type_id: tipo_de_acto.id)
+Tag.create(name: "Acuerdo", tag_type_id: tipo_de_acto.id)
+Tag.create(name: "Tratado Internacional", tag_type_id: tipo_de_acto.id)
+Tag.create(name: "Resolución", tag_type_id: tipo_de_acto.id)
+Tag.create(name: "Sentencia", tag_type_id: tipo_de_acto.id)

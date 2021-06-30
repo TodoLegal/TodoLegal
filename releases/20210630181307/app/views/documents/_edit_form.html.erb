@@ -1,0 +1,132 @@
+<%= form_with(model: document, local: true) do |form| %>
+  <% if document.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(document.errors.count, "error") %> prohibited this document from being saved:</h2>
+
+      <ul>
+        <% document.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="form-group">
+            <%= form.label :identificador_de_Emisión %>
+            <%= form.text_field :name, class: "form-control", maxlength: "50",
+                onkeyup:"charCountUpdate(this.value, 'identifier', 50)" %>
+            <span id="identifier">0 de 50 caracteres</span>
+          </div>
+        </div>
+      </div>
+
+      <!--
+      <div class="row">
+        <div class="col-md-8">
+          <div class="form-group">
+            <%= form.label :url %>
+            <%= form.text_field :url, class: "form-control" %>
+          </div>
+        </div>
+      </div>
+      -->
+
+      <div class="row">
+
+        <div class="form-group col-md-4">
+          <%= form.label :fecha_de_publicación %>
+          <div class="form-inline">
+            <%= form.date_select :publication_date, {:order => [:day, :month, :year]}, {:class => 'form-control mr-2'} %>
+          </div>
+        </div>
+        
+        <div class="form-group col-md-4">
+          <%= form.label :número_de_gaceta %> 
+          <%= form.text_field :publication_number, class: "form-control", disabled:true, id:"gazetteNumber" %>
+          <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="inputSwitch" onclick="toggleEdition()">
+            <label class="custom-control-label" for="inputSwitch">Habilitar edición</label>
+          </div>
+        </div>
+
+      </div>
+      
+      <div class="row">
+        <div class="col-md-4">
+          <% if document.end_page %>
+            <span>Páginas incluídas <%= document.start_page + 1 %>-<%= document.end_page + 1 %> </span>
+          <% end %>
+        </div>
+        <div class="col-md-4">
+          <% if document.position %>
+            <span> Posición en Gaceta <%=document.position + 1 %> de <%= @documents_count %> </span>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-8">
+          <div class="form-group">
+            <%= form.label :descripción_corta %>
+            <%= form.text_area :short_description, class: "form-control", maxlength: "250", 
+                onkeyup:"charCountUpdate(this.value, 'shortDescription', 250)" %>
+            <span id="shortDescription">0 de 250 caracteres</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-8">
+          <div class="form-group">
+            <%= form.label :descripcion_larga %>
+            <%= form.text_area :description, class: "form-control", maxlength: "1000",
+                onkeyup:"charCountUpdate(this.value, 'longDescription', 1000)" %>
+            <span id="longDescription">0 de 1000 caracteres</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-8">
+          <div class="form-group">
+            <%= form.label :original_file %>
+            <%= form.file_field :original_file, class: "form-control" %>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <%= form.submit "Guardar cambios", class: "d-inline p-2 btn btn-primary" %>
+        <% if @is_next_document_valid %>
+          <%= link_to 'Siguiente', edit_document_path(@next_document), class:"d-inline p-2 btn btn-secondary"%>
+        <% else %>
+           <button type="button" class="d-inline p-2 btn btn-secondary" disabled="true">Siguiente</button>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+<% end %>
+
+<script>
+  function toggleEdition(){
+    const enabled = document.getElementById("inputSwitch").checked;
+    const textInput = document.getElementById("gazetteNumber").disabled = !enabled;
+  }
+
+  function charCountUpdate(str, elementId, maxLength){
+    const element = document.getElementById( elementId );
+    element.innerHTML= str.length + ' de ' + maxLength + ' caracteres'; 
+  }
+</script>
+
+<style>
+  .custom-control-label{
+    font-weight: normal!important;
+    color: #696c6f!important;
+  }
+</style>

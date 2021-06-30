@@ -1,0 +1,5 @@
+---
+BUNDLE_DEPLOYMENT: "true"
+BUNDLE_PATH: "/home/deploy/TodoLegal/shared/bundle"
+BUNDLE_JOBS: "4"
+BUNDLE_WITHOUT: "development:test"

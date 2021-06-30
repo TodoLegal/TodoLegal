@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Law:</strong>
+  <%= @law_modification.law_id %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @law_modification.name %>
+</p>
+
+<%= link_to 'Edit', edit_law_modification_path(@law_modification) %> |
+<%= link_to 'Back', law_modifications_path %>

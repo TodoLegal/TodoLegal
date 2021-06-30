@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  number: 1
+  body: MyText
+  position: 1
+  law_id: 1
+
+two:
+  number: 1
+  body: MyText
+  position: 1
+  law_id: 1

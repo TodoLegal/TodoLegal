@@ -1,0 +1,396 @@
+<% if !@is_onboarding %>
+  <%= render 'layouts/logged_navbar' %> 
+<% end %>
+
+<section class="pricing">
+  <% if @is_onboarding %>
+    <a href="/" class="back-image" data-toggle="modal" data-target="#cancelPricingModal">
+    <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="image">
+    </a>
+
+     <!-- Start Cancel Modal -->
+        <div class="modal fade" id="cancelPricingModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-body">
+                <h5 class="modal-title" id="cancelModalLongTitle">¿Estás seguro que deseas salir?</h5>
+                <label id="labelBasico">
+                  Para tener una mejor experiencia te recomendamos completar el proceso de creación de cuenta.
+                </label>
+                <div class="form-group" id="bottonsGroup">
+                  <%= link_to 'Salir', root_path, id:"okButton", class:"btn btn-secondary" %>
+                  &nbsp;&nbsp;&nbsp;
+                  <button type="button" id="dismissBtn" class="btn btn-primary" data-dismiss="modal">Continuar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--End Cancel modal -->
+
+    <% if @user_just_registered %>
+      <div class="alert alert-success alert-dismissible fade show" role="alert" id="savedArticle"> 
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+          La información de perfil ha sido guardada, procede a elegir un plan para tu cuenta.
+      </div>
+    <% end %>
+  <% end %>
+
+
+  <div class="card card--pricing">
+  <div class="container">
+    <div class="row">
+      <div class="pricing-heading col-12">
+      <h2 class="title">Elige un Plan</h3>
+      <p class="body">Si eliges el plan Pro, puedes pagar mensual o anualmente, cancelar o bajar al plan básico en cualquier momento. Con ambas cuentas puedes acceder a <a href="https://todolegal.app/">TodoLegal</a> y a <a href="https://valid.todolegal.app/">Valid</a>, lo que cambia es el tipo de acceso a la información: limitado o ilimitado.</p>
+      </div>
+    </div>
+
+    <div class="row row-eq-height">
+      <% if !@activate_pro_account %>
+      <!-- Free Tier -->
+        <div class="col-lg-6 card card--dark-100 mb-5 mb-lg-0 card--basic">
+          <div class="card-body">
+            <h5 class="card-title">Básico</h5>
+            <h6 class="card-price">Gratis</h6>
+            <%= render 'basic_pricing_description' %>
+          </div>
+          <div class="card-bottom">
+            <% if @return_to %>
+              <%= link_to "Continuar con Plan Básico", @return_to, params: {pricing_onboarding: @pricing_onboarding}, class:"btn btn-block btn-outline-primary" %>
+            <% else %>
+              <%= link_to "Continuar con Plan Básico", @select_basic_plan_path, params: {pricing_onboarding: @pricing_onboarding}, class:"btn btn-block btn-outline-primary" %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- Pro Tier -->
+        <div class="col-lg-6 card card--dark-100" id="pro-tier">
+          <div class="card-body">
+            <h5 class="card-title">Pro</h5>
+            <h6 class="card-price">$ <%= MONTHLY_PRICE_ANNUALLY %><span class="period">/mensual</span></h6>
+            <small>Facturado a <strong>$<%= BASE_PRICE_ANNUALLY %></strong> anual -15%</small>
+            <%= render 'pro_pricing_description' %>
+          </div>
+          <div class="card-bottom">
+            <%= button_to "Elegir Plan Pro", @select_pro_plan_path, method: :get, params: {is_onboarding: @is_onboarding, pricing_onboarding: @pricing_onboarding, go_to_law: @go_to_law}, class:"btn btn-block btn-primary"%>
+            <p class="text-center py-2 change-plan-link" onclick="changePlan(2)">Cambiar a pago mensual</p>
+          </div>
+      </div>
+
+      <!-- Card - Plan Pro Mensual  -->
+        <div class="col-lg-6 card card--dark-100 hide-plan" id="pro-mensual">
+          <div class="card-body">
+            <h5 class="card-title">Pro</h5>
+            <h6 class="card-price">$<%= BASE_PRICE_MONTHLY %><span class="period">/mensual</span></h6>
+            <small>Podrás ahorrar <strong>15%</strong> si eliges el
+             <!-- Agregar el switch de mensual a anual tambien  -->
+             <label class="link" onclick="changePlan(1)">pago anual</label>.</small>
+             <%= render 'pro_pricing_description' %>
+          </div>
+          <div class="card-bottom">
+            <%= button_to "Elegir Plan Pro", @select_pro_plan_path, method: :get, params: {is_monthly: true, is_onboarding: @is_onboarding, pricing_onboarding: @pricing_onboarding, go_to_law: @go_to_law}, class:"btn btn-block btn-primary"%>
+            <p class="text-center py-2 change-plan-link" onclick="changePlan(1)">Cambiar a pago anual</p>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function changePlan(plan){
+    if(plan == 1){
+      document.getElementById("pro-tier").classList.remove('hide-plan');
+      document.getElementById("pro-mensual").classList.add('hide-plan');
+    }else{
+      document.getElementById("pro-mensual").classList.remove('hide-plan');
+      document.getElementById("pro-tier").classList.add('hide-plan');
+    }
+  }
+</script>
+
+<style>
+  section.pricing {
+      background: #EFF3F8;
+      padding-top: 1rem;
+  }
+
+  .hide-plan{
+    display: none;
+  }
+
+  .pricing .card.card--discount {
+    border: 1px solid #1A7FFA;
+    border-radius: 0 0 4px 4px;
+  }
+
+  /* Label discount
+  .pricing .card.card--discount:before {
+    background: #1A7FFA;
+    content: "50% Descuento válido hasta el 24 de agosto";
+    display: block; 
+    position: absolute;
+    top: -40px;
+    left: -1px  ;
+    width: calc(100% + 2px);
+    height: 40px;
+    padding: .5rem;
+    color: white; 
+    border-radius: 4px 4px 0 0  ;
+    border: 1px solid #1A7FFA;
+    font-weight: bold;
+  }  
+*/
+  /* Remove media query after 17 Aug
+  @media (max-width: 375.98px) {
+
+    .pricing .card.card--discount:before {
+      top: -60px;
+      height: 60px;
+    }  
+
+   }
+*/
+  @media only screen and (max-width: 767.98px) {
+    section.pricing {
+        background: white;
+    }
+  }
+
+  section.pricing .alert{
+    width: calc(100% - 30px);
+    margin: auto auto 1rem;
+    max-width: 1068px;
+  }
+
+  section.pricing .body,
+  section.pricing li,
+  section.pricing small .link {
+    color: #505864;
+  }
+
+  section.pricing small {
+    display: inline-block;
+    margin-bottom: 1rem;  
+    color: #505864;
+  }
+  
+  .pricing .link {
+    text-decoration: underline;
+  }
+
+  .change-plan-link, .link:hover{
+    cursor: pointer;
+  }
+
+  .pricing-heading {
+    text-align: left;
+    margin-bottom: 1rem;
+  }
+
+  .change-plan-link{
+    text-decoration: underline;
+    color: #1A7FFA;
+    margin: 0;
+    padding-top: .5rem;
+
+  }
+
+  section.pricing .plan-description {
+    color: #171F2A;
+  }
+
+  @media only screen and (max-width: 767.98px) {
+     .pricing-heading {
+        text-align: center;
+        margin-bottom: .5rem;
+      }
+  }
+
+  .card--pricing {
+      padding-bottom: 2rem;
+  }
+
+  .card-bottom {
+    padding-bottom: 1.5rem;
+  }
+
+@media only screen and (min-width: 1280px) {
+     .card--pricing {
+        padding: 0 2rem 3rem 2rem;
+    }
+  }
+
+  @media only screen and (min-width: 1280px) {
+     section.pricing ul {
+       margin-bottom: 2rem; 
+      }
+  }
+
+  @media only screen and (max-width: 992px) {
+     .card.col-lg-6 {
+       margin: auto 1rem;
+     }
+     .card--basic {
+        margin-bottom: 3rem;
+        border: 1px solid red;
+      }
+  }
+
+  @media only screen and (min-width: 992px) {
+     
+     .pricing .row {
+       justify-content: space-between;
+     }
+     .card.col-lg-6 {
+       flex: 0 0 48%;
+       margin-top: 1rem;
+     }
+     .card-bottom {
+      min-height: 100px;
+    }
+  }
+  
+
+    .pricing .card {
+        border: none;
+        border-radius: 4px;
+    }
+
+    .pricing hr {
+        margin: 1.5rem 0;
+    }
+
+    .pricing .card-title,
+    .pricing .card-price {
+        font-size: 1.5rem;
+        margin: .5rem auto;
+        font-weight: bold;
+    }
+
+    .card-price {
+      color: #1A7FFA;
+    }
+
+    .pricing .card-price .period {
+        font-size: 0.8rem;
+    }
+
+    .pricing ul li {
+        margin-bottom: 1rem;
+    }
+
+    .pricing .text-muted {
+        opacity: 0.7;
+    }
+
+    .pricing{
+        background: #1A7FFA;
+    }
+
+    .title{
+      font-size: 24px;
+      padding-top: 4%;
+      margin-bottom: .5rem;
+      font-weight: bold;
+    }
+
+    .image{
+      height: 12vh;
+      max-height: 110px;
+      margin: 2vh auto 0;
+      display: block;
+    }
+
+    #btnDisable{
+      /* opacity: 0.15; */
+      background: #C9DFFA;
+      border-style: none;
+      color: #0360E7;
+      line-height: 19px;
+    }
+
+    ul li .fa-li {
+      color: #1A7FFA;
+    }
+
+    .pricing  .row-eq-height {
+      justify-content: space-around;
+      padding-top: 2rem;/* Remove property after 17 Aug */
+    }
+
+    /* Remove media query after 17 Aug */
+    @media (max-width: 375.98px) {
+
+    .pricing  .row-eq-height {
+        padding-top: 4rem;
+      }
+
+   }
+
+    .card-bottom .btn {
+      max-width: 360px;
+      margin: auto;
+    }
+
+    
+
+ /* Move styles to general */
+  .modal-body{
+    text-align: center;
+  }
+
+  #okButton{
+    width: auto;
+  }
+
+  #dismissBtn{
+    border:none;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .modal-title{
+    padding-top: 30px;
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 26px;
+  }
+
+  #labelBasico{
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 21px;
+    color: #505864;
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+
+  #bottonsGroup{
+    margin-bottom: 30px;
+  }
+
+  .more-info-text{
+    font-family: -apple-system, sans-serif;
+    color: #505864;
+    font-size: 18px;
+    line-height: 21px;
+    text-align: center;
+}
+
+  .modal-subtitle{
+    color: #fc5603;
+    font-family: -apple-system, sans-serif;
+    font-weight: bold;
+    margin: 2rem auto;
+    line-height: 1.25rem;
+    text-align: center;
+  }
+
+</style>

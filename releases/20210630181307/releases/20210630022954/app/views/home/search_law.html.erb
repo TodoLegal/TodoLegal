@@ -1,0 +1,17 @@
+<% if @query.blank? %>
+  <% content_for :title, "Búsqueda - TodoLegal" %>
+<% else %>
+  <% content_for :title, @query + " - TodoLegal" %>
+<% end %>
+
+<div class="container container--results">
+
+  <section style="margin-bottom: 40px;">
+    <%= render partial: 'search_law_input', locals: {target_url: '/search_law', home_flag: false} %>
+  </section>
+
+  <%= render partial: 'search_result', locals:{home_flag: false} %>
+
+  <%# <%= link_to 'Ir al inicio', root_path %>
+
+</div>

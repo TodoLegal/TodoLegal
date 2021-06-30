@@ -1,0 +1,42 @@
+current directory: /home/deploy/TodoLegal/shared/bundle/ruby/3.0.0/gems/ed25519-1.2.4/ext/ed25519_ref10
+/home/ubuntu/.rbenv/versions/3.0.1/bin/ruby -I /home/ubuntu/.rbenv/versions/3.0.1/lib/ruby/3.0.0 -r ./siteconf20210626-23102-n3tlvu.rb extconf.rb
+creating Makefile
+
+current directory: /home/deploy/TodoLegal/shared/bundle/ruby/3.0.0/gems/ed25519-1.2.4/ext/ed25519_ref10
+make DESTDIR\= clean
+
+current directory: /home/deploy/TodoLegal/shared/bundle/ruby/3.0.0/gems/ed25519-1.2.4/ext/ed25519_ref10
+make DESTDIR\=
+compiling ed25519_ref10.c
+In file included from /home/ubuntu/.rbenv/versions/3.0.1/include/ruby-3.0.0/ruby/ruby.h:15,
+                 from /home/ubuntu/.rbenv/versions/3.0.1/include/ruby-3.0.0/ruby.h:38,
+                 from ed25519_ref10.c:1:
+/home/ubuntu/.rbenv/versions/3.0.1/include/ruby-3.0.0/ruby/internal/config.h:132:50: warning: __VA_OPT__ is not available until C++2a
+  132 | # define RBIMPL_TEST2(...)          RBIMPL_TEST3(__VA_OPT__(,),1,0,0)
+      |                                                  ^
+In file included from /home/ubuntu/.rbenv/versions/3.0.1/include/ruby-3.0.0/ruby/ruby.h:44,
+                 from /home/ubuntu/.rbenv/versions/3.0.1/include/ruby-3.0.0/ruby.h:38,
+                 from ed25519_ref10.c:1:
+/home/ubuntu/.rbenv/versions/3.0.1/include/ruby-3.0.0/ruby/internal/scan_args.h:369:41: warning: __VA_OPT__ is not available until C++2a
+  369 |         (rb_scan_args)(argc, argvp, fmt __VA_OPT__(, __VA_ARGS__)))
+      |                                         ^
+/home/ubuntu/.rbenv/versions/3.0.1/include/ruby-3.0.0/ruby/internal/scan_args.h:377:53: warning: __VA_OPT__ is not available until C++2a
+  377 |         (rb_scan_args_kw)(kw_flag, argc, argvp, fmt __VA_OPT__(, __VA_ARGS__)))
+      |                                                     ^
+cc1: warning: unrecognized command line option ‘-Wno-self-assign’
+cc1: warning: unrecognized command line option ‘-Wno-parentheses-equality’
+cc1: warning: unrecognized command line option ‘-Wno-constant-logical-operand’
+compiling fe.c
+compiling ge.c
+compiling keypair.c
+compiling open.c
+compiling sc_muladd.c
+compiling sc_reduce.c
+compiling sha512.c
+compiling sign.c
+compiling verify.c
+linking shared-object ed25519_ref10.so
+
+current directory: /home/deploy/TodoLegal/shared/bundle/ruby/3.0.0/gems/ed25519-1.2.4/ext/ed25519_ref10
+make DESTDIR\= install
+/usr/bin/install -c -m 0755 ed25519_ref10.so ./.gem.20210626-23102-3qzsry

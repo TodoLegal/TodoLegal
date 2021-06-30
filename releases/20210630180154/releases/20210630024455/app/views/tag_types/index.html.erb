@@ -1,0 +1,27 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Tag Types</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @tag_types.each do |tag_type| %>
+      <tr>
+        <td><%= tag_type.name %></td>
+        <td><%= link_to 'Show', tag_type %></td>
+        <td><%= link_to 'Edit', edit_tag_type_path(tag_type) %></td>
+        <td><%= link_to 'Destroy', tag_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Tag Type', new_tag_type_path %>

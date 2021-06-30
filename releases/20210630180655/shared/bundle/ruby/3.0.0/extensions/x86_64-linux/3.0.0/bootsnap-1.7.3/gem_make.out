@@ -1,0 +1,15 @@
+current directory: /home/deploy/TodoLegal/shared/bundle/ruby/3.0.0/gems/bootsnap-1.7.3/ext/bootsnap
+/home/ubuntu/.rbenv/versions/3.0.1/bin/ruby -I /home/ubuntu/.rbenv/versions/3.0.1/lib/ruby/3.0.0 -r ./siteconf20210626-23102-8o9xh4.rb extconf.rb
+creating Makefile
+
+current directory: /home/deploy/TodoLegal/shared/bundle/ruby/3.0.0/gems/bootsnap-1.7.3/ext/bootsnap
+make DESTDIR\= clean
+
+current directory: /home/deploy/TodoLegal/shared/bundle/ruby/3.0.0/gems/bootsnap-1.7.3/ext/bootsnap
+make DESTDIR\=
+compiling bootsnap.c
+linking shared-object bootsnap/bootsnap.so
+
+current directory: /home/deploy/TodoLegal/shared/bundle/ruby/3.0.0/gems/bootsnap-1.7.3/ext/bootsnap
+make DESTDIR\= install
+/usr/bin/install -c -m 0755 bootsnap.so ./.gem.20210626-23102-2efbgs/bootsnap

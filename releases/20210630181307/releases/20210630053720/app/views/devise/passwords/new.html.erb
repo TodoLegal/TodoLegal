@@ -1,0 +1,80 @@
+<% content_for :title, "Recuperación de la cuenta - TodoLegal" %>
+
+<section>
+<div class="container">
+  <a href="/">
+    <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="img-logo">
+  </a>
+  <div class="card card--onboarding bg-white rounded">
+    <div class="card-body">
+      <h2 class="card-title text-center">Recuperación de la cuenta</h2>
+      <p class="card-text">Ingresa tu correo electrónico para enviarte instrucciones</p>
+      <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+        <%= render "devise/shared/error_messages", resource: resource %>
+
+        <div class="form-group">
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", class:'form-control', placeholder:"Correo electrónico", id:"email" %>
+        </div>
+
+        <div class="form-group">
+          <%= f.submit "Enviar instrucciones de recuperación", class: 'btn btn-primary btn-block btn-lg', id:"nextButton", data:{toggle:"popover", placement:"top", trigger:"focus",
+                content:"Complete todos los campos."}%>
+        </div>
+      <% end %>
+    </div>
+    <p class="card-text text-center content" > <%= render "devise/shared/links" %> </p>
+  </div>
+  <%= javascript_pack_tag "form_validator" %>
+</div>
+</section>
+
+<style>
+  .img-logo{
+    height: 12vh;
+    max-height: 110px;
+    margin: auto;
+    display: block;
+  }
+
+  .card-title{
+    margin-bottom: 30px;
+  }
+
+  .card-text{
+    font-size: 18px;
+    line-height: 21px;
+    /* text-align: center; */
+    color: #505864;
+    margin-bottom: 10px;
+  }
+
+  @media only screen and (max-width: 767.98px){
+    .card{
+      width:100%;
+      margin-left: 0%;
+      padding: 0;
+      border: none;
+    }
+    .card-body{
+      padding: 0%;
+    }
+
+    section{
+      background: white;
+      height: 500px;
+    }
+
+    .img-logo{
+      width: 70px;
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+    }
+
+    .card-title{
+      font-size: 27px;
+      line-height: 33px
+    }
+  }
+
+</style>

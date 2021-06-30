@@ -1,0 +1,5 @@
+forma_de_publicacion = TagType.find_by_name("Forma de Publicación")
+Tag.create(name: "Gaceta", tag_type_id: forma_de_publicacion.id)
+Tag.create(name: "Gaceta Municipal", tag_type_id: forma_de_publicacion.id)
+Tag.create(name: "Circular", tag_type_id: forma_de_publicacion.id)
+Tag.create(name: "Oficio", tag_type_id: forma_de_publicacion.id)

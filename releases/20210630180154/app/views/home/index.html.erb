@@ -1,0 +1,107 @@
+<% content_for :title, "TodoLegal - El buscador de leyes de Honduras" %>
+
+<div class="jumbotron d-none d-sm-block" align="center" style="padding-top: 0px; padding-bottom: 20px;background-color: #EFF3F8;margin: 0px">
+  <a href="/"><img align="center" src="/img/logo_landing_mobile.png" class="img-fluid-vertical" height="300"></a>
+</div>
+
+<div class="jumbotron d-block d-sm-none" style="padding-top: 0px; padding-bottom: 0px;background-color: #EFF3F8;margin: 0px">
+  <a href="/"><img align="center" src="/img/logo_landing_mobile.png" class="img-fluid" height="300"></a>
+</div>
+
+<div class="container container--home">
+
+  <div class="d-none d-xl-block">
+    <h3 align="center">El buscador de Leyes y Gacetas Testing 2 de Honduras</h3>
+  </div>
+  <div class="d-xl-none">
+    <h6 align="center">El buscador de Leyes y Gacetas Testing 2 de Honduras</h6>
+  </div>
+
+  <br/>
+  <%= render partial: 'search_law_input', locals: {target_url: '/search_law', home_flag: true } %>
+
+  <div class="row">
+    <div class="col-sm-6 col-md-4 py-2">
+      <div class="card card-body h-100" style="padding:0px">
+        <a class="" href="<%= google_drive_search_path %>" style="padding:20px">
+        <img class="icon-drive" src="/img/valid_logo.png"/>
+          <table width="100%">
+            <tr>
+              <td>
+                <h5 class="card-title">Gacetas</h5>
+              </td>
+            </tr>
+          </table>
+          <p><%= valid_document_count %> documentos</p>
+        </a>
+      </div>
+    </div>
+    <div class="col-sm-6 col-md-4 py-2">
+      <div class="card card-body h-100" style="padding:0px">
+        <a class="" href="<%= ley_abierta_url %>?tlclick=home" style="padding:20px" target="_blank">
+        <img class="icon-drive" src="/img/ley_abierta_logo.png"/>
+          <table width="100%">
+            <tr>
+              <td>
+                <h5 class="card-title">Ley Abierta</h5>
+              </td>
+            </tr>
+          </table>
+          <p>6 episodios</p>
+        </a>
+      </div>
+    </div>
+    <div class="col-sm-6 col-md-4 py-2">
+      <div class="card card-body h-100" style="padding:0px">
+        <a class="" href="<%= google_drive_covid_search_path %>" style="padding:20px">
+        <img class="icon-drive" src="/img/google_drive_logo.png"/>
+          <table width="100%">
+            <tr>
+              <td>
+                <h5 class="card-title">Repositorio COVID-19</h5>
+              </td>
+            </tr>
+          </table>
+          <p><%= google_drive_covid_documents_count %> documentos</p>
+        </a>
+      </div>
+    </div>
+    <% @tags.each do |tag| %>
+      <% if tag.laws.count != 0 %>
+        <div class="col-sm-6 col-md-4 py-2">
+          <div class="card card-body h-100" style="padding:0px">
+            <a class="" href="<%= tag_path(tag) %>" style="padding:20px">
+              <h5 class="card-title"><%= tag.name %></h5>
+              <p><%= tag.laws.count %> leyes</p>
+            </a>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <p class="resultinfo"><%= all_document_count %> leyes y documentos ingresados</p>
+
+  <% if !@current_user_plan_is_active %>
+    <div class="billboard billboard--home">
+      <div class="billboard-content">
+        <h5 class="billboard-title">Suscríbete y obtén acceso ilimitado</h5>
+        <p class="billboard-body">
+          Adquiere el <b>Plan Pro</b> por <b>$<%= BASE_PRICE_MONTHLY %> al mes</b> y accede a las más de <%= (all_document_count/10)*10 %> leyes y publicaciones de La Gaceta y a todo lo nuevo que se publica.
+          <i class="text-muted d-block">Puedes cancelar la suscripción en cualquier momento.</i>
+        </p>
+      </div>
+      <div class="billboard-actions form-group" id="change-plan-btn-form">
+        <% if user_signed_in? %>
+          <%= button_to "Adquirir Plan Pro", pricing_path, method: :get, params: {activate_pro_account: true}, remote: true, class:"btn btn-primary",  id:"change-plan-button"%>
+        <% else %>
+          <%= button_to "Adquirir Plan Pro", pricing_path, method: :get, params: {is_onboarding: true, pricing_onboarding: true}, remote: true, class:"btn btn-primary",  id:"change-plan-button"%>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+</div>
+
+
+<%= javascript_pack_tag "help_card" %>

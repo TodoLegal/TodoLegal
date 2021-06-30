@@ -1,0 +1,16 @@
+current directory: /home/deploy/TodoLegal/shared/bundle/ruby/3.0.0/gems/eventmachine-1.2.7/ext/fastfilereader
+/home/ubuntu/.rbenv/versions/3.0.1/bin/ruby -I /home/ubuntu/.rbenv/versions/3.0.1/lib/ruby/3.0.0 -r ./siteconf20210626-23102-4g664p.rb extconf.rb
+creating Makefile
+
+current directory: /home/deploy/TodoLegal/shared/bundle/ruby/3.0.0/gems/eventmachine-1.2.7/ext/fastfilereader
+make DESTDIR\= clean
+
+current directory: /home/deploy/TodoLegal/shared/bundle/ruby/3.0.0/gems/eventmachine-1.2.7/ext/fastfilereader
+make DESTDIR\=
+compiling mapper.cpp
+compiling rubymain.cpp
+linking shared-object fastfilereaderext.so
+
+current directory: /home/deploy/TodoLegal/shared/bundle/ruby/3.0.0/gems/eventmachine-1.2.7/ext/fastfilereader
+make DESTDIR\= install
+/usr/bin/install -c -m 0755 fastfilereaderext.so ./.gem.20210626-23102-c58coy

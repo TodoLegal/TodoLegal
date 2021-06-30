@@ -22,10 +22,11 @@ namespace :deploy do
         unless test("[ -f #{shared_path}/gcs.keyfile ]")
           upload! 'gcs.keyfile', "#{shared_path}/gcs.keyfile"
         end
+        after 'deploy:publishing', 'deploy:restart'
       end
     end
   end
-  after 'deploy:publishing', 'deploy:restart'
+  
 end
 
 

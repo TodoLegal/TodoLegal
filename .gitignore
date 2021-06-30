@@ -9,6 +9,7 @@
 /public/pending.csv
 public/google_drive_data.json
 public/google_drive_covid_data.json
+config/database.yml
 
 token.yaml
 public/gazettes/

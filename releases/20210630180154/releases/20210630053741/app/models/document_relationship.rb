@@ -1,2 +1,0 @@
-class DocumentRelationship < ApplicationRecord
-end

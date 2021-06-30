@@ -1,2 +1,0 @@
-class UserDocumentDownloadTracker < ApplicationRecord
-end

@@ -1,6 +1,0 @@
-{
-  "environment": "production",
-  "port": 3000,
-  "daemonize": true,
-  "user": "deploy"
-}

@@ -25,7 +25,10 @@ namespace :deploy do
       end
     end
   end
+  after 'deploy:publishing', 'deploy:restart'
 end
+
+
 
 # Deploy to the user's home directory
 set :deploy_to, "/home/deploy/#{fetch :application}"

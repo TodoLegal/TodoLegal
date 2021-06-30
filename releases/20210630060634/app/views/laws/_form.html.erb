@@ -1,0 +1,47 @@
+<div class="container">
+  <%= form_with(model: law, local: true) do |form| %>
+    <% if law.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(law.errors.count, "error") %> prohibited this law from being saved:</h2>
+
+        <ul>
+          <% law.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <p></p>
+    <div class="card">
+      <div class="card-body" style="padding-left:200px;">
+        <div class="row">
+          <div class="col-md-8">
+            <div class="form-group">
+              <%= form.label :nombre %>
+              <%= form.text_field :name, class: "form-control" %>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8">
+            <div class="form-group">
+              <%= form.label :numero_de_creacion %>
+              <%= form.text_field :creation_number, class: "form-control" %>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8">
+            <div class="form-group">
+              <%= form.label :modificaciones %>
+              <%= form.text_field :modifications, class: "form-control" %>
+            </div>
+          </div>
+        </div>
+        <%= form.submit "Actualizar", class: "d-inline p-2 btn btn-primary"%>
+        &nbsp;&nbsp;
+        <u> <%= link_to 'Cancelar', law_path, class: "d-inline p-2 text-danger"%> </u>
+      </div>
+    </div>
+  <% end %>
+</div>

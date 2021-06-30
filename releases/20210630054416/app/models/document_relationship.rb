@@ -1,0 +1,2 @@
+class DocumentRelationship < ApplicationRecord
+end

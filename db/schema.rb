@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_11_083625) do
+ActiveRecord::Schema.define(version: 2021_06_24_192347) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -44,6 +44,14 @@ ActiveRecord::Schema.define(version: 2021_06_11_083625) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "alternative_tag_names", force: :cascade do |t|
+    t.integer "tag_id"
+    t.string "alternative_name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["tag_id", "alternative_name"], name: "index_alternative_tag_names_on_tag_id_and_alternative_name", unique: true
   end
 
   create_table "articles", force: :cascade do |t|

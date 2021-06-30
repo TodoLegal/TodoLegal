@@ -10,7 +10,7 @@
 public/google_drive_data.json
 public/google_drive_covid_data.json
 config/database.yml
-
+shared/*
 
 token.yaml
 public/gazettes/
@@ -34,6 +34,7 @@ config/database.yml
 !/log/.keep
 !/tmp/.keep
 /releases/*
+/shared/*
 # Ignore uploaded files in development.
 /storage/*
 !/storage/.keep

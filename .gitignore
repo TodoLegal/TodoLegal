@@ -11,6 +11,7 @@ public/google_drive_data.json
 public/google_drive_covid_data.json
 config/database.yml
 
+
 token.yaml
 public/gazettes/
 gcs.keyfile
@@ -32,7 +33,7 @@ config/database.yml
 /tmp/*
 !/log/.keep
 !/tmp/.keep
-
+/releases/*
 # Ignore uploaded files in development.
 /storage/*
 !/storage/.keep

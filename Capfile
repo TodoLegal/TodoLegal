@@ -38,8 +38,8 @@ install_plugin Capistrano::SCM::Git
 Dir.glob("lib/capistrano/tasks/*.rake").each { |r| import r }
 
 require 'capistrano/rails'
+require 'capistrano/passenger'
 require 'capistrano/rbenv'
-require 'capistrano/nginx'
 
 set :rbenv_type, :user
-set :rbenv_ruby, '3.0.1'
+set :rbenv_ruby, '3.0.0'

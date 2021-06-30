@@ -27,7 +27,7 @@ gem 'capistrano', '~> 3.11'
 gem 'capistrano-rails', '~> 1.4'
 gem 'capistrano-passenger', '~> 0.2.0'
 gem 'capistrano-rbenv', '~> 2.1', '>= 2.1.4'
-gem 'capistrano3-nginx', '~> 2.0'
+gem 'capistrano3-nginx'
 gem 'doorkeeper'
 # For capistrano
 gem 'ed25519', '>= 1.2', '< 2.0'

@@ -22,7 +22,6 @@ namespace :deploy do
         unless test("[ -f #{shared_path}/gcs.keyfile ]")
           upload! 'gcs.keyfile', "#{shared_path}/gcs.keyfile"
         end
-        after 'deploy:cleanup', 'deploy:restart'
       end
     end
   end
@@ -32,7 +31,9 @@ end
 
 
 # Deploy to the user's home directory
+set :passenger_restart_command, '/usr/bin/passenger-config restart-app'
 set :deploy_to, "/home/deploy/#{fetch :application}"
+
 
 append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', '.bundle', 'public/system', 'public/uploads'
 

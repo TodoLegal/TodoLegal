@@ -34,7 +34,7 @@ class DocumentsController < ApplicationController
 
   # GET /documents/1/edit
   def edit
-    @document_type = params[:doc_type]
+    @document_type = @document.name
     @documents_count = Document.where(publication_number: @document.publication_number).count
     if @document.position
       @next_document = Document.where(publication_number: @document.publication_number).find_by(position: @document.position + 1 )
@@ -107,12 +107,11 @@ class DocumentsController < ApplicationController
     end
   end
 
-  def getCleanDescription description
-    description = description.truncate(400)
-    while description.size > 0 and !(description[0] =~ /[A-Za-z]/)
-      description[0] = ''
+  def cleanText text
+    while text && !text.blank? and !(text[0] =~ /[A-Za-z]/)
+      text[0] = ''
     end
-    return description
+    return text
   end
 
   def set_content_disposition_attachment key, file_name
@@ -162,12 +161,16 @@ class DocumentsController < ApplicationController
     puts "Creating related documents"
     json_data["files"].each do |file|
       puts "Creating: " + file["name"]
-      description = getCleanDescription file["description"]
       new_document = Document.create(
         name: file["name"],
-        description: description,
+        publication_date: document.publication_date,
         publication_number: document.publication_number,
-        publication_date: document.publication_date)
+        description: cleanText(file["description"]),
+        short_description: cleanText(file["short_description"]),
+        full_text: cleanText(file["full_text"]),
+        start_page: file["start_page"],
+        end_page: file["end_page"],
+        position: file["position"])
       tag = Tag.find_by_name(file["tag"])
       issuer = Tag.find_by_name(file["issuer"])
       if tag
@@ -180,6 +183,14 @@ class DocumentsController < ApplicationController
         institution_tag = Tag.find_by_name(institution)
         if institution_tag
           DocumentTag.create(document_id: new_document.id, tag_id: institution_tag.id)
+        end
+      end
+      full_text_lower = file["full_text"].downcase
+      AlternativeTagName.all.each do |alternative_tag_name|
+        if full_text_lower.include? alternative_tag_name.alternative_name
+          if !DocumentTag.exists?(document_id: new_document.id, tag_id: alternative_tag_name.tag_id)
+            DocumentTag.create(document_id: new_document.id, tag_id: alternative_tag_name.tag_id)
+          end
         end
       end
       new_document.url = new_document.generate_friendly_url

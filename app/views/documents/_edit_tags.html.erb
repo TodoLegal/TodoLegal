@@ -1,29 +1,25 @@
 <section class="tags--section">
-    
-
-       
-
         
-        <% if @document_type == "Avisos Legales" %>
-            <h4> Tema </h4>
-            <%= render partial:'edit_tag_table', locals: {tag_name: "tema"}%>
-        <% elsif @document_type == "Marcas de Fábrica" %>
-            <h4> Tema </h4>
-            <%= render partial:'edit_tag_table', locals: {tag_name: "tema"}%>
-            <h4> Materia </h4>
-            <%= render partial:'edit_tag_table', locals: {tag_name: "materia"}%>
-        <% elsif  @document_type == "Gaceta Completa" %>
-            <h4> Instituciones </h4>
-            <%= render partial:'edit_tag_table', locals: {tag_name: "institucion"}%>
-        <% else %>
+    <% if @document_type == "Avisos Legales" %>
+        <h4> Tema </h4>
+        <%= render partial:'edit_tag_table', locals: {tag_name: "tema"}%>
+    <% elsif @document_type == "Marcas de Fábrica" %>
+        <h4> Tema </h4>
+        <%= render partial:'edit_tag_table', locals: {tag_name: "tema"}%>
+        <h4> Materia </h4>
+        <%= render partial:'edit_tag_table', locals: {tag_name: "materia"}%>
+    <% elsif  @document_type == "Gaceta Completa" %>
+        <h4> Instituciones </h4>
+        <%= render partial:'edit_tag_table', locals: {tag_name: "institucion"}%>
+    <% else %>
 
-            <h4> Tema </h4>
-            <%= render partial:'edit_tag_table', locals: {tag_name: "tema"}%>
-            <h4> Materia </h4>
-            <%= render partial:'edit_tag_table', locals: {tag_name: "materia"}%>
-            <h4> Instituciones </h4>
-            <%= render partial:'edit_tag_table', locals: {tag_name: "institucion"}%>
-        <% end %>
+        <h4> Tema </h4>
+        <%= render partial:'edit_tag_table', locals: {tag_name: "tema"}%>
+        <h4> Materia </h4>
+        <%= render partial:'edit_tag_table', locals: {tag_name: "materia"}%>
+        <h4> Instituciones </h4>
+        <%= render partial:'edit_tag_table', locals: {tag_name: "institucion"}%>
+    <% end %>
     
 </section>
 

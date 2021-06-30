@@ -416,7 +416,7 @@ DEPENDENCIES
   capistrano-passenger (~> 0.2.0)
   capistrano-rails (~> 1.4)
   capistrano-rbenv (~> 2.1, >= 2.1.4)
-  capistrano3-nginx (~> 2.0)
+  capistrano3-nginx
   capybara (>= 2.15)
   devise
   discordrb

@@ -116,5 +116,4 @@ module ApplicationHelper
     browser_locale = request.env['HTTP_ACCEPT_LANGUAGE'].try(:scan, /^[a-z]{2}/).try(:first) 
     return browser_locale.eql? "en"
   end
-
 end

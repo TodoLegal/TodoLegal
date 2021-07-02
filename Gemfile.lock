@@ -79,7 +79,7 @@ GEM
       sshkit (>= 1.9.0)
     capistrano-bundler (2.0.1)
       capistrano (~> 3.1)
-    capistrano-passenger (0.2.0)
+    capistrano-passenger (0.2.1)
       capistrano (~> 3.0)
     capistrano-rails (1.6.1)
       capistrano (~> 3.1)
@@ -87,6 +87,8 @@ GEM
     capistrano-rbenv (2.2.0)
       capistrano (~> 3.1)
       sshkit (~> 1.3)
+    capistrano3-nginx (3.0.4)
+      capistrano (~> 3.0)
     capybara (3.35.3)
       addressable
       mini_mime (>= 0.1.3)
@@ -411,9 +413,10 @@ DEPENDENCIES
   browser
   byebug
   capistrano (~> 3.11)
-  capistrano-passenger (~> 0.2.0)
+  capistrano-passenger (>= 0.2.1)
   capistrano-rails (~> 1.4)
   capistrano-rbenv (~> 2.1, >= 2.1.4)
+  capistrano3-nginx
   capybara (>= 2.15)
   devise
   discordrb
@@ -454,4 +457,4 @@ RUBY VERSION
    ruby 3.0.0p0
 
 BUNDLED WITH
-   2.2.11
+   2.2.21

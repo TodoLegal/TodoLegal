@@ -30,8 +30,7 @@ tag_especiales_y_otras = Tag.create({ name: 'Especiales y Otras', tag_type_id: t
 tag_internacional_publico = Tag.create({ name: 'Internacional Público', tag_type_id: tag_type_materia.id })
 tag_civil = Tag.create({ name: 'Civil', tag_type_id: tag_type_materia.id })
 tag_mercantil = Tag.create({ name: 'Mercantil', tag_type_id: tag_type_materia.id })
-tag_bancario = Tag.create({ name: 'Bancario', tag_type_id: tag_type_materia.id })
-tag_monetario = Tag.create({ name: 'Monetario', tag_type_id: tag_type_materia.id })
+tag_financiero = Tag.create({ name: 'Financiero', tag_type_id: tag_type_materia.id })
 tag_administrativo = Tag.create({ name: 'Administrativo', tag_type_id: tag_type_materia.id })
 tag_ambiental = Tag.create({ name: 'Ambiental', tag_type_id: tag_type_materia.id })
 tag_militar = Tag.create({ name: 'Militar', tag_type_id: tag_type_materia.id })
@@ -50,6 +49,7 @@ tag_municipalidad_de_sps = Tag.create(name: "Municipalidad de SPS", tag_type_id:
 tag_senasa = Tag.create(name: "SENASA", tag_type_id: tag_institucion.id)
 tag_aduana = Tag.create(name: "Aduana", tag_type_id: tag_institucion.id)
 tag_cree = Tag.create(name: "CREE", tag_type_id: tag_institucion.id)
+tag_enag = Tag.create(name: "ENAG", tag_type_id: tag_institucion.id)
 
 # Forma de Publicación
 tag_gaceta = Tag.create(name: "Gaceta", tag_type_id: tag_forma_de_publicacion.id)
@@ -193,6 +193,8 @@ document_a = Document.create(
   description: "Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera que logró hacer un libro de textos especimen. No sólo sobrevivió 500 años, sino que tambien ingresó como texto de relleno en documentos electrónicos, quedando esencialmente igual al original. Fue popularizado en los 60s con la creación de las hojas 'Letraset', las cuales contenian pasajes de Lorem Ipsum, y más recientemente con software de autoedición, como por ejemplo Aldus PageMaker, el cual incluye versiones de Lorem Ipsum."
 )
 
+IssuerDocumentTag.create(document_id: document_a.id, tag_id: Tag.find_by_name("Congreso Nacional").id)
+
 DocumentTag.create({document_id: document_a.id, tag_id: Tag.find_by_name("Laboral").id})
 DocumentTag.create({document_id: document_a.id, tag_id: Tag.find_by_name("Poder Ejecutivo").id})
 DocumentTag.create({document_id: document_a.id, tag_id: Tag.find_by_name("Gaceta").id})
@@ -207,8 +209,11 @@ document_b = Document.create(
   description: "Al contrario del pensamiento popular, el texto de Lorem Ipsum no es simplemente texto aleatorio. Tiene sus raices en una pieza cl´sica de la literatura del Latin, que data del año 45 antes de Cristo, haciendo que este adquiera mas de 2000 años de antiguedad. Richard McClintock, un profesor de Latin de la Universidad de Hampden-Sydney en Virginia, encontró una de las palabras más oscuras de la lengua del latín, 'consecteur', en un pasaje de Lorem Ipsum, y al seguir leyendo distintos textos del latín, descubrió la fuente indudable. Lorem Ipsum viene de las secciones 1.10.32 y 1.10.33 de 'de Finnibus Bonorum et Malorum' (Los Extremos del Bien y El Mal) por Cicero, escrito en el año 45 antes de Cristo. Este libro es un tratado de teoría de éticas, muy popular durante el Renacimiento. La primera linea del Lorem Ipsum, 'Lorem ipsum dolor sit amet..', viene de una linea en la sección 1.10.32."
 )
 
-DocumentTag.create({document_id: document_a.id, tag_id: Tag.find_by_name("Monetario").id})
-DocumentTag.create({document_id: document_a.id, tag_id: Tag.find_by_name("CNBS").id})
-DocumentTag.create({document_id: document_a.id, tag_id: Tag.find_by_name("Circular").id})
+IssuerDocumentTag.create(document_id: document_b.id, tag_id: Tag.find_by_name("CNBS").id)
+
+DocumentTag.create({document_id: document_b.id, tag_id: Tag.find_by_name("Monetario").id})
+DocumentTag.create({document_id: document_b.id, tag_id: Tag.find_by_name("Aduana").id})
+DocumentTag.create({document_id: document_b.id, tag_id: Tag.find_by_name("SENASA").id})
+DocumentTag.create({document_id: document_b.id, tag_id: Tag.find_by_name("Circular").id})
 
 DocumentRelationship.create({document_1_id: document_a.id, document_2_id: document_b.id, relationship: "belongs to"})

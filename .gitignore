@@ -14,7 +14,8 @@ config/database.yml
 current
 shared/*
 repo/*
-
+revisions.log
+/revisions.log
 token.yaml
 public/gazettes/
 gcs.keyfile

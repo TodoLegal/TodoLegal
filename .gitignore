@@ -9,12 +9,19 @@
 /public/pending.csv
 public/google_drive_data.json
 public/google_drive_covid_data.json
+config/database.yml
+/current
+current
+shared/*
+repo/*
+
 token.yaml
 public/gazettes/
 gcs.keyfile
 .rbenv-vars
 config/application.yml
 
+config/database.yml
 #Gemfile.lock
 /config/credentials.yml.enc
 
@@ -30,7 +37,9 @@ config/application.yml
 /tmp/*
 !/log/.keep
 !/tmp/.keep
-
+/releases/*
+/shared/*
+/repo/*
 # Ignore uploaded files in development.
 /storage/*
 !/storage/.keep

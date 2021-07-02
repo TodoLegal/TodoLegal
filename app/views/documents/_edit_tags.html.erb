@@ -2,32 +2,34 @@
         
     <% if @document_type == "Avisos Legales" %>
         <h4> Tema </h4>
-        <%= render partial:'edit_tag_table', locals: {tag_name: "tema"}%>
+        <%= render partial:'edit_tag_table', locals: {tag_name: "tema", issuer: false}%>
         <h4> Forma de Publicación </h4>
-        <%= render partial:'edit_tag_table', locals: {tag_name: "Forma de Publicación"}%>
+        <%= render partial:'edit_tag_table', locals: {tag_name: "Forma de Publicación", issuer: false}%>
     <% elsif @document_type == "Marcas de Fábrica" %>
         <h4> Tema </h4>
-        <%= render partial:'edit_tag_table', locals: {tag_name: "tema"}%>
+        <%= render partial:'edit_tag_table', locals: {tag_name: "tema", issuer: false}%>
         <h4> Materia </h4>
-        <%= render partial:'edit_tag_table', locals: {tag_name: "materia"}%>
+        <%= render partial:'edit_tag_table', locals: {tag_name: "materia", issuer: false}%>
         <h4> Forma de Publicación </h4>
-        <%= render partial:'edit_tag_table', locals: {tag_name: "Forma de Publicación"}%>
-    <% elsif  @document_type == "Gaceta Completa" %>
+        <%= render partial:'edit_tag_table', locals: {tag_name: "Forma de Publicación", issuer: false}%>
+    <% elsif  @document_type == "Gaceta" %>
         <h4> Forma de Publicación </h4>
-        <%= render partial:'edit_tag_table', locals: {tag_name: "Forma de Publicación"}%>
-        <h4> Instituciones </h4>
-        <%= render partial:'edit_tag_table', locals: {tag_name: "Institución"}%>
+        <%= render partial:'edit_tag_table', locals: {tag_name: "Forma de Publicación", issuer: false}%>
+        <h4> Institución emisora </h4>
+        <%= render partial:'edit_tag_table', locals: {tag_name: "Institución", issuer: true}%>
     <% else %>
         <h4> Materia </h4>
-        <%= render partial:'edit_tag_table', locals: {tag_name: "materia"}%>
-        <h4> Instituciones </h4>
-        <%= render partial:'edit_tag_table', locals: {tag_name: "Institución"}%>
+        <%= render partial:'edit_tag_table', locals: {tag_name: "materia", issuer: false}%>
         <h4> Forma de Publicación </h4>
-        <%= render partial:'edit_tag_table', locals: {tag_name: "Forma de Publicación"}%>
+        <%= render partial:'edit_tag_table', locals: {tag_name: "Forma de Publicación", issuer: false}%>
+        <h4> Institución emisora </h4>
+        <%= render partial:'edit_tag_table', locals: {tag_name: "Institución", issuer: true}%>
         <h4> Tipo de Acto </h4>
-        <%= render partial:'edit_tag_table', locals: {tag_name: "Tipo de Acto"}%>
+        <%= render partial:'edit_tag_table', locals: {tag_name: "Tipo de Acto", issuer: false}%>
         <h4> Tema </h4>
-        <%= render partial:'edit_tag_table', locals: {tag_name: "tema"}%>
+        <%= render partial:'edit_tag_table', locals: {tag_name: "tema", issuer: false}%>
+        <h4> Instituciones relacionadas </h4>
+        <%= render partial:'edit_tag_table', locals: {tag_name: "Institución", issuer: false}%>
     <% end %>
     
 </section>

@@ -1,8 +1,9 @@
 # config valid for current version and patch releases of Capistrano
-lock "~> 3.16.0"
+
 
 set :application, "TodoLegal"
 set :repo_url, "https://github.com/TodoLegal/TodoLegal.git"
+set :passenger_restart_command, '/usr/bin/passenger-config restart-app'
 
 append :linked_files, "config/master.key"
 append :linked_files, "config/credentials.yml.enc"
@@ -24,10 +25,16 @@ namespace :deploy do
       end
     end
   end
+  
 end
 
+
+
 # Deploy to the user's home directory
-set :deploy_to, "/home/deploy/#{fetch :application}"
+set :deploy_to, "/home/ubuntu/#{fetch :application}"
+
+
+
 
 append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', '.bundle', 'public/system', 'public/uploads'
 

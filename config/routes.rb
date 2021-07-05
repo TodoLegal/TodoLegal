@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   get "/token_login/:authentication_token" => "home#token_login", as: "token_login"
   resources :law_tags
   resources :document_tags
+  resources :issuer_document_tags
   resources :tags
   resources :tag_types
   resources :laws

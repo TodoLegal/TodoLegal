@@ -11,8 +11,11 @@ class AdminController < ApplicationController
       @gazettes = Document.where(publication_number: @query)
         .group_by(&:publication_number)
         .sort_by { |x | [ x ] }.reverse
+
+      @gazzetes_list = Document.where(publication_number: @query).order('publication_number DESC').page params[:page]
     else
       @gazettes = Document.where.not(publication_number: nil).group_by(&:publication_number).sort_by { | x | [ x ] }.reverse
+      @gazzetes_list = Document.all.order('publication_number DESC').page params[:page]
     end
     gazette_temp = @gazettes.first
     @missing_gazettes = []

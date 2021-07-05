@@ -1,0 +1,70 @@
+class IssuerDocumentTagsController < ApplicationController
+    before_action :set_document_tag, only: [:show, :edit, :update, :destroy]
+    before_action :authenticate_admin!, only: [:show, :new, :edit, :create, :update, :destroy]
+
+    # GET /document_tags/1
+    # GET /document_tags/1.json
+    def show
+    end
+  
+    # GET /issuer_document_tags/new
+    def new
+      @issuer_document_tag = IssuerDocumentTag.new
+    end
+  
+    # GET /issuer_document_tags/1/edit
+    def edit
+    end
+
+    # POST /issuer_document_tags
+    # POST /issuer_document_tags.json
+    def create
+      @issuer_document_tag = IssuerDocumentTag.new(document_tag_params)
+
+      respond_to do |format|
+        if @issuer_document_tag.save
+          format.html { redirect_to edit_document_path(@issuer_document_tag.document), notice: 'Se ha añadido el tag exitosamente.' }
+          format.json { render :show, status: :created, location: @issuer_document_tag.document }
+        else
+          format.html { render :new }
+          format.json { render json: @issuer_document_tag.errors, status: :unprocessable_entity }
+        end
+      end
+    end
+
+    # PATCH/PUT /issuer_document_tags/1
+    # PATCH/PUT /issuer_document_tags/1.json
+    def update
+      respond_to do |format|
+        if @issuer_document_tag.update(document_tag_params)
+          format.html { redirect_to @issuer_document_tag, notice: 'Se ha actualizado la materia exitosamente.' }
+          format.json { render :show, status: :ok, location: @issuer_document_tag }
+        else
+          format.html { render :edit }
+          format.json { render json: @issuer_document_tag.errors, status: :unprocessable_entity }
+        end
+      end
+    end
+  
+    # DELETE /issuer_document_tags/1
+    # DELETE /issuer_document_tags/1.json
+    def destroy
+      document = @issuer_document_tag.document
+      @issuer_document_tag.destroy
+      respond_to do |format|
+        format.html { redirect_to edit_document_path(document), notice: 'Se ha eliminado el tag exitosamente.' }
+        format.json { head :no_content }
+      end
+    end
+
+    private
+      # Use callbacks to share common setup or constraints between actions.
+      def set_document_tag
+        @issuer_document_tag = IssuerDocumentTag.find(params[:id])
+      end
+
+      # Never trust parameters from the scary internet, only allow the white list through.
+      def document_tag_params
+        params.require(:issuer_document_tag).permit(:document_id, :tag_id)
+      end
+end

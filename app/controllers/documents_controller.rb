@@ -145,6 +145,8 @@ class DocumentsController < ApplicationController
     json_data = JSON.parse(python_return_value)
     run_process_gazette_script document, document_pdf_path
     document.url = document.generate_friendly_url
+    document.start_page = 0
+    document.end_page = json_data["page_count"]
     document.save
     document.original_file.attach(
       io: File.open(

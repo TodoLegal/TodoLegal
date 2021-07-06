@@ -146,7 +146,7 @@ class DocumentsController < ApplicationController
     run_process_gazette_script document, document_pdf_path
     document.url = document.generate_friendly_url
     document.start_page = 0
-    document.end_page = json_data["page_count"]
+    document.end_page = json_data["page_count"] - 1
     document.save
     document.original_file.attach(
       io: File.open(

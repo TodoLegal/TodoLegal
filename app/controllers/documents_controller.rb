@@ -35,7 +35,7 @@ class DocumentsController < ApplicationController
   # GET /documents/1/edit
   def edit
     @document_type = @document.name
-    @documents_count = Document.where(publication_number: @document.publication_number).count
+    @documents_count = Document.where(publication_number: @document.publication_number).where.not(position: nil).count
     if @document.position
       @next_document = Document.where(publication_number: @document.publication_number).find_by(position: @document.position + 1 )
     end

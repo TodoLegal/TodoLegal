@@ -67,6 +67,14 @@
                     <li class="page-item active" aria-current="page">
                       <span class="page-link"><%= i %></span>
                     </li>
+                  <% elsif i === document.position && @is_previous_document_valid %>
+                    <li class="page-item" aria-current="page">
+                      <%= link_to "#{i}", edit_document_path(@previous_document), class:"page-link " %>
+                    </li>
+                  <% elsif i === document.position + 2 && @is_next_document_valid %>
+                    <li class="page-item" aria-current="page">
+                      <%= link_to "#{i}", edit_document_path(@next_document), class:"page-link " %>
+                    </li>
                   <% else %>
                     <li class="page-item" aria-current="page">
                       <span class="page-link"><%= i %></span>
@@ -115,9 +123,9 @@
           <div class="col-md-5">
             <%= form.submit "Guardar cambios", class: "d-inline p-2 btn btn-primary" %>
             <% if @is_next_document_valid %>
-              <%= link_to 'Siguiente', edit_document_path(@next_document), class:"d-inline p-2 btn btn-secondary"%>
+              <%=link_to "Guardar y siguiente", update_and_next_path(@next_document), class: "d-inline p-2 btn btn-secondary" %>
             <% else %>
-              <button type="button" class="d-inline p-2 btn btn-secondary" disabled="true">Siguiente</button>
+              <button type="button" class="d-inline p-2 btn btn-secondary" disabled="true">Guardar y siguiente</button>
             <% end %>
           </div>
           <div class="col-md-3">

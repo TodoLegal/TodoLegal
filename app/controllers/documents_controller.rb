@@ -35,14 +35,21 @@ class DocumentsController < ApplicationController
   # GET /documents/1/edit
   def edit
     @document_type = @document.name
-    @documents_count = Document.where(publication_number: @document.publication_number).count
+    @documents_count = Document.where(publication_number: @document.publication_number).where.not(position: nil).count
     if @document.position
       @next_document = Document.where(publication_number: @document.publication_number).find_by(position: @document.position + 1 )
+      @previous_document = Document.where(publication_number: @document.publication_number).find_by(position: @document.position - 1 )
     end
     if @next_document
       @is_next_document_valid = true
     else
       @is_next_document_valid = false
+    end
+
+    if @previous_document
+      @is_previous_document_valid = true
+    else
+      @is_previous_document_valid = false
     end
 
   end
@@ -216,6 +223,21 @@ class DocumentsController < ApplicationController
       puts error.to_s
     end
     puts "Created related documents"
+  end
+
+  def update_and_next
+    respond_to do |format|
+      if @document.update(document_params)
+        #if params[:original_file]
+        #  run_gazette_script @document
+        #end
+        format.html { redirect_to edit_document_path(@next_document), notice: 'Document was successfully updated.' }
+        format.json { render :show, status: :ok, location: @document }
+      else
+        format.html { render :edit }
+        format.json { render json: @document.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   private

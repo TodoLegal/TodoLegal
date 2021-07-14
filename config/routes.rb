@@ -48,6 +48,7 @@ Rails.application.routes.draw do
   get "download_recieve_information_users" => "admin#download_recieve_information_users", as: "download_recieve_information_users"
   get "download_all_users" => "admin#download_all_users", as: "download_all_users"
   get '/gacetas', to: redirect('https://valid.todolegal.app'), as: "google_drive_search"
+  post 'documents/update_and_next', as: "update_and_next"
 
   get '/rails/active_storage/blobs/redirect/:signed_id/*filename', to: 'active_storage_redirect#show'
 

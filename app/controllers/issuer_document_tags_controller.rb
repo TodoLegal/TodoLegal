@@ -19,7 +19,13 @@ class IssuerDocumentTagsController < ApplicationController
     # POST /issuer_document_tags
     # POST /issuer_document_tags.json
     def create
-      @issuer_document_tag = IssuerDocumentTag.new(document_tag_params)
+      if document_tag_params[:tag_id].to_i != 0
+        @issuer_document_tag = IssuerDocumentTag.new(document_id: document_tag_params[:document_id], tag_id: document_tag_params[:tag_id])
+      else
+        @tag_type = TagType.find_by(name: document_tag_params[:tag_type])
+        @new_tag = Tag.create(name: document_tag_params[:tag_id], tag_type_id: @tag_type.id)
+        @issuer_document_tag = IssuerDocumentTag.new(document_id: document_tag_params[:document_id], tag_id: @new_tag.id)
+      end
 
       respond_to do |format|
         if @issuer_document_tag.save
@@ -65,6 +71,6 @@ class IssuerDocumentTagsController < ApplicationController
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def document_tag_params
-        params.require(:issuer_document_tag).permit(:document_id, :tag_id)
+        params.require(:issuer_document_tag).permit(:document_id, :tag_id, :tag_type)
       end
 end

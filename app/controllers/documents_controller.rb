@@ -95,7 +95,12 @@ class DocumentsController < ApplicationController
         #if params[:original_file]
         #  run_gazette_script @document
         #end
-        format.html { redirect_to @document, notice: 'Document was successfully updated.' }
+        if params[:commit] == 'Guardar cambios'
+          format.html { redirect_to edit_document_path(@document), notice: 'Document was successfully updated.' }
+        elsif params[:commit] == 'Guardar y siguiente'
+          @next_document = Document.where(publication_number: @document.publication_number).find_by(position: @document.position + 1 )
+          format.html { redirect_to edit_document_path(@next_document), notice: 'Document was successfully updated.' }
+        end
         format.json { render :show, status: :ok, location: @document }
       else
         format.html { render :edit }
@@ -223,21 +228,6 @@ class DocumentsController < ApplicationController
       puts error.to_s
     end
     puts "Created related documents"
-  end
-
-  def update_and_next
-    respond_to do |format|
-      if @document.update(document_params)
-        #if params[:original_file]
-        #  run_gazette_script @document
-        #end
-        format.html { redirect_to edit_document_path(@next_document), notice: 'Document was successfully updated.' }
-        format.json { render :show, status: :ok, location: @document }
-      else
-        format.html { render :edit }
-        format.json { render json: @document.errors, status: :unprocessable_entity }
-      end
-    end
   end
 
   private

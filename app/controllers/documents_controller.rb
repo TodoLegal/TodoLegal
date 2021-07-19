@@ -37,7 +37,7 @@ class DocumentsController < ApplicationController
     @document_type = @document.name
     @documents_count = Document.where(publication_number: @document.publication_number).where.not(position: nil).count
     if @document.position
-      @next_document = Document.where(publication_number: @document.publication_number).find_by(position: @document.position + 1 )
+      @next_document = get_next_document @document
       @previous_document = Document.where(publication_number: @document.publication_number).find_by(position: @document.position - 1 )
     end
     if @next_document
@@ -98,8 +98,7 @@ class DocumentsController < ApplicationController
         if params[:commit] == 'Guardar cambios'
           format.html { redirect_to edit_document_path(@document), notice: 'Document was successfully updated.' }
         elsif params[:commit] == 'Guardar y siguiente'
-          @next_document = Document.where(publication_number: @document.publication_number).find_by(position: @document.position + 1 )
-          format.html { redirect_to edit_document_path(@next_document), notice: 'Document was successfully updated.' }
+          format.html { redirect_to edit_document_path(get_next_document @document), notice: 'Document was successfully updated.' }
         end
         format.json { render :show, status: :ok, location: @document }
       else
@@ -245,5 +244,9 @@ class DocumentsController < ApplicationController
       require "google/cloud/storage"
       storage = Google::Cloud::Storage.new(project_id:"docs-tl", credentials: Rails.root.join("gcs.keyfile"))
       return storage.bucket GCS_BUCKET
+    end
+
+    def get_next_document document
+      Document.where(publication_number: document.publication_number).find_by(position: document.position + 1 )
     end
 end

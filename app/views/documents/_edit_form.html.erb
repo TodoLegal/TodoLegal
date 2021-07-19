@@ -123,9 +123,9 @@
           <div class="col-md-5">
             <%= form.submit "Guardar cambios", class: "d-inline p-2 btn btn-primary" %>
             <% if @is_next_document_valid %>
-              <%=link_to "Guardar y siguiente", update_and_next_path(@next_document), class: "d-inline p-2 btn btn-secondary" %>
+              <%= form.submit "Guardar y siguiente", class: "d-inline p-2 btn btn-secondary" %>
             <% else %>
-              <button type="button" class="d-inline p-2 btn btn-secondary" disabled="true">Guardar y siguiente</button>
+            <button type="button" class="d-inline p-2 btn btn-secondary" disabled="true">Guardar y siguiente</button>
             <% end %>
           </div>
           <div class="col-md-3">

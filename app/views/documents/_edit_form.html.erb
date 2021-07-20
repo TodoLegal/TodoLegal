@@ -13,13 +13,25 @@
 
   <div class="card">
     <div class="card-body">
+
       <div class="row">
         <div class="col-md-8">
           <div class="form-group">
             <%= form.label :identificador_de_Emisión %>
-            <%= form.text_field :name, class: "form-control", maxlength: "50",
+            <%= form.text_field :issue_id, class: "form-control", maxlength: "50",
                 onkeyup:"charCountUpdate(this.value, 'identifier', 50)" %>
             <small id="identifier">0 de 50 caracteres</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-8">
+          <div class="form-group">
+            <%= form.label :nombre %>
+            <%= form.text_field :name, class: "form-control", maxlength: "50",
+                onkeyup:"charCountUpdate(this.value, 'name', 50)" %>
+            <small id="name">0 de 50 caracteres</small>
           </div>
         </div>
       </div>

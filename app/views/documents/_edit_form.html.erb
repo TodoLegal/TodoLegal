@@ -132,15 +132,15 @@
           <div class="col-md-5">
             <%= form.submit "Guardar cambios", class: "d-inline p-2 btn btn-primary" %>
             <% if @is_next_document_valid %>
-              <%= form.submit "Guardar y siguiente", class: "d-inline p-2 btn btn-secondary" %>
+              <%= form.submit "Guardar y siguiente", class: "d-inline p-2 btn btn-outline-secondary" %>
             <% else %>
-            <button type="button" class="d-inline p-2 btn btn-secondary" disabled="true">Guardar y siguiente</button>
+            <a type="button" class="d-inline p-2 btn btn-outline-secondary" disabled="true">Guardar y siguiente</a>
             <% end %>
           </div>
     <% end %> 
           <div class="col-md-3">
             <% if @document.original_file.attached? %>
-              <%= button_to(@document.original_file, {class:"btn btn-outline-primary", method: :get}) do %>
+              <%= button_to(@document.original_file, {class:"btn btn-link", method: :get}) do %>
                 Descargar archivo
               <% end %>
             <% end %>

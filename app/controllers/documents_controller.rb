@@ -37,7 +37,7 @@ class DocumentsController < ApplicationController
     @document_type = @document.name
     @documents_count = Document.where(publication_number: @document.publication_number).where.not(position: nil).count
     if @document.position
-      @next_document = Document.where(publication_number: @document.publication_number).find_by(position: @document.position + 1 )
+      @next_document = get_next_document @document
       @previous_document = Document.where(publication_number: @document.publication_number).find_by(position: @document.position - 1 )
     end
     if @next_document
@@ -95,7 +95,11 @@ class DocumentsController < ApplicationController
         #if params[:original_file]
         #  run_gazette_script @document
         #end
-        format.html { redirect_to @document, notice: 'Document was successfully updated.' }
+        if params[:commit] == 'Guardar cambios'
+          format.html { redirect_to edit_document_path(@document), notice: 'Document was successfully updated.' }
+        elsif params[:commit] == 'Guardar y siguiente'
+          format.html { redirect_to edit_document_path(get_next_document @document), notice: 'Document was successfully updated.' }
+        end
         format.json { render :show, status: :ok, location: @document }
       else
         format.html { render :edit }
@@ -225,21 +229,6 @@ class DocumentsController < ApplicationController
     puts "Created related documents"
   end
 
-  def update_and_next
-    respond_to do |format|
-      if @document.update(document_params)
-        #if params[:original_file]
-        #  run_gazette_script @document
-        #end
-        format.html { redirect_to edit_document_path(@next_document), notice: 'Document was successfully updated.' }
-        format.json { render :show, status: :ok, location: @document }
-      else
-        format.html { render :edit }
-        format.json { render json: @document.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_document
@@ -248,12 +237,16 @@ class DocumentsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def document_params
-      params.require(:document).permit(:name, :original_file, :url, :publication_date, :publication_number, :description, :short_description)
+      params.require(:document).permit(:issue_id, :name, :original_file, :url, :publication_date, :publication_number, :description, :short_description)
     end
 
     def get_bucket
       require "google/cloud/storage"
       storage = Google::Cloud::Storage.new(project_id:"docs-tl", credentials: Rails.root.join("gcs.keyfile"))
       return storage.bucket GCS_BUCKET
+    end
+
+    def get_next_document document
+      Document.where(publication_number: document.publication_number).find_by(position: document.position + 1 )
     end
 end

@@ -1,5 +1,5 @@
 # This is a basic workflow to help you get started with Actions
-name: Deploy with Capistrano
+name: Deploy Test TodoLegal
 
 # Controls when the action will run. 
 on:
@@ -28,4 +28,7 @@ jobs:
     - uses: miloserdow/capistrano-deploy@master
       with:
         target: production # Defines the environment that will be used for the deployment
-        deploy_key: ${{ secrets.DEPLOY_ENC_KEY }} # Name of the variable configured in Settings/Secrets of your github project
+        deploy_key: ${{ secrets.DEPLOY_ENC_KEY_TEST }} # Name of the variable configured in Settings/Secrets of your github project
+        enc_rsa_key_pth: config/deploy_id_rsa_enc_test
+      env:
+        SERVER_IP: 143.198.77.148

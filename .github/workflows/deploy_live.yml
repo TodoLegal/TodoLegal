@@ -31,4 +31,4 @@ jobs:
         deploy_key: ${{ secrets.DEPLOY_ENC_KEY_LIVE }} # Name of the variable configured in Settings/Secrets of your github project
         enc_rsa_key_pth: config/deploy_id_rsa_enc_live
       env:
-        SERVER_IP: 128.199.11.177
+        SERVER_IP: ENV["SERVER_IP"]

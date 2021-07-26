@@ -30,13 +30,13 @@ tag_especiales_y_otras = Tag.create({ name: 'Especiales y Otras', tag_type_id: t
 tag_internacional_publico = Tag.create({ name: 'Internacional Público', tag_type_id: tag_type_materia.id })
 tag_civil = Tag.create({ name: 'Civil', tag_type_id: tag_type_materia.id })
 tag_mercantil = Tag.create({ name: 'Mercantil', tag_type_id: tag_type_materia.id })
-tag_financiero = Tag.create({ name: 'Financiero', tag_type_id: tag_type_materia.id })
 tag_administrativo = Tag.create({ name: 'Administrativo', tag_type_id: tag_type_materia.id })
 tag_ambiental = Tag.create({ name: 'Ambiental', tag_type_id: tag_type_materia.id })
 tag_militar = Tag.create({ name: 'Militar', tag_type_id: tag_type_materia.id })
 tag_judicial = Tag.create({ name: 'Judicial', tag_type_id: tag_type_materia.id })
 tag_familia = Tag.create({ name: 'Familia', tag_type_id: tag_type_materia.id })
 tag_derechos_humanos = Tag.create({ name: 'Derechos Humanos', tag_type_id: tag_type_materia.id })
+tag_propiedad_intelectual = Tag.create({ name: 'Propiedad Intelectual', tag_type_id: tag_type_materia.id })
 
 # Institución
 
@@ -50,6 +50,7 @@ tag_senasa = Tag.create(name: "SENASA", tag_type_id: tag_institucion.id)
 tag_aduana = Tag.create(name: "Aduana", tag_type_id: tag_institucion.id)
 tag_cree = Tag.create(name: "CREE", tag_type_id: tag_institucion.id)
 tag_enag = Tag.create(name: "ENAG", tag_type_id: tag_institucion.id)
+tag_varios = Tag.create(name: "Varios", tag_type_id: tag_institucion.id)
 
 # Forma de Publicación
 tag_gaceta = Tag.create(name: "Gaceta", tag_type_id: tag_forma_de_publicacion.id)
@@ -63,6 +64,11 @@ tag_acuerdo = Tag.create(name: "Acuerdo", tag_type_id: tag_tipo_de_acto.id)
 tag_tratado_internacional = Tag.create(name: "Tratado Internacional", tag_type_id: tag_tipo_de_acto.id)
 tag_resolucion = Tag.create(name: "Resolución", tag_type_id: tag_tipo_de_acto.id)
 tag_sentencia = Tag.create(name: "Sentencia", tag_type_id: tag_tipo_de_acto.id)
+
+# Tema
+marcas = Tag.create(name: "Marcas", tag_type_id: tag_tema.id)
+marcas = Tag.create(name: "Avisos Legales", tag_type_id: tag_tema.id)
+marcas = Tag.create(name: "Licitaciones", tag_type_id: tag_tema.id)
 
 ###################
 #### LawAccess ####

@@ -23,8 +23,8 @@ jobs:
     - uses: actions/checkout@v2
       with:
         ref: live
-    - run:
-        git pull origin live
+    - run: 
+        git pull origin live && 
         echo "Pulling from Live"
     - uses: ruby/setup-ruby@v1
       with:

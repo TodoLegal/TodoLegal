@@ -23,8 +23,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         ref: refs/heads/live
-
-    - run: |
+    - run:
         git pull origin live
         ls
         cat README.md

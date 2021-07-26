@@ -146,6 +146,8 @@ class DocumentsController < ApplicationController
     document.publication_number = gazette_number
     document.name = "Gaceta"
     document.save
+    addIssuerTagIfExists(document.id, "ENAG")
+    addTagIfExists(document.id, "Gaceta")
   end
 
   def run_slice_gazette_script document, document_pdf_path
@@ -184,13 +186,21 @@ class DocumentsController < ApplicationController
         start_page: file["start_page"],
         end_page: file["end_page"],
         position: file["position"])
-      tag = Tag.find_by_name(file["tag"])
-      issuer = Tag.find_by_name(file["issuer"])
-      if tag
-        DocumentTag.create(document_id: new_document.id, tag_id: tag.id)
-      end
-      if issuer
-        IssuerDocumentTag.create(document_id: new_document.id, tag_id: issuer.id)
+      addTagIfExists(new_document.id, file["tag"])
+      addIssuerTagIfExists(new_document.id, file["issuer"])
+      if file["name"] == "Marcas de Fábrica"
+        addIssuerTagIfExists(document.id, "Varios")
+        addTagIfExists(document.id, "Marcas")
+        addTagIfExists(document.id, "Gaceta")
+        addTagIfExists(document.id, "Mercantil")
+        addTagIfExists(document.id, "Propiedad Intelectual")
+      elsif file["name"] == "Avisos Legales"
+        addIssuerTagIfExists(document.id, "Varios")
+        addTagIfExists(document.id, "Avisos Legales")
+        addTagIfExists(document.id, "Licitaciones")
+        addTagIfExists(document.id, "Gaceta")
+      else
+        addTagIfExists(document.id, "Gaceta")
       end
       file["institutions"].each do |institution|
         institution_tag = Tag.find_by_name(institution)
@@ -248,5 +258,19 @@ class DocumentsController < ApplicationController
 
     def get_next_document document
       Document.where(publication_number: document.publication_number).find_by(position: document.position + 1 )
+    end
+
+    def addTagIfExists document_id, tag_name
+      tag = Tag.find_by_name(tag_name)
+      if tag
+        DocumentTag.create(document_id: document_id, tag_id: tag.id)
+      end
+    end
+
+    def addIssuerTagIfExists document_id, issuer_tag_name
+      tag = Tag.find_by_name(tag_name)
+      if tag
+        IssuerDocumentTag.create(document_id: document_id, tag_id: tag.id)
+      end
     end
 end

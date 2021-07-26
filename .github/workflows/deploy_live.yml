@@ -22,11 +22,10 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
       with:
-        ref: refs/heads/live
+        ref: live
     - run:
         git pull origin live
-        ls
-        cat README.md
+        echo "Pulling from Live"
     - uses: ruby/setup-ruby@v1
       with:
         # ruby-version: 3.0.1 # Not needed with a .ruby-version file

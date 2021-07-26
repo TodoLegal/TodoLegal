@@ -188,25 +188,19 @@ class DocumentsController < ApplicationController
         position: file["position"])
       addTagIfExists(new_document.id, file["tag"])
       addIssuerTagIfExists(new_document.id, file["issuer"])
+      addTagIfExists(document.id, "Gaceta")
       if file["name"] == "Marcas de Fábrica"
         addIssuerTagIfExists(document.id, "Varios")
         addTagIfExists(document.id, "Marcas")
-        addTagIfExists(document.id, "Gaceta")
         addTagIfExists(document.id, "Mercantil")
         addTagIfExists(document.id, "Propiedad Intelectual")
       elsif file["name"] == "Avisos Legales"
         addIssuerTagIfExists(document.id, "Varios")
         addTagIfExists(document.id, "Avisos Legales")
         addTagIfExists(document.id, "Licitaciones")
-        addTagIfExists(document.id, "Gaceta")
-      else
-        addTagIfExists(document.id, "Gaceta")
       end
       file["institutions"].each do |institution|
-        institution_tag = Tag.find_by_name(institution)
-        if institution_tag
-          DocumentTag.create(document_id: new_document.id, tag_id: institution_tag.id)
-        end
+        addTagIfExists(new_document.id, institution)
       end
       full_text_lower = file["full_text"].downcase
       AlternativeTagName.all.each do |alternative_tag_name|

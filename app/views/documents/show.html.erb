@@ -13,8 +13,18 @@
   </h2>
   <div class="document--info  ml-4">
     <p>
+      <strong>Title:</strong>
+      <%= get_document_title @document %>
+    </p>
+
+    <p>
       <strong>Name:</strong>
       <%= @document.name %>
+    </p>
+
+    <p>
+      <strong>Issue id:</strong>
+      <%= @document.issue_id %>
     </p>
 
     <p>
@@ -39,7 +49,7 @@
       <% if @documents_in_same_gazette %>
         <% @documents_in_same_gazette.each do |document| %>
           <li>
-            <%= link_to document.name, document %>
+            <%= link_to get_document_title(document), document %>
           </li>
         <% end %>
       <% end %>

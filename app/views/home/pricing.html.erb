@@ -70,14 +70,14 @@
       <!-- Pro Tier -->
         <div class="col-lg-6 card card--dark-100" id="pro-tier">
           <div class="card-body">
-            <h5 class="card-title">Pro</h5>
-            <h6 class="card-price">$ <%= MONTHLY_PRICE_ANNUALLY %><span class="period">/mensual</span></h6>
-            <small>Facturado a <strong>$<%= BASE_PRICE_ANNUALLY %></strong> anual -15%</small>
+            <h5 class="card-title">Enterprise</h5>
+            <h6 class="card-price">$ <%= ENTERPRISE_PRICE %><span class="period">/mensual</span></h6>
+            <small>Para empresas.</small>
             <%= render 'pro_pricing_description' %>
           </div>
           <div class="card-bottom">
-            <%= button_to "Elegir Plan Pro", @select_pro_plan_path, method: :get, params: {is_onboarding: @is_onboarding, pricing_onboarding: @pricing_onboarding, go_to_law: @go_to_law}, class:"btn btn-block btn-primary"%>
-            <p class="text-center py-2 change-plan-link" onclick="changePlan(2)">Cambiar a pago mensual</p>
+            <a href="https://calendly.com/melissa-castro/30min" class="btn btn-block btn-primary"> Programa una llamada </a>
+            <p class="text-center py-2 change-plan-link" onclick="changePlan(2)">Cambiar a Pro</p>
           </div>
       </div>
 
@@ -86,14 +86,13 @@
           <div class="card-body">
             <h5 class="card-title">Pro</h5>
             <h6 class="card-price">$<%= BASE_PRICE_MONTHLY %><span class="period">/mensual</span></h6>
-            <small>Podrás ahorrar <strong>15%</strong> si eliges el
+            <small>Para usuarios individuales.</small>
              <!-- Agregar el switch de mensual a anual tambien  -->
-             <label class="link" onclick="changePlan(1)">pago anual</label>.</small>
              <%= render 'pro_pricing_description' %>
           </div>
           <div class="card-bottom">
             <%= button_to "Elegir Plan Pro", @select_pro_plan_path, method: :get, params: {is_monthly: true, is_onboarding: @is_onboarding, pricing_onboarding: @pricing_onboarding, go_to_law: @go_to_law}, class:"btn btn-block btn-primary"%>
-            <p class="text-center py-2 change-plan-link" onclick="changePlan(1)">Cambiar a pago anual</p>
+            <p class="text-center py-2 change-plan-link" onclick="changePlan(1)">Cambiar a Enterprise</p>
           </div>
         </div>
       </div>

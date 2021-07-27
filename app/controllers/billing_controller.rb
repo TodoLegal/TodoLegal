@@ -19,6 +19,7 @@ class BillingController < ApplicationController
     @coupon = params["coupon"]
     @base_price_monthly = BASE_PRICE_MONTHLY
     @monthly_price_annually = MONTHLY_PRICE_ANNUALLY
+    @enterprise_price = ENTERPRISE_PRICE
     @base_price_annually = BASE_PRICE_ANNUALLY
     if params["invalid_card"] == "true"
       @stripe_backend_error = I18n.t(:invalid_card)

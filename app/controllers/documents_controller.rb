@@ -65,14 +65,14 @@ class DocumentsController < ApplicationController
         file = bucket.file @document.original_file.key
         if params["document"]["auto_process_type"] == "slice"
           file.download "tmp/gazette.pdf"
-          run_slice_gazette_script @document, Rails.root.join("tmp") + "gazette.pdf"
+          slice_gazette @document, Rails.root.join("tmp") + "gazette.pdf"
           if $discord_bot
             $discord_bot.send_message($discord_bot_channel_notifications, "Nueva gaceta seccionada en Valid! " + @document.publication_number + " :scroll:")
           end
           format.html { redirect_to gazette_path(@document.publication_number), notice: 'La gaceta se ha partido exitósamente.' }
         elsif params["document"]["auto_process_type"] == "process"
           file.download "tmp/gazette.pdf"
-          run_process_gazette_script @document, Rails.root.join("tmp") + "gazette.pdf"
+          process_gazette @document, Rails.root.join("tmp") + "gazette.pdf"
           if $discord_bot
             $discord_bot.send_message($discord_bot_channel_notifications, "Nueva gaceta en Valid! " + @document.publication_number + " :scroll:")
           end
@@ -134,29 +134,35 @@ class DocumentsController < ApplicationController
     end
   end
 
-  def run_process_gazette_script document, document_pdf_path, json_data
-    puts "Storing complete Gaceta"
+  def run_slice_gazette_script document, document_pdf_path
+    puts ">run_slice_gazette_script called"
+    python_return_value = `python3 ~/GazetteSlicer/slice_gazette.py #{ document_pdf_path } '#{ Rails.root.join("public", "gazettes") }' '#{document.id}'`
+    return JSON.parse(python_return_value)
+  end
+
+  def process_gazette document, document_pdf_path
+    puts ">process_gazette called"
+    python_return_value = `python3 ~/GazetteSlicer/process_gazette.py #{ document_pdf_path }`
+    json_data = JSON.parse(python_return_value)
     document.name = "Gaceta"
     document.issue_id = json_data["gazette"]["number"]
     document.publication_number = json_data["gazette"]["number"]
     document.publication_date = json_data["gazette"]["date"]
-    document.short_description = "Esta es la gaceta número " + document.publication_number + " de fecha " + document.publication_date + "."
+    document.short_description = "Esta es la gaceta número " + document.publication_number + " de fecha " + document.publication_date.to_s + "."
     document.description = ""
-    document.url = document.generate_friendly_url
-    document.start_page = 0
-    document.end_page = json_data["page_count"] - 1
     document.save
     addIssuerTagIfExists(document.id, "ENAG")
     addTagIfExists(document.id, "Gaceta")
   end
 
-  def run_slice_gazette_script document, document_pdf_path
-    # run slice script
-    puts "Starting python script"
-    python_return_value = `python3 ~/GazetteSlicer/slice_gazette.py #{ document_pdf_path } '#{ Rails.root.join("public", "gazettes") }' '#{document.id}'`
-    puts "Starting pyton script"
-    json_data = JSON.parse(python_return_value)
-    run_process_gazette_script document, document_pdf_path, json_data
+  def slice_gazette document, document_pdf_path
+    puts ">slice_gazette called"
+    json_data = run_slice_gazette_script(document, document_pdf_path)
+    process_gazette document, document_pdf_path
+    document.url = document.generate_friendly_url
+    document.start_page = 0
+    document.end_page = json_data["page_count"] - 1
+    document.save
     document.original_file.attach(
       io: File.open(
         Rails.root.join(
@@ -178,10 +184,10 @@ class DocumentsController < ApplicationController
       long_description = ""
       if file["name"] == "Marcas de Fábrica"
         name = file["name"]
-        short_description = "Esta es la sección de marcas de Fábrica de la Gaceta " + document.publication_number + " de fecha " + document.publication_date + "."
+        short_description = "Esta es la sección de marcas de Fábrica de la Gaceta " + document.publication_number + " de fecha " + document.publication_date.to_s + "."
       elsif file["name"] == "Avisos Legales"
         name = file["name"]
-        short_description = "Esta es la sección de avisos legales de la Gaceta " + document.publication_number + " de fecha " + document.publication_date + "."
+        short_description = "Esta es la sección de avisos legales de la Gaceta " + document.publication_number + " de fecha " + document.publication_date.to_s + "."
       else
         issue_id = file["name"]
         short_description = cleanText(file["short_description"])
@@ -274,7 +280,7 @@ class DocumentsController < ApplicationController
     end
 
     def addIssuerTagIfExists document_id, issuer_tag_name
-      tag = Tag.find_by_name(tag_name)
+      tag = Tag.find_by_name(issuer_tag_name)
       if tag
         IssuerDocumentTag.create(document_id: document_id, tag_id: tag.id)
       end

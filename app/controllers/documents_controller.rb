@@ -134,17 +134,17 @@ class DocumentsController < ApplicationController
     end
   end
 
-  def run_process_gazette_script document, document_pdf_path
-    # run slice script
-    puts "Starting process python script"
-    python_return_value = `python3 ~/GazetteSlicer/process_gazette.py #{ document_pdf_path }`
-    puts "Starting process pyton script"
-    json_data = JSON.parse(python_return_value)
-    gazette_date = json_data["gazette"]["date"]
-    gazette_number = json_data["gazette"]["number"]
-    document.publication_date = gazette_date
-    document.publication_number = gazette_number
+  def run_process_gazette_script document, document_pdf_path, json_data
+    puts "Storing complete Gaceta"
     document.name = "Gaceta"
+    document.issue_id = json_data["gazette"]["number"]
+    document.publication_number = json_data["gazette"]["number"]
+    document.publication_date = json_data["gazette"]["date"]
+    document.short_description = "Esta es la gaceta número " + document.publication_number + " de fecha " + document.publication_date + "."
+    document.description = ""
+    document.url = document.generate_friendly_url
+    document.start_page = 0
+    document.end_page = json_data["page_count"] - 1
     document.save
     addIssuerTagIfExists(document.id, "ENAG")
     addTagIfExists(document.id, "Gaceta")
@@ -156,11 +156,7 @@ class DocumentsController < ApplicationController
     python_return_value = `python3 ~/GazetteSlicer/slice_gazette.py #{ document_pdf_path } '#{ Rails.root.join("public", "gazettes") }' '#{document.id}'`
     puts "Starting pyton script"
     json_data = JSON.parse(python_return_value)
-    run_process_gazette_script document, document_pdf_path
-    document.url = document.generate_friendly_url
-    document.start_page = 0
-    document.end_page = json_data["page_count"] - 1
-    document.save
+    run_process_gazette_script document, document_pdf_path, json_data
     document.original_file.attach(
       io: File.open(
         Rails.root.join(
@@ -176,28 +172,44 @@ class DocumentsController < ApplicationController
     puts "Creating related documents"
     json_data["files"].each do |file|
       puts "Creating: " + file["name"]
+      name = ""
+      issue_id = ""
+      short_description = ""
+      long_description = ""
+      if file["name"] == "Marcas de Fábrica"
+        name = file["name"]
+        short_description = "Esta es la sección de marcas de Fábrica de la Gaceta " + document.publication_number + " de fecha " + document.publication_date + "."
+      elsif file["name"] == "Avisos Legales"
+        name = file["name"]
+        short_description = "Esta es la sección de avisos legales de la Gaceta " + document.publication_number + " de fecha " + document.publication_date + "."
+      else
+        issue_id = file["name"]
+        short_description = cleanText(file["short_description"])
+        long_description = cleanText(file["description"])
+      end
       new_document = Document.create(
-        name: file["name"],
+        name: name,
+        issue_id: issue_id,
         publication_date: document.publication_date,
         publication_number: document.publication_number,
-        description: cleanText(file["description"]),
-        short_description: cleanText(file["short_description"]),
+        short_description: short_description,
+        description: long_description,
         full_text: cleanText(file["full_text"]),
         start_page: file["start_page"],
         end_page: file["end_page"],
         position: file["position"])
       addTagIfExists(new_document.id, file["tag"])
       addIssuerTagIfExists(new_document.id, file["issuer"])
-      addTagIfExists(document.id, "Gaceta")
+      addTagIfExists(new_document.id, "Gaceta")
       if file["name"] == "Marcas de Fábrica"
-        addIssuerTagIfExists(document.id, "Varios")
-        addTagIfExists(document.id, "Marcas")
-        addTagIfExists(document.id, "Mercantil")
-        addTagIfExists(document.id, "Propiedad Intelectual")
+        addIssuerTagIfExists(new_document.id, "Varios")
+        addTagIfExists(new_document.id, "Marcas")
+        addTagIfExists(new_document.id, "Mercantil")
+        addTagIfExists(new_document.id, "Propiedad Intelectual")
       elsif file["name"] == "Avisos Legales"
-        addIssuerTagIfExists(document.id, "Varios")
-        addTagIfExists(document.id, "Avisos Legales")
-        addTagIfExists(document.id, "Licitaciones")
+        addIssuerTagIfExists(new_document.id, "Varios")
+        addTagIfExists(new_document.id, "Avisos Legales")
+        addTagIfExists(new_document.id, "Licitaciones")
       end
       file["institutions"].each do |institution|
         addTagIfExists(new_document.id, institution)
@@ -227,7 +239,7 @@ class DocumentsController < ApplicationController
       puts "File uploaded"
     end
     json_data["errors"].each do |error|
-      puts "Error found!!!"
+      puts "Error found!"
       puts error.to_s
     end
     puts "Created related documents"

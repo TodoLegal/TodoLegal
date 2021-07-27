@@ -5,7 +5,7 @@ require "fileutils"
 
 OOB_URI = "urn:ietf:wg:oauth:2.0:oob".freeze
 APPLICATION_NAME = "Drive API Ruby Quickstart".freeze
-CREDENTIALS_PATH = "/root/credentials.json".freeze
+CREDENTIALS_PATH = "/home/deploy/TodoLegal/credentials.json".freeze
 
 # The file token.yaml stores the user's access and refresh tokens, and is
 # created automatically when the authorization flow completes for the first

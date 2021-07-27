@@ -1,10 +1,9 @@
 <table class="table table-sm"">
   <thead>
     <tr>
-      <th class="table--headers" scope="col">Nombre</th>
+      <th class="table--headers" scope="col">Título</th>
       <th class="table--headers"scope="col">Fecha de publicación</th>
       <th class="table--headers"scope="col">Número de publicación</th>
-      <th class="table--headers"scope="col">Posicion</th>
       <th class="acciones--tableHeader" scope="col">Acciones</th>
     </tr>
   </thead>
@@ -12,7 +11,7 @@
     <% documents.each do |document| %>
         <tr>
             <td>
-                <%= document.name %>
+                <%= get_document_title(document) %>
             </td>
             <td>
                 <%= document.publication_date %>

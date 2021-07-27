@@ -65,14 +65,14 @@ class DocumentsController < ApplicationController
         file = bucket.file @document.original_file.key
         if params["document"]["auto_process_type"] == "slice"
           file.download "tmp/gazette.pdf"
-          run_slice_gazette_script @document, Rails.root.join("tmp") + "gazette.pdf"
+          slice_gazette @document, Rails.root.join("tmp") + "gazette.pdf"
           if $discord_bot
             $discord_bot.send_message($discord_bot_channel_notifications, "Nueva gaceta seccionada en Valid! " + @document.publication_number + " :scroll:")
           end
           format.html { redirect_to gazette_path(@document.publication_number), notice: 'La gaceta se ha partido exitósamente.' }
         elsif params["document"]["auto_process_type"] == "process"
           file.download "tmp/gazette.pdf"
-          run_process_gazette_script @document, Rails.root.join("tmp") + "gazette.pdf"
+          process_gazette @document, Rails.root.join("tmp") + "gazette.pdf"
           if $discord_bot
             $discord_bot.send_message($discord_bot_channel_notifications, "Nueva gaceta en Valid! " + @document.publication_number + " :scroll:")
           end
@@ -134,27 +134,31 @@ class DocumentsController < ApplicationController
     end
   end
 
-  def run_process_gazette_script document, document_pdf_path
-    # run slice script
-    puts "Starting process python script"
-    python_return_value = `python3 ~/GazetteSlicer/process_gazette.py #{ document_pdf_path }`
-    puts "Starting process pyton script"
-    json_data = JSON.parse(python_return_value)
-    gazette_date = json_data["gazette"]["date"]
-    gazette_number = json_data["gazette"]["number"]
-    document.publication_date = gazette_date
-    document.publication_number = gazette_number
-    document.name = "Gaceta"
-    document.save
+  def run_slice_gazette_script document, document_pdf_path
+    puts ">run_slice_gazette_script called"
+    python_return_value = `python3 ~/GazetteSlicer/slice_gazette.py #{ document_pdf_path } '#{ Rails.root.join("public", "gazettes") }' '#{document.id}'`
+    return JSON.parse(python_return_value)
   end
 
-  def run_slice_gazette_script document, document_pdf_path
-    # run slice script
-    puts "Starting python script"
-    python_return_value = `python3 ~/GazetteSlicer/slice_gazette.py #{ document_pdf_path } '#{ Rails.root.join("public", "gazettes") }' '#{document.id}'`
-    puts "Starting pyton script"
+  def process_gazette document, document_pdf_path
+    puts ">process_gazette called"
+    python_return_value = `python3 ~/GazetteSlicer/process_gazette.py #{ document_pdf_path }`
     json_data = JSON.parse(python_return_value)
-    run_process_gazette_script document, document_pdf_path
+    document.name = "Gaceta"
+    document.issue_id = json_data["gazette"]["number"]
+    document.publication_number = json_data["gazette"]["number"]
+    document.publication_date = json_data["gazette"]["date"]
+    document.short_description = "Esta es la gaceta número " + document.publication_number + " de fecha " + document.publication_date.to_s + "."
+    document.description = ""
+    document.save
+    addIssuerTagIfExists(document.id, "ENAG")
+    addTagIfExists(document.id, "Gaceta")
+  end
+
+  def slice_gazette document, document_pdf_path
+    puts ">slice_gazette called"
+    json_data = run_slice_gazette_script(document, document_pdf_path)
+    process_gazette document, document_pdf_path
     document.url = document.generate_friendly_url
     document.start_page = 0
     document.end_page = json_data["page_count"] - 1
@@ -174,29 +178,47 @@ class DocumentsController < ApplicationController
     puts "Creating related documents"
     json_data["files"].each do |file|
       puts "Creating: " + file["name"]
+      name = ""
+      issue_id = ""
+      short_description = ""
+      long_description = ""
+      if file["name"] == "Marcas de Fábrica"
+        name = file["name"]
+        short_description = "Esta es la sección de marcas de Fábrica de la Gaceta " + document.publication_number + " de fecha " + document.publication_date.to_s + "."
+      elsif file["name"] == "Avisos Legales"
+        name = file["name"]
+        short_description = "Esta es la sección de avisos legales de la Gaceta " + document.publication_number + " de fecha " + document.publication_date.to_s + "."
+      else
+        issue_id = file["name"]
+        short_description = cleanText(file["short_description"])
+        long_description = cleanText(file["description"])
+      end
       new_document = Document.create(
-        name: file["name"],
+        name: name,
+        issue_id: issue_id,
         publication_date: document.publication_date,
         publication_number: document.publication_number,
-        description: cleanText(file["description"]),
-        short_description: cleanText(file["short_description"]),
+        short_description: short_description,
+        description: long_description,
         full_text: cleanText(file["full_text"]),
         start_page: file["start_page"],
         end_page: file["end_page"],
         position: file["position"])
-      tag = Tag.find_by_name(file["tag"])
-      issuer = Tag.find_by_name(file["issuer"])
-      if tag
-        DocumentTag.create(document_id: new_document.id, tag_id: tag.id)
-      end
-      if issuer
-        IssuerDocumentTag.create(document_id: new_document.id, tag_id: issuer.id)
+      addTagIfExists(new_document.id, file["tag"])
+      addIssuerTagIfExists(new_document.id, file["issuer"])
+      addTagIfExists(new_document.id, "Gaceta")
+      if file["name"] == "Marcas de Fábrica"
+        addIssuerTagIfExists(new_document.id, "Varios")
+        addTagIfExists(new_document.id, "Marcas")
+        addTagIfExists(new_document.id, "Mercantil")
+        addTagIfExists(new_document.id, "Propiedad Intelectual")
+      elsif file["name"] == "Avisos Legales"
+        addIssuerTagIfExists(new_document.id, "Varios")
+        addTagIfExists(new_document.id, "Avisos Legales")
+        addTagIfExists(new_document.id, "Licitaciones")
       end
       file["institutions"].each do |institution|
-        institution_tag = Tag.find_by_name(institution)
-        if institution_tag
-          DocumentTag.create(document_id: new_document.id, tag_id: institution_tag.id)
-        end
+        addTagIfExists(new_document.id, institution)
       end
       full_text_lower = file["full_text"].downcase
       AlternativeTagName.all.each do |alternative_tag_name|
@@ -223,7 +245,7 @@ class DocumentsController < ApplicationController
       puts "File uploaded"
     end
     json_data["errors"].each do |error|
-      puts "Error found!!!"
+      puts "Error found!"
       puts error.to_s
     end
     puts "Created related documents"
@@ -248,5 +270,19 @@ class DocumentsController < ApplicationController
 
     def get_next_document document
       Document.where(publication_number: document.publication_number).find_by(position: document.position + 1 )
+    end
+
+    def addTagIfExists document_id, tag_name
+      tag = Tag.find_by_name(tag_name)
+      if tag
+        DocumentTag.create(document_id: document_id, tag_id: tag.id)
+      end
+    end
+
+    def addIssuerTagIfExists document_id, issuer_tag_name
+      tag = Tag.find_by_name(issuer_tag_name)
+      if tag
+        IssuerDocumentTag.create(document_id: document_id, tag_id: tag.id)
+      end
     end
 end

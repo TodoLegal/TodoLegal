@@ -1,18 +1,18 @@
-<%= form_with(model: document, local: true) do |form| %>
-  <% if document.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(document.errors.count, "error") %> prohibited this document from being saved:</h2>
-
-      <ul>
-        <% document.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="card">
+ <div class="card">
     <div class="card-body">
+
+    <%= form_with(model: document, local: true) do |form| %>
+      <% if document.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(document.errors.count, "error") %> prohibited this document from being saved:</h2>
+
+          <ul>
+            <% document.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
 
       <div class="row">
         <div class="col-md-8">
@@ -65,9 +65,6 @@
               <span class="badge bg-primary document--pages"> <%= document.start_page + 1 %>-<%= document.end_page + 1 %> </span>
             </label>
           <% end %>
-        </div>
-        <div class="col-md-3 see--document--btn">
-          <%= link_to 'Ver documento', document, class:"btn btn-outline-secondary"%>
         </div>
         <div class="col-md-4">
           <label class="d-inline"> <strong> Posición en Gaceta </strong> </label>
@@ -135,24 +132,24 @@
           <div class="col-md-5">
             <%= form.submit "Guardar cambios", class: "d-inline p-2 btn btn-primary" %>
             <% if @is_next_document_valid %>
-              <%= form.submit "Guardar y siguiente", class: "d-inline p-2 btn btn-secondary" %>
+              <%= form.submit "Guardar y siguiente", class: "d-inline p-2 btn btn-outline-secondary" %>
             <% else %>
-            <button type="button" class="d-inline p-2 btn btn-secondary" disabled="true">Guardar y siguiente</button>
+            <a type="button" class="d-inline p-2 btn btn-outline-secondary" disabled="true">Guardar y siguiente</a>
             <% end %>
           </div>
+    <% end %> 
           <div class="col-md-3">
             <% if @document.original_file.attached? %>
-              <%= button_to(@document.original_file, {class:"btn btn-outline-primary", method: :get}) do %>
+              <%= button_to(@document.original_file, {class:"btn btn-link", method: :get}) do %>
                 Descargar archivo
               <% end %>
             <% end %>
           </div>
         </div>
-      </div>
-    </div>
+      </div> 
   </div>
+</div>
 
-<% end %>
 
 <script>
   function toggleEdition(){

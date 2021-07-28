@@ -163,17 +163,7 @@ class DocumentsController < ApplicationController
     document.start_page = 0
     document.end_page = json_data["page_count"] - 1
     document.save
-    document.original_file.attach(
-      io: File.open(
-        Rails.root.join(
-          "public",
-          "gazettes",
-          document.id.to_s, json_data["files"][0]["path"]).to_s
-      ),
-      filename: document.name + ".pdf",
-      content_type: "application/pdf"
-    )
-    set_content_disposition_attachment document.original_file.key, document.name + ".pdf"
+    # set_content_disposition_attachment document.original_file.key, document.name + ".pdf"
     # create the related documents
     puts "Creating related documents"
     json_data["files"].each do |file|

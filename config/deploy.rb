@@ -5,8 +5,8 @@ set :application, "TodoLegal"
 set :repo_url, "https://github.com/TodoLegal/TodoLegal.git"
 set :passenger_restart_command, '/usr/bin/passenger-config restart-app'
 
-#append :linked_files, "config/master.key"
-#append :linked_files, "config/credentials.yml.enc"
+append :linked_files, "config/master.key"
+append :linked_files, "config/credentials.yml.enc"
 append :linked_files, "gcs.keyfile"
 
 namespace :deploy do

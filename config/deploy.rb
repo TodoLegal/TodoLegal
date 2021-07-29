@@ -7,7 +7,7 @@ set :passenger_restart_command, '/usr/bin/passenger-config restart-app'
 
 #append :linked_files, "config/master.key"
 #append :linked_files, "config/credentials.yml.enc"
-#append :linked_files, "gcs.keyfile"
+append :linked_files, "gcs.keyfile"
 
 namespace :deploy do
   namespace :check do

@@ -29,9 +29,9 @@
         <div class="col-md-8">
           <div class="form-group">
             <%= form.label :nombre %>
-            <%= form.text_field :name, class: "form-control", maxlength: "50",
-                onkeyup:"charCountUpdate(this.value, 'name', 50)" %>
-            <small id="name">0 de 50 caracteres</small>
+            <%= form.text_field :name, class: "form-control", maxlength: "100",
+                onkeyup:"charCountUpdate(this.value, 'name', 100)" %>
+            <small id="name">0 de 100 caracteres</small>
           </div>
         </div>
       </div>

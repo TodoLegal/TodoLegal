@@ -27,6 +27,7 @@ jobs:
        echo "Deployingg to production server on branch $GITHUB_REF"
        cat test_file
        cat app/views/home/index.html.erb
+       bundle install
     - uses: ruby/setup-ruby@v1
       with:
         # ruby-version: 3.0.1 # Not needed with a .ruby-version file
@@ -34,4 +35,4 @@ jobs:
     - run: |
        echo "Manual deploy"
        bundle install
-       cap production deploy
+       bundle exec cap -v

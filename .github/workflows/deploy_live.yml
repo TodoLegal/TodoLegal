@@ -27,13 +27,14 @@ jobs:
       with:
         # ruby-version: 3.0.1 # Not needed with a .ruby-version file
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-    - run: |
-       echo "Arbriter"
-       cat test_file
-       cat app/views/home/index.html.erb
-    - run: |
-       echo "Bundle install"
-       bundle install
-    - run: |
-       echo "Manual deploy"
-       SERVER_IP="159.89.179.7" SERVER_KEY="${{ secrets.SERVER_KEY }}" bundle exec cap production deploy
+    - uses: miloserdow/capistrano-deploy@master
+      with:
+        target: production # Defines the environment that will be used for the deployment
+        deploy_key: ${{ secrets.DEPLOY_ENC_KEY_LIVE }} # Name of the variable configured in Settings/Secrets of your github project
+        enc_rsa_key_pth: config/deploy_id_rsa_enc_live
+    #- run:
+    #    git pull origin live &&
+    #    echo "Pulling from Live"
+      env:
+        SERVER_IP: 159.89.179.7
+        CAPISTRANO_BRANCH: live

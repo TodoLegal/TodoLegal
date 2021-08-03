@@ -32,4 +32,4 @@ jobs:
        bundle install
     - run: |
        echo "Manual deploy"
-       SERVER_IP="159.89.179.7" SERVER_KEY="{{secret.SERVER_KEY}}" bundle exec cap production deploy
+       SERVER_IP="159.89.179.7" SERVER_KEY="${{ secret.SERVER_KEY }}" bundle exec cap production deploy

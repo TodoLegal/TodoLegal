@@ -60,13 +60,3 @@ server ENV["SERVER_IP"], user: 'deploy', roles: %w{app db web}
 #     auth_methods: %w(publickey password)
 #     # password: "please use keys"
 #   }
-
-server ENV["SERVER_IP"],
-  user: "deploy",
-  roles: %w{app db web},
-  ssh_options: {
-    keys: %w(./config/deploy_id_rsa_enc_live),
-    forward_agent: true,
-    auth_methods: %w(password),
-    password: ENV["SERVER_KEY"]
-  }

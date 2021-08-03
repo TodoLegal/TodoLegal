@@ -28,6 +28,10 @@ jobs:
         # ruby-version: 3.0.1 # Not needed with a .ruby-version file
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
     - run: |
+       echo "Arbriter"
+       cat test_file
+       cat app/views/home/index.html.erb
+    - run: |
        echo "Bundle install"
        bundle install
     - run: |

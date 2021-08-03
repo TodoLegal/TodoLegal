@@ -37,3 +37,4 @@ jobs:
     #    echo "Pulling from Live"
       env:
         SERVER_IP: 159.89.179.7
+        CAPISTRANO_BRANCH: live

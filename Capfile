@@ -41,5 +41,6 @@ require 'capistrano/rails'
 require 'capistrano/passenger'
 require 'capistrano/rbenv'
 
+set :deploy_via, :copy
 set :rbenv_type, :user
 set :rbenv_ruby, '3.0.0'

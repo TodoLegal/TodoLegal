@@ -23,10 +23,6 @@ jobs:
     - uses: actions/checkout@v2
       with:
         ref: live
-    - run: |
-       echo "Deployingg to production server on branch $GITHUB_REF"
-       cat test_file
-       cat app/views/home/index.html.erb
     - uses: ruby/setup-ruby@v1
       with:
         # ruby-version: 3.0.1 # Not needed with a .ruby-version file
@@ -36,4 +32,4 @@ jobs:
        bundle install
     - run: |
        echo "Manual deploy"
-       bundle exec cap production deploy
+       SERVER_IP="159.89.179.7" SERVER_KEY="${{secret.SERVER_KEY}}" bundle exec cap production deploy

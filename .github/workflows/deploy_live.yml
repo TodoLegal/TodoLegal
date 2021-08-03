@@ -36,5 +36,4 @@ jobs:
        bundle install
     - run: |
        echo "Manual deploy"
-       bundle install
-       bundle exec cap -v
+       bundle exec cap production deploy

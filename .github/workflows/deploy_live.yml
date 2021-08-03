@@ -26,17 +26,11 @@ jobs:
     - run: |
        echo "Deployingg to production server on branch $GITHUB_REF"
        cat test_file
+       cat TodoLegal/app/views/home/index.html.erb
     - uses: ruby/setup-ruby@v1
       with:
         # ruby-version: 3.0.1 # Not needed with a .ruby-version file
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-    - uses: miloserdow/capistrano-deploy@master
-      with:
-        target: production # Defines the environment that will be used for the deployment
-        deploy_key: ${{ secrets.DEPLOY_ENC_KEY_LIVE }} # Name of the variable configured in Settings/Secrets of your github project
-        enc_rsa_key_pth: config/deploy_id_rsa_enc_live
-    #- run:
-    #    git pull origin live &&
-    #    echo "Pulling from Live"
-      env:
-        SERVER_IP: 159.89.179.7
+    - run: |
+       echo "Manual deploy"
+       cap production deploy

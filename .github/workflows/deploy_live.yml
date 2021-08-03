@@ -33,4 +33,5 @@ jobs:
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
     - run: |
        echo "Manual deploy"
+       bundle install
        cap production deploy

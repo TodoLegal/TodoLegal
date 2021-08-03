@@ -6,7 +6,7 @@
 # server "example.com", user: "deploy", roles: %w{app db web}, my_property: :my_value
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
-server ENV["SERVER_IP"], user: 'deploy', roles: %w{app db web}
+# server ENV["SERVER_IP"], user: 'deploy', roles: %w{app db web}
 
 
 # role-based syntax
@@ -59,3 +59,13 @@ server ENV["SERVER_IP"], user: 'deploy', roles: %w{app db web}
 #     auth_methods: %w(publickey password)
 #     # password: "please use keys"
 #   }
+
+server ENV["SERVER_IP"],
+  user: "deploy",
+  roles: %w{app db web},
+  ssh_options: {
+    keys: %w(./config/deploy_id_rsa_enc_live),
+    forward_agent: true,
+    auth_methods: %w(password),
+    password: ENV["SERVER_KEY"]
+  }

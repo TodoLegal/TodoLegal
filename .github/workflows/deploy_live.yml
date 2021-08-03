@@ -26,7 +26,7 @@ jobs:
     - run: |
        echo "Deployingg to production server on branch $GITHUB_REF"
        cat test_file
-       cat TodoLegal/app/views/home/index.html.erb
+       cat app/views/home/index.html.erb
     - uses: ruby/setup-ruby@v1
       with:
         # ruby-version: 3.0.1 # Not needed with a .ruby-version file

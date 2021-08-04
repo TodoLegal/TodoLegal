@@ -28,7 +28,7 @@
             </div>
           </div>
 
-          <%= render partial: 'gazettes_list', locals: {gazettes: @gazettes} %>
+          <%= render partial: 'gazettes_list', locals: {gazettes: @gazettes_pagination} %>
 
         </div>
         
@@ -37,7 +37,7 @@
         </div>
 
     </div>
-    <%=paginate @gazettes %>
+    <%=paginate @gazettes_pagination %>
 </div>
 
 <style>

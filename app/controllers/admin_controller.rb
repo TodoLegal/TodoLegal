@@ -11,10 +11,10 @@ class AdminController < ApplicationController
       @gazettes = Document.where(publication_number: @query)
         .group_by(&:publication_number)
         .sort_by { |x | [ x ] }.reverse
-      @gazettes_pagination = Kaminari.paginate_array(@gazettes).page(params[:page]).per(1)
+      @gazettes_pagination = Kaminari.paginate_array(@gazettes).page(params[:page]).per(20)
     else
       @gazettes = Document.where.not(publication_number: nil).group_by(&:publication_number).sort_by { | x | [ x ] }.reverse
-      @gazettes_pagination = Kaminari.paginate_array(@gazettes).page(params[:page]).per(1)
+      @gazettes_pagination = Kaminari.paginate_array(@gazettes).page(params[:page]).per(20)
     end
     gazette_temp = @gazettes.first
     @missing_gazettes = []

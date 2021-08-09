@@ -8,18 +8,18 @@ TodoLegal makes legal information accessible to lawyers and citizens. See the we
 
 |  | Development | Production |
 |----------|------------ |------------ |
-| Linux                | ✔ | ✔ |
-| MacOS                | ✔ |   |
 | Rails 6              | ✔ | ✔ |
 | PostgreSQL           | ✔ | ✔ |
-| Posrgres Text Search | ✔ | ✔ |
-| Puma                 | ✔ |   |
+| Passenger            | ✔ |   |
+| Github Actions       | ✔ | ✔ |
 | Thin + nginx + SSL   |   | ✔ |
 | Discord bot          |   | ✔ |
 | Stripe               | ✔ | ✔ |
 | Google Storage       | ✔ | ✔ |
 | Elastic Search       | ✔ | ✔ |
-| OAuth IdM            | ✔ | ✔ |
+| OAuth via Doorkeeper | ✔ | ✔ |
+| Linux                | ✔ | ✔ |
+| MacOS                | ✔ |   |
 
 # Code contributions welcome
 

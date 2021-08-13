@@ -1,10 +1,15 @@
 
 <nav class="navbar navbar-expand-lg navbar-light  sticky-top" id="topNavbar">
-    <a href="/" class="navbar-brand text-primary" >
-        <img  src="/img/top_navbar/top_navbar.svg" alt="Card image cap" class="logo img-fluid">
-         &nbsp;&nbsp;
-        <img src="/img/top_navbar/Logo-letras-white.svg" alt="Card image cap" class="todolegal img-fluid">
-    </a>
+    <section class="d-inline-flex">
+        <a href="/" class="navbar-brand text-primary" >
+            <img  src="/img/top_navbar/top_navbar.svg" alt="Card image cap" class="logo img-fluid">
+            &nbsp;&nbsp;
+        </a>
+        <a href="https://valid.todolegal.app" class="valid--link"> 
+            <img  src="/img/top_navbar/valid.png" alt="Card image cap" class="valid--logo">
+            <span> Ve a Valid </span> 
+        </a>
+    </section>
     <% if current_user_is_admin || current_user_is_editor  %>
         <ul class="navbar-nav" >
             <div class="btn-group">
@@ -127,6 +132,20 @@
         line-height: .3rem;
         display: block;
         padding-top: .5rem;
+    }
+    .valid--link{
+        align-self: center;
+        color: white;
+    }
+
+    .valid--link:hover{
+        color: white;
+        text-decoration: none;
+    }
+
+    .valid--logo{
+        padding-bottom: 2%;
+        width: 15%;
     }
 
     @media only screen and (max-width: 767.98px){

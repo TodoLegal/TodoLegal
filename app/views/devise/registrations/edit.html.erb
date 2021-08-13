@@ -1,10 +1,6 @@
 <% content_for :title, "Tu cuenta - TodoLegal" %>
 
-<% if user_signed_in? %>
-    <%= render 'layouts/logged_navbar' %>        
-<% else %>
-    <%= render 'layouts/unlogged_navbar' %> 
-<% end %>
+<%= render 'layouts/logged_navbar' %> 
 
 <div class = "container container--cuenta">
   <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">

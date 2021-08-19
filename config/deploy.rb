@@ -22,9 +22,6 @@ namespace :deploy do
         unless test("[ -f #{shared_path}/gcs.keyfile ]")
           upload! 'gcs.keyfile', "#{shared_path}/gcs.keyfile"
         end
-        unless test("[ -f #{shared_path}/.rbenv-vars ]")
-          upload! '.rbenv-vars', "#{shared_path}/.rbenv-vars"
-        end
       end
     end
   end

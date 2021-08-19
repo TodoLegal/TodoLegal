@@ -1,6 +1,6 @@
 [![Discord](https://img.shields.io/discord/600740585887760385.svg?label=Discord&logo=discord&color=7289DA&labelColor=2C2F33)](https://discord.todolegal.app)
 
-# TodoLegalxx
+# TodoLegalxxx
 
 TodoLegal makes legal information accessible to lawyers and citizens. See the webapp [live on production](https://todolegal.app/).
 

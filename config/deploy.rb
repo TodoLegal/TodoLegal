@@ -8,6 +8,7 @@ set :passenger_restart_command, '/usr/bin/passenger-config restart-app'
 append :linked_files, "config/master.key"
 append :linked_files, "config/credentials.yml.enc"
 append :linked_files, "gcs.keyfile"
+append :linked_files, ".rbenv-vars"
 
 namespace :deploy do
   namespace :check do
@@ -21,6 +22,9 @@ namespace :deploy do
         end
         unless test("[ -f #{shared_path}/gcs.keyfile ]")
           upload! 'gcs.keyfile', "#{shared_path}/gcs.keyfile"
+        end
+        unless test("[ -f #{shared_path}/.rbenv-vars ]")
+          upload! '.rbenv-vars', "#{shared_path}/.rbenv-vars"
         end
       end
     end

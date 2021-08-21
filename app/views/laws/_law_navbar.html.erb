@@ -14,70 +14,43 @@
             <button type="button" onclick="hideDocumentContainer()" class="btn btn-light search-button" id="hideDocumentContainer-button">
                 <i class="fas fa-search"></i>
             </button>
-            <button type="button" class="btn btn-primary btn-lg btn-avatar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border-radius: 50%;"  data-display="static" id="menu-botton">
-                <% if current_user.first_name %>
-                    <%= current_user.first_name[0]%>
-                <% end %>
-            </button>
-            <div class="dropdown-menu dropdown-menu-right">
-                <div class="name-container">
-                <div class="circle btn-avatar btn-avatar-large">
-                    <% if current_user.first_name.present? && current_user.last_name.present? %>
-                        <%= current_user.first_name[0].upcase + current_user.last_name[0].upcase%>
+            <% if current_user_is_admin || current_user_is_editor %>
+                <button type="button" class="btn btn-primary btn-lg btn-avatar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border-radius: 50%;"  data-display="static" id="menu-botton">
+                    <% if current_user.first_name %>
+                        <%= current_user.first_name[0]%>
                     <% end %>
-                </div>
-                <% if current_user.first_name && current_user.last_name %>
-                    <%= current_user.first_name + " " + current_user.last_name %>
-                <% end %>
-                <div>
-                    
-                </div>
-                </div>
-
-                <a href="/users/edit" class="dropdown-item">
-                <i class="fas fa-user" aria-hidden="true"></i>
-                Tu cuenta</a>
-                <a href="/invite_friends" class="dropdown-item">
-                <i class="fas fa-gift" aria-hidden="true"></i>
-                Invitar amigos</a>
-
-                 <% if current_user_is_pro %>
-                    <!--
-                    <form method="POST" action="/create_customer_portal_session">
-                        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-                        <input type="submit" class="btn btn-primary" value="Manejar Suscripción Pro">
-                    </form>-->
-                    <a href="/users/edit" class="dropdown-item dropdown-item--suscription">
-                    
-                    <i class="fas fa-star" aria-hidden="true"></i>
-                    <div class="suscription-type">
-                    <small>Plan activo</small> <span>Pro</span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <div class="name-container">
+                        <div class="circle btn-avatar btn-avatar-large">
+                            <% if current_user.first_name.present? && current_user.last_name.present? %>
+                                <%= current_user.first_name[0].upcase + current_user.last_name[0].upcase%>
+                            <% end %>
+                        </div>
+                        <% if current_user.first_name && current_user.last_name %>
+                            <%= current_user.first_name + " " + current_user.last_name %>
+                        <% end %>
                     </div>
-                    </a>
-                <% else %>
-                    <a href="/pricing" class="dropdown-item">
-                    <i class="fas fa-star" aria-hidden="true"></i>
-                    Precios</a>
-                <% end %>
-                
-                <% if current_user_is_admin %>
-                    <button class="dropdown-item disabled font-weight-bold " type="button" >
-                        Administrar
-                    </button>
-                    <div class="dropdown-divider"></div>
-                    <%= link_to('-> Usuarios', admin_users_path, class:"dropdown-item") %>
-                    <%= link_to('-> Documentos', laws_path, class:"dropdown-item")%>
-                    <div class="dropdown-divider"></div>
-                    <% if is_editor_mode_enabled %>
-                        <a href="/admin/disable_edit_mode" class="dropdown-item">
-                        Deshabilitar modo edición</a>
-                    <% else %>
-                        <a href="/admin/enable_edit_mode" class="dropdown-item">
-                        Habilitar modo edición</a>
+                    <% if current_user_is_admin %>
+                        <%= link_to('Usuarios', admin_users_path, class:"dropdown-item") %>
+                        <%= link_to('CMS(TL)', laws_path, class:"dropdown-item")%>
+                        <%= link_to('CMS(Valid)', documents_path, class:"dropdown-item")%>
+                        <%= link_to('Gacetas', gazettes_path, class:"dropdown-item")%>
                     <% end %>
-                <% end %>
-                <%= link_to('Cerrar sesión', destroy_user_session_path, method: :delete, class:"dropdown-item") %>
-            </div>
+
+                    <% if current_user_is_editor %>
+                        <div class="dropdown-divider"></div>
+                        <% if is_editor_mode_enabled %>
+                            <a href="/admin/disable_edit_mode" class="dropdown-item">
+                            Deshabilitar modo edición</a>
+                        <% else %>
+                            <a href="/admin/enable_edit_mode" class="dropdown-item">
+                            Habilitar modo edición</a>
+                        <% end %>
+                    <% end %>
+                    <%= link_to('Cerrar sesión', destroy_user_session_path, method: :delete, class:"dropdown-item") %>
+                </div>
+            <% end %>
         </div>
     </ul>
 </nav>

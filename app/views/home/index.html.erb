@@ -70,17 +70,17 @@
   <% if !@current_user_plan_is_active %>
     <div class="billboard billboard--home">
       <div class="billboard-content">
-        <h5 class="billboard-title">Suscríbete y obtén acceso ilimitado</h5>
+        <h5 class="billboard-title">TodoLegal es gratis.</h5>
         <p class="billboard-body">
-          Adquiere el <b>Plan Pro</b> por <b>$<%= BASE_PRICE_MONTHLY %> al mes</b> y accede a las más de <%= (all_document_count/10)*10 %> leyes y publicaciones de La Gaceta y a todo lo nuevo que se publica.
+          También somos desarrolladores de <b>Valid</b>, donde nos especializamos en procesar <b>La Gaceta</b>. Puedes conocer nuestro planes empresariales visitando la herramienta.
           <i class="text-muted d-block">Puedes cancelar la suscripción en cualquier momento.</i>
         </p>
       </div>
       <div class="billboard-actions form-group" id="change-plan-btn-form">
         <% if user_signed_in? %>
-          <%= button_to "Adquirir Plan Pro", pricing_path, method: :get, params: {activate_pro_account: true}, remote: true, class:"btn btn-primary",  id:"change-plan-button"%>
+          <%= button_to "Ver planes", pricing_path, method: :get, params: {activate_pro_account: true}, remote: true, class:"btn btn-primary",  id:"change-plan-button"%>
         <% else %>
-          <%= button_to "Adquirir Plan Pro", pricing_path, method: :get, params: {is_onboarding: true, pricing_onboarding: true}, remote: true, class:"btn btn-primary",  id:"change-plan-button"%>
+          <%= button_to "Ver planes", pricing_path, method: :get, params: {is_onboarding: true, pricing_onboarding: true}, remote: true, class:"btn btn-primary",  id:"change-plan-button"%>
         <% end %>
       </div>
     </div>

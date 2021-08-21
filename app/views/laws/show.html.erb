@@ -1,9 +1,5 @@
 <% content_for :title, @law.name + " - TodoLegal" %>
-<% if user_signed_in? %>
-  <%= render 'law_navbar'%>
-<% else %>
-  <%= render 'law_unlogged_navbar'%>
-<% end %>
+<%= render 'law_navbar'%>
 
 <%if @info_is_searched %>
   <% display_search_container = "block" %>

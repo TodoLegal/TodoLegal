@@ -18,7 +18,7 @@
                   Para tener una mejor experiencia te recomendamos completar el proceso de creación de cuenta.
                 </label>
                 <div class="form-group" id="bottonsGroup">
-                  <a href="<%= ENV['VALID_BASE_URL']%>" id="okButton" class="btn btn-secondary" > Salir </a>
+                  <a href="<%= ENV.fetch("VALID_BASE_URL") { "" } %>" id="okButton" class="btn btn-secondary" > Salir </a>
                   &nbsp;&nbsp;&nbsp;
                   <button type="button" id="dismissBtn" class="btn btn-primary" data-dismiss="modal">Continuar</button>
                 </div>

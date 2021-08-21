@@ -1,6 +1,6 @@
 [![Discord](https://img.shields.io/discord/600740585887760385.svg?label=Discord&logo=discord&color=7289DA&labelColor=2C2F33)](https://discord.todolegal.app)
 
-# TodoLegal
+# TodoLegalxxxyyy
 
 TodoLegal makes legal information accessible to lawyers and citizens. See the webapp [live on production](https://todolegal.app/).
 
@@ -8,18 +8,18 @@ TodoLegal makes legal information accessible to lawyers and citizens. See the we
 
 |  | Development | Production |
 |----------|------------ |------------ |
-| Linux                | ✔ | ✔ |
-| MacOS                | ✔ |   |
 | Rails 6              | ✔ | ✔ |
 | PostgreSQL           | ✔ | ✔ |
-| Posrgres Text Search | ✔ | ✔ |
-| Puma                 | ✔ |   |
+| Passenger            | ✔ |   |
+| Github Actions       | ✔ | ✔ |
 | Thin + nginx + SSL   |   | ✔ |
 | Discord bot          |   | ✔ |
 | Stripe               | ✔ | ✔ |
 | Google Storage       | ✔ | ✔ |
 | Elastic Search       | ✔ | ✔ |
-| OAuth IdM            | ✔ | ✔ |
+| OAuth via Doorkeeper | ✔ | ✔ |
+| Linux                | ✔ | ✔ |
+| MacOS                | ✔ |   |
 
 # Code contributions welcome
 

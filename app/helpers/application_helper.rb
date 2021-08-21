@@ -116,6 +116,10 @@ module ApplicationHelper
     Document.where.not(name: "Gaceta").count
   end
 
+  def valid_gazettes_count
+    Document.where.not(publication_number: nil).group_by(&:publication_number).count
+  end
+
   def user_browser_language_is_english
     browser_locale = request.env['HTTP_ACCEPT_LANGUAGE'].try(:scan, /^[a-z]{2}/).try(:first) 
     return browser_locale.eql? "en"

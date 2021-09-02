@@ -18,7 +18,7 @@
                   Para tener una mejor experiencia te recomendamos completar el proceso de creación de cuenta.
                 </label>
                 <div class="form-group" id="bottonsGroup">
-                  <a href="<%= ENV.fetch("VALID_BASE_URL") { "" } %>" id="okButton" class="btn btn-secondary" > Salir </a>
+                  <a href="https://valid.todolegal.app" id="okButton" class="btn btn-secondary" > Salir </a>
                   &nbsp;&nbsp;&nbsp;
                   <button type="button" id="dismissBtn" class="btn btn-primary" data-dismiss="modal">Continuar</button>
                 </div>
@@ -44,14 +44,14 @@
     <div class="row">
       <div class="pricing-heading col-12">
       <h2 class="title">Elige un Plan</h3>
-      <p class="body">Si eliges el plan Pro, puedes pagar mensual o anualmente, cancelar o bajar al plan básico en cualquier momento. Con ambas cuentas puedes acceder a <a href="https://todolegal.app/">TodoLegal</a> y a <a href="https://valid.todolegal.app/">Valid</a>, lo que cambia es el tipo de acceso a la información: limitado o ilimitado.</p>
+      <p class="body">Cualquier plan que elijas lo puedes cambiar cuando quieras.</p>
       </div>
     </div>
 
     <div class="row row-eq-height">
 
       <!-- Pro Tier -->
-        <div class="col-lg-6 card card--dark-100" id="pro-tier">
+        <div class="col-lg-6 card card--dark-100 hide-plan" id="pro-tier">
           <div class="card-body">
             <h5 class="card-title">Pro</h5>
             <h6 class="card-price">$ <%= MONTHLY_PRICE_ANNUALLY %><span class="period">/mensual</span></h6>
@@ -65,7 +65,7 @@
         </div>
 
       <!-- Card - Plan Pro Mensual  -->
-        <div class="col-lg-6 card card--dark-100 hide-plan" id="pro-mensual">
+        <div class="col-lg-6 card card--dark-100" id="pro-mensual">
           <div class="card-body">
             <h5 class="card-title">Pro</h5>
             <h6 class="card-price">$<%= BASE_PRICE_MONTHLY %><span class="period">/mensual</span></h6>
@@ -82,7 +82,7 @@
 
       <!-- Enterprise -->
         <div class="col-lg-6 card card--dark-100 mb-5 mb-lg-0 card--enterprise">
-            <div class="card-body">
+          <div class="card-body">
             <h5 class="card-title">Enterprise</h5>
             <h6 class="card-price">$ <%= ENTERPRISE_PRICE %><span class="period">/mensual</span></h6>
             <small>Para empresas.</small>
@@ -318,14 +318,13 @@
 
     .pricing  .row-eq-height {
       justify-content: space-around;
-      padding-top: 2rem;/* Remove property after 17 Aug */
     }
 
     /* Remove media query after 17 Aug */
     @media (max-width: 375.98px) {
 
     .pricing  .row-eq-height {
-        padding-top: 4rem;
+        padding-top: 1rem;
       }
 
    }

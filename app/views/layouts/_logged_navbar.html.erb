@@ -1,85 +1,59 @@
 
 <nav class="navbar navbar-expand-lg navbar-light  sticky-top" id="topNavbar">
-    <a href="/" class="navbar-brand text-primary" >
-        <img  src="/img/top_navbar/top_navbar.svg" alt="Card image cap" class="logo img-fluid">
-         &nbsp;&nbsp;
-        <img src="/img/top_navbar/Logo-letras-white.svg" alt="Card image cap" class="todolegal img-fluid">
-    </a>
-    <ul class="navbar-nav" >
-        <div class="btn-group">
-            <button type="button" class="btn btn-primary btn-lg btn-avatar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border-radius: 50%;"  data-display="static" id="menu-botton">
-                <% if current_user.first_name %>
-                    <%= current_user.first_name[0]%>
-                <% end %>
-            </button>
-            <div class="dropdown-menu dropdown-menu-right">
-                <div class="name-container">
-                <div class="circle btn-avatar btn-avatar-large">
-                    <% if current_user.first_name.present? && current_user.last_name.present? %>
-                        <%= current_user.first_name[0].upcase + current_user.last_name[0].upcase%>
+    <section class="d-inline-flex">
+        <a href="/" class="navbar-brand text-primary" >
+            <img  src="/img/top_navbar/top_navbar.svg" alt="Card image cap" class="logo img-fluid">
+            &nbsp;&nbsp;
+        </a>
+        <a href="https://valid.todolegal.app" class="valid--link"> 
+            <img  src="/img/top_navbar/valid.png" alt="Card image cap" class="valid--logo">
+            <span> Ve a Valid </span> 
+        </a>
+    </section>
+    <% if current_user_is_admin || current_user_is_editor  %>
+        <ul class="navbar-nav" >
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary btn-lg btn-avatar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border-radius: 50%;"  data-display="static" id="menu-botton">
+                    <% if current_user.first_name %>
+                        <%= current_user.first_name[0]%>
                     <% end %>
-                </div>
-                <% if current_user.first_name && current_user.last_name %>
-                    <%= current_user.first_name + " " + current_user.last_name %>
-                <% end %>
-                <div>
-                    
-                </div>
-                </div>
-
-                <a href="/users/edit" class="dropdown-item">
-                <i class="fas fa-user" aria-hidden="true"></i>
-                Tu cuenta</a>
-                <a href="/invite_friends" class="dropdown-item">
-                <i class="fas fa-gift" aria-hidden="true"></i>
-                Invitar amigos</a>
-
-                <% if current_user_is_pro %>
-                    <!--
-                    <form method="POST" action="/create_customer_portal_session">
-                        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-                        <input type="submit" class="btn btn-primary" value="Manejar Suscripción Pro">
-                    </form>-->
-                    <a href="/users/edit" class="dropdown-item dropdown-item--suscription">
-                    
-                    <i class="fas fa-star" aria-hidden="true"></i>
-                    <div class="suscription-type">
-                    <small>Plan activo</small> <span>Pro</span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <div class="name-container">
+                        <div class="circle btn-avatar btn-avatar-large">
+                            <% if current_user.first_name.present? && current_user.last_name.present? %>
+                                <%= current_user.first_name[0].upcase + current_user.last_name[0].upcase%>
+                            <% end %>
+                        </div>
+                        <% if current_user.first_name && current_user.last_name %>
+                            <%= current_user.first_name + " " + current_user.last_name %>
+                        <% end %>
                     </div>
-                    </a>
-                <% else %>
-                    <a href="/pricing" class="dropdown-item">
-                    <i class="fas fa-star" aria-hidden="true"></i>
-                    Precios</a>
-                <% end %>
-
-                <% if current_user_is_admin %>
-                    <button class="dropdown-item disabled font-weight-bold " type="button" >
-                        Administrar
-                    </button>
-                    <div class="dropdown-divider"></div>
-                    <%= link_to('-> Usuarios', admin_users_path, class:"dropdown-item") %>
-                    <%= link_to('-> CMS(TL)', laws_path, class:"dropdown-item")%>
-                    <%= link_to('-> CMS(Valid)', documents_path, class:"dropdown-item")%>
-                    <%= link_to('-> Gacetas', gazettes_path, class:"dropdown-item")%>
-                <% end %>
-                <% if current_user_is_editor %>
-                    <div class="dropdown-divider"></div>
-                    <% if is_editor_mode_enabled %>
-                        <a href="/admin/disable_edit_mode" class="dropdown-item">
-                        Deshabilitar modo edición</a>
-                    <% else %>
-                        <a href="/admin/enable_edit_mode" class="dropdown-item">
-                        Habilitar modo edición</a>
+                    <% if current_user_is_admin %>
+                        <%= link_to('Usuarios', admin_users_path, class:"dropdown-item") %>
+                        <%= link_to('CMS(TL)', laws_path, class:"dropdown-item")%>
+                        <%= link_to('CMS(Valid)', documents_path, class:"dropdown-item")%>
+                        <%= link_to('Gacetas', gazettes_path, class:"dropdown-item")%>
                     <% end %>
-                <% end %>
-                <%= link_to(destroy_user_session_path, {class: "dropdown-item", method: 'delete' }) do %>
-                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
-                    Cerrar sesión
-                <% end %>
+
+                    <% if current_user_is_editor %>
+                        <div class="dropdown-divider"></div>
+                        <% if is_editor_mode_enabled %>
+                            <a href="/admin/disable_edit_mode" class="dropdown-item">
+                            Deshabilitar modo edición</a>
+                        <% else %>
+                            <a href="/admin/enable_edit_mode" class="dropdown-item">
+                            Habilitar modo edición</a>
+                        <% end %>
+                    <% end %>
+                    <%= link_to(destroy_user_session_path, {class: "dropdown-item", method: 'delete' }) do %>
+                        <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                        Cerrar sesión
+                    <% end %>
+                </div>
             </div>
-        </div>
-    </ul>
+        </ul>
+    <% end %>
 </nav>
 
 <style>
@@ -158,6 +132,20 @@
         line-height: .3rem;
         display: block;
         padding-top: .5rem;
+    }
+    .valid--link{
+        align-self: center;
+        color: white;
+    }
+
+    .valid--link:hover{
+        color: white;
+        text-decoration: none;
+    }
+
+    .valid--logo{
+        padding-bottom: 2%;
+        width: 15%;
     }
 
     @media only screen and (max-width: 767.98px){

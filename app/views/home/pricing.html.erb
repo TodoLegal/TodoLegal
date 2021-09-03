@@ -4,29 +4,17 @@
 
 <section class="pricing">
   <% if @is_onboarding %>
-    <a href="/" class="back-image" data-toggle="modal" data-target="#cancelPricingModal">
-    <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="image">
-    </a>
+    <div style="text-align:center;">
+      <a class="back-image" data-toggle="modal" data-target="#cancelModalTodolegal">
+        <img class="image" border="0" alt="Logo TodoLegal" src="/img/Icon-Todolegal-gray20px.svg"/>
+      </a>
+      <a class="back-image" data-toggle="modal" data-target="#cancelModalValid">
+        <img class="image" border="0" alt="Logo Valid" src="/img/Icon-Valid-gray20px.svg"/>
+      </a>
+    </div>
 
-     <!-- Start Cancel Modal -->
-        <div class="modal fade" id="cancelPricingModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalCenterTitle" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-body">
-                <h5 class="modal-title" id="cancelModalLongTitle">¿Estás seguro que deseas salir?</h5>
-                <label id="labelBasico">
-                  Para tener una mejor experiencia te recomendamos completar el proceso de creación de cuenta.
-                </label>
-                <div class="form-group" id="bottonsGroup">
-                  <%= link_to 'Salir', root_path, id:"okButton", class:"btn btn-secondary" %>
-                  &nbsp;&nbsp;&nbsp;
-                  <button type="button" id="dismissBtn" class="btn btn-primary" data-dismiss="modal">Continuar</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!--End Cancel modal -->
+    <%= render "cancel_modal", id: "cancelModalTodolegal", cancel_url: root_path %>
+    <%= render "cancel_modal", id: "cancelModalValid", cancel_url: "https://valid.todolegal.app" %>
 
     <% if @user_just_registered %>
       <div class="alert alert-success alert-dismissible fade show" role="alert" id="savedArticle"> 
@@ -303,7 +291,6 @@
       height: 12vh;
       max-height: 110px;
       margin: 2vh auto 0;
-      display: block;
     }
 
     #btnDisable{

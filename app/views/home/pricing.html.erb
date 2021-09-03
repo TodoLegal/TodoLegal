@@ -4,29 +4,17 @@
 
 <section class="pricing">
   <% if @is_onboarding %>
-    <a href="/" class="back-image" data-toggle="modal" data-target="#cancelPricingModal">
-    <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="image">
-    </a>
+    <div style="text-align:center;">
+      <a class="back-image" data-toggle="modal" data-target="#cancelModalTodolegal">
+        <img class="image" border="0" alt="Logo TodoLegal" src="/img/Icon-Todolegal-gray20px.svg"/>
+      </a>
+      <a class="back-image" data-toggle="modal" data-target="#cancelModalValid">
+        <img class="image" border="0" alt="Logo Valid" src="/img/Icon-Valid-gray20px.svg"/>
+      </a>
+    </div>
 
-     <!-- Start Cancel Modal -->
-        <div class="modal fade" id="cancelPricingModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalCenterTitle" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-body">
-                <h5 class="modal-title" id="cancelModalLongTitle">¿Estás seguro que deseas salir?</h5>
-                <label id="labelBasico">
-                  Para tener una mejor experiencia te recomendamos completar el proceso de creación de cuenta.
-                </label>
-                <div class="form-group" id="bottonsGroup">
-                  <%= link_to 'Salir', root_path, id:"okButton", class:"btn btn-secondary" %>
-                  &nbsp;&nbsp;&nbsp;
-                  <button type="button" id="dismissBtn" class="btn btn-primary" data-dismiss="modal">Continuar</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!--End Cancel modal -->
+    <%= render "cancel_modal", id: "cancelModalTodolegal", cancel_url: root_path %>
+    <%= render "cancel_modal", id: "cancelModalValid", cancel_url: "https://valid.todolegal.app" %>
 
     <% if @user_just_registered %>
       <div class="alert alert-success alert-dismissible fade show" role="alert" id="savedArticle"> 
@@ -44,57 +32,55 @@
     <div class="row">
       <div class="pricing-heading col-12">
       <h2 class="title">Elige un Plan</h3>
-      <p class="body">Si eliges el plan Pro, puedes pagar mensual o anualmente, cancelar o bajar al plan básico en cualquier momento. Con ambas cuentas puedes acceder a <a href="https://todolegal.app/">TodoLegal</a> y a <a href="https://valid.todolegal.app/">Valid</a>, lo que cambia es el tipo de acceso a la información: limitado o ilimitado.</p>
+      <p class="body">Cualquier plan que elijas lo puedes cambiar cuando quieras.</p>
       </div>
     </div>
 
     <div class="row row-eq-height">
-      <% if !@activate_pro_account %>
-      <!-- Free Tier -->
-        <div class="col-lg-6 card card--dark-100 mb-5 mb-lg-0 card--basic">
-          <div class="card-body">
-            <h5 class="card-title">Básico</h5>
-            <h6 class="card-price">Gratis</h6>
-            <%= render 'basic_pricing_description' %>
-          </div>
-          <div class="card-bottom">
-            <% if @return_to %>
-              <%= link_to "Continuar con Plan Básico", @return_to, params: {pricing_onboarding: @pricing_onboarding}, class:"btn btn-block btn-outline-primary" %>
-            <% else %>
-              <%= link_to "Continuar con Plan Básico", @select_basic_plan_path, params: {pricing_onboarding: @pricing_onboarding}, class:"btn btn-block btn-outline-primary" %>
-            <% end %>
-          </div>
-        </div>
-      <% end %>
 
       <!-- Pro Tier -->
-        <div class="col-lg-6 card card--dark-100" id="pro-tier">
+        <div class="col-lg-6 card card--dark-100 hide-plan" id="pro-tier">
           <div class="card-body">
-            <h5 class="card-title">Enterprise</h5>
-            <h6 class="card-price">$ <%= ENTERPRISE_PRICE %><span class="period">/mensual</span></h6>
-            <small>Para empresas.</small>
+            <h5 class="card-title">Pro</h5>
+            <h6 class="card-price">$ <%= MONTHLY_PRICE_ANNUALLY %><span class="period">/mensual</span></h6>
+            <small>Facturado a <strong>$<%= BASE_PRICE_ANNUALLY %></strong> anual -50%</small>
             <%= render 'pro_pricing_description' %>
           </div>
           <div class="card-bottom">
-            <a href="https://calendly.com/melissa-castro/30min" class="btn btn-block btn-primary"> Programa una llamada </a>
-            <p class="text-center py-2 change-plan-link" onclick="changePlan(2)">Cambiar a Pro</p>
+            <%= button_to "Elegir Plan Pro", @select_pro_plan_path, method: :get, params: {is_onboarding: @is_onboarding, pricing_onboarding: @pricing_onboarding, go_to_law: @go_to_law}, class:"btn btn-block btn-primary"%>
+            <p class="text-center py-2 change-plan-link" onclick="changePlan(2)">Cambiar a pago mensual</p>
           </div>
-      </div>
+        </div>
 
       <!-- Card - Plan Pro Mensual  -->
-        <div class="col-lg-6 card card--dark-100 hide-plan" id="pro-mensual">
+        <div class="col-lg-6 card card--dark-100" id="pro-mensual">
           <div class="card-body">
             <h5 class="card-title">Pro</h5>
             <h6 class="card-price">$<%= BASE_PRICE_MONTHLY %><span class="period">/mensual</span></h6>
-            <small>Para usuarios individuales.</small>
+            <small>Podrás ahorrar <strong>50%</strong> si eliges el
              <!-- Agregar el switch de mensual a anual tambien  -->
+             <label class="link" onclick="changePlan(1)">pago anual</label>.</small>
              <%= render 'pro_pricing_description' %>
           </div>
           <div class="card-bottom">
             <%= button_to "Elegir Plan Pro", @select_pro_plan_path, method: :get, params: {is_monthly: true, is_onboarding: @is_onboarding, pricing_onboarding: @pricing_onboarding, go_to_law: @go_to_law}, class:"btn btn-block btn-primary"%>
-            <p class="text-center py-2 change-plan-link" onclick="changePlan(1)">Cambiar a Enterprise</p>
+            <p class="text-center py-2 change-plan-link" onclick="changePlan(1)">Cambiar a pago anual</p>
           </div>
         </div>
+
+      <!-- Enterprise -->
+        <div class="col-lg-6 card card--dark-100 mb-5 mb-lg-0 card--enterprise">
+          <div class="card-body">
+            <h5 class="card-title">Enterprise</h5>
+            <h6 class="card-price">$ <%= ENTERPRISE_PRICE %><span class="period">/mensual</span></h6>
+            <small>Para empresas.</small>
+            <%= render 'enterprise_pricing_description' %>
+          </div>
+          <div class="card-bottom">
+            <a href="https://calendly.com/melissa-castro/30min" class="btn btn-block btn-primary"> Programa una llamada </a>
+          </div>
+        </div>
+
       </div>
       </div>
     </div>
@@ -235,7 +221,7 @@
      .card.col-lg-6 {
        margin: auto 1rem;
      }
-     .card--basic {
+     .card--enterprise {
         margin-bottom: 3rem;
         border: 1px solid red;
       }
@@ -303,7 +289,6 @@
       height: 12vh;
       max-height: 110px;
       margin: 2vh auto 0;
-      display: block;
     }
 
     #btnDisable{
@@ -320,14 +305,13 @@
 
     .pricing  .row-eq-height {
       justify-content: space-around;
-      padding-top: 2rem;/* Remove property after 17 Aug */
     }
 
     /* Remove media query after 17 Aug */
     @media (max-width: 375.98px) {
 
     .pricing  .row-eq-height {
-        padding-top: 4rem;
+        padding-top: 1rem;
       }
 
    }

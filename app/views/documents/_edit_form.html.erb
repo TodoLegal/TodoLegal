@@ -140,7 +140,7 @@
     <% end %> 
           <div class="col-md-3">
             <% if @document.original_file.attached? %>
-              <%= button_to(@document.original_file, {class:"btn btn-link", method: :get}) do %>
+              <%= button_to(url_for(@document.original_file), {class:"btn btn-link", method: :get}) do %>
                 Descargar archivo
               <% end %>
             <% end %>

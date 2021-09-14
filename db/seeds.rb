@@ -94,7 +94,7 @@ permissions_pro = Permission.create(name: "Pro")
 
 law_demo = Law.create({ name: "Demo", creation_number: "2018-04", law_access_id: law_access_todos.id })
 LawTag.create({law_id: law_demo.id, tag_id: Tag.find_by_name("Especiales y Otras").id})
-LawTag.create({law_id: law_demo.id, tag_id: Tag.find_by_name("Resolucion").id})
+LawTag.create({law_id: law_demo.id, tag_id: Tag.find_by_name("Resolución").id})
 LawTag.create({law_id: law_demo.id, tag_id: Tag.find_by_name("Congreso Nacional").id})
 LawTag.create({law_id: law_demo.id, tag_id: Tag.find_by_name("Circular").id})
 LawTag.create({law_id: law_demo.id, tag_id: Tag.find_by_name("Sentencia").id})

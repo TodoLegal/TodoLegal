@@ -10,6 +10,8 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
     if params[:access_token]
       user = User.find_by_id(doorkeeper_token.resource_owner_id)
       #user_id_str = user.id.to_s
+    elsif current_user
+      user = current_user
     end
 
     if user && current_user_type(user) == "pro"

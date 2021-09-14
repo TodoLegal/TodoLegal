@@ -231,7 +231,7 @@ class DocumentsController < ApplicationController
         filename: document.name + ".pdf",
         content_type: "application/pdf"
       )
-      set_content_disposition_attachment new_document.original_file.key, new_document.name + ".pdf"
+      set_content_disposition_attachment new_document.original_file.key, get_document_title(new_document) + ".pdf"
       puts "File uploaded"
     end
     json_data["errors"].each do |error|

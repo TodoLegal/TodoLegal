@@ -291,4 +291,16 @@ protected
   def isWordInText word, text
     return /[^a-zA-Z0-9]#{word}[^a-zA-Z0-9]/.match(text)
   end
+
+  def get_document_title document
+    if !document.name.blank? and !document.issue_id.blank?
+      return document.name + ", " + document.issue_id
+    elsif !document.name.blank? and document.issue_id.blank?
+      return document.name
+    elsif document.name.blank? and !document.issue_id.blank?
+      return document.issue_id
+    else
+      return "<vacío>"
+    end
+  end
 end

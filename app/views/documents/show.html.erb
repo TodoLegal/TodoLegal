@@ -70,7 +70,7 @@
           Editar
       <% end %>
       <% if @document.original_file.attached? %>
-        <%= button_to(@document.original_file, {class:"btn btn-outline-primary", method: :get}) do %>
+        <%= button_to(url_for(@document.original_file), {class:"btn btn-outline-primary", method: :get}) do %>
           Descargar archivo
         <% end %>
       <% end %>

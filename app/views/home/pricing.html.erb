@@ -63,14 +63,18 @@
           <div class="card-body">
             <h5 class="card-title">Pro</h5>
             <h6 class="card-price">$<%= BASE_PRICE_MONTHLY %><span class="period">/mensual</span></h6>
+            <!-- 
             <small>Podrás ahorrar <strong>50%</strong> si eliges el
-             <!-- Agregar el switch de mensual a anual tambien  -->
+             //Agregar el switch de mensual a anual tambien
              <label class="link" onclick="changePlan(1)">pago anual</label>.</small>
+             -->
              <%= render 'pro_pricing_description' %>
           </div>
           <div class="card-bottom">
             <%= button_to "Elegir Plan Pro", @select_pro_plan_path, method: :get, params: {is_monthly: true, is_onboarding: @is_onboarding, pricing_onboarding: @pricing_onboarding, go_to_law: @go_to_law}, class:"btn btn-block btn-primary"%>
+            <!-- 
             <p class="text-center py-2 change-plan-link" onclick="changePlan(1)">Cambiar a pago anual</p>
+            -->
           </div>
         </div>
 

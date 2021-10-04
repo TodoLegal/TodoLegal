@@ -21,7 +21,7 @@
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
         </button>
-          La información de perfil ha sido guardada, procede a elegir un plan para tu cuenta.
+          La información de perfil ha sido guardada, elige un plan para tu cuenta.
       </div>
     <% end %>
   <% end %>
@@ -32,7 +32,13 @@
     <div class="row">
       <div class="pricing-heading col-12">
       <h2 class="title">Elige un Plan</h3>
-      <p class="body">Cualquier plan que elijas lo puedes cambiar cuando quieras.</p>
+      <p class="body">Valid es una herramienta para abogados y equipos legales que quieren optimizar sus procesos de investigación y mantenerse informados de los cambios mas relevantes.</p>
+        
+ <p class="body">Con Inteligencia Artificial y Motores de Búsqueda, facilitamos el acceso a información legal contenida en La Gaceta. Puedes encontrar documentos por número de publicación o tema, y descargar fácilmente los archivos. Cada nueva Gaceta de Honduras la puedes encontrar en Valid.</p>
+        
+ <p class="body">Conoce nuestros planes, y elige el que mas te sirva.  
+
+        </p>
       </div>
     </div>
 
@@ -57,14 +63,18 @@
           <div class="card-body">
             <h5 class="card-title">Pro</h5>
             <h6 class="card-price">$<%= BASE_PRICE_MONTHLY %><span class="period">/mensual</span></h6>
+            <!-- 
             <small>Podrás ahorrar <strong>50%</strong> si eliges el
-             <!-- Agregar el switch de mensual a anual tambien  -->
+             //Agregar el switch de mensual a anual tambien
              <label class="link" onclick="changePlan(1)">pago anual</label>.</small>
+             -->
              <%= render 'pro_pricing_description' %>
           </div>
           <div class="card-bottom">
             <%= button_to "Elegir Plan Pro", @select_pro_plan_path, method: :get, params: {is_monthly: true, is_onboarding: @is_onboarding, pricing_onboarding: @pricing_onboarding, go_to_law: @go_to_law}, class:"btn btn-block btn-primary"%>
+            <!-- 
             <p class="text-center py-2 change-plan-link" onclick="changePlan(1)">Cambiar a pago anual</p>
+            -->
           </div>
         </div>
 
@@ -73,7 +83,9 @@
           <div class="card-body">
             <h5 class="card-title">Enterprise</h5>
             <h6 class="card-price">$ <%= ENTERPRISE_PRICE %><span class="period">/mensual</span></h6>
+            <!-- 
             <small>Para empresas.</small>
+            -->
             <%= render 'enterprise_pricing_description' %>
           </div>
           <div class="card-bottom">

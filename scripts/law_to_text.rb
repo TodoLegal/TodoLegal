@@ -9,6 +9,8 @@ arg_directory = ARGV[1]
 
 @law = Law.find_by_id(arg_id)
 
+puts "Exporting: " @law.name
+
 @books = @law.books.order(:position)
 @titles = @law.titles.order(:position)
 @chapters = @law.chapters.order(:position)
@@ -24,25 +26,43 @@ get_law_stream_return_values = application_controller.get_law_stream @law, @book
 @result_go_to_article = get_law_stream_return_values[2]
 @has_articles_only = get_law_stream_return_values[3]
 
-puts @stream.count
-
 result = ""
 
 @stream.each do |s|
     if s.instance_of? Book
-        result+= "Libro " + s.number + ": " + s.name + "\n"
+        result+= "Libro "
+        result+= s.number if s.number
+        result+= ": "
+        result+= s.name if s.name
+        result+= "\n"
     end
     if s.instance_of? Title
-        result+= "Título " + s.number + ": " + s.name + "\n"
+        result+= "Título "
+        result+= s.number if s.number
+        result+= ": "
+        result+= s.name if s.name
+        result+= "\n"
     end
     if s.instance_of? Chapter
-        result+= "Capítulo " + s.number + ": " + s.name + "\n"
+        result+= "Capítulo "
+        result+= s.number if s.number
+        result+= ": "
+        result+= s.name if s.name
+        result+= "\n"
     end
     if s.instance_of? Section
-        result+= "Sección " + s.number + ": " + s.name + "\n"
+        result+= "Sección "
+        result+= s.number if s.number
+        result+= ": "
+        result+= s.name if s.name
+        result+= "\n"
     end
     if s.instance_of? Subsection
-        result+= "Subsección " + s.number + ": " + s.name + "\n"
+        result+= "Subsección "
+        result+= s.number if s.number
+        result+= ": "
+        result+= s.name if s.name
+        result+= "\n"
     end
     if s.instance_of? Article
         result+= "Artículo " + s.number + "\n" + s.body + "\n"

@@ -9,7 +9,7 @@ arg_directory = ARGV[1]
 
 @law = Law.find_by_id(arg_id)
 
-puts "Exporting: " @law.name
+puts "Exporting: " + @law.name
 
 @books = @law.books.order(:position)
 @titles = @law.titles.order(:position)
@@ -72,5 +72,5 @@ end
 @law.materia_names.each do |law_materia|
     FileUtils.mkdir_p(arg_directory)
     FileUtils.mkdir_p(arg_directory + law_materia)
-    File.open(arg_directory + law_materia + "/" + @law.name, 'w') { |file| file.write(result) }
+    File.open(arg_directory + law_materia + "/" + @law.name[0, 20], 'w') { |file| file.write(result) }
 end

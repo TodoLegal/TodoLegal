@@ -34,7 +34,10 @@ class DocumentsController < ApplicationController
 
   # GET /documents/1/edit
   def edit
-    @document_type = @document.name
+    @document_type = nil
+    if @document.document_type
+      @document_type = @document.document_type.name
+    end
     @documents_count = Document.where(publication_number: @document.publication_number).where.not(position: nil).count
     if @document.position
       @next_document = get_next_document @document
@@ -58,6 +61,7 @@ class DocumentsController < ApplicationController
   # POST /documents.json
   def create
     @document = Document.new(document_params)
+    @document.document_type_id = DocumentType.find_by_name("Sentencia").id
     respond_to do |format|
       if @document.save
         # download file
@@ -77,6 +81,10 @@ class DocumentsController < ApplicationController
             $discord_bot.send_message($discord_bot_channel_notifications, "Nueva gaceta en Valid! " + @document.publication_number + " :scroll:")
           end
           format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido una gaceta.' }
+        elsif params["document"]["auto_process_type"] == "judgement"
+          @document.document_type_id = DocumentType.find_by_name("Sentencia").id
+          @document.save
+          format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido una sentencia.' }
         else
           format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido un documento.' }
         end
@@ -274,5 +282,14 @@ class DocumentsController < ApplicationController
       if tag
         IssuerDocumentTag.create(document_id: document_id, tag_id: tag.id)
       end
+    end
+
+    def get_doc_type auto_process_type
+      if auto_process_type == "slice" or auto_process_type == "process"
+        return "Gaceta"
+      elsif auto_process_type == "judgement"
+        return "Sentencia"
+      end
+      return "Ninguno"
     end
 end

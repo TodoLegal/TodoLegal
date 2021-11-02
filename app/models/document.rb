@@ -6,6 +6,8 @@ class Document < ApplicationRecord
   has_many :document_tags, :dependent => :destroy
   has_many :tags, through: :document_tags, :dependent => :destroy
 
+  belongs_to :document_type
+
   has_one_attached :original_file
 
   pg_search_scope :search_by_all,

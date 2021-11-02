@@ -4,10 +4,9 @@
 dir_path = ARGV[0]
 
 Dir.foreach(dir_path) do |fname|
-    break
     document = Document.where(name:"Gaceta", publication_number: fname).first
     if document
-        puts document.issue_id
+        puts "Reuploading: " + document.publication_number
         document.original_file.attach(
             io: File.open(
                 dir_path + fname
@@ -15,5 +14,7 @@ Dir.foreach(dir_path) do |fname|
             filename: document.name + ".pdf",
             content_type: "application/pdf"
         )
+    else
+        puts fname + " not found."
     end
 end

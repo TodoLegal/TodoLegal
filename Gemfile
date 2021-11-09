@@ -30,10 +30,12 @@ gem 'capistrano-rbenv', '~> 2.1', '>= 2.1.4'
 gem 'capistrano3-nginx'
 gem 'capistrano-bundler'
 gem 'doorkeeper'
+#Support for NewRelic
+gem 'newrelic_rpm'
+
 # For capistrano
 gem 'ed25519', '>= 1.2', '< 2.0'
 gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.1', '>= 6.1.3'
 # Use sqlite3 as the database for Active Record

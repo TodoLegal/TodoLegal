@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_17_010412) do
+ActiveRecord::Schema.define(version: 2021_11_02_030307) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -44,6 +44,13 @@ ActiveRecord::Schema.define(version: 2021_07_17_010412) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "alternative_institution_names", force: :cascade do |t|
+    t.string "name"
+    t.string "alternative_name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "alternative_tag_names", force: :cascade do |t|
@@ -97,6 +104,12 @@ ActiveRecord::Schema.define(version: 2021_07_17_010412) do
     t.index ["document_id", "tag_id"], name: "index_document_tags_on_document_id_and_tag_id", unique: true
   end
 
+  create_table "document_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "documents", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
@@ -111,12 +124,27 @@ ActiveRecord::Schema.define(version: 2021_07_17_010412) do
     t.integer "end_page"
     t.integer "position"
     t.string "issue_id"
+    t.integer "document_type_id"
   end
 
   create_table "email_subscriptions", force: :cascade do |t|
     t.string "email"
     t.string "security_key"
     t.string "status"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "institution_alternative_names", force: :cascade do |t|
+    t.string "name"
+    t.string "alternative_name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "institution_tag_names", force: :cascade do |t|
+    t.integer "tag_id"
+    t.string "alternative_name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -251,6 +279,13 @@ ActiveRecord::Schema.define(version: 2021_07_17_010412) do
     t.string "name"
     t.string "number"
     t.integer "law_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "tokens", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "token"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

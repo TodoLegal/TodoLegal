@@ -7,7 +7,7 @@ puts "Loading.."
 puts file_path
 document_controller = DocumentsController.new
 @document = Document.create
-document_controller.run_process_gazette_script @document, '"' + file_path + '"'
+document_controller.slice_gazette @document, '"' + file_path + '"'
 puts "A"
 @document.original_file.attach(
     io: File.open(

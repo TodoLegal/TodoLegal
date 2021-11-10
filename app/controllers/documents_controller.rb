@@ -61,13 +61,14 @@ class DocumentsController < ApplicationController
   # POST /documents.json
   def create
     @document = Document.new(document_params)
-    @document.document_type_id = DocumentType.find_by_name("Sentencia").id
+    @document.document_type_id = get_document_type(params["document"]["auto_process_type"])
     respond_to do |format|
       if @document.save
         # download file
         bucket = get_bucket
         file = bucket.file @document.original_file.key
         if params["document"]["auto_process_type"] == "slice"
+          get_gazette_document_type_id
           file.download "tmp/gazette.pdf"
           slice_gazette @document, Rails.root.join("tmp") + "gazette.pdf"
           if $discord_bot
@@ -82,8 +83,6 @@ class DocumentsController < ApplicationController
           end
           format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido una gaceta.' }
         elsif params["document"]["auto_process_type"] == "judgement"
-          @document.document_type_id = DocumentType.find_by_name("Sentencia").id
-          @document.save
           format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido una sentencia.' }
         else
           format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido un documento.' }
@@ -199,6 +198,7 @@ class DocumentsController < ApplicationController
         short_description: short_description,
         description: long_description,
         full_text: cleanText(file["full_text"]),
+        document_type_id: get_part_document_type_id(name),
         start_page: file["start_page"],
         end_page: file["end_page"],
         position: file["position"])
@@ -284,12 +284,58 @@ class DocumentsController < ApplicationController
       end
     end
 
-    def get_doc_type auto_process_type
-      if auto_process_type == "slice" or auto_process_type == "process"
-        return "Gaceta"
+    def get_document_type auto_process_type
+      if !auto_process_type
+        return DocumentType.find_by_name("Ninguno").id
+      elsif auto_process_type == "slice" or auto_process_type == "process"
+        return get_gazette_document_type_id
       elsif auto_process_type == "judgement"
-        return "Sentencia"
+        return get_sentence_document_type_id
       end
-      return "Ninguno"
+      return DocumentType.find_by_name("Ninguno").id
+    end
+
+    def get_empty_document_type_id
+      document_type = DocumentType.find_by_name("Ninguno")
+      if document_type
+        return document_type.id
+      end
+      return nil
+    end
+
+    def get_gazette_document_type_id
+      document_type = DocumentType.find_by_name("Gaceta")
+      if document_type
+        return document_type.id
+      end
+      return nil
+    end
+
+    def get_sentence_document_type_id
+      document_type = DocumentType.find_by_name("Sentencia")
+      if document_type
+        return document_type.id
+      end
+      return nil
+    end
+
+    def get_part_document_type_id name
+      if name == "Avisos Legales"
+        document_type = DocumentType.find_by_name("Avisos Legales")
+        if document_type
+          return document_type.id
+        end
+      elsif name == "Marcas de Fábrica"
+        document_type = DocumentType.find_by_name("Marcas de Fábrica")
+        if document_type
+          return document_type.id
+        end
+      else
+        document_type = DocumentType.find_by_name("Sección de Gaceta")
+        if document_type
+          return document_type.id
+        end
+      end
+      return nil
     end
 end

@@ -32,5 +32,6 @@ jobs:
         enc_rsa_key_pth: config/deploy_id_rsa_enc_test
       env:
         SERVER_IP: ${{ secrets.TEST_SERVER_IP }}
+        SERVER_PORT: ${{ secrets.TEST_SERVER_PORT }}
         CAPISTRANO_BRANCH: master
         RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}

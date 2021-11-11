@@ -36,6 +36,8 @@ gem 'newrelic_rpm'
 # For capistrano
 gem 'ed25519', '>= 1.2', '< 2.0'
 gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
+gem 'capistrano-env_config'
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.1', '>= 6.1.3'
 # Use sqlite3 as the database for Active Record

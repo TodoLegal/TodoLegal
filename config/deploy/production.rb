@@ -8,11 +8,11 @@
 # server "db.example.com", user: "deploy", roles: %w{db}
 set :branch, ENV["CAPISTRANO_BRANCH"]
 server ENV["SERVER_IP"], user: 'deploy', roles: %w{app db web}
-set :ssh_options, {
-    forward_agent: true,
-    port: ENV["SERVER_PORT"],
-    user: 'deploy'
-}
+#set :ssh_options, {
+#    forward_agent: true,
+#    port: ENV["SERVER_PORT"],
+#    user: 'deploy'
+#}
 
 # role-based syntax
 # ==================

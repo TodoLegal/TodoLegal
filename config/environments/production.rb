@@ -7,6 +7,7 @@ if !ENV['EXCEPTION_BOT_TOKEN'].blank?
 end
 $discord_bot_channel_code = 717989750421848115
 $discord_bot_channel_notifications = 742414195928203296
+$discord_bot_document_upload = 908151486234628186
 
 module ExceptionNotifier
   class DiscordNotifier

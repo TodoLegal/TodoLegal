@@ -72,14 +72,14 @@ class DocumentsController < ApplicationController
           file.download "tmp/gazette.pdf"
           slice_gazette @document, Rails.root.join("tmp") + "gazette.pdf"
           if $discord_bot
-            $discord_bot.send_message($discord_bot_channel_notifications, "Nueva gaceta seccionada en Valid! " + @document.publication_number + " :scroll:")
+            $discord_bot.send_message($discord_bot_document_upload, "Nueva gaceta seccionada en Valid! " + @document.publication_number + " :scroll:")
           end
           format.html { redirect_to gazette_path(@document.publication_number), notice: 'La gaceta se ha partido exitósamente.' }
         elsif params["document"]["auto_process_type"] == "process"
           file.download "tmp/gazette.pdf"
           process_gazette @document, Rails.root.join("tmp") + "gazette.pdf"
           if $discord_bot
-            $discord_bot.send_message($discord_bot_channel_notifications, "Nueva gaceta en Valid! " + @document.publication_number + " :scroll:")
+            $discord_bot.send_message($discord_bot_document_upload, "Nueva gaceta en Valid! " + @document.publication_number + " :scroll:")
           end
           format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido una gaceta.' }
         elsif params["document"]["auto_process_type"] == "judgement"

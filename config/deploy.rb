@@ -28,6 +28,18 @@ namespace :deploy do
 end
 
 
+namespace :link_relic do
+  desc 'Setup New Relic'
+  task :link_relic do
+    on roles(:web) do
+      execute :ln, '-s /home/deploy/newrelic.yml /home/deploy/TodoLegal/current/config'
+    end
+  end
+end
+
+after "deploy", "link_relic:link_relic"
+
+# after 'deploy:foo', 'deploy:link_relic'
 
 
 

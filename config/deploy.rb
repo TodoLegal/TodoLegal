@@ -25,9 +25,9 @@ namespace :deploy do
       end
     end
   end
-  task :link_relic, :roles => :app do
-    run "ln -s /home/deploy/newrelic.yml /home/deploy/TodoLegal/current/config"
-  end
+  #task :link_relic, :roles => :app do
+  #  run "ln -s /home/deploy/newrelic.yml /home/deploy/TodoLegal/current/config"
+  #end
 end
 
 # after 'deploy:foo', 'deploy:link_relic'

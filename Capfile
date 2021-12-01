@@ -1,3 +1,6 @@
+require 'capistrano/env_config'
+
+
 # Load DSL and set up stages
 require "capistrano/setup"
 

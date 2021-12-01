@@ -144,13 +144,27 @@ class DocumentsController < ApplicationController
   def run_slice_gazette_script document, document_pdf_path
     puts ">run_slice_gazette_script called"
     python_return_value = `python3 ~/GazetteSlicer/slice_gazette.py #{ document_pdf_path } '#{ Rails.root.join("public", "gazettes") }' '#{document.id}'`
-    return JSON.parse(python_return_value)
+    begin
+      result = JSON.parse(python_return_value)
+      return result
+    rescue
+      document.description = "Error: on slice gazette"
+      document.save
+      return {}
+    end
   end
 
   def process_gazette document, document_pdf_path
     puts ">process_gazette called"
     python_return_value = `python3 ~/GazetteSlicer/process_gazette.py #{ document_pdf_path }`
-    json_data = JSON.parse(python_return_value)
+    json_data = {}
+    begin
+      json_data = JSON.parse(python_return_value)
+    rescue
+      document.description = "Error: on process gazette"
+      document.save
+      return
+    end
     document.name = "Gaceta"
     document.issue_id = json_data["gazette"]["number"]
     document.publication_number = json_data["gazette"]["number"]
@@ -239,7 +253,7 @@ class DocumentsController < ApplicationController
         filename: document.name + ".pdf",
         content_type: "application/pdf"
       )
-      set_content_disposition_attachment new_document.original_file.key, helpers.get_document_title(new_document) + ".pdf"
+      #set_content_disposition_attachment new_document.original_file.key, helpers.get_document_title(new_document) + ".pdf"
       puts "File uploaded"
     end
     json_data["errors"].each do |error|

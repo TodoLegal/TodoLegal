@@ -28,7 +28,14 @@ class Api::V1::DocumentsController < ApplicationController
     #  json_document = json_document.merge(file: "")
     #end
 
+    issuer_name = ""
+    issuer = IssuerDocumentTag.where(document_id: @document.id)
+    if issuer and issuer.first
+      issuer_name = issuer.first.tag.name
+    end
+
     render json: {"document": json_document,
+      "issuer": issuer_name,
       "tags": get_document_tags,
       "related_documents": get_related_documents,
       "can_access": can_access_document,

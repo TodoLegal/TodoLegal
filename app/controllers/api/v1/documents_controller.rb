@@ -91,7 +91,7 @@ class Api::V1::DocumentsController < ApplicationController
           tags.push({"name": document_tag.tag.name, "type": document_tag.tag.tag_type.name})
         end
       end
-      issuer_name = get_issuer_name document.id
+      issuer_name = get_issuer_name document["id"].to_i
       document["issuer"] = issuer_name
       document["tags"] = tags
     end

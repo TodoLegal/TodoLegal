@@ -28,11 +28,7 @@ class Api::V1::DocumentsController < ApplicationController
     #  json_document = json_document.merge(file: "")
     #end
 
-    issuer_name = ""
-    issuer = IssuerDocumentTag.where(document_id: @document.id)
-    if issuer and issuer.first
-      issuer_name = issuer.first.tag.name
-    end
+    issuer_name = get_issuer_name @document.id
 
     render json: {"document": json_document,
       "issuer": issuer_name,
@@ -42,7 +38,7 @@ class Api::V1::DocumentsController < ApplicationController
       "user_type": current_user_type(user),
     }
   end
-  
+
   def get_documents
     limit = 100
     if !params["limit"].blank?
@@ -95,6 +91,8 @@ class Api::V1::DocumentsController < ApplicationController
           tags.push({"name": document_tag.tag.name, "type": document_tag.tag.tag_type.name})
         end
       end
+      issuer_name = get_issuer_name document.id
+      document["issuer"] = issuer_name
       document["tags"] = tags
     end
 
@@ -102,6 +100,13 @@ class Api::V1::DocumentsController < ApplicationController
   end
 
 protected
+  def get_issuer_name document_id
+    issuer = IssuerDocumentTag.find_by_id(document_id)
+    if issuer
+      issuer_name = issuer.tag.name
+    end
+  end
+
   def get_document_json
     related_documents = Document.where(publication_number: @document.publication_number)
     json_document = @document.as_json

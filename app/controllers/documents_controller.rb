@@ -87,6 +87,7 @@ class DocumentsController < ApplicationController
           end
           format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido una gaceta.' }
         elsif params["document"]["auto_process_type"] == "judgement"
+          JudgementAuxiliary.create(document_id: @document.id, aplicable_laws: "")
           format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido una sentencia.' }
         else
           format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido un documento.' }
@@ -106,6 +107,13 @@ class DocumentsController < ApplicationController
         #if params[:original_file]
         #  run_gazette_script @document
         #end
+        if !params[:document]["aplicable_laws"].blank?
+          judgement_auxiliary = JudgementAuxiliary.find_by_document_id(@document.id)
+          if judgement_auxiliary
+            judgement_auxiliary.aplicable_laws = params[:document]["aplicable_laws"]
+            judgement_auxiliary.save
+          end
+        end
         if params[:commit] == 'Guardar cambios'
           format.html { redirect_to edit_document_path(@document), notice: 'Document was successfully updated.' }
         elsif params[:commit] == 'Guardar y siguiente'

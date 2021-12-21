@@ -5,6 +5,7 @@ class Document < ApplicationRecord
   has_many :issuer_document_tags, :dependent => :destroy
   has_many :document_tags, :dependent => :destroy
   has_many :tags, through: :document_tags, :dependent => :destroy
+  has_one :judgement_auxiliary
 
   belongs_to :document_type
 

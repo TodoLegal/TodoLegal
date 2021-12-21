@@ -38,6 +38,19 @@
         </div>
       </div>
 
+      <% if document.document_type.name == "Sentencia" %>
+      <div class="row">
+        <div class="col-md-8">
+          <div class="form-group">
+            <%= form.label :relación_normativa %>
+            <%= form.text_field :aplicable_laws, value: document.judgement_auxiliary.aplicable_laws, class: "form-control", maxlength: "50",
+                onkeyup:"charCountUpdate(this.value, 'identifier', 50)" %>
+            <small id="identifier">0 de 50 caracteres</small>
+          </div>
+        </div>
+      </div>
+      <% end %>
+
       <% if document.document_type.name != "Sentencia" %>
         <div class="row">
           <div class="col-md-8">

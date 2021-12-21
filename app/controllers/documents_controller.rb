@@ -6,6 +6,7 @@ class DocumentsController < ApplicationController
   # GET /documents.json
   def index
     @query = params["query"]
+    @show_only_judgements = params["judgements"]
     if !@query.blank?
       if @query && @query.length == 5 && @query[1] != ','
         @query.insert(2, ",")
@@ -13,6 +14,9 @@ class DocumentsController < ApplicationController
       @documents = Document.where(publication_number: @query).order('publication_number DESC').page params[:page]
     else
       @documents = Document.all.order('publication_number DESC').page params[:page]
+    end
+    if @show_only_judgements
+      @documents = Document.where(document_type_id: DocumentType.find_by_name("Sentencia")).order('publication_number DESC').page params[:page]
     end
   end
 

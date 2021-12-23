@@ -73,6 +73,11 @@ Rails.application.routes.draw do
           get "/:id", to: 'laws#get_law'
         end
       end
+      resource :tags do
+        member do
+          get "/", to: 'tags#get_tags'
+        end
+      end
     end
   end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html

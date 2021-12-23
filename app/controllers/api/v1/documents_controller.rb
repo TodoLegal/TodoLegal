@@ -64,14 +64,31 @@ class Api::V1::DocumentsController < ApplicationController
       rescue ArgumentError
       end
     end
+
+    searchkick_where = {
+      publication_date: {gte: from, lte: to},
+      name: {not: "Gaceta"},
+    }
+
+    if !params["tags"].blank? and params["tags"].kind_of?(Array)
+      document_ids = []
+      params["tags"].each do |tag_name|
+        tag = Tag.find_by_name(tag_name)
+        if tag
+          document_ids = []
+          tag.documents.each do |document|
+            document_ids.push(document.id)
+          end
+          document_ids = document_ids.uniq
+        end
+      end
+      searchkick_where[:id] = {in: document_ids}
+    end
+
     documents = Document.search(
       query,
       fields: [:name, :publication_number, :description],
-      where:
-      {
-        publication_date: {gte: from, lte: to},
-        name: {not: "Gaceta"},
-      },
+      where: searchkick_where,
       limit: limit,
       offset: params["offset"].to_i,
       order: {publication_date: :desc})
@@ -110,6 +127,10 @@ protected
   def get_document_json
     related_documents = Document.where(publication_number: @document.publication_number)
     json_document = @document.as_json
+    judgement_auxiliary = JudgementAuxiliary.find_by_document_id(@document.id)
+    if judgement_auxiliary
+      json_document["applicable_laws"] = judgement_auxiliary.aplicable_laws
+    end
     return json_document
   end
 

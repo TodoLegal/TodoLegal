@@ -111,6 +111,7 @@ class Api::V1::DocumentsController < ApplicationController
       issuer_name = get_issuer_name document["id"].to_i
       document["issuer"] = issuer_name
       document["tags"] = tags
+      document_json_post_process document["id"].to_i, document
     end
 
     render json: { "documents": documents, "count": total_count }
@@ -131,8 +132,25 @@ protected
     if judgement_auxiliary
       json_document["applicable_laws"] = judgement_auxiliary.applicable_laws
     end
-    return json_document
+    document_type = @document.document_type
+    if document_type
+      json_document["document_type"] = document_type.id
+    end
+    return document_json_post_process @document.id, json_document
   end
+
+  def document_json_post_process document_id, document_json
+    judgement_auxiliary = JudgementAuxiliary.find_by_document_id(document_id)
+    if judgement_auxiliary
+      document_json["applicable_laws"] = judgement_auxiliary.applicable_laws
+    end
+    document_type = Document.find_by_id(document_id).document_type
+    if document_type
+      document_json["document_type"] = document_type.name
+    end
+    document_json.delete("full_text")
+  end
+
 
   def get_document_tags
     tags = []

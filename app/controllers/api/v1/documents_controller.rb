@@ -129,7 +129,7 @@ protected
     json_document = @document.as_json
     judgement_auxiliary = JudgementAuxiliary.find_by_document_id(@document.id)
     if judgement_auxiliary
-      json_document["applicable_laws"] = judgement_auxiliary.aplicable_laws
+      json_document["applicable_laws"] = judgement_auxiliary.applicable_laws
     end
     return json_document
   end

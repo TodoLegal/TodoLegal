@@ -2,8 +2,8 @@
 
 one:
   document_id: 1
-  aplicable_laws: MyString
+  applicable_laws: MyString
 
 two:
   document_id: 1
-  aplicable_laws: MyString
+  applicable_laws: MyString

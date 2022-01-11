@@ -17,6 +17,8 @@
         <h4> Institución emisora </h4>
         <%= render partial:'edit_tag_table', locals: {tag_name: "Institución", issuer: true}%>
     <% elsif  @document_type == "Sentencia" %>
+        <h4> Materia </h4>
+        <%= render partial:'edit_tag_table', locals: {tag_name: "materia", issuer: false}%>
         <h4> Institución </h4>
         <%= render partial:'edit_tag_table', locals: {tag_name: "Institución", issuer: false}%>
         <h4> Instancia </h4>

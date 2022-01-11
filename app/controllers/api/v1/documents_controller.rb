@@ -128,14 +128,6 @@ protected
   def get_document_json
     related_documents = Document.where(publication_number: @document.publication_number)
     json_document = @document.as_json
-    judgement_auxiliary = JudgementAuxiliary.find_by_document_id(@document.id)
-    if judgement_auxiliary
-      json_document["applicable_laws"] = judgement_auxiliary.applicable_laws
-    end
-    document_type = @document.document_type
-    if document_type
-      json_document["document_type"] = document_type.id
-    end
     return document_json_post_process @document.id, json_document
   end
 

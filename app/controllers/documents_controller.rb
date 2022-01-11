@@ -178,11 +178,12 @@ class DocumentsController < ApplicationController
       return
     end
     document.name = "Gaceta"
-    document.issue_id = json_data["gazette"]["number"]
     document.publication_number = json_data["gazette"]["number"]
     document.publication_date = json_data["gazette"]["date"]
     document.short_description = "Esta es la gaceta número " + document.publication_number + " de fecha " + document.publication_date.to_s + "."
     document.description = ""
+    document.issue_id = json_data["gazette"]["number"]
+    document.url = document.generate_friendly_url
     document.save
     addIssuerTagIfExists(document.id, "ENAG")
     addTagIfExists(document.id, "Gaceta")
@@ -192,9 +193,9 @@ class DocumentsController < ApplicationController
     puts ">slice_gazette called"
     json_data = run_slice_gazette_script(document, document_pdf_path)
     process_gazette document, document_pdf_path
-    document.url = document.generate_friendly_url
     document.start_page = 0
     document.end_page = json_data["page_count"] - 1
+    document.url = document.generate_friendly_url
     document.save
     # set_content_disposition_attachment document.original_file.key, document.name + ".pdf"
     # create the related documents

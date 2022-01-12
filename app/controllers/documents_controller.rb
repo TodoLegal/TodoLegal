@@ -33,7 +33,8 @@ class DocumentsController < ApplicationController
   # GET /documents/new
   def new
     @document = Document.new
-    @comes_from_gazettes = params[:comes_from_gazette];
+    @selected_document_type = params[:selected_document_type]
+    @comes_from_gazettes = params[:comes_from_gazette]
   end
 
   # GET /documents/1/edit
@@ -118,6 +119,8 @@ class DocumentsController < ApplicationController
           format.html { redirect_to edit_document_path(@document), notice: 'Document was successfully updated.' }
         elsif params[:commit] == 'Guardar y siguiente'
           format.html { redirect_to edit_document_path(get_next_document @document), notice: 'Document was successfully updated.' }
+        elsif params[:commit] == 'Subir nueva sentencia'
+          format.html { redirect_to new_document_path + "?selected_document_type=judgement" }
         end
         format.json { render :show, status: :ok, location: @document }
       else

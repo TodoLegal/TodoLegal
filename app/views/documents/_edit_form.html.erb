@@ -49,7 +49,8 @@
         </div>
       </div>
 
-      <% if document.document_type.name == "Sentencia" and document.judgement_auxiliary %>
+      <!-- TODO: Should we remove applicable_laws from database? -->
+      <% if false && document.document_type.name == "Sentencia" and document.judgement_auxiliary %>
       <div class="row">
         <div class="col-md-8">
           <div class="form-group">
@@ -181,10 +182,14 @@
         <div class="row">
           <div class="col-md-5">
             <%= form.submit "Guardar cambios", class: "d-inline p-2 btn btn-primary" %>
-            <% if @is_next_document_valid %>
-              <%= form.submit "Guardar y siguiente", class: "d-inline p-2 btn btn-outline-secondary" %>
+            <% if document.document_type.name == "Sentencia" %>
+              <%= form.submit "Subir nueva sentencia", class: "d-inline p-2 btn btn-outline-secondary" %>
             <% else %>
-            <a type="button" class="d-inline p-2 btn btn-outline-secondary" disabled="true">Guardar y siguiente</a>
+              <% if @is_next_document_valid %>
+                <%= form.submit "Guardar y siguiente", class: "d-inline p-2 btn btn-outline-secondary" %>
+              <% else %>
+                <a type="button" class="d-inline p-2 btn btn-outline-secondary" disabled="true">Guardar y siguiente</a>
+              <% end %>
             <% end %>
           </div>
     <% end %> 

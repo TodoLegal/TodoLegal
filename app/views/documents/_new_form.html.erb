@@ -15,7 +15,7 @@
 
   <div class="field">
     <%= form.label :proceso_automático %>
-    <%= form.select(:auto_process_type, options_for_select([['Ninguno', "none"], ['Procesar Gaceta', "process"], ['Procesar y partir Gaceta', "slice"], ['Subir Sentencia', "judgement"]])) %>
+    <%= form.select(:auto_process_type, options_for_select([['Ninguno', "none"], ['Procesar Gaceta', "process"], ['Procesar y partir Gaceta', "slice"], ['Subir Sentencia', "judgement"]], @selected_document_type)) %>
   </div>
 
   <div class="field">

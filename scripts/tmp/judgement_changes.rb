@@ -71,7 +71,7 @@ primera_instancia = Tag.create({ name: 'Primera Instancia', tag_type_id: tag_typ
 segunda_instancia = Tag.create({ name: 'Segunda Instancia', tag_type_id: tag_type_instancia.id })
 unica_instancia = Tag.create({ name: 'Única Instancia', tag_type_id: tag_type_instancia.id })
 
-tag_type_tipo_de_demanda = TagType.create({ name: 'Tipo de Demanda' })
+tag_type_tipo_de_demanda = TagType.create({ name: 'Tipo de Demanda o Proceso' })
 ordinaria = Tag.create({ name: 'Ordinaria', tag_type_id: tag_type_tipo_de_demanda.id })
 ejecutiva = Tag.create({ name: 'Ejecutiva', tag_type_id: tag_type_tipo_de_demanda.id })
 sumaria = Tag.create({ name: 'Sumaria', tag_type_id: tag_type_tipo_de_demanda.id })

@@ -36,5 +36,6 @@ jobs:
     #    git pull origin live &&
     #    echo "Pulling from Live"
       env:
-        SERVER_IP: 159.89.179.7
+        SERVER_IP: ${{ secrets.LIVE_SERVER_IP }}
+        SERVER_PORT: ${{ secrets.LIVE_SERVER_PORT }}
         CAPISTRANO_BRANCH: live

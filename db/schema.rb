@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_02_030307) do
+ActiveRecord::Schema.define(version: 2022_01_11_181020) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -163,6 +163,13 @@ ActiveRecord::Schema.define(version: 2021_11_02_030307) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["law_id", "tag_id"], name: "index_issuer_law_tags_on_law_id_and_tag_id", unique: true
+  end
+
+  create_table "judgement_auxiliaries", force: :cascade do |t|
+    t.integer "document_id"
+    t.string "applicable_laws"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "law_accesses", force: :cascade do |t|

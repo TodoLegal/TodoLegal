@@ -31,11 +31,7 @@ jobs:
         deploy_key: ${{ secrets.DEPLOY_ENC_KEY_TEST }} # Name of the variable configured in Settings/Secrets of your github project
         enc_rsa_key_pth: config/deploy_id_rsa_enc_test
       env:
-<<<<<<< HEAD
-        SERVER_IP: 161.35.177.91:284
-=======
         SERVER_IP: ${{ secrets.TEST_SERVER_IP }}
         SERVER_PORT: ${{ secrets.TEST_SERVER_PORT }}
->>>>>>> 40c8d8b59550cacd534d55270811b3b6860d3eb7
         CAPISTRANO_BRANCH: master
         RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}

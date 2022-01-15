@@ -147,14 +147,13 @@ Rails.application.configure do
   #host = 'todolegal.app'
   #config.action_mailer.default_url_options = { host: host }
   
-  config.action_mailer.default_url_options = { host: "mg.todolegal.app" }
+  config.action_mailer.default_url_options = { host: ENV['MAILGUN_URL'] }
   config.action_mailer.delivery_method = :mailgun
   config.action_mailer.mailgun_settings = {
     api_key: ENV['MAILGUN_KEY'],
-    domain: "mg.todolegal.app"
+    domain: ENV['MAILGUN_URL']
   # api_host: 'api.eu.mailgun.net'  # Uncomment this line for EU region domains
   }
-
 
   # config.to_prepare { Devise::SessionsController.force_ssl }
   # config.to_prepare { Devise::RegistrationsController.force_ssl }

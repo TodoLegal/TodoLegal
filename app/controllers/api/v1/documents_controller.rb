@@ -28,14 +28,17 @@ class Api::V1::DocumentsController < ApplicationController
     #  json_document = json_document.merge(file: "")
     #end
 
+    issuer_name = get_issuer_name @document.id
+
     render json: {"document": json_document,
+      "issuer": issuer_name,
       "tags": get_document_tags,
       "related_documents": get_related_documents,
       "can_access": can_access_document,
       "user_type": current_user_type(user),
     }
   end
-  
+
   def get_documents
     limit = 100
     if !params["limit"].blank?
@@ -61,14 +64,31 @@ class Api::V1::DocumentsController < ApplicationController
       rescue ArgumentError
       end
     end
+
+    searchkick_where = {
+      publication_date: {gte: from, lte: to},
+      name: {not: "Gaceta"},
+    }
+
+    if !params["tags"].blank? and params["tags"].kind_of?(Array)
+      document_ids = []
+      params["tags"].each do |tag_name|
+        tag = Tag.find_by_name(tag_name)
+        if tag
+          document_ids = []
+          tag.documents.each do |document|
+            document_ids.push(document.id)
+          end
+          document_ids = document_ids.uniq
+        end
+      end
+      searchkick_where[:id] = {in: document_ids}
+    end
+
     documents = Document.search(
       query,
       fields: [:name, :publication_number, :description],
-      where:
-      {
-        publication_date: {gte: from, lte: to},
-        name: {not: "Gaceta"},
-      },
+      where: searchkick_where,
       limit: limit,
       offset: params["offset"].to_i,
       order: {publication_date: :desc})
@@ -88,18 +108,42 @@ class Api::V1::DocumentsController < ApplicationController
           tags.push({"name": document_tag.tag.name, "type": document_tag.tag.tag_type.name})
         end
       end
+      issuer_name = get_issuer_name document["id"].to_i
+      document["issuer"] = issuer_name
       document["tags"] = tags
+      document_json_post_process document["id"].to_i, document
     end
 
     render json: { "documents": documents, "count": total_count }
   end
 
 protected
+  def get_issuer_name document_id
+    issuer = IssuerDocumentTag.find_by_document_id(document_id)
+    if issuer
+      issuer_name = issuer.tag.name
+    end
+  end
+
   def get_document_json
     related_documents = Document.where(publication_number: @document.publication_number)
     json_document = @document.as_json
-    return json_document
+    return document_json_post_process @document.id, json_document
   end
+
+  def document_json_post_process document_id, document_json
+    judgement_auxiliary = JudgementAuxiliary.find_by_document_id(document_id)
+    if judgement_auxiliary
+      document_json["applicable_laws"] = judgement_auxiliary.applicable_laws
+    end
+    document_type = Document.find_by_id(document_id).document_type
+    if document_type
+      document_json["document_type"] = document_type.name
+    end
+    document_json.delete("full_text")
+    return document_json
+  end
+
 
   def get_document_tags
     tags = []

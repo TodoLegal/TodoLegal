@@ -6,6 +6,7 @@ class DocumentsController < ApplicationController
   # GET /documents.json
   def index
     @query = params["query"]
+    @show_only_judgements = params["judgements"]
     if !@query.blank?
       if @query && @query.length == 5 && @query[1] != ','
         @query.insert(2, ",")
@@ -13,6 +14,9 @@ class DocumentsController < ApplicationController
       @documents = Document.where(publication_number: @query).order('publication_number DESC').page params[:page]
     else
       @documents = Document.all.order('publication_number DESC').page params[:page]
+    end
+    if @show_only_judgements
+      @documents = Document.where(document_type_id: DocumentType.find_by_name("Sentencia")).order('publication_number DESC').page params[:page]
     end
   end
 
@@ -29,7 +33,8 @@ class DocumentsController < ApplicationController
   # GET /documents/new
   def new
     @document = Document.new
-    @comes_from_gazettes = params[:comes_from_gazette];
+    @selected_document_type = params[:selected_document_type]
+    @comes_from_gazettes = params[:comes_from_gazette]
   end
 
   # GET /documents/1/edit
@@ -83,6 +88,7 @@ class DocumentsController < ApplicationController
           end
           format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido una gaceta.' }
         elsif params["document"]["auto_process_type"] == "judgement"
+          JudgementAuxiliary.create(document_id: @document.id, applicable_laws: "")
           format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido una sentencia.' }
         else
           format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido un documento.' }
@@ -102,10 +108,19 @@ class DocumentsController < ApplicationController
         #if params[:original_file]
         #  run_gazette_script @document
         #end
+        if !params[:document]["applicable_laws"].blank?
+          judgement_auxiliary = JudgementAuxiliary.find_by_document_id(@document.id)
+          if judgement_auxiliary
+            judgement_auxiliary.applicable_laws = params[:document]["applicable_laws"]
+            judgement_auxiliary.save
+          end
+        end
         if params[:commit] == 'Guardar cambios'
           format.html { redirect_to edit_document_path(@document), notice: 'Document was successfully updated.' }
         elsif params[:commit] == 'Guardar y siguiente'
           format.html { redirect_to edit_document_path(get_next_document @document), notice: 'Document was successfully updated.' }
+        elsif params[:commit] == 'Subir nueva sentencia'
+          format.html { redirect_to new_document_path + "?selected_document_type=judgement" }
         end
         format.json { render :show, status: :ok, location: @document }
       else
@@ -166,11 +181,12 @@ class DocumentsController < ApplicationController
       return
     end
     document.name = "Gaceta"
-    document.issue_id = json_data["gazette"]["number"]
     document.publication_number = json_data["gazette"]["number"]
     document.publication_date = json_data["gazette"]["date"]
     document.short_description = "Esta es la gaceta número " + document.publication_number + " de fecha " + document.publication_date.to_s + "."
     document.description = ""
+    document.issue_id = json_data["gazette"]["number"]
+    document.url = document.generate_friendly_url
     document.save
     addIssuerTagIfExists(document.id, "ENAG")
     addTagIfExists(document.id, "Gaceta")
@@ -180,9 +196,9 @@ class DocumentsController < ApplicationController
     puts ">slice_gazette called"
     json_data = run_slice_gazette_script(document, document_pdf_path)
     process_gazette document, document_pdf_path
-    document.url = document.generate_friendly_url
     document.start_page = 0
     document.end_page = json_data["page_count"] - 1
+    document.url = document.generate_friendly_url
     document.save
     # set_content_disposition_attachment document.original_file.key, document.name + ".pdf"
     # create the related documents

@@ -143,18 +143,16 @@ Rails.application.configure do
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
 
   # TodoLegal main config
-  config.action_mailer.delivery_method = :smtp
-  host = 'todolegal.app'
-  config.action_mailer.default_url_options = { host: host }
-
-  # SMTP settings for gmail
-  config.action_mailer.smtp_settings = {
-    :address              => "smtp.gmail.com",
-    :port                 => 587,
-    :user_name            => ENV['GMAIL_USERNAME'],
-    :password             => ENV['GMAIL_PASSWORD'],
-    :authentication       => "plain",
-    #:enable_starttls_auto => true
+  #config.action_mailer.delivery_method = :smtp
+  #host = 'todolegal.app'
+  #config.action_mailer.default_url_options = { host: host }
+  
+  config.action_mailer.default_url_options = { host: ENV['MAILGUN_URL'] }
+  config.action_mailer.delivery_method = :mailgun
+  config.action_mailer.mailgun_settings = {
+    api_key: ENV['MAILGUN_KEY'],
+    domain: ENV['MAILGUN_URL']
+  # api_host: 'api.eu.mailgun.net'  # Uncomment this line for EU region domains
   }
 
   # config.to_prepare { Devise::SessionsController.force_ssl }

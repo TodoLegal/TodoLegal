@@ -5,6 +5,7 @@ class Document < ApplicationRecord
   has_many :issuer_document_tags, :dependent => :destroy
   has_many :document_tags, :dependent => :destroy
   has_many :tags, through: :document_tags, :dependent => :destroy
+  has_one :judgement_auxiliary
 
   belongs_to :document_type
 
@@ -20,6 +21,6 @@ class Document < ApplicationRecord
                   }
 
   def generate_friendly_url
-    [id, name.parameterize, publication_number.parameterize.tr('-','')].join('-')
+    [name.parameterize.tr('-',''), publication_number.parameterize.tr('-','')].join('-')
   end
 end

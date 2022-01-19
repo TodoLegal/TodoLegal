@@ -1,8 +1,11 @@
 <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
 <div class="container">
   <p id="notice"><%= notice %></p>
-
-  <h1>Documentos</h1>
+  <% if @show_only_judgements %>
+    <h1>Sentencias</h1>
+  <% else %>
+    <h1>Documentos</h1>
+  <% end %>
   <div class="row justify-content-end">
     <div class="col-6">
       <form action="<%= documents_path %>" method="get">

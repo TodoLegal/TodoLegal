@@ -120,7 +120,7 @@ class Api::V1::DocumentsController < ApplicationController
 protected
   def get_issuer_name document_id
     issuer = IssuerDocumentTag.find_by_document_id(document_id)
-    if issuer
+    if issuer && issuer.tag
       issuer_name = issuer.tag.name
     end
   end

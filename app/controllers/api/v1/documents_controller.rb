@@ -141,6 +141,7 @@ protected
       document_json["document_type"] = document_type.name
     end
     document_json.delete("full_text")
+    return document_json
   end
 
 

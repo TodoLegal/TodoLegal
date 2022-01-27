@@ -147,7 +147,7 @@ Rails.application.configure do
   #host = 'todolegal.app'
   #config.action_mailer.default_url_options = { host: host }
   
-  config.action_mailer.default_url_options = { host: ENV['MAILGUN_URL'] }
+  config.action_mailer.default_url_options = { host: "todolegal.app" }
   config.action_mailer.delivery_method = :mailgun
   config.action_mailer.mailgun_settings = {
     api_key: ENV['MAILGUN_KEY'],

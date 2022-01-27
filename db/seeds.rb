@@ -225,7 +225,6 @@ document_b = Document.create(
 
 IssuerDocumentTag.create(document_id: document_b.id, tag_id: Tag.find_by_name("CNBS").id)
 
-DocumentTag.create({document_id: document_b.id, tag_id: Tag.find_by_name("Monetario").id})
 DocumentTag.create({document_id: document_b.id, tag_id: Tag.find_by_name("Aduana").id})
 DocumentTag.create({document_id: document_b.id, tag_id: Tag.find_by_name("SENASA").id})
 DocumentTag.create({document_id: document_b.id, tag_id: Tag.find_by_name("Circular").id})

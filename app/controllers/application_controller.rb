@@ -145,7 +145,7 @@ class ApplicationController < ActionController::Base
 
         @stream = get_law_stream_return_values[0]
         @result_index_items = get_law_stream_return_values[1]
-        @result_go_to_article = get_law_stream_return_values[2]
+        @go_to_article = get_law_stream_return_values[2]
         @has_articles_only = get_law_stream_return_values[3]
       end
     end

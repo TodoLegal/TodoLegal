@@ -93,6 +93,17 @@ class Api::V1::DocumentsController < ApplicationController
       offset: params["offset"].to_i,
       order: {publication_date: :desc})
 
+    if !params["query"].blank?
+      $tracker.track(0, 'Valid Search', {
+        'query' => query,
+        'location' => "API",
+        'limit' => limit,
+        'offset' => params["offset"],
+        'tags' => params["tags"],
+        'results' => total_count
+      })
+    end
+
     total_count = documents.total_count
     documents = documents.to_json
     documents = JSON.parse(documents)

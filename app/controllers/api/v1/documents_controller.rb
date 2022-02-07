@@ -85,7 +85,7 @@ class Api::V1::DocumentsController < ApplicationController
       searchkick_where[:id] = {in: document_ids}
     end
 
-    if query == "*"
+    if query != "*"
       documents = Document.search(
         query,
         fields: ["name^10", "publication_number^5", "short_description^2", "description" ],
@@ -133,7 +133,7 @@ class Api::V1::DocumentsController < ApplicationController
         'results' => total_count
       })
     end
-    
+
     render json: { "documents": documents, "count": total_count }
   end
 

@@ -85,14 +85,25 @@ class Api::V1::DocumentsController < ApplicationController
       searchkick_where[:id] = {in: document_ids}
     end
 
-    documents = Document.search(
-      query,
-      fields: ["name^10", "publication_number^5", "short_description^2", "description" ],
-      where: searchkick_where,
-      limit: limit,
-      offset: params["offset"].to_i,
-      order: {publication_date: :desc})
+    if query == "*"
+      documents = Document.search(
+        query,
+        fields: ["name^10", "publication_number^5", "short_description^2", "description" ],
+        where: searchkick_where,
+        limit: limit,
+        offset: params["offset"].to_i)
+    else
+      documents = Document.search(
+        query,
+        fields: ["name", "publication_number", "short_description", "description" ],
+        where: searchkick_where,
+        limit: limit,
+        offset: params["offset"].to_i,
+        order: {publication_date: :desc})
+    end
 
+    p "Search response: ", documents
+    
     total_count = documents.total_count
     documents = documents.to_json
     documents = JSON.parse(documents)

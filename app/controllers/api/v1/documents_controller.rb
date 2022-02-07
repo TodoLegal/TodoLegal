@@ -88,7 +88,7 @@ class Api::V1::DocumentsController < ApplicationController
     if query != "*"
       documents = Document.search(
         query,
-        fields: ["name^10", "publication_number^5", "short_description^2", "description" ],
+        fields: ["name^10", "issue_id^5", "short_description^2", "description"],
         where: searchkick_where,
         limit: limit,
         offset: params["offset"].to_i)

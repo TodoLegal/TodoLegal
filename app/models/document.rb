@@ -1,6 +1,6 @@
 class Document < ApplicationRecord
   include PgSearch
-  searchkick searchable: [:name, :publication_number, :short_description, :description], language: "light_spanish"
+  searchkick searchable: [:name, :issue_id, :short_description, :description], language: "light_spanish"
 
   has_many :issuer_document_tags, :dependent => :destroy
   has_many :document_tags, :dependent => :destroy

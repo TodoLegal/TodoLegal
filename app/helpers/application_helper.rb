@@ -72,7 +72,7 @@ module ApplicationHelper
       if !user.stripe_customer_id.blank?
         customer = Stripe::Customer.retrieve(user.stripe_customer_id)
       end
-      if (customer and current_user_plan_is_active customer) || (current_user_is_editor)
+      if (customer and current_user_plan_is_active customer) || (current_user_is_editor) || (current_user_is_pro)
         return "pro"
       else
         return "basic"

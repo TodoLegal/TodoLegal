@@ -10,55 +10,33 @@
 
 <div class="container container--home">
 
- 
+  <div class="d-none d-xl-block">
+    <h3 align="center">El buscador de Leyes y Gacetas de Honduras.</h3>
+  </div>
+  <div class="d-xl-none">
+    <h6 align="center">El buscador de Leyes y Gacetas de Honduras.</h6>
+  </div>
+
+  
+  <br/>
+  <%= render partial: 'search_law_input', locals: {target_url: '/search_law', home_flag: true } %>
 
   <div class="row">
-    <div class="col-sm-6 col-md-4 py-2">
-      <div class="card card-body h-100 card-with-border" style="padding:0px">
-        <a class="" href="<%= google_drive_search_path %>" style="padding:20px">
-        <img class="icon-drive" src="/img/valid_logo.png"/>
-          <table width="100%">
-            <tr>
-              <td>
-                <h5 class="card-title">Valid</h5>
-              </td>
-            </tr>
-          </table>
-          <p><%= valid_gazettes_count %> gacetas</p>
-        </a>
-      </div>
-    </div>
-    <div class="col-sm-6 col-md-4 py-2">
-      <div class="card card-body h-100 card-with-border" style="padding:0px">
-        <a class="" href="<%= home_path %>" style="padding:20px">
-        <img class="icon-drive" src="/img/Icon-Todolegal-gray128px.svg"/>
-          <table width="100%">
-            <tr>
-              <td>
-                <h5 class="card-title">TodoLegal</h5>
-              </td>
-            </tr>
-          </table>
-          <p><%= law_count %> leyes</p>
-        </a>
-      </div>
-    </div>
-    <div class="col-sm-6 col-md-4 py-2">
-      <div class="card card-body h-100 card-with-border" style="padding:0px">
-        <a class="" href="<%= ley_abierta_url %>?tlclick=home" style="padding:20px" target="_blank">
-        <img class="icon-drive" src="/img/ley_abierta_logo.png"/>
-          <table width="100%">
-            <tr>
-              <td>
-                <h5 class="card-title">Ley Abierta</h5>
-              </td>
-            </tr>
-          </table>
-          <p>13 episodios</p>
-        </a>
-      </div>
-    </div>
+    <% @tags.each do |tag| %>
+      <% if tag.laws.count != 0 %>
+        <div class="col-sm-6 col-md-4 py-2">
+          <div class="card card-body h-100" style="padding:0px">
+            <a class="" href="<%= tag_path(tag) %>" style="padding:20px">
+              <h5 class="card-title"><%= tag.name %></h5>
+              <p><%= tag.laws.count %> leyes</p>
+            </a>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
   </div>
+
+  <p class="resultinfo"><%= law_count %> leyes ingresadas</p>
 
   <% if !@current_user_plan_is_active %>
     <div class="billboard billboard--home">
@@ -80,3 +58,6 @@
   <% end %>
 
 </div>
+
+
+<%= javascript_pack_tag "help_card" %>

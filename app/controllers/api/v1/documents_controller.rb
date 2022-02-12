@@ -1,7 +1,7 @@
 class Api::V1::DocumentsController < ApplicationController
   protect_from_forgery with: :null_session
   include ApplicationHelper
-  before_action :doorkeeper_authorize!, :document_exists!, only: [:get_document]
+  before_action :doorkeeper_authorize!, :document_exists!, only: [:get_document, :get_documents]
   skip_before_action :doorkeeper_authorize!, unless: :has_access_token?
   
   def get_document
@@ -40,6 +40,11 @@ class Api::V1::DocumentsController < ApplicationController
   end
 
   def get_documents
+    user_id = 0
+    if params[:access_token]
+      user = User.find_by_id(doorkeeper_token.resource_owner_id)
+      user_id = user.id
+    end
     limit = 100
     if !params["limit"].blank?
       limit = params["limit"]
@@ -125,7 +130,7 @@ class Api::V1::DocumentsController < ApplicationController
     end
 
     if !params["query"].blank?
-      $tracker.track(0, 'Valid Search', {
+      $tracker.track(user_id, 'Valid Search', {
         'query' => query,
         'location' => "API",
         'limit' => limit,

@@ -14,7 +14,7 @@ class Api::V1::DocumentsController < ApplicationController
       user_id_str = user.id.to_s
     end
 
-    if user && current_user_type(user) == "pro"
+    if user && current_user_type_api(user) == "pro"
       json_document = json_document.merge(file: url_for(@document.original_file))
     else
       json_document = json_document.merge(file: "")

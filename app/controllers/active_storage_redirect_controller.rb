@@ -14,7 +14,7 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
       user = current_user
     end
 
-    if user && current_user_type(user) == "pro"
+    if user && current_user_type_api(user) == "pro"
       super
     else
       redirect_to "http://valid.todolegal.app?error='invalid permissions'"

@@ -36,7 +36,7 @@ class Api::V1::DocumentsController < ApplicationController
       "tags": get_document_tags,
       "related_documents": get_related_documents,
       "can_access": can_access_document,
-      "user_type": current_user_type(user),
+      "user_type": current_user_type_api(user),
     }
   end
 

@@ -1,5 +1,6 @@
 class HomeController < ApplicationController
   layout 'onboarding', only: [:pricing, :invite_friends]
+  layout 'landing', only: [:index]
   include ActionView::Helpers::NumberHelper
   require 'set'
   

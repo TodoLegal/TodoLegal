@@ -13,6 +13,18 @@ module ApplicationHelper
     current_user && current_user.permissions.find_by_name("Pro")
   end
 
+  def user_is_admin_api user
+    user &&  user.permissions.find_by_name("Admin")
+  end
+
+  def user_is_editor_api user
+    user && ( user.permissions.find_by_name("Editor") ||  user.permissions.find_by_name("Admin"))
+  end
+
+  def user_is_pro_api user
+    user &&  user.permissions.find_by_name("Pro")
+  end
+
   def is_editor_mode_enabled
     session[:edit_mode_enabled]
   end
@@ -73,6 +85,20 @@ module ApplicationHelper
         customer = Stripe::Customer.retrieve(user.stripe_customer_id)
       end
       if (customer and current_user_plan_is_active customer) || (current_user_is_editor)
+        return "pro"
+      else
+        return "basic"
+      end
+    end
+    return "not logged"
+  end
+
+  def current_user_type_api user
+    if user
+      if !user.stripe_customer_id.blank?
+        customer = Stripe::Customer.retrieve(user.stripe_customer_id)
+      end
+      if (customer and current_user_plan_is_active customer) || (user_is_editor_api user) || (user_is_pro_api user)
         return "pro"
       else
         return "basic"

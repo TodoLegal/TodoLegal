@@ -1,5 +1,6 @@
 class HomeController < ApplicationController
   layout 'onboarding', only: [:pricing, :invite_friends]
+  layout 'landing', only: [:index]
   include ActionView::Helpers::NumberHelper
   require 'set'
   
@@ -7,6 +8,10 @@ class HomeController < ApplicationController
     #if process_doorkeeper_redirect_to
     #  return
     #end
+    # @tags = Tag.where(tag_type: TagType.find_by_name("materia"))
+  end
+
+  def home
     @tags = Tag.where(tag_type: TagType.find_by_name("materia"))
   end
 

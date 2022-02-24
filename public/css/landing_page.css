@@ -61,6 +61,7 @@ a:hover{
     width: 100%
 }
 
+/* Below tablets */
 @media only screen and (max-width: 767.98px){
     .landing-cards{
         height: 300px!important;
@@ -84,5 +85,51 @@ a:hover{
         margin-bottom: 0px;
         text-align: center;
         opacity: 1;
+    }
+  }
+
+  /* Tablets */
+
+  @media only screen and (min-width: 768px) and (max-width: 1024px){
+    .landing-cards{
+        height: 300px!important;
+        padding-top: 0px !important;
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
+
+    .landing-page-icon{
+        height: 50px;
+        width: auto;
+    }
+
+    .landing-card-title{
+      font-size: 27px;
+      line-height: 33px
+    }
+
+    .landing-header-text{
+        color: #22252C;
+        font: normal normal 500 21px/45px Poppins;
+        letter-spacing: 0px;
+        margin-bottom: 0px;
+        text-align: center;
+        opacity: 1;
+    }
+
+    .landing-card-text{
+        font: normal normal normal 17px/27px Poppins;
+    }
+
+    .landing-page-button{
+        font: normal normal bold 14px/33px Poppins;
+    }
+
+    .landing-page{
+        padding-top: 10%;
+    }
+
+    .count-text{
+        font-size: 14px;
     }
   }

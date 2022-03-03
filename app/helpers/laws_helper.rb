@@ -5,7 +5,7 @@ module LawsHelper
     end
 
     def all_document_count
-        Law.count + Document.count + google_drive_covid_documents_count
+        Law.count + Document.count
     end
 
     def current_law_article

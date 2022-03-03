@@ -1,2 +1,44 @@
 module LawsHelper
+    def current_law_name
+        @current_law = Law.find(params[:id])
+        return @law.name
+    end
+
+    def all_document_count
+        Law.count + Document.count + google_drive_covid_documents_count
+    end
+
+    def current_law_article
+        @articles = @current_law.articles.order(:position)
+        
+        if params[:query]
+            @tokens = params[:query].scan(/\w+|\W/)
+            if @tokens.first == '/'
+              articles = []
+              @tokens.each do |token|
+                if is_number token
+                  articles = token
+                end
+              end
+              params[:articles] = articles
+              params[:query] = nil
+            end
+        end
+
+        if params[:articles] && params[:articles].size == 1
+            article_body = @articles.where('number LIKE ?', "%#{params[:articles].first}%").first.body
+            return "Artículo " + "#{params[:articles].first}. " + article_body
+        else
+            article_body =  @current_law.articles.first.body
+            return "Artículo 1." + article_body
+        end
+
+        # if @article_number
+        #     return @law.articles.where('number LIKE ?', "%#{@article_number}%").first
+        # else
+        #    return @current_law.articles.first.body
+        # end
+        # @current_law.articles.first.body
+    end
+
 end

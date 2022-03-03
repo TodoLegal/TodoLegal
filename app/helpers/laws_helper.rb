@@ -30,7 +30,7 @@ module LawsHelper
             return "Artículo " + "#{params[:articles].first}. " + article_body
         else
             article_body =  @current_law.articles.first.body
-            return "Artículo 1." + article_body
+            return "Artículo 1. " + article_body
         end
 
         # if @article_number

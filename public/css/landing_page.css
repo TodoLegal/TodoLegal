@@ -61,6 +61,12 @@ a:hover{
     width: 100%
 }
 
+@media only screen and (max-width: 320px){
+    .landing-cards{
+        padding-top: 0px !important;
+    }
+}
+
 /* Below tablets */
 @media only screen and (max-width: 767.98px){
     .landing-cards{
@@ -90,7 +96,7 @@ a:hover{
 
   /* Tablets */
 
-  @media only screen and (min-width: 768px) and (max-width: 1024px){
+  @media only screen and (min-width: 575px) and (max-width: 1200px){
     .landing-cards{
         height: 300px!important;
         padding-top: 0px !important;
@@ -105,7 +111,7 @@ a:hover{
 
     .landing-card-title{
       font-size: 27px;
-      line-height: 33px
+      line-height: 33px;
     }
 
     .landing-header-text{

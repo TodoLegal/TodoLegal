@@ -18,6 +18,7 @@ class DocumentsController < ApplicationController
     if @show_only_judgements
       @documents = Document.where(document_type_id: DocumentType.find_by_name("Sentencia")).order('publication_number DESC').page params[:page]
     end
+    expires_in 10.minutes
   end
 
   # GET /documents/1

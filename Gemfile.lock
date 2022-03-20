@@ -111,6 +111,8 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
+    devise-security (0.17.0)
+      devise (>= 4.3.0)
     digest-crc (0.6.3)
       rake (>= 12.0.0, < 14.0.0)
     discordrb (3.4.0)
@@ -436,6 +438,7 @@ DEPENDENCIES
   capistrano3-nginx
   capybara (>= 2.15)
   devise
+  devise-security
   discordrb
   doorkeeper
   ed25519 (>= 1.2, < 2.0)
@@ -475,4 +478,4 @@ RUBY VERSION
    ruby 3.0.0p0
 
 BUNDLED WITH
-   2.2.24
+   2.3.8

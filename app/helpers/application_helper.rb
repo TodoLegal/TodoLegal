@@ -54,30 +54,30 @@ module ApplicationHelper
     return hashed_fingerprint
   end
 
-  #def get_user_document_download_tracker(user_id_str)
-  #  fingerprint = get_fingerprint + user_id_str
-  #  user_document_download_tracker = UserDocumentDownloadTracker.find_by_fingerprint(fingerprint)
-  #  if !user_document_download_tracker
-  #    user_document_download_tracker = UserDocumentDownloadTracker.create(fingerprint: fingerprint, downloads: 0, period_start: DateTime.now)
-  #  end
-  #  if user_document_download_tracker.period_start <= 1.month.ago # TODO set time window
-  #    user_document_download_tracker.period_start = DateTime.now
-  #    user_document_download_tracker.downloads = 0
-  #    user_document_download_tracker.save
-  #  end
-  #  return user_document_download_tracker
-  #end
+  def get_user_document_download_tracker(user_id_str)
+   fingerprint = get_fingerprint + user_id_str
+   user_document_download_tracker = UserDocumentDownloadTracker.find_by_fingerprint(fingerprint)
+   if !user_document_download_tracker
+     user_document_download_tracker = UserDocumentDownloadTracker.create(fingerprint: fingerprint, downloads: 0, period_start: DateTime.now)
+   end
+   if user_document_download_tracker.period_start <= 1.month.ago # TODO set time window
+     user_document_download_tracker.period_start = DateTime.now
+     user_document_download_tracker.downloads = 0
+     user_document_download_tracker.save
+   end
+   return user_document_download_tracker
+  end
 
   # deprecated
-  #def can_access_documents(user_document_download_tracker, current_user_type)
-  #  if current_user_type == "pro"
-  #    return true
-  #  elsif current_user_type == "basic"
-  #    return user_document_download_tracker.downloads < MAXIMUM_BASIC_MONTHLY_DOCUMENTS
-  #  else
-  #    return user_document_download_tracker.downloads < MAXIMUM_NOT_LOGGGED_MONTHLY_DOCUMENTS
-  #  end
-  #end
+  def can_access_documents(user_document_download_tracker, current_user_type)
+   if current_user_type == "pro"
+     return true
+   elsif current_user_type == "basic"
+     return user_document_download_tracker.downloads < MAXIMUM_BASIC_MONTHLY_DOCUMENTS
+   else
+     return user_document_download_tracker.downloads < MAXIMUM_NOT_LOGGGED_MONTHLY_DOCUMENTS
+   end
+  end
 
   def current_user_type user
     if user

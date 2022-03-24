@@ -14,20 +14,26 @@ class Api::V1::DocumentsController < ApplicationController
       user_id_str = user.id.to_s
     end
 
-    if user && current_user_type_api(user) == "pro"
-      json_document = json_document.merge(file: url_for(@document.original_file))
-    else
-      json_document = json_document.merge(file: "")
+    # if user && current_user_type_api(user) == "pro"
+    #   json_document = json_document.merge(file: url_for(@document.original_file))
+    # else
+    #   json_document = json_document.merge(file: "")
+    # end
+
+    #from here
+    user_document_download_tracker = get_user_document_download_tracker(user_id_str)
+    can_access_document = can_access_documents(user_document_download_tracker, current_user_type(user))
+
+    if !can_access_document
+      #TODO send email
     end
-
-    #user_document_download_tracker = get_user_document_download_tracker(user_id_str)
-    #can_access_document = can_access_documents(user_document_download_tracker, current_user_type(user))
-
-    #if can_access_document and @document.original_file.attached?
-    #  json_document = json_document.merge(file: url_for(@document.original_file))
-    #else
-    #  json_document = json_document.merge(file: "")
-    #end
+    
+    if can_access_document and @document.original_file.attached?
+     json_document = json_document.merge(file: url_for(@document.original_file))
+    else
+     json_document = json_document.merge(file: "")
+    end
+    #to here
 
     issuer_name = get_issuer_name @document.id
 
@@ -36,6 +42,7 @@ class Api::V1::DocumentsController < ApplicationController
       "tags": get_document_tags,
       "related_documents": get_related_documents,
       "can_access": can_access_document,
+      "downloads": user_document_download_tracker.downloads,
       "user_type": current_user_type_api(user),
     }
   end

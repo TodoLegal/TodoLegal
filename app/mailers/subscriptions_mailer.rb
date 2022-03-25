@@ -21,4 +21,11 @@ class SubscriptionsMailer < ApplicationMailer
     @rounded_all_document_count = 1130
     mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: user.email, subject: 'Cuenta Pro')
   end
+
+  def free_trial_end user 
+    @user = user
+    # TODO: make this auto calculated again
+    @rounded_all_document_count = 1130
+    mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: user.email, subject: 'Free trial')
+  end
 end

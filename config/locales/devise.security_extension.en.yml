@@ -1,4 +1,4 @@
-es:
+en:
   errors:
     messages:
       taken_in_past: 'la contraseña fue usada previamente, por favor elige otra.'

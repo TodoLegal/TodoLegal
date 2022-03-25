@@ -23,10 +23,6 @@ class Api::V1::DocumentsController < ApplicationController
     #from here
     user_document_download_tracker = get_user_document_download_tracker(user_id_str)
     can_access_document = can_access_documents(user_document_download_tracker, current_user_type(user))
-
-    if !can_access_document
-      #TODO send email
-    end
     
     if can_access_document and @document.original_file.attached? and current_user_type_api(user) == "pro"
      json_document = json_document.merge(file: url_for(@document.original_file))

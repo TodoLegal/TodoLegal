@@ -29,7 +29,7 @@ class Api::V1::DocumentsController < ApplicationController
       #TODO send email
     end
     
-    if can_access_document and @document.original_file.attached? 
+    if can_access_document and @document.original_file.attached?  and already_logged_in
      json_document = json_document.merge(file: url_for(@document.original_file))
     else
      json_document = json_document.merge(file: "")

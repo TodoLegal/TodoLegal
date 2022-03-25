@@ -13,7 +13,10 @@
 ActiveRecord::Schema.define(version: 2022_03_20_053457) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "fuzzystrmatch"
+  enable_extension "pg_trgm"
   enable_extension "plpgsql"
+  enable_extension "unaccent"
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -115,12 +118,6 @@ ActiveRecord::Schema.define(version: 2022_03_20_053457) do
     t.integer "position"
     t.string "issue_id"
     t.integer "document_type_id"
-    t.index ["description"], name: "documents_description_idx"
-    t.index ["issue_id"], name: "documents_issue_id_idx"
-    t.index ["name"], name: "documents_name_idx"
-    t.index ["publication_date"], name: "documents_publication_date_idx"
-    t.index ["publication_number"], name: "documents_publication_number_idx"
-    t.index ["url"], name: "documents_url_idx"
   end
 
   create_table "email_subscriptions", force: :cascade do |t|
@@ -129,7 +126,6 @@ ActiveRecord::Schema.define(version: 2022_03_20_053457) do
     t.string "status"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["email"], name: "email_subscriptions_email_idx"
   end
 
   create_table "issuer_document_tags", force: :cascade do |t|
@@ -249,8 +245,6 @@ ActiveRecord::Schema.define(version: 2022_03_20_053457) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "law_id"
-    t.index ["name"], name: "subsections_name_idx"
-    t.index ["number"], name: "subsections_number_idx"
   end
 
   create_table "tag_types", force: :cascade do |t|

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_11_181020) do
+ActiveRecord::Schema.define(version: 2022_03_20_053457) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -44,13 +44,6 @@ ActiveRecord::Schema.define(version: 2022_01_11_181020) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
-  end
-
-  create_table "alternative_institution_names", force: :cascade do |t|
-    t.string "name"
-    t.string "alternative_name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "alternative_tag_names", force: :cascade do |t|
@@ -131,20 +124,6 @@ ActiveRecord::Schema.define(version: 2022_01_11_181020) do
     t.string "email"
     t.string "security_key"
     t.string "status"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "institution_alternative_names", force: :cascade do |t|
-    t.string "name"
-    t.string "alternative_name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "institution_tag_names", force: :cascade do |t|
-    t.integer "tag_id"
-    t.string "alternative_name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -290,13 +269,6 @@ ActiveRecord::Schema.define(version: 2022_01_11_181020) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "tokens", force: :cascade do |t|
-    t.integer "user_id"
-    t.string "token"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "user_document_download_trackers", force: :cascade do |t|
     t.string "fingerprint"
     t.integer "downloads"
@@ -335,6 +307,7 @@ ActiveRecord::Schema.define(version: 2022_01_11_181020) do
     t.boolean "receive_information_emails"
     t.string "stripe_customer_id"
     t.string "authentication_token", limit: 30
+    t.string "unique_session_id"
     t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true

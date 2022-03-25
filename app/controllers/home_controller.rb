@@ -13,6 +13,7 @@ class HomeController < ApplicationController
 
   def home
     @tags = Tag.where(tag_type: TagType.find_by_name("materia"))
+    expires_in 10.minutes
   end
 
   def token_login

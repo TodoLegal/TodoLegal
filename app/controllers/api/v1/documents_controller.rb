@@ -205,7 +205,7 @@ protected
     return params[:access_token]
   end
 
-  def already_logged_in
+def already_logged_in
   Warden::Manager.after_set_user only: :fetch do |record, warden, options|
     scope = options[:scope]
     if record.devise_modules.include?(:session_limitable) &&
@@ -223,7 +223,8 @@ protected
        warden.logout(scope)
        throw :warden, scope: scope, message: :session_limited
      end
+    end
+  end
 end
-end
-end
+
 end

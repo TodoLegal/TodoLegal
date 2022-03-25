@@ -2,6 +2,7 @@ class Api::V1::DocumentsController < ApplicationController
   protect_from_forgery with: :null_session
   include ApplicationHelper
   before_action :document_exists!, only: [:get_document]
+  before_action :already_logged_in
   before_action :doorkeeper_authorize!, only: [:get_document, :get_documents]
   skip_before_action :doorkeeper_authorize!, unless: :has_access_token?
   
@@ -28,10 +29,11 @@ class Api::V1::DocumentsController < ApplicationController
       #TODO send email
     end
     
-    if can_access_document and @document.original_file.attached? and current_user_type_api(user) == "pro"
+    if can_access_document and @document.original_file.attached? 
      json_document = json_document.merge(file: url_for(@document.original_file))
     else
      json_document = json_document.merge(file: "")
+     
     end
     #to here
 
@@ -202,4 +204,18 @@ protected
   def has_access_token?
     return params[:access_token]
   end
+
+  def already_logged_in
+  Warden::Manager.after_set_user only: :fetch do |record, warden, options|
+    scope = options[:scope]
+    #if User.find_by unique_session_id: current_user.unique_session_id
+    if record.unique_session_id == warden.session(scope)['unique_session_id']
+      warden.raw_session.clear
+      warden.logout(scope)
+      throw :warden, scope: scope, message: :session_limited
+      return
+  end
+end
+end
+
 end

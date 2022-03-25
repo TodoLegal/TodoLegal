@@ -6,28 +6,31 @@
 #
 default: &default
   adapter: postgresql
+  encoding: unicode
+  host: <%= ENV['DB_URL'] %>
+  username: <%= ENV['DB_USER'] %>
+  password: <%= ENV['DB_PASS'] %>
+  port: <%= ENV['DB_PORT']%>
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 7000
 
 development:
-  adapter: postgresql
-  encoding: unicode
+  <<: *default
   database: todolegaldb_development
-  host: localhost
   pool: 5
-  username: postgres
-  password: MyPassword
+
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: db/test.sqlite3
+  database: todolegaldb_test
 
 production:
   primary:
    <<: *default
+   database: todolegaldb_production
    pool: 22
    checkout_timeout: 6
    url: <%= ENV.fetch("DB_URL") { "" } %>

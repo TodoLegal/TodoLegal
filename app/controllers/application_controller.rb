@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :null_session
   before_action :configure_devise_permitted_parameters, if: :devise_controller?
   before_action :miniprofiler
+  before_action :already_logged_in
   #acts_as_token_authentication_handler_for User, if: :json_request?
   skip_before_action :configure_devise_permitted_parameters, if: :json_request?
 
@@ -303,4 +304,28 @@ protected
   def isWordInText word, text
     return /[^a-zA-Z0-9]#{word}[^a-zA-Z0-9]/.match(text)
   end
+
+  def already_logged_in
+    Warden::Manager.after_set_user only: :fetch do |record, warden, options|
+      scope = options[:scope]
+      if record.devise_modules.include?(:session_limitable) &&
+        warden.authenticated?(scope) &&
+        options[:store] != false
+       if record.unique_session_id != warden.session(scope)['unique_session_id'] &&
+          !record.skip_session_limitable? && 
+          !warden.session(scope)['devise.skip_session_limitable']
+         Rails.logger.warn do
+           '[devise-security][session_limitable] session id mismatch: '\
+           "expected=#{record.unique_session_id.inspect} "\
+           "actual=#{warden.session(scope)['unique_session_id'].inspect}"
+         end
+         warden.raw_session.clear
+         warden.logout(scope)
+         throw :warden, scope: scope, message: :session_limited
+       end
+      end
+    end
+  end
+
+
 end

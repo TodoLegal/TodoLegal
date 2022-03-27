@@ -23,11 +23,11 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
 
     #from here
     user_document_download_tracker = get_user_document_download_tracker(user_id_str)
-    can_access_document = can_access_documents(user_document_download_tracker, current_user_type(user))
-    if current_user_type(user) != "pro"
+    can_access_document = can_access_documents(user_document_download_tracker, current_user_type_api(user))
+    if user && current_user_type_api(user) != "pro"
      user_document_download_tracker.downloads += 1
     end
-    if can_access_document
+    if user && can_access_document
      user_document_download_tracker.save
      super
     else

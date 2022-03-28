@@ -2,6 +2,7 @@ class Api::V1::DocumentsController < ApplicationController
   protect_from_forgery with: :null_session
   include ApplicationHelper
   before_action :document_exists!, only: [:get_document]
+  before_action :already_logged_in
   before_action :doorkeeper_authorize!, only: [:get_document, :get_documents]
   skip_before_action :doorkeeper_authorize!, unless: :has_access_token?
   
@@ -28,6 +29,7 @@ class Api::V1::DocumentsController < ApplicationController
      json_document = json_document.merge(file: url_for(@document.original_file))
     else
      json_document = json_document.merge(file: "")
+     
     end
     #to here
 
@@ -198,4 +200,42 @@ protected
   def has_access_token?
     return params[:access_token]
   end
+
+def already_logged_in
+  Warden::Manager.after_set_user except: :fetch do |record, warden, options|
+    if record.devise_modules.include?(:session_limitable) &&
+       warden.authenticated?(options[:scope]) &&
+       !record.skip_session_limitable?
+  
+       if !options[:skip_session_limitable]
+        unique_session_id = Devise.friendly_token
+        warden.session(options[:scope])['unique_session_id'] = unique_session_id
+        record.update_unique_session_id!(unique_session_id)
+       else
+        warden.session(options[:scope])['devise.skip_session_limitable'] = true
+       end
+    end
+  end
+  
+  Warden::Manager.after_set_user only: :fetch do |record, warden, options|
+    scope = options[:scope]
+    if record.devise_modules.include?(:session_limitable) &&
+      warden.authenticated?(scope) &&
+      options[:store] != false
+     if record.unique_session_id != warden.session(scope)['unique_session_id'] &&
+        !record.skip_session_limitable? && 
+        !warden.session(scope)['devise.skip_session_limitable']
+       Rails.logger.warn do
+         '[devise-security][session_limitable] session id mismatch: '\
+         "expected=#{record.unique_session_id.inspect} "\
+         "actual=#{warden.session(scope)['unique_session_id'].inspect}"
+       end
+       warden.raw_session.clear
+       warden.logout(scope)
+       throw :warden, scope: scope, message: :session_limited
+     end
+    end
+  end
+end
+
 end

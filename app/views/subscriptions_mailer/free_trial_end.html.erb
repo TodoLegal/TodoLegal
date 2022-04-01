@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Gracias por adquirir la cuenta Pro</title>
+        <title>Cuenta ha expirado</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </head>
 
@@ -18,30 +18,38 @@
                                 <td width="540">
                                     <table border="0" cellpadding="0" cellspacing="0" width="100%" >
                                         <tr>
-                                            <td>
-                                                <img alt="TodoLegal.app" style="max-width: 260px; padding-bottom: 20px; padding-top: 20px;display: inline;vertical-align: center;" src="https://todolegal.app/img/logo_landing_mobile.png" width="260" align="center">
-                                            </td>
+                                            <a class="back-image" data-toggle="modal" data-target="#cancelModalTodolegal">
+                                                <img style="height: 15vh; max-height: 110px; margin: 2vh auto 0;" border="0" alt="Logo TodoLegal" src="https://todolegal.app/img/Icon-Todolegal-gray20px.svg"/>
+                                            </a>
+                                            <a class="back-image" data-toggle="modal" data-target="#cancelModalValid">
+                                                <img style="height: 15vh; max-height: 110px; margin: 2vh auto 0;" border="0" alt="Logo Valid" src="https://todolegal.app/img/Icon-Valid-gray20px.svg"/>
+                                            </a>
                                         </tr>
                                         <tr>
                                             <td style="background-color: #FFFFFF; text-align: left; padding: 40px;">
                                                 <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">
-                                                    Hola <%= @user.first_name %> <%= @user.last_name %>,</p>
+                                                    Hola,</p>
                                                 <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">
-                                                    Gracias por adquirir la suscripción Pro. 
+                                                    Tu cuenta ha expirado y ya no puedes descargar más documentos. Si quieres disfrutar de descargas ilimitadas, 
+                                                    adquiere uno de nuestros planes dando click en <a href="https://todolegal.app/pricing">este enlace</a>. 
                                                 </p>
                                                 <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">
-                                                Ahora puedes acceder a más de <%= @rounded_all_document_count %> documentos de legislación hondureña. 
+                                                    Te damos 50% de descuento en la suscripción al Plan Pro por 6 meses. Solo tienes que seleccionar el plan, 
+                                                    escoger el paquete por 6 meses e ingresar el cupón: 6MESES. 
                                                 </p>
                                                 <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">   
-                                                Para ver tus facturas, cambiar tu tarjeta de crédito o cancelar el servicio administra 
-                                                <a href="https://todolegal.app/users/edit" target="_blank" style="color: #1A7FFA; text-decoration: underline;">tu cuenta</a>.
-                                            </p>
-                                            <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">
-                                                Saludos, 
-                                            </p>
-                                            <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">
-                                                <i>El equipo de Todolegal</i>
-                                            </p>
+                                                    Si quieres conversar con alguno de nuestros agentes, da click en <a href="https://calendly.com/tl-ventas/15">este enlace</a> 
+                                                    y programa una llamada.
+                                                </p>
+                                                <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">   
+                                                    Nuestra meta es ser el repositorio legal más grande de Centroamérica. Ayúdanos a organizar la información legal
+                                                </p>
+                                                <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">
+                                                    ¡Saludos! 
+                                                </p>
+                                                <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">
+                                                    <i>El equipo de Todolegal</i>
+                                                </p>
                                             </td>
                                         </tr>
                                         <tr>

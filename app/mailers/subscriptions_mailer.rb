@@ -34,6 +34,6 @@ class SubscriptionsMailer < ApplicationMailer
     @user = user
     # TODO: make this auto calculated again
     # @rounded_all_document_count = 1130
-    mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: user.email, subject: 'Free trial')
+    mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: user.email, subject: 'Cuenta ha expirado, cupón de descuento.')
   end
 end

@@ -137,8 +137,8 @@ class BillingController < ApplicationController
       if $discord_bot
         $discord_bot.send_message($discord_bot_channel_notifications, "Se ha registrado un usuario Pro por 1 año :dancer:")
       end
-      if ENV['GMAIL_USERNAME']
-        #SubscriptionsMailer.welcome_pro_user(current_user).deliver
+      if ENV['MAILGUN_KEY']
+        SubscriptionsMailer.welcome_pro_user(current_user).deliver
       end
     end
 

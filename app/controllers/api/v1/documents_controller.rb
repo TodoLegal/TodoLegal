@@ -25,7 +25,7 @@ class Api::V1::DocumentsController < ApplicationController
     user_document_download_tracker = get_user_document_download_tracker(user_id_str)
     can_access_document = can_access_documents(user_document_download_tracker, current_user_type_api(user))
     
-    if can_access_document and @document.original_file.attached?  and already_logged_in and already_logged_in
+    if can_access_document and @document.original_file.attached?  and already_logged_in 
      json_document = json_document.merge(file: url_for(@document.original_file))
     else
      json_document = json_document.merge(file: "")

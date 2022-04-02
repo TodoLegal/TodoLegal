@@ -1,11 +1,11 @@
 class ApplicationController < ActionController::Base
   include Devise::Controllers::Rememberable
   require 'csv'
-
+  before_action :already_logged_in
   protect_from_forgery with: :null_session
   before_action :configure_devise_permitted_parameters, if: :devise_controller?
   before_action :miniprofiler
-  before_action :already_logged_in
+  
   #acts_as_token_authentication_handler_for User, if: :json_request?
   skip_before_action :configure_devise_permitted_parameters, if: :json_request?
 

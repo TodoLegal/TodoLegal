@@ -184,6 +184,7 @@ module ApplicationHelper
          warden.raw_session.clear
          warden.logout(scope)
          throw :warden, scope: scope, message: :session_limited
+         sign_out current_user
          return true
        end
       end

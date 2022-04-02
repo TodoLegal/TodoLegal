@@ -164,4 +164,34 @@ module ApplicationHelper
       return "<vacío>"
     end
   end
+
+  def already_logged_in
+    Warden::Manager.after_set_user only: :fetch do |record, warden, options|
+      scope = options[:scope]
+      if record.devise_modules.include?(:session_limitable) &&
+        warden.authenticated?(scope) &&
+        options[:store] != false
+      #Log Inicio
+       if record.unique_session_id != warden.session(scope)['unique_session_id'] &&
+          !record.skip_session_limitable? && 
+          !warden.session(scope)['devise.skip_session_limitable']
+         Rails.logger.warn do
+           '[devise-security][session_limitable] session id mismatch: '\
+           "expected=#{record.unique_session_id.inspect} "\
+           "actual=#{warden.session(scope)['unique_session_id'].inspect}"
+         end
+      #Log Final
+         warden.raw_session.clear
+         warden.logout(scope)
+         throw :warden, scope: scope, message: :session_limited
+         return true
+       end
+      end
+    end
+    return false
+  end
+  
+
+
+
 end

@@ -12,4 +12,7 @@ class SubscriptionsMailerPreview < ActionMailer::Preview
   def welcome_basic_user
     SubscriptionsMailer.welcome_basic_user(User.first)
   end
+  def discount_coupon
+    SubscriptionsMailer.discount_coupon(User.first)
+  end
 end

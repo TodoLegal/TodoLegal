@@ -20,7 +20,7 @@ class SubscriptionsMailer < ApplicationMailer
     @user = user
     # TODO: make this auto calculated again
     # @rounded_all_document_count = 1130
-    mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: user.email, subject: 'Bienvenido(a) a TodoLegal.')
+    mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: user.email, subject: 'Bienvenido(a) a TodoLegal')
   end
 
   def welcome_pro_user user
@@ -34,6 +34,13 @@ class SubscriptionsMailer < ApplicationMailer
     @user = user
     # TODO: make this auto calculated again
     # @rounded_all_document_count = 1130
-    mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: user.email, subject: 'Cuenta ha expirado, cupón de descuento.')
+    mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: user.email, subject: 'Cuenta ha expirado')
+  end
+
+  def discount_coupon user
+    @user = user
+    # TODO: make this auto calculated again
+    # @rounded_all_document_count = 1130
+    mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: user.email, subject: '50% descuento')
   end
 end

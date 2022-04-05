@@ -15,6 +15,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
     @pricing_onboarding = params[:pricing_onboarding]
     session[:return_to] = params[:return_to] if params[:return_to]
     super
+
+    if ENV['MAILGUN_KEY']
+      SubscriptionsMailer.welcome_basic_user(current_user).deliver
+    end
+
   end
 
   # POST /resource

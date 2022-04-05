@@ -16,10 +16,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
     session[:return_to] = params[:return_to] if params[:return_to]
     super
 
-    if ENV['MAILGUN_KEY']
-      SubscriptionsMailer.welcome_basic_user(current_user).deliver
-    end
-
   end
 
   # POST /resource
@@ -105,6 +101,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
       'last_sign_in_ip'      => current_user.last_sign_in_ip,
       'receive_information_emails'      => current_user.receive_information_emails
       })
+
+      if ENV['MAILGUN_KEY']
+        SubscriptionsMailer.welcome_basic_user(current_user).deliver
+      end
+      
     end
     if $discord_bot
       $discord_bot.send_message($discord_bot_channel_notifications, "Se ha registrado un nuevo usuario :tada:")

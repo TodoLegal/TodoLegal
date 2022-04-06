@@ -70,11 +70,12 @@ module ApplicationHelper
 
   #deprecated
   def can_access_documents(user_document_download_tracker, current_user_type)
-   if current_user_type == "pro"
+   if current_user_type == "pro" 
      return true
    elsif current_user_type == "basic"
      return user_document_download_tracker.downloads < MAXIMUM_BASIC_MONTHLY_DOCUMENTS
    else
+      already_logged_in_helper 
     #  return user_document_download_tracker.downloads < MAXIMUM_NOT_LOGGGED_MONTHLY_DOCUMENTS
     return false
    end
@@ -165,7 +166,8 @@ module ApplicationHelper
     end
   end
 
-  def already_logged_in
+  def already_logged_in_helper
+    puts "dosinsdofinsdoifn  Entre al if ajjdnfoinwponwponwepgewngpwegon"
     Warden::Manager.after_set_user only: :fetch do |record, warden, options|
       scope = options[:scope]
       if record.devise_modules.include?(:session_limitable) &&
@@ -185,14 +187,15 @@ module ApplicationHelper
          warden.logout(scope)
          throw :warden, scope: scope, message: :session_limited
          sign_out current_user
+         puts "owefnweofnweofinwf oewfnweofnw Estoy logueado sjneofsnfoeiwfnweoifnweoifn"
          return true
+         
        end
       end
     end
+    puts "owefnweofnweofinwf oewfnweofnw Estoy deslogueado sjneofsnfoeiwfnweoifnweoifn"
     return false
   end
   
-
-
 
 end

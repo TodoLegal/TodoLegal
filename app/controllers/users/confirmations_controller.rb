@@ -12,7 +12,9 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
     super
     if @email
       @first_name = User.find_by_email(@email).first_name
+      redirect_to "http://valid.todolegal.app"
     end
+    
   end
 
   # GET /resource/confirmation?confirmation_token=abcdef

@@ -2,7 +2,6 @@ class Api::V1::DocumentsController < ApplicationController
   protect_from_forgery with: :null_session
   include ApplicationHelper
   before_action :document_exists!, only: [:get_document]
-  before_action :already_logged_in_helper
   before_action :doorkeeper_authorize!, only: [:get_document, :get_documents]
   skip_before_action :doorkeeper_authorize!, unless: :has_access_token?
   
@@ -25,7 +24,7 @@ class Api::V1::DocumentsController < ApplicationController
     user_document_download_tracker = get_user_document_download_tracker(user_id_str)
     can_access_document = can_access_documents(user_document_download_tracker, current_user_type_api(user))
     
-    if already_logged_in_helper and can_access_document and @document.original_file.attached? 
+    if can_access_document and @document.original_file.attached?
      json_document = json_document.merge(file: url_for(@document.original_file))
      puts already_logged_in_helper
     else

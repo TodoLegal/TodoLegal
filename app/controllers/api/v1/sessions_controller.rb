@@ -44,7 +44,7 @@ class Api::V1::SessionsController < Devise::SessionsController
     # end 
     render json: {"user": user,
       "user_type": current_user_type_api(user),
-      "confirmed_user": user?.confirmed_at?
+      "confirmed_user": user ? user.confirmed_at : false
     }
   end
 

@@ -26,13 +26,8 @@ class Api::V1::DocumentsController < ApplicationController
     
     if can_access_document and @document.original_file.attached?
      json_document = json_document.merge(file: url_for(@document.original_file))
-     puts already_logged_in_helper
     else
-      if current_user.confirmed_at? == false
-       current_user.send_confirmation_instructions
-      end 
      json_document = json_document.merge(file: "")
-     puts already_logged_in_helper
     end
     #to here
 

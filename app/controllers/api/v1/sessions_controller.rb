@@ -39,12 +39,12 @@ class Api::V1::SessionsController < Devise::SessionsController
 
   def me
     user = User.find_by_id(doorkeeper_token.resource_owner_id)
-    # if current_user?.confirmed_at? == false
+    # if current_user.confirmed_at? == false
     #   current_user.send_confirmation_instructions
     # end 
     render json: {"user": user,
       "user_type": current_user_type_api(user),
-      "confirmed_user": user ? user.confirmed_at : false
+      "confirmed_user": user ? user.confirmed_at? : false
     }
   end
 

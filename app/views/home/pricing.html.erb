@@ -26,89 +26,180 @@
     <% end %>
   <% end %>
 
-  <div class="card card--pricing">
-  <div class="container">
-    <div class="row">
-      <div class="pricing-heading col-12">
-      <h2 class="title">Elige un Plan</h3>
-      <p class="body">Valid es una herramienta para abogados y equipos legales que quieren optimizar sus procesos de investigación y mantenerse informados de los cambios mas relevantes.</p>
+  <div class="card--pricing">
+    <div class="container">
+      <div class="row">
+        <div class="pricing-heading col-12">
+        <h2 class="title">Elige un Plan</h3>
+        <p class="body">Valid es una herramienta para abogados y equipos legales que quieren optimizar sus procesos de investigación y mantenerse informados de los cambios mas relevantes.</p>
+          
+        <p class="body">Con Inteligencia Artificial y Motores de Búsqueda, facilitamos el acceso a información legal contenida en La Gaceta. Puedes encontrar documentos por número de publicación o tema, y descargar fácilmente los archivos. Cada nueva Gaceta de Honduras la puedes encontrar en Valid.</p>
+                
+        <p class="body">Conoce nuestros planes, y elige el que mas te sirva.  
+
+          </p>
+        </div>
+      </div>
+
+      <div class="row range-label desktop-range-labels">
+        <div class="col-lg-4 col-md-12 pro-labels-container">
+          <label for="customRange" class="range-top-label">Mensual</label>
+          <label for="customRange" class="range-top-label">Semestral</label>
+          <label for="customRange" class="range-top-label">Anual</label>
+        </div>
+      </div>
+      <div class="row pro-range desktop-range">
+        <div class="col-lg-4 col-md-12">
+          <input type="range" class="form-range" min="1" max="3" value="1" step="1" id="customRange" onchange="changeProPlan(this.value)">
+        </div>
+      </div>
+      
+      <div class="row row-eq-height">
+
+       <!-- Card - Plan Basico  -->
+        <div class="col-lg-4 col-md-12">
+          <div class="card card--dark-100" id="pro-mensual">
+            <div class="card-body">
+              <h5 class="card-title">Prueba Gratis</h5>
+              <h6 class="card-price">Gratis</h6>
+                <%= render 'basic_pricing_description' %>
+            </div>
+            <div class="card-bottom">
+              <a href="https://valid.todolegal.app" class="btn btn-block btn-primary btn-pricing"%>Iniciar prueba </a>
+            </div>
+          </div>
+        </div>
         
-      <p class="body">Con Inteligencia Artificial y Motores de Búsqueda, facilitamos el acceso a información legal contenida en La Gaceta. Puedes encontrar documentos por número de publicación o tema, y descargar fácilmente los archivos. Cada nueva Gaceta de Honduras la puedes encontrar en Valid.</p>
-              
-      <p class="body">Conoce nuestros planes, y elige el que mas te sirva.  
+        <!-- Mobile range  -->
+        <div class="col-lg-4 col-md-12 pro-labels-container mobile-range-labels">
+          <label for="customRange" class="range-top-label">Mensual</label>
+          <label for="customRange" class="range-top-label">Semestral</label>
+          <label for="customRange" class="range-top-label">Anual</label>
+        </div>
 
-        </p>
-      </div>
-    </div>
+        <div class="col-lg-4 col-md-12 mobile-range">
+          <input type="range" class="form-range" min="1" max="3" value="1" step="1" id="customRange" onchange="changeProPlan(this.value)">
+        </div>
+        <!-- End of mobile range-->
 
-    <div class="row row-eq-height">
-
-      <!-- Pro Tier -->
-        <div class="col-lg-6 card card--dark-100 hide-plan" id="pro-tier">
-          <div class="card-body">
-            <h5 class="card-title">Pro</h5>
-            <h6 class="card-price">$ <%= MONTHLY_PRICE_ANNUALLY %><span class="period">/mensual</span></h6>
-            <small>Facturado a <strong>$<%= BASE_PRICE_ANNUALLY %></strong> anual -50%</small>
-            <%= render 'pro_pricing_description' %>
-          </div>
-          <div class="card-bottom">
-            <%= button_to "Elegir Plan Pro", @select_pro_plan_path, method: :get, params: {is_onboarding: @is_onboarding, pricing_onboarding: @pricing_onboarding, go_to_law: @go_to_law}, class:"btn btn-block btn-primary"%>
-            <p class="text-center py-2 change-plan-link" onclick="changePlan(2)">Cambiar a pago mensual</p>
+         <!-- Pro Tier mensual  -->
+        <div class="col-lg-4 col-md-12" id="proMensual">
+          <div class="card card--dark-100">
+            <div class="card-body">
+              <h5 class="card-title">Pro Mensual</h5>
+              <h6 class="card-price">$<%= BASE_PRICE_MONTHLY %><span class="period">/mensual</span></h6>
+              <!-- 
+              <small>Podrás ahorrar <strong>50%</strong> si eliges el
+                //Agregar el switch de mensual a anual tambien
+                <label class="link" onclick="changePlan(1)">pago anual</label>.</small>
+                -->
+                <%= render 'pro_pricing_description' %>
+            </div>
+            <div class="card-bottom">
+              <%= button_to "Elegir Plan Pro", @select_pro_plan_path, method: :get, params: {is_monthly: true, is_onboarding: @is_onboarding, pricing_onboarding: @pricing_onboarding, go_to_law: @go_to_law}, class:"btn btn-block btn-primary btn-pricing"%>
+              <!-- 
+              <p class="text-center py-2 change-plan-link" onclick="changePlan(1)">Cambiar a pago anual</p>
+              -->
+            </div>
           </div>
         </div>
 
-      <!-- Card - Plan Pro Mensual  -->
-       
-        <div class="col-lg-6 card card--dark-100" id="pro-mensual">
-          <div class="card-body">
-            <h5 class="card-title">Pro</h5>
-            <h6 class="card-price">$<%= BASE_PRICE_MONTHLY %><span class="period">/mensual</span></h6>
-            <!-- 
-            <small>Podrás ahorrar <strong>50%</strong> si eliges el
-             //Agregar el switch de mensual a anual tambien
-             <label class="link" onclick="changePlan(1)">pago anual</label>.</small>
-             -->
-             <%= render 'pro_pricing_description' %>
-          </div>
-          <div class="card-bottom">
-            <%= button_to "Elegir Plan Pro", @select_pro_plan_path, method: :get, params: {is_monthly: true, is_onboarding: @is_onboarding, pricing_onboarding: @pricing_onboarding, go_to_law: @go_to_law}, class:"btn btn-block btn-primary"%>
-            <!-- 
-            <p class="text-center py-2 change-plan-link" onclick="changePlan(1)">Cambiar a pago anual</p>
-            -->
+        <!-- Pro Tier semestral -->
+        <div class="col-lg-4 col-md-12 hide-plan" id="proSemestral">
+          <div class="card card--dark-100">
+            <div class="card-body">
+              <h5 class="card-title">Pro Semestral</h5>
+              <h6 class="card-price">$ <%= MONTHLY_PRICE_ANNUALLY %><span class="period">/mensual</span></h6>
+              <small>Facturado a <strong>$<%= BASE_PRICE_ANNUALLY %></strong> anual -50%</small>
+              <%= render 'pro_pricing_description' %>
+            </div>
+            <div class="card-bottom">
+              <%= button_to "Elegir Plan Pro", @select_pro_plan_path, method: :get, params: {is_onboarding: @is_onboarding, pricing_onboarding: @pricing_onboarding, go_to_law: @go_to_law}, class:"btn btn-block btn-primary btn-pricing"%>
+              <!-- 
+              <p class="text-center py-2 change-plan-link" onclick="changePlan(2)">Cambiar a pago mensual</p>
+              -->
+            </div>
           </div>
         </div>
 
-      <!-- Enterprise -->
-        <div class="col-lg-6 card card--dark-100 mb-5 mb-lg-0 card--enterprise">
-          <div class="card-body">
-            <h5 class="card-title">Enterprise</h5>
-            <h6 class="card-price">$ <%= ENTERPRISE_PRICE %><span class="period">/mensual</span></h6>
-            <!-- 
-            <small>Para empresas.</small>
-            -->
-            <%= render 'enterprise_pricing_description' %>
-          </div>
-          <div class="card-bottom">
-            <a href="https://calendly.com/tl-ventas/15" class="btn btn-block btn-primary"> Programa una llamada </a>
+        <!-- Pro Tier anual -->
+        <div class="col-lg-4 col-md-12 hide-plan" id="proAnual">
+          <div class="card card--dark-100">
+            <div class="card-body">
+              <h5 class="card-title">Pro Anual</h5>
+              <h6 class="card-price">$ <%= MONTHLY_PRICE_ANNUALLY %><span class="period">/mensual</span></h6>
+              <small>Facturado a <strong>$<%= BASE_PRICE_ANNUALLY %></strong> anual -50%</small>
+              <%= render 'pro_pricing_description' %>
+            </div>
+            <div class="card-bottom">
+              <%= button_to "Elegir Plan Pro", @select_pro_plan_path, method: :get, params: {is_onboarding: @is_onboarding, pricing_onboarding: @pricing_onboarding, go_to_law: @go_to_law}, class:"btn btn-block btn-primary btn-pricing"%>
+              <!-- 
+              <p class="text-center py-2 change-plan-link" onclick="changePlan(2)">Cambiar a pago mensual</p>
+              -->
+            </div>
           </div>
         </div>
 
+        <!-- Start Enterprise -->
+        <div class="col-lg-4 col-md-12">
+          <div class="card card--dark-100 card--enterprise">
+            <div class="card-body">
+              <h5 class="card-title">Enterprise</h5>
+              <h6 class="card-price">$ <%= ENTERPRISE_PRICE %><span class="period">/mensual</span></h6>
+              <!-- 
+              <small>Para empresas.</small>
+              -->
+              <%= render 'enterprise_pricing_description' %>
+            </div>
+            <div class="card-bottom">
+              <a href="https://calendly.com/tl-ventas/15" class="btn btn-block btn-primary btn-pricing"> Programa una llamada </a>
+            </div>
+          </div>
+        </div>
+        <!-- End Enterprise -->
+        
       </div>
-      </div>
+
     </div>
   </div>
 </section>
 
 <script>
-  function changePlan(plan){
-    if(plan == 1){
-      document.getElementById("pro-tier").classList.remove('hide-plan');
-      document.getElementById("pro-mensual").classList.add('hide-plan');
-    }else{
-      document.getElementById("pro-mensual").classList.remove('hide-plan');
-      document.getElementById("pro-tier").classList.add('hide-plan');
+  // function changePlan(plan){
+  //   if(plan == 1){
+  //     document.getElementById("pro-tier").classList.remove('hide-plan');
+  //     document.getElementById("pro-mensual").classList.add('hide-plan');
+  //   }else{
+  //     document.getElementById("pro-mensual").classList.remove('hide-plan');
+  //     document.getElementById("pro-tier").classList.add('hide-plan');
+  //   }
+  // }
+
+    function changeProPlan( value ){
+      switch (value) {
+        case "1":
+          document.getElementById("proMensual").classList.remove('hide-plan');
+          document.getElementById("proSemestral").classList.add('hide-plan');
+          document.getElementById("proAnual").classList.add('hide-plan');
+          break;
+        case "2":
+          document.getElementById("proMensual").classList.add('hide-plan');
+          document.getElementById("proSemestral").classList.remove('hide-plan');
+          document.getElementById("proAnual").classList.add('hide-plan');
+          break;
+        case "3":
+          document.getElementById("proMensual").classList.add('hide-plan');
+          document.getElementById("proSemestral").classList.add('hide-plan');
+          document.getElementById("proAnual").classList.remove('hide-plan');
+          break;
+        default:
+          document.getElementById("proMensual").classList.remove('hide-plan');
+          document.getElementById("proSemestral").classList.add('hide-plan');
+          document.getElementById("proAnual").classList.add('hide-plan');
+          break;
+      }
     }
-  }
+    
 </script>
 
 <style>
@@ -124,6 +215,55 @@
   .pricing .card.card--discount {
     border: 1px solid #1A7FFA;
     border-radius: 0 0 4px 4px;
+  }
+  
+  .btn-pricing{
+    width: 80% !important;
+  }
+
+  .range-label{
+    justify-content: center;
+  }
+  
+  .pro-range{
+    justify-content: center;
+    margin-bottom: 15px;
+  }
+
+  .form-range{
+    width: 100%;
+  }
+
+  .pro-labels-container{
+    font-size: 0.9rem;
+    text-align-last: justify;
+  }
+
+  .desktop-range-labels{
+    display: none;
+  }
+  .desktop-range{
+    display: none;
+  }
+
+  .mobile-range-labels{
+    margin-top: 20px;
+  }
+  
+  @media only screen and (min-width: 992px) {
+     .desktop-range-labels{
+       display: flex;
+     }
+     .desktop-range{
+       display: flex;
+     }
+
+     .mobile-range-labels{
+       display: none;
+     }
+     .mobile-range{
+       display: none;
+     }
   }
 
   /* Label discount
@@ -210,6 +350,7 @@
   }
 
   .card--pricing {
+      background-color: #fff;
       padding-bottom: 2rem;
   }
 
@@ -217,7 +358,7 @@
     padding-bottom: 1.5rem;
   }
 
-@media only screen and (min-width: 1280px) {
+  @media only screen and (min-width: 1280px) {
      .card--pricing {
         padding: 0 2rem 3rem 2rem;
     }
@@ -241,9 +382,9 @@
 
   @media only screen and (min-width: 992px) {
      
-     .pricing .row {
+     /* .pricing .row {
        justify-content: space-between;
-     }
+     } */
      .card.col-lg-6 {
        flex: 0 0 48%;
        margin-top: 1rem;

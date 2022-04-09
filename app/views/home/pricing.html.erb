@@ -41,15 +41,17 @@
         </div>
       </div>
 
-      <div class="row range-label">
+      <div class="row range-label desktop-range-labels">
         <div class="col-lg-4 col-md-12 pro-labels-container">
           <label for="customRange" class="range-top-label">Mensual</label>
           <label for="customRange" class="range-top-label">Semestral</label>
           <label for="customRange" class="range-top-label">Anual</label>
         </div>
       </div>
-      <div class="row pro-range">
-        <input type="range" class="form-range" min="1" max="3" value="1" step="1" id="customRange" onchange="changeProPlan(this.value)">
+      <div class="row pro-range desktop-range">
+        <div class="col-lg-4 col-md-12">
+          <input type="range" class="form-range" min="1" max="3" value="1" step="1" id="customRange" onchange="changeProPlan(this.value)">
+        </div>
       </div>
       
       <div class="row row-eq-height">
@@ -67,6 +69,18 @@
             </div>
           </div>
         </div>
+        
+        <!-- Mobile range  -->
+        <div class="col-lg-4 col-md-12 pro-labels-container mobile-range-labels">
+          <label for="customRange" class="range-top-label">Mensual</label>
+          <label for="customRange" class="range-top-label">Semestral</label>
+          <label for="customRange" class="range-top-label">Anual</label>
+        </div>
+
+        <div class="col-lg-4 col-md-12 mobile-range">
+          <input type="range" class="form-range" min="1" max="3" value="1" step="1" id="customRange" onchange="changeProPlan(this.value)">
+        </div>
+        <!-- End of mobile range-->
 
          <!-- Pro Tier mensual  -->
         <div class="col-lg-4 col-md-12" id="proMensual">
@@ -217,12 +231,39 @@
   }
 
   .form-range{
-    width: 30%;
+    width: 100%;
   }
 
   .pro-labels-container{
     font-size: 0.9rem;
     text-align-last: justify;
+  }
+
+  .desktop-range-labels{
+    display: none;
+  }
+  .desktop-range{
+    display: none;
+  }
+
+  .mobile-range-labels{
+    margin-top: 20px;
+  }
+  
+  @media only screen and (min-width: 992px) {
+     .desktop-range-labels{
+       display: flex;
+     }
+     .desktop-range{
+       display: flex;
+     }
+
+     .mobile-range-labels{
+       display: none;
+     }
+     .mobile-range{
+       display: none;
+     }
   }
 
   /* Label discount

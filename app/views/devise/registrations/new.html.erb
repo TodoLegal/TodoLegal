@@ -15,56 +15,60 @@
       <% if @pricing_onboarding %>
         <input type="hidden" id="pricing_onboarding" name="pricing_onboarding" value="<%= @pricing_onboarding %>">
       <% end %>
-            <!-------------------------------- Register Card ------------------------------------------->
-            <a href="/">
-              <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="img-fluid">
-            </a>
-            <div class="card card--onboarding bg-white rounded">
-              <!-------------------------------- Card Body ------------------------------------------->
-              <div class="card-body">
-                <h2 class="card-title text-center">Crea tu cuenta</h2>
-                <p class="content text-center">Si ya tienes una cuenta <%= render "devise/shared/links" %></p>
-                <%= render "devise/shared/error_messages", resource: resource%>
-                <div class="form-group">
-                  <div class="row">
-                    <div class="col-md-6 form-group">
-                      <%= f.label :Nombre %><br />
-                      <%= f.text_field :first_name, autofocus: true, class:"form-control", id:"name"%>
-                    </div>
-                    <div class="col-md-6 form-group">
-                      <%= f.label :Apellido %><br />
-                      <%= f.text_field :last_name, class:"form-control", id:"lastName"%>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <%= f.label :Correo_eléctronico %><br />
-                  <%= f.email_field :email, autocomplete: "email", class:"form-control", id:"email"%>
-                </div>
-
-                <div class="form-group">
-                  <%= f.label :Contraseña %><br />
-                  <%= f.password_field :password, autocomplete: "new-password", class: "form-control", id:"password"%>
-                  <small id="passwordHelpBlock" class="form-text text-muted">
-                    <em>(Mínimo <%= @minimum_password_length %> caracteres)</em>
-                  </small>
-                </div>
-
-                <div class="form-group">
-                  <%= f.label :Confirma_tu_contraseña %><br />
-                  <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", id:"confirmPassword"%>
-                </div>
-                <div class="form-group">
-                  <button type="submit" class="btn btn-primary btn-block btn-next btn-lg" id="nextButton"  
-                  data-container="body" data-toggle="popover" data-placement="top" data-trigger="focus"
-                  data-content="Complete todos los campos." onclick="required()">Crear cuenta</button>
-                </div>
+      <!-------------------------------- Register Card ------------------------------------------->
+      <div style="text-align:center;">
+        <a class="back-image">
+          <img class="image" border="0" alt="Logo TodoLegal" href="/" src="/img/Icon-Todolegal-gray20px.svg"/>
+        </a>
+        <a class="back-image">
+          <img class="image" border="0" alt="Logo Valid" href="/" src="/img/Icon-Valid-gray20px.svg"/>
+        </a>
+      </div>
+      <div class="card card--onboarding bg-white rounded">
+        <!-------------------------------- Card Body ------------------------------------------->
+        <div class="card-body">
+          <h2 class="card-title text-center">Crea tu cuenta</h2>
+          <p class="content text-center">Si ya tienes una cuenta <%= render "devise/shared/links" %></p>
+          <%= render "devise/shared/error_messages", resource: resource%>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-6 form-group">
+                <%= f.label :Nombre %><br />
+                <%= f.text_field :first_name, autofocus: true, class:"form-control", id:"name"%>
               </div>
-              <!-------------------------------- End of Card Body ------------------------------------------->
+              <div class="col-md-6 form-group">
+                <%= f.label :Apellido %><br />
+                <%= f.text_field :last_name, class:"form-control", id:"lastName"%>
+              </div>
             </div>
-            <p class="content text-center">Al crear una cuenta, accedes a los <a href="https://policies.todolegal.app/terms/" target="_blank">Términos y condiciones</a></p>
-          <!-------------------------------- End of Register Card ------------------------------------------->
           </div>
+          <div class="form-group">
+            <%= f.label :Correo_eléctronico %><br />
+            <%= f.email_field :email, autocomplete: "email", class:"form-control", id:"email"%>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :Contraseña %><br />
+            <%= f.password_field :password, autocomplete: "new-password", class: "form-control", id:"password"%>
+            <small id="passwordHelpBlock" class="form-text text-muted">
+              <em>(Mínimo <%= @minimum_password_length %> caracteres)</em>
+            </small>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :Confirma_tu_contraseña %><br />
+            <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", id:"confirmPassword"%>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block btn-next btn-lg" id="nextButton"  
+            data-container="body" data-toggle="popover" data-placement="top" data-trigger="focus"
+            data-content="Complete todos los campos." onclick="required()">Crear cuenta</button>
+          </div>
+        </div>
+        <!-------------------------------- End of Card Body ------------------------------------------->
+      </div>
+      <p class="content text-center">Al crear una cuenta, accedes a los <a href="https://policies.todolegal.app/terms/" target="_blank">Términos y condiciones</a></p>
+          <!-------------------------------- End of Register Card ------------------------------------------->
       <%= javascript_pack_tag "form_validator" %>
     <% end %>
   </div>
@@ -145,6 +149,16 @@
 </script>
 
 <style>
+  .image{
+    height: 12vh;
+    max-height: 110px;
+    margin: 2vh auto 0;
+  }
+
+  .back-image{
+    display: inline-block;
+  }
+
   .form-check-input{
     width: 25px; 
     height:25px;
@@ -189,12 +203,6 @@
     max-height: 110px;
     margin: 2vh auto 0;
     display: block;
-  }
-
-  .back-image {
-    width: 30%;
-    display: block;
-    margin: auto;
   }
 
   #back-icon-container{

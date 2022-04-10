@@ -14,13 +14,21 @@ class BillingController < ApplicationController
     end
 
     @is_monthly = params[:is_monthly]
+    @is_semestral = params[:is_semestral]
+    @is_annually = params[:is_annually]
+    @is_student = params[:is_student]
     @is_onboarding = params[:is_onboarding]
     @go_to_law = params["go_to_law"]
     @coupon = params["coupon"]
+
     @base_price_monthly = BASE_PRICE_MONTHLY
-    @monthly_price_annually = MONTHLY_PRICE_ANNUALLY
-    @enterprise_price = ENTERPRISE_PRICE
+    @base_price_semestral = BASE_PRICE_SEMESTRAL
     @base_price_annually = BASE_PRICE_ANNUALLY
+    @base_price_student = BASE_PRICE_STUDENT
+    @monthly_price_annually = MONTHLY_PRICE_ANNUALLY
+    @monthly_price_semestral = MONTHLY_PRICE_SEMESTRAL
+    @enterprise_price = ENTERPRISE_PRICE
+
     if params["invalid_card"] == "true"
       @stripe_backend_error = I18n.t(:invalid_card)
     end
@@ -61,12 +69,21 @@ class BillingController < ApplicationController
         if !params["is_monthly"].blank?
           redirect_path += "is_monthly=" + params["is_monthly"] + "&"
         end
+        if !params["is_semestral"].blank?
+          redirect_path += "is_semestral=" + params["is_semestral"] + "&"
+        end
+        if !params["is_annually"].blank?
+          redirect_path += "is_annually=" + params["is_annually"] + "&"
+        end
+        if !params["is_student"].blank?
+          redirect_path += "is_student=" + params["is_student"] + "&"
+        end
         redirect_path += "is_onboarding=true"
         format.html { redirect_to redirect_path }
       end
       return
     end
-    if params["is_monthly"] == "true"
+    if params["is_monthly"] == "true" && params["is_student"].blank?
       if coupon.blank?
         subscription = Stripe::Subscription.create({
           customer: customer.id,
@@ -103,7 +120,7 @@ class BillingController < ApplicationController
       if ENV['MAILGUN_KEY']
         SubscriptionsMailer.welcome_pro_user(current_user).deliver
       end
-    else
+    elsif params["is_annually"] == "true"
       if coupon.blank?
         subscription = Stripe::Subscription.create({
           customer: customer.id,
@@ -140,6 +157,81 @@ class BillingController < ApplicationController
       if ENV['MAILGUN_KEY']
         SubscriptionsMailer.welcome_pro_user(current_user).deliver
       end
+    elsif params["is_semestral"] == "true"
+      if coupon.blank?
+        subscription = Stripe::Subscription.create({
+          customer: customer.id,
+          items: [{
+            price: STRIPE_SEMESTER_SUBSCRIPTION_PRICE
+          }]
+        })
+        if current_user
+          $tracker.track(current_user.id, 'Upgrade Plan', {
+            'plan' => 'Pro',
+            'payment' => 'Semestral',
+            'coupon' => false
+          })
+        end
+      else
+        subscription = Stripe::Subscription.create({
+          customer: customer.id,
+          items: [{
+            price: STRIPE_SEMESTER_SUBSCRIPTION_PRICE
+          }],
+          coupon: coupon
+        })
+        if current_user
+          $tracker.track(current_user.id, 'Upgrade Plan', {
+            'plan' => 'Pro',
+            'payment' => 'Semestral',
+            'coupon' => true
+          })
+        end
+      end
+      if $discord_bot
+        $discord_bot.send_message($discord_bot_channel_notifications, "Se ha registrado un usuario Pro por 6 meses :dancer:")
+      end
+      if ENV['MAILGUN_KEY']
+        SubscriptionsMailer.welcome_pro_user(current_user).deliver
+      end
+    else
+      if coupon.blank?
+        subscription = Stripe::Subscription.create({
+          customer: customer.id,
+          items: [{
+            price: STRIPE_STUDENT_SUBSCRIPTION_PRICE
+          }]
+        })
+        if current_user
+          $tracker.track(current_user.id, 'Upgrade Plan', {
+            'plan' => 'Pro',
+            'payment' => 'Student',
+            'coupon' => false
+          })
+        end
+      else
+        subscription = Stripe::Subscription.create({
+          customer: customer.id,
+          items: [{
+            price: STRIPE_STUDENT_SUBSCRIPTION_PRICE
+          }],
+          coupon: coupon
+        })
+        if current_user
+          $tracker.track(current_user.id, 'Upgrade Plan', {
+            'plan' => 'Pro',
+            'payment' => 'Student',
+            'coupon' => true
+          })
+        end
+      end
+      if $discord_bot
+        $discord_bot.send_message($discord_bot_channel_notifications, "Se ha registrado un usuario Pro mensual estudiante :dancer:")
+      end
+      if ENV['MAILGUN_KEY']
+        SubscriptionsMailer.welcome_pro_user(current_user).deliver
+      end
+    
     end
 
     user = User.find_by_email(params["email"])

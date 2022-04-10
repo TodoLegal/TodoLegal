@@ -12,6 +12,15 @@
       <% if @is_monthly %>
         <input type="hidden" id="is_monthly" name="is_monthly" value="<%= @is_monthly %>">
       <% end %>
+      <% if @is_semestral %>
+        <input type="hidden" id="is_semestral" name="is_semestral" value="<%= @is_semestral %>">
+      <% end %>
+      <% if @is_annually %>
+        <input type="hidden" id="is_annually" name="is_annually" value="<%= @is_annually %>">
+      <% end %>
+      <% if @is_student %>
+        <input type="hidden" id="is_student" name="is_student" value="<%= @is_student %>">
+      <% end %>
       <% if @pricing_onboarding %>
         <input type="hidden" id="pricing_onboarding" name="pricing_onboarding" value="<%= @pricing_onboarding %>">
       <% end %>

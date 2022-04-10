@@ -39,9 +39,14 @@
           <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
           <% if @is_monthly %>
             <%= hidden_field_tag :is_monthly, true %>
-          <% else %>
-            <%= hidden_field_tag :is_monthly, false %>
+          <% elsif @is_semestral %>
+            <%= hidden_field_tag :is_semestral, true %>
+          <% elsif @is_annually %>
+            <%= hidden_field_tag :is_annually, true %>
+          <% elsif @is_student %>
+            <%= hidden_field_tag :is_student, true %>
           <% end %>
+          
           <% if @is_coupon_valid %>
             <%= hidden_field_tag :coupon, @coupon %>
           <% end %>
@@ -114,8 +119,15 @@
       <div class="card-heading">
         <% if @is_monthly %>
           <h2 class="card-title">Suscripción mensual</h2>
-        <% else %>
+        <% elsif @is_semestral %>
+          <h2 class="card-title">Suscripción semestral</h2>
+          <p style="font-size: 14px;"><i>Dependiendo de tu tarjeta de crédito o debito, el cobro puede reflejarse en lempiras o dólares.</i></p>
+        <% elsif @is_annually %>
           <h2 class="card-title">Suscripción anual</h2>
+          <p style="font-size: 14px;"><i>Dependiendo de tu tarjeta de crédito o debito, el cobro puede reflejarse en lempiras o dólares.</i></p>
+        <% else %>
+          <h2 class="card-title">Suscripción Pro para estudiantes</h2>
+          <p style="font-size: 14px;"><i>Tienes un descuento automático en tu suscripción mensual.</i></p>
           <p style="font-size: 14px;"><i>Dependiendo de tu tarjeta de crédito o debito, el cobro puede reflejarse en lempiras o dólares.</i></p>
         <% end %>
       </div>
@@ -138,7 +150,24 @@
             <% end %>
           </strong>
         </div>
-      <% else %>
+      <% elsif @is_semestral %>
+        <div class="subscription-row">
+          <p class="subscription-row-label">Mensualidad</p>
+          <strong class="subscription-row-value">$<%= number_with_precision(@monthly_price_semestral, :precision => 2) %></strong>
+        </div>
+        <div class="subscription-row subscription-row-total">
+          <p class="subscription-row-label">Total</p>
+          <strong class="subscription-row-value">
+            <% if @is_coupon_valid %>
+              <del>
+                $<%= number_with_precision(@base_price_semestral, :precision => 2) %>
+              </del>
+            <% else %>
+              $<%= number_with_precision(@base_price_semestral, :precision => 2) %>
+            <% end %>
+        </div>
+
+      <% elsif @is_annually %>
         <div class="subscription-row">
           <p class="subscription-row-label">Mensualidad</p>
           <strong class="subscription-row-value">$<%= number_with_precision(@monthly_price_annually, :precision => 2) %></strong>
@@ -152,6 +181,22 @@
               </del>
             <% else %>
               $<%= number_with_precision(@base_price_annually, :precision => 2) %>
+            <% end %>
+        </div>
+      <% else %>
+        <div class="subscription-row">
+          <p class="subscription-row-label">Mensualidad</p>
+          <strong class="subscription-row-value">$<%= number_with_precision(@base_price_student, :precision => 2) %></strong>
+        </div>
+        <div class="subscription-row subscription-row-total">
+          <p class="subscription-row-label">Total</p>
+          <strong class="subscription-row-value">
+            <% if @is_coupon_valid %>
+              <del>
+                $<%= number_with_precision(@base_price_student, :precision => 2) %>
+              </del>
+            <% else %>
+              $<%= number_with_precision(@base_price_student, :precision => 2) %>
             <% end %>
         </div>
       <% end %>
@@ -175,6 +220,15 @@
             <% end %>
             <% if @is_monthly %>
               <%= hidden_field_tag :is_monthly, @is_monthly %>
+            <% end %>
+            <% if @is_semestral %>
+              <%= hidden_field_tag :is_semestral, @is_semestral %>
+            <% end %>
+            <% if @is_annually %>
+              <%= hidden_field_tag :is_annually, @is_annually %>
+            <% end %>
+            <% if @is_student %>
+              <%= hidden_field_tag :is_student, @is_student %>
             <% end %>
             <%= hidden_field_tag :go_to_law, @go_to_law %>
             <div id="coupon-form" class="input-group input-group-lg mb-6" style="margin: 1rem auto;">

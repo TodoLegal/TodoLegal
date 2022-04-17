@@ -45,6 +45,7 @@ class Users::SessionsController < Devise::SessionsController
            "expected=#{record.unique_session_id.inspect} "\
            "actual=#{warden.session(scope)['unique_session_id'].inspect}"
          end
+         redirect_to '/users/edit'
          warden.raw_session.clear
          warden.logout(scope)
          throw :warden, scope: scope, message: :session_limited

@@ -2,8 +2,8 @@ class Api::V1::SessionsController < Devise::SessionsController
   #skip_before_action :verify_signed_out_user, only[:destroy]
   protect_from_forgery with: :null_session
   include ApplicationHelper
-  before_action :already_logged_in2
-  before_action :doorkeeper_authorize!, only: [:me,:already_logged_in2]
+  before_action :already_logged_in
+  before_action :doorkeeper_authorize!, only: [:me]
 
   def create
     user = warden.authenticate!({user: params[:user]})
@@ -39,17 +39,14 @@ class Api::V1::SessionsController < Devise::SessionsController
 
   def me
     user = User.find_by_id(doorkeeper_token.resource_owner_id)
-    # if current_user.confirmed_at? == false
-    #   current_user.send_confirmation_instructions
-    # end 
     render json: {"user": user,
       "user_type": current_user_type_api(user),
       "confirmed_user": user ? user.confirmed_at? : false
     }
-    already_logged_in2()
+    # already_logged_in2()
   end
 
-  def already_logged_in2
+  def already_logged_in
     Warden::Manager.after_set_user only: :fetch do |record, warden, options|
       scope = options[:scope]
       if record.devise_modules.include?(:session_limitable) &&
@@ -63,7 +60,7 @@ class Api::V1::SessionsController < Devise::SessionsController
            "expected=#{record.unique_session_id.inspect} "\
            "actual=#{warden.session(scope)['unique_session_id'].inspect}"
          end
-         redirect_to '/users/edit'
+        #  redirect_to '/users/edit'
          warden.raw_session.clear
          warden.logout(scope)
          throw :warden, scope: scope, message: :session_limited

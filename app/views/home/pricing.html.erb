@@ -41,6 +41,8 @@
         </div>
       </div>
 
+      <!-- comentario por mientras
+
       <div class="row range-label desktop-range-labels">
         <div class="col-lg-4 col-md-12 pro-labels-container">
           <label for="customRange" class="range-top-label">Mensual</label>
@@ -53,7 +55,8 @@
           <input type="range" class="form-range" min="1" max="3" value="1" step="1" id="customRange" onchange="changeProPlan(this.value)">
         </div>
       </div>
-      
+
+      -->
       <div class="row row-eq-height">
 
        <!-- Card - Plan Basico  -->
@@ -69,18 +72,6 @@
             </div>
           </div>
         </div>
-        
-        <!-- Mobile range  -->
-        <div class="col-lg-4 col-md-12 pro-labels-container mobile-range-labels">
-          <label for="customRange" class="range-top-label">Mensual</label>
-          <label for="customRange" class="range-top-label">Semestral</label>
-          <label for="customRange" class="range-top-label">Anual</label>
-        </div>
-
-        <div class="col-lg-4 col-md-12 mobile-range">
-          <input type="range" class="form-range" min="1" max="3" value="1" step="1" id="customRange" onchange="changeProPlan(this.value)">
-        </div>
-        <!-- End of mobile range-->
 
          <!-- Pro Tier mensual  -->
         <div class="col-lg-4 col-md-12" id="proMensual">
@@ -88,6 +79,19 @@
             <div class="card-body">
               <h5 class="card-title">Pro Mensual</h5>
               <h6 class="card-price">$<%= BASE_PRICE_MONTHLY %><span class="period">/mensual</span></h6>
+              <div class="row range-label desktop-range-labels">
+                <div class="col-lg-12 col-md-12 pro-labels-container">
+                  <label for="customRange1" class="range-top-label">Mensual</label>
+                  <label for="customRange1" class="range-top-label">Semestral</label>
+                  <label for="customRange1" class="range-top-label">Anual</label>
+                </div>
+              </div>
+              <div class="row pro-range desktop-range">
+                <div class="col-lg-12 col-md-12">
+                  <input type="range" class="form-range" min="1" max="3" value="1" id="customRange1" onchange="changeProPlan(this.value)">
+                </div>
+              </div>
+              
               <!-- 
               <small>Podrás ahorrar <strong>50%</strong> si eliges el
                 //Agregar el switch de mensual a anual tambien
@@ -111,6 +115,18 @@
               <h5 class="card-title">Pro Semestral</h5>
               <h6 class="card-price">$ <%= MONTHLY_PRICE_SEMESTRAL %><span class="period">/mensual</span></h6>
               <small>Facturado a <strong>$<%= BASE_PRICE_SEMESTRAL %></strong> semestral -10%</small>
+              <div class="row range-label desktop-range-labels">
+                <div class="col-lg-12 col-md-12 pro-labels-container">
+                  <label for="customRange2" class="range-top-label">Mensual</label>
+                  <label for="customRange2" class="range-top-label">Semestral</label>
+                  <label for="customRange2" class="range-top-label">Anual</label>
+                </div>
+              </div>
+              <div class="row pro-range desktop-range">
+                <div class="col-lg-12 col-md-12">
+                  <input type="range" class="form-range" min="1" max="3" value="2" id="customRange2" onchange="changeProPlan(this.value)">
+                </div>
+              </div>
               <%= render 'pro_pricing_description' %>
             </div>
             <div class="card-bottom">
@@ -129,6 +145,18 @@
               <h5 class="card-title">Pro Anual</h5>
               <h6 class="card-price">$ <%= MONTHLY_PRICE_ANNUALLY %><span class="period">/mensual</span></h6>
               <small>Facturado a <strong>$<%= BASE_PRICE_ANNUALLY %></strong> anual -20%</small>
+              <div class="row range-label desktop-range-labels">
+                <div class="col-lg-12 col-md-12 pro-labels-container">
+                  <label for="customRange3" class="range-top-label">Mensual</label>
+                  <label for="customRange3" class="range-top-label">Semestral</label>
+                  <label for="customRange3" class="range-top-label">Anual</label>
+                </div>
+              </div>
+              <div class="row pro-range desktop-range">
+                <div class="col-lg-12 col-md-12">
+                  <input type="range" class="form-range" min="1" max="3" value="3" id="customRange3" onchange="changeProPlan(this.value)">
+                </div>
+              </div>
               <%= render 'pro_pricing_description' %>
             </div>
             <div class="card-bottom">
@@ -181,21 +209,33 @@
           document.getElementById("proMensual").classList.remove('hide-plan');
           document.getElementById("proSemestral").classList.add('hide-plan');
           document.getElementById("proAnual").classList.add('hide-plan');
+
+          document.getElementById("customRange2").value = 2
+          document.getElementById("customRange3").value = 3
           break;
         case "2":
           document.getElementById("proMensual").classList.add('hide-plan');
           document.getElementById("proSemestral").classList.remove('hide-plan');
           document.getElementById("proAnual").classList.add('hide-plan');
+
+          document.getElementById("customRange1").value = 1
+          document.getElementById("customRange3").value = 3
           break;
         case "3":
           document.getElementById("proMensual").classList.add('hide-plan');
           document.getElementById("proSemestral").classList.add('hide-plan');
           document.getElementById("proAnual").classList.remove('hide-plan');
+
+          document.getElementById("customRange1").value = 1
+          document.getElementById("customRange2").value = 2
           break;
         default:
           document.getElementById("proMensual").classList.remove('hide-plan');
           document.getElementById("proSemestral").classList.add('hide-plan');
           document.getElementById("proAnual").classList.add('hide-plan');
+
+          document.getElementById("customRange2").value = 2
+          document.getElementById("customRange3").value = 3
           break;
       }
     }
@@ -239,30 +279,9 @@
     text-align-last: justify;
   }
 
-  .desktop-range-labels{
-    display: none;
-  }
-  .desktop-range{
-    display: none;
-  }
-
-  .mobile-range-labels{
-    margin-top: 20px;
-  }
-  
-  @media only screen and (min-width: 992px) {
-     .desktop-range-labels{
-       display: flex;
-     }
-     .desktop-range{
-       display: flex;
-     }
-
-     .mobile-range-labels{
-       display: none;
-     }
-     .mobile-range{
-       display: none;
+  @media only screen and (max-width: 992px) {
+     .col-lg-4{
+       margin-bottom: 15px;
      }
   }
 

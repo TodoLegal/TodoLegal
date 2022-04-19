@@ -59,13 +59,19 @@
   <%= render 'layouts/logged_navbar' %> 
 
   <% if notice %>
-    <div class="alert alert-primary alert-dismissible fade show" role="alert" id="notice">
+    <div class="alert alert-primary alert-dismissible fade show text-center" role="alert" id="notice">
       <%= notice %>
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
   <% end %>
+
+  <% if current_user and !current_user.confirmed_at%>
+    <div class="alert alert-primary alert-dismissible fade show text-center" role="alert" id="notice">
+        El último paso es confirmar tu cuenta por correo electrónico. Si no lo tienes  <%= link_to 'Haz clic aquí para reenviar.', send_confirmation_email_path, method: :post%>
+    </div>
+  <%end%>
 
   <%= yield %>
   

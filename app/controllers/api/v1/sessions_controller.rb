@@ -2,8 +2,8 @@ class Api::V1::SessionsController < Devise::SessionsController
   #skip_before_action :verify_signed_out_user, only[:destroy]
   protect_from_forgery with: :null_session
   include ApplicationHelper
-  before_action :already_logged_in
   before_action :doorkeeper_authorize!, only: [:me]
+  before_action :already_logged_in
 
   def create
     user = warden.authenticate!({user: params[:user]})
@@ -41,6 +41,7 @@ class Api::V1::SessionsController < Devise::SessionsController
     user = User.find_by_id(doorkeeper_token.resource_owner_id)
     render json: {"user": user,
       "user_type": current_user_type_api(user),
+      "user_signed_in": user_signed_in?,
       "confirmed_user": user ? user.confirmed_at? : false
     }
     # already_logged_in2()
@@ -61,6 +62,7 @@ class Api::V1::SessionsController < Devise::SessionsController
            "actual=#{warden.session(scope)['unique_session_id'].inspect}"
          end
         #  redirect_to '/users/edit'
+        #  destroy
          warden.raw_session.clear
          warden.logout(scope)
          throw :warden, scope: scope, message: :session_limited

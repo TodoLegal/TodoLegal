@@ -1,6 +1,5 @@
 class HomeController < ApplicationController
   layout 'onboarding', only: [:pricing, :invite_friends, :send_confirmation_email]
-  layout 'landing', only: [:index]
   include ActionView::Helpers::NumberHelper
   require 'set'
   
@@ -9,6 +8,7 @@ class HomeController < ApplicationController
     #  return
     #end
     # @tags = Tag.where(tag_type: TagType.find_by_name("materia"))
+    render action: "index", layout: "landing"
   end
 
   def home

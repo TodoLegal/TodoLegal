@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
-  layout 'onboarding', only: [:pricing, :invite_friends]
+  layout 'onboarding', only: [:pricing, :invite_friends, :send_confirmation_email]
   include ActionView::Helpers::NumberHelper
   require 'set'
   
@@ -145,6 +145,16 @@ class HomeController < ApplicationController
   def invite_friends
   end
 
+  def send_confirmation_email
+    @url = "https#{request.original_url[4...-1]}"
+    if current_user
+      current_user.send_confirmation_instructions
+      #redirect_to @url, notice: "Confirmación enviada a tu correo."
+      redirect_back(fallback_location: @url)
+      flash[:notice] = "Confirmación enviada a tu correo."
+    end
+  end
+
   def getGoogleDriveFiles file_path, get_parent_files, folder, query
     files = []
     if File.file?(file_path)
@@ -267,4 +277,8 @@ protected
     end
     return result_query
   end
+
+
+
+
 end

@@ -178,4 +178,8 @@ module ApplicationHelper
   #   return false
   # end
 
+  #def send_confirmation_email
+  #  current_user.send_confirmation_instructions
+  #end
+
 end

@@ -25,18 +25,15 @@
                                         <tr>
                                             <td style="background-color: #FFFFFF; text-align: left; padding: 40px;">
                                                 <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">
-                                                    Hola <%= @user.first_name %> <%= @user.last_name %>,</p>
+                                                  Hola <%= @user.first_name %> <%= @user.last_name %>,</p>
                                                 <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">
-                                                    Tu cuenta ha sido creada. Por tu seguridad recomendamos <%= link_to 'confirmar tu correo', confirmation_url(@resource, confirmation_token: @token), style:"color: #1A7FFA; text-decoration: underline;" %>
+                                                  Para usar TodoLegal debes confirmar tu correo dando click en el siguiente enlace. <%= link_to 'confirmar tu correo', confirmation_url(@resource, confirmation_token: @token), style:"color: #1A7FFA; text-decoration: underline;" %>
                                                 </p>
                                                 <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">
-                                                    Con la cuenta básica puedes acceder a los documentos más importantes de la legislación hondureña (Constitución, Código Civil, Código Penal, Código del Trabajo, etc).
-                                                </p>
-                                                <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">   
-                                                    Si quieres acceder a más documentos disponibles puedes <a href="https://todolegal.app/pricing" target="_blank" style="color: #1A7FFA; text-decoration: underline;">adquirir la suscripción Pro</a>.
+                                                  Si no creaste una cuenta en TodoLegal, puedes ignorar este correo.
                                                 </p>
                                                 <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">
-                                                    Saludos, 
+                                                ¡Gracias!
                                                 </p>
                                             <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">
                                                 <i>El equipo de Todolegal</i>

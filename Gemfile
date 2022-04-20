@@ -32,6 +32,8 @@ gem 'capistrano-bundler'
 gem 'doorkeeper'
 #Support for NewRelic
 gem 'newrelic_rpm'
+#Queue management
+gem 'sidekiq'
 
 # For capistrano
 gem 'ed25519', '>= 1.2', '< 2.0'

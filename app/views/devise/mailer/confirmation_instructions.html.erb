@@ -27,7 +27,7 @@
                                                 <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">
                                                   Hola <%= @user.first_name %> <%= @user.last_name %>,</p>
                                                 <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">
-                                                  Para usar TodoLegal debes confirmar tu correo dando click en el siguiente enlace. <%= link_to 'confirmar tu correo', confirmation_url(@resource, confirmation_token: @token), style:"color: #1A7FFA; text-decoration: underline;" %>
+                                                  Para usar TodoLegal debes confirmar tu correo dando click en <%= link_to 'este enlace.', confirmation_url(@resource, confirmation_token: @token), style:"color: #1A7FFA; text-decoration: underline;" %>
                                                 </p>
                                                 <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">
                                                   Si no creaste una cuenta en TodoLegal, puedes ignorar este correo.
@@ -91,7 +91,7 @@
                                                     Este es un correo autogenerado y lo estás recibiendo porque creaste una cuenta en Todolegal. Si no hiciste esta solicitud, envianos un correo a <a href="mailto:info@todolegal.app" target="_blank" style="color: #A6B9D3; text-decoration: underline;">info@todolegal.app</a> o escribenos en el chat de <a href="https://todolegal.app" target="_blank" style="color: #A6B9D3; text-decoration: underline;">todolegal.app</a>.
                                                 </p>
                                                 <p style="font-family: Helvetica, Arial, sans-serif; color:#FFFFFF; font-size: 14px;">
-                                                    By TODOLEGAL LLC 2020
+                                                    By TODOLEGAL LLC 2022
                                                 </p>
                                             </td>
                                             

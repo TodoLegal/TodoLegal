@@ -44,7 +44,7 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
     if  user_document_download_tracker.downloads >= 3 && current_user_type_api(user) != "pro"
       if ENV['MAILGUN_KEY']
         SubscriptionsMailer.free_trial_end(user).deliver
-        SubscriptionsMailer.discount_coupon(user).deliver_later(wait_until: 3.hours.from_now)
+        SubscriptionsMailer.discount_coupon(user).deliver_later(wait_until: 1.hour.from_now)
       end
     end
     

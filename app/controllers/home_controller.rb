@@ -146,7 +146,7 @@ class HomeController < ApplicationController
   end
 
   def send_confirmation_email
-    @url = "https#{request.original_url[4...-1]}"
+    @url = "https#{request.original_url[4...-1]}?confirmation_email_sent"
     if current_user
       current_user.send_confirmation_instructions
       #redirect_to @url, notice: "Confirmación enviada a tu correo."

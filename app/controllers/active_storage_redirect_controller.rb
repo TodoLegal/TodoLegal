@@ -3,6 +3,7 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
   include ApplicationHelper
 
   before_action :doorkeeper_authorize!, only: [:show]
+  before_action :already_logged_in_user 
   skip_before_action :doorkeeper_authorize!, unless: :has_access_token?
 
   def show
@@ -24,14 +25,18 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
     #from here
     user_document_download_tracker = get_user_document_download_tracker(user_id_str)
     can_access_document = can_access_documents(user_document_download_tracker, current_user_type_api(user))
-    if user && current_user_type_api(user) != "pro"
+    if user && current_user_type_api(user) != "pro" && current_user
      user_document_download_tracker.downloads += 1
     end
-    if user && can_access_document
+    if user && can_access_document && current_user
      user_document_download_tracker.save
      super
     else
-     redirect_to "http://valid.todolegal.app?error='invalid permissions'"
+      if current_user
+        redirect_to "http://valid.todolegal.app?error='invalid permissions'"
+      else
+        redirect_to "https://test.todolegal.app/users/sign_in"
+      end
      return
     end
     #to here
@@ -43,6 +48,31 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
       end
     end
     
+  end
+
+  def already_logged_in_user
+    Warden::Manager.after_set_user only: :fetch do |record, warden, options|
+      scope = options[:scope]
+      if record.devise_modules.include?(:session_limitable) &&
+        warden.authenticated?(scope) &&
+        options[:store] != false
+       if record.unique_session_id != warden.session(scope)['unique_session_id'] &&
+          !record.skip_session_limitable? && 
+          !warden.session(scope)['devise.skip_session_limitable']
+         Rails.logger.warn do
+           '[devise-security][session_limitable] session id mismatch: '\
+           "expected=#{record.unique_session_id.inspect} "\
+           "actual=#{warden.session(scope)['unique_session_id'].inspect}"
+         end
+        #  redirect_to '/users/edit'
+        #  destroy
+         warden.raw_session.clear
+         warden.logout(scope)
+         throw :warden, scope: scope, message: :session_limited
+         
+       end
+      end
+    end
   end
 
 protected

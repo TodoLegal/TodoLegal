@@ -41,10 +41,8 @@ class Api::V1::SessionsController < Devise::SessionsController
     user = User.find_by_id(doorkeeper_token.resource_owner_id)
     render json: {"user": user,
       "user_type": current_user_type_api(user),
-      "user_signed_in": current_user_signed_in?,
       "confirmed_user": user ? user.confirmed_at? : false
     }
-    # already_logged_in2()
   end
 
   def already_logged_in
@@ -62,7 +60,6 @@ class Api::V1::SessionsController < Devise::SessionsController
            "actual=#{warden.session(scope)['unique_session_id'].inspect}"
          end
         #  redirect_to '/users/edit'
-        #  destroy
          warden.raw_session.clear
          warden.logout(scope)
          throw :warden, scope: scope, message: :session_limited

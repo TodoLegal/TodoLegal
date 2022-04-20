@@ -81,10 +81,6 @@ module ApplicationHelper
   end
   #to here
 
-  def current_user_signed_in?
-    !current_user.nil?
-  end
-
   def current_user_type user
     if user
       if !user.stripe_customer_id.blank?

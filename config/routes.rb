@@ -58,7 +58,6 @@ Rails.application.routes.draw do
       devise_for :users, controllers: { registrations: 'api/v1/registrations', sessions: 'api/v1/sessions' }
       devise_scope :user do
         get "/me", to: 'sessions#me'
-        # get "/already_logged_in", to: 'sessions#already_logged_in2'
       end
       resource :examples do
         member do

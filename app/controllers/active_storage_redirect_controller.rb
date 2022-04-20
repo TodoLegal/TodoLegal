@@ -35,7 +35,7 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
       if current_user
         redirect_to "http://valid.todolegal.app?error='invalid permissions'"
       else
-        redirect_to "https://test.todolegal.app/users/sign_in"
+        redirect_to "http://localhost:3000?error=session already in use"
       end
      return
     end
@@ -64,12 +64,11 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
            "expected=#{record.unique_session_id.inspect} "\
            "actual=#{warden.session(scope)['unique_session_id'].inspect}"
          end
-        #  redirect_to '/users/edit'
         #  destroy
          warden.raw_session.clear
          warden.logout(scope)
          throw :warden, scope: scope, message: :session_limited
-         
+         redirect_to 'https://test.todolegal.app/users/sign_in'
        end
       end
     end

@@ -34,6 +34,7 @@ gem 'doorkeeper'
 gem 'newrelic_rpm'
 #Queue management
 gem 'sidekiq'
+gem 'redis-namespace'
 
 # For capistrano
 gem 'ed25519', '>= 1.2', '< 2.0'

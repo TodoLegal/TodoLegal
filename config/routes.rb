@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  require 'sidekiq/web'
+
+
+    
+
+
   resources :alternative_tag_names
   use_doorkeeper
   resources :documents
@@ -52,6 +58,10 @@ Rails.application.routes.draw do
   get '/gacetas', to: redirect('https://valid.todolegal.app'), as: "google_drive_search"
 
   get '/rails/active_storage/blobs/redirect/:signed_id/*filename', to: 'active_storage_redirect#show'
+  
+  authenticate :user do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 
   namespace :api, defaults: {format: :json} do
     namespace :v1 do

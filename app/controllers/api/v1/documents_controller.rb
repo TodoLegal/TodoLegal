@@ -20,7 +20,6 @@ class Api::V1::DocumentsController < ApplicationController
     #   json_document = json_document.merge(file: "")
     # end
 
-    #from here
     user_document_download_tracker = get_user_document_download_tracker(user_id_str)
     can_access_document = can_access_documents(user_document_download_tracker, current_user_type_api(user))
     
@@ -29,7 +28,6 @@ class Api::V1::DocumentsController < ApplicationController
     else
      json_document = json_document.merge(file: "")
     end
-    #to here
 
     issuer_name = get_issuer_name @document.id
 

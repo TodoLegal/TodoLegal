@@ -53,7 +53,7 @@ module ApplicationHelper
     hashed_fingerprint = BCrypt::Engine.hash_secret( raw_fingerprint, "$2a$10$ThisIsTheSalt22CharsX." )
     return hashed_fingerprint
   end
-  #from here
+
   def get_user_document_download_tracker(user_id_str)
    fingerprint = get_fingerprint + user_id_str
    user_document_download_tracker = UserDocumentDownloadTracker.find_by_fingerprint(fingerprint)
@@ -79,7 +79,6 @@ module ApplicationHelper
     return false
    end
   end
-  #to here
 
   def current_user_type user
     if user

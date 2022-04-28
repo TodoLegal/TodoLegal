@@ -14,6 +14,10 @@ class HomeController < ApplicationController
   def home
     @tags = Tag.where(tag_type: TagType.find_by_name("materia"))
     expires_in 10.minutes
+
+    if params[:is_free_trial]
+      redirect_to "https://test.valid.todolegal.app"
+    end
   end
 
   def token_login

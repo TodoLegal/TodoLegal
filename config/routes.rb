@@ -59,7 +59,7 @@ Rails.application.routes.draw do
 
   get '/rails/active_storage/blobs/redirect/:signed_id/*filename', to: 'active_storage_redirect#show'
   
-  authenticate :user do
+  authenticate :user, lambda { |u| u.admin? } do
     mount Sidekiq::Web => '/sidekiq'
   end
 

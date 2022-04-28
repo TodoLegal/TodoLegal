@@ -41,22 +41,6 @@
         </div>
       </div>
 
-      <!-- comentario por mientras
-
-      <div class="row range-label desktop-range-labels">
-        <div class="col-lg-4 col-md-12 pro-labels-container">
-          <label for="customRange" class="range-top-label">Mensual</label>
-          <label for="customRange" class="range-top-label">Semestral</label>
-          <label for="customRange" class="range-top-label">Anual</label>
-        </div>
-      </div>
-      <div class="row pro-range desktop-range">
-        <div class="col-lg-4 col-md-12">
-          <input type="range" class="form-range" min="1" max="3" value="1" step="1" id="customRange" onchange="changeProPlan(this.value)">
-        </div>
-      </div>
-
-      -->
       <div class="row row-eq-height">
 
        <!-- Card - Plan Basico  -->
@@ -67,9 +51,15 @@
               <h6 class="card-price">Gratis</h6>
                 <%= render 'basic_pricing_description' %>
             </div>
-            <div class="card-bottom">
-              <a href="https://valid.todolegal.app" class="btn btn-block btn-primary btn-pricing"%>Iniciar prueba </a>
-            </div>
+            <% if @pricing_onboarding %>
+              <div class="card-bottom">
+                <%= button_to "Iniciar prueba", @select_pro_plan_path, method: :get, params: {is_onboarding: @is_onboarding, pricing_onboarding: @pricing_onboarding, go_to_law: @go_to_law}, class:"btn btn-block btn-primary btn-pricing"%>
+              </div>
+            <% else %>
+              <div class="card-bottom">
+                <a href="https://valid.todolegal.app" class="btn btn-block btn-primary btn-pricing"%>Iniciar prueba </a>
+              </div>
+            <% end %>
           </div>
         </div>
 

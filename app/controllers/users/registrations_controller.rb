@@ -127,6 +127,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
         checkout_path(is_onboarding:true, go_to_law: params[:go_to_law], is_semestral: params[:is_semestral])
       elsif !params[:is_annually].blank?
         checkout_path(is_onboarding:true, go_to_law: params[:go_to_law], is_annually: params[:is_annually])
+      else
+        home_path(is_free_trial:true)
       end
     else
       pricing_path(is_onboarding:true, go_to_law: params[:go_to_law], go_to_checkout: params[:go_to_checkout], user_just_registered: true)

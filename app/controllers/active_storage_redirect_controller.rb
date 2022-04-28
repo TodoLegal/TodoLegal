@@ -7,10 +7,10 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
   skip_before_action :doorkeeper_authorize!, unless: :has_access_token?
 
   def show
-    user_id_str = "" #here
+    user_id_str = ""
     if params[:access_token]
       user = User.find_by_id(doorkeeper_token.resource_owner_id)
-      user_id_str = user.id.to_s #here
+      user_id_str = user.id.to_s
     elsif current_user
       user = current_user
     end
@@ -22,9 +22,9 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
     #   return
     # end
 
-    #from here
     user_document_download_tracker = get_user_document_download_tracker(user_id_str)
     can_access_document = can_access_documents(user_document_download_tracker, current_user_type_api(user))
+
     if user && current_user_type_api(user) != "pro" && current_user
      user_document_download_tracker.downloads += 1
     end
@@ -35,16 +35,15 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
       if current_user
         redirect_to "http://valid.todolegal.app?error='invalid permissions'"
       else
-        redirect_to "http://localhost:3000?error=session already in use"
+        redirect_to "http://test.valid.todolegal.app?error=session already in use"
       end
      return
     end
-    #to here
 
-    if  user_document_download_tracker.downloads >= 3 && current_user_type_api(user) != "pro"
+    if  user_document_download_tracker.downloads >= MAXIMUM_BASIC_MONTHLY_DOCUMENTS && current_user_type_api(user) != "pro"
       if ENV['MAILGUN_KEY']
         SubscriptionsMailer.free_trial_end(user).deliver
-        SubscriptionsMailer.discount_coupon(user).deliver_later(wait_until: 1.hour.from_now)
+        SubscriptionsMailer.discount_coupon(user).deliver_later(wait_until: 3.days.from_now)
       end
     end
     

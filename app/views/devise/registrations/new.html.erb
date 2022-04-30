@@ -12,164 +12,72 @@
       <% if @is_monthly %>
         <input type="hidden" id="is_monthly" name="is_monthly" value="<%= @is_monthly %>">
       <% end %>
+      <% if @is_semestral %>
+        <input type="hidden" id="is_semestral" name="is_semestral" value="<%= @is_semestral %>">
+      <% end %>
+      <% if @is_annually %>
+        <input type="hidden" id="is_annually" name="is_annually" value="<%= @is_annually %>">
+      <% end %>
+      <% if @is_student %>
+        <input type="hidden" id="is_student" name="is_student" value="<%= @is_student %>">
+      <% end %>
       <% if @pricing_onboarding %>
         <input type="hidden" id="pricing_onboarding" name="pricing_onboarding" value="<%= @pricing_onboarding %>">
       <% end %>
-      <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="false">
-        <div class="carousel-inner">
-          <div class="carousel-item active" id="account">
-            <!-------------------------------- Register Card ------------------------------------------->
-            <a href="/">
-              <img  src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="img-fluid">
-            </a>
-            <div class="card card--onboarding bg-white rounded">
-              <!-------------------------------- Card Body ------------------------------------------->
-              <div class="card-body">
-                <h2 class="card-title text-center">Crea tu cuenta</h2>
-                <p class="content text-center">Si ya tienes una cuenta <%= render "devise/shared/links" %></p>
-                <%= render "devise/shared/error_messages", resource: resource%>
-                <div class="form-group">
-                  <div class="row">
-                    <div class="col-md-6 form-group">
-                      <%= f.label :Nombre %><br />
-                      <%= f.text_field :first_name, autofocus: true, class:"form-control", id:"name"%>
-                    </div>
-                    <div class="col-md-6 form-group">
-                      <%= f.label :Apellido %><br />
-                      <%= f.text_field :last_name, class:"form-control", id:"lastName"%>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <%= f.label :Correo_eléctronico %><br />
-                  <%= f.email_field :email, autocomplete: "email", class:"form-control", id:"email"%>
-                </div>
-
-                <div class="form-group">
-                  <%= f.label :Contraseña %><br />
-                  <%= f.password_field :password, autocomplete: "new-password", class: "form-control", id:"password"%>
-                  <small id="passwordHelpBlock" class="form-text text-muted">
-                    <em>(Mínimo <%= @minimum_password_length %> caracteres)</em>
-                  </small>
-                </div>
-
-                <div class="form-group">
-                  <%= f.label :Confirma_tu_contraseña %><br />
-                  <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", id:"confirmPassword"%>
-                </div>
-                <div class="form-group">
-                  <button type="button" class="btn btn-primary btn-block btn-next btn-lg" id="nextButton" data-target="#carouselExampleIndicators" 
-                  data-slide-to="1" data-container="body" data-toggle="popover" data-placement="top" data-trigger="focus"
-                  data-content="Complete todos los campos." onclick="required()">Siguiente</button>
-                </div>
+      <!-------------------------------- Register Card ------------------------------------------->
+      <div style="text-align:center;">
+        <a class="back-image" href="/">
+          <img class="image" border="0" alt="Logo TodoLegal" href="/" src="/img/Icon-Todolegal-gray20px.svg"/>
+        </a>
+        <a class="back-image" href="/">
+          <img class="image" border="0" alt="Logo Valid" href="/" src="/img/Icon-Valid-gray20px.svg"/>
+        </a>
+      </div>
+      <div class="card card--onboarding bg-white rounded">
+        <!-------------------------------- Card Body ------------------------------------------->
+        <div class="card-body">
+          <h2 class="card-title text-center">Crea tu cuenta</h2>
+          <p class="content text-center">Si ya tienes una cuenta <%= render "devise/shared/links" %></p>
+          <%= render "devise/shared/error_messages", resource: resource%>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-6 form-group">
+                <%= f.label :Nombre %><br />
+                <%= f.text_field :first_name, autofocus: true, class:"form-control", id:"name"%>
               </div>
-              <!-------------------------------- End of Card Body ------------------------------------------->
+              <div class="col-md-6 form-group">
+                <%= f.label :Apellido %><br />
+                <%= f.text_field :last_name, class:"form-control", id:"lastName"%>
+              </div>
             </div>
-            <p class="content text-center">Al crear una cuenta, accedes a los <a href="https://policies.todolegal.app/terms/" target="_blank">Términos y condiciones</a></p>
+          </div>
+          <div class="form-group">
+            <%= f.label :Correo_eléctronico %><br />
+            <%= f.email_field :email, autocomplete: "email", class:"form-control", id:"email"%>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :Contraseña %><br />
+            <%= f.password_field :password, autocomplete: "new-password", class: "form-control", id:"password"%>
+            <small id="passwordHelpBlock" class="form-text text-muted">
+              <em>(Mínimo <%= @minimum_password_length %> caracteres)</em>
+            </small>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :Confirma_tu_contraseña %><br />
+            <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", id:"confirmPassword"%>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block btn-next btn-lg" id="nextButton"  
+            data-container="body" data-toggle="popover" data-placement="top" data-trigger="focus"
+            data-content="Complete todos los campos." onclick="required()">Crear cuenta</button>
+          </div>
+        </div>
+        <!-------------------------------- End of Card Body ------------------------------------------->
+      </div>
+      <p class="content text-center">Al crear una cuenta, accedes a los <a href="https://policies.todolegal.app/terms/" target="_blank">Términos y condiciones</a></p>
           <!-------------------------------- End of Register Card ------------------------------------------->
-          </div>
-          <div class="carousel-item">
-            <!-------------------------------- Register Card ------------------------------------------->
-            <div class="containter" id="back-icon-container">
-              <i class="fas fa-arrow-left" id="back-icon" data-target="#carouselExampleIndicators"  data-slide-to="0"></i>
-              <a href="/" class="back-image" data-toggle="modal" data-target="#cancelRegistrationModal">
-                <img src="/img/Icon-Todolegal-gray20px.svg" alt="Card image cap" class="img-fluid">
-              </a>
-            </div>
-
-            <!-- Start Cancel Registration Modal -->
-            <div class="modal fade" id="cancelRegistrationModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalCenterTitle" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                  <div class="modal-body">
-                    <h5 class="modal-title" id="cancelModalLongTitle">¿Estás seguro que deseas salir?</h5>
-                    <label id="labelBasico">
-                      Una vez que regreses a la página inicial no se guardará la información que ingresaste.
-                    </label>
-                    <div class="form-group" id="bottonsGroup">
-                      <%= link_to 'Salir', root_path, id:"okButton", class:"btn btn-primary", style:"padding-top: 10px;"%>
-                      &nbsp;&nbsp;&nbsp;
-                      <button type="button" id="dismissBtn" class="btn btn-secondary" data-dismiss="modal">Regresar al formulario</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!--End Cancel Registration modal -->
-
-            <div class="card card--onboarding bg-white rounded" id="profileInfo" tabindex="0">
-              <!-------------------------------- Card Body ------------------------------------------->
-              <div class="card-body">
-                <%= render "devise/shared/error_messages", resource: resource %>
-                <h2 class="card-title text-center">Información del perfil</h2>
-                <p class="content">Brindanos un poco de información para ofrecerte contenido de acuerdo a tus necesidades.</p>
-                <p class = "titles" >Profesión</p>
-                <div class="form-group">
-                  <div class="form-check form-check-inline custom-form custom-form--radio">
-                    <%= f.radio_button :occupation, "Abogado", {class: "form-check-input", id:"radio1", checked:"checked", onclick:"showOtherField('Abogado')"}%>
-                    <label class="form-check-label" for="radio1">Abogado</label>
-                  </div>
-                  <div class="form-check form-check-inline custom-form custom-form--radio">
-                    <%= f.radio_button :occupation, "Estudiante", {class: "form-check-input", id:"radio2", onclick:"showOtherField('Estudiante')"}%>
-                    <label class="form-check-label" for="radio2">Estudiante</label>
-                  </div>
-                  <div class="form-check form-check-inline custom-form custom-form--radio">
-                    <%= f.radio_button :occupation, "Otro", {class: "form-check-input", id:"radio3", onclick:"showOtherField('Otro')"}%>
-                    <label class="form-check-label" for="radio3">Otro</label>
-                  </div>
-                  <div class="form-group other-profesion"  id="otherField" style="display: none;">
-                    <label> ¿A qué te dedicas?</label>&nbsp;<label id="label-opcional">Opcional</label>
-                    <input type="text" id="otherOccupation" autocomplete= "Otro", value="", class="form-control">
-                    <input type="hidden" id="hiddenField" name="other_occupation" value="">
-                  </div>
-                </div>
-                <p class = "titles">Preferencias</p>
-                <div class="form-group">
-                  <div class="form-check custom-form custom-form--checkbox" style="border-radius: 5px;background-color: #EFF3F8;margin-bottom: 4%;">
-                    <%= f.check_box :receive_information_emails, {class: "form-check-input", id:"check1"}, "1"%>
-                    <label class="form-check-label" for="check1">Quiero recibir el boletín informativo a mi correo electrónico.</label>
-                  </div>
-                  <div class="form-check custom-form custom-form--checkbox" style="background: #171F2A;color: white;border-radius: 8px;">
-                    <%= f.check_box :is_contributor, {class: "form-check-input", id:"check2", checked:"checked"}, "0"%>
-                    <label class="form-check-label" for="check2">Quiero participar en actividades para contribuir al estudio y mejora de la app.</label>
-                  </div>
-                </div>
-                <a href="/" data-toggle="modal" data-target="#moreInfoModal" style="text-decoration: underline;">
-                <i class="fas fa-info-circle"></i>
-                Más información</a>
-                <div class="form-group">
-                  <%= f.submit "Crear cuenta", class: 'btn btn-primary btn-block btn-next btn-lg', id:"registerButton", onclick:"sendParameter()"%>
-                </div>
-              </div>
-              <!-------------------------------- End of Card Body ------------------------------------------->
-            </div>
-            <p class="content text-center" style="font-family: SF Pro Display;color: #505864;align-items: center;text-align: center;">Al crear una cuenta, accedes a los <a href="https://policies.todolegal.app/terms/">Términos y condiciones</a></p>
-            <!-------------------------------- End of Register Card ------------------------------------------->
-          </div>
-        </div>
-      </div>
-
-      <!-- Start More info Modal -->
-      <div class="modal fade" id="moreInfoModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-body">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-              <h2 class="modal-title" id="cancelModalLongTitle">¿Cómo Funciona?</h2>
-              <h5 class="modal-subtitle" style="margin-top: 30px;"> TodoLegal es un producto en constante mejora </h5> 
-              <p class="more-info-text">
-                Si seleccionas está opción, un miembro de nuestro equipo te contactará para que formes parte del panel de usuarios. Y puedas darnos retroalimentación sobre ideas futuras que estén en nuestro plan de desarrollo; o para informarnos sobre errores que experimentes en el sistema.
-              </p>
-              <div class="form-group" id="bottonsGroup">
-                <button type="button" id="dismissBtn" class="btn btn-secondary" data-dismiss="modal">Entendido</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!--End More info modal -->
       <%= javascript_pack_tag "form_validator" %>
     <% end %>
   </div>
@@ -211,45 +119,55 @@
   });
 
   //triggers registerButton click on enter when second card is focused
-  var input = document.getElementById("profileInfo");
-  input.addEventListener("keypress", function(event) {
-    if ( event.keyCode === 13 ) {
-      event.preventDefault();
-      document.getElementById("registerButton").click();
-    }
-  });
+  // var input = document.getElementById("profileInfo");
+  // input.addEventListener("keypress", function(event) {
+  //   if ( event.keyCode === 13 ) {
+  //     event.preventDefault();
+  //     document.getElementById("registerButton").click();
+  //   }
+  // });
 
-  addEventListener("change", function(event){
-    $('.form-check').each(function() {
-      if($(this).children().is(":checked")) {
-        this.classList.add('checked');
-      } else {
-        this.classList.remove('checked');
-      }
-    });
-  });
+  // addEventListener("change", function(event){
+  //   $('.form-check').each(function() {
+  //     if($(this).children().is(":checked")) {
+  //       this.classList.add('checked');
+  //     } else {
+  //       this.classList.remove('checked');
+  //     }
+  //   });
+  // });
 
 //show the other field when radio button "Otro" is selected
-  function showOtherField(field){
-    if(field === "Otro")
-    {
-      document.getElementById("otherField").style.display = "block";
-    }else
-    {
-      document.getElementById("otherField").style.display = "none";
-    }
-  }
+  // function showOtherField(field){
+  //   if(field === "Otro")
+  //   {
+  //     document.getElementById("otherField").style.display = "block";
+  //   }else
+  //   {
+  //     document.getElementById("otherField").style.display = "none";
+  //   }
+  // }
 
-  //send occupation extra param
-  function sendParameter(){
-    var param = document.getElementById("otherOccupation").value;
-    console.log(param);
-    document.getElementById("hiddenField").value = param;
-  }
+  // //send occupation extra param
+  // function sendParameter(){
+  //   var param = document.getElementById("otherOccupation").value;
+  //   console.log(param);
+  //   document.getElementById("hiddenField").value = param;
+  // }
 
 </script>
 
 <style>
+  .image{
+    height: 12vh;
+    max-height: 110px;
+    margin: 2vh auto 0;
+  }
+
+  .back-image{
+    display: inline-block;
+  }
+
   .form-check-input{
     width: 25px; 
     height:25px;
@@ -294,12 +212,6 @@
     max-height: 110px;
     margin: 2vh auto 0;
     display: block;
-  }
-
-  .back-image {
-    width: 30%;
-    display: block;
-    margin: auto;
   }
 
   #back-icon-container{

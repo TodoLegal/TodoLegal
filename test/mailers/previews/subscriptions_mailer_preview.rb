@@ -6,4 +6,13 @@ class SubscriptionsMailerPreview < ActionMailer::Preview
   def welcome_pro_user
     SubscriptionsMailer.welcome_pro_user(User.first)
   end
+  def free_trial_end
+    SubscriptionsMailer.free_trial_end(User.first)
+  end
+  def welcome_basic_user
+    SubscriptionsMailer.welcome_basic_user(User.first)
+  end
+  def discount_coupon
+    SubscriptionsMailer.discount_coupon(User.first)
+  end
 end

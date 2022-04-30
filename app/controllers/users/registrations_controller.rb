@@ -12,9 +12,13 @@ class Users::RegistrationsController < Devise::RegistrationsController
     @go_to_law = params[:go_to_law]
     @go_to_checkout = params[:go_to_checkout]
     @is_monthly = params[:is_monthly]
+    @is_semestral = params[:is_semestral]
+    @is_annually = params[:is_annually]
+    @is_student = params[:is_student]
     @pricing_onboarding = params[:pricing_onboarding]
     session[:return_to] = params[:return_to] if params[:return_to]
     super
+
   end
 
   # POST /resource
@@ -100,14 +104,32 @@ class Users::RegistrationsController < Devise::RegistrationsController
       'last_sign_in_ip'      => current_user.last_sign_in_ip,
       'receive_information_emails'      => current_user.receive_information_emails
       })
+
+      if ENV['MAILGUN_KEY']
+        SubscriptionsMailer.welcome_basic_user(current_user).deliver
+      end
+      
     end
     if $discord_bot
       $discord_bot.send_message($discord_bot_channel_notifications, "Se ha registrado un nuevo usuario :tada:")
     end
 
+    #TODO
+    #Validate student email.
+
     session[:user_just_signed_up] = true
     if params[:pricing_onboarding]
-      checkout_path(is_onboarding:true, go_to_law: params[:go_to_law], is_monthly: params[:is_monthly])
+      #TODO 
+      #Otro if igual al primero con un && is_student y que dentro del envie is_student de param en lugar de is_monthly
+      if !params[:is_monthly].blank?
+        checkout_path(is_onboarding:true, go_to_law: params[:go_to_law], is_monthly: params[:is_monthly])
+      elsif !params[:is_semestral].blank?
+        checkout_path(is_onboarding:true, go_to_law: params[:go_to_law], is_semestral: params[:is_semestral])
+      elsif !params[:is_annually].blank?
+        checkout_path(is_onboarding:true, go_to_law: params[:go_to_law], is_annually: params[:is_annually])
+      else
+        home_path(is_free_trial:true)
+      end
     else
       pricing_path(is_onboarding:true, go_to_law: params[:go_to_law], go_to_checkout: params[:go_to_checkout], user_just_registered: true)
     end

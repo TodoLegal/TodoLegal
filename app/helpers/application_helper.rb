@@ -53,7 +53,7 @@ module ApplicationHelper
     hashed_fingerprint = BCrypt::Engine.hash_secret( raw_fingerprint, "$2a$10$ThisIsTheSalt22CharsX." )
     return hashed_fingerprint
   end
-  #from here
+
   def get_user_document_download_tracker(user_id_str)
    fingerprint = get_fingerprint + user_id_str
    user_document_download_tracker = UserDocumentDownloadTracker.find_by_fingerprint(fingerprint)
@@ -79,7 +79,6 @@ module ApplicationHelper
     return false
    end
   end
-  #to here
 
   def current_user_type user
     if user
@@ -164,4 +163,22 @@ module ApplicationHelper
       return "<vacío>"
     end
   end
+
+  # def already_logged_in_helper
+  #   Warden::Manager.after_set_user only: :fetch do |record, warden, options|
+  #     scope = options[:scope]
+  #     if record.devise_modules.include?(:session_limitable) && warden.authenticated?(scope) && options[:store] != false
+  #     #Log Inicio
+  #      if record.unique_session_id != warden.session(scope)['unique_session_id'] && !record.skip_session_limitable? &&  !warden.session(scope)['devise.skip_session_limitable']
+  #       return true
+  #      end
+  #     end
+  #   end
+  #   return false
+  # end
+
+  #def send_confirmation_email
+  #  current_user.send_confirmation_instructions
+  #end
+
 end

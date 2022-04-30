@@ -20,6 +20,17 @@ class User < ApplicationRecord
     self.errors.clear
     self.errors.add(:base, I18n.t(:email_taken)) if User.where(:email => self.email).exists?
   end
+
+  def admin?
+    @permissionid = UserPermission.find_by(:user_id => self.id)
+    if !@permissionid
+      return false
+    elsif @permissionid.permission_id==1 
+      return true
+    else
+      return false
+    end
+   end
   
   protected
   def confirmation_required?

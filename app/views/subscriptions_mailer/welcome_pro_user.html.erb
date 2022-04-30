@@ -18,30 +18,38 @@
                                 <td width="540">
                                     <table border="0" cellpadding="0" cellspacing="0" width="100%" >
                                         <tr>
-                                            <td>
-                                                <img alt="TodoLegal.app" style="max-width: 260px; padding-bottom: 20px; padding-top: 20px;display: inline;vertical-align: center;" src="https://todolegal.app/img/logo_landing_mobile.png" width="260" align="center">
-                                            </td>
+                                            <a class="back-image" data-toggle="modal" data-target="#cancelModalTodolegal">
+                                                <img style="height: 15vh; max-height: 110px; margin: 2vh auto 0;" border="0" alt="Logo TodoLegal" src="https://todolegal.app/img/logo_landing_mobile.png"/>
+                                            </a>
                                         </tr>
                                         <tr>
                                             <td style="background-color: #FFFFFF; text-align: left; padding: 40px;">
                                                 <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">
-                                                    Hola <%= @user.first_name %> <%= @user.last_name %>,</p>
+                                                    Hola,
                                                 <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">
-                                                    Gracias por adquirir la suscripción Pro. 
+                                                    Gracias por adquirir la Suscripción Pro. Con esta cuenta puedes descargar documentos de forma ilimitada. 
+                                                    Los cobros los hacemos de forma automática de acuerdo a tu plan y siempre recibirás una factura con la información 
+                                                    del cobro.
                                                 </p>
                                                 <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">
-                                                Ahora puedes acceder a más de <%= @rounded_all_document_count %> documentos de legislación hondureña. 
+                                                    Actualmente tenemos más de <%= (valid_document_count/10) * 10 %> documentos que se actualizan constantemente y siempre estamos 
+                                                    trabajando en nuevas funcionalidades y en agregar más fuentes de información. Si quieres comentarnos algo sobre el servicio, 
+                                                    o necesitas ayuda para el uso de la plataforma, nos puedes puedes escribir a este correo o programar una llamada con uno de 
+                                                    nuestros agentes dando click en <a href="https://calendly.com/tl-ventas/15">este enlace</a>.
                                                 </p>
                                                 <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">   
-                                                Para ver tus facturas, cambiar tu tarjeta de crédito o cancelar el servicio administra 
-                                                <a href="https://todolegal.app/users/edit" target="_blank" style="color: #1A7FFA; text-decoration: underline;">tu cuenta</a>.
-                                            </p>
-                                            <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">
-                                                Saludos, 
-                                            </p>
-                                            <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">
-                                                <i>El equipo de Todolegal</i>
-                                            </p>
+                                                    Para ver tus facturas, cambiar tu tarjeta de crédito o cancelar el servicio, puedes dar click en 
+                                                    <a href="https://todolegal.app/users/edit" target="_blank" style="color: #1A7FFA; text-decoration: underline;">este enlace</a>.
+                                                </p>
+                                                 <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">   
+                                                    Nuestra meta es ser el repositorio legal más grande de Centroamérica. Ayúdanos a organizar la información legal
+                                                </p>
+                                                <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">
+                                                    ¡Saludos! 
+                                                </p>
+                                                <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">
+                                                    <i>Equipo TodoLegal</i>
+                                                </p>
                                             </td>
                                         </tr>
                                         <tr>
@@ -92,7 +100,7 @@
                                         <tr>
                                             <td style="background-color: #171F2A; text-align: center; padding: 40px;">
                                                 <p style="font-family: Helvetica, Arial, sans-serif; color:#FFFFFF; font-size: 14px; ">
-                                                    Este es un correo autogenerado y lo estás recibiendo porque te suscribiste a la cuenta Pro. Si no hiciste esta solicitud, envianos un correo a <a href="mailto:info@todolegal.app" target="_blank" style="color: #A6B9D3; text-decoration: underline;">info@todolegal.app</a> o escribenos en el chat de <a href="https://todolegal.app" target="_blank" style="color: #A6B9D3; text-decoration: underline;">todolegal.app</a>.
+                                                    Este es un correo autogenerado y lo estás recibiendo porque te suscribiste a la cuenta Pro. Si no hiciste esta solicitud, envíanos un correo a <a href="mailto:info@todolegal.app" target="_blank" style="color: #A6B9D3; text-decoration: underline;">info@todolegal.app</a> o escribenos en el chat de <a href="https://todolegal.app" target="_blank" style="color: #A6B9D3; text-decoration: underline;">todolegal.app</a>.
                                                 </p>
                                                 <p style="font-family: Helvetica, Arial, sans-serif; color:#FFFFFF; font-size: 14px;">
                                                     By TODOLEGAL LLC 2020

@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  require 'sidekiq/web'
+
+
+    
+
+
   resources :alternative_tag_names
   use_doorkeeper
   resources :documents
@@ -20,6 +26,7 @@ Rails.application.routes.draw do
   resources :subsections, only: [:edit, :update]
   resources :articles, only: [:edit, :update]
 
+
   root :to => "home#index"
   get '/search_law', to: 'home#search_law'
   get '/pricing', to: 'home#pricing'
@@ -33,7 +40,7 @@ Rails.application.routes.draw do
   post "/charge" => "billing#charge", as: "charge"
   post "/create_customer_portal_session" => "billing#create_customer_portal_session", as: "create_customer_portal_session"
   get '/home', to: 'home#home'
-
+  get "/home/send_confirmation_email" => "home#send_confirmation_email", as: "send_confirmation_email"
   get "admin/users" => "admin#users", as: "admin_users"
   post "admin/grant_permission" => "admin#grant_permission", as: "admin_grant_permission"
   post "admin/revoke_permission" => "admin#revoke_permission", as: "admin_revoke_permission"
@@ -51,6 +58,10 @@ Rails.application.routes.draw do
   get '/gacetas', to: redirect('https://valid.todolegal.app'), as: "google_drive_search"
 
   get '/rails/active_storage/blobs/redirect/:signed_id/*filename', to: 'active_storage_redirect#show'
+  
+  authenticate :user, lambda { |u| u.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 
   namespace :api, defaults: {format: :json} do
     namespace :v1 do

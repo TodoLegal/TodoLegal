@@ -32,7 +32,10 @@ gem 'capistrano-bundler'
 gem 'doorkeeper'
 #Support for NewRelic
 gem 'newrelic_rpm'
-
+#Queue management
+gem 'sidekiq'
+gem 'redis-namespace'
+gem  'foreman'
 # For capistrano
 gem 'ed25519', '>= 1.2', '< 2.0'
 gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'

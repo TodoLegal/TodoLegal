@@ -31,9 +31,9 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :google
   config.hosts << ENV['SERVER_IP']
-  Rails.application.config.hosts << '.todolegal.app'
+  Rails.application.config.hosts << 'devchuco.todolegal.app'
   # Don't care if the mailer can't send.
-  config.action_mailer.default_url_options = { host: ENV['MAILGUN_URL'] }
+  config.action_mailer.default_url_options = { host: "devchuco.todolegal.app" }
   config.action_mailer.delivery_method = :mailgun
   config.action_mailer.mailgun_settings = {
     api_key: ENV['MAILGUN_KEY'],

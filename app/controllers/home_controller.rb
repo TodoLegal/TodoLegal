@@ -1,6 +1,5 @@
 class HomeController < ApplicationController
-  layout 'onboarding', only: [:pricing, :invite_friends]
-  layout 'landing', only: [:index]
+  layout 'onboarding', only: [:pricing, :invite_friends, :send_confirmation_email]
   include ActionView::Helpers::NumberHelper
   require 'set'
   
@@ -9,11 +8,16 @@ class HomeController < ApplicationController
     #  return
     #end
     # @tags = Tag.where(tag_type: TagType.find_by_name("materia"))
+    render action: "index", layout: "landing"
   end
 
   def home
     @tags = Tag.where(tag_type: TagType.find_by_name("materia"))
     expires_in 10.minutes
+
+    if params[:is_free_trial]
+      redirect_to "https://valid.todolegal.app"
+    end
   end
 
   def token_login
@@ -145,6 +149,22 @@ class HomeController < ApplicationController
   def invite_friends
   end
 
+  def send_confirmation_email
+    @url = "https#{request.original_url[4...-1]}"
+    if current_user
+      current_user.send_confirmation_instructions
+      #redirect_to @url, notice: "Confirmación enviada a tu correo."
+      if params[:redirect_to]
+        @valid_url = params[:redirect_to]
+        redirect_to "#{@valid_url}?confirmation_email_sent"
+        flash[:notice] = "Confirmación enviada a tu correo."
+      else
+        redirect_back(fallback_location: @url)
+        flash[:notice] = "Confirmación enviada a tu correo."
+      end
+    end
+  end
+
   def getGoogleDriveFiles file_path, get_parent_files, folder, query
     files = []
     if File.file?(file_path)
@@ -267,4 +287,8 @@ protected
     end
     return result_query
   end
+
+
+
+
 end

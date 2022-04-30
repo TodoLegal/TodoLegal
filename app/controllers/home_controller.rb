@@ -16,7 +16,7 @@ class HomeController < ApplicationController
     expires_in 10.minutes
 
     if params[:is_free_trial]
-      redirect_to "https://test.valid.todolegal.app"
+      redirect_to "https://valid.todolegal.app"
     end
   end
 

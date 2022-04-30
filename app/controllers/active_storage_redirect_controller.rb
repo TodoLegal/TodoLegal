@@ -35,7 +35,7 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
       if current_user
         redirect_to "http://valid.todolegal.app?error='invalid permissions'"
       else
-        redirect_to "http://test.valid.todolegal.app?error=session already in use"
+        redirect_to "http://valid.todolegal.app?error=session already in use"
       end
      return
     end
@@ -43,7 +43,7 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
     if  user_document_download_tracker.downloads >= MAXIMUM_BASIC_MONTHLY_DOCUMENTS && current_user_type_api(user) != "pro"
       if ENV['MAILGUN_KEY']
         SubscriptionsMailer.free_trial_end(user).deliver
-        SubscriptionsMailer.discount_coupon(user).deliver_later(wait_until: 1.day.from_now)
+        SubscriptionsMailer.discount_coupon(user).deliver_later(wait_until: 3.days.from_now)
       end
     end
     
@@ -67,7 +67,7 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
          warden.raw_session.clear
          warden.logout(scope)
          throw :warden, scope: scope, message: :session_limited
-         redirect_to 'https://test.todolegal.app/users/sign_in'
+         redirect_to 'https://todolegal.app/users/sign_in'
        end
       end
     end

@@ -8,9 +8,11 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
 
   def show
     user_id_str = ""
+    user_id = 0
     if params[:access_token]
       user = User.find_by_id(doorkeeper_token.resource_owner_id)
       user_id_str = user.id.to_s
+      user_id = user.id
     elsif current_user
       user = current_user
     end
@@ -26,11 +28,15 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
     can_access_document = can_access_documents(user_document_download_tracker, current_user_type_api(user))
 
     if user && current_user_type_api(user) != "pro" && current_user
-     user_document_download_tracker.downloads += 1
+      user_document_download_tracker.downloads += 1
     end
     if user && can_access_document && current_user
-     user_document_download_tracker.save
-     super
+      $tracker.track(user_id, 'Valid download', {
+        'user_type' => current_user_type_api(user)
+        'location' => "API"
+      })
+      user_document_download_tracker.save
+      super
     else
       if current_user
         redirect_to "http://valid.todolegal.app?error='invalid permissions'"

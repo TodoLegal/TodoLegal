@@ -33,6 +33,8 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
     if user && can_access_document && current_user
       $tracker.track(user_id, 'Valid download', {
         'user_type' => current_user_type_api(user),
+        'document_name' => params[:document_name],
+        'document_id' => params[:document_id],
         'location' => "API"
       })
       user_document_download_tracker.save

@@ -107,6 +107,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
       if ENV['MAILGUN_KEY']
         SubscriptionsMailer.welcome_basic_user(current_user).deliver
+        current_user.send_confirmation_instructions
       end
       
     end

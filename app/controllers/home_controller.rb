@@ -162,6 +162,8 @@ class HomeController < ApplicationController
         redirect_back(fallback_location: @url)
         flash[:notice] = "Confirmación enviada a tu correo."
       end
+    else
+      redirect_to @url, notice: "Cuenta ya ha sido confirmada."
     end
   end
 

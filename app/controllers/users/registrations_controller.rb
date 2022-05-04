@@ -180,4 +180,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       'receive_information_emails'      => user.receive_information_emails
     }, ip = user.current_sign_in_ip, {'$ignore_time' => 'true'});
   end
+
+
+  
 end

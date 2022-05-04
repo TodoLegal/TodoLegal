@@ -43,7 +43,7 @@
 
       <div class="row row-eq-height">
       
-        <% if !current_user  %>
+        <% if !current_user || @user_just_registered%>
           <!-- Card - Plan Basico  -->
           <div class="col-lg-4 col-md-12">
             <div class="card card--dark-100" id="pro-mensual">

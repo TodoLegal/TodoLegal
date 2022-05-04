@@ -3,6 +3,7 @@
 en:
   devise:
     confirmations:
+      already_confirmed: "Tu cuenta ya fue previamente confirmada."
       confirmed: "Tu correo electrónico ha sido confirmado exitosamente."
       send_instructions: "Recibirás un email con las instrucciones para confirmar tu correo electrónico en unos minutos."
       send_paranoid_instructions: "Si tu correo electrónico existe en nuestra base de datos, recibirás un email con las instrucciones para confirmar tu correo electrónico en unos minutos."
@@ -55,7 +56,7 @@ en:
       unlocked: "Tu cuenta ha sido desbloqueada. Inicia sesión para continuar."
   errors:
     messages:
-      already_confirmed: "ya fue confirmada. Intenta ingresar."
+      already_confirmed: "Tu cuenta ya fue previamente confirmada."
       confirmation_period_expired: "necesita ser confirmada dentro de %{period}, por favor pide una nueva"
       expired: "ha expirado, por favor pide una nueva"
       not_found: "no encontrado"

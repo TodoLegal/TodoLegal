@@ -3,7 +3,7 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
   include ApplicationHelper
 
   before_action :doorkeeper_authorize!, only: [:show]
-  before_action :already_logged_in_user 
+  # before_action :already_logged_in_user 
   skip_before_action :doorkeeper_authorize!, unless: :has_access_token?
 
   def show

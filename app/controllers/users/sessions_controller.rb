@@ -5,7 +5,7 @@ class Users::SessionsController < Devise::SessionsController
   layout "onboarding"
   include Devise::Controllers::Helpers
   skip_before_action :verify_authenticity_token
-  before_action :already_logged_in
+  # before_action :already_logged_in
   # before_action :configure_sign_in_params, only: [:create]
 
   # GET /resource/sign_in

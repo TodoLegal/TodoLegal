@@ -151,7 +151,7 @@ class HomeController < ApplicationController
 
   def send_confirmation_email
     @url = "https#{request.original_url[4...-1]}"
-    if current_user
+    if current_user && current_user.confirmed_at == nil
       current_user.send_confirmation_instructions
       #redirect_to @url, notice: "Confirmación enviada a tu correo."
       if params[:redirect_to]
@@ -162,6 +162,8 @@ class HomeController < ApplicationController
         redirect_back(fallback_location: @url)
         flash[:notice] = "Confirmación enviada a tu correo."
       end
+    else
+      redirect_to @url, notice: "Cuenta ya ha sido confirmada."
     end
   end
 

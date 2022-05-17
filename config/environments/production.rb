@@ -33,6 +33,8 @@ Rails.application.configure do
   #application.config.hosts.clear 
   # Code is not reloaded between requests.
   config.cache_classes = true
+  config.action_controller.perform_caching = true
+  config.action_controller.page_cache_directory = Rails.root.join("public", "cached_pages")
   config.hosts << ENV['SERVER_IP']
   Rails.application.config.hosts << '.todolegal.app'
   # Eager load code on boot. This eager loads most of Rails and

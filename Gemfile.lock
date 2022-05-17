@@ -27,6 +27,8 @@ GEM
       rack-test (>= 0.6.3)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.2.0)
+    actionpack-page_caching (1.2.4)
+      actionpack (>= 4.0.0)
     actiontext (6.1.4)
       actionpack (= 6.1.4)
       activerecord (= 6.1.4)
@@ -105,6 +107,7 @@ GEM
     connection_pool (2.2.5)
     crass (1.0.6)
     daemons (1.4.0)
+    dalli (3.2.1)
     declarative (0.0.20)
     devise (4.8.0)
       bcrypt (~> 3.0)
@@ -434,6 +437,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  actionpack-page_caching
   bcrypt_pbkdf (>= 1.0, < 2.0)
   bootsnap (>= 1.4.2)
   browser
@@ -446,6 +450,7 @@ DEPENDENCIES
   capistrano-rbenv (~> 2.1, >= 2.1.4)
   capistrano3-nginx
   capybara (>= 2.15)
+  dalli
   devise
   devise-security
   discordrb

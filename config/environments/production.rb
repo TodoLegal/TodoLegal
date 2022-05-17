@@ -148,6 +148,9 @@ Rails.application.configure do
   #config.action_mailer.default_url_options = { host: host }
   
   config.action_mailer.default_url_options = { host: "todolegal.app" }
+  config.action_controller.perform_caching = true
+  config.action_controller.page_cache_directory = Rails.root.join("public", "cached_pages")
+
   config.action_mailer.delivery_method = :mailgun
   config.action_mailer.mailgun_settings = {
     api_key: ENV['MAILGUN_KEY'],

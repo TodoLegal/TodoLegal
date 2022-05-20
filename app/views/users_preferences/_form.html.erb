@@ -1,0 +1,37 @@
+<%= form_with(model: users_preference) do |form| %>
+  <% if users_preference.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(users_preference.errors.count, "error") %> prohibited this users_preference from being saved:</h2>
+
+      <ul>
+        <% users_preference.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :user_id %>
+    <%= form.number_field :user_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :users_preferences_tags_id %>
+    <%= form.number_field :users_preferences_tags_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :mail_sent_at %>
+    <%= form.datetime_select :mail_sent_at %>
+  </div>
+
+  <div class="field">
+    <%= form.label :mail_frequency %>
+    <%= form.number_field :mail_frequency %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

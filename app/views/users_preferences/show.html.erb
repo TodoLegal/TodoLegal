@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User:</strong>
+  <%= @users_preference.user_id %>
+</p>
+
+<p>
+  <strong>Users preferences tags:</strong>
+  <%= @users_preference.users_preferences_tags_id %>
+</p>
+
+<p>
+  <strong>Mail sent at:</strong>
+  <%= @users_preference.mail_sent_at %>
+</p>
+
+<p>
+  <strong>Mail frequency:</strong>
+  <%= @users_preference.mail_frequency %>
+</p>
+
+<%= link_to 'Edit', edit_users_preference_path(@users_preference) %> |
+<%= link_to 'Back', users_preferences_path %>

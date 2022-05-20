@@ -1,0 +1,2 @@
+class UsersPreferencesTag < ApplicationRecord
+end

@@ -1,7 +1,7 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins 'http://test-valid-todolegal.netlify.app:443'
-    resource '/api/v1/documents/*', headers: :any, methods: [:get, :post, :patch, :put]
+    origins '*'
+    resource '*', headers: :any, methods: [:get, :post, :patch, :put]
   end
 end
 

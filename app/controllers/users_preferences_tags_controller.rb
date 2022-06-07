@@ -3,7 +3,12 @@ class UsersPreferencesTagsController < ApplicationController
 
   # GET /users_preferences_tags or /users_preferences_tags.json
   def index
+    @preferences_tags = UsersPreferencesTag.new
     @users_preferences_tags = UsersPreferencesTag.all
+    @all_tags = Tag.all
+
+    # Para obtener el count, se tiene que hacer un where con el id del tag para obtener todas las ocurrencias y luego un count de eso. Se hace con cada tag
+    # @top_tags = DocumentTag
   end
 
   # GET /users_preferences_tags/1 or /users_preferences_tags/1.json
@@ -25,7 +30,7 @@ class UsersPreferencesTagsController < ApplicationController
 
     respond_to do |format|
       if @users_preferences_tag.save
-        format.html { redirect_to @users_preferences_tag, notice: "Users preferences tag was successfully created." }
+        format.html { redirect_to users_preferences_tags_url, notice: "Users preferences tag was successfully created." }
         format.json { render :show, status: :created, location: @users_preferences_tag }
       else
         format.html { render :new, status: :unprocessable_entity }

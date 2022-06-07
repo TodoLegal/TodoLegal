@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/mailchimp/mailchimp-marketing-ruby.git
+  revision: 3a1a98dab913702ec4d1b279e34957973c338264
+  specs:
+    MailchimpMarketing (3.0.75)
+      excon (>= 0.76.0, < 1)
+      json (~> 2.1, >= 2.1.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -146,6 +154,7 @@ GEM
     exception_notification (4.4.3)
       actionmailer (>= 4.0, < 7)
       activesupport (>= 4.0, < 7)
+    excon (0.92.3)
     faraday (1.5.1)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
@@ -222,6 +231,7 @@ GEM
       concurrent-ruby (~> 1.0)
     jbuilder (2.11.2)
       activesupport (>= 5.0.0)
+    json (2.6.2)
     jwt (2.2.3)
     kaminari (1.2.1)
       activesupport (>= 4.1.0)
@@ -437,6 +447,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  MailchimpMarketing!
   actionpack-page_caching
   bcrypt_pbkdf (>= 1.0, < 2.0)
   bootsnap (>= 1.4.2)

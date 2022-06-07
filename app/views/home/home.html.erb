@@ -56,6 +56,23 @@
       </div>
     </div>
   <% end %>
+</br>
+<div class="billboard billboard--home">
+<div class="billboard-content">
+  <h5 class="billboard-title">Suscribete a nuestra lista de correos.</h5>
+  <p class="billboard-body">Y mantente actualizado sobre las leyes del pais.<p>
+
+  
+   #mailing_list
+   #addEmail
+
+    <%= form_tag({:controller => "mailing_list", :action => "addEmail"}, method: :post) do %>
+        <%= label_tag  "Correo Electronico:" %>
+        <%= text_field_tag :email, params[:email] %>
+        <%= submit_tag "Agregar" %>
+    <% end %>
+</div>
+</div>
 
 </div>
 

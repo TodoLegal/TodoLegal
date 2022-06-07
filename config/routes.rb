@@ -47,6 +47,7 @@ Rails.application.routes.draw do
   post "admin/grant_permission" => "admin#grant_permission", as: "admin_grant_permission"
   post "admin/revoke_permission" => "admin#revoke_permission", as: "admin_revoke_permission"
   post "admin/set_law_access" => "admin#set_law_access", as: "admin_set_law_access"
+  post 'adduser', to: 'mailing_list#addEmail', as: "add_to_mailing_list"
   get 'admin/enable_edit_mode', to: 'admin#enable_edit_mode', as: "enable_edit_mode"
   get 'admin/disable_edit_mode', to: 'admin#disable_edit_mode', as: "disable_edit_mode"
   get 'admin/gazettes', to: 'admin#gazettes', as: "gazettes"

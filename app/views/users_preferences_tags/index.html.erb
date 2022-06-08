@@ -16,8 +16,14 @@
         <tr>
           <td><%= tag.name %></td>
           <td>
-            <%= button_to users_preferences_tag, method: :delete, data: { confirm: 'Are you sure?'}, class:"btn btn-outline-danger"  do %>
-              <i class="fas fa-trash-alt"></i>
+            <% if users_preferences_tag.is_tag_available %>
+              <%= button_to users_preferences_tag, method: :get,  params: {users_preferences_tag: users_preferences_tag, tag_id: users_preferences_tag.tag_id, is_tag_available: false }, class:"btn btn-outline-primary"  do %>
+                Habilitado
+              <% end %>
+            <% else %>
+              <%= button_to users_preferences_tag, method: :get, params: {users_preferences_tag: users_preferences_tag, tag_id: users_preferences_tag.tag_id, is_tag_available: true }, class:"btn btn-outline-danger"  do %>
+                Deshabilitado
+              <% end %>
             <% end %>
           </td>
         </tr>

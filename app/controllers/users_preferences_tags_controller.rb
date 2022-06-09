@@ -1,5 +1,6 @@
 class UsersPreferencesTagsController < ApplicationController
   before_action :set_users_preferences_tag, only: %i[ show edit update destroy ]
+  before_action :authenticate_admin!, only: [:index, :show, :new, :edit, :create, :update, :destroy]
 
   # GET /users_preferences_tags or /users_preferences_tags.json
   def index

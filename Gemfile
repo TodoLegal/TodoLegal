@@ -33,6 +33,10 @@ gem 'capistrano-bundler'
 gem 'doorkeeper'
 gem 'MailchimpMarketing', :git => 'https://github.com/mailchimp/mailchimp-marketing-ruby.git'
 
+gem "administrate"
+gem 'administrate-field-active_storage'
+gem "image_processing"
+
 #Support for NewRelic
 gem 'newrelic_rpm'
 #Queue management

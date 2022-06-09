@@ -1,4 +1,35 @@
 Rails.application.routes.draw do
+  namespace :supervisor do
+      resources :users
+      resources :subsections
+      resources :titles
+      resources :user_permissions
+      resources :email_subscriptions
+      resources :document_types
+      resources :issuer_document_tags
+      resources :tag_types
+      resources :alternative_tag_names
+      resources :chapters
+      resources :users_preferences
+      resources :sections
+      resources :document_tags
+      resources :documents
+      resources :permissions
+      resources :document_relationships
+      resources :books
+      resources :judgement_auxiliaries
+      resources :law_tags
+      resources :law_modifications
+      resources :law_accesses
+      resources :laws
+      resources :user_document_download_trackers
+      resources :articles
+      resources :issuer_law_tags
+      resources :tags
+      resources :users_preferences_tags
+
+      root to: "users#index"
+    end
   resources :users_preferences
   resources :users_preferences_tags
   require 'sidekiq/web'

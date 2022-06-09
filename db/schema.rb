@@ -10,13 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_20_053457) do
+ActiveRecord::Schema.define(version: 2022_05_18_022746) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "fuzzystrmatch"
-  enable_extension "pg_trgm"
   enable_extension "plpgsql"
-  enable_extension "unaccent"
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -118,6 +115,12 @@ ActiveRecord::Schema.define(version: 2022_03_20_053457) do
     t.integer "position"
     t.string "issue_id"
     t.integer "document_type_id"
+    t.index ["description"], name: "documents_description_idx"
+    t.index ["issue_id"], name: "documents_issue_id_idx"
+    t.index ["name"], name: "documents_name_idx"
+    t.index ["publication_date"], name: "documents_publication_date_idx"
+    t.index ["publication_number"], name: "documents_publication_number_idx"
+    t.index ["url"], name: "documents_url_idx"
   end
 
   create_table "email_subscriptions", force: :cascade do |t|
@@ -126,6 +129,7 @@ ActiveRecord::Schema.define(version: 2022_03_20_053457) do
     t.string "status"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["email"], name: "email_subscriptions_email_idx"
   end
 
   create_table "issuer_document_tags", force: :cascade do |t|
@@ -245,6 +249,8 @@ ActiveRecord::Schema.define(version: 2022_03_20_053457) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "law_id"
+    t.index ["name"], name: "subsections_name_idx"
+    t.index ["number"], name: "subsections_number_idx"
   end
 
   create_table "tag_types", force: :cascade do |t|
@@ -307,11 +313,26 @@ ActiveRecord::Schema.define(version: 2022_03_20_053457) do
     t.boolean "receive_information_emails"
     t.string "stripe_customer_id"
     t.string "authentication_token", limit: 30
-    t.string "unique_session_id"
+    t.string "unique_session_id", limit: 20
     t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "users_preferences", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "users_preferences_tags_id"
+    t.datetime "mail_sent_at"
+    t.integer "mail_frequency"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "users_preferences_tags", force: :cascade do |t|
+    t.integer "tag_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

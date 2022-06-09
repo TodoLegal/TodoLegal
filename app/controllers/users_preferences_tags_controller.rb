@@ -7,8 +7,9 @@ class UsersPreferencesTagsController < ApplicationController
     @users_preferences_tags = UsersPreferencesTag.all
     @all_tags = Tag.all
 
-    # Para obtener el count, se tiene que hacer un where con el id del tag para obtener todas las ocurrencias y luego un count de eso. Se hace con cada tag
-    # @top_tags = DocumentTag
+    #Get tags with the most documents associated to them
+    @top_tags = DocumentTag.group(:tag_id).count
+    @top_tags = Hash[@top_tags.sort_by {|k, v| -v} [0..19]].to_h
   end
 
   # GET /users_preferences_tags/1 or /users_preferences_tags/1.json

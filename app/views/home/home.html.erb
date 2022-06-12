@@ -1,3 +1,4 @@
+
 <% content_for :title, "TodoLegal - El buscador de leyes de Honduras" %>
 
 <div class="jumbotron d-none d-sm-block" align="center" style="padding-top: 0px; padding-bottom: 20px;background-color: #EFF3F8;margin: 0px">
@@ -39,42 +40,35 @@
   <p class="resultinfo"><%= law_count %> leyes ingresadas</p>
 
   <% if !@current_user_plan_is_active %>
-    <div class="billboard billboard--home">
-      <div class="billboard-content">
-        <h5 class="billboard-title">TodoLegal es gratis.</h5>
-        <p class="billboard-body">
-          También somos desarrolladores de <b>Valid</b>, donde nos especializamos en procesar <b>La Gaceta</b>. Puedes conocer nuestro planes empresariales visitando la herramienta.
-          <i class="text-muted d-block">Puedes cancelar la suscripción en cualquier momento.</i>
-        </p>
-      </div>
-      <div class="billboard-actions form-group" id="change-plan-btn-form">
-        <% if user_signed_in? %>
-          <%= button_to "Ver planes", pricing_path, method: :get, params: {activate_pro_account: true}, remote: true, class:"btn btn-primary",  id:"change-plan-button"%>
-        <% else %>
-          <%= button_to "Ver planes", pricing_path, method: :get, params: {is_onboarding: true, pricing_onboarding: true}, remote: true, class:"btn btn-primary",  id:"change-plan-button"%>
-        <% end %>
-      </div>
-    </div>
+  <div class="card container text-white animate__animated animate__bounce" id="closeablecard" style="background-color:#171F2A;">
+
+  <div class="card-header bg-transparent border-bottom-0">
+    <button data-dismiss="alert" data-target="#closeablecard" type="button" class="close" aria-label="Close">
+      <span aria-hidden="true" style="color: white;">&times;</span>
+    </button>
+  </div>
+  
+    <div class="card-body">
+    <h5 class="billboard-title">Suscríbite a nuestro boletín semanal</h5>
+    <p class="text-white">Déjanos tu correo y recibirás un un resumen semanal con los cambios normativas más importantes del país.</p>
+    <br>
+    <form class="form-inline" style="margin-top:-2em; margin-left:-1em;">
+    <%= form_tag({:controller => "mailing_list", :action => "addEmail"}, method: :post) do %>
+        <div class=" form-group mx-sm-3 mb-2">
+          <%= text_field_tag :email, params[:email], class:"form-control bg-light",  id:"inputEmail", placeholder:"Correo", style:"padding-right:5em;" %>
+        </div>
+        <%= submit_tag "Enviar", class: 'btn btn-primary mb-2', type:"submit", style:"padding:0.7em;" %>
+      <% end %>
+  
+  </div>
+  
+  </div>
+  </form>
+  </div>
   <% end %>
 </br>
-<div class="billboard billboard--home">
-<div class="billboard-content">
-  <h5 class="billboard-title">Suscribete a nuestra lista de correos.</h5>
-  <p class="billboard-body">Y mantente actualizado sobre las leyes del pais.<p>
 
-  
-   #mailing_list
-   #addEmail
-
-    <%= form_tag({:controller => "mailing_list", :action => "addEmail"}, method: :post) do %>
-        <%= label_tag  "Correo Electronico:" %>
-        <%= text_field_tag :email, params[:email] %>
-        <%= submit_tag "Agregar" %>
-    <% end %>
-</div>
-</div>
-
-</div>
 
 
 <%= javascript_pack_tag "help_card" %>
+<%= javascript_pack_tag "hide_card" %>

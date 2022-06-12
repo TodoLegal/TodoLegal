@@ -16,7 +16,7 @@ class MailingListController < ApplicationController
     if e.blank?
       
     else
-      redirect_back fallback_location:"/" , notice: "Error #{e}" 
+      redirect_back fallback_location:"/" 
     end
   end
 end

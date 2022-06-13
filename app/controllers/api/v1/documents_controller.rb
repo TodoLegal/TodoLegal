@@ -122,7 +122,11 @@ class Api::V1::DocumentsController < ApplicationController
       end
       document_tags.each do |document_tag|
         if document_tag
-          tags.push({"name": document_tag.tag.name, "type": document_tag.tag.tag_type.name})
+          if document_tag.tag.name && document_tag.tag.tag_type
+            tags.push({"name": document_tag.tag.name, "type": document_tag.tag.tag_type.name})
+          elsif document_tag.tag.name
+            tags.push({"name": document_tag.tag.name, "type": ""})
+          end
         end
       end
       issuer_name = get_issuer_name document["id"].to_i

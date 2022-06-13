@@ -1,27 +1,93 @@
-<p id="notice"><%= notice %></p>
+<div class="container">
+  <h1>Administracion de temas de preferencia</h1>
 
-<h1>Users Preferences Tags</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Tag</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @users_preferences_tags.each do |users_preferences_tag| %>
+  <table class="table table-bordered">
+    <thead>
       <tr>
-        <td><%= users_preferences_tag.tag_id %></td>
-        <td><%= link_to 'Show', users_preferences_tag %></td>
-        <td><%= link_to 'Edit', edit_users_preferences_tag_path(users_preferences_tag) %></td>
-        <td><%= link_to 'Destroy', users_preferences_tag, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <th scope="col">Tema</th>
+        <th scope="col">Estado</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
 
-<br>
+    <tbody>
+      <% @users_preferences_tags.each do |users_preferences_tag| %>
+        <% tag = Tag.find_by(id: users_preferences_tag.tag_id) %>
+        <tr>
+          <td><%= tag.name %></td>
+          <td>
+            <% if users_preferences_tag.is_tag_available %>
+              <%= button_to users_preferences_tag, method: :get,  params: {users_preferences_tag: users_preferences_tag, tag_id: users_preferences_tag.tag_id, is_tag_available: false }, class:"btn btn-outline-primary"  do %>
+                Habilitado
+              <% end %>
+            <% else %>
+              <%= button_to users_preferences_tag, method: :get, params: {users_preferences_tag: users_preferences_tag, tag_id: users_preferences_tag.tag_id, is_tag_available: true }, class:"btn btn-outline-secondary"  do %>
+                Deshabilitado
+              <% end %>
+            <% end %>
+          </td>
+          <td>
+            <%= button_to users_preferences_tag, method: :delete, data: { confirm: '¿Estás Seguro que deseas eliminarlo?' }, class:"btn btn-outline-danger" do %>
+              <i class="fas fa-trash-alt"></i>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+      <tr>
+        <%= form_with(model: @preferences_tags, local: true) do |form|%>
+          <% if @preferences_tags.errors.any? %>
+            <div id="error_explanation">
+              <h2><%= pluralize(@preferences_tags.errors.count, "error") %> prohibited this users_preferences_tag from being saved:</h2>
 
-<%= link_to 'New Users Preferences Tag', new_users_preferences_tag_path %>
+              <ul>
+                <% @preferences_tags.errors.each do |error| %>
+                  <li><%= error.full_message %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+          <td>
+            <%= form.collection_select(:tag_id, @all_tags, :id, :name, {:prompt=>true}, {:class=>'form-control js-example-tags'}) %>
+          </td>
+          <td>
+            <%= form.submit "Agregar tag", class: 'btn btn-primary' %>
+          </td>
+        <% end %>
+      </tr>
+    </tbody>
+  </table>
+  <br>
+  <h1>Top temas</h1>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">Temas</th>
+        <th scope="col">Cantidad</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @top_tags.each do |key, value| %>
+        <% tag_name = Tag.find_by(id: key.to_i).name %>
+        <tr>
+          <td> <%= tag_name %></td>
+          <td> <%= value %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<script>
+    $('.js-example-basic-single').select2();
+    $(".js-example-tags").select2({
+        tags: true
+    });
+</script>
+
+<style>
+    
+    .table{
+        background-color: white;
+    }
+</style>
+

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_08_083708) do
+ActiveRecord::Schema.define(version: 2022_06_13_042048) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -316,11 +316,11 @@ ActiveRecord::Schema.define(version: 2022_06_08_083708) do
 
   create_table "users_preferences", force: :cascade do |t|
     t.integer "user_id"
-    t.integer "users_preferences_tags_id"
     t.datetime "mail_sent_at"
     t.integer "mail_frequency"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "user_preference_tags", default: [], array: true
   end
 
   create_table "users_preferences_tags", force: :cascade do |t|

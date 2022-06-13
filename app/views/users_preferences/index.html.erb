@@ -1,33 +1,15 @@
-<p id="notice"><%= notice %></p>
-
-<h1>Users Preferences</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>User</th>
-      <th>Users preferences tags</th>
-      <th>Mail sent at</th>
-      <th>Mail frequency</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @users_preferences.each do |users_preference| %>
-      <tr>
-        <td><%= users_preference.user_id %></td>
-        <td><%= users_preference.users_preferences_tags_id %></td>
-        <td><%= users_preference.mail_sent_at %></td>
-        <td><%= users_preference.mail_frequency %></td>
-        <td><%= link_to 'Show', users_preference %></td>
-        <td><%= link_to 'Edit', edit_users_preference_path(users_preference) %></td>
-        <td><%= link_to 'Destroy', users_preference, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Users Preference', new_users_preference_path %>
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            
+            <h1>Recibe notificaciones</h1>
+            <div class="row">
+                <div class="col">
+                    <p> Elige los temas de tu interés y recibe notificaciones de acuerdo a tu preferencia. </p>
+                </div>
+                <div class="col">
+                    <%= render 'form', users_preference: @users_preference %>
+                </div>
+            </div>
+    </div>
+</div>

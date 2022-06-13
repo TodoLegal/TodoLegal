@@ -1,5 +1,4 @@
-<div class="container">
-  <%= form_with(model: users_preference) do |form| %>
+<%= form_with(model: users_preference) do |form| %>
     <% if users_preference.errors.any? %>
       <div id="error_explanation">
         <h2><%= pluralize(users_preference.errors.count, "error") %> prohibited this users_preference from being saved:</h2>
@@ -35,7 +34,6 @@
       <%= form.submit %>
     </div>
   <% end %>
-</div>
 
 <style>
 

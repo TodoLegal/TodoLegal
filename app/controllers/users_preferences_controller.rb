@@ -3,7 +3,7 @@ class UsersPreferencesController < ApplicationController
 
   # GET /users_preferences or /users_preferences.json
   def index
-    @tags = UsersPreferencesTag.all
+    @tags = UsersPreferencesTag.where(is_tag_available: true)
     @users_preference = UsersPreference.new
   end
 

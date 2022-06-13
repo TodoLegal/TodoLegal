@@ -1,37 +1,65 @@
 <%= form_with(model: users_preference) do |form| %>
-  <% if users_preference.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(users_preference.errors.count, "error") %> prohibited this users_preference from being saved:</h2>
+    <% if users_preference.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(users_preference.errors.count, "error") %> prohibited this users_preference from being saved:</h2>
 
-      <ul>
-        <% users_preference.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+        <ul>
+          <% users_preference.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <section class="preference-tags">
+      <%= form.collection_check_boxes :user_preference_tags, @tags, :tag_id, :id do |b| %>
+        <% tag_name = Tag.find_by(id: b.value).name %>
+        <p class="form-check">
+          <%= b.check_box %>
+          <%= b.label do%>
+            <%= tag_name %>
+          <% end %>
+        </p>
+      <% end %>
+    </section>
+
+    <%= form.hidden_field :user_id, value: current_user.id %>
+
+    <section class="frequency">
+      <%= form.label :mail_frequency %>
+      <%= form.number_field :mail_frequency %>
+    </section>
+
+    <div class="actions">
+      <%= form.submit %>
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :user_id %>
-    <%= form.number_field :user_id %>
-  </div>
+<style>
 
-  <div class="field">
-    <%= form.label :users_preferences_tags_id %>
-    <%= form.number_field :users_preferences_tags_id %>
-  </div>
+  .preference-tags .form-check label {
+    border-radius: 80px;
+    cursor: pointer;
+    margin: 0px;
+    padding: .0em 1em 0em 1em;
+  }
 
-  <div class="field">
-    <%= form.label :mail_sent_at %>
-    <%= form.datetime_select :mail_sent_at %>
-  </div>
+  .preference-tags .form-check input[type=checkbox]:checked~label,
+  .preference-tags .form-check input[type=radio]:checked~label {
+    background-color: #1A7FFA;
+    color: #FFFFFF;
+  }
 
-  <div class="field">
-    <%= form.label :mail_frequency %>
-    <%= form.number_field :mail_frequency %>
-  </div>
+  .form-check {
+    background: #EFEFEF;
+    border: 1px solid #9F9F9F;
+    border-radius: 80px;
+    display: inline-block;
+    padding: 0;
+  }
 
-  <div class="actions">
-    <%= form.submit %>
-  </div>
-<% end %>
+  .preference-tags .form-check input[type=checkbox]{
+    display: none;
+  }
+
+</style>

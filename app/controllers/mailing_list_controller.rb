@@ -1,6 +1,7 @@
 class MailingListController < ApplicationController
   require 'MailchimpMarketing'
   def addEmail
+    flash[:notice] = "Entre a controller."
     client = MailchimpMarketing::Client.new()
     client.set_config({
       :api_key => ENV['MAILCHIMP_API_KEY'],

@@ -6,7 +6,7 @@
     var divElem=document.getElementById('closeablecard');
     var isClicked=0;
 
-    divElem.style.display='block';
+    //divElem.style.display='block';
 
     divElem.addEventListener("click", () => {
       isClicked=1;

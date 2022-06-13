@@ -1,37 +1,70 @@
-<%= form_with(model: users_preference) do |form| %>
-  <% if users_preference.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(users_preference.errors.count, "error") %> prohibited this users_preference from being saved:</h2>
+<div class="container">
+  <%= form_with(model: users_preference) do |form| %>
+    <% if users_preference.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(users_preference.errors.count, "error") %> prohibited this users_preference from being saved:</h2>
 
-      <ul>
-        <% users_preference.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+        <ul>
+          <% users_preference.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <section class="preference-tags">
+      <%= form.collection_check_boxes :users_preferences_tag_ids, @tags, :id, :tag_id do |b| %>
+        <p class="form-check custom-form custom-form--checkbox">
+          <%= b.check_box %>
+          <%= b.label %>
+        </p>
+      <% end %>
+    </section>
+
+    <section class="frequency">
+      <%= form.label :mail_frequency %>
+      <%= form.number_field :mail_frequency %>
+    </section>
+
+    <div class="actions">
+      <%= form.submit %>
     </div>
   <% end %>
+</div>
 
-  <div class="field">
-    <%= form.label :user_id %>
-    <%= form.number_field :user_id %>
-  </div>
+<style>
+  .preference-tags .form-check label {
+    /* font-weight: 400; */
+      /* width: 100%; */
+      border-radius: 80px;
+  }
 
-  <div class="field">
-    <%= form.label :users_preferences_tags_id %>
-    <%= form.number_field :users_preferences_tags_id %>
-  </div>
+  .form-check-input{
+    display: none !important;
+  }
+  .preference-tags .form-check input[type=checkbox]:checked~label,
+  .preference-tags .form-check input[type=radio]:checked~label {
+      background-color: #1A7FFA;
+      color: #FFFFFF;
+  }
 
-  <div class="field">
-    <%= form.label :mail_sent_at %>
-    <%= form.datetime_select :mail_sent_at %>
-  </div>
+  .preference-tags .form-check label,
+  .preference-tags .form-check label {
+      padding: .5em 1em .5em 2em;
+      cursor: pointer;
+  }
 
-  <div class="field">
-    <%= form.label :mail_frequency %>
-    <%= form.number_field :mail_frequency %>
-  </div>
+  .form-check {
+    border: 1px solid #9F9F9F;
+    border-radius: 80px;
+    display: inline-block;
+    padding: 0;
+  }
 
-  <div class="actions">
-    <%= form.submit %>
-  </div>
-<% end %>
+  .form-check-inline .form-check-input,
+  .form-check-input {
+      position: absolute;
+      opacity: 0;
+  }
+
+</style>

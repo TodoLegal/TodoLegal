@@ -13,7 +13,7 @@
     <% end %>
 
     <section class="preference-tags">
-      <%= form.collection_check_boxes :user_preference_tags, UsersPreferencesTag.all, :tag_id, :id do |b| %>
+      <%= form.collection_check_boxes :user_preference_tags, @tags, :tag_id, :id do |b| %>
         <% tag_name = Tag.find_by(id: b.value).name %>
         <p class="form-check">
           <%= b.check_box %>

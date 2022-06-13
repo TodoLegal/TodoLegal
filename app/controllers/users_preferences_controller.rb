@@ -27,7 +27,7 @@ class UsersPreferencesController < ApplicationController
 
     respond_to do |format|
       if @users_preference.save
-        format.html { redirect_to users_preference_url, notice: "Users preference was successfully created." }
+        format.html { redirect_to users_preferences_url, notice: "Users preference was successfully created." }
         format.json { render :show, status: :created, location: @users_preference }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -40,7 +40,7 @@ class UsersPreferencesController < ApplicationController
   def update
     respond_to do |format|
       if @users_preference.update(users_preference_params)
-        format.html { redirect_to users_preference_url, notice: "Users preference was successfully updated." }
+        format.html { redirect_to users_preferences_url, notice: "Users preference was successfully updated." }
         format.json { render :show, status: :ok, location: @users_preference }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -66,6 +66,6 @@ class UsersPreferencesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def users_preference_params
-      params.require(:users_preference).permit(:mail_frequency, users_preference: [ ])
+      params.require(:users_preference).permit(:user_id, :mail_frequency, user_preference_tags: [])
     end
 end

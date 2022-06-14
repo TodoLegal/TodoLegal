@@ -12,7 +12,7 @@
     <% end %>
 
     <section class="preference-tags">
-      <%= form.collection_check_boxes :user_preference_tags, @tags, :tag_id, :id do |b| %>
+      <%= form.collection_check_boxes :user_preference_tags, @tags, :tag_id, :id, include_hidden: false do |b| %>
         <% tag_name = Tag.find_by(id: b.value).name %>
         <p class="form-check">
           <%= b.check_box %>
@@ -25,9 +25,20 @@
 
     <%= form.hidden_field :user_id, value: current_user.id %>
 
-    <section class="frequency">
-      <%= form.label :mail_frequency %>
-      <%= form.number_field :mail_frequency %>
+    <section class="preference-tags mt-2">
+      <p class="preference-subtitle">Frecuencia de notificaciones </p>
+      <p class="form-check"> 
+        <%= form.radio_button :mail_frequency, 7%>
+        <%= form.label :mail_frequency_7, "Semanal" %>
+      </p>
+      <p class="form-check"> 
+        <%= form.radio_button :mail_frequency, 15%>
+        <%= form.label :mail_frequency_15, "Quincenal" %>
+      </p>
+      <p class="form-check"> 
+        <%= form.radio_button :mail_frequency, 31%>
+        <%= form.label :mail_frequency_31, "Mensual" %>
+      </p>
     </section>
 
     <div class="actions">
@@ -58,8 +69,29 @@
     padding: 0;
   }
 
-  .preference-tags .form-check input[type=checkbox]{
+  .preference-tags .form-check input[type=checkbox],
+  .preference-tags .form-check input[type=radio]{
     display: none;
+  }
+
+  .preference-title{
+    color: #000000;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 43px;
+    margin-top: 0.5em;
+  }
+
+  .preference-subtitle{
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 29px;
+    /* identical to box height */
+
+
+    color: #000000;
   }
 
 </style>

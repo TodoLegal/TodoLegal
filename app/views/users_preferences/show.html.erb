@@ -7,7 +7,14 @@
 
 <p>
   <strong>Users preferences tags:</strong>
-  <%= @users_preference.user_preference_tags %>
+  <% @users_preference.user_preference_tags.each do | user_preference_tag | %>
+    <% if user_preference_tag %>
+      <% tag_name = Tag.find_by(id: user_preference_tag).name %>
+      <%= tag_name %>,
+    <% else %>
+      nil,
+    <% end %>
+  <% end %>
 </p>
 
 <p>

@@ -1,50 +1,92 @@
 <%= form_with(model: users_preference) do |form| %>
-    <% if users_preference.errors.any? %>
-      <div id="error_explanation">
-        <h2><%= pluralize(users_preference.errors.count, "error") %> prohibited this users_preference from being saved:</h2>
 
-        <ul>
-          <% users_preference.errors.each do |error| %>
-            <li><%= error.full_message %></li>
-          <% end %>
-        </ul>
-      </div>
+    <% if @go_to_law %>
+      <input type="hidden" id="go_to_law" name="go_to_law" value="<%= @go_to_law %>">
+    <% end %>
+    <% if @redirect_to_valid %>
+        <input type="hidden" id="redirect_to_valid" name="redirect_to_valid" value="<%= @redirect_to_valid %>">
+    <% end %>
+    <% if @is_monthly %>
+        <input type="hidden" id="is_monthly" name="is_monthly" value="<%= @is_monthly %>">
+    <% end %>
+    <% if @is_semestral %>
+        <input type="hidden" id="is_semestral" name="is_semestral" value="<%= @is_semestral %>">
+    <% end %>
+    <% if @is_annually %>
+        <input type="hidden" id="is_annually" name="is_annually" value="<%= @is_annually %>">
+    <% end %>
+    <% if @is_onboarding %>
+        <input type="hidden" id="is_onboarding" name="is_onboarding" value="<%= @is_onboarding %>">
     <% end %>
 
-    <section class="preference-tags">
-      <%= form.collection_check_boxes :user_preference_tags, @tags, :tag_id, :id, include_hidden: false do |b| %>
-        <% tag_name = Tag.find_by(id: b.value).name %>
-        <p class="form-check">
-          <%= b.check_box %>
-          <%= b.label do%>
-            <%= tag_name %>
-          <% end %>
-        </p>
-      <% end %>
-    </section>
+  <% if users_preference.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(users_preference.errors.count, "error") %> prohibited this users_preference from being saved:</h2>
 
-    <%= form.hidden_field :user_id, value: current_user.id %>
-
-    <section class="preference-tags mt-2">
-      <p class="preference-subtitle">Frecuencia de notificaciones </p>
-      <p class="form-check"> 
-        <%= form.radio_button :mail_frequency, 7%>
-        <%= form.label :mail_frequency_7, "Semanal" %>
-      </p>
-      <p class="form-check"> 
-        <%= form.radio_button :mail_frequency, 15%>
-        <%= form.label :mail_frequency_15, "Quincenal" %>
-      </p>
-      <p class="form-check"> 
-        <%= form.radio_button :mail_frequency, 31%>
-        <%= form.label :mail_frequency_31, "Mensual" %>
-      </p>
-    </section>
-
-    <div class="form-group">
-      <%= form.submit "Enviar", class:"btn btn-primary" %>
+      <ul>
+        <% users_preference.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
     </div>
   <% end %>
+
+  <section class="preference-tags">
+    <%= form.collection_check_boxes :user_preference_tags, @tags, :tag_id, :id, include_hidden: false do |b| %>
+      <% tag_name = Tag.find_by(id: b.value).name %>
+      <p class="form-check">
+        <%= b.check_box %>
+        <%= b.label do%>
+          <%= tag_name %>
+        <% end %>
+      </p>
+    <% end %>
+  </section>
+
+  <%= form.hidden_field :user_id, value: current_user.id %>
+
+  <section class="preference-tags mt-2">
+    <p class="preference-subtitle">Frecuencia de notificaciones </p>
+    <p class="form-check"> 
+      <%= form.radio_button :mail_frequency, 7%>
+      <%= form.label :mail_frequency_7, "Semanal" %>
+    </p>
+    <p class="form-check"> 
+      <%= form.radio_button :mail_frequency, 15%>
+      <%= form.label :mail_frequency_15, "Quincenal" %>
+    </p>
+    <p class="form-check"> 
+      <%= form.radio_button :mail_frequency, 31%>
+      <%= form.label :mail_frequency_31, "Mensual" %>
+    </p>
+  </section>
+
+  <div class="form-group mt-4">
+    <%= form.submit "Enviar", class:"btn btn-primary" %>
+    <% if @redirect_to_valid %>
+      <%=link_to "https://valid.todolegal.app", method: :get do %>
+        <span class="skip-btn">Omitir</span>
+        <i class="fas fa-arrow-right"></i>
+      <% end %>
+    <% elsif @is_monthly %>
+        <%=link_to checkout_path(is_monthly: true, is_onboarding:true), method: :get do %>
+          <span class="skip-btn">Omitir</span>
+          <i class="fas fa-arrow-right"></i>
+        <% end %>
+    <% elsif @is_semestral %>
+        <%=link_to checkout_path(is_semestral: true, is_onboarding:true), method: :get do %>
+          <span class="skip-btn">Omitir</span>
+          <i class="fas fa-arrow-right"></i>
+        <% end %>
+    <% else %>
+        <%=link_to checkout_path(is_annually: true, is_onboarding:true), method: :get do %>
+          <span class="skip-btn">Omitir</span>
+          <i class="fas fa-arrow-right"></i>
+        <% end %>
+    <% end %>
+  </div>
+
+<% end %>
 
 <style>
 
@@ -89,6 +131,15 @@
     font-weight: 700;
     font-size: 24px;
     line-height: 29px;
+  }
+
+  .form-group .btn{
+    display: inline-block;
+    margin-right: 2em;
+  }
+
+  .skip-btn{
+    text-decoration: underline;
   }
 
 </style>

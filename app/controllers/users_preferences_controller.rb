@@ -5,6 +5,14 @@ class UsersPreferencesController < ApplicationController
   def index
     @tags = UsersPreferencesTag.where(is_tag_available: true)
     @users_preference = UsersPreference.new
+
+    #onboarding parameters
+    @redirect_to_valid = params[:redirect_to_valid]
+    @go_to_law = params[:go_to_law]
+    @is_onboarding = params[:is_onboarding]
+    @is_monthly = params[:is_monthly]
+    @is_semestral = params[:is_semestral]
+    @is_annually = params[:is_annually] 
   end
 
   # GET /users_preferences/1 or /users_preferences/1.json
@@ -27,8 +35,20 @@ class UsersPreferencesController < ApplicationController
 
     respond_to do |format|
       if @users_preference.save
-        format.html { redirect_to users_preferences_url, notice: "Users preference was successfully created." }
-        format.json { render :show, status: :created, location: @users_preference }
+        if params[:redirect_to_valid] == true
+          format.html { redirect_to "https://valid.todolegal.app?preferences=true"}
+        elsif !params[:is_monthly].blank?
+          format.html { redirect_to checkout_url(is_onboarding:true, go_to_law: params[:go_to_law], is_monthly: params[:is_monthly]) }
+          format.json { render :show, status: :created, location: @users_preference }
+        elsif !params[:is_semestral].blank?
+          format.html { redirect_to checkout_url(is_onboarding:true, go_to_law: params[:go_to_law], is_semestral: params[:is_semestral])}
+          format.json { render :show, status: :created, location: @users_preference }
+        elsif !params[:is_annually].blank?
+          format.html { redirect_to checkout_url(is_onboarding:true, go_to_law: params[:go_to_law], is_annually: params[:is_annually]) }
+          format.json { render :show, status: :created, location: @users_preference }
+        else
+          format.html { redirect_to "https://valid.todolegal.app"}
+        end
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @users_preference.errors, status: :unprocessable_entity }

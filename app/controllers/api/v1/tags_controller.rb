@@ -10,4 +10,11 @@ class Api::V1::TagsController < ApplicationController
       end
       render json: { "tags": @tags }
     end
+
+    def get_preference_tags_list
+      @tags = []
+      @tags = UsersPreferencesTag.where(is_tag_available: true)
+
+      render json: {"preference_tags_list": @tags}
+    end
   end

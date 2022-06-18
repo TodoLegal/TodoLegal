@@ -3,7 +3,7 @@ class UsersPreferencesController < ApplicationController
 
   # GET /users_preferences or /users_preferences.json
   def index
-    @tags = UsersPreferencesTag.where(is_tag_available: true)
+    @tags = UsersPreferencesTag.joins(:tag).where(users_preferences_tags: {is_tag_available: true}).select(:tag_id, :name)
     @users_preference = UsersPreference.new
 
     #onboarding parameters

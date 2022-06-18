@@ -13,8 +13,12 @@ class Api::V1::TagsController < ApplicationController
 
     def get_preference_tags_list
       @tags = []
-      @tags = UsersPreferencesTag.where(is_tag_available: true)
+      @preference_tags = UsersPreferencesTag.joins(:tag).where(users_preferences_tags: {is_tag_available: true}).pluck(:tag_id, :name)
 
-      render json: {"preference_tags_list": @tags}
+      @preference_tags.each do |tag|
+        @tags.push({"tag_id": tag[0], "tag_name": tag[1]})
+      end
+
+      render json: {"preference_tags": @tags}
     end
   end

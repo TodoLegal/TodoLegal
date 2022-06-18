@@ -91,6 +91,7 @@ Rails.application.routes.draw do
       resource :tags do
         member do
           get "/", to: 'tags#get_tags'
+          get "/get_preference_tags_list", to: 'tags#get_preference_tags_list'
         end
       end
     end

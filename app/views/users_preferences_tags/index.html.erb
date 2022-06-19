@@ -67,9 +67,8 @@
     </thead>
     <tbody>
       <% @top_tags.each do |key, value| %>
-        <% tag_name = Tag.find_by(id: key.to_i).name %>
         <tr>
-          <td> <%= tag_name %></td>
+          <td> <%= key %></td>
           <td> <%= value %></td>
         </tr>
       <% end %>

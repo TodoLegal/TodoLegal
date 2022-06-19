@@ -4,12 +4,16 @@ class UsersPreferencesTagsController < ApplicationController
 
   # GET /users_preferences_tags or /users_preferences_tags.json
   def index
+    @tema_tag_id = TagType.find_by(name: "tema").id
+    @materia_tag_id = TagType.find_by(name: "materia").id
+
     @preferences_tags = UsersPreferencesTag.new
     @users_preferences_tags = UsersPreferencesTag.all
-    @all_tags = Tag.all
+    @all_tags = Tag.where(tag_type_id: @materia_tag_id).or(Tag.where(tag_type_id: @tema_tag_id))
 
     #Get tags with the most documents associated to them
-    @top_tags = DocumentTag.group(:tag_id).count
+    @top_tags = DocumentTag.joins(:tag).where(tags: {tag_type_id: @tema_tag_id}).or( DocumentTag.joins(:tag).where(tags: {tag_type_id: @materia_tag_id}) )
+    @top_tags = @top_tags.group(:name).count
     @top_tags = Hash[@top_tags.sort_by {|k, v| -v} [0..19]].to_h
   end
 

@@ -14,11 +14,33 @@ class Api::V1::UsersPreferencesController < ApplicationController
         render json: { "user_preferences": user_preferences }
     end
 
+    #/api/v1/users_preferences?tags_id[]=4&tags_id[]=27&tags_id[]=41&frequency=15&access_token=uK1AGqqD_n4u7g3zh46K2Ce8WDwgFwcMTqcARQo8KCk
     def update_user_preferences
+        default_frequency = 7
+        default_tags_id = []
         @user = get_user_by_id
         if @user
-            
+            @user_preference = UsersPreference.find_by(user_id: @user.id)
+            if @user_preference
+                if !params["tags_id"].blank? and params["tags_id"].kind_of?(Array)
+                    @user_preference.user_preference_tags = params["tags_id"]
+                end
+                if !params["frequency"].blank?
+                    @user_preference.frequency = params["frequency"]
+                end
+                @user_preference.save
+            else
+                if !params["frequency"].blank?
+                    default_frequency = params["frequency"]
+                end
+                if !params["tags_id"].blank?
+                    default_tags_id = params["default_tags_id"]
+                end
+                UsersPreference.create(user_id: @user.id, frequency: default_frequency, user_preference_tags: default_tags_id)
+            end
+            render json: {message: "User successfully updated."}, status: 200
         end
+        render json: {message: "Unable to update user."}, status: 400
     end
 
     private

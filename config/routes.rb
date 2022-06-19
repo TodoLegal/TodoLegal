@@ -94,6 +94,11 @@ Rails.application.routes.draw do
           get "/preference_tags", to: 'tags#get_preference_tags_list'
         end
       end
+      resource :users_preferences do
+        member do
+          get "/", to: 'users_preferences#get_user_preferences'
+        end
+      end
     end
   end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html

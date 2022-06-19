@@ -91,6 +91,13 @@ Rails.application.routes.draw do
       resource :tags do
         member do
           get "/", to: 'tags#get_tags'
+          get "/preference_tags", to: 'tags#get_preference_tags_list'
+        end
+      end
+      resource :users_preferences do
+        member do
+          get "/", to: 'users_preferences#get_user_preferences'
+          put "/", to: 'users_preferences#update_user_preferences'
         end
       end
     end

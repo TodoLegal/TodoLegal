@@ -8,7 +8,7 @@ class Api::V1::UsersPreferencesController < ApplicationController
         if params[:access_token]
             @user = get_user_by_id
             if @user
-                user_preferences = UsersPreference.find_by(id: @user.id)
+                user_preferences = UsersPreference.find_by(user_id: @user.id)
             end
         end
         render json: { "user_preferences": user_preferences }
@@ -47,7 +47,7 @@ class Api::V1::UsersPreferencesController < ApplicationController
         end
     end
 
-    private
+    protected
         def get_user_by_id
             return User.find_by_id(doorkeeper_token.resource_owner_id)
         end

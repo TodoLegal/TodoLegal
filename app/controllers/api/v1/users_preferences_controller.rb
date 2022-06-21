@@ -15,7 +15,7 @@ class Api::V1::UsersPreferencesController < ApplicationController
     end
 
     #/api/v1/users_preferences?tags_id[]=4&tags_id[]=27&tags_id[]=41&frequency=15&access_token=uK1AGqqD_n4u7g3zh46K2Ce8WDwgFwcMTqcARQo8KCk
-    def update_user_preferences
+    def update
         #default values in case the user submits just one of the preference values
         default_frequency = 7
         default_tags_id = []
@@ -43,7 +43,7 @@ class Api::V1::UsersPreferencesController < ApplicationController
             end
             render json: {message: "User successfully updated."}, status: 200
         else
-            render json: {message: "Unable to update user."}, status: 400
+            render json: {message: "Unable to update user."}, status: :unprocesable_entity
         end
     end
 

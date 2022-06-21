@@ -97,7 +97,7 @@ Rails.application.routes.draw do
       resource :users_preferences do
         member do
           get "/", to: 'users_preferences#get_user_preferences'
-          patch "/", to: 'users_preferences#update'
+          patch "/:id", to: 'users_preferences#update'
         end
       end
     end

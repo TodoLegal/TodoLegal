@@ -4,7 +4,7 @@ class UsersPreferencesTagsController < ApplicationController
 
   # GET /users_preferences_tags or /users_preferences_tags.json
   def index
-    @tema_tag_id = TagType.find_by(name: "tema").id
+    @tema_tag_id = TagType.find_by(name: "Tema").id
     @materia_tag_id = TagType.find_by(name: "materia").id
 
     @preferences_tags = UsersPreferencesTag.new

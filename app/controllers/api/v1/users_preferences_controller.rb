@@ -23,7 +23,7 @@ class Api::V1::UsersPreferencesController < ApplicationController
     #/api/v1/users_preferences?tags_id[]=4&tags_id[]=27&tags_id[]=41&frequency=15&access_token=uK1AGqqD_n4u7g3zh46K2Ce8WDwgFwcMTqcARQo8KCk
     def update
         #default values in case the user submits just one of the preference values
-        default_frequency = 7
+        default_frequency = 0
         default_tags_id = []
 
         @user = get_user_by_id

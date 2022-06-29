@@ -1,16 +1,116 @@
 <div class="container">
     <div class="card">
         <div class="card-body">
-            
-            <h1 class="preference-title">Recibe notificaciones</h1>
             <div class="row">
-                <div class="col-sm-6 col-md-6">
-                    <p> Elige los temas de tu interés y recibe notificaciones de acuerdo a tu preferencia. </p>
+                <div class="col-sm-6 col-md-6 preferences-left">
+                    <h1 class="preference-title">Notificaciones Personalizadas</h1>
+                    <p class="preferences-p1"> Elige los temas de tu interés y recibe notificaciones de acuerdo a tu preferencia. </p>
+                    <hr class="preferences-divider"/>
+                    <p class="preferences-p2"> 
+                        Si deseas programas tus notificaciones personalizadas en otros momentos, puedes darle click a  
+                        <% if @redirect_to_valid %>
+                            <%=link_to "https://valid.todolegal.app", method: :get do %>
+                                <span class="skip-btn">omitir.</span>
+                            <% end %>
+                        <% elsif @is_monthly %>
+                            <%=link_to checkout_path(is_monthly: true, is_onboarding:true), method: :get do %>
+                                <span class="skip-btn">omitir.</span>
+                            <% end %>
+                        <% elsif @is_semestral %>
+                            <%=link_to checkout_path(is_semestral: true, is_onboarding:true), method: :get do %>
+                                <span class="skip-btn">omitir.</span>
+                            <% end %>
+                        <% else %>
+                            <%=link_to checkout_path(is_annually: true, is_onboarding:true), method: :get do %>
+                                <span class="skip-btn">omitir.</span>
+                            <% end %>
+                        <% end %>
+                    </p>
+                    <% if @redirect_to_valid %>
+                        <%=link_to "https://valid.todolegal.app", method: :get do %>
+                            <span class="skip-btn">Omitir</span>
+                            <i class="fas fa-arrow-right"></i>
+                        <% end %>
+                    <% elsif @is_monthly %>
+                        <%=link_to checkout_path(is_monthly: true, is_onboarding:true), method: :get do %>
+                            <span class="skip-btn">Omitir</span>
+                            <i class="fas fa-arrow-right"></i>
+                        <% end %>
+                    <% elsif @is_semestral %>
+                        <%=link_to checkout_path(is_semestral: true, is_onboarding:true), method: :get do %>
+                            <span class="skip-btn">Omitir</span>
+                            <i class="fas fa-arrow-right"></i>
+                        <% end %>
+                    <% else %>
+                        <%=link_to checkout_path(is_annually: true, is_onboarding:true), method: :get do %>
+                            <span class="skip-btn">Omitir</span>
+                            <i class="fas fa-arrow-right"></i>
+                        <% end %>
+                    <% end %>
                 </div>
-                <div class="col-sm-6 col-md-6">
+                <div class="col-sm-6 col-md-6 preferences-right">
                     <p class="preference-subtitle">Elige temas</p>
                     <%= render 'form', users_preference: @users_preference %>
                 </div>
             </div>
     </div>
 </div>
+
+<style>
+
+    .preferences-left{
+        background: #F2F5F8;
+        border-radius: 5px;
+        padding: 40px;
+    }
+
+    .preferences-divider{
+        height: 2px;
+        background: #1A7FFA;
+        border-radius: 5px;
+    }
+
+    .preference-title{
+        font-style: normal;
+        font-weight: 700;
+        font-size: 54px;
+        line-height: 67px;
+    }
+
+    .preferences-p1{
+        font-style: normal;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 24px;
+
+    }
+
+    .preferences-left .preferences-p2{
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 19px;
+        margin-top: 2rem;
+        margin-bottom: 3rem;
+    }
+
+    @media only screen and (max-width: 992.98px) {
+        .preference-title{
+            font-size: 34px;
+            line-height: 37px;
+        }
+
+        .preference-subtitle{
+            font-style: normal;
+            font-weight: 700;
+            font-size: 20px;
+            line-height: 24px;
+        }
+
+        .preferences-left{
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+    }
+
+</style>

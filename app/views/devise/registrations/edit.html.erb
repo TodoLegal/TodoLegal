@@ -212,22 +212,7 @@
         <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
       <% end %>
 
-      <!-- Edit preferences -->
-      <p class = "titles">Preferencias</p>
-      <div class="form-group">
-        <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-          <div class="form-check custom-form custom-form--checkbox">
-            <%= f.check_box :receive_information_emails, autofocus: true, class: "form-check-input check-submit", id:"check1"%>
-            <label class="form-check-label" for="check1">Quiero recibir el boletín informativo a mi correo electrónico.</label>
-          </div>
-          <div class="form-check custom-form custom-form--checkbox">
-            <%= f.check_box :is_contributor, autofocus: true, class: "form-check-input check-submit", id:"check2"%>
-            <label class="form-check-label" for="check2">Quiero participar en actividades para contribuir al estudio y mejora de la app.</label>
-          </div>
-          <%= f.submit "Guardar cambios", class: 'btn btn-primary', id:"submitPreferences", style:"display:none;"%>
-        <% end %>
-      </div>
-      <hr>
+      
       <!-- Cancel Button -->
       <button type="button" class="btn btn-link btn-delete-account" data-toggle="modal" data-target="#cancelAccountModal" id="delete-account-btn">
         <i class="fas fa-trash-alt" aria-hidden="true"></i>
@@ -282,34 +267,34 @@
     }
   }
 
-  addEventListener("load", function(event){
-    $('.form-check').each(function(){
-      if($(this).children().is(":checked")) {
-        this.classList.add('checked');
-      } else {
-        this.classList.remove('checked');
-      }
-    });
-  });
+  // addEventListener("load", function(event){
+  //   $('.form-check').each(function(){
+  //     if($(this).children().is(":checked")) {
+  //       this.classList.add('checked');
+  //     } else {
+  //       this.classList.remove('checked');
+  //     }
+  //   });
+  // });
 
-  addEventListener("change", function(event){
-    $('.form-check').each(function(){
-      if($(this).children().is(":checked")) {
-        this.classList.add('checked');
-      } else {
-        this.classList.remove('checked');
-      }
-    });
-  });
+  // addEventListener("change", function(event){
+  //   $('.form-check').each(function(){
+  //     if($(this).children().is(":checked")) {
+  //       this.classList.add('checked');
+  //     } else {
+  //       this.classList.remove('checked');
+  //     }
+  //   });
+  // });
 
-  var checkBoxes = document.getElementsByClassName("check-submit");
+  // var checkBoxes = document.getElementsByClassName("check-submit");
   
-  var checkBoxClick = function (){
-    document.getElementById("submitPreferences").click();
-  };
-  //triggers form submit when checkboxes clicked
-  checkBoxes[0].addEventListener("click", checkBoxClick, false );
-  checkBoxes[1].addEventListener("click", checkBoxClick, false );
+  // var checkBoxClick = function (){
+  //   document.getElementById("submitPreferences").click();
+  // };
+  // //triggers form submit when checkboxes clicked
+  // checkBoxes[0].addEventListener("click", checkBoxClick, false );
+  // checkBoxes[1].addEventListener("click", checkBoxClick, false );
 
   function showOtherField(field){
     if(field === "Otro")

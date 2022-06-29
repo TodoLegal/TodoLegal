@@ -59,28 +59,7 @@
   </section>
 
   <div class="form-group mt-4">
-    <%= form.submit "Enviar", class:"btn btn-primary" %>
-    <% if @redirect_to_valid %>
-      <%=link_to "https://valid.todolegal.app", method: :get do %>
-        <span class="skip-btn">Omitir</span>
-        <i class="fas fa-arrow-right"></i>
-      <% end %>
-    <% elsif @is_monthly %>
-        <%=link_to checkout_path(is_monthly: true, is_onboarding:true), method: :get do %>
-          <span class="skip-btn">Omitir</span>
-          <i class="fas fa-arrow-right"></i>
-        <% end %>
-    <% elsif @is_semestral %>
-        <%=link_to checkout_path(is_semestral: true, is_onboarding:true), method: :get do %>
-          <span class="skip-btn">Omitir</span>
-          <i class="fas fa-arrow-right"></i>
-        <% end %>
-    <% else %>
-        <%=link_to checkout_path(is_annually: true, is_onboarding:true), method: :get do %>
-          <span class="skip-btn">Omitir</span>
-          <i class="fas fa-arrow-right"></i>
-        <% end %>
-    <% end %>
+    <%= form.submit "Guardar", class:"btn btn-primary btn-lg" %>
   </div>
 
 <% end %>
@@ -111,15 +90,6 @@
   .preference-tags .form-check input[type=checkbox],
   .preference-tags .form-check input[type=radio]{
     display: none;
-  }
-
-  .preference-title{
-    color: #000000;
-    font-style: normal;
-    font-weight: 700;
-    font-size: 36px;
-    line-height: 43px;
-    margin-top: 0.5em;
   }
 
   .preference-subtitle{

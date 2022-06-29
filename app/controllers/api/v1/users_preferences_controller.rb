@@ -23,7 +23,7 @@ class Api::V1::UsersPreferencesController < ApplicationController
     #/api/v1/users_preferences?tags_id[]=4&tags_id[]=27&tags_id[]=41&frequency=15&access_token=uK1AGqqD_n4u7g3zh46K2Ce8WDwgFwcMTqcARQo8KCk
     def update
         #default values in case the user submits just one of the preference values
-        default_frequency = 7
+        default_frequency = 0
         default_tags_id = []
 
         @user = get_user_by_id
@@ -40,6 +40,13 @@ class Api::V1::UsersPreferencesController < ApplicationController
                 @user_preference.user_preference_tags = default_tags_id
                 @user_preference.mail_frequency = default_frequency
                 @user_preference.save
+
+                $tracker.track(@user.id, 'Preferences edition', {
+                    'user_type' => current_user_type_api(@user),
+                    'selected_tags' => default_tags_id,
+                    'selected_mail_frequency' => default_frequency,
+                    'location' => "API"
+                })
             else
                 if !params["mail_frequency"].blank?
                     default_frequency = params["mail_frequency"]
@@ -48,6 +55,13 @@ class Api::V1::UsersPreferencesController < ApplicationController
                     default_tags_id = params["tags_id"]
                 end
                 UsersPreference.create(user_id: @user.id, mail_frequency: default_frequency, user_preference_tags: default_tags_id)
+
+                $tracker.track(@user.id, 'Preferences edition', {
+                    'user_type' => current_user_type_api(@user),
+                    'selected_tags' => default_tags_id,
+                    'selected_mail_frequency' => default_frequency,
+                    'location' => "API"
+                })
             end
             render json: {message: "User successfully updated."}, status: 200
         else

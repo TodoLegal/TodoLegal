@@ -1,16 +1,22 @@
 class Api::V1::UsersPreferencesController < ApplicationController
     protect_from_forgery with: :null_session
     include ApplicationHelper
-    before_action :doorkeeper_authorize!, only: [:get_user_preferences, :update_user_preferences]
+    before_action :doorkeeper_authorize!, only: [:get_user_preferences, :update]
 
     def get_user_preferences
-        user_preferences = []
+        user_preferences = {
+            user_preference_tags: [],
+            mail_frequency: 0
+        }
+
         if params[:access_token]
             @user = get_user_by_id
-            if @user
-                user_preferences = UsersPreference.find_by(user_id: @user.id)
+            @preferences = UsersPreference.find_by(user_id: @user.id)
+            if @user && @preferences
+                user_preferences = @preferences
             end
         end
+
         render json: { "user_preferences": user_preferences }
     end
 
@@ -26,11 +32,13 @@ class Api::V1::UsersPreferencesController < ApplicationController
             #checks if user already has preferences, if not, creates preferences
             if @user_preference
                 if !params["tags_id"].blank? and params["tags_id"].kind_of?(Array)
-                    @user_preference.user_preference_tags = params["tags_id"]
+                    default_tags_id = params["tags_id"]
                 end
                 if !params["mail_frequency"].blank?
-                    @user_preference.mail_frequency = params["mail_frequency"]
+                    default_frequency = params["mail_frequency"]
                 end
+                @user_preference.user_preference_tags = default_tags_id
+                @user_preference.mail_frequency = default_frequency
                 @user_preference.save
             else
                 if !params["mail_frequency"].blank?

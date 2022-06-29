@@ -1,0 +1,2 @@
+class UserNotificationsHistory < ApplicationRecord
+end

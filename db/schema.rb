@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_13_042048) do
+ActiveRecord::Schema.define(version: 2022_06_21_033146) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -273,6 +273,14 @@ ActiveRecord::Schema.define(version: 2022_06_13_042048) do
     t.string "fingerprint"
     t.integer "downloads"
     t.datetime "period_start"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "user_notifications_histories", force: :cascade do |t|
+    t.integer "user_id"
+    t.datetime "mail_sent_at"
+    t.integer "documents_ids", default: [], array: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

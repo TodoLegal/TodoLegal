@@ -8,14 +8,13 @@ class MailUserPreferencesJob < ApplicationJob
         documents_tags  =  []
         uniq_documents_tags = []
         #@documents_to_save = UserNotificationsHistory.new(user_notifications_history_params)
-        @current_id = 0
         notification_history = []        
         @all_notifications_history = UserNotificationsHistory.select("documents_ids").where(user_id: user.id)
-        @ids_to_be_sent = []
+        @docs_to_be_sent = []
         @user_notification_history = nil
 
       @user_preferences.user_preference_tags.each do |tag|
-        documents_tags.push(Document.joins(:document_tags).where('publication_date > ?',  (Date.today - 45.day).to_datetime).where('document_tags.tag_id'=> tag).pluck(:document_id)).flatten
+        documents_tags.push(Document.joins(:document_tags).where('publication_date > ?',  (Date.today - 45.day).to_datetime).where('document_tags.tag_id'=> tag)).flatten
       end
 
       documents_tags = documents_tags.flatten
@@ -41,16 +40,16 @@ class MailUserPreferencesJob < ApplicationJob
        
       @all_notifications_history.pluck(:documents_ids).each do |ida|
         @notification_history_final.each do |idb|
-          if ida != idb || ida.documents_ids.blank? == false
-            @ids_to_be_sent.push(idb)
+          if ida != idb.id || ida.documents_ids.blank? == false
+            @docs_to_be_sent.push(idb)
           end
         end
       end
       
-      @ids_to_be_sent=@ids_to_be_sent.uniq
+      @docs_to_be_sent=@docs_to_be_sent.uniq
 
-      @user_notifications_history = UserNotificationsHistory.create(user_id: current_user.id, mail_sent_at: DateTime.now, documents_ids: @ids_to_be_sent )
-        NotificationsMailer.user_preferences_mail(user,@ids_to_be_sent).deliver_later(wait_until: 1.day.from_now)[]
+      @user_notifications_history = UserNotificationsHistory.create(user_id: current_user.id, mail_sent_at: DateTime.now, documents_ids: @docs_to_be_sent )
+        NotificationsMailer.user_preferences_mail(user,@docs_to_be_sent).deliver
       @user_notifications_history.save
 
   end

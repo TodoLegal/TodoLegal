@@ -11,7 +11,8 @@ class NotificationsMailer < ApplicationMailer
       @user = user
       @documents_to_send = notif_arr
       #Controllers/ActiveStorageMailer have the jobs.
-      mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: user.email, subject: 'Sus leyes importantes.')
+      #mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: user.email, subject: 'Sus leyes importantes.')
+      mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: "hector@todolegal.app", subject: 'Sus leyes importantes.')
   end
 
 end

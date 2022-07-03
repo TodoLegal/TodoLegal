@@ -6,32 +6,32 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </head>
 
-    <body style="margin: 0; padding: 0; background-color: #F2F5F8;">
+    <body style="margin: 0; padding: 0; background-color: white;">
         <!-- Inicio del Header -->
         <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: 0px auto; border-spacing: 0px;">
             <tbody>
+                <%= render 'header' %>
                 <tr>
                     <td style="text-align: center;">
                         <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: auto;">
                             <tr>
                                 <td></td>
-                                <td width="540">
+                                <td width="580">
                                     <table border="0" cellpadding="0" cellspacing="0" width="100%" >
                                         <tr>
-                                            <a class="back-image" data-toggle="modal" data-target="#cancelModalTodolegal">
-                                                <img style="height: 15vh; max-height: 110px; margin: 2vh auto 0;" border="0" alt="Logo TodoLegal" src="https://todolegal.app/img/logo_landing_mobile.png"/>
-                                            </a>
-                                        </tr>
-                                        <tr>
                                             <td style="background-color: #FFFFFF; text-align: left; padding: 40px;">
-                                                <% [1,2,3].each do |n| %>
-                                                    <p> Carlos</p>
-                                                <% end %>
-                                                <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">
-                                                    Hola, soy el loco de preferencias que te escribe esto, cuando lo veas, significa que ya ganaste
-                                                <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">
-                                                    Bienvenido a Valid, una herramienta de Todolegal. Acabas de crear una cuenta gratuita que te permite 3 descargas, luego de eso puedes optar por uno de <a href="https://todolegal.app/pricing">nuestros planes </a> 
-                                                    para descargar documentos de forma ilimitada.
+                                                <p
+                                                    style="font-family: Lato, Helvetica, Arial, sans-serif; color:#7575A1; font-size: 16px; font-style: normal; line-height: 19px;"
+                                                >
+                                                    Hola Carlos, 
+                                                </p>
+                                                <p
+                                                    style="font-family: Lato, Helvetica, Arial, sans-serif; color:#7575A1; font-size: 16px; font-style: normal; line-height: 19px;"
+                                                >
+                                                    Estas son las alertas legales en base a las preferencias que seleccionaste. Si quieres modificar tus preferencias 
+                                                    lo puedes hacer dando <a href="https://test.valid.todolegal.app/users/preferences">click aquí</a>.
+                                                </p>
+                                                <%=render partial: 'document_card', locals:{documents: @documents_to_send}%>
                                                 <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">
                                                 Actualmente contamos con más de <%= (valid_document_count/10) * 10 %>  documentos legales que se actualizan constatemente y cada 4 semanas lanzamos nuevas funcionalidades al producto. En este video tutorial puedes aprender a usar la herramienta, solo debes dar click en <a href="https://www.youtube.com/watch?v=34MuK_1SCfc&t=3s">este enlace</a>. Si quieres contactarnos, lo puedes hacer respondiento a este correo, o programando una llamada con uno de 
                                                 nuestros representando dando click en <a href="https://calendly.com/tl-ventas/15">este enlace</a>.
@@ -47,51 +47,7 @@
                                             </p>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td style="background-color: #FFFFFF; text-align: center;">
-                                                
-                                                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="padding-left: 40px; padding-bottom: 40px; padding-right: 40px;">
-                                                    <tr>
-                                                        <td style="padding-top:20px ; border-top: 1px solid #F2F5F8;">
-                                                            <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">
-                                                                Síguenos en nuestras redes
-                                                            </p>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <table border="0" width="160" style="margin: auto;">
-                                                                <tr>
-                                                                    <td style="text-align: center;">
-                                                                        <a href="https://twitter.com/TodoLegal1" alt="Twitter" style="width: 40px; height: 40px;">
-                                                                            <img src="https://todolegal.app/img/mails/twitter.png">
-                                                                        </a>
-                                                                    </td>
-                                                                    <td style="text-align: center;">
-                                                                        <a href="https://www.facebook.com/todolegaltech/" alt="Facebook" style="width: 40px; height: 40px;">
-                                                                            <img src="https://todolegal.app/img/mails/facebook.png">
-                                                                        </a>
-                                                                    </td>
-                                                                    <td style="text-align: center;">
-                                                                        <a href="https://www.linkedin.com/company/todolegal" alt="Linkedin" style="width: 40px; height: 40px;">
-                                                                            <img src="https://todolegal.app/img/mails/linkedin.png">
-                                                                        </a>
-                                                                    </td>
-                                                                    <td style="text-align: center;">
-                                                                        <a href="https://instagram.com/todolegal.app?igshid=1ibunfzqohm2g" alt="Instagram" style="width: 40px; height: 40px;">
-                                                                            <img src="https://todolegal.app/img/mails/instagram.png">
-                                                                        </a>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                        </td>
-                                                        
-                                                    </tr>
-                                                </table>
-                                                
-                                            </td>
-                                            
-                                        </tr>
+                                        
                                         <tr>
                                             <td style="background-color: #171F2A; text-align: center; padding: 40px;">
                                                 <p style="font-family: Helvetica, Arial, sans-serif; color:#FFFFFF; font-size: 14px; ">

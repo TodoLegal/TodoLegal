@@ -14,7 +14,7 @@ class MailUserPreferencesJob < ApplicationJob
         @user_notification_history = nil
 
       @user_preferences.user_preference_tags.each do |tag|
-        documents_tags.push(Document.joins(:document_tags).where('publication_date > ?',  (Date.today - 45.day).to_datetime).where('document_tags.tag_id'=> tag)).flatten
+         documents_tags.push(Document.joins(:document_tags).where('publication_date > ?',(Date.today - 45.day).to_datetime).where('document_tags.tag_id'=> tag).select(:tag_id, :id, :name, :issue_id, :publication_number, :publication_date, :description))
       end
 
       documents_tags = documents_tags.flatten

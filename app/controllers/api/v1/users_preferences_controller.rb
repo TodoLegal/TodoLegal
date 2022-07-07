@@ -45,7 +45,7 @@ class Api::V1::UsersPreferencesController < ApplicationController
                     #Probablemente hay que considerar user un scheduler, ademas de que cuando se cambien prefererencias, matar el job anterior antes de agregar 
                     # a la cola el nuevo job
                     # MailUserPreferencesJob.set(wait_until: Date.tomorrow).perform_later(@user)
-                    MailUserPreferencesJob.set(wait: 1.hour).perform_later(@user)
+                    MailUserPreferencesJob.set(wait: 5.minutes).perform_later(@user)
                 end
 
                 $tracker.track(@user.id, 'Preferences edition', {
@@ -65,7 +65,7 @@ class Api::V1::UsersPreferencesController < ApplicationController
 
                 if default_frequency.to_i > 0
                     # MailUserPreferencesJob.set(wait_until: Date.tomorrow).perform_later(@user)
-                    MailUserPreferencesJob.set(wait: 1.hour).perform_later(@user)
+                    MailUserPreferencesJob.set(wait: 5.minutes).perform_later(@user)
                 end
 
                 $tracker.track(@user.id, 'Preferences edition', {

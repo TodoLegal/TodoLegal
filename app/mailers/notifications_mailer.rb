@@ -8,14 +8,13 @@ class NotificationsMailer < ApplicationMailer
   end
 
   def user_preferences_mail(user, notif_arr) 
-      @user = User.find_by(email: "carlosvilla00896@gmail.com")
-
-      @tema_tag_id = TagType.find_by(name: "tema").id
-      @materia_tag_id = TagType.find_by(name: "materia").id
-      docs = Document.joins(:document_tags).select(:tag_id, :document_id, :name, :issue_id, :publication_number, :publication_date, :description)
-
-      docs = docs.order(tag_id: :asc)
+      @user = user
       @documents_to_send = []
+      # @tema_tag_id = TagType.find_by(name: "tema").id
+      # @materia_tag_id = TagType.find_by(name: "materia").id
+      # docs = Document.joins(:document_tags).select(:tag_id, :document_id, :name, :issue_id, :publication_number, :publication_date, :description)
+
+      docs = notif_arr.order(tag_id: :asc)
       current_tag_name = ""
       temp_docs = []
 

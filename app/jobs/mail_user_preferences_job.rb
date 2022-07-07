@@ -52,5 +52,8 @@ class MailUserPreferencesJob < ApplicationJob
         NotificationsMailer.user_preferences_mail(user,@docs_to_be_sent).deliver
       @user_notifications_history.save
 
+      #Tomar en consideracion que solo se repita uno de los jobs que se agregaron a la cola en el API, pasar otro parametro para diferenciar eso
+      email_frequency = @user_preferences.email_frequency
+      self.set(wait: 1.hour).perform_later(user)
   end
 end

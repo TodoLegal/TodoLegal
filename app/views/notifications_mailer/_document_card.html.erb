@@ -1,0 +1,78 @@
+<section class="documents-section">
+    <% grouped_documents.each do | group | %>
+        <div class="topic-divider"> 
+            <p class="divider-text"><%= group[:tag_name]%></p> 
+        </div>
+        <% group[:documents].each do | document | %>
+            <div class="document-card">
+                <p class="doc-card-title">
+                    <%= document.name %>
+                </p>
+                <p class="doc-card-subtitle">
+                    <%= document.publication_date %>
+                </p>
+                <p class="doc-card-subtitle">
+                Gaceta: <%= document.publication_number %>
+                </p>
+
+                <p class="doc-card-description">
+                    <%= document.description %>
+                </p>
+            </div>
+            <% if document != group[:documents].last %>
+                <hr class="doc-card-divider"/>
+            <% end %>
+        <% end %>
+    <% end %>
+</section>
+
+<style>
+    .documents-section{
+        margin-top: 5px;
+    }
+
+    .doc-card-title{
+        font-family: "Lato", Helvetica, Arial, sans-serif;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 19px;
+    }
+
+    .doc-card-subtitle{
+        color: #494949;
+        font-family: "Lato", Helvetica, Arial, sans-serif;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 17px;
+    }
+
+    .doc-card-description{
+        font-family: "Lato", Helvetica, Arial, sans-serif;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 19px;
+    }
+
+    .topic-divider{
+        align-items: center;
+        background: #171F2A; 
+        color: white; 
+        height: 42px; 
+    }
+
+    .divider-text{
+        font-family: "Lato", Helvetica, Arial, sans-serif; 
+        font-style: normal; 
+        font-weight: 800; 
+        font-size: 24px; 
+        line-height: 45px; 
+        margin-left: 10px;
+    }
+
+    .doc-card-divider{
+        border-top: 2px solid #D9D9D9;
+    }
+</style>

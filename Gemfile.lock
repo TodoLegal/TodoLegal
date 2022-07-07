@@ -173,7 +173,6 @@ GEM
     faraday-net_http_persistent (1.2.0)
     faraday-patron (1.0.0)
     ffi (1.15.3)
-    foreman (0.87.2)
     gems (1.2.0)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
@@ -468,7 +467,6 @@ DEPENDENCIES
   doorkeeper
   ed25519 (>= 1.2, < 2.0)
   exception_notification
-  foreman
   google-api-client
   google-cloud-storage (~> 1.11)
   jbuilder (~> 2.7)

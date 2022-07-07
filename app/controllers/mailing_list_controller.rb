@@ -8,7 +8,7 @@ class MailingListController < ApplicationController
     })
     response =
       client.lists.add_list_member(
-        ENV['MAILCHIMP_UNIQUE_ID'], {email_address: params[:email],'status_if_new' => 'subscribed','status' => 'subscribed'})
+        ENV['MAILCHIMP_UNIQUE_ID'], {email_address: params[:email],'status' => 'pending'})
     p response
     redirect_back fallback_location:"/" , notice: "Te has suscrito a la lista de Correo de TodoLegal exitosamente."
   rescue MailchimpMarketing::ApiError => e

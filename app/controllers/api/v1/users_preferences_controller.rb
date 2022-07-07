@@ -41,6 +41,13 @@ class Api::V1::UsersPreferencesController < ApplicationController
                 @user_preference.mail_frequency = default_frequency
                 @user_preference.save
 
+                if default_frequency > 0
+                    #Probablemente hay que considerar user un scheduler, ademas de que cuando se cambien prefererencias, matar el job anterior antes de agregar 
+                    # a la cola el nuevo job
+                    # MailUserPreferencesJob.set(wait_until: Date.tomorrow).perform_later(@user)
+                    MailUserPreferencesJob.set(wait: 1.hour).perform_later(@user)
+                end
+
                 $tracker.track(@user.id, 'Preferences edition', {
                     'user_type' => current_user_type_api(@user),
                     'selected_tags' => default_tags_id,
@@ -55,6 +62,11 @@ class Api::V1::UsersPreferencesController < ApplicationController
                     default_tags_id = params["tags_id"]
                 end
                 UsersPreference.create(user_id: @user.id, mail_frequency: default_frequency, user_preference_tags: default_tags_id)
+
+                if default_frequency > 0
+                    # MailUserPreferencesJob.set(wait_until: Date.tomorrow).perform_later(@user)
+                    MailUserPreferencesJob.set(wait: 1.hour).perform_later(@user)
+                end
 
                 $tracker.track(@user.id, 'Preferences edition', {
                     'user_type' => current_user_type_api(@user),

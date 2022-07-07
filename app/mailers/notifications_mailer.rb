@@ -14,7 +14,8 @@ class NotificationsMailer < ApplicationMailer
       # @materia_tag_id = TagType.find_by(name: "materia").id
       # docs = Document.joins(:document_tags).select(:tag_id, :document_id, :name, :issue_id, :publication_number, :publication_date, :description)
 
-      docs = notif_arr.order(tag_id: :asc)
+      #docs = notif_arr.order(tag_id: :asc)
+      docs = notif_arr.sort_by{|tag_id|}
       current_tag_name = ""
       temp_docs = []
 

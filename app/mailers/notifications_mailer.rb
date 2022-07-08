@@ -10,18 +10,42 @@ class NotificationsMailer < ApplicationMailer
   def user_preferences_mail(user, notif_arr) 
       @user = user
       @documents_to_send = []
+
+      # @docs_array = []
+      # @tags_array = [1, 3, 5, 17, 51]
+
       # @tema_tag_id = TagType.find_by(name: "tema").id
       # @materia_tag_id = TagType.find_by(name: "materia").id
-      # docs = Document.joins(:document_tags).select(:tag_id, :document_id, :name, :issue_id, :publication_number, :publication_date, :description)
 
-      #docs = notif_arr.order(tag_id: :asc)
-      docs = notif_arr.sort_by{|tag_id|}
+      # docs = []
+      # @tags_array.each do |tag|
+      #   temp = Document.joins(:document_tags).where('publication_date > ?',(Date.today - 3000.day).to_datetime).where('document_tags.tag_id'=> tag).select(:tag_id, :document_id, :name, :issue_id, :publication_number, :publication_date, :description)
+        
+      #   if temp.length > 0
+      #     temp.each do | doc |
+      #       docs.push( doc )
+      #     end
+      #   end
+
+      # end
+
+      # docs.each do |doc|
+      #   @docs_array.push(doc)
+      # end
+
+      # docs = @docs_array.sort_by{|item| item.tag_id }
+      docs = notif_arr.sort_by{|item| item.tag_id }
       current_tag_name = ""
       temp_docs = []
 
       docs.each do |doc|
         tag_name = Tag.find_by(id: doc.tag_id).name
-        if tag_name != current_tag_name
+        if tag_name != current_tag_name || doc == docs.last
+
+          if doc == docs.last
+            temp_docs.push(doc)
+          end
+
           if temp_docs.length > 0
             @documents_to_send.push({
               "tag_name": current_tag_name,

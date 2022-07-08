@@ -12,7 +12,15 @@ class MailUserPreferencesJob < ApplicationJob
         @user_notification_history = nil
 
       @user_preferences.user_preference_tags.each do |tag|
-        documents_tags << Document.joins(:document_tags).select(:id, :tag_id,  :name, :issue_id, :publication_number, :publication_date, :description).where('publication_date > ?',(Date.today - 45.day).to_datetime).where('document_tags.tag_id'=> 5)
+        temp = nil
+        temp = Document.joins(:document_tags).select(:id, :tag_id,  :name, :issue_id, :publication_number, :publication_date, :description).where('publication_date > ?',(Date.today - 45.day).to_datetime).where('document_tags.tag_id'=> tag)
+
+        if temp.blank? != true
+          temp.each do |doc|
+            documents_tags << temp
+          end
+        end
+
       end
 
       documents_tags = documents_tags.flatten
@@ -43,12 +51,12 @@ class MailUserPreferencesJob < ApplicationJob
       
       @docs_to_be_sent=@docs_to_be_sent.uniq
 
+      NotificationsMailer.user_preferences_mail(user,@docs_to_be_sent).deliver
       @user_notifications_history = UserNotificationsHistory.create(user_id: user.id, mail_sent_at: DateTime.now, documents_ids: @docs_to_be_sent.collect(&:id) )
-        NotificationsMailer.user_preferences_mail(user,@docs_to_be_sent).deliver
       @user_notifications_history.save
 
       #Tomar en consideracion que solo se repita uno de los jobs que se agregaron a la cola en el API, pasar otro parametro para diferenciar eso
-      # email_frequency = @user_preferences.mail_frequency
-      # self.set(wait: 1.hour).perform_later(user)
+      email_frequency = @user_preferences.mail_frequency
+      MailUserPreferencesJob.set(wait: 1.minutes).perform_later(self)
   end
 end

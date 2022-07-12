@@ -14,7 +14,7 @@ class MailUserPreferencesJob < ApplicationJob
 
       @user_preferences.user_preference_tags.each do |tag|
         temp = nil
-        temp = Document.joins(:document_tags).select(:id, :tag_id,  :name, :issue_id, :publication_number, :publication_date, :description).where('publication_date > ?',(Date.today - 45.day).to_datetime).where('document_tags.tag_id'=> tag)
+        temp = Document.joins(:document_tags).select(:id, :tag_id,  :name, :issue_id, :publication_number, :publication_date, :description).where('publication_date > ?',(Date.today - 1000.day).to_datetime).where('document_tags.tag_id'=> tag)
 
         if temp.blank? != true
           temp.each do |doc|
@@ -25,7 +25,8 @@ class MailUserPreferencesJob < ApplicationJob
       end
 
       documents_tags = documents_tags.flatten
-      uniq_documents_tags = documents_tags.uniq
+      documents_tags = documents_tags.sort_by{|item| item.publication_date }
+      uniq_documents_tags = documents_tags.uniq{ |document| [document.id] }
 
 
       if uniq_documents_tags.length >= 24 
@@ -42,21 +43,25 @@ class MailUserPreferencesJob < ApplicationJob
 
       @notification_history_final = notification_history
        
-      @all_notifications_history.pluck(:documents_ids).each do |ida|
-        @notification_history_final.each do |idb|
-          if ida != idb.id || ida.documents_ids.blank? == false
-            @docs_to_be_sent.push(idb)
+      if @all_notifications_history.count > 0 
+        @all_notifications_history.pluck(:documents_ids).each do |ida|
+          @notification_history_final.each do |idb|
+            if !ida.include?(idb.id)
+              @docs_to_be_sent.push(idb)
+            end
           end
         end
+      else
+        @docs_to_be_sent = @notification_history_final
       end
       
-      @docs_to_be_sent=@docs_to_be_sent.uniq
+      @docs_to_be_sent = @docs_to_be_sent.uniq
 
       #NotificationsMailer.user_preferences_mail(user,@docs_to_be_sent).deliver
 
       if @docs_to_be_sent.blank? != true
-        NotificationsMailer.user_preferences_mail(user,@docs_to_be_sent).deliver
-        @user_notifications_history = UserNotificationsHistory.create(user_id: user.id, mail_frequency: @user_preferences.mail_frequency ,mail_sent_at: DateTime.now, documents_ids: @docs_to_be_sent.collect(&:id) )
+        NotificationsMailer.user_preferences_mail(user, @docs_to_be_sent).deliver
+        @user_notifications_history = UserNotificationsHistory.create(user_id: user.id ,mail_sent_at: DateTime.now, documents_ids: @docs_to_be_sent.collect(&:id) )
         @user_notifications_history.save
       end
 

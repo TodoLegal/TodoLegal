@@ -59,6 +59,8 @@ class NotificationsMailer < ApplicationMailer
       end
       #Controllers/ActiveStorageMailer have the jobs.
       mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: @user.email, subject: 'Notificaciones personalizadas.')
+
+      # MailUserPreferencesJob.set(wait: 5.minutes).perform_later(@user)
   end
 
 end

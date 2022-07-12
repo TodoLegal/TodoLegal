@@ -1,5 +1,5 @@
 class MailUserPreferencesJob < ApplicationJob
-  queue_as :mailers
+  queue_as :default
 
   def perform(user)
         @tags = []

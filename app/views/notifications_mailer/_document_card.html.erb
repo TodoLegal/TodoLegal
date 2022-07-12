@@ -6,7 +6,8 @@
         <% group[:documents].each do | document | %>
             <div class="document-card">
                 <p class="doc-card-title">
-                    <%= document.name %>
+                    <%= document.name %>,
+                    document_id : <%= document.document_id %>
                 </p>
                 <p class="doc-card-subtitle">
                     <%= document.publication_date %>

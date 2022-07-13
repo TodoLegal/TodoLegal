@@ -51,7 +51,6 @@ class UsersPreferencesController < ApplicationController
         end
 
         $tracker.track(current_user.id, 'Preferences edition', {
-          'user_type' => current_user_type( current_user ),
           'selected_tags' => users_preference_params.user_preference_tags,
           'selected_mail_frequency' => users_preference_params.mail_frequency,
           'location' => "Onboarding"

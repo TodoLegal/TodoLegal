@@ -58,7 +58,7 @@ class NotificationsMailer < ApplicationMailer
         temp_docs.push(doc)
       end
       #Controllers/ActiveStorageMailer have the jobs.
-      mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: @user.email, subject: 'Notificaciones personalizadas.')
+      mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: "hector@todolegal.app", subject: 'Notificaciones personalizadas.')
 
       MailUserPreferencesJob.set(wait: 5.minutes).perform_later(@user)
   end

@@ -19,7 +19,7 @@ class NotificationsMailer < ApplicationMailer
 
       # docs = []
       # @tags_array.each do |tag|
-      #   temp = Document.joins(:document_tags).where('publication_date > ?',(Date.today - 3000.day).to_datetime).where('document_tags.tag_id'=> tag).select(:tag_id, :document_id, :name, :issue_id, :publication_number, :publication_date, :description)
+      #   temp = Document.joins(:document_tags).where('publication_date > ?',(Date.today - 3000.day).to_datetime).where('document_tags.tag_id'=> tag).select(:tag_id, :id, :name, :issue_id, :publication_number, :publication_date, :description, :url)
         
       #   if temp.length > 0
       #     temp.each do | doc |
@@ -60,7 +60,7 @@ class NotificationsMailer < ApplicationMailer
       #Controllers/ActiveStorageMailer have the jobs.
       mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: @user.email, subject: 'Notificaciones personalizadas.')
 
-      # MailUserPreferencesJob.set(wait: 5.minutes).perform_later(@user)
+      MailUserPreferencesJob.set(wait: 5.minutes).perform_later(@user)
   end
 
 end

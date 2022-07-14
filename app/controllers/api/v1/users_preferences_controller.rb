@@ -64,7 +64,7 @@ class Api::V1::UsersPreferencesController < ApplicationController
                 UsersPreference.create(user_id: @user.id, mail_frequency: default_frequency, user_preference_tags: default_tags_id)
 
                 if default_frequency.to_i > 0
-                    # MailUserPreferencesJob.set(wait_until: Date.tomorrow).perform_later(@user)
+                    MailUserPreferencesJob.set(wait: 1.minute).perform_later(@user)
                     MailUserPreferencesJob.set(wait: 5.minutes).perform_later(@user)
                 end
 

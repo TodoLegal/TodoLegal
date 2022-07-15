@@ -62,7 +62,7 @@ class MailUserPreferencesJob < ApplicationJob
         NotificationsMailer.user_preferences_mail(user, @docs_to_be_sent, justOnce).deliver
         if @user_notifications_history
           @user_notifications_history.documents_ids = @user_notifications_history.documents_ids + @docs_to_be_sent.collect(&:id)
-          @user_notifications_history.mail_sent_at: DateTime.now
+          @user_notifications_history.mail_sent_at = DateTime.now
           @user_notifications_history.save
         else
           @user_notifications_history = UserNotificationsHistory.create(user_id: user.id ,mail_sent_at: DateTime.now, documents_ids: @docs_to_be_sent.collect(&:id) )

@@ -42,7 +42,7 @@ class Api::V1::UsersPreferencesController < ApplicationController
                 @user_preference.save
 
                 if default_frequency.to_i > 0
-                    MailUserPreferencesJob.set(wait: 5.minutes, false).perform_later(@user)
+                    MailUserPreferencesJob.set(wait: 5.minutes).perform_later(@user, false)
                 end
 
                 $tracker.track(@user.id, 'Preferences edition', {

@@ -7,8 +7,10 @@ class NotificationsMailer < ApplicationMailer
     #(email =~ email_regex)
   end
 
-  def user_preferences_mail(user, notif_arr) 
+  def user_preferences_mail(user, notif_arr, justOnce) 
       @user = user
+      @user_preferences = UsersPreference.find_by(user_id: @user.id)
+      @last_email_sent_date = UserNotificationsHistory.find_by(user_id: @user.id).mail_sent_at
       @documents_to_send = []
 
       # @docs_array = []
@@ -57,10 +59,14 @@ class NotificationsMailer < ApplicationMailer
         end
         temp_docs.push(doc)
       end
-      #Controllers/ActiveStorageMailer have the jobs.
+
       mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: @user.email, subject: 'Notificaciones personalizadas.')
 
-      MailUserPreferencesJob.set(wait: 5.minutes).perform_later(@user)
+      # if DateTime.now >= (@last_email_sent_date + @user_preferences.mail_frequency.days) && !justOnce
+      if justOnce
+        MailUserPreferencesJob.set(wait: 5.minutes).perform_later(@user)
+      end
+      # end
   end
 
 end

@@ -63,7 +63,7 @@ class NotificationsMailer < ApplicationMailer
       mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: @user.email, subject: 'Notificaciones personalizadas.')
 
       # if DateTime.now >= (@last_email_sent_date + @user_preferences.mail_frequency.days) && !justOnce
-      if justOnce
+      if !justOnce
         MailUserPreferencesJob.set(wait: 5.minutes).perform_later(@user)
       end
       # end

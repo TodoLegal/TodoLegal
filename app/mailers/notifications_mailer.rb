@@ -10,7 +10,8 @@ class NotificationsMailer < ApplicationMailer
   def user_preferences_mail(user, notif_arr, justOnce) 
       @user = user
       @user_preferences = UsersPreference.find_by(user_id: @user.id)
-      @last_email_sent_date = UserNotificationsHistory.find_by(user_id: @user.id).mail_sent_at
+      @last_email_sent_date = UserNotificationsHistory.find_by(user_id: @user.id)
+      @last_email_sent_date = @last_email_sent_date ? @last_email_sent_date.mail_sent_at : DateTime.now 
       @documents_to_send = []
 
       # @docs_array = []

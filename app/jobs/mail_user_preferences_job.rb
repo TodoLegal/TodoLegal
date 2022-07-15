@@ -1,16 +1,14 @@
 class MailUserPreferencesJob < ApplicationJob
   queue_as :default
 
-  def perform(user)
+  def perform(user, justOnce)
         @tags = []
         @user_preferences = UsersPreference.find_by(user_id: user.id)
         documents_tags  =  []
         uniq_documents_tags = []
-        notification_history = []        
-        @all_notifications_history = UserNotificationsHistory.select("documents_ids").where(user_id: user.id)
-        # @last_email_sent_date = UserNotificationsHistory.select("mail_sent_at").order(mail_sent_at: :desc).limit(1).find_by(user_id: user.id).mail_sent_at
+        filtered_documents = []        
+        @user_notifications_history = UserNotificationsHistory.find_by(user_id: user.id)
         @docs_to_be_sent = []
-        @user_notification_history = nil
 
       #get all the documents that contains the tags the user has selected
       @user_preferences.user_preference_tags.each do |tag|
@@ -32,38 +30,44 @@ class MailUserPreferencesJob < ApplicationJob
 
 
       #discard documents that had been sent in previous emails, using the user's notifications history
-      if @all_notifications_history.count > 0 
-        @all_notifications_history.pluck(:documents_ids).each do |ida|
+      if @user_notifications_history 
+        @user_notifications_history.documents_ids.each do |ida|
           uniq_documents_tags.each do |idb|
-            if !ida.include?(idb.id)
-              notification_history.push(idb)
+            if ida != idb.id
+              filtered_documents.push(idb)
             end
           end
         end
       else
-        notification_history = uniq_documents_tags
+        filtered_documents = uniq_documents_tags
       end
 
       #limit the documents array to be 25 or less documents
-      if notification_history.length >= 24 
+      if filtered_documents.length >= 24 
         cont = 0
-        notification_history.each do |id|
+        filtered_documents.each do |id|
           if cont <= 24
             @docs_to_be_sent.push(id)
             cont=cont+1
           end
         end
       else
-        @docs_to_be_sent = notification_history
+        @docs_to_be_sent = filtered_documents
       end  
       
       @docs_to_be_sent = @docs_to_be_sent.uniq
 
       #Send Routine
       if @docs_to_be_sent.blank? != true
-        NotificationsMailer.user_preferences_mail(user, @docs_to_be_sent).deliver
-        @user_notifications_history = UserNotificationsHistory.create(user_id: user.id ,mail_sent_at: DateTime.now, documents_ids: @docs_to_be_sent.collect(&:id) )
-        @user_notifications_history.save
+        NotificationsMailer.user_preferences_mail(user, @docs_to_be_sent, justOnce).deliver
+        if @user_notifications_history
+          @user_notifications_history.documents_ids = @user_notifications_history.documents_ids + @docs_to_be_sent.collect(&:id)
+          @user_notifications_history.mail_sent_at: DateTime.now
+          @user_notifications_history.save
+        else
+          @user_notifications_history = UserNotificationsHistory.create(user_id: user.id ,mail_sent_at: DateTime.now, documents_ids: @docs_to_be_sent.collect(&:id) )
+          @user_notifications_history.save
+        end
       end
       
   end

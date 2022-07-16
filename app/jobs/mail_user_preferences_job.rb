@@ -2,7 +2,6 @@ class MailUserPreferencesJob < ApplicationJob
   queue_as :default
 
   def perform(user, justOnce)
-        @tags = []
         @user_preferences = UsersPreference.find_by(user_id: user.id)
         documents_tags  =  []
         uniq_documents_tags = []
@@ -31,11 +30,9 @@ class MailUserPreferencesJob < ApplicationJob
 
       #discard documents that had been sent in previous emails, using the user's notifications history
       if @user_notifications_history 
-        @user_notifications_history.documents_ids.each do |ida|
-          uniq_documents_tags.each do |idb|
-            if ida != idb.id
-              filtered_documents.push(idb)
-            end
+        uniq_documents_tags.each do |document|
+          if !@user_notifications_history.documents_ids.include?(document.id)
+            filtered_documents.push(document)
           end
         end
       else

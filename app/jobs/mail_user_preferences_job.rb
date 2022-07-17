@@ -1,7 +1,7 @@
 class MailUserPreferencesJob < ApplicationJob
   queue_as :default
 
-  def perform(user, justOnce)
+  def perform(user:, justOnce:)
         @user_preferences = UsersPreference.find_by(user_id: user.id)
         documents_tags  =  []
         uniq_documents_tags = []

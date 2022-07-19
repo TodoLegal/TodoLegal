@@ -24,8 +24,8 @@ class MailUserPreferencesJob < ApplicationJob
 
       #sort the queried documents from oldest to most recent
       documents_tags = documents_tags.flatten
-      documents_tags = documents_tags.sort_by{|item| item.publication_date }
       uniq_documents_tags = documents_tags.uniq{ |document| [document.id] }
+      uniq_documents_tags = uniq_documents_tags.sort_by{|item| item.publication_date }
 
 
       #discard documents that had been sent in previous emails, using the user's notifications history
@@ -59,7 +59,6 @@ class MailUserPreferencesJob < ApplicationJob
         NotificationsMailer.user_preferences_mail(user, @docs_to_be_sent, justOnce).deliver
         if @user_notifications_history
           @user_notifications_history.documents_ids = @user_notifications_history.documents_ids + @docs_to_be_sent.collect(&:id)
-          @user_notifications_history.mail_sent_at = DateTime.now
           @user_notifications_history.save
         else
           @user_notifications_history = UserNotificationsHistory.create(user_id: user.id ,mail_sent_at: DateTime.now, documents_ids: @docs_to_be_sent.collect(&:id) )

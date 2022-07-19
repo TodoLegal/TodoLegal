@@ -10,8 +10,8 @@ class NotificationsMailer < ApplicationMailer
   def user_preferences_mail(user, notif_arr, justOnce) 
       @user = user
       @user_preferences = UsersPreference.find_by(user_id: @user.id)
-      @last_email_sent_date = UserNotificationsHistory.find_by(user_id: @user.id)
-      @last_email_sent_date = @last_email_sent_date ? @last_email_sent_date.mail_sent_at : DateTime.now 
+      @user_notifications_history = UserNotificationsHistory.find_by(user_id: @user.id)
+      @last_email_sent_date = @user_notifications_history ? @user_notifications_history.mail_sent_at : DateTime.now 
       @documents_to_send = []
 
       # @docs_array = []
@@ -66,7 +66,9 @@ class NotificationsMailer < ApplicationMailer
       if DateTime.now >= (@last_email_sent_date + @user_preferences.mail_frequency.minutes)
         MailUserPreferencesJob.set(wait: @user_preferences.mail_frequency.minutes).perform_later(@user, justOnce: false)
       end
-      # end
+
+      @user_notifications_history.mail_sent_at = DateTime.now
+      @user_notifications_history.save
   end
 
 end

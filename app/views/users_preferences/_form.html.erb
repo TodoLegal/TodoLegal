@@ -59,7 +59,7 @@
   </section>
 
   <div class="form-group mt-4">
-    <%= form.submit "Guardar", class:"btn btn-primary btn-lg" %>
+    <%= form.submit "Guardar", class:"btn btn-primary btn-lg submit-btn" %>
   </div>
 
 <% end %>
@@ -68,6 +68,7 @@
 
   .preference-tags .form-check label {
     border-radius: 80px;
+    border: 1px solid #9F9F9F; 
     cursor: pointer;
     margin: 0px;
     padding: .0em 1em 0em 1em;
@@ -76,14 +77,15 @@
   .preference-tags .form-check input[type=checkbox]:checked~label,
   .preference-tags .form-check input[type=radio]:checked~label {
     background-color: #1A7FFA;
+    border: 1px solid #1A7FFA;
     color: #FFFFFF;
   }
 
   .form-check {
     background: #EFEFEF;
-    border: 1px solid #9F9F9F;
     border-radius: 80px;
     display: inline-block;
+    margin-bottom: 7px;
     padding: 0;
   }
 
@@ -107,6 +109,13 @@
 
   .skip-btn{
     text-decoration: underline;
+  }
+
+  .submit-btn{
+    font-style: normal;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 38px;
   }
 
 </style>

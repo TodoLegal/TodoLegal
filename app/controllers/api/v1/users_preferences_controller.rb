@@ -42,7 +42,7 @@ class Api::V1::UsersPreferencesController < ApplicationController
                 @user_preference.save
 
                 if default_frequency.to_i > 0
-                    MailUserPreferencesJob.set(wait: 5.minutes).perform_later(@user, justOnce: false)
+                    MailUserPreferencesJob.set(wait: default_frequency.to_i.minutes).perform_later(@user, justOnce: false)
                 end
 
                 $tracker.track(@user.id, 'Preferences edition', {
@@ -62,7 +62,7 @@ class Api::V1::UsersPreferencesController < ApplicationController
 
                 if default_frequency.to_i > 0
                     MailUserPreferencesJob.set(wait: 1.minute).perform_later(@user, justOnce: true)
-                    MailUserPreferencesJob.set(wait: 5.minutes).perform_later(@user, justOnce: false)
+                    MailUserPreferencesJob.set(wait: default_frequency.to_i.minutes).perform_later(@user, justOnce: false)
                 end
 
                 $tracker.track(@user.id, 'Preferences edition', {

@@ -52,8 +52,8 @@ class UsersPreferencesController < ApplicationController
 
         mail_frequency = params[:mail_frequency].to_i
         if mail_frequency > 0
-          MailUserPreferencesJob.set(wait: 1.minute).perform_later(current_user, justOnce: true)
-          MailUserPreferencesJob.set(wait: @users_preference.mail_frequency.minutes).perform_later(current_user, justOnce: false)
+          MailUserPreferencesJob.set(wait: 1.minute).perform_later(current_user)
+          MailUserPreferencesJob.set(wait: @users_preference.mail_frequency.minutes).perform_later(current_user)
         end
 
         $tracker.track(current_user.id, 'Preferences edition', {

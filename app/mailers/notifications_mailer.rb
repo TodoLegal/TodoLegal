@@ -7,7 +7,7 @@ class NotificationsMailer < ApplicationMailer
     #(email =~ email_regex)
   end
 
-  def user_preferences_mail(user, notif_arr, justOnce) 
+  def user_preferences_mail(user, notif_arr) 
       @user = user
       @user_preferences = UsersPreference.find_by(user_id: @user.id)
       @user_notifications_history = UserNotificationsHistory.find_by(user_id: @user.id)
@@ -63,8 +63,8 @@ class NotificationsMailer < ApplicationMailer
 
       mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: @user.email, subject: 'Notificaciones personalizadas.')
 
-      if DateTime.now >= (@last_email_sent_date + @user_preferences.mail_frequency.minutes)
-        MailUserPreferencesJob.set(wait: @user_preferences.mail_frequency.minutes).perform_later(@user, justOnce: false)
+      if DateTime.now >= (@last_email_sent_date + @user_preferences.mail_frequency.minutes) && user_notifications_history
+        MailUserPreferencesJob.set(wait: @user_preferences.mail_frequency.minutes).perform_later(@user)
       end
   end
 

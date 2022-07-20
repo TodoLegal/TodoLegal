@@ -50,14 +50,15 @@ class UsersPreferencesController < ApplicationController
           format.html { redirect_to "https://valid.todolegal.app"}
         end
 
-        if users_preference_params.mail_frequency.to_i > 0
-          MailUserPreferencesJob.set(wait: 1.minute).perform_later(@user, justOnce: true)
-          MailUserPreferencesJob.set(wait: mail_frequency.to_i.minutes).perform_later(@user, justOnce: false)
+        mail_frequency = params[:mail_frequency].to_i
+        if mail_frequency > 0
+          MailUserPreferencesJob.set(wait: 1.minute).perform_later(current_user, justOnce: true)
+          MailUserPreferencesJob.set(wait: @users_preference.mail_frequency.minutes).perform_later(current_user, justOnce: false)
         end
 
         $tracker.track(current_user.id, 'Preferences edition', {
-          'selected_tags' => users_preference_params.user_preference_tags,
-          'selected_mail_frequency' => users_preference_params.mail_frequency,
+          'selected_tags' => @users_preference.user_preference_tags,
+          'selected_mail_frequency' => @users_preference.mail_frequency,
           'location' => "Onboarding"
         })
 

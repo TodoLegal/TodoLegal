@@ -1,7 +1,7 @@
 class MailUserPreferencesJob < ApplicationJob
   queue_as :default
 
-  def perform(user, justOnce)
+  def perform(user)
         @user_preferences = UsersPreference.find_by(user_id: user.id)
         documents_tags  =  []
         uniq_documents_tags = []
@@ -56,7 +56,7 @@ class MailUserPreferencesJob < ApplicationJob
 
       #Send Routine
       if @docs_to_be_sent.blank? != true
-        NotificationsMailer.user_preferences_mail(user, @docs_to_be_sent, justOnce).deliver
+        NotificationsMailer.user_preferences_mail(user, @docs_to_be_sent).deliver
         if @user_notifications_history
           @user_notifications_history.documents_ids = @user_notifications_history.documents_ids + @docs_to_be_sent.collect(&:id)
           @user_notifications_history.mail_sent_at = DateTime.now
@@ -65,7 +65,8 @@ class MailUserPreferencesJob < ApplicationJob
           @user_notifications_history = UserNotificationsHistory.create(user_id: user.id ,mail_sent_at: DateTime.now, documents_ids: @docs_to_be_sent.collect(&:id) )
           @user_notifications_history.save
         end
+      else
+        MailUserPreferencesJob.set(wait: @user_preferences.mail_frequency.minutes).perform_later(user)
       end
-      
   end
 end

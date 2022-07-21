@@ -50,7 +50,8 @@ class UsersPreferencesController < ApplicationController
           format.html { redirect_to "https://valid.todolegal.app"}
         end
 
-        mail_frequency = params[:mail_frequency].to_i
+        mail_frequency = @users_preference.mail_frequency ? @users_preference.mail_frequency : 0
+        
         if mail_frequency > 0
           MailUserPreferencesJob.set(wait: 1.minute).perform_later(current_user)
           MailUserPreferencesJob.set(wait: @users_preference.mail_frequency.minutes).perform_later(current_user)

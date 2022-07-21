@@ -67,7 +67,10 @@ class MailUserPreferencesJob < ApplicationJob
           @user_notifications_history.save
         end
       else
-        enqueue_new_job(user)
+        @last_email_sent_date = @user_notifications_history ? @user_notifications_history.mail_sent_at : DateTime.now - @user_preferences.mail_frequency.minutes
+        if DateTime.now >= (@last_email_sent_date + (@user_preferences.mail_frequency.minutes - 1.minute))
+          enqueue_new_job(user)
+        end
       end
   end
 end

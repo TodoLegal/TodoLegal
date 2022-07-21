@@ -1,5 +1,6 @@
 class MailUserPreferencesJob < ApplicationJob
   queue_as :default
+  include ApplicationHelper
 
   def perform(user)
         @user_preferences = UsersPreference.find_by(user_id: user.id)
@@ -66,7 +67,7 @@ class MailUserPreferencesJob < ApplicationJob
           @user_notifications_history.save
         end
       else
-        MailUserPreferencesJob.set(wait: @user_preferences.mail_frequency.minutes).perform_later(user)
+        enqueue_new_job(user)
       end
   end
 end

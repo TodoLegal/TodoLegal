@@ -164,6 +164,11 @@ module ApplicationHelper
     end
   end
 
+  def enqueue_new_job user
+    mail_frequency = UsersPreference.find_by(user_id: user.id).mail_frequency
+    MailUserPreferencesJob.set(wait: @user_preferences.mail_frequency.minutes).perform_later(user)
+  end
+
   # def already_logged_in_helper
   #   Warden::Manager.after_set_user only: :fetch do |record, warden, options|
   #     scope = options[:scope]

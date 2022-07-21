@@ -44,7 +44,7 @@ class MailUserPreferencesJob < ApplicationJob
       if filtered_documents.length >= 9 
         cont = 0
         filtered_documents.each do |id|
-          if cont <= 24
+          if cont <= 9
             @docs_to_be_sent.push(id)
             cont=cont+1
           end

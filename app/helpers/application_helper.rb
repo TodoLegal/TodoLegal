@@ -173,7 +173,11 @@ module ApplicationHelper
   end
 
   def delete_user_notifications_job job_id
-    Sidekiq::ScheduledSet.new.find_job(job_id).delete
+    if job_id
+      job_to_delete = Sidekiq::ScheduledSet.new.find_job(job_id)
+      return job_to_delete ? job_to_delete.delete : false
+    end
+    return false
   end
 
   # def already_logged_in_helper

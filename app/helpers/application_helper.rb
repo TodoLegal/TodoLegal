@@ -165,8 +165,15 @@ module ApplicationHelper
   end
 
   def enqueue_new_job user
-    mail_frequency = UsersPreference.find_by(user_id: user.id).mail_frequency
-    MailUserPreferencesJob.set(wait: @user_preferences.mail_frequency.minutes).perform_later(user)
+    @user_preferences = UsersPreference.find_by(user_id: user.id)
+    mail_frequency = @user_preferences.mail_frequency
+    job = MailUserPreferencesJob.set(wait: @user_preferences.mail_frequency.minutes).perform_later(user)
+    @user_preferences.job_id = job.provider_job_id
+    @user_preferences.save
+  end
+
+  def delete_user_notifications_job job_id
+    Sidekiq::ScheduledSet.new.find_job(job_id).delete
   end
 
   # def already_logged_in_helper

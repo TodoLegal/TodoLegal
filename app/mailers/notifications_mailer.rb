@@ -14,29 +14,6 @@ class NotificationsMailer < ApplicationMailer
       @last_email_sent_date = @user_notifications_history ? @user_notifications_history.mail_sent_at : DateTime.now - @user_preferences.mail_frequency.minutes
       @documents_to_send = []
 
-      # @docs_array = []
-      # @tags_array = [1, 3, 5, 17, 51]
-
-      # @tema_tag_id = TagType.find_by(name: "tema").id
-      # @materia_tag_id = TagType.find_by(name: "materia").id
-
-      # docs = []
-      # @tags_array.each do |tag|
-      #   temp = Document.joins(:document_tags).where('publication_date > ?',(Date.today - 3000.day).to_datetime).where('document_tags.tag_id'=> tag).select(:tag_id, :id, :name, :issue_id, :publication_number, :publication_date, :description, :url)
-        
-      #   if temp.length > 0
-      #     temp.each do | doc |
-      #       docs.push( doc )
-      #     end
-      #   end
-
-      # end
-
-      # docs.each do |doc|
-      #   @docs_array.push(doc)
-      # end
-
-      # docs = @docs_array.sort_by{|item| item.tag_id }
       docs = notif_arr.sort_by{|item| item.tag_id }
       current_tag_name = ""
       temp_docs = []
@@ -64,8 +41,10 @@ class NotificationsMailer < ApplicationMailer
       mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: @user.email, subject: 'Notificaciones personalizadas.')
 
       #when a user sets preferences for the first time, we send an email the next day. We have to substract that day from the frequency validation 
-      if DateTime.now >= (@last_email_sent_date + (@user_preferences.mail_frequency.minutes - 1.minute)) && @user_notifications_history
-        MailUserPreferencesJob.set(wait: @user_preferences.mail_frequency.minutes).perform_later(@user)
+      if @user_notifications_history
+        job = MailUserPreferencesJob.set(wait: @user_preferences.mail_frequency.minutes).perform_later(@user)
+        @user_preferences.job_id = job.provider_job_id
+        @user_preferences.save
       end
   end
 

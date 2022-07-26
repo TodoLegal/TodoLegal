@@ -40,7 +40,7 @@ class NotificationsMailer < ApplicationMailer
 
       mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: @user.email, subject: 'Notificaciones personalizadas.')
 
-      #when a user sets preferences for the first time, we send an email the next day. We have to substract that day from the frequency validation 
+      #checks if user has a history, if it does, schedules a new job
       if @user_notifications_history
         job = MailUserPreferencesJob.set(wait: @user_preferences.mail_frequency.minutes).perform_later(@user)
         @user_preferences.job_id = job.provider_job_id

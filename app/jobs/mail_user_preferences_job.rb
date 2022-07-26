@@ -13,7 +13,7 @@ class MailUserPreferencesJob < ApplicationJob
       #get all the documents that contains the tags the user has selected
       @user_preferences.user_preference_tags.each do |tag|
         temp = nil
-        temp = Document.joins(:document_tags).select(:id, :tag_id,  :name, :issue_id, :publication_number, :publication_date, :description, :url).where('publication_date > ?',(Date.today - 1000.day).to_datetime).where('document_tags.tag_id'=> tag)
+        temp = Document.joins(:document_tags).select(:id, :tag_id,  :name, :issue_id, :publication_number, :publication_date, :description, :url).where('publication_date > ?',(Date.today - 1000.day).to_datetime).where('documents.updated_at <= ?', DateTime.now - 20.minutes).where('document_tags.tag_id'=> tag)
 
         if temp.blank? != true
           temp.each do |doc|

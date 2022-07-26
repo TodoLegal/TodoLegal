@@ -47,6 +47,7 @@ class Api::V1::UsersPreferencesController < ApplicationController
                     new_job = MailUserPreferencesJob.set(wait: default_frequency.to_i.minutes).perform_later(@user)
                     delete_user_notifications_job(@user_preference.job_id)
                     @user_preference.job_id = new_job.provider_job_id
+                    @user_preference.save
                 end
 
                 $tracker.track(@user.id, 'Preferences edition', {

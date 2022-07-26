@@ -31,6 +31,7 @@ class Api::V1::UsersPreferencesController < ApplicationController
             @user_preference = UsersPreference.find_by(user_id: @user.id)
             #checks if user already has preferences, if not, creates preferences
             if @user_preference
+                old_frequency = @user_preference.mail_frequency
                 if !params["tags_id"].blank? and params["tags_id"].kind_of?(Array)
                     default_tags_id = params["tags_id"]
                 end
@@ -41,8 +42,11 @@ class Api::V1::UsersPreferencesController < ApplicationController
                 @user_preference.mail_frequency = default_frequency
                 @user_preference.save
 
-                if default_frequency.to_i > 0
-                    MailUserPreferencesJob.set(wait: default_frequency.to_i.minutes).perform_later(@user)
+                #deletes old job and schedules a new one withe updated frequency
+                if default_frequency.to_i > 0 && default_frequency != old_frequency
+                    new_job = MailUserPreferencesJob.set(wait: default_frequency.to_i.minutes).perform_later(@user)
+                    delete_user_notifications_job(user_preference.job_id)
+                    @user_preference.job_id = new_job.provider_job_id
                 end
 
                 $tracker.track(@user.id, 'Preferences edition', {
@@ -62,7 +66,9 @@ class Api::V1::UsersPreferencesController < ApplicationController
 
                 if default_frequency.to_i > 0
                     MailUserPreferencesJob.set(wait: 1.minute).perform_later(@user)
-                    MailUserPreferencesJob.set(wait: default_frequency.to_i.minutes).perform_later(@user)
+                    job = MailUserPreferencesJob.set(wait: default_frequency.to_i.minutes).perform_later(@user)
+                    @user_preference.job_id = job.provider_job_id
+                    @user_preference.save
                 end
 
                 $tracker.track(@user.id, 'Preferences edition', {

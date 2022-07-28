@@ -41,7 +41,7 @@ class NotificationsMailer < ApplicationMailer
       mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: @user.email, subject: 'Notificaciones personalizadas.')
 
       $tracker.track(@user.id, 'Notifications email', {
-        'email_sent_at' => Date.today.to_s
+        'email_sent_at' => Date.today.to_s,
         'location' => "Notifications mailer"
       })
 

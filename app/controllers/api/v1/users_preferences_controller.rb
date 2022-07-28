@@ -43,7 +43,7 @@ class Api::V1::UsersPreferencesController < ApplicationController
                 @user_preference.save
 
                 #deletes old job and schedules a new one withe updated frequency
-                if default_frequency.to_i > 0 && default_frequency.to_id != old_frequency
+                if default_frequency.to_i > 0 && default_frequency.to_i != old_frequency
                     new_job = MailUserPreferencesJob.set(wait: default_frequency.to_i.minutes).perform_later(@user)
                     delete_user_notifications_job(@user_preference.job_id)
                     @user_preference.job_id = new_job.provider_job_id

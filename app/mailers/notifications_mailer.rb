@@ -28,7 +28,7 @@ class NotificationsMailer < ApplicationMailer
 
           if temp_docs.length > 0
             @documents_to_send.push({
-              "tag_name": current_tag_name,
+              "tag_name": current_tag_name == "" ? tag_name : current_tag_name,
               "documents": temp_docs
             })
             temp_docs = []
@@ -39,6 +39,11 @@ class NotificationsMailer < ApplicationMailer
       end
 
       mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: @user.email, subject: 'Notificaciones personalizadas.')
+
+      $tracker.track(@user.id, 'Notifications email', {
+        'email_sent_at' => Date.today.to_s
+        'location' => "Notifications mailer"
+      })
 
       #checks if user has a history, if it does, schedules a new job
       if @user_notifications_history

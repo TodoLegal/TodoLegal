@@ -7,69 +7,88 @@
             <img class="logo-img" border="0" alt="Logo Valid" href="/" src="/img/Icon-Valid-gray20px.svg"/>
         </a>
     </div>
-    <div class="card">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-sm-6 col-md-6 preferences-left">
-                    <h1 class="preference-title">Notificaciones Personalizadas</h1>
-                    <p class="preferences-p1"> Elige los temas de tu interés y recibe notificaciones de acuerdo a tu preferencia. </p>
-                    <hr class="preferences-divider"/>
-                    <p class="preferences-p2"> 
-                        Si deseas programas tus notificaciones personalizadas en otros momentos, puedes darle click a  
-                        <% if @redirect_to_valid %>
-                            <%=link_to "https://valid.todolegal.app", method: :get do %>
-                                <span class="skip-btn">omitir.</span>
-                            <% end %>
-                        <% elsif @is_monthly %>
-                            <%=link_to checkout_path(is_monthly: true, is_onboarding:true), method: :get do %>
-                                <span class="skip-btn">omitir.</span>
-                            <% end %>
-                        <% elsif @is_semestral %>
-                            <%=link_to checkout_path(is_semestral: true, is_onboarding:true), method: :get do %>
-                                <span class="skip-btn">omitir.</span>
-                            <% end %>
-                        <% else %>
-                            <%=link_to checkout_path(is_annually: true, is_onboarding:true), method: :get do %>
-                                <span class="skip-btn">omitir.</span>
-                            <% end %>
-                        <% end %>
-                    </p>
-                    <% if @redirect_to_valid %>
-                        <%=link_to "https://valid.todolegal.app", method: :get do %>
-                            <span class="skip-btn">Omitir</span>
-                            <i class="fas fa-arrow-right"></i>
-                        <% end %>
-                    <% elsif @is_monthly %>
-                        <%=link_to checkout_path(is_monthly: true, is_onboarding:true), method: :get do %>
-                            <span class="skip-btn">Omitir</span>
-                            <i class="fas fa-arrow-right"></i>
-                        <% end %>
-                    <% elsif @is_semestral %>
-                        <%=link_to checkout_path(is_semestral: true, is_onboarding:true), method: :get do %>
-                            <span class="skip-btn">Omitir</span>
-                            <i class="fas fa-arrow-right"></i>
-                        <% end %>
-                    <% else %>
-                        <%=link_to checkout_path(is_annually: true, is_onboarding:true), method: :get do %>
-                            <span class="skip-btn">Omitir</span>
-                            <i class="fas fa-arrow-right"></i>
-                        <% end %>
+    <div class="container row user-preferences">
+        <div class="col-md-12 col-sm-12 user-preferences-left">
+            <h1 class="preference-title">Notificaciones Personalizadas</h1>
+            <p class="preferences-p1"> Elige los temas de tu interés y recibe notificaciones de acuerdo a tu preferencia. </p>
+            <hr class="preferences-divider"/>
+            <p class="preferences-p2"> 
+                Si deseas programar tus notificaciones personalizadas en otro momento, puedes darle click a  
+                <% if @redirect_to_valid %>
+                    <%=link_to "https://valid.todolegal.app", method: :get do %>
+                        <span class="skip-btn">omitir.</span>
                     <% end %>
-                </div>
-                <div class="col-sm-6 col-md-6 preferences-right">
+                <% elsif @is_monthly %>
+                    <%=link_to checkout_path(is_monthly: true, is_onboarding:true), method: :get do %>
+                        <span class="skip-btn">omitir.</span>
+                    <% end %>
+                <% elsif @is_semestral %>
+                    <%=link_to checkout_path(is_semestral: true, is_onboarding:true), method: :get do %>
+                        <span class="skip-btn">omitir.</span>
+                    <% end %>
+                <% else %>
+                    <%=link_to checkout_path(is_annually: true, is_onboarding:true), method: :get do %>
+                        <span class="skip-btn">omitir.</span>
+                    <% end %>
+                <% end %>
+            </p>
+            <% if @redirect_to_valid %>
+                <%=link_to "https://valid.todolegal.app", method: :get do %>
+                    <span class="skip-btn">Omitir</span>
+                    <i class="fas fa-arrow-right"></i>
+                <% end %>
+            <% elsif @is_monthly %>
+                <%=link_to checkout_path(is_monthly: true, is_onboarding:true), method: :get do %>
+                    <span class="skip-btn">Omitir</span>
+                    <i class="fas fa-arrow-right"></i>
+                <% end %>
+            <% elsif @is_semestral %>
+                <%=link_to checkout_path(is_semestral: true, is_onboarding:true), method: :get do %>
+                    <span class="skip-btn">Omitir</span>
+                    <i class="fas fa-arrow-right"></i>
+                <% end %>
+            <% else %>
+                <%=link_to checkout_path(is_annually: true, is_onboarding:true), method: :get do %>
+                    <span class="skip-btn">Omitir</span>
+                    <i class="fas fa-arrow-right"></i>
+                <% end %>
+            <% end %>
+        </div>
+        <div class="card col-md-12 col-sm-12 user-preferences-right">
+            <div class="card-body">
+                <div class="preferences-right">
                     <p class="preference-subtitle">Elige temas</p>
                     <%= render 'form', users_preference: @users_preference %>
                 </div>
-            </div>
+        </div>
     </div>
+    
 </div>
 
 <style>
 
-    .preferences-left{
-        background: #F2F5F8;
+    .user-preferences{
+        position: relative;
+    }
+
+    .user-preferences-left{
+        background: #E5E5E5;
         border-radius: 5px;
+        max-width: 50%;
         padding: 40px;
+        position: absolute;
+        top: 3rem;
+        z-index: 9;
+    }
+
+    .user-preferences-right{
+        border-radius: 12px;
+        height: 500px;
+        margin-left: 40%;
+        margin-right: 0px; 
+        padding-left: 10%;
+        position: absolute;
+        max-width: 60%;
     }
 
     .preferences-divider{
@@ -103,7 +122,9 @@
     }
 
     .logo-img{
-        height: 132px;
+        height: 12vh;
+        max-height: 110px;
+        margin: 2vh auto 0;
         margin-bottom: 2rem;
     }
 
@@ -130,6 +151,31 @@
 
         .submit-btn{
             font-size: 22px;
+        }
+
+        .user-preferences{
+            /* padding-left: 0px;
+            padding-right: 0px; */
+            margin-bottom: 30px;
+        }
+
+        .user-preferences-left{
+            border-radius: 5px;
+            max-width: 100%;
+            padding: 20px;
+            position: relative;
+            top: 0px;
+            z-index: 0;
+        }
+
+        .user-preferences-right{
+            border-radius: 12px;
+            height: 100%;
+            margin-left: 0px;
+            max-width: 100%;
+            padding-left: 0px;
+            position: relative;
+            width: 100%;
         }
     }
 

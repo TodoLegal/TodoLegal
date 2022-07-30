@@ -1,6 +1,6 @@
 class UsersPreferencesController < ApplicationController
   before_action :set_users_preference, only: %i[ show edit update destroy ]
-
+  layout 'onboarding'
   # GET /users_preferences or /users_preferences.json
   def index
     @tags = UsersPreferencesTag.joins(:tag).where(users_preferences_tags: {is_tag_available: true}).select(:tag_id, :name)

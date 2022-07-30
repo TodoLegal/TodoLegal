@@ -11,7 +11,6 @@ class NotificationsMailer < ApplicationMailer
       @user = user
       @user_preferences = UsersPreference.find_by(user_id: @user.id)
       @user_notifications_history = UserNotificationsHistory.find_by(user_id: @user.id)
-      @last_email_sent_date = @user_notifications_history ? @user_notifications_history.mail_sent_at : DateTime.now - @user_preferences.mail_frequency.minutes
       @documents_to_send = []
 
       docs = notif_arr.sort_by{|item| item.tag_id }
@@ -47,7 +46,7 @@ class NotificationsMailer < ApplicationMailer
 
       #checks if user has a history, if it does, schedules a new job
       if @user_notifications_history
-        job = MailUserPreferencesJob.set(wait: @user_preferences.mail_frequency.minutes).perform_later(@user)
+        job = MailUserPreferencesJob.set(wait: @user_preferences.mail_frequency.days).perform_later(@user)
         @user_preferences.job_id = job.provider_job_id
         @user_preferences.save
       end

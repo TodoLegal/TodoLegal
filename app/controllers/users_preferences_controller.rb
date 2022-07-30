@@ -1,6 +1,6 @@
 class UsersPreferencesController < ApplicationController
   before_action :set_users_preference, only: %i[ show edit update destroy ]
-
+  layout 'onboarding'
   # GET /users_preferences or /users_preferences.json
   def index
     @tags = UsersPreferencesTag.joins(:tag).where(users_preferences_tags: {is_tag_available: true}).select(:tag_id, :name)
@@ -53,8 +53,8 @@ class UsersPreferencesController < ApplicationController
         mail_frequency = @users_preference.mail_frequency ? @users_preference.mail_frequency : 0
         
         if mail_frequency > 0
-          MailUserPreferencesJob.set(wait: 1.minute).perform_later(current_user)
-          job = MailUserPreferencesJob.set(wait: @users_preference.mail_frequency.minutes).perform_later(current_user)
+          MailUserPreferencesJob.set(wait: 1.day).perform_later(current_user)
+          job = MailUserPreferencesJob.set(wait: @users_preference.mail_frequency.days).perform_later(current_user)
           @users_preference.job_id = job.provider_job_id
           @users_preference.save
         end

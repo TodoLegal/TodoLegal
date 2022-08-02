@@ -7,4 +7,5 @@ end
 
 Rails.application.config.hosts << "test.todolegal.app"
 Rails.application.config.hosts << "todolegal.app"
+Rails.application.config.hosts << "devchuco.todolegal.app"
 Rails.application.config.hosts << "167.71.188.59"

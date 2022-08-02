@@ -1,0 +1,117 @@
+<section class="documents-section"
+    stye="margin-top: 5px;"
+>
+    <% grouped_documents.each do | group | %>
+        <div class="topic-divider"
+            style="align-items: center; background: #171F2A; color: white; height: 42px;"
+        > 
+            <p class="divider-text"
+                style="font-family: 'Lato', Helvetica, Arial, sans-serif; font-style: normal; font-weight: 800; font-size: 24px; line-height: 45px; margin-left: 10px;"
+            >
+             <%= group[:tag_name]%>
+            </p> 
+        </div>
+        <% group[:documents].each do | document | %>
+            <div class="document-card"
+                style="margin-top: 2em; margin-bottom: 3em;"
+            >
+                <p class="doc-card-title"
+                    style="font-family: 'Lato', Helvetica, Arial, sans-serif; font-style: normal; font-weight: 700; font-size: 16px; line-height: 19px; margin-bottom: 0.5rem;"
+                >
+                    <%= document.name %>,
+                    <%= document.id %>
+                </p>
+                <p class="doc-card-subtitle"
+                    style="color: #494949; font-family: 'Lato', Helvetica, Arial, sans-serif; font-style: normal; font-weight: 400; font-size: 14px; line-height: 17px; margin-bottom: 0.1rem; margin-top: 0rem;"
+                >
+                    <%= document.publication_date %>
+                </p>
+                <p class="doc-card-subtitle"
+                    style="color: #494949; font-family: 'Lato', Helvetica, Arial, sans-serif; font-style: normal; font-weight: 400; font-size: 14px; line-height: 17px; margin-top: 0.1rem; margin-bottom: 0.5rem;"
+                >
+                Gaceta: <%= document.publication_number %>
+                </p>
+                <%= link_to "https://valid.todolegal.app/gaceta/honduras/#{document.url}/#{document.id}", class:"share" do %>
+                    <img class="download-icon" alt="Download Icon" 
+                        style="width: 20px; height: 22px;"
+                        src="https://todolegal.app/img/mails/download.png"
+                    />
+                <% end %>
+                &nbsp;&nbsp;
+                <%= link_to "https://valid.todolegal.app/gaceta/honduras/#{document.url}/#{document.id}", class:"share" do %>
+                    <img class="download-icon" alt="Twitter Icon" 
+                        style="width: 20px; height: 22px;"
+                        src="https://todolegal.app/img/twitter.png"
+                    />
+                <% end %>
+                <p class="doc-card-description"
+                    style="font-family: 'Lato', Helvetica, Arial, sans-serif; font-style: normal; font-weight: 400; font-size: 16px; line-height: 19px;"
+                >
+                    <%= document.description %>
+                </p>
+            </div>
+            <% if document != group[:documents].last %>
+                <hr class="doc-card-divider"
+                    style="border-top: 2px solid #D9D9D9;"
+                />
+            <% end %>
+
+            <% if group == grouped_documents.last && document == group[:documents].last %>
+                <hr 
+                    style="border: 1px solid #FF5722;"
+                />
+            <% end %>
+        <% end %>
+    <% end %>
+</section>
+
+<style>
+    /* .documents-section{
+        margin-top: 5px;
+    }
+
+    .doc-card-title{
+        font-family: "Lato", Helvetica, Arial, sans-serif;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 19px;
+    }
+
+    .doc-card-subtitle{
+        color: #494949;
+        font-family: "Lato", Helvetica, Arial, sans-serif;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 17px;
+    }
+
+    .doc-card-description{
+        font-family: "Lato", Helvetica, Arial, sans-serif;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 19px;
+    }
+
+    .topic-divider{
+        align-items: center;
+        background: #171F2A; 
+        color: white; 
+        height: 42px; 
+    }
+
+    .divider-text{
+        font-family: "Lato", Helvetica, Arial, sans-serif; 
+        font-style: normal; 
+        font-weight: 800; 
+        font-size: 24px; 
+        line-height: 45px; 
+        margin-left: 10px;
+    }
+
+    .doc-card-divider{
+        border-top: 2px solid #D9D9D9;
+    } */
+</style>

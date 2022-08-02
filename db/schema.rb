@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_20_053457) do
+ActiveRecord::Schema.define(version: 2022_07_21_080239) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -277,6 +277,14 @@ ActiveRecord::Schema.define(version: 2022_03_20_053457) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "user_notifications_histories", force: :cascade do |t|
+    t.integer "user_id"
+    t.datetime "mail_sent_at"
+    t.integer "documents_ids", default: [], array: true
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "user_permissions", force: :cascade do |t|
     t.integer "user_id"
     t.integer "permission_id"
@@ -312,6 +320,22 @@ ActiveRecord::Schema.define(version: 2022_03_20_053457) do
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "users_preferences", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "job_id"
+    t.integer "mail_frequency"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "user_preference_tags", default: [], array: true
+  end
+
+  create_table "users_preferences_tags", force: :cascade do |t|
+    t.integer "tag_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.boolean "is_tag_available"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

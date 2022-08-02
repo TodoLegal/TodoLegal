@@ -1,0 +1,59 @@
+<% if !current_user %>
+    <div class="row container mail-form-container">
+    <div class="container-fluid card  text-white animate__animated animate__bounce" id="closeablecard">
+    
+        <div class="card-header bg-transparent border-bottom-0">
+        <button data-dismiss="alert" data-target="#closeablecard" type="button" class="close" aria-label="Close">
+            <span aria-hidden="true" style="color: white;">&times;</span>
+        </button>
+        </div>
+        
+        <div class="card-body">
+        <h5 class="billboard-title">Suscríbite a nuestro boletín semanal</h5>
+        <p class="text-white">Déjanos tu correo y recibirás un un resumen semanal con los cambios normativos más importantes del país.</p>
+        <%= form_tag({:controller => "mailing_list", :action => "addEmail"}, class: "mailer-form", method: :post) do %>
+            <div class="input-group mb-2">
+            <%= text_field_tag :email, params[:email], class:"form-control",  id:"inputEmail", 
+                placeholder:"Correo", type: "text", aria: {describedby: "button-addon2"}
+            %>
+            <div class="input-group-append">
+                <%= submit_tag "Enviar", class: 'btn btn-primary submit-btn', type:"submit", id:"button-addon2"%>
+            </div>
+            </div>
+        <% end %>
+
+        </div>
+    
+    </div>
+    </div>
+<% end %>
+
+<%= javascript_pack_tag "hide_card" %>
+
+<style>
+
+  .mail-form-container{
+    padding-top:2em;
+  }
+
+  .mail-form-container .card{
+    background-color:#171F2A;
+    border-radius: 6px;
+  }
+
+  .mail-form-container .billboard-title, .text-white{
+    margin-bottom: 0px
+  }
+
+  .mailer-form{
+    margin-right: 50%;
+    margin-top: 3px;
+  }
+
+  @media only screen and (max-width: 767.98px) {
+    .mailer-form{
+      margin-right: 0px;
+    }
+  }
+
+</style>

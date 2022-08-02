@@ -164,6 +164,22 @@ module ApplicationHelper
     end
   end
 
+  def enqueue_new_job user
+    @user_preferences = UsersPreference.find_by(user_id: user.id)
+    mail_frequency = @user_preferences.mail_frequency
+    job = MailUserPreferencesJob.set(wait: @user_preferences.mail_frequency.days).perform_later(user)
+    @user_preferences.job_id = job.provider_job_id
+    @user_preferences.save
+  end
+
+  def delete_user_notifications_job job_id
+    if job_id
+      job_to_delete = Sidekiq::ScheduledSet.new.find_job(job_id)
+      return job_to_delete ? job_to_delete.delete : false
+    end
+    return false
+  end
+
   # def already_logged_in_helper
   #   Warden::Manager.after_set_user only: :fetch do |record, warden, options|
   #     scope = options[:scope]

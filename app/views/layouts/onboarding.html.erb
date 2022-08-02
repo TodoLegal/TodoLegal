@@ -43,9 +43,17 @@
 </head>
 <body>
     <%= render 'layouts/google_analytics_body' %>
-
+    
     <!-- Page Content  -->
     <div id="content" style="padding: 0px">
+         <% if notice %>
+            <div class="alert alert-primary alert-dismissible fade show text-center" role="alert" id="notice">
+                <%= notice %>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        <% end %>
         <%= yield %>
     </div>
 

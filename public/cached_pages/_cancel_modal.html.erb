@@ -1,0 +1,17 @@
+<div class="modal fade" id="<%= id %>" tabindex="-1" role="dialog" aria-labelledby="cancelModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h5 class="modal-title" id="cancelModalLongTitle">¿Estás seguro que deseas salir?</h5>
+        <label id="labelBasico">
+          Para tener una mejor experiencia te recomendamos completar el proceso de creación de cuenta.
+        </label>
+        <div class="form-group" id="bottonsGroup">
+          <%= link_to 'Salir', cancel_url, id:"okButton", class:"btn btn-secondary" %>
+          &nbsp;&nbsp;&nbsp;
+          <button type="button" id="dismissBtn" class="btn btn-primary" data-dismiss="modal">Continuar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

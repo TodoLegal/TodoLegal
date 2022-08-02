@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :users_preferences
+  resources :users_preferences_tags
   require 'sidekiq/web'
 
 
@@ -45,6 +47,7 @@ Rails.application.routes.draw do
   post "admin/grant_permission" => "admin#grant_permission", as: "admin_grant_permission"
   post "admin/revoke_permission" => "admin#revoke_permission", as: "admin_revoke_permission"
   post "admin/set_law_access" => "admin#set_law_access", as: "admin_set_law_access"
+  post 'adduser', to: 'mailing_list#addEmail', as: "add_to_mailing_list"
   get 'admin/enable_edit_mode', to: 'admin#enable_edit_mode', as: "enable_edit_mode"
   get 'admin/disable_edit_mode', to: 'admin#disable_edit_mode', as: "disable_edit_mode"
   get 'admin/gazettes', to: 'admin#gazettes', as: "gazettes"
@@ -88,6 +91,13 @@ Rails.application.routes.draw do
       resource :tags do
         member do
           get "/", to: 'tags#get_tags'
+          get "/preference_tags", to: 'tags#get_preference_tags_list'
+        end
+      end
+      resource :users_preferences do
+        member do
+          get "/", to: 'users_preferences#get_user_preferences'
+          patch "/", to: 'users_preferences#update'
         end
       end
     end

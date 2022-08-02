@@ -1,0 +1,121 @@
+<%= form_with(model: users_preference) do |form| %>
+
+    <% if @go_to_law %>
+      <input type="hidden" id="go_to_law" name="go_to_law" value="<%= @go_to_law %>">
+    <% end %>
+    <% if @redirect_to_valid %>
+        <input type="hidden" id="redirect_to_valid" name="redirect_to_valid" value="<%= @redirect_to_valid %>">
+    <% end %>
+    <% if @is_monthly %>
+        <input type="hidden" id="is_monthly" name="is_monthly" value="<%= @is_monthly %>">
+    <% end %>
+    <% if @is_semestral %>
+        <input type="hidden" id="is_semestral" name="is_semestral" value="<%= @is_semestral %>">
+    <% end %>
+    <% if @is_annually %>
+        <input type="hidden" id="is_annually" name="is_annually" value="<%= @is_annually %>">
+    <% end %>
+    <% if @is_onboarding %>
+        <input type="hidden" id="is_onboarding" name="is_onboarding" value="<%= @is_onboarding %>">
+    <% end %>
+
+  <% if users_preference.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(users_preference.errors.count, "error") %> prohibited this users_preference from being saved:</h2>
+
+      <ul>
+        <% users_preference.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <section class="preference-tags">
+    <%= form.collection_check_boxes :user_preference_tags, @tags, :tag_id, :name, include_hidden: false do |b| %>
+      <p class="form-check">
+        <%= b.check_box %>
+        <%= b.label%>
+      </p>
+    <% end %>
+  </section>
+
+  <%= form.hidden_field :user_id, value: current_user.id %>
+
+  <section class="preference-tags mt-2">
+    <p class="preference-subtitle">Frecuencia de notificaciones </p>
+    <p class="form-check"> 
+      <%= form.radio_button :mail_frequency, 7%>
+      <%= form.label :mail_frequency_7, "Semanal" %>
+    </p>
+    <p class="form-check"> 
+      <%= form.radio_button :mail_frequency, 15%>
+      <%= form.label :mail_frequency_15, "Quincenal" %>
+    </p>
+    <p class="form-check"> 
+      <%= form.radio_button :mail_frequency, 31%>
+      <%= form.label :mail_frequency_31, "Mensual" %>
+    </p>
+  </section>
+
+  <div class="form-group mt-4">
+    <%= form.submit "Guardar", class:"btn btn-primary btn-lg submit-btn" %>
+  </div>
+
+<% end %>
+
+<style>
+
+  .preference-tags .form-check label {
+    border-radius: 80px;
+    border: 1px solid #9F9F9F; 
+    cursor: pointer;
+    margin: 0px;
+    padding: .0em 1em 0em 1em;
+  }
+
+  .preference-tags .form-check input[type=checkbox]:checked~label,
+  .preference-tags .form-check input[type=radio]:checked~label {
+    background-color: #1A7FFA;
+    border: 1px solid #1A7FFA;
+    color: #FFFFFF;
+  }
+
+  .form-check {
+    background: #EFEFEF;
+    border-radius: 80px;
+    display: inline-block;
+    margin-bottom: 7px;
+    padding: 0;
+  }
+
+  .preference-tags .form-check input[type=checkbox],
+  .preference-tags .form-check input[type=radio]{
+    display: none;
+  }
+
+  .preference-subtitle{
+    color: #000000;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 29px;
+  }
+
+  .form-group .btn{
+    display: inline-block;
+    margin-right: 2em;
+  }
+
+  .skip-btn{
+    text-decoration: underline;
+  }
+
+  .submit-btn{
+    font-style: normal;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 38px;
+  }
+
+</style>

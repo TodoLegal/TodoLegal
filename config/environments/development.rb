@@ -5,6 +5,7 @@ Rails.application.configure do
   # every request. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
+  config.action_controller.page_cache_directory = Rails.root.join("public", "cached_pages")
 
   # Do not eager load code on boot.
   config.eager_load = false
@@ -12,24 +13,29 @@ Rails.application.configure do
   # Show full error reports.
   config.consider_all_requests_local = true
 
+  # Show full error reports and disable caching
+  config.action_controller.perform_caching = true
+  config.cache_store = :mem_cache_store
+
   # Enable/disable caching. By default caching is disabled.
-  # Run rails dev:cache to toggle caching.
-  if Rails.root.join('tmp', 'caching-dev.txt').exist?
-    config.action_controller.perform_caching = true
-    config.action_controller.enable_fragment_cache_logging = true
+  # R to toggle caching.
+  #if Rails.root.join('tmp', 'caching-dev.txt').exist?
+   # config.action_controller.perform_caching = true
+   # config.action_controller.enable_fragment_cache_logging = true
+    #config.cache_store = :dalli_store
+    #config.cache_store = :memory_store
 
-    config.cache_store = :memory_store
-    config.public_file_server.headers = {
-      'Cache-Control' => "public, max-age=#{2.days.to_i}"
-    }
-  else
-    config.action_controller.perform_caching = false
-
-    config.cache_store = :null_store
-  end
+    #config.public_file_server.headers = {
+   #   'Cache-Control' => "public, max-age=#{2.days.to_i}"
+    #}
+  #else
+    #config.action_controller.perform_caching = false
+    #config.cache_store = :null_store
+  #end
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :google
+  config.action_controller.perform_caching = true
   config.hosts << ENV['SERVER_IP']
   Rails.application.config.hosts << 'devchuco.todolegal.app'
   # Don't care if the mailer can't send.
@@ -69,6 +75,5 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  
 
 end

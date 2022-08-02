@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User:</strong>
+  <%= @users_preference.user_id %>
+</p>
+
+<p>
+  <strong>Users preferences tags:</strong>
+  <% @users_preference.user_preference_tags.each do | user_preference_tag | %>
+    <% if user_preference_tag %>
+      <% tag_name = Tag.find_by(id: user_preference_tag).name %>
+      <%= tag_name %>,
+    <% else %>
+      nil,
+    <% end %>
+  <% end %>
+</p>
+
+<p>
+  <strong>Mail sent at:</strong>
+  <%= @users_preference.mail_sent_at %>
+</p>
+
+<p>
+  <strong>Mail frequency:</strong>
+  <%= @users_preference.mail_frequency %>
+</p>
+
+<%= link_to 'Edit', edit_users_preference_path(@users_preference) %> |
+<%= link_to 'Back', users_preferences_path %>

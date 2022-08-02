@@ -16,6 +16,7 @@ gem 'exception_notification'
 gem 'discordrb'
 gem 'stripe'
 gem 'rack-mini-profiler'
+gem 'dalli'
 gem 'simple_token_authentication'
 gem 'mixpanel-ruby'
 gem "google-cloud-storage", "~> 1.11", require: false
@@ -30,12 +31,14 @@ gem 'capistrano-rbenv', '~> 2.1', '>= 2.1.4'
 gem 'capistrano3-nginx'
 gem 'capistrano-bundler'
 gem 'doorkeeper'
+gem 'MailchimpMarketing', :git => 'https://github.com/mailchimp/mailchimp-marketing-ruby.git'
+
 #Support for NewRelic
 gem 'newrelic_rpm'
 #Queue management
 gem 'sidekiq'
 gem 'redis-namespace'
-gem  'foreman'
+#gem  'foreman'
 # For capistrano
 gem 'ed25519', '>= 1.2', '< 2.0'
 gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
@@ -61,6 +64,8 @@ gem 'mailgun-ruby'
 # gem 'redis', '~> 4.0'
 # Use Active Model has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
+gem "actionpack-page_caching"
+#gem 'rack-cors'
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'

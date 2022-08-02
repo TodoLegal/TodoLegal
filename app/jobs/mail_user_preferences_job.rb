@@ -55,7 +55,7 @@ class MailUserPreferencesJob < ApplicationJob
       
       @docs_to_be_sent = @docs_to_be_sent.uniq
 
-
+      #Send Routine
       if @docs_to_be_sent.blank? != true
         NotificationsMailer.user_preferences_mail(user, @docs_to_be_sent).deliver
         if @user_notifications_history

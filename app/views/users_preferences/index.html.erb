@@ -1,0 +1,182 @@
+<div class="container">
+    <div style="text-align:center;">
+        <a class="logos">
+            <img class="logo-img" border="0" alt="Logo TodoLegal" href="/" src="/img/Icon-Todolegal-gray20px.svg"/>
+        </a>
+        <a class="logos">
+            <img class="logo-img" border="0" alt="Logo Valid" href="/" src="/img/Icon-Valid-gray20px.svg"/>
+        </a>
+    </div>
+    <div class="container row user-preferences">
+        <div class="col-md-12 col-sm-12 user-preferences-left">
+            <h1 class="preference-title">Notificaciones Personalizadas</h1>
+            <p class="preferences-p1"> Elige los temas de tu interés y recibe notificaciones de acuerdo a tu preferencia. </p>
+            <hr class="preferences-divider"/>
+            <p class="preferences-p2"> 
+                Si deseas programar tus notificaciones personalizadas en otro momento, puedes darle click a  
+                <% if @redirect_to_valid %>
+                    <%=link_to "https://valid.todolegal.app", method: :get do %>
+                        <span class="skip-btn">omitir.</span>
+                    <% end %>
+                <% elsif @is_monthly %>
+                    <%=link_to checkout_path(is_monthly: true, is_onboarding:true), method: :get do %>
+                        <span class="skip-btn">omitir.</span>
+                    <% end %>
+                <% elsif @is_semestral %>
+                    <%=link_to checkout_path(is_semestral: true, is_onboarding:true), method: :get do %>
+                        <span class="skip-btn">omitir.</span>
+                    <% end %>
+                <% else %>
+                    <%=link_to checkout_path(is_annually: true, is_onboarding:true), method: :get do %>
+                        <span class="skip-btn">omitir.</span>
+                    <% end %>
+                <% end %>
+            </p>
+            <% if @redirect_to_valid %>
+                <%=link_to "https://valid.todolegal.app", method: :get do %>
+                    <span class="skip-btn">Omitir</span>
+                    <i class="fas fa-arrow-right"></i>
+                <% end %>
+            <% elsif @is_monthly %>
+                <%=link_to checkout_path(is_monthly: true, is_onboarding:true), method: :get do %>
+                    <span class="skip-btn">Omitir</span>
+                    <i class="fas fa-arrow-right"></i>
+                <% end %>
+            <% elsif @is_semestral %>
+                <%=link_to checkout_path(is_semestral: true, is_onboarding:true), method: :get do %>
+                    <span class="skip-btn">Omitir</span>
+                    <i class="fas fa-arrow-right"></i>
+                <% end %>
+            <% else %>
+                <%=link_to checkout_path(is_annually: true, is_onboarding:true), method: :get do %>
+                    <span class="skip-btn">Omitir</span>
+                    <i class="fas fa-arrow-right"></i>
+                <% end %>
+            <% end %>
+        </div>
+        <div class="card col-md-12 col-sm-12 user-preferences-right">
+            <div class="card-body">
+                <div class="preferences-right">
+                    <p class="preference-subtitle">Elige temas</p>
+                    <%= render 'form', users_preference: @users_preference %>
+                </div>
+        </div>
+    </div>
+    
+</div>
+
+<style>
+
+    .user-preferences{
+        position: relative;
+    }
+
+    .user-preferences-left{
+        background: #E5E5E5;
+        border-radius: 5px;
+        max-width: 50%;
+        padding: 40px;
+        position: absolute;
+        top: 3.8rem;
+        z-index: 9;
+    }
+
+    .user-preferences-right{
+        border-radius: 12px;
+        height: 500px;
+        margin-left: 40%;
+        margin-right: 0px; 
+        padding-left: 10%;
+        position: absolute;
+        max-width: 60%;
+    }
+
+    .preferences-divider{
+        height: 2px;
+        background: #1A7FFA;
+        border-radius: 5px;
+    }
+
+    .preference-title{
+        font-style: normal;
+        font-weight: 700;
+        font-size: 54px;
+        line-height: 104.02%;
+    }
+
+    .preferences-p1{
+        font-style: normal;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 24px;
+
+    }
+
+    .preferences-left .preferences-p2{
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 19px;
+        margin-top: 2rem;
+        margin-bottom: 3rem;
+    }
+
+    .logo-img{
+        height: 12vh;
+        max-height: 110px;
+        margin: 2vh auto 0;
+        margin-bottom: 2rem;
+    }
+
+    @media only screen and (max-width: 992.98px) {
+        .preference-title{
+            font-size: 34px;
+        }
+
+        .preference-subtitle{
+            font-style: normal;
+            font-weight: 700;
+            font-size: 20px;
+            line-height: 24px;
+        }
+
+        .preferences-left{
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+
+        .logo-img{
+            height: 112px;
+        }
+
+        .submit-btn{
+            font-size: 22px;
+        }
+
+        .user-preferences{
+            /* padding-left: 0px;
+            padding-right: 0px; */
+            margin-bottom: 30px;
+        }
+
+        .user-preferences-left{
+            border-radius: 5px;
+            max-width: 100%;
+            padding: 20px;
+            position: relative;
+            top: 0px;
+            z-index: 0;
+        }
+
+        .user-preferences-right{
+            border-radius: 12px;
+            height: 100%;
+            margin-left: 0px;
+            max-width: 100%;
+            padding-left: 0px;
+            position: relative;
+            width: 100%;
+        }
+    }
+
+</style>

@@ -123,13 +123,14 @@ class Users::RegistrationsController < Devise::RegistrationsController
       #TODO 
       #Otro if igual al primero con un && is_student y que dentro del envie is_student de param en lugar de is_monthly
       if !params[:is_monthly].blank?
-        checkout_path(is_onboarding:true, go_to_law: params[:go_to_law], is_monthly: params[:is_monthly])
+        users_preferences_path(is_onboarding:true, go_to_law: params[:go_to_law], is_monthly: params[:is_monthly])
       elsif !params[:is_semestral].blank?
-        checkout_path(is_onboarding:true, go_to_law: params[:go_to_law], is_semestral: params[:is_semestral])
+        users_preferences_path(is_onboarding:true, go_to_law: params[:go_to_law], is_semestral: params[:is_semestral])
       elsif !params[:is_annually].blank?
-        checkout_path(is_onboarding:true, go_to_law: params[:go_to_law], is_annually: params[:is_annually])
+        users_preferences_path(is_onboarding:true, go_to_law: params[:go_to_law], is_annually: params[:is_annually])
       else
-        home_path(is_free_trial:true)
+        #When user chooses Prueba Gratis
+        users_preferences_path(is_onboarding:true, redirect_to_valid:true)
       end
     else
       pricing_path(is_onboarding:true, go_to_law: params[:go_to_law], go_to_checkout: params[:go_to_checkout], user_just_registered: true)

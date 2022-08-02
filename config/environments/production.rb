@@ -33,6 +33,8 @@ Rails.application.configure do
   #application.config.hosts.clear 
   # Code is not reloaded between requests.
   config.cache_classes = true
+  config.action_controller.perform_caching = true
+  config.action_controller.page_cache_directory = Rails.root.join("public", "cached_pages")
   config.hosts << ENV['SERVER_IP']
   Rails.application.config.hosts << '.todolegal.app'
   # Eager load code on boot. This eager loads most of Rails and
@@ -85,8 +87,8 @@ Rails.application.configure do
   config.log_tags = [ :request_id ]
 
   # Use a different cache store in production.
-  # config.cache_store = :mem_cache_store
-  config.cache_store = :memory_store
+  config.cache_store = :mem_cache_store
+  #config.cache_store = :memory_store
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter     = :resque
@@ -148,6 +150,9 @@ Rails.application.configure do
   #config.action_mailer.default_url_options = { host: host }
   
   config.action_mailer.default_url_options = { host: "todolegal.app" }
+  config.action_controller.perform_caching = true
+  config.action_controller.page_cache_directory = Rails.root.join("public", "cached_pages")
+
   config.action_mailer.delivery_method = :mailgun
   config.action_mailer.mailgun_settings = {
     api_key: ENV['MAILGUN_KEY'],

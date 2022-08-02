@@ -26,13 +26,20 @@ module LawsHelper
         end
 
         if params[:articles] && params[:articles].size == 1
-            article_body = @articles.where('number LIKE ?', "%#{params[:articles].first}%").first.body
-            return "Artículo " + "#{params[:articles].first}. " + article_body
-        elsif @current_law.articles.first
+            article_body = nil
+            article = @articles.where('number LIKE ?', "%#{params[:articles].first}%").first
+            if article
+                article_body = @articles.where('number LIKE ?', "%#{params[:articles].first}%").first.body
+            end
+
+            article_text =  @current_law.articles.first.body
+            if article_body
+                article_text = article_body
+            end
+            return "Artículo " + "#{params[:articles].first}. " + article_text
+        else
             article_body =  @current_law.articles.first.body
             return "Artículo 1. " + article_body
-        else
-            return ""
         end
         # if @article_number
         #     return @law.articles.where('number LIKE ?', "%#{@article_number}%").first

@@ -1,5 +1,6 @@
 class UsersPreferencesController < ApplicationController
   before_action :set_users_preference, only: %i[ show edit update destroy ]
+  include ApplicationHelper
   layout 'onboarding'
   # GET /users_preferences or /users_preferences.json
   def index
@@ -60,7 +61,7 @@ class UsersPreferencesController < ApplicationController
         end
 
         $tracker.track(current_user.id, 'Preferences edition', {
-          'selected_tags' => @users_preference.user_preference_tags,
+          'selected_tags' => get_tags_name(@users_preference.user_preference_tags),
           'selected_mail_frequency' => @users_preference.mail_frequency,
           'location' => "Onboarding"
         })

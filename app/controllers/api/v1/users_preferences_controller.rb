@@ -52,7 +52,7 @@ class Api::V1::UsersPreferencesController < ApplicationController
 
                 $tracker.track(@user.id, 'Preferences edition', {
                     'user_type' => current_user_type_api(@user),
-                    'selected_tags' => default_tags_id,
+                    'selected_tags' => get_tags_name(default_tags_id),
                     'selected_mail_frequency' => default_frequency,
                     'location' => "API"
                 })
@@ -74,7 +74,7 @@ class Api::V1::UsersPreferencesController < ApplicationController
 
                 $tracker.track(@user.id, 'Preferences edition', {
                     'user_type' => current_user_type_api(@user),
-                    'selected_tags' => default_tags_id,
+                    'selected_tags' => get_tags_name(default_tags_id),
                     'selected_mail_frequency' => default_frequency,
                     'location' => "API"
                 })

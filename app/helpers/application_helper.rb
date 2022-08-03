@@ -180,6 +180,19 @@ module ApplicationHelper
     return false
   end
 
+  def get_tags_name tags_ids
+    tags_names = []
+
+    tags_ids.each do |id|
+        tag = Tag.find_by(id: id)
+        if tag
+            tags_names.push(tag.name)
+        end
+    end
+
+    return tags_names
+  end
+
   # def already_logged_in_helper
   #   Warden::Manager.after_set_user only: :fetch do |record, warden, options|
   #     scope = options[:scope]

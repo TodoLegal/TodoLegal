@@ -41,7 +41,6 @@ module LawsHelper
             article_body =  @current_law.articles.first.body
             return "Artículo 1. " + article_body
         end
-
         # if @article_number
         #     return @law.articles.where('number LIKE ?', "%#{@article_number}%").first
         # else

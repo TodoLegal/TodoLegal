@@ -10,7 +10,7 @@
         
         <div class="card-body">
         <h5 class="billboard-title">Suscríbite a nuestro boletín semanal</h5>
-        <p class="text-white">Déjanos tu correo y recibirás un un resumen semanal con los cambios normativos más importantes del país.</p>
+        <p class="text-white">Déjanos tu correo y recibirás un resumen semanal con los cambios normativos más importantes del país.</p>
         <%= form_tag({:controller => "mailing_list", :action => "addEmail"}, class: "mailer-form", method: :post) do %>
             <div class="input-group mb-2">
             <%= text_field_tag :email, params[:email], class:"form-control",  id:"inputEmail", 

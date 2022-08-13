@@ -34,7 +34,7 @@
   <section class="preference-tags">
     <%= form.collection_check_boxes :user_preference_tags, @tags, :tag_id, :name, include_hidden: false do |b| %>
       <p class="form-check">
-        <%= b.check_box %>
+        <%= b.check_box class: "tags-checkbox"%>
         <%= b.label%>
       </p>
     <% end %>
@@ -45,24 +45,62 @@
   <section class="preference-tags mt-2">
     <p class="preference-subtitle">Frecuencia de notificaciones </p>
     <p class="form-check"> 
-      <%= form.radio_button :mail_frequency, 7%>
+      <%= form.radio_button :mail_frequency, 7, class: "frequency-radiobtn"%>
       <%= form.label :mail_frequency_7, "Semanal" %>
     </p>
     <p class="form-check"> 
-      <%= form.radio_button :mail_frequency, 15%>
+      <%= form.radio_button :mail_frequency, 15, class: "frequency-radiobtn"%>
       <%= form.label :mail_frequency_15, "Quincenal" %>
     </p>
     <p class="form-check"> 
-      <%= form.radio_button :mail_frequency, 31%>
+      <%= form.radio_button :mail_frequency, 31, class: "frequency-radiobtn"%>
       <%= form.label :mail_frequency_31, "Mensual" %>
     </p>
   </section>
 
   <div class="form-group mt-4">
-    <%= form.submit "Guardar", class:"btn btn-primary btn-lg submit-btn" %>
+    <%= form.submit "Guardar",
+      id:"savePreferencesBtn", 
+      class:"btn btn-primary btn-lg submit-btn", 
+      onclick: "validateCheckedPreferences()", 
+      data:{ container:"body", toggle:"popover", placement:"top", trigger:"focus", content:"Seleccione temas y frequencia"}
+    %>
   </div>
 
 <% end %>
+
+<script>
+
+function validateCheckedPreferences (){
+    const tags = document.getElementsByClassName("tags-checkbox");
+    const frequency = document.getElementsByClassName("frequency-radiobtn");
+
+    let isAnyTagSelected = false;
+    let isAnyFrequencySelected = false;
+
+    for (let index = 0; index < tags.length; index++) {
+      if ( tags[index].checked ){
+        isAnyTagSelected = true;
+      }
+    }
+
+    for (let index = 0; index < frequency.length; index++) {
+      if ( frequency[index].checked ){
+        isAnyFrequencySelected = true;
+      }
+    }
+
+    if ( isAnyTagSelected == false || isAnyFrequencySelected == false ){
+      event.preventDefault();
+      event.stopPropagation();
+      $('#savePreferencesBtn').popover('show')
+    }else{
+      $('#savePreferencesBtn').unbind();
+      $('#savePreferencesBtn').popover('hide')
+    }
+}
+
+</script>
 
 <style>
 

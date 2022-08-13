@@ -25,7 +25,7 @@ module LawsHelper
             end
         end
 
-        if params[:articles] && params[:articles].size == 1
+        if params[:articles] && params[:articles].size > 0
             article_body = nil
             article = @articles.where('number LIKE ?', "%#{params[:articles].first}%").first
             if article

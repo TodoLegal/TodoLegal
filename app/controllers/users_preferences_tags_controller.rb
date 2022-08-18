@@ -9,7 +9,10 @@ class UsersPreferencesTagsController < ApplicationController
 
     @preferences_tags = UsersPreferencesTag.new
     @users_preferences_tags = UsersPreferencesTag.all
+    
     @all_tags = Tag.where(tag_type_id: @materia_tag_id).or(Tag.where(tag_type_id: @tema_tag_id))
+    @issuer_tags = Tag.joins(:issuer_document_tags)
+    @all_tags = @all_tags + @issuer_tags
 
     #Get tags with the most documents associated to them
     @top_tags = DocumentTag.joins(:tag).where(tags: {tag_type_id: @tema_tag_id}).or( DocumentTag.joins(:tag).where(tags: {tag_type_id: @materia_tag_id}) )

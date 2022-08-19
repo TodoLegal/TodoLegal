@@ -41,7 +41,7 @@
                         <% if tag_type %>
                             <%= form.hidden_field :document_id, value: @document.id %>
                             <%= form.hidden_field :tag_type, value: tag_name %>
-                            <%= form.collection_select(:tag_id, Tag.where(tag_type_id: tag_type.id), :id, :name, {:prompt=>true}, {:class=>'form-control js-example-tags', :id=>tag_type.id+700}) %>
+                            <%= form.collection_select(:tag_id, Tag.where(tag_type_id: tag_type.id), :id, :name, {:prompt=>true}, {:class=>'form-control js-example-basic-single', :id=>tag_type.id+700}) %>
                         <% end %>
                     <td>
                     <%= form.submit "Agregar tag", class: 'btn btn-primary' %>
@@ -83,11 +83,7 @@
                         <% if tag_type %>
                             <%= form.hidden_field :document_id, value: @document.id %>
                             <%= form.hidden_field :tag_type, value: tag_name %>
-                            <% if tag_name == "Tema" || tag_name == "Institución" || tag_name == "Ponente" %>
-                                <%= form.collection_select(:tag_id, Tag.where(tag_type_id: tag_type.id), :id, :name, {:prompt=>true}, {:class=>'form-control js-example-tags', :id=>tag_type.id}) %>
-                            <% else %>
-                                <%= form.collection_select(:tag_id, Tag.where(tag_type_id: tag_type.id), :id, :name, {:prompt=>true}, {:class=>'form-control js-example-basic-single', :id=>tag_type.id}) %>
-                            <% end %>
+                            <%= form.collection_select(:tag_id, Tag.where(tag_type_id: tag_type.id), :id, :name, {:prompt=>true}, {:class=>'form-control js-example-basic-single', :id=>tag_type.id}) %>
                         <% end %>
                     <td>
                     <%= form.submit "Agregar tag", class: 'btn btn-primary' %>

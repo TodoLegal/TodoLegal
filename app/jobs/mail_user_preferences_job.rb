@@ -15,7 +15,7 @@ class MailUserPreferencesJob < ApplicationJob
       @user_preferences.user_preference_tags.each do |tag|
         can_add_document = false
         temp = nil
-        @tag_type = Tag.find_by(id: tag).tag_type
+        @tag_type = Tag.find_by(id: tag).tag_type_id
 
         temp = Document.joins(:document_tags).select(:id, :tag_id,  :name, :issue_id, :publication_number, :publication_date, :description, :url).where('publication_date > ?',(Date.today - 45.day).to_datetime).where('documents.updated_at <= ?', DateTime.now - 20.minutes).where('document_tags.tag_id'=> tag)
 

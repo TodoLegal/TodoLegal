@@ -13,7 +13,12 @@ class UsersPreferencesController < ApplicationController
     @is_onboarding = params[:is_onboarding]
     @is_monthly = params[:is_monthly]
     @is_semestral = params[:is_semestral]
-    @is_annually = params[:is_annually] 
+    @is_annually = params[:is_annually]
+    
+    if current_user.blank?
+      redirect_to "https://todolegal.app/users/sign_in"
+    end
+
   end
 
   # GET /users_preferences/1 or /users_preferences/1.json

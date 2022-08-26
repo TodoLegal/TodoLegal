@@ -10,28 +10,28 @@ class MailUserPreferencesJob < ApplicationJob
         @user_notifications_history = UserNotificationsHistory.find_by(user_id: user.id)
         @docs_to_be_sent = []
         @institution_tag_type = TagType.find_by(name: "Institución").id
+        @mercantil_tag_id = Tag.find_by(name: "Mercantil").id
 
       #get all the documents that contains the tags the user has selected
       @user_preferences.user_preference_tags.each do |tag|
-        can_add_document = false
         temp = nil
-        @tag_type = Tag.find_by(id: tag).tag_type_id
+        @current_tag = Tag.find_by(id: tag)
 
-        temp = Document.joins(:document_tags).select(:id, :tag_id,  :name, :issue_id, :publication_number, :publication_date, :description, :url).where('publication_date > ?',(Date.today - 45.day).to_datetime).where('documents.updated_at <= ?', DateTime.now - 20.minutes).where('document_tags.tag_id'=> tag)
+        #if tag is Institución type, query documents from issuers_document_tags table only
+        if @current_tag.tag_type_id == @institution_tag_type
+          temp = Document.joins(:issuer_document_tags).select(:id, :tag_id,  :name, :issue_id, :publication_number, :publication_date, :description, :url).where('publication_date > ?',(Date.today - 45.day).to_datetime).where('documents.updated_at <= ?', DateTime.now - 20.minutes).where('issuer_document_tags.tag_id'=> tag)
+        else
+          temp = Document.joins(:document_tags).select(:id, :tag_id,  :name, :issue_id, :publication_number, :publication_date, :description, :url).where('publication_date > ?',(Date.today - 45.day).to_datetime).where('documents.updated_at <= ?', DateTime.now - 20.minutes).where('document_tags.tag_id'=> tag)
+        end
+
+        #if tag is Mercantil, discard documents that are Marcas de Fabrica 
+        if @current_tag.id == @mercantil_tag_id
+          temp = temp.where("name NOT LIKE \'%Marcas de Fábrica%\'")
+        end
 
         if temp.blank? != true
           temp.each do |doc|
-            if @tag_type == @institution_tag_type
-              @document_with_issuer_tag = IssuerDocumentTag.find_by(document_id: doc.id, tag_id: tag)
-              can_add_document = !@document_with_issuer_tag.blank?
-            else
-              can_add_document = true
-            end
-            
-            if can_add_document
               documents_tags << temp
-            end
-
           end
         end
 

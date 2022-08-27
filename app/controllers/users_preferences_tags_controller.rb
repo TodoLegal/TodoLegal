@@ -12,6 +12,7 @@ class UsersPreferencesTagsController < ApplicationController
     
     @all_tags = Tag.where(tag_type_id: @materia_tag_id).or(Tag.where(tag_type_id: @tema_tag_id))
     @issuer_tags = Tag.joins(:issuer_document_tags)
+    @issuer_tags = @issuer_tags.uniq
     @all_tags = @all_tags + @issuer_tags
 
     #Get tags with the most documents associated to them

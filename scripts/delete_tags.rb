@@ -1,8 +1,9 @@
 
 ######### update tags, repeat this script for each tag #############
 tag_type = TagType.find_by_name("Tema") # tipo de tag del nuevo tag
-@new_tag = Tag.create(name: "Tema 3", tag_type_id: tag_type.id)
-@old_tag = Tag.find_by(name: "Nombrar, Delegar y Cancelar")
+@new_tag = Tag.create(name: "Nombramientos y Delegaciones", tag_type_id: tag_type.id)
+@new_tag = Tag.find_by(name: "Nombramientos y Delegaciones")
+@old_tag = Tag.find_by(name: "Cancelacion de Acuerdo")
 
 #save the documents ids
 @documents_with_old_tag = DocumentTag.where(tag_id: @old_tag.id )
@@ -23,7 +24,7 @@ UsersPreferencesTag.find_by(tag_id: @old_tag.id).delete
 
 ################# delete tags ###############
 
-@tag = Tag.find_by(name: "Tema 2")
+@tag = Tag.find_by(name: "Acuerdo de Nombramiento")
 @documents_with_tag = DocumentTag.where(tag_id: @tag.id )
 
 documents_ids = []
@@ -33,8 +34,6 @@ documents_ids = []
 end
 
 # delete tag from Admin preferences table
-UsersPreferencesTag.find_by(tag_id: @old_tag.id).delete
+UsersPreferencesTag.find_by(tag_id: @tag.id).delete
 
 @tag.delete
-
-

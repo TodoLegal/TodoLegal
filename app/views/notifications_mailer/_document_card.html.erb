@@ -1,7 +1,19 @@
 <section class="documents-section"
     stye="margin-top: 5px;"
 >
+    <% show_institution_divider = true %>
     <% grouped_documents.each do | group | %>
+        <% if show_institution_divider && group[:tag_type] == "Institución" %>
+            <p class="doc-card-title"
+                style="font-family: 'Lato', Helvetica, Arial, sans-serif; font-style: normal; font-weight: 700; font-size: 16px; line-height: 19px; margin-bottom: 0.5rem;"
+            >
+                Instituciones 
+            </p>
+            <hr 
+                style="border: 1px solid #FF5722;"
+            />
+            <% show_institution_divider = false %>
+        <% end %>
         <div class="topic-divider"
             style="align-items: center; background: #171F2A; color: white; height: 42px;"
         > 

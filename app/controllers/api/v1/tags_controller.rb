@@ -6,7 +6,12 @@ class Api::V1::TagsController < ApplicationController
       @tags = []
       if !params[:type].blank?
         tag_type = TagType.where(name: params[:type])
-        @tags = Tag.where(tag_type: tag_type)
+        if tag_type == "Institución"
+          @tags = Tag.joins(:issuer_document_tags)
+          @tags = @tags.uniq
+        else 
+          @tags = Tag.where(tag_type: tag_type)
+        end
       end
       render json: { "tags": @tags }
     end

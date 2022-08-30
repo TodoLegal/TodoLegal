@@ -81,10 +81,17 @@ class Api::V1::DocumentsController < ApplicationController
       document_ids = []
       params["tags"].each do |tag_name|
         tag = Tag.find_by_name(tag_name)
+        tag_type = TagType.find_by(id: tag.tag_type_id)
         if tag
           document_ids = []
-          tag.documents.each do |document|
-            document_ids.push(document.id)
+          if tag_type.name == "Institución"
+            tag.issuer_document_tags.each do |issuer_tag|
+              document_ids.push(issuer_tag.document_id)
+            end 
+          else
+            tag.documents.each do |document|
+              document_ids.push(document.id)
+            end
           end
           document_ids = document_ids.uniq
         end

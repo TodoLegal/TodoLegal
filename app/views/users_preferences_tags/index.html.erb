@@ -47,7 +47,7 @@
           <% end %>
 
           <td>
-            <%= form.collection_select(:tag_id, @all_tags, :id, :name, {:prompt=>true}, {:class=>'form-control js-example-tags'}) %>
+            <%= form.collection_select(:tag_id, @all_tags, :id, :name, {:prompt=>true}, {:class=>'form-control js-example-basic-single'}) %>
           </td>
           <td>
             <%= form.submit "Agregar tag", class: 'btn btn-primary' %>

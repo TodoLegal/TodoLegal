@@ -18,21 +18,30 @@ class NotificationsMailer < ApplicationMailer
       temp_docs = []
 
       docs.each do |doc|
-        tag_name = Tag.find_by(id: doc.tag_id).name
-        if tag_name != current_tag_name || doc == docs.last
+        tag = Tag.find_by(id: doc.tag_id)
+
+        if tag.name != current_tag_name || doc == docs.last
 
           if doc == docs.last
+            if tag.name != current_tag_name
+              @documents_to_send.push({
+                "tag_name": current_tag_name == "" ? tag.name : current_tag_name,
+                "documents": temp_docs
+              })
+              temp_docs = []
+            end
             temp_docs.push(doc)
+            current_tag_name = tag.name
           end
 
           if temp_docs.length > 0
             @documents_to_send.push({
-              "tag_name": current_tag_name == "" ? tag_name : current_tag_name,
+              "tag_name": current_tag_name == "" ? tag.name : current_tag_name,
               "documents": temp_docs
             })
             temp_docs = []
           end
-          current_tag_name = tag_name
+          current_tag_name = tag.name
         end
         temp_docs.push(doc)
       end

@@ -42,7 +42,7 @@ class Api::V1::UsersPreferencesController < ApplicationController
                 @user_preference.mail_frequency = default_frequency.to_i
                 @user_preference.save
 
-                #deletes old job and schedules a new one withe updated frequency
+                #deletes old job and schedules a new one with updated frequency
                 if default_frequency.to_i > 0 && default_frequency.to_i != old_frequency
                     new_job = MailUserPreferencesJob.set(wait: default_frequency.to_i.days).perform_later(@user)
                     delete_user_notifications_job(@user_preference.job_id)
@@ -66,7 +66,10 @@ class Api::V1::UsersPreferencesController < ApplicationController
                 @preferences = UsersPreference.create(user_id: @user.id, mail_frequency: default_frequency, user_preference_tags: default_tags_id)
 
                 if default_frequency.to_i > 0
-                    MailUserPreferencesJob.set(wait: 1.day).perform_later(@user)
+                    #send an email the next day only if the user selected a frequency greater than 1 day
+                    if default_frequency.to_i != 1
+                        MailUserPreferencesJob.set(wait: 1.day).perform_later(@user)
+                    end
                     job = MailUserPreferencesJob.set(wait: default_frequency.to_i.days).perform_later(@user)
                     @preferences.job_id = job.provider_job_id
                     @preferences.save

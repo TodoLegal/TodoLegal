@@ -4,7 +4,7 @@ var name = document.getElementById("name");
 if(name){
 
     bootstrapValidate(name, 'required:Debes ingresar tu nombre', function (isValid){
-    if(isValid)
+    if(isValid && name.value.includes("https") == false)
     {
         $('#nextButton').unbind();
         $('#nextButton').popover('hide')
@@ -22,7 +22,7 @@ if(name){
 var lastName = document.getElementById("lastName");
 if(lastName){
     bootstrapValidate(lastName, 'required:Debes ingresar tu apellido', function (isValid){
-    if(isValid)
+    if(isValid && lastName.value.includes("https") == false)
     {
         $('#nextButton').unbind();
         $('#nextButton').popover('hide')

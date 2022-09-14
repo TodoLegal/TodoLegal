@@ -94,7 +94,7 @@
     var password = document.getElementById("password").value;
     var confirmPassword = document.getElementById("confirmPassword").value;
     
-    if( (name.trim() == "") || (lastName.trim() == "") || (email.trim() == "") || (password.trim() == "") || (confirmPassword.trim() == "") || (isValid == false) || name.trim().includes("/") || name.trim().includes("https") )
+    if( name.includes("https") || name.includes("/") || (name.trim() == "") || (lastName.trim() == "") || (email.trim() == "") || (password.trim() == "") || (confirmPassword.trim() == "") || (isValid == false))
     {
         $('#nextButton').popover('show')
         event.preventDefault();
@@ -102,9 +102,15 @@
     }
     else
     {
-      $('#nextButton').unbind();
-      $('#nextButton').popover('hide')
-      document.getElementById("profileInfo").focus(); 
+      if( name.includes("https") == false){
+        $('#nextButton').unbind();
+        $('#nextButton').popover('hide')
+        document.getElementById("profileInfo").focus(); 
+      }else{
+        $('#nextButton').popover('show')
+        event.preventDefault();
+        event.stopPropagation();
+      }
     }
     
   }

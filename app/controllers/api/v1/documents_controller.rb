@@ -129,9 +129,9 @@ class Api::V1::DocumentsController < ApplicationController
       end
       document_tags.each do |document_tag|
         if document_tag
-          if document_tag.tag
+          if document_tag.tag && document_tag.tag.tag_type
             tags.push({"name": document_tag.tag.name, "type": document_tag.tag.tag_type.name})
-          elsif document_tag.tag.name
+          elsif document_tag.tag
             tags.push({"name": document_tag.tag.name, "type": ""})
           end
         end

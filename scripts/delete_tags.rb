@@ -1,9 +1,9 @@
 
 ######### update tags, repeat this script for each tag #############
 tag_type = TagType.find_by_name("Tema") # tipo de tag del nuevo tag
-@new_tag = Tag.create(name: "Aduanero e Import-Export", tag_type_id: tag_type.id)
-@new_tag = Tag.find_by(name: "Aduanero e Import-Export")
-@old_tag = Tag.find_by(name: "Integración")
+@new_tag = Tag.create(name: "Incentivos, Subsidios y Subvenciones", tag_type_id: tag_type.id)
+@new_tag = Tag.find_by(name: "Incentivos, Subsidios y Subvenciones") #esto primeto, a veces ya estan creados
+@old_tag = Tag.find_by(name: "Incentivos, Indemnizaciones y Subvenciones")
 
 #save the documents ids
 @documents_with_old_tag = DocumentTag.where(tag_id: @old_tag.id )
@@ -21,7 +21,7 @@ UsersPreferencesTag.find_by(tag_id: @old_tag.id).delete
 
 ################# delete tags ###############
 
-@tag = Tag.find_by(name: "Acuerdo de Nombramiento")
+@tag = Tag.find_by(name: "Deuda")
 @documents_with_tag = DocumentTag.where(tag_id: @tag.id )
 
 documents_ids = []
@@ -34,6 +34,9 @@ end
 UsersPreferencesTag.find_by(tag_id: @tag.id).delete
 
 @tag.delete
+
+#delete from law_tags
+@laws_with_old_tag = LawTag.where(tag_id: @old_tag.id)
 
 
 ########## delete tags in users preferences ##############

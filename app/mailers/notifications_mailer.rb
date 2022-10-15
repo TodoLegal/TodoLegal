@@ -23,7 +23,7 @@ class NotificationsMailer < ApplicationMailer
         if tag.name != current_tag_name || doc == docs.last
 
           if doc == docs.last
-            if tag.name != current_tag_name
+            if tag.name != current_tag_name && temp_docs.length > 0
               @documents_to_send.push({
                 "tag_name": current_tag_name == "" ? tag.name : current_tag_name,
                 "documents": temp_docs
@@ -46,7 +46,7 @@ class NotificationsMailer < ApplicationMailer
         temp_docs.push(doc)
       end
 
-      mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: @user.email, subject: 'Notificaciones personalizadas.')
+      mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: @user.email, subject: 'Alertas Legales')
 
       $tracker.track(@user.id, 'Notifications email', {
         'email_sent_at' => Date.today.to_s,

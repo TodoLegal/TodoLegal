@@ -17,8 +17,16 @@ class NotificationsMailer < ApplicationMailer
       current_tag_name = ""
       temp_docs = []
 
+      @act_type_tag = TagType.find_by(name: "Tipo de Acto")
+      
       docs.each do |doc|
         tag = Tag.find_by(id: doc.tag_id)
+
+        act_type_tag = nil
+
+        #obtains the Tipo de Acto tag from each document
+        act_type_tag = Tag.joins(:document_tags).where( document_tags: {document_id: doc.id}).where(tags: {tag_type_id: @act_type_tag.id})
+        act_type_tag = act_type_tag.first ? act_type_tag.first.name : nil
 
         if tag.name != current_tag_name || doc == docs.last
 
@@ -30,7 +38,11 @@ class NotificationsMailer < ApplicationMailer
               })
               temp_docs = []
             end
-            temp_docs.push(doc)
+
+            temp_docs.push({
+              doc: doc,
+              act_type: act_type_tag
+            })
             current_tag_name = tag.name
           end
 
@@ -43,7 +55,11 @@ class NotificationsMailer < ApplicationMailer
           end
           current_tag_name = tag.name
         end
-        temp_docs.push(doc)
+
+        temp_docs.push({
+          doc: doc,
+          act_type: act_type_tag
+        })
       end
 
       mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: @user.email, subject: 'Alertas Legales')

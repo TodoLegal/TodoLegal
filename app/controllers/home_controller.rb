@@ -145,6 +145,10 @@ class HomeController < ApplicationController
       @select_pro_plan_path = checkout_path
     end
   end
+
+  def piil_home
+  
+  end
   
   def invite_friends
   end

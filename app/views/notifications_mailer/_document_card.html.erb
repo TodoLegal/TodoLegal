@@ -19,32 +19,32 @@
                     style="font-family: 'Lato', Helvetica, Arial, sans-serif; font-style: normal; font-weight: 700; font-size: 16px; line-height: 19px; margin-bottom: 0.5rem;"
                 >
                     
-                        <%= document.issue_id %>
+                        <%= document[:doc].issue_id %> <%= document[:act_type] %> 
                 </p>
                 <p class="doc-card-title"
                     style="font-family: 'Lato', Helvetica, Arial, sans-serif; font-style: normal; font-weight: 700; font-size: 16px; line-height: 19px; margin-bottom: 0.5rem;"
                 >
                    
-                        <%= document.name %>
+                        <%= document[:doc].name %>
                 </p>
                 <p class="doc-card-subtitle"
                     style="color: #494949; font-family: 'Lato', Helvetica, Arial, sans-serif; font-style: normal; font-weight: 400; font-size: 14px; line-height: 17px; margin-bottom: 0.1rem; margin-top: 0rem;"
                 >
-                    <%= document.publication_date %>
+                    <%= document[:doc].publication_date %>
                 </p>
                 <p class="doc-card-subtitle"
                     style="color: #494949; font-family: 'Lato', Helvetica, Arial, sans-serif; font-style: normal; font-weight: 400; font-size: 14px; line-height: 17px; margin-top: 0.1rem; margin-bottom: 0.5rem;"
                 >
-                Gaceta: <%= document.publication_number %>
+                Gaceta: <%= document[:doc].publication_number %>
                 </p>
-                <%= link_to "https://valid.todolegal.app/gaceta/honduras/#{document.url}/#{document.id}", class:"share" do %>
+                <%= link_to "https://valid.todolegal.app/gaceta/honduras/#{document[:doc].url}/#{document[:doc].id}", class:"share" do %>
                     <img class="download-icon" alt="Download Icon" 
                         style="width: 20px; height: 22px;"
                         src="https://todolegal.app/img/mails/download.png"
                     />
                 <% end %>
                 &nbsp;&nbsp;
-                <%= link_to "https://valid.todolegal.app/gaceta/honduras/#{document.url}/#{document.id}", class:"share" do %>
+                <%= link_to "https://valid.todolegal.app/gaceta/honduras/#{document[:doc].url}/#{document[:doc].id}", class:"share" do %>
                     <img class="download-icon" alt="Twitter Icon" 
                         style="width: 20px; height: 22px;"
                         src="https://todolegal.app/img/twitter.png"
@@ -53,7 +53,7 @@
                 <p class="doc-card-description"
                     style="font-family: 'Lato', Helvetica, Arial, sans-serif; font-style: normal; font-weight: 400; font-size: 16px; line-height: 19px;"
                 >
-                    <%= document.description %>
+                    <%= document[:doc].description %>
                 </p>
             </div>
             <% if document != group[:documents].last %>

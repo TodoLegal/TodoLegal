@@ -122,7 +122,7 @@ module ApplicationHelper
   end
 
   def ley_abierta_url
-    "https://pod.link/LeyAbierta/"
+    "https://leyabierta.todolegal.app/"
   end
 
   def non_pro_law_count

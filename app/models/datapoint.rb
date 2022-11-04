@@ -1,0 +1,2 @@
+class Datapoint < ApplicationRecord
+end

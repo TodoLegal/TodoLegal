@@ -1,0 +1,2 @@
+class VerificationHistory < ApplicationRecord
+end

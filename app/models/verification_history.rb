@@ -1,2 +1,0 @@
-class VerificationHistory < ApplicationRecord
-end

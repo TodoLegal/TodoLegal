@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  resources :verification_histories
-  resources :datapoints
   resources :users_preferences
   resources :users_preferences_tags
   require 'sidekiq/web'

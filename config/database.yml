@@ -7,7 +7,7 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  host: <%= ENV['DB_URL'] %>
+  host: <%= ENV['DB_HOST'] %>
   username: <%= ENV['DB_USER'] %>
   password: <%= ENV['DB_PASS'] %>
   port: <%= ENV['DB_PORT']%>
@@ -30,7 +30,6 @@ test:
 production:
   primary:
    <<: *default
-   database: todolegaldb_production
+   database: TodoLegal
    pool: 22
    checkout_timeout: 6
-   url: <%= ENV.fetch("DB_URL") { "" } %>

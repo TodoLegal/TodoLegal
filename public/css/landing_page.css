@@ -61,6 +61,10 @@ a:hover{
     width: 100%
 }
 
+.open-leyabierta-btn{
+    background: #007bff 0% 0% no-repeat padding-box !important;
+}
+
 @media only screen and (max-width: 320px){
     .landing-cards{
         padding-top: 0px !important;

@@ -116,10 +116,29 @@ class Api::V1::DocumentsController < ApplicationController
         offset: params["offset"].to_i,
         order: {publication_date: :desc})
     end
-    
+
     total_count = documents.total_count
     documents = documents.to_json
     documents = JSON.parse(documents)
+
+
+    #Extract this into a reusable method
+    can_access_document = true
+    user_id_str = ""
+    if params[:access_token]
+      user = User.find_by_id(doorkeeper_token.resource_owner_id)
+      user_id_str = user.id.to_s
+    end
+
+    user_document_download_tracker = get_user_document_download_tracker(user_id_str)
+    can_access_document = can_access_documents(user_document_download_tracker, current_user_type_api(user))
+    #this piece of code
+    
+    if can_access_document
+      documents = attach_file_to_documents(documents, true)
+    else
+      documents = attach_file_to_documents(documents, false)
+    end
 
     documents.each do | document |
       tags = []
@@ -206,6 +225,21 @@ protected
 
   def has_access_token?
     return params[:access_token]
+  end
+
+  def attach_file_to_documents documents, can_access
+    docs = documents
+
+    docs.each do | document |
+      ar_document = Document.find_by_id(document["id"])
+      if can_access && ar_document.original_file.attached?
+        document["file"] = url_for(ar_document.original_file)
+      else
+        document["file"] = ""
+      end
+    end
+
+    return docs
   end
 
 end

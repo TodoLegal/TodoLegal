@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_16_095103) do
+ActiveRecord::Schema.define(version: 2022_12_23_091409) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -81,12 +81,26 @@ ActiveRecord::Schema.define(version: 2022_12_16_095103) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "datapoints", force: :cascade do |t|
+  create_table "datapoint_types", force: :cascade do |t|
     t.integer "user_permission_id"
     t.string "name"
     t.integer "priority"
+    t.text "description"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "datapoints", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "document_id"
+    t.integer "document_tag_id"
+    t.integer "status"
+    t.text "comments"
+    t.boolean "is_active"
+    t.datetime "last_verified_at"
+    t.boolean "is_empty_field"
+    t.integer "datapoint_type_id"
   end
 
   create_table "document_relationships", force: :cascade do |t|
@@ -350,23 +364,19 @@ ActiveRecord::Schema.define(version: 2022_12_16_095103) do
 
   create_table "verification_histories", force: :cascade do |t|
     t.integer "datapoint_id"
-    t.integer "document_id"
     t.integer "user_id"
-    t.integer "status"
-    t.datetime "verification_dt"
     t.text "comments"
     t.boolean "is_active"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "document_tag_id"
+    t.datetime "verification_dt"
+    t.string "selected_status"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "datapoints", "user_permissions"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "verification_histories", "datapoints"
-  add_foreign_key "verification_histories", "documents"
   add_foreign_key "verification_histories", "users"
 end

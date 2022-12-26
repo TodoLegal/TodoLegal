@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_11_08_014402) do
+ActiveRecord::Schema.define(version: 2022_12_16_095103) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -352,12 +352,13 @@ ActiveRecord::Schema.define(version: 2022_11_08_014402) do
     t.integer "datapoint_id"
     t.integer "document_id"
     t.integer "user_id"
-    t.boolean "is_verified"
+    t.integer "status"
     t.datetime "verification_dt"
     t.text "comments"
     t.boolean "is_active"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "document_tag_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

@@ -74,7 +74,7 @@ class DocumentsController < ApplicationController
         bucket = get_bucket
         file = bucket.file @document.original_file.key
         if params["document"]["auto_process_type"] == "slice"
-          get_gazette_document_type_id
+          get_gazette_document_type_id #this is maybe a misplaced and useless call to this method, delete later?
           file.download "tmp/gazette.pdf"
           slice_gazette @document, Rails.root.join("tmp") + "gazette.pdf"
           if $discord_bot
@@ -91,8 +91,12 @@ class DocumentsController < ApplicationController
         elsif params["document"]["auto_process_type"] == "judgement"
           JudgementAuxiliary.create(document_id: @document.id, applicable_laws: "")
           format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido una sentencia.' }
+        elsif params["document"]["auto_process_type"] == "avisos"
+          format.html { redirect_to edit_document_path(@document), notice: 'Se han subido Avisos Legales.' }
+        elsif params["document"]["auto_process_type"] == "marcas"
+          format.html { redirect_to edit_document_path(@document), notice: 'Se han subido Marcas de Fábrica.' }
         else
-          format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido un documento.' }
+          format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido una sección de Gaceta.' }
         end
       else
         format.html { render :new }
@@ -288,7 +292,7 @@ class DocumentsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def document_params
-      params.require(:document).permit(:issue_id, :name, :original_file, :url, :publication_date, :publication_number, :description, :short_description)
+      params.require(:document).permit(:issue_id, :name, :original_file, :url, :publication_date, :publication_number, :description, :short_description, :start_page, :end_page, :position)
     end
 
     def get_bucket
@@ -322,6 +326,15 @@ class DocumentsController < ApplicationController
         return get_gazette_document_type_id
       elsif auto_process_type == "judgement"
         return get_sentence_document_type_id
+      elsif auto_process_type == "avisos"
+        document_type = DocumentType.find_by_name("Avisos Legales")
+        return document_type.id
+      elsif auto_process_type == "marcas"
+        document_type = DocumentType.find_by_name("Marcas de Fábrica")
+        return document_type.id
+      else
+        document_type = DocumentType.find_by_name("Sección de Gaceta")
+        return document_type.id
       end
       return DocumentType.find_by_name("Ninguno").id
     end

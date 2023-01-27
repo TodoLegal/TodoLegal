@@ -14,6 +14,19 @@ DocumentType.create(name: "Gaceta")
 DocumentType.create(name: "Sección de Gaceta")
 DocumentType.create(name: "Sentencia")
 
+########################
+#### DatapointTypes ####
+########################
+
+DatapointType.create(name:"Issue id", priority: 1)
+DatapointType.create(name:"Name", priority: 8)
+DatapointType.create(name:"Description", priority: 3)
+DatapointType.create(name:"Short Description", priority: 2)
+DatapointType.create(name:"Issuer", priority: 4)
+DatapointType.create(name:"Tema", priority: 5)
+DatapointType.create(name:"Materia", priority: 6)
+DatapointType.create(name:"Tipo de Acto", priority: 7)
+
 ##################
 #### TagTypes ####
 ##################

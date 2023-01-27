@@ -14,10 +14,25 @@
   <br>
 
   <div class="field">
-    <%= form.label :proceso_automático %>
-    <%= form.select(:auto_process_type, options_for_select([['Ninguno', "none"], ['Procesar Gaceta', "process"], ['Procesar y partir Gaceta', "slice"], ['Subir Sentencia', "judgement"]], @selected_document_type)) %>
-  </div>
+    <% if @selected_document_type == "process" %>
+      <h4> Gaceta completa </h4>
+    <% elsif @selected_document_type == "judgement"%>
+      <h4> Sentencia </h4>
+    <% elsif @selected_document_type == "slice"%>
+      <h4> Procesar y partir Gaceta </h4>
+    <% elsif @selected_document_type == "avisos" %>
+      <h4> Avisos Legales </h4>
+    <% elsif @selected_document_type == "marcas"%>
+      <h4> Marcas de Fábrica </h4>
+    <% elsif @selected_document_type == "seccion" %>
+      <h4> Sección de Gaceta </h4>
+    <% else %>
+      <h4> Ninguno </h4>
+    <% end %>
 
+    <input type="hidden" id="hiddenField" name="document[auto_process_type]" value="<%= @selected_document_type %>">
+  </div>
+  
   <div class="field">
     <%= form.file_field :original_file %>
   </div>

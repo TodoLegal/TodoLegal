@@ -100,26 +100,15 @@
       </div>
       
       <div class="row">
-        <div class="form-group col-md-5">
-          <% if document.document_type.name != "Sentencia" && document.end_page %>
+        <div class="col-md-2">
+          <% if document.end_page %>
             <label> 
               <strong>Páginas incluídas </strong> 
               <span class="badge bg-primary document--pages"> <%= document.start_page + 1 %>-<%= document.end_page + 1 %> </span>
             </label>
-          <% elsif document.document_type.name != "Sentencia" %>
-            <div class="row">
-              <div class="col">
-                <%= form.label :página_inicial %>
-                <%= form.text_field :start_page, class: "form-control" %>
-              </div>
-              <div class="col">
-                <%= form.label :página_final %>
-                <%= form.text_field :end_page, class: "form-control" %>
-              </div>
-            </div>
           <% end %>
         </div>
-          <div class="form-group col-md-3">
+          <div class="form-group col-md-4">
           <% if document.document_type.name != "Sentencia" and document.position %>
             <label class="d-inline"> <strong> Posición en Gaceta </strong> </label>
             <nav aria-label="...">
@@ -145,9 +134,6 @@
                   
                 <% end %>
             </nav>
-          <% elsif document.document_type.name != "Sentencia" %>
-            <%= form.label :posición_en_gaceta %>
-            <%= form.text_field :position, class: "form-control inline-block" %>
           <% end %>
         </div>
       </div>

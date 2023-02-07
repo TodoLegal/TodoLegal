@@ -292,7 +292,7 @@ class DocumentsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def document_params
-      params.require(:document).permit(:issue_id, :name, :original_file, :url, :publication_date, :publication_number, :description, :short_description, :start_page, :end_page, :position)
+      params.require(:document).permit(:issue_id, :name, :original_file, :url, :publication_date, :publication_number, :description, :short_description)
     end
 
     def get_bucket

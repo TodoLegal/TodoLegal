@@ -14,6 +14,19 @@ DocumentType.create(name: "Gaceta")
 DocumentType.create(name: "Sección de Gaceta")
 DocumentType.create(name: "Sentencia")
 
+########################
+#### DatapointTypes ####
+########################
+
+DatapointType.create(name:"Issue id", priority: 1, description: "Este campo sirve para identificar al documento con el código que la institución lo creó. Algunos ejemplos de estos códigos son: 15-2020, 146-2022, 09/2022, Sesión No 3972.\n\nSi el código en la Gaceta lleva la palabra decreto o acuerdo, no se debe poner.\n\nSi se utiliza la descripción CERTIFICACIÓN, se debe buscar que número de sesión, acta, acuerdo o decreto se está certificando y eso es lo que se debe poner.")
+DatapointType.create(name:"Name", priority: 8, description: "Este campo es opcional, tiene un máximo de 120 caracteres y sirve para identificar al documento de forma que sea entendido en lenguaje natural.\n\nEs otra forma de describir el documento aparte del código de emisión, ejemplo: Código Penal y Código Civil.")
+DatapointType.create(name:"Description", priority: 3, description: "Este campo resume en 1,250 caracteres el contenido del documento. Sirve para que el usuario decida si lo quiere descargar o no.\n\nEs más extenso que la descripción corta y puede ser una transcripción textual, siempre y cuando abarque la mayor explicación del documento.")
+DatapointType.create(name:"Short Description", priority: 2, description: "Este campo es crítico y sirve al usuario para conocer rápidamente sobre el contenido del documento. El usuario lo visualiza en el feed principal de Valid y debe comunicar en 250 caracteres el contenido del documento. Puede ser una transcripción textual.")
+DatapointType.create(name:"Issuer", priority: 4, description: "Se utiliza para identificar la institución que emitió el documento.")
+DatapointType.create(name:"Tema", priority: 5, description: "Este campo permite la mejor forma para la clasificación de la información y también permite ser usado por el usuario para seleccionar sus preferencias y recibir las notificaciones personalizadas. Procurar usar entre 2 ó 3 temas por documento.")
+DatapointType.create(name:"Materia", priority: 6, description:"Este campo permite clasificar el documento en relación a la materia del derecho al que pertenece y sirve al usuario para escoger sus intereses y recibir notificaciones en base a ellas. Nunca más de 2 materias y el 95% de las veces usar solo 1 materia.\n\nUna de las materias más común es Derecho Administrativo. Esta se usa para la regulación de la administración pública, proyectos del estado o nombramiento de funcionarios.")
+DatapointType.create(name:"Tipo de Acto", priority: 7, description: "Este campo determina el tipo de acto que realizó la institución. Los actos están definidos en múltiples leyes, entre ellas la Ley General de la Administración Pública")
+
 ##################
 #### TagTypes ####
 ##################

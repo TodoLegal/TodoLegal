@@ -164,6 +164,18 @@ module ApplicationHelper
     end
   end
 
+  def form_url_field document
+    if !document.url.blank?
+      return document.url
+    elsif !document.issue_id.blank?
+      return I18n.transliterate(document.issue_id.gsub(/\s/, "-"))
+    elsif !document.name.blank?
+      return I18n.transliterate(document.name.gsub(/\s/, "-"))
+    else
+      return "documento"
+    end
+  end
+
   def enqueue_new_job user
     @user_preferences = UsersPreference.find_by(user_id: user.id)
     mail_frequency = @user_preferences.mail_frequency

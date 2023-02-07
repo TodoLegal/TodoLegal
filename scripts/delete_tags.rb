@@ -21,7 +21,7 @@ UsersPreferencesTag.find_by(tag_id: @old_tag.id).delete
 
 ################# delete tags ###############
 
-@tag = Tag.find_by(name: "Deuda")
+@tag = Tag.find_by(name: "Ratificación de acuerdo")
 @documents_with_tag = DocumentTag.where(tag_id: @tag.id )
 
 documents_ids = []
@@ -39,7 +39,7 @@ UsersPreferencesTag.find_by(tag_id: @tag.id).delete
 @laws_with_old_tag = LawTag.where(tag_id: @old_tag.id)
 
 
-########## delete tags in users preferences ##############
+########## delete tags in users preferences ##############s
 
 @old_tag = Tag.find_by(name: "old tag")
 @new_tag = Tag.find_by(name: "new tag")

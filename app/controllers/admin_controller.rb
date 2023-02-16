@@ -1,6 +1,6 @@
 class AdminController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_action :authenticate_admin!, only: [:gazettes, :gazette, :users, :download_contributor_users, :download_recieve_information_users, :grant_permission, :revoke_permission, :set_law_access]
+  before_action :authenticate_admin!, only: [:gazettes, :gazette, :users, :download_contributor_users, :download_recieve_information_users, :grant_permission, :revoke_permission, :set_law_access, :deactivate_notifications, :activate_notifications]
 
   def gazettes
     @query = params["query"]
@@ -172,5 +172,46 @@ class AdminController < ApplicationController
     session[:edit_mode_enabled] = false
     redirect_back(fallback_location: root_path, notice: "Modo editor deshabilitado.")
   end
+
+  def deactivate_notifications
+    user = User.find_by_id(params[:user_id])
+    user_preferences = UsersPreference.find_by(user_id: user.id)
+    @error_message = nil
+
+    if user
+      user_preferences = UsersPreference.find_by(user_id: user.id)
+      if user_preferences
+        user_preferences.active_notifications = false
+        user_preferences.save
+      else
+        @error_message = "El usuario no tiene preferencias/notificaciones activas."
+      end
+    else
+      @error_message = "No se pudo encontrar el usuario"
+    end
+
+    redirect_to admin_users_url
+  end
+
+  def activate_notifications
+    user = User.find_by_id(params[:user_id])
+    user_preferences = UsersPreference.find_by(user_id: user.id)
+    @error_message = nil
+
+    if user
+      user_preferences = UsersPreference.find_by(user_id: user.id)
+      if user_preferences
+        user_preferences.active_notifications = true
+        user_preferences.save
+      else
+        @error_message = "El usuario no tiene preferencias/notificaciones activas."
+      end
+    else
+      @error_message = "No se pudo encontrar el usuario"
+    end
+
+    redirect_to admin_users_url
+  end
+
 end
   

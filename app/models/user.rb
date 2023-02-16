@@ -10,6 +10,8 @@ class User < ApplicationRecord
 
   has_many :user_permissions, :dependent => :destroy
   has_many :permissions, through: :user_permissions
+  has_one :users_preference, :dependent => :destroy
+  has_one :user_notifications_history, :dependent => :destroy
 
   def remember_me
     true

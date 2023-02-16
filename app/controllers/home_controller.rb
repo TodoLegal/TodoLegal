@@ -18,6 +18,16 @@ class HomeController < ApplicationController
     if params[:is_free_trial]
       redirect_to "https://valid.todolegal.app"
     end
+
+    if current_user
+      $tracker.track(current_user.id, 'TodoLegal Session', {
+        'user_type' => current_user_type_api(current_user),
+        'is_email_confirmed' =>  current_user.confirmed_at?,
+        'has_notifications_activated': UsersPreference.find_by(user_id: current_user.id) != nil,
+        'session_date' => DateTime.now - 6.hours,
+        'location' => "TL Home"
+      })
+    end
   end
 
   def token_login

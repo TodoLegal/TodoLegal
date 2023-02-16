@@ -1,6 +1,7 @@
 class HomeController < ApplicationController
   layout 'onboarding', only: [:pricing, :invite_friends, :send_confirmation_email]
   include ActionView::Helpers::NumberHelper
+  include ApplicationHelper
   require 'set'
   caches_page 
   def index

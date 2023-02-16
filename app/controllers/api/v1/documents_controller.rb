@@ -23,10 +23,17 @@ class Api::V1::DocumentsController < ApplicationController
     user_document_download_tracker = get_user_document_download_tracker(user_id_str)
     can_access_document = can_access_documents(user_document_download_tracker, current_user_type_api(user))
     
+    #get related documents
+    related_documents = get_related_documents
+    related_documents = related_documents.to_json
+    related_documents = JSON.parse(related_documents)
+
     if can_access_document and @document.original_file.attached?
-     json_document = json_document.merge(file: url_for(@document.original_file))
+      json_document = json_document.merge(file: url_for(@document.original_file))
+      related_documents = attach_file_to_documents(related_documents, true)
     else
-     json_document = json_document.merge(file: "")
+      json_document = json_document.merge(file: "")
+      related_documents = attach_file_to_documents(related_documents, false)
     end
 
     issuer_name = get_issuer_name @document.id
@@ -34,7 +41,7 @@ class Api::V1::DocumentsController < ApplicationController
     render json: {"document": json_document,
       "issuer": issuer_name,
       "tags": get_document_tags,
-      "related_documents": get_related_documents,
+      "related_documents": related_documents,
       "can_access": can_access_document,
       "downloads": user_document_download_tracker.downloads,
       "user_type": current_user_type_api(user),

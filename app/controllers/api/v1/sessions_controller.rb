@@ -42,6 +42,16 @@ class Api::V1::SessionsController < Devise::SessionsController
       "user_type": current_user_type_api(user),
       "confirmed_user": user ? user.confirmed_at? : false
     }
+
+    if user
+      $tracker.track(user.id, 'Valid Session', {
+        'user_type' => current_user_type_api(user),
+        'is_email_confirmed' =>  user.confirmed_at?,
+        'has_notifications_activated': UsersPreference.find_by(user_id: user.id) != nil
+        'session_date' => DateTime.now - 6.hours,
+        'location' => "Valid (API)"
+      })
+    end
   end
 
 end

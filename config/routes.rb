@@ -61,7 +61,8 @@ Rails.application.routes.draw do
   get "download_recieve_information_users" => "admin#download_recieve_information_users", as: "download_recieve_information_users"
   get "download_all_users" => "admin#download_all_users", as: "download_all_users"
   get '/gacetas', to: redirect('https://valid.todolegal.app'), as: "google_drive_search"
-  get '/piil', to: 'home#piil_home'
+  post "admin/deactivate_notifications" => "admin#deactivate_notifications", as: "deactivate_notifications"
+  post "admin/activate_notifications" => "admin#activate_notifications", as: "activate_notifications"
 
   get '/rails/active_storage/blobs/redirect/:signed_id/*filename', to: 'active_storage_redirect#show'
   

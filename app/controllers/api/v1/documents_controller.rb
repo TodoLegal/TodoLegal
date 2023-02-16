@@ -203,12 +203,24 @@ protected
     end
     document_type = Document.find_by_id(document_id).document_type
     if document_type
-      document_json["document_type"] = document_type.name
+      document_json["document_type"] = get_document_type_name(document_id, document_type)
     end
     document_json.delete("full_text")
     return document_json
   end
 
+  def get_document_type_name document_id, document_type
+    case document_type.name
+    when "Sección de Gaceta"
+      act_type_tag = TagType.find_by(name: "Tipo de Acto")
+      type_name = Document.find_by_id(document_id).tags.find_by(tag_type_id: act_type_tag.id)
+      type_name = type_name ? type_name.name : ""
+      return type_name
+    else
+      return document_type.name
+    end
+    
+  end
 
   def get_document_tags
     tags = []

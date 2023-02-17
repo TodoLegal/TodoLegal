@@ -29,12 +29,14 @@
     <% @permissions.each do |permission| %>
       <th><%= permission.name %></th>
     <% end %>
+    <th>Notificaciones</th>
   </tr>
   <% @users.each do |user| %>
     <tr>
       <td><%= user.email %></td>
       <td><%= user.created_at %> ago</td>
       <td><%= user.last_sign_in_at ? time_ago_in_words(user.last_sign_in_at) : "" %> ago</td>
+
       <% @permissions.each do |permission| %>
         <% if UserPermission.find_by(user: user, permission: permission) %>
           <td>yes
@@ -43,7 +45,7 @@
               <%= hidden_field_tag :user_id, user.id %>
               <%= hidden_field_tag :permission_id, permission.id %>
               <div class="form-inline">
-                <button type="submit">Revcoar</button>
+                <button type="submit">Revocar</button>
               </div>
             </form>
           </td>
@@ -60,6 +62,34 @@
           </td>
         <% end %>
       <% end %>
+
+      <% user_preferences = UsersPreference.find_by(user: user) %>
+      <% if user_preferences && user_preferences.active_notifications %>
+        <td>
+          Activadas
+          <form action="/admin/deactivate_notifications" method="post">
+            <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+            <%= hidden_field_tag :user_id, user.id %>
+            <div class="form-inline">
+              <button type="submit">Desactivar</button>
+            </div>
+          </form>
+        </td>
+      <% elsif user_preferences %>
+        <td>
+          Desactivadas
+          <form action="/admin/activate_notifications" method="post">
+            <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+            <%= hidden_field_tag :user_id, user.id %>
+            <div class="form-inline">
+              <button type="submit">Activar</button>
+            </div>
+          </form>
+        </td>
+      <% else %>
+        <td>Sin preferencias creadas</td>
+      <% end %>
+
     </tr>
   <% end %>
 </table>

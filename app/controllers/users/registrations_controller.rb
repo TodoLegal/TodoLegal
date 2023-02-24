@@ -96,6 +96,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       '$email'            => current_user.email,
       'first_name'      => current_user.first_name,
       'last_name'      => current_user.last_name,
+      'phone_number'    => current_user.phone_number,
       'occupation'      => current_user.occupation,
       'is_contributor'      => current_user.is_contributor,
       'current_sign_in_at'      => current_user.current_sign_in_at,

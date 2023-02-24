@@ -57,6 +57,11 @@
           </div>
 
           <div class="form-group">
+            <%= f.label :Número_de_teléfono %><br />
+            <%= f.text_field :phone_number, autocomplete: "phone-number", class:"form-control", id:"phone"%>
+          </div>
+
+          <div class="form-group">
             <%= f.label :Contraseña %><br />
             <%= f.password_field :password, autocomplete: "new-password", class: "form-control", id:"password"%>
             <small id="passwordHelpBlock" class="form-text text-muted">

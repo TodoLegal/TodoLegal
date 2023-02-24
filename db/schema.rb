@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_02_16_065628) do
+ActiveRecord::Schema.define(version: 2023_02_21_064028) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -360,6 +360,7 @@ ActiveRecord::Schema.define(version: 2023_02_16_065628) do
     t.string "stripe_customer_id"
     t.string "authentication_token", limit: 30
     t.string "unique_session_id"
+    t.text "phone_number", default: ""
     t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true

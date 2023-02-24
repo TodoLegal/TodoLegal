@@ -85,7 +85,9 @@ class DocumentsController < ApplicationController
           file.download "tmp/gazette.pdf"
           process_gazette @document, Rails.root.join("tmp") + "gazette.pdf"
           if $discord_bot
-            $discord_bot.send_message($discord_bot_document_upload, "Nueva gaceta en Valid! " + @document.publication_number + " :scroll:")
+            publication_number = ""
+            publication_number = @document.publication_number if @document.publication_number
+            $discord_bot.send_message($discord_bot_document_upload, "Nueva gaceta en Valid! " + publication_number + " :scroll:")
           end
           format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido una gaceta.' }
         elsif params["document"]["auto_process_type"] == "judgement"

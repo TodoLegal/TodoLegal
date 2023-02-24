@@ -14,6 +14,8 @@ class UsersPreferencesController < ApplicationController
     @is_monthly = params[:is_monthly]
     @is_semestral = params[:is_semestral]
     @is_annually = params[:is_annually]
+
+    return_to_path = session[:return_to] if session[:return_to]
     
     if current_user.blank?
       redirect_to "https://todolegal.app/users/sign_in"
@@ -42,7 +44,12 @@ class UsersPreferencesController < ApplicationController
     respond_to do |format|
       if @users_preference.save
         if params[:redirect_to_valid] == true
-          format.html { redirect_to "https://valid.todolegal.app?preferences=true"}
+          if return_to_path
+            session[:return_to] = nil
+            format.html { redirect_to return_to_path}
+          else
+            format.html { redirect_to "https://valid.todolegal.app?preferences=true"}
+          end
         elsif !params[:is_monthly].blank?
           format.html { redirect_to checkout_url(is_onboarding:true, go_to_law: params[:go_to_law], is_monthly: params[:is_monthly]) }
           format.json { render :show, status: :created, location: @users_preference }

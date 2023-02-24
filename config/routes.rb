@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   resources :verification_histories
   resources :datapoints
-  resources :users_preferences
+  resources :users_preferences, only: [:index, :edit, :update, :create]
   resources :users_preferences_tags
   require 'sidekiq/web'
 
@@ -63,6 +63,7 @@ Rails.application.routes.draw do
   get '/gacetas', to: redirect('https://valid.todolegal.app'), as: "google_drive_search"
   post "admin/deactivate_notifications" => "admin#deactivate_notifications", as: "deactivate_notifications"
   post "admin/activate_notifications" => "admin#activate_notifications", as: "activate_notifications"
+  get 'users_preferences/skip_notifications', to: 'users_preferences#skip_notifications', as: "skip_notifications"
 
   get '/rails/active_storage/blobs/redirect/:signed_id/*filename', to: 'active_storage_redirect#show'
   

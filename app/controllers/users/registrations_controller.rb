@@ -16,7 +16,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     @is_annually = params[:is_annually]
     @is_student = params[:is_student]
     @pricing_onboarding = params[:pricing_onboarding]
-    session[:return_to] = params[:return_to] if params[:return_to]
+    # session[:return_to] = params[:return_to] if params[:return_to]
     super
 
   end

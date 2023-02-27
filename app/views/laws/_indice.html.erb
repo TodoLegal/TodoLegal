@@ -32,7 +32,7 @@
       <% is_section_blocked = true %>
       <% is_subsection_blocked = true %>
 
-      <% @index_items.each do |index_items|%>
+      <% @result_index_items.each do |index_items|%>
           
         <% if index_items.instance_of? Book %>
           <!-- Level 1 Book -->
@@ -140,7 +140,7 @@
                     </button>
                   </section>
                   <section class="index-subsection-name">
-                    <a class="uncolored_link" href="#subsection_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('subsection_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
+                    <a class="uncolored_link" href="#section_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('section_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
                       <%= index_items.name %>
                     </a>
                   </section>

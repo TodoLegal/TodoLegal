@@ -93,7 +93,6 @@ class ApplicationController < ActionController::Base
 
   def get_raw_law
     @stream = []
-    @index_items = []
     @highlight_enabled = false
     @query = ""
     @articles_count = 0

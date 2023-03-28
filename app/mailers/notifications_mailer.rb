@@ -77,4 +77,24 @@ class NotificationsMailer < ApplicationMailer
       end
   end
 
+  def pro_without_active_notifications user
+    @user = user
+    mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: user.email, subject: 'Recibe alertas personalizadas en tu correo electrónico')
+  end
+
+  def basic_without_active_notifications user
+    @user = user
+    mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: user.email, subject: 'Activación de notificaciones personalizadas')
+  end
+
+  def basic_with_active_notifications user
+    @user = user
+    mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: user.email, subject: 'Activación de notificaciones personalizadas')
+  end
+
+  def cancel_notifications user
+    @user = user
+    mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: user.email, subject: '¿Quieres seguir recibiendo notificaciones personalizadas?')
+  end
+
 end

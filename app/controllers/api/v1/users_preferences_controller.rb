@@ -88,6 +88,18 @@ class Api::V1::UsersPreferencesController < ApplicationController
         end
     end
 
+    def deactivate_notifications
+        user = get_user_by_id
+        if user
+            user_preferences = UsersPreference.find_by(user_id: user.id)
+            users_preferences.active_notifications = !user_preferences.active_notifications
+            users_preferences.save
+            render json: {message: "User successfully updated."}, status: 200
+        else
+            render json: {message: "Unable to update user."}, status: :unprocesable_entity
+        end
+    end
+
     protected
         def get_user_by_id
             return User.find_by_id(doorkeeper_token.resource_owner_id)

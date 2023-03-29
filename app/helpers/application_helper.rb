@@ -68,16 +68,23 @@ module ApplicationHelper
    return user_document_download_tracker
   end
 
-  #deprecated
-  def can_access_documents(user_document_download_tracker, current_user_type)
-   if current_user_type == "pro"
+  def can_access_documents(user)
+    current_user_type = current_user_type_api(user)
+
+    if current_user_type == "pro"
      return true
-   elsif current_user_type == "basic"
-     return user_document_download_tracker.downloads < MAXIMUM_BASIC_MONTHLY_DOCUMENTS
-   else
-    #  return user_document_download_tracker.downloads < MAXIMUM_NOT_LOGGGED_MONTHLY_DOCUMENTS
-    return false
-   end
+    elsif current_user_type == "basic"
+      
+      if user.confirmed_at?
+        return user.user_trial.active?
+      else
+        #if unconfirmed, check if trial is still active and the downloads are below the maximum
+        return user.user_trial.active? && user.user_trial.downloads < MAXIMUM_UNCONFIRMED_USER_DOWNLOADS
+      end
+      
+    else
+      return false
+    end
   end
 
   def current_user_type user

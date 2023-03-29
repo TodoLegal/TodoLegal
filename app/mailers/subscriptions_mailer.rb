@@ -27,14 +27,14 @@ class SubscriptionsMailer < ApplicationMailer
     @user = user
     # TODO: make this auto calculated again
     # @rounded_all_document_count = 1130
-    mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: user.email, subject: 'Cuenta Pro')
+    mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: user.email, subject: 'Bienvenido(a) a TodoLegal')
   end
 
   def free_trial_end user
     @user = user
     # TODO: make this auto calculated again
     # @rounded_all_document_count = 1130
-    mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: user.email, subject: 'Cuenta ha expirado')
+    mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: user.email, subject: 'Tu cuenta está a punto de vencer')
   end
 
   def discount_coupon user

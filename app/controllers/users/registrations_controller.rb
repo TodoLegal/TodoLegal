@@ -132,6 +132,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
       else
         #When user chooses Prueba Gratis
         users_preferences_path(is_onboarding:true, redirect_to_valid:true)
+        user_trial = UserTrial.create(user_id: current_user.id, trial_start: DateTime.now - 6.hours)
+        #send trial start email
       end
     else
       pricing_path(is_onboarding:true, go_to_law: params[:go_to_law], go_to_checkout: params[:go_to_checkout], user_just_registered: true)

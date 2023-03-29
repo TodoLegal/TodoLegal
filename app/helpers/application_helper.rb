@@ -60,26 +60,23 @@ module ApplicationHelper
    if !user_document_download_tracker
      user_document_download_tracker = UserDocumentDownloadTracker.create(fingerprint: fingerprint, downloads: 0, period_start: DateTime.now)
    end
-  #  if user_document_download_tracker.period_start <= 1.month.ago # TODO set time window
-  #    user_document_download_tracker.period_start = DateTime.now
-  #    user_document_download_tracker.downloads = 0
-  #    user_document_download_tracker.save
-  #  end
    return user_document_download_tracker
   end
 
   def can_access_documents(user)
     current_user_type = current_user_type_api(user)
+    user_trial = UserTrial.find_by(user_id: user.id)
 
     if current_user_type == "pro"
      return true
     elsif current_user_type == "basic"
       
+      #first checks if user has a user_trial table entry, if not, returns false. This can happen when a user was Pro and downgraded to basic
       if user.confirmed_at?
-        return user.user_trial.active?
+        return user_trial ? user_trial.active? : false
       else
         #if unconfirmed, check if trial is still active and the downloads are below the maximum
-        return user.user_trial.active? && user.user_trial.downloads < MAXIMUM_UNCONFIRMED_USER_DOWNLOADS
+        return user_trial ? user_trial.active? && (user_trial.downloads < MAXIMUM_UNCONFIRMED_USER_DOWNLOADS) : false
       end
       
     else

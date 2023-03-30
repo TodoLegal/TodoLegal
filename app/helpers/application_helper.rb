@@ -65,7 +65,10 @@ module ApplicationHelper
 
   def can_access_documents(user)
     current_user_type = current_user_type_api(user)
-    user_trial = UserTrial.find_by(user_id: user.id)
+    user_trial = nil
+    if current_user_type != "not logged"
+      user_trial = UserTrial.find_by(user_id: user.id)
+    end
 
     if current_user_type == "pro"
       #Pro users have to confirm their emails too, if unconfirmed, we let them download just one document until they confirm their emails

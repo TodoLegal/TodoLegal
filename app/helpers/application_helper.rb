@@ -69,14 +69,23 @@ module ApplicationHelper
 
     if current_user_type == "pro"
       #Pro users have to confirm their emails too, if unconfirmed, we let them download just one document until they confirm their emails
+      if !user_trial
+        user_trial = UserTrial.create(user_id: user.id)
+      end 
      return user.confirmed_at? ? true : user_trial.downloads < MAXIMUM_UNCONFIRMED_USER_DOWNLOADS
     elsif current_user_type == "basic"
       #first checks if user has a user_trial table entry, if not, returns false. This can happen when a user was Pro and downgraded to basic
+      if !user_trial
+        user_trial = UserTrial.create(user_id: user.id, trial_start: DateTime.now, trial_end: DateTime.now + 2.days, active: true)
+        NotificationsMailer.basic_with_active_notifications(user).deliver
+        SubscriptionsMailer.free_trial_end(user).deliver_later(wait_until: user_trial.trial_end - 1.day)
+        NotificationsMailer.cancel_notifications(user).deliver_later(wait_until: user_trial.trial_end)
+      end 
       if user.confirmed_at?
-        return user_trial ? user_trial.active? : false
+        return user_trial.active?
       else
         #if unconfirmed, check if trial is still active and the downloads are below the maximum
-        return user_trial ? user_trial.active? && (user_trial.downloads < MAXIMUM_UNCONFIRMED_USER_DOWNLOADS) : false
+        return user_trial.active? && (user_trial.downloads < MAXIMUM_UNCONFIRMED_USER_DOWNLOADS)
       end
       
     else
@@ -90,7 +99,7 @@ module ApplicationHelper
     current_user_type = current_user_type_api(user)
 
     if current_user_type == "pro"
-      return 0
+      return -1
     end
 
     if user_trial

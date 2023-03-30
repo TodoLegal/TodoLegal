@@ -3,4 +3,20 @@ class NotificationsMailerPreview < ActionMailer::Preview
     def user_preferences_mail
         NotificationsMailer.user_preferences_mail(User.first, Document.all)
     end
+
+    def pro_without_active_notifications
+        NotificationsMailer.pro_without_active_notifications(User.first)
+    end
+
+    def basic_without_active_notifications
+        NotificationsMailer.basic_without_active_notifications(User.first)
+    end
+
+    def basic_with_active_notifications
+        NotificationsMailer.basic_with_active_notifications(User.first)
+    end
+
+    def cancel_notifications
+        NotificationsMailer.cancel_notifications(User.first)
+    end
 end

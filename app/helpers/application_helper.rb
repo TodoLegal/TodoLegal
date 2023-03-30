@@ -60,24 +60,46 @@ module ApplicationHelper
    if !user_document_download_tracker
      user_document_download_tracker = UserDocumentDownloadTracker.create(fingerprint: fingerprint, downloads: 0, period_start: DateTime.now)
    end
-  #  if user_document_download_tracker.period_start <= 1.month.ago # TODO set time window
-  #    user_document_download_tracker.period_start = DateTime.now
-  #    user_document_download_tracker.downloads = 0
-  #    user_document_download_tracker.save
-  #  end
    return user_document_download_tracker
   end
 
-  #deprecated
-  def can_access_documents(user_document_download_tracker, current_user_type)
-   if current_user_type == "pro"
-     return true
-   elsif current_user_type == "basic"
-     return user_document_download_tracker.downloads < MAXIMUM_BASIC_MONTHLY_DOCUMENTS
-   else
-    #  return user_document_download_tracker.downloads < MAXIMUM_NOT_LOGGGED_MONTHLY_DOCUMENTS
-    return false
-   end
+  def can_access_documents(user)
+    current_user_type = current_user_type_api(user)
+    user_trial = UserTrial.find_by(user_id: user.id)
+
+    if current_user_type == "pro"
+      #Pro users have to confirm their emails too, if unconfirmed, we let them download just one document until they confirm their emails
+     return user.confirmed_at? ? true : user_trial.downloads < MAXIMUM_UNCONFIRMED_USER_DOWNLOADS
+    elsif current_user_type == "basic"
+      
+      #first checks if user has a user_trial table entry, if not, returns false. This can happen when a user was Pro and downgraded to basic
+      if user.confirmed_at?
+        return user_trial ? user_trial.active? : false
+      else
+        #if unconfirmed, check if trial is still active and the downloads are below the maximum
+        return user_trial ? user_trial.active? && (user_trial.downloads < MAXIMUM_UNCONFIRMED_USER_DOWNLOADS) : false
+      end
+      
+    else
+      return false
+    end
+  end
+
+  def remaining_free_trial_time user
+    user_trial = UserTrial.find_by(user_id: user.id)
+    trial_remaining_time = 0
+    current_user_type = current_user_type_api(user)
+
+    if current_user_type == "pro"
+      return 0
+    end
+
+    if user_trial
+      trial_remaining_time = user_trial.trial_end - user_trial.trial_start
+      trial_remaining_time = trial_remaining_time.to_i
+    end
+
+    return trial_remaining_time
   end
 
   def current_user_type user

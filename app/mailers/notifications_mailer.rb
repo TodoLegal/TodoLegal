@@ -95,6 +95,9 @@ class NotificationsMailer < ApplicationMailer
   def cancel_notifications user
     @user = user
     mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: user.email, subject: '¿Quieres seguir recibiendo notificaciones personalizadas?')
+    user_trial = user.user_trial
+    user_trial.active = false
+    user_trial.save
   end
 
 end

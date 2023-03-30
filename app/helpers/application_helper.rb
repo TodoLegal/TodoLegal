@@ -85,6 +85,23 @@ module ApplicationHelper
     end
   end
 
+  def remaining_free_trial_time user
+    user_trial = UserTrial.find_by(user_id: user.id)
+    trial_remaining_time = 0
+    current_user_type = current_user_type_api(user)
+
+    if current_user_type == "pro"
+      return 0
+    end
+
+    if user_trial
+      trial_remaining_time = user_trial.trial_end - user_trial.trial_start
+      trial_remaining_time = trial_remaining_time.to_i
+    end
+
+    return trial_remaining_time
+  end
+
   def current_user_type user
     if user
       if !user.stripe_customer_id.blank?

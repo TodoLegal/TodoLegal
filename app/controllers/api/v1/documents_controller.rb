@@ -9,11 +9,16 @@ class Api::V1::DocumentsController < ApplicationController
     json_document = get_document_json
     can_access_document = true
     user = nil
+    user_trial = nil
     if params[:access_token]
       user = User.find_by_id(doorkeeper_token.resource_owner_id)
     end
 
     can_access_document = can_access_documents(user)
+
+    if user
+      user_trial = UserTrial.find_by(user_id: user.id)
+    end
     
     #get related documents
     related_documents = get_related_documents
@@ -35,7 +40,7 @@ class Api::V1::DocumentsController < ApplicationController
       "tags": get_document_tags,
       "related_documents": related_documents,
       "can_access": can_access_document,
-      "downloads": user.user_trial ? user.user_trial.downloads : 0,
+      "downloads": user_trial ? user_trial.downloads : 0,
       "user_type": current_user_type_api(user),
     }
   end

@@ -35,7 +35,7 @@ class Api::V1::DocumentsController < ApplicationController
       "tags": get_document_tags,
       "related_documents": related_documents,
       "can_access": can_access_document,
-      "downloads": user_document_download_tracker.downloads,
+      "downloads": user.user_trial ? user.user_trial.downloads : 0,
       "user_type": current_user_type_api(user),
     }
   end

@@ -105,12 +105,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
       'last_sign_in_ip'      => current_user.last_sign_in_ip,
       'receive_information_emails'      => current_user.receive_information_emails
       })
+    
+    if ENV['MAILGUN_KEY']
+      current_user.send_confirmation_instructions
+    end
 
-      if ENV['MAILGUN_KEY']
-        SubscriptionsMailer.welcome_basic_user(current_user).deliver
-        current_user.send_confirmation_instructions
-      end
-      
     end
     if $discord_bot
       $discord_bot.send_message($discord_bot_channel_notifications, "Se ha registrado un nuevo usuario :tada:")
@@ -135,8 +134,12 @@ class Users::RegistrationsController < Devise::RegistrationsController
       else
         #When user chooses Prueba Gratis
         users_preferences_path(is_onboarding:true, redirect_to_valid:true)
-        user_trial = UserTrial.create(user_id: current_user.id, trial_start: DateTime.now - 6.hours, active: true)
-        #send free trial start email
+        user_trial = UserTrial.create(user_id: current_user.id, trial_start: DateTime.now, trial_end: DateTime.now + 2.days, active: true)
+        if ENV['MAILGUN_KEY']
+          SubscriptionsMailer.welcome_basic_user(current_user).deliver
+          SubscriptionsMailer.free_trial_end(user).deliver_later(wait_until: user_trial.trial_end - 1.day)
+          NotificationsMailer.cancel_notifications(user).deliver_later(wait_until: user_trial.trial_end)
+        end
       end
     else
       pricing_path(is_onboarding:true, go_to_law: params[:go_to_law], go_to_checkout: params[:go_to_checkout], user_just_registered: true)

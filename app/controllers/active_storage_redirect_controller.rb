@@ -18,10 +18,16 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
     end
 
     can_access_document = can_access_documents(user)
-
+    user_trial = user.user_trial
     if user && current_user_type_api(user) != "pro" && current_user
-      user.user_trial.downloads += 1
+      user_trial.downloads += 1
     end
+
+    #if Pro user is not confirmed, add a download to the db. 
+    if user && current_user_type_api(user) == "pro" && !user.confirmed_at? && current_user
+      user_trial.downloads += 1
+    end
+
     if user && can_access_document && current_user
       $tracker.track(user_id, 'Valid download', {
         'user_type' => current_user_type_api(user),
@@ -29,7 +35,7 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
         'document_id' => params[:document_id],
         'location' => "API"
       })
-      user_document_download_tracker.save
+      user_trial.save
       super
     else
       if current_user

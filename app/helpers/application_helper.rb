@@ -104,7 +104,7 @@ module ApplicationHelper
 
     if user_trial
       trial_remaining_time = user_trial.trial_end - user_trial.trial_start
-      trial_remaining_time = trial_remaining_time.to_i
+      trial_remaining_time = (trial_remaining_time/1.day).to_i
     end
 
     return trial_remaining_time

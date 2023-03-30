@@ -71,7 +71,6 @@ module ApplicationHelper
       #Pro users have to confirm their emails too, if unconfirmed, we let them download just one document until they confirm their emails
      return user.confirmed_at? ? true : user_trial.downloads < MAXIMUM_UNCONFIRMED_USER_DOWNLOADS
     elsif current_user_type == "basic"
-      
       #first checks if user has a user_trial table entry, if not, returns false. This can happen when a user was Pro and downgraded to basic
       if user.confirmed_at?
         return user_trial ? user_trial.active? : false

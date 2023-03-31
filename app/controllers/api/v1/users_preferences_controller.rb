@@ -6,7 +6,8 @@ class Api::V1::UsersPreferencesController < ApplicationController
     def get_user_preferences
         user_preferences = {
             user_preference_tags: [],
-            mail_frequency: 0
+            mail_frequency: 0,
+            active_notifications: false
         }
 
         if params[:access_token]
@@ -88,6 +89,7 @@ class Api::V1::UsersPreferencesController < ApplicationController
         end
     end
 
+     #/api/v1/users_preferences/deactivate_notifications?access_token=uK1AGqqD_n4u7g3zh46K2Ce8Wo8KCk
     def deactivate_notifications
         user = get_user_by_id
         user_preference = UsersPreference.find_by(user_id: user.id)

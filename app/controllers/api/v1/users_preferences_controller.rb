@@ -90,7 +90,17 @@ class Api::V1::UsersPreferencesController < ApplicationController
 
     def deactivate_notifications
         user = get_user_by_id
-        if user
+        user_preference = UsersPreference.find_by(user_id: user.id)
+        if user && user_preference
+            if user_preference.active_notifications
+                delete_user_notifications_job(user_preference.job_id)
+            else
+                delete_user_notifications_job(user_preference.job_id)
+                
+                new_job = MailUserPreferencesJob.set(wait: user_preference.mail_frequency.to_i.days).perform_later(@user)
+                user_preference.job_id = new_job.provider_job_id
+                user_preference.save
+            end
             user_preferences = UsersPreference.find_by(user_id: user.id)
             users_preferences.active_notifications = !user_preferences.active_notifications
             users_preferences.save

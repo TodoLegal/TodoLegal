@@ -129,8 +129,13 @@ class Api::V1::DocumentsController < ApplicationController
     #Extract this into a reusable method
     can_access_document = true
     user = nil
+    user_trial = nil
     if params[:access_token]
       user = User.find_by_id(doorkeeper_token.resource_owner_id)
+    end
+
+    if user
+      user_trial = UserTrial.find_by(user_id: user.id)
     end
 
     can_access_document = can_access_documents(user)
@@ -174,7 +179,7 @@ class Api::V1::DocumentsController < ApplicationController
       })
     end
 
-    render json: { "documents": documents, "count": total_count }
+    render json: { "documents": documents, "count": total_count, "downloads": user_trial ? user_trial.downloads : 1, }
   end
 
 protected

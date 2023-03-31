@@ -15,7 +15,7 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
     end
   end
 
-  def after_confirmation_path_for(resource_name, resource)
+  def after_confirmation_path_for
    if process_doorkeeper_redirect_to
       return
    else
@@ -29,7 +29,7 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
 
     if resource.errors.empty?
       set_flash_message!(:notice, :confirmed)
-      respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource) }
+      redirect_to after_confirmation_path_for
     else
       #respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
       set_flash_message!(:notice, :already_confirmed)

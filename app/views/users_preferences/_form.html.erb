@@ -32,11 +32,23 @@
   <% end %>
 
   <section class="preference-tags">
+    <% tag_counter = 0 %>
     <%= form.collection_check_boxes :user_preference_tags, @tags, :tag_id, :name, include_hidden: false do |b| %>
-      <p class="form-check">
-        <%= b.check_box class: "tags-checkbox"%>
-        <%= b.label%>
-      </p>
+      <% tag_counter = tag_counter + 1 %>
+      <% if tag_counter < 12 %> 
+        <p class="form-check">
+          <%= b.check_box class: "tags-checkbox"%>
+          <%= b.label%>
+        </p>
+      <% else %>
+        <% if tag_counter == 12 %>
+          <a href="#" id="seeMoreBtn" style="text-decoration: underline;" onclick="showMoreTags()"> Ver más </a>
+        <% end %>
+        <p class="form-check see-more">
+          <%= b.check_box class: "tags-checkbox"%>
+          <%= b.label%>
+        </p>
+      <% end %>
     <% end %>
   </section>
 
@@ -104,6 +116,16 @@ function validateCheckedPreferences (){
     }
 }
 
+function showMoreTags (){
+  const tags = document.getElementsByClassName("see-more");
+  const seeMoreBtn = document.getElementById("seeMoreBtn");
+
+  for (i = 0; i < tags.length; i++){  
+      tags[i].style.display = 'inline-block'
+      seeMoreBtn.style.display = 'none';
+  }
+}
+
 </script>
 
 <style>
@@ -158,6 +180,10 @@ function validateCheckedPreferences (){
     font-weight: 700;
     font-size: 28px;
     line-height: 38px;
+  }
+
+  .see-more{
+    display: none;
   }
 
 </style>

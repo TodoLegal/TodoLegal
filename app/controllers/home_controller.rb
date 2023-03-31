@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
-  layout 'onboarding', only: [:pricing, :invite_friends, :send_confirmation_email]
+  layout 'onboarding', only: [:pricing, :invite_friends, :send_confirmation_email, :confirm_email_view]
   include ActionView::Helpers::NumberHelper
   include ApplicationHelper
   require 'set'
@@ -157,8 +157,8 @@ class HomeController < ApplicationController
     end
   end
 
-  def piil_home
-  
+  def confirm_email_view
+    
   end
   
   def invite_friends

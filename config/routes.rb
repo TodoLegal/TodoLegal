@@ -64,6 +64,7 @@ Rails.application.routes.draw do
   post "admin/deactivate_notifications" => "admin#deactivate_notifications", as: "deactivate_notifications"
   post "admin/activate_notifications" => "admin#activate_notifications", as: "activate_notifications"
   get 'users_preferences/skip_notifications', to: 'users_preferences#skip_notifications', as: "skip_notifications"
+  get '/confirm_email_view', to: 'home#confirm_email_view', as:"confirm_email_view"
 
   get '/rails/active_storage/blobs/redirect/:signed_id/*filename', to: 'active_storage_redirect#show'
   

@@ -123,23 +123,24 @@ class Users::RegistrationsController < Devise::RegistrationsController
       #TODO 
       #Otro if igual al primero con un && is_student y que dentro del envie is_student de param en lugar de is_monthly
       if !params[:is_monthly].blank?
+        user_trial = UserTrial.create(user_id: current_user.id)
         users_preferences_path(is_onboarding:true, go_to_law: params[:go_to_law], is_monthly: params[:is_monthly])
-        user_trial = UserTrial.create(user_id: current_user.id)
       elsif !params[:is_semestral].blank?
+        user_trial = UserTrial.create(user_id: current_user.id)
         users_preferences_path(is_onboarding:true, go_to_law: params[:go_to_law], is_semestral: params[:is_semestral])
-        user_trial = UserTrial.create(user_id: current_user.id)
       elsif !params[:is_annually].blank?
-        users_preferences_path(is_onboarding:true, go_to_law: params[:go_to_law], is_annually: params[:is_annually])
         user_trial = UserTrial.create(user_id: current_user.id)
+        users_preferences_path(is_onboarding:true, go_to_law: params[:go_to_law], is_annually: params[:is_annually])
       else
         #When user chooses Prueba Gratis
-        users_preferences_path(is_onboarding:true, redirect_to_valid:true)
         user_trial = UserTrial.create(user_id: current_user.id, trial_start: DateTime.now, trial_end: DateTime.now + 2.days, active: true)
         if ENV['MAILGUN_KEY']
           SubscriptionsMailer.welcome_basic_user(current_user).deliver
           SubscriptionsMailer.free_trial_end(current_user).deliver_later(wait_until: user_trial.trial_end - 1.day)
           NotificationsMailer.cancel_notifications(current_user).deliver_later(wait_until: user_trial.trial_end)
         end
+
+        users_preferences_path(is_onboarding:true, redirect_to_valid:true)
       end
     else
       pricing_path(is_onboarding:true, go_to_law: params[:go_to_law], go_to_checkout: params[:go_to_checkout], user_just_registered: true)

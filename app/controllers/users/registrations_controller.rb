@@ -137,8 +137,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
         user_trial = UserTrial.create(user_id: current_user.id, trial_start: DateTime.now, trial_end: DateTime.now + 2.days, active: true)
         if ENV['MAILGUN_KEY']
           SubscriptionsMailer.welcome_basic_user(current_user).deliver
-          SubscriptionsMailer.free_trial_end(user).deliver_later(wait_until: user_trial.trial_end - 1.day)
-          NotificationsMailer.cancel_notifications(user).deliver_later(wait_until: user_trial.trial_end)
+          SubscriptionsMailer.free_trial_end(current_user).deliver_later(wait_until: user_trial.trial_end - 1.day)
+          NotificationsMailer.cancel_notifications(current_user).deliver_later(wait_until: user_trial.trial_end)
         end
       end
     else

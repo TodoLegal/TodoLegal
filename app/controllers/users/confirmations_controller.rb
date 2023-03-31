@@ -15,7 +15,7 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
     end
   end
 
-  def after_confirmation_path_for(resource)
+  def after_confirmation_path_for(resource_name, resource)
    if process_doorkeeper_redirect_to
       return
    else

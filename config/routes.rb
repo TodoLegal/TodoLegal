@@ -104,6 +104,7 @@ Rails.application.routes.draw do
         member do
           get "/", to: 'users_preferences#get_user_preferences'
           patch "/", to: 'users_preferences#update'
+          patch "/deactivate_notifications", to: 'users_preferences#deactivate_notifications'
         end
       end
     end

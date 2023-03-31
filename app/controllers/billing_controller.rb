@@ -238,13 +238,13 @@ class BillingController < ApplicationController
     user.stripe_customer_id = customer.id
     user.save
 
-    if process_doorkeeper_redirect_to
-      return
-    end
+    # if process_doorkeeper_redirect_to
+    #   return
+    # end
 
     respond_to do |format|
       if params["go_to_law"].blank?
-        format.html { redirect_to root_path, notice: I18n.t(:charge_complete) }
+        format.html { redirect_to confirm_email_view_path, notice: I18n.t(:charge_complete) }
       else
         format.html { redirect_to Law.find_by_id(params["go_to_law"]), notice: I18n.t(:charge_complete) }
       end

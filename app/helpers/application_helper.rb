@@ -74,9 +74,9 @@ module ApplicationHelper
       return true
     elsif current_user_type == "basic"
       if !user_trial
-        user_trial = UserTrial.create(user_id: user.id, trial_start: DateTime.now, trial_end: DateTime.now + 2.days, active: true)
+        user_trial = UserTrial.create(user_id: user.id, trial_start: DateTime.now, trial_end: DateTime.now + 1.day, active: true)
         NotificationsMailer.basic_with_active_notifications(user).deliver
-        SubscriptionsMailer.free_trial_end(user).deliver_later(wait_until: user_trial.trial_end - 1.day)
+        SubscriptionsMailer.free_trial_end(user).deliver_later(wait_until: user_trial.trial_end - 12.hours)
         NotificationsMailer.cancel_notifications(user).deliver_later(wait_until: user_trial.trial_end)
       end
       return user_trial.active?

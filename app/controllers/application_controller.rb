@@ -21,8 +21,14 @@ class ApplicationController < ActionController::Base
     return false
   end
 
+
   def after_sign_in_remember_me(resource)
     remember_me resource
+  end
+
+  def after_confirmation_path_for(resource_name, resource)
+    # Customize the redirect URL here
+    redirect_to "https://test.valid.todolegal.app"
   end
   
   def current_user_is_admin

@@ -25,11 +25,6 @@ class ApplicationController < ActionController::Base
   def after_sign_in_remember_me(resource)
     remember_me resource
   end
-
-  def after_confirmation_path_for(resource_name, resource)
-    # Customize the redirect URL here
-    redirect_to "https://test.valid.todolegal.app"
-  end
   
   def current_user_is_admin
     current_user != nil && current_user.permissions.find_by_name("Admin") != nil
@@ -266,6 +261,11 @@ protected
 
   def after_sign_out_path_for(resource)
     signed_out_path
+  end
+
+  def after_confirmation_path_for(resource_name, resource)
+    # Customize the redirect URL here
+    "https://test.valid.todolegal.app"
   end
 
   def findLaws query

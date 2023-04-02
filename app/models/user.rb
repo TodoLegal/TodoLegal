@@ -27,7 +27,7 @@ class User < ApplicationRecord
     @permissionid = UserPermission.find_by(:user_id => self.id)
     if !@permissionid
       return false
-    elsif @permissionid.permission_id==1 
+    elsif @permissionid.permission.name=="Admin" 
       return true
     else
       return false

@@ -18,7 +18,7 @@ es:
       unconfirmed: "Tienes que confirmar tu cuenta antes de continuar."
     mailer:
       confirmation_instructions:
-        subject: "Instrucciones de confirmación"
+        subject: "Confirma tu correo"
       reset_password_instructions:
         subject: "Instrucciones de cambio de contraseña"
       unlock_instructions:

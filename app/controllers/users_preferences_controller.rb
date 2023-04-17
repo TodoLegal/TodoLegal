@@ -12,7 +12,6 @@ class UsersPreferencesController < ApplicationController
     @go_to_law = params[:go_to_law]
     @is_onboarding = params[:is_onboarding]
     @is_monthly = params[:is_monthly]
-    @is_semestral = params[:is_semestral]
     @is_annually = params[:is_annually]
     
     if current_user.blank?
@@ -50,9 +49,6 @@ class UsersPreferencesController < ApplicationController
           end
         elsif !params[:is_monthly].blank?
           format.html { redirect_to checkout_url(is_onboarding:true, go_to_law: params[:go_to_law], is_monthly: params[:is_monthly]) }
-          format.json { render :show, status: :created, location: @users_preference }
-        elsif !params[:is_semestral].blank?
-          format.html { redirect_to checkout_url(is_onboarding:true, go_to_law: params[:go_to_law], is_semestral: params[:is_semestral])}
           format.json { render :show, status: :created, location: @users_preference }
         elsif !params[:is_annually].blank?
           format.html { redirect_to checkout_url(is_onboarding:true, go_to_law: params[:go_to_law], is_annually: params[:is_annually]) }

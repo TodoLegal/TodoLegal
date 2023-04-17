@@ -12,7 +12,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
     @go_to_law = params[:go_to_law]
     @go_to_checkout = params[:go_to_checkout]
     @is_monthly = params[:is_monthly]
-    @is_semestral = params[:is_semestral]
     @is_annually = params[:is_annually]
     @is_student = params[:is_student]
     @pricing_onboarding = params[:pricing_onboarding]
@@ -125,9 +124,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
       if !params[:is_monthly].blank?
         user_trial = UserTrial.create(user_id: current_user.id)
         users_preferences_path(is_onboarding:true, go_to_law: params[:go_to_law], is_monthly: params[:is_monthly])
-      elsif !params[:is_semestral].blank?
-        user_trial = UserTrial.create(user_id: current_user.id)
-        users_preferences_path(is_onboarding:true, go_to_law: params[:go_to_law], is_semestral: params[:is_semestral])
       elsif !params[:is_annually].blank?
         user_trial = UserTrial.create(user_id: current_user.id)
         users_preferences_path(is_onboarding:true, go_to_law: params[:go_to_law], is_annually: params[:is_annually])

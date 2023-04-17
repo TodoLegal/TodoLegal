@@ -22,10 +22,6 @@
                     <%=link_to checkout_path(is_monthly: true, is_onboarding:true), method: :get do %>
                         <span class="skip-btn">omitir.</span>
                     <% end %>
-                <% elsif @is_semestral %>
-                    <%=link_to checkout_path(is_semestral: true, is_onboarding:true), method: :get do %>
-                        <span class="skip-btn">omitir.</span>
-                    <% end %>
                 <% else %>
                     <%=link_to checkout_path(is_annually: true, is_onboarding:true), method: :get do %>
                         <span class="skip-btn">omitir.</span>
@@ -39,11 +35,6 @@
                 <% end %>
             <% elsif @is_monthly %>
                 <%=link_to checkout_path(is_monthly: true, is_onboarding:true), method: :get do %>
-                    <span class="skip-btn">Omitir</span>
-                    <i class="fas fa-arrow-right"></i>
-                <% end %>
-            <% elsif @is_semestral %>
-                <%=link_to checkout_path(is_semestral: true, is_onboarding:true), method: :get do %>
                     <span class="skip-btn">Omitir</span>
                     <i class="fas fa-arrow-right"></i>
                 <% end %>

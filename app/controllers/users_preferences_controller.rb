@@ -60,7 +60,7 @@ class UsersPreferencesController < ApplicationController
         mail_frequency = @users_preference.mail_frequency ? @users_preference.mail_frequency : 0
         
         if mail_frequency > 0
-          MailUserPreferencesJob.set(wait: 1.day).perform_later(current_user)
+          # MailUserPreferencesJob.set(wait: 1.day).perform_later(current_user)
           job = MailUserPreferencesJob.set(wait: @users_preference.mail_frequency.days).perform_later(current_user)
           @users_preference.job_id = job.provider_job_id
           @users_preference.save

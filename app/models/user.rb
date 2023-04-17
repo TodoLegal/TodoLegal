@@ -33,6 +33,10 @@ class User < ApplicationRecord
       return false
     end
    end
+
+   def self.ignore_users_whith_free_trial
+    where.not("EXISTS(SELECT 1 from user_trials where users.id = user_trials.user_id)")
+   end
   
   protected
   def confirmation_required?

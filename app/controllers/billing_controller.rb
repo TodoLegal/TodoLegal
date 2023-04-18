@@ -195,6 +195,8 @@ class BillingController < ApplicationController
     user.stripe_customer_id = customer.id
     user.save
 
+    user_trial = UserTrial.create(user_id: user.id, active: false)
+
     # if process_doorkeeper_redirect_to
     #   return
     # end

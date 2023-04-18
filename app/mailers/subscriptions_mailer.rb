@@ -35,10 +35,6 @@ class SubscriptionsMailer < ApplicationMailer
     # TODO: make this auto calculated again
     # @rounded_all_document_count = 1130
     mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: user.email, subject: 'Tu cuenta está a punto de vencer')
-
-    user_trial = user.user_trial
-    user_trial.active = false
-    user_trial.save
   end
 
   def discount_coupon user

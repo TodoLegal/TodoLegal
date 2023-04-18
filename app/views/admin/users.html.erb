@@ -10,6 +10,12 @@
   <li><%= link_to 'Descargar contribuyentes', download_contributor_users_path(format: :csv) %></li>
 </ul>
 
+<section class="mb-4">
+
+  <h3>Reporte de usuarios con free trial activado</h3>
+  <%= render "email_campaign_report" %>
+</section>
+
 <form action="<%= admin_users_url %>" method="get">
   <div>
     <input name="email" value="<%= @email %>" type="text" placeholder="usuario@correo.com">
@@ -67,7 +73,7 @@
       <% if user_preferences && user_preferences.active_notifications %>
         <td>
           Activadas
-          <form action="/admin/deactivate_notifications" method="post">
+          <form action="/admin/activate_batch_of_users" method="post">
             <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
             <%= hidden_field_tag :user_id, user.id %>
             <div class="form-inline">

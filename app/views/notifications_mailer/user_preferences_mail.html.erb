@@ -21,22 +21,32 @@
                                         <tr>
                                             <td style="background-color: #FFFFFF; text-align: left; padding: 40px;">
                                                 <p
-                                                    style="font-family: 'Lato', Helvetica, Arial, sans-serif; color:#7575A1; font-size: 16px; font-style: normal; line-height: 19px;"
+                                                    style="font-family: 'Lato', Helvetica, Arial, sans-serif; font-style: normal; font-weight: 400; font-size: 16px; line-height: 19px;"
                                                 >
                                                     Hola <%= @user.first_name %>, 
                                                 </p>
+                                                <% if @user_type != "pro" %>
+                                                    <p
+                                                        style="font-family: 'Lato', Helvetica, Arial, sans-serif; font-style: normal; font-weight: 400; font-size: 16px; line-height: 19px;"
+                                                    >
+                                                        Te quedan <%= @remaining_free_trial_time %> días restantes de tu prueba gratis. Para seguir recibiendo notificaciones indefinidamente, puedes <strong>suscribirte</strong> 
+                                                        a uno de nuestros planes en este enlace: 
+                                                        <a href="https://todolegal.app/pricing">https://todolegal.app/pricing</a>. 
+                                                    </p>
+                                                <% end %>
                                                 <p
-                                                    style="font-family: 'Lato', Helvetica, Arial, sans-serif; color:#7575A1; font-size: 16px; font-style: normal; line-height: 19px;"
+                                                    style="font-family: 'Lato', Helvetica, Arial, sans-serif; font-style: normal; font-weight: 400; font-size: 16px; line-height: 19px;"
                                                 >
                                                     Estas son las alertas legales en base a las preferencias que seleccionaste. Si quieres modificar tus preferencias 
                                                     lo puedes hacer dando <a href="https://valid.todolegal.app/users/preferences">click aquí</a>.
                                                 </p>
                                                 <p
-                                                    style="font-family: 'Lato', Helvetica, Arial, sans-serif; color:#7575A1; font-size: 16px; font-style: normal; line-height: 19px;"
+                                                    style="font-family: 'Lato', Helvetica, Arial, sans-serif; font-style: normal; font-weight: 400; font-size: 16px; line-height: 19px;"
                                                 >
                                                     Este correo contiene únicamente hasta 25 notificaciones. Si quieres encontrar todo lo relacionado al tema o institución de tu interés,
                                                     <a href="https://valid.todolegal.app"> ingresa a Valid</a> y realiza la búsqueda avanzada.
                                                 </p>
+                                                
                                                 <%=render partial: 'document_card', locals:{grouped_documents: @documents_to_send}%>
                                             
                                                 <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">

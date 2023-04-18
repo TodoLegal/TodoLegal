@@ -39,8 +39,6 @@
           <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
           <% if @is_monthly %>
             <%= hidden_field_tag :is_monthly, true %>
-          <% elsif @is_semestral %>
-            <%= hidden_field_tag :is_semestral, true %>
           <% elsif @is_annually %>
             <%= hidden_field_tag :is_annually, true %>
           <% elsif @is_student %>
@@ -119,9 +117,6 @@
       <div class="card-heading">
         <% if @is_monthly %>
           <h2 class="card-title">Suscripción mensual</h2>
-        <% elsif @is_semestral %>
-          <h2 class="card-title">Suscripción semestral</h2>
-          <p style="font-size: 14px;"><i>Dependiendo de tu tarjeta de crédito o debito, el cobro puede reflejarse en lempiras o dólares.</i></p>
         <% elsif @is_annually %>
           <h2 class="card-title">Suscripción anual</h2>
           <p style="font-size: 14px;"><i>Dependiendo de tu tarjeta de crédito o debito, el cobro puede reflejarse en lempiras o dólares.</i></p>
@@ -136,78 +131,61 @@
       <% if @is_monthly %>
         <div class="subscription-row">
           <p class="subscription-row-label">Mensualidad</p>
-          <strong class="subscription-row-value">$<%= number_with_precision(@base_price_monthly, :precision => 2) %></strong>
+          <strong class="subscription-row-value">HNL<%= number_with_precision(@base_price_monthly, :precision => 2, :delimiter => ',') %></strong>
         </div>
         <div class="subscription-row subscription-row-total">
           <p class="subscription-row-label">Total</p>
           <strong class="subscription-row-value">
             <% if @is_coupon_valid %>
               <del>
-                $<%= number_with_precision(@base_price_monthly, :precision => 2) %>
+                HNL<%= number_with_precision(@base_price_monthly, :precision => 2, :delimiter => ',') %>
               </del>
             <% else %>
-              $<%= number_with_precision(@base_price_monthly, :precision => 2) %>
+              HNL<%= number_with_precision(@base_price_monthly, :precision => 2, :delimiter => ',') %>
             <% end %>
           </strong>
         </div>
-      <% elsif @is_semestral %>
-        <div class="subscription-row">
-          <p class="subscription-row-label">Mensualidad</p>
-          <strong class="subscription-row-value">$<%= number_with_precision(@monthly_price_semestral, :precision => 2) %></strong>
-        </div>
-        <div class="subscription-row subscription-row-total">
-          <p class="subscription-row-label">Total</p>
-          <strong class="subscription-row-value">
-            <% if @is_coupon_valid %>
-              <del>
-                $<%= number_with_precision(@base_price_semestral, :precision => 2) %>
-              </del>
-            <% else %>
-              $<%= number_with_precision(@base_price_semestral, :precision => 2) %>
-            <% end %>
-        </div>
-
       <% elsif @is_annually %>
         <div class="subscription-row">
           <p class="subscription-row-label">Mensualidad</p>
-          <strong class="subscription-row-value">$<%= number_with_precision(@monthly_price_annually, :precision => 2) %></strong>
+          <strong class="subscription-row-value">HNL<%= number_with_precision(@monthly_price_annually, :precision => 2, :delimiter => ',') %></strong>
         </div>
         <div class="subscription-row subscription-row-total">
           <p class="subscription-row-label">Total</p>
           <strong class="subscription-row-value">
             <% if @is_coupon_valid %>
               <del>
-                $<%= number_with_precision(@base_price_annually, :precision => 2) %>
+                HNL<%= number_with_precision(@base_price_annually, :precision => 2, :delimiter => ',') %>
               </del>
             <% else %>
-              $<%= number_with_precision(@base_price_annually, :precision => 2) %>
+              HNL<%= number_with_precision(@base_price_annually, :precision => 2, :delimiter => ',') %>
             <% end %>
         </div>
       <% else %>
         <div class="subscription-row">
           <p class="subscription-row-label">Mensualidad</p>
-          <strong class="subscription-row-value">$<%= number_with_precision(@base_price_student, :precision => 2) %></strong>
+          <strong class="subscription-row-value">HNL<%= number_with_precision(@base_price_student, :precision => 2) %></strong>
         </div>
         <div class="subscription-row subscription-row-total">
           <p class="subscription-row-label">Total</p>
           <strong class="subscription-row-value">
             <% if @is_coupon_valid %>
               <del>
-                $<%= number_with_precision(@base_price_student, :precision => 2) %>
+                HNL<%= number_with_precision(@base_price_student, :precision => 2, :delimiter => ',') %>
               </del>
             <% else %>
-              $<%= number_with_precision(@base_price_student, :precision => 2) %>
+              HNL<%= number_with_precision(@base_price_student, :precision => 2, :delimiter => ',') %>
             <% end %>
         </div>
       <% end %>
       <% if @is_coupon_valid %>
         <div class="subscription-row">
           <p class="subscription-row-label">Descuento</p>
-          <strong class="subscription-row-value">-$<%= number_with_precision(@discount, :precision => 2) %></strong>
+          <strong class="subscription-row-value">-HNL<%= number_with_precision(@discount, :precision => 2, :delimiter => ',') %></strong>
         </div>
         <div class="subscription-row subscription-row-total">
           <p class="subscription-row-label">Total</p>
-          <strong class="subscription-row-value">$<%= number_with_precision(@total_after_discount, :precision => 2) %></strong>
+          <strong class="subscription-row-value">HNL<%= number_with_precision(@total_after_discount, :precision => 2, :delimiter => ',') %></strong>
         </div>
       <% end %>
       <div class="subscription-row subscription-row-total">
@@ -220,9 +198,6 @@
             <% end %>
             <% if @is_monthly %>
               <%= hidden_field_tag :is_monthly, @is_monthly %>
-            <% end %>
-            <% if @is_semestral %>
-              <%= hidden_field_tag :is_semestral, @is_semestral %>
             <% end %>
             <% if @is_annually %>
               <%= hidden_field_tag :is_annually, @is_annually %>

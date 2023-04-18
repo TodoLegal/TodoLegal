@@ -69,18 +69,17 @@
         <div class="col-lg-4 col-md-12" id="proMensual">
           <div class="card card--dark-100">
             <div class="card-body">
-              <h5 class="card-title">Pro Mensual</h5>
+              <h5 class="card-title">Profesional Mensual</h5>
               <h6 class="card-price">HNL<%= number_with_precision(BASE_PRICE_MONTHLY, :precision => 2, :delimiter => ',') %><span class="period">/mensual</span></h6>
               <div class="row range-label desktop-range-labels">
                 <div class="col-lg-12 col-md-12 pro-labels-container">
                   <label for="customRange1" class="range-top-label">Mensual</label>
-                  <label for="customRange1" class="range-top-label">Semestral</label>
                   <label for="customRange1" class="range-top-label">Anual</label>
                 </div>
               </div>
               <div class="row pro-range desktop-range">
                 <div class="col-lg-12 col-md-12">
-                  <input type="range" class="form-range" min="1" max="3" value="1" id="customRange1" onchange="changeProPlan(this.value)">
+                  <input type="range" class="form-range" min="1" max="2" value="1" id="customRange1" onchange="changeProPlan(this.value)">
                 </div>
               </div>
               
@@ -92,39 +91,9 @@
                 <%= render 'pro_pricing_description' %>
             </div>
             <div class="card-bottom">
-              <%= button_to "Elegir Plan Pro", @select_pro_plan_path, method: :get, params: {is_monthly: true, is_onboarding: @is_onboarding, pricing_onboarding: @pricing_onboarding, go_to_law: @go_to_law}, class:"btn btn-block btn-primary btn-pricing"%>
+              <%= button_to "Elegir Plan Profesional", @select_pro_plan_path, method: :get, params: {is_monthly: true, is_onboarding: @is_onboarding, pricing_onboarding: @pricing_onboarding, go_to_law: @go_to_law}, class:"btn btn-block btn-primary btn-pricing"%>
               <!-- 
               <p class="text-center py-2 change-plan-link" onclick="changePlan(1)">Cambiar a pago anual</p>
-              -->
-            </div>
-          </div>
-        </div>
-
-        <!-- Pro Tier semestral -->
-        <div class="col-lg-4 col-md-12 hide-plan" id="proSemestral">
-          <div class="card card--dark-100">
-            <div class="card-body">
-              <h5 class="card-title">Pro Semestral</h5>
-              <h6 class="card-price">HNL<%= number_with_precision(MONTHLY_PRICE_SEMESTRAL, :precision => 2, :delimiter => ',') %><span class="period">/mensual</span></h6>
-              <small>Facturado a <strong>HNL<%= number_with_precision(BASE_PRICE_SEMESTRAL, :precision => 2, :delimiter => ',') %></strong> semestral -10%</small>
-              <div class="row range-label desktop-range-labels">
-                <div class="col-lg-12 col-md-12 pro-labels-container">
-                  <label for="customRange2" class="range-top-label">Mensual</label>
-                  <label for="customRange2" class="range-top-label">Semestral</label>
-                  <label for="customRange2" class="range-top-label">Anual</label>
-                </div>
-              </div>
-              <div class="row pro-range desktop-range">
-                <div class="col-lg-12 col-md-12">
-                  <input type="range" class="form-range" min="1" max="3" value="2" id="customRange2" onchange="changeProPlan(this.value)">
-                </div>
-              </div>
-              <%= render 'pro_pricing_description' %>
-            </div>
-            <div class="card-bottom">
-              <%= button_to "Elegir Plan Pro", @select_pro_plan_path, method: :get, params: {is_semestral: true, is_onboarding: @is_onboarding, pricing_onboarding: @pricing_onboarding, go_to_law: @go_to_law}, class:"btn btn-block btn-primary btn-pricing"%>
-              <!-- 
-              <p class="text-center py-2 change-plan-link" onclick="changePlan(2)">Cambiar a pago mensual</p>
               -->
             </div>
           </div>
@@ -134,25 +103,24 @@
         <div class="col-lg-4 col-md-12 hide-plan" id="proAnual">
           <div class="card card--dark-100">
             <div class="card-body">
-              <h5 class="card-title">Pro Anual</h5>
+              <h5 class="card-title">Profesional Anual</h5>
               <h6 class="card-price">HNL<%= number_with_precision(MONTHLY_PRICE_ANNUALLY, :precision => 2, :delimiter => ',') %><span class="period">/mensual</span></h6>
               <small>Facturado a <strong>HNL<%= number_with_precision(BASE_PRICE_ANNUALLY, :precision => 2, :delimiter => ',') %></strong> anual -20%</small>
               <div class="row range-label desktop-range-labels">
                 <div class="col-lg-12 col-md-12 pro-labels-container">
-                  <label for="customRange3" class="range-top-label">Mensual</label>
-                  <label for="customRange3" class="range-top-label">Semestral</label>
-                  <label for="customRange3" class="range-top-label">Anual</label>
+                  <label for="customRange2" class="range-top-label">Mensual</label>
+                  <label for="customRange2" class="range-top-label">Anual</label>
                 </div>
               </div>
               <div class="row pro-range desktop-range">
                 <div class="col-lg-12 col-md-12">
-                  <input type="range" class="form-range" min="1" max="3" value="3" id="customRange3" onchange="changeProPlan(this.value)">
+                  <input type="range" class="form-range" min="1" max="2" value="2" id="customRange2" onchange="changeProPlan(this.value)">
                 </div>
               </div>
               <%= render 'pro_pricing_description' %>
             </div>
             <div class="card-bottom">
-              <%= button_to "Elegir Plan Pro", @select_pro_plan_path, method: :get, params: {is_annually: true, is_onboarding: @is_onboarding, pricing_onboarding: @pricing_onboarding, go_to_law: @go_to_law}, class:"btn btn-block btn-primary btn-pricing"%>
+              <%= button_to "Elegir Plan Profesional", @select_pro_plan_path, method: :get, params: {is_annually: true, is_onboarding: @is_onboarding, pricing_onboarding: @pricing_onboarding, go_to_law: @go_to_law}, class:"btn btn-block btn-primary btn-pricing"%>
               <!-- 
               <p class="text-center py-2 change-plan-link" onclick="changePlan(2)">Cambiar a pago mensual</p>
               -->
@@ -199,35 +167,21 @@
       switch (value) {
         case "1":
           document.getElementById("proMensual").classList.remove('hide-plan');
-          document.getElementById("proSemestral").classList.add('hide-plan');
           document.getElementById("proAnual").classList.add('hide-plan');
 
           document.getElementById("customRange2").value = 2
-          document.getElementById("customRange3").value = 3
           break;
         case "2":
           document.getElementById("proMensual").classList.add('hide-plan');
-          document.getElementById("proSemestral").classList.remove('hide-plan');
-          document.getElementById("proAnual").classList.add('hide-plan');
-
-          document.getElementById("customRange1").value = 1
-          document.getElementById("customRange3").value = 3
-          break;
-        case "3":
-          document.getElementById("proMensual").classList.add('hide-plan');
-          document.getElementById("proSemestral").classList.add('hide-plan');
           document.getElementById("proAnual").classList.remove('hide-plan');
 
           document.getElementById("customRange1").value = 1
-          document.getElementById("customRange2").value = 2
           break;
         default:
           document.getElementById("proMensual").classList.remove('hide-plan');
-          document.getElementById("proSemestral").classList.add('hide-plan');
           document.getElementById("proAnual").classList.add('hide-plan');
 
           document.getElementById("customRange2").value = 2
-          document.getElementById("customRange3").value = 3
           break;
       }
     }

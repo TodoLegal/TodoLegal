@@ -12,7 +12,6 @@ class UsersPreferencesController < ApplicationController
     @go_to_law = params[:go_to_law]
     @is_onboarding = params[:is_onboarding]
     @is_monthly = params[:is_monthly]
-    @is_semestral = params[:is_semestral]
     @is_annually = params[:is_annually]
     
     if current_user.blank?
@@ -51,9 +50,6 @@ class UsersPreferencesController < ApplicationController
         elsif !params[:is_monthly].blank?
           format.html { redirect_to checkout_url(is_onboarding:true, go_to_law: params[:go_to_law], is_monthly: params[:is_monthly]) }
           format.json { render :show, status: :created, location: @users_preference }
-        elsif !params[:is_semestral].blank?
-          format.html { redirect_to checkout_url(is_onboarding:true, go_to_law: params[:go_to_law], is_semestral: params[:is_semestral])}
-          format.json { render :show, status: :created, location: @users_preference }
         elsif !params[:is_annually].blank?
           format.html { redirect_to checkout_url(is_onboarding:true, go_to_law: params[:go_to_law], is_annually: params[:is_annually]) }
           format.json { render :show, status: :created, location: @users_preference }
@@ -64,8 +60,8 @@ class UsersPreferencesController < ApplicationController
         mail_frequency = @users_preference.mail_frequency ? @users_preference.mail_frequency : 0
         
         if mail_frequency > 0
-          MailUserPreferencesJob.set(wait: 1.day).perform_later(current_user)
-          job = MailUserPreferencesJob.set(wait: @users_preference.mail_frequency.days).perform_later(current_user)
+          # MailUserPreferencesJob.set(wait: 1.day).perform_later(current_user)
+          job = MailUserPreferencesJob.set(wait: @users_preference.mail_frequency.hours).perform_later(current_user)
           @users_preference.job_id = job.provider_job_id
           @users_preference.save
         end

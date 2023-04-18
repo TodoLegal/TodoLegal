@@ -224,7 +224,7 @@ class AdminController < ApplicationController
 
   def activate_batch_of_users
     #tributario, reformas, aduanas, subsidio, mercantil
-    default_tags_names = ["Tributario", "Reformas", "Aduanas", "Subsidio", "Mercantil", "Congreso Nacional", "Secretaría de Desarrollo Económico"]
+    default_tags_names = ["Tributario", "Reformas", "Aduanas", "Subsidio", "Mercantil", "Congreso Nacional", "Secretaría de Desarrollo Económico", "Administrativo"]
     default_tags_id = []
     default_frequency = 1
 
@@ -239,21 +239,21 @@ class AdminController < ApplicationController
 
     batch_of_users.each do | user |
       #first create a free_trial entry
-      user_trial = UserTrial.create(user_id: user.id, trial_start: DateTime.now, trial_end: DateTime.now + 1.day, active: true)
+      user_trial = UserTrial.create(user_id: user.id, trial_start: DateTime.now, trial_end: DateTime.now + 2.hours, active: true)
       
       #check if the user has active notifications
       user_has_preferences = user.users_preference
       if user_has_preferences
         if current_user_type_api(user) != "pro" 
           NotificationsMailer.basic_with_active_notifications(user).deliver
-          SubscriptionsMailer.free_trial_end(current_user).deliver_later(wait_until: user_trial.trial_end - 12.hours)
+          SubscriptionsMailer.free_trial_end(current_user).deliver_later(wait_until: user_trial.trial_end - 1.hours)
           NotificationsMailer.cancel_notifications(current_user).deliver_later(wait_until: user_trial.trial_end)
         end
       else
         user_preferences = UsersPreference.create(user_id: user.id, mail_frequency: default_frequency, user_preference_tags: default_tags_id)
         if current_user_type_api(user) != "pro"
           NotificationsMailer.basic_without_active_notifications(user).deliver
-          SubscriptionsMailer.free_trial_end(current_user).deliver_later(wait_until: user_trial.trial_end - 12.hours)
+          SubscriptionsMailer.free_trial_end(current_user).deliver_later(wait_until: user_trial.trial_end - 1.hours)
           NotificationsMailer.cancel_notifications(current_user).deliver_later(wait_until: user_trial.trial_end)
         elsif current_user_type_api(user) == "pro"
           NotificationsMailer.pro_without_active_notifications(user).deliver

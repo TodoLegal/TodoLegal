@@ -41,10 +41,10 @@ class NotificationsMailer < ApplicationMailer
     user_trial = user.user_trial
 
     if !user_trial && current_user_type_api(user) != "pro"
-      user_trial = UserTrial.create(user_id: user.id, trial_start: DateTime.now, trial_end: DateTime.now + 1.day, active: true)
-      # NotificationsMailer.basic_with_active_notifications(user).deliver
-      # SubscriptionsMailer.free_trial_end(user).deliver_later(wait_until: user_trial.trial_end - 12.hours)
-      # NotificationsMailer.cancel_notifications(user).deliver_later(wait_until: user_trial.trial_end)
+      user_trial = UserTrial.create(user_id: user.id, trial_start: DateTime.now, trial_end: DateTime.now + 2.hours, active: true)
+      NotificationsMailer.basic_with_active_notifications(user).deliver
+      SubscriptionsMailer.free_trial_end(user).deliver_later(wait_until: user_trial.trial_end - 1.hours)
+      NotificationsMailer.cancel_notifications(user).deliver_later(wait_until: user_trial.trial_end)
     end
 
     return remaining_free_trial_time(user)
@@ -118,7 +118,7 @@ class NotificationsMailer < ApplicationMailer
 
       #checks if user has a history, if it does, schedules a new job
       if @user_notifications_history
-        job = MailUserPreferencesJob.set(wait: @user_preferences.mail_frequency.days).perform_later(@user)
+        job = MailUserPreferencesJob.set(wait: @user_preferences.mail_frequency.hours).perform_later(@user)
         @user_preferences.job_id = job.provider_job_id
         @user_preferences.save
       end

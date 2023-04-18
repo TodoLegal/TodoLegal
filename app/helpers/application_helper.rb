@@ -77,9 +77,9 @@ module ApplicationHelper
       return true
     elsif current_user_type == "basic"
       if !user_trial
-        user_trial = UserTrial.create(user_id: user.id, trial_start: DateTime.now, trial_end: DateTime.now + 1.day, active: true)
+        user_trial = UserTrial.create(user_id: user.id, trial_start: DateTime.now, trial_end: DateTime.now + 2.hours, active: true)
         NotificationsMailer.basic_with_active_notifications(user).deliver
-        SubscriptionsMailer.free_trial_end(user).deliver_later(wait_until: user_trial.trial_end - 12.hours)
+        SubscriptionsMailer.free_trial_end(user).deliver_later(wait_until: user_trial.trial_end - 1.hours)
         NotificationsMailer.cancel_notifications(user).deliver_later(wait_until: user_trial.trial_end)
       end
       return user_trial.active?
@@ -204,7 +204,7 @@ module ApplicationHelper
   def enqueue_new_job user
     @user_preferences = UsersPreference.find_by(user_id: user.id)
     mail_frequency = @user_preferences.mail_frequency
-    job = MailUserPreferencesJob.set(wait: @user_preferences.mail_frequency.days).perform_later(user)
+    job = MailUserPreferencesJob.set(wait: @user_preferences.mail_frequency.hours).perform_later(user)
     @user_preferences.job_id = job.provider_job_id
     @user_preferences.save
   end

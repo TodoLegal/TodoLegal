@@ -1,6 +1,6 @@
 class AdminController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_action :authenticate_admin!, only: [:gazettes, :gazette, :users, :download_contributor_users, :download_recieve_information_users, :grant_permission, :revoke_permission, :set_law_access, :deactivate_notifications, :activate_notifications, :activate_batch_of_users, :get_users_with_free_trial_activated]
+  before_action :authenticate_admin!, only: [:gazettes, :gazette, :users, :download_contributor_users, :download_recieve_information_users, :grant_permission, :revoke_permission, :set_law_access, :deactivate_notifications, :activate_notifications, :activate_batch_of_users]
   include ApplicationHelper
 
   def gazettes
@@ -59,6 +59,9 @@ class AdminController < ApplicationController
       @users = User.all.limit(10)
     end
     @permissions = Permission.all
+
+    @users_with_free_trial = UserTrial.count
+    @users_left = User.count - UserTrial.count
 
     respond_to do |format|
       format.html
@@ -232,7 +235,7 @@ class AdminController < ApplicationController
       end
     end
 
-    batch_of_users = User.ignore_users_whith_free_trial.last(700)
+    batch_of_users = User.ignore_users_whith_free_trial.order(created_at: :desc).last(4)
 
     batch_of_users.each do | user |
       #first create a free_trial entry

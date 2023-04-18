@@ -1,0 +1,24 @@
+<table border="1">
+  <tr>
+    <th>Usuarios que han recibo correos</th>
+    <th>Usuarios faltantes</th>
+  </tr>
+  <tr>
+    <td>
+      <%= @users_with_free_trial %>
+    </td>
+    <td> 
+      <%= @users_left %>
+    </td>
+  </tr>
+</table>
+<% if @users_left != 0 %>
+  <form action="/admin/activate_batch_of_users" method="post">
+    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+    <div class="form-inline">
+      <button class="btn btn-primary" type="submit" type="button">Enviar siguiente batch</button>
+    </div>
+  </form>
+<% else %>
+  <button class="btn btn-primary" type="submit" type="button" disabled>No pendientes</button>
+<% end%>

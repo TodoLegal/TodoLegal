@@ -79,7 +79,7 @@
               </div>
               <div class="row pro-range desktop-range">
                 <div class="col-lg-12 col-md-12">
-                  <input type="range" class="form-range" min="1" max="3" value="1" id="customRange1" onchange="changeProPlan(this.value)">
+                  <input type="range" class="form-range" min="1" max="2" value="1" id="customRange1" onchange="changeProPlan(this.value)">
                 </div>
               </div>
               
@@ -108,13 +108,13 @@
               <small>Facturado a <strong>HNL<%= number_with_precision(BASE_PRICE_ANNUALLY, :precision => 2, :delimiter => ',') %></strong> anual -20%</small>
               <div class="row range-label desktop-range-labels">
                 <div class="col-lg-12 col-md-12 pro-labels-container">
-                  <label for="customRange3" class="range-top-label">Mensual</label>
-                  <label for="customRange3" class="range-top-label">Anual</label>
+                  <label for="customRange2" class="range-top-label">Mensual</label>
+                  <label for="customRange2" class="range-top-label">Anual</label>
                 </div>
               </div>
               <div class="row pro-range desktop-range">
                 <div class="col-lg-12 col-md-12">
-                  <input type="range" class="form-range" min="1" max="3" value="3" id="customRange3" onchange="changeProPlan(this.value)">
+                  <input type="range" class="form-range" min="1" max="2" value="2" id="customRange2" onchange="changeProPlan(this.value)">
                 </div>
               </div>
               <%= render 'pro_pricing_description' %>
@@ -169,16 +169,9 @@
           document.getElementById("proMensual").classList.remove('hide-plan');
           document.getElementById("proAnual").classList.add('hide-plan');
 
-          document.getElementById("customRange3").value = 3
+          document.getElementById("customRange2").value = 2
           break;
         case "2":
-          document.getElementById("proMensual").classList.add('hide-plan');
-          document.getElementById("proAnual").classList.add('hide-plan');
-
-          document.getElementById("customRange1").value = 1
-          document.getElementById("customRange3").value = 3
-          break;
-        case "3":
           document.getElementById("proMensual").classList.add('hide-plan');
           document.getElementById("proAnual").classList.remove('hide-plan');
 
@@ -188,7 +181,7 @@
           document.getElementById("proMensual").classList.remove('hide-plan');
           document.getElementById("proAnual").classList.add('hide-plan');
 
-          document.getElementById("customRange3").value = 3
+          document.getElementById("customRange2").value = 2
           break;
       }
     }

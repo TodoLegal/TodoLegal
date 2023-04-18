@@ -19,9 +19,9 @@ class MailUserPreferencesJob < ApplicationJob
 
       #if tag is Institución type, query documents from issuers_document_tags table only
       if @current_tag && @current_tag.tag_type_id == @institution_tag_type
-        temp = Document.joins(:issuer_document_tags).select(:id, :tag_id,  :name, :issue_id, :publication_number, :publication_date, :description, :url).where('publication_date > ?',(Date.today - 45.day).to_datetime).where('documents.updated_at <= ?', DateTime.now - 20.minutes).where('issuer_document_tags.tag_id'=> tag)
+        temp = Document.joins(:issuer_document_tags).select(:id, :tag_id,  :name, :issue_id, :publication_number, :publication_date, :description, :url).where('publication_date > ?',(Date.today - 3000.day).to_datetime).where('documents.updated_at <= ?', DateTime.now - 20.minutes).where('issuer_document_tags.tag_id'=> tag)
       else
-        temp = Document.joins(:document_tags).select(:id, :tag_id,  :name, :issue_id, :publication_number, :publication_date, :description, :url).where('publication_date > ?',(Date.today - 45.day).to_datetime).where('documents.updated_at <= ?', DateTime.now - 20.minutes).where('document_tags.tag_id'=> tag)
+        temp = Document.joins(:document_tags).select(:id, :tag_id,  :name, :issue_id, :publication_number, :publication_date, :description, :url).where('publication_date > ?',(Date.today - 3000.day).to_datetime).where('documents.updated_at <= ?', DateTime.now - 20.minutes).where('document_tags.tag_id'=> tag)
       end
 
       #if tag is Mercantil, discard documents that are Marcas de Fabrica 

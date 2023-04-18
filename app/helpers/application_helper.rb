@@ -71,6 +71,9 @@ module ApplicationHelper
     end
 
     if current_user_type == "pro"
+      if !user_trial
+        user_trial = UserTrial.create(user_id: user.id, active: false)
+      end
       return true
     elsif current_user_type == "basic"
       if !user_trial

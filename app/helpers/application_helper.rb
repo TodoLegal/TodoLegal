@@ -93,25 +93,25 @@ module ApplicationHelper
     end
 
     if current_user_type == "pro"
+      if !user_trial 
+        user_trial = UserTrial.create(user_id: user.id, active: false)
+      end
       if !user_preferences
-        created_preferences = create_preferences(user)
+        user_preferences = create_preferences(user)
         NotificationsMailer.pro_without_active_notifications(user).deliver
         enqueue_new_job(user)
       end
-      if !user_trial
-        user_trial = UserTrial.create(user_id: user.id, active: false)
-      end
       return true
     elsif current_user_type == "basic"
-      if !user_preferences
-        created_preferences = create_preferences(user)
-        enqueue_new_job(user)
-      end
       if !user_trial
         user_trial = UserTrial.create(user_id: user.id, trial_start: DateTime.now, trial_end: DateTime.now + 2.weeks, active: true)
         NotificationsMailer.basic_with_active_notifications(user).deliver
         SubscriptionsMailer.free_trial_end(user).deliver_later(wait_until: user_trial.trial_end - 1.days)
         NotificationsMailer.cancel_notifications(user).deliver_later(wait_until: user_trial.trial_end)
+      end
+      if !user_preferences
+        user_preferences = create_preferences(user)
+        enqueue_new_job(user)
       end
       return user_trial.active?
     else

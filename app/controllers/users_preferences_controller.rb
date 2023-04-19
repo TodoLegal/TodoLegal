@@ -108,9 +108,9 @@ class UsersPreferencesController < ApplicationController
 
     respond_to do |format|
       if @redirect_to_valid
-        format.html { redirect_to "https://test.valid.todolegal.app?preferences=true"}
+        format.html { redirect_to "https://valid.todolegal.app?preferences=true"}
       else
-        format.html { redirect_to "https://test.valid.todolegal.app?preferences=false"}
+        format.html { redirect_to "https://valid.todolegal.app?preferences=false"}
       end
     end
 

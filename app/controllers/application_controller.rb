@@ -266,7 +266,7 @@ protected
   def after_confirmation_path_for(resource_name, resource)
     # Customize the redirect URL here
     puts "Uses customized method in application_controller"
-    "https://test.valid.todolegal.app"
+    "https://valid.todolegal.app"
   end
 
   def findLaws query

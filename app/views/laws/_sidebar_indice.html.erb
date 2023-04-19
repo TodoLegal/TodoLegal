@@ -21,7 +21,7 @@
         <% end %>
       <% end %>
     <% else %>
-      <% @index_items.each do |index_items|%>
+      <% @result_index_items.each do |index_items|%>
         <% if index_items.instance_of? Book %>
           <li>
             <a class="uncolored_link" href="#book_<%= index_items.position %>" onclick="return colapseIndice();">

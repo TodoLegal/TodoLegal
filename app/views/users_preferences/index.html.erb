@@ -15,15 +15,11 @@
             <p class="preferences-p2"> 
                 Si deseas programar tus notificaciones personalizadas en otro momento, puedes darle click a  
                 <% if @redirect_to_valid %>
-                    <%=link_to "https://valid.todolegal.app", method: :get do %>
+                    <%=link_to confirm_email_view_path(redirect_to_valid: @redirect_to_valid), method: :get do %>
                         <span class="skip-btn">omitir.</span>
                     <% end %>
                 <% elsif @is_monthly %>
                     <%=link_to checkout_path(is_monthly: true, is_onboarding:true), method: :get do %>
-                        <span class="skip-btn">omitir.</span>
-                    <% end %>
-                <% elsif @is_semestral %>
-                    <%=link_to checkout_path(is_semestral: true, is_onboarding:true), method: :get do %>
                         <span class="skip-btn">omitir.</span>
                     <% end %>
                 <% else %>
@@ -33,17 +29,12 @@
                 <% end %>
             </p>
             <% if @redirect_to_valid %>
-                <%=link_to "https://valid.todolegal.app", method: :get do %>
+                <%=link_to confirm_email_view_path(redirect_to_valid: @redirect_to_valid), method: :get do %>
                     <span class="skip-btn">Omitir</span>
                     <i class="fas fa-arrow-right"></i>
                 <% end %>
             <% elsif @is_monthly %>
                 <%=link_to checkout_path(is_monthly: true, is_onboarding:true), method: :get do %>
-                    <span class="skip-btn">Omitir</span>
-                    <i class="fas fa-arrow-right"></i>
-                <% end %>
-            <% elsif @is_semestral %>
-                <%=link_to checkout_path(is_semestral: true, is_onboarding:true), method: :get do %>
                     <span class="skip-btn">Omitir</span>
                     <i class="fas fa-arrow-right"></i>
                 <% end %>
@@ -83,7 +74,7 @@
 
     .user-preferences-right{
         border-radius: 12px;
-        height: 500px;
+        min-height: 500px;
         margin-left: 40%;
         margin-right: 0px; 
         padding-left: 10%;

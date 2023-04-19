@@ -10,7 +10,7 @@ Doorkeeper.configure do
     # Put your resource owner authentication logic here.
     # Example implementation:
     if !current_user and params[:go_to_signup] == "true"
-      redirect_to new_user_registration_path(return_to: request.fullpath)
+      redirect_to pricing_path(return_to: request.fullpath)
     elsif !current_user
       redirect_to new_user_session_url(return_to: request.fullpath)
     else

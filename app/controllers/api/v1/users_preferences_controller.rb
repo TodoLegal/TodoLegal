@@ -68,9 +68,9 @@ class Api::V1::UsersPreferencesController < ApplicationController
 
                 if default_frequency.to_i > 0
                     #send an email the next day only if the user selected a frequency greater than 1 day
-                    if default_frequency.to_i != 1
-                        MailUserPreferencesJob.set(wait: 1.day).perform_later(@user)
-                    end
+                    # if default_frequency.to_i != 1
+                    #     MailUserPreferencesJob.set(wait: 1.day).perform_later(@user)
+                    # end
                     job = MailUserPreferencesJob.set(wait: default_frequency.to_i.days).perform_later(@user)
                     @preferences.job_id = job.provider_job_id
                     @preferences.save

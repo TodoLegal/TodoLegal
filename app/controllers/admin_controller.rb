@@ -235,7 +235,7 @@ class AdminController < ApplicationController
       end
     end
 
-    batch_of_users = User.ignore_users_whith_free_trial.order(created_at: :desc).last(2)
+    batch_of_users = User.ignore_users_whith_free_trial.order(created_at: :asc).last(2)
 
     batch_of_users.each do | user |
       #first create a free_trial entry

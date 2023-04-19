@@ -61,7 +61,7 @@ class UsersPreferencesController < ApplicationController
         
         if mail_frequency > 0
           # MailUserPreferencesJob.set(wait: 1.day).perform_later(current_user)
-          job = MailUserPreferencesJob.set(wait: @users_preference.mail_frequency.hours).perform_later(current_user)
+          job = MailUserPreferencesJob.set(wait: @users_preference.mail_frequency.days).perform_later(current_user)
           @users_preference.job_id = job.provider_job_id
           @users_preference.save
         end
@@ -108,9 +108,9 @@ class UsersPreferencesController < ApplicationController
 
     respond_to do |format|
       if @redirect_to_valid
-        format.html { redirect_to "https://test.valid.todolegal.app?preferences=true"}
+        format.html { redirect_to "https://valid.todolegal.app?preferences=true"}
       else
-        format.html { redirect_to "https://test.valid.todolegal.app?preferences=false"}
+        format.html { redirect_to "https://valid.todolegal.app?preferences=false"}
       end
     end
 

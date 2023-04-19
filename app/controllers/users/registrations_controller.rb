@@ -129,10 +129,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
         users_preferences_path(is_onboarding:true, go_to_law: params[:go_to_law], is_annually: params[:is_annually])
       else
         #When user chooses Prueba Gratis
-        user_trial = UserTrial.create(user_id: current_user.id, trial_start: DateTime.now, trial_end: DateTime.now + 2.hours, active: true)
+        user_trial = UserTrial.create(user_id: current_user.id, trial_start: DateTime.now, trial_end: DateTime.now + 2.weeks, active: true)
         if ENV['MAILGUN_KEY']
           SubscriptionsMailer.welcome_basic_user(current_user).deliver
-          SubscriptionsMailer.free_trial_end(current_user).deliver_later(wait_until: user_trial.trial_end - 1.hours)
+          SubscriptionsMailer.free_trial_end(current_user).deliver_later(wait_until: user_trial.trial_end - 1.days)
           NotificationsMailer.cancel_notifications(current_user).deliver_later(wait_until: user_trial.trial_end)
         end
 

@@ -223,8 +223,7 @@ class AdminController < ApplicationController
   end
 
   def activate_batch_of_users
-    #tributario, reformas, aduanas, subsidio, mercantil
-    default_tags_names = ["Tributario", "Reformas", "Aduanas", "Subsidio", "Mercantil", "Congreso Nacional", "Secretaría de Desarrollo Económico", "Administrativo"]
+    default_tags_names = ["Tributario", "Reformas", "Aduanas", "Subsidio", "Mercantil", "Congreso Nacional", "Secretaría de Desarrollo Económico"]
     default_tags_id = []
     default_frequency = 1
 
@@ -235,7 +234,7 @@ class AdminController < ApplicationController
       end
     end
 
-    batch_of_users = User.ignore_users_whith_free_trial.order(created_at: :asc).last(2)
+    batch_of_users = User.ignore_users_whith_free_trial.order(created_at: :asc).last(50)
 
     batch_of_users.each do | user |
       #first create a free_trial entry

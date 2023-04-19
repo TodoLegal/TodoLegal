@@ -3,6 +3,7 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   layout "onboarding"
   include Devise::Controllers::Helpers
+  include ApplicationHelper
   #skip_before_filter :verify_authenticity_token, :only => :create
   # before_action :configure_sign_up_params, only: [:create]
   # before_action :configure_account_update_params, only: [:update]
@@ -28,6 +29,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # GET /resource/edit
   def edit
+    @has_pro_permission = current_user_is_pro
     if current_user and current_user.stripe_customer_id
       begin
         @customer = Stripe::Customer.retrieve(current_user.stripe_customer_id)

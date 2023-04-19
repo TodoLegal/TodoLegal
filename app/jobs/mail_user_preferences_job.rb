@@ -55,7 +55,7 @@ class MailUserPreferencesJob < ApplicationJob
     end
 
     #limit the documents array to be 25 or less documents
-    if filtered_documents.length >= 24 
+    if filtered_documents.length >= 3 
       cont = 0
       filtered_documents.each do |id|
         if cont <= 24

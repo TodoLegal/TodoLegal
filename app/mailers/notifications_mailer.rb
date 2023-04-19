@@ -116,12 +116,7 @@ class NotificationsMailer < ApplicationMailer
         'location' => "Notifications mailer"
       })
 
-      #checks if user has a history, if it does, schedules a new job
-      if @user_notifications_history
-        job = MailUserPreferencesJob.set(wait: @user_preferences.mail_frequency.hours).perform_later(@user)
-        @user_preferences.job_id = job.provider_job_id
-        @user_preferences.save
-      end
+      enqueue_new_job(@user)
   end
 
   def pro_without_active_notifications user

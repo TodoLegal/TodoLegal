@@ -194,8 +194,11 @@ class BillingController < ApplicationController
     user = User.find_by_email(params["email"])
     user.stripe_customer_id = customer.id
     user.save
-
-    user_trial = UserTrial.create(user_id: user.id, active: false)
+    user_trial = UserTrial.find_by(user_id: user.id)
+    
+    if !user_trial
+      user_trial = UserTrial.create(user_id: user.id, active: false)
+    end
 
     # if process_doorkeeper_redirect_to
     #   return

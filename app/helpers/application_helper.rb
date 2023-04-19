@@ -204,7 +204,7 @@ module ApplicationHelper
   def enqueue_new_job user
     @user_preferences = UsersPreference.find_by(user_id: user.id)
     mail_frequency = @user_preferences.mail_frequency
-    job = MailUserPreferencesJob.set(wait: @user_preferences.mail_frequency.hours).perform_later(user)
+    job = MailUserPreferencesJob.set(wait: @user_preferences.mail_frequency.minutes + 5.minutes).perform_later(user)
     @user_preferences.job_id = job.provider_job_id
     @user_preferences.save
   end

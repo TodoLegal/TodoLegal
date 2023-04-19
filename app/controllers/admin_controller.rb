@@ -246,15 +246,15 @@ class AdminController < ApplicationController
       if user_has_preferences
         if current_user_type_api(user) != "pro" 
           NotificationsMailer.basic_with_active_notifications(user).deliver
-          SubscriptionsMailer.free_trial_end(current_user).deliver_later(wait_until: user_trial.trial_end - 1.hours)
-          NotificationsMailer.cancel_notifications(current_user).deliver_later(wait_until: user_trial.trial_end)
+          SubscriptionsMailer.free_trial_end(user).deliver_later(wait_until: user_trial.trial_end - 1.hours)
+          NotificationsMailer.cancel_notifications(user).deliver_later(wait_until: user_trial.trial_end)
         end
       else
         user_preferences = UsersPreference.create(user_id: user.id, mail_frequency: default_frequency, user_preference_tags: default_tags_id)
         if current_user_type_api(user) != "pro"
           NotificationsMailer.basic_without_active_notifications(user).deliver
-          SubscriptionsMailer.free_trial_end(current_user).deliver_later(wait_until: user_trial.trial_end - 1.hours)
-          NotificationsMailer.cancel_notifications(current_user).deliver_later(wait_until: user_trial.trial_end)
+          SubscriptionsMailer.free_trial_end(user).deliver_later(wait_until: user_trial.trial_end - 1.hours)
+          NotificationsMailer.cancel_notifications(user).deliver_later(wait_until: user_trial.trial_end)
         elsif current_user_type_api(user) == "pro"
           NotificationsMailer.pro_without_active_notifications(user).deliver
           user_trial.active = false

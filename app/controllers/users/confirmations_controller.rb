@@ -17,7 +17,7 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
 
   # def after_confirmation_path_for(resource_name, resource)
   #   # Customize the redirect URL here
-  #   "https://test.valid.todolegal.app"
+  #   "https://valid.todolegal.app"
   # end
 
   def show

@@ -12,9 +12,6 @@
       <% if @is_monthly %>
         <input type="hidden" id="is_monthly" name="is_monthly" value="<%= @is_monthly %>">
       <% end %>
-      <% if @is_semestral %>
-        <input type="hidden" id="is_semestral" name="is_semestral" value="<%= @is_semestral %>">
-      <% end %>
       <% if @is_annually %>
         <input type="hidden" id="is_annually" name="is_annually" value="<%= @is_annually %>">
       <% end %>
@@ -54,6 +51,11 @@
           <div class="form-group">
             <%= f.label :Correo_eléctronico %><br />
             <%= f.email_field :email, autocomplete: "email", class:"form-control", id:"email"%>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :Número_de_teléfono %><br />
+            <%= f.text_field :phone_number, autocomplete: "phone-number", class:"form-control", id:"phone"%>
           </div>
 
           <div class="form-group">

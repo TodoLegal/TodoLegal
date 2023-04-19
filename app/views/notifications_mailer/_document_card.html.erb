@@ -38,17 +38,17 @@
                 Gaceta: <%= document[:doc].publication_number %>
                 </p>
                 <%= link_to "https://valid.todolegal.app/gaceta/honduras/#{form_url_field(document[:doc])}/#{document[:doc].id}", class:"share" do %>
-                    <img class="download-icon" alt="Download Icon" 
-                        style="width: 20px; height: 22px;"
-                        src="https://todolegal.app/img/mails/download.png"
-                    />
-                <% end %>
-                &nbsp;&nbsp;
-                <%= link_to "https://valid.todolegal.app/gaceta/honduras/#{form_url_field(document[:doc])}/#{document[:doc].id}", class:"share" do %>
-                    <img class="download-icon" alt="Twitter Icon" 
-                        style="width: 20px; height: 22px;"
-                        src="https://todolegal.app/img/twitter.png"
-                    />
+                    <button
+                        type="button"
+                        style="padding: 5px; border-radius: 8px; border: 2px solid #afafaf; cursor: pointer;"
+                    > 
+                        <img class="download-icon" alt="Download Icon" 
+                            style="width: 20px; height: 22px;"
+                            src="https://todolegal.app/img/mails/download.png"
+                        />
+                        <span style="margin-bottom: 20px; padding-bottom: 5px;">Descargar</span>
+                    </button>
+                    
                 <% end %>
                 <p class="doc-card-description"
                     style="font-family: 'Lato', Helvetica, Arial, sans-serif; font-style: normal; font-weight: 400; font-size: 16px; line-height: 19px;"

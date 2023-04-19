@@ -13,11 +13,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
     @go_to_law = params[:go_to_law]
     @go_to_checkout = params[:go_to_checkout]
     @is_monthly = params[:is_monthly]
-    @is_semestral = params[:is_semestral]
     @is_annually = params[:is_annually]
     @is_student = params[:is_student]
     @pricing_onboarding = params[:pricing_onboarding]
-    session[:return_to] = params[:return_to] if params[:return_to]
+    # session[:return_to] = params[:return_to] if params[:return_to]
     super
 
   end
@@ -98,6 +97,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       '$email'            => current_user.email,
       'first_name'      => current_user.first_name,
       'last_name'      => current_user.last_name,
+      'phone_number'    => current_user.phone_number,
       'occupation'      => current_user.occupation,
       'is_contributor'      => current_user.is_contributor,
       'current_sign_in_at'      => current_user.current_sign_in_at,
@@ -106,12 +106,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
       'last_sign_in_ip'      => current_user.last_sign_in_ip,
       'receive_information_emails'      => current_user.receive_information_emails
       })
+    
+    if ENV['MAILGUN_KEY']
+      current_user.send_confirmation_instructions
+    end
 
-      if ENV['MAILGUN_KEY']
-        SubscriptionsMailer.welcome_basic_user(current_user).deliver
-        current_user.send_confirmation_instructions
-      end
-      
     end
     if $discord_bot
       $discord_bot.send_message($discord_bot_channel_notifications, "Se ha registrado un nuevo usuario :tada:")
@@ -125,13 +124,20 @@ class Users::RegistrationsController < Devise::RegistrationsController
       #TODO 
       #Otro if igual al primero con un && is_student y que dentro del envie is_student de param en lugar de is_monthly
       if !params[:is_monthly].blank?
+        user_trial = UserTrial.create(user_id: current_user.id)
         users_preferences_path(is_onboarding:true, go_to_law: params[:go_to_law], is_monthly: params[:is_monthly])
-      elsif !params[:is_semestral].blank?
-        users_preferences_path(is_onboarding:true, go_to_law: params[:go_to_law], is_semestral: params[:is_semestral])
       elsif !params[:is_annually].blank?
+        user_trial = UserTrial.create(user_id: current_user.id)
         users_preferences_path(is_onboarding:true, go_to_law: params[:go_to_law], is_annually: params[:is_annually])
       else
         #When user chooses Prueba Gratis
+        user_trial = UserTrial.create(user_id: current_user.id, trial_start: DateTime.now, trial_end: DateTime.now + 2.weeks, active: true)
+        if ENV['MAILGUN_KEY']
+          SubscriptionsMailer.welcome_basic_user(current_user).deliver
+          SubscriptionsMailer.free_trial_end(current_user).deliver_later(wait_until: user_trial.trial_end - 1.days)
+          NotificationsMailer.cancel_notifications(current_user).deliver_later(wait_until: user_trial.trial_end)
+        end
+
         users_preferences_path(is_onboarding:true, redirect_to_valid:true)
       end
     else

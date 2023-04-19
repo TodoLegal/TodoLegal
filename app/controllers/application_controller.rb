@@ -21,6 +21,7 @@ class ApplicationController < ActionController::Base
     return false
   end
 
+
   def after_sign_in_remember_me(resource)
     remember_me resource
   end
@@ -93,7 +94,6 @@ class ApplicationController < ActionController::Base
 
   def get_raw_law
     @stream = []
-    @index_items = []
     @highlight_enabled = false
     @query = ""
     @articles_count = 0
@@ -263,6 +263,12 @@ protected
     signed_out_path
   end
 
+  def after_confirmation_path_for(resource_name, resource)
+    # Customize the redirect URL here
+    puts "Uses customized method in application_controller"
+    "https://valid.todolegal.app"
+  end
+
   def findLaws query
     @laws = Law.all.search_by_name(query).with_pg_search_highlight
   end
@@ -272,8 +278,8 @@ protected
   end
 
   def configure_devise_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up) { |u| u.permit(:first_name, :last_name, :occupation, :receive_information_emails, :is_contributor, :email, :password, :password_confirmation)}
-    devise_parameter_sanitizer.permit(:account_update) { |u| u.permit(:first_name, :last_name, :occupation, :receive_information_emails, :is_contributor, :email, :stripe_customer_id, :password, :current_password)}
+    devise_parameter_sanitizer.permit(:sign_up) { |u| u.permit(:first_name, :last_name, :occupation, :email, :phone_number, :password, :password_confirmation)}
+    devise_parameter_sanitizer.permit(:account_update) { |u| u.permit(:first_name, :last_name, :occupation, :email, :phone_number, :stripe_customer_id, :password, :current_password)}
   end
 
   def miniprofiler

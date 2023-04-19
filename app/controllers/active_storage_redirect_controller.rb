@@ -7,7 +7,7 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
   skip_before_action :doorkeeper_authorize!, unless: :has_access_token?
 
   def show
-    user_id_str = ""
+    user = nil
     user_id = 0
     if params[:access_token]
       user = User.find_by_id(doorkeeper_token.resource_owner_id)
@@ -17,19 +17,17 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
       user = current_user
     end
 
-    # if user && current_user_type_api(user) == "pro"
-    #   super
-    # else
-    #   redirect_to "http://valid.todolegal.app?error='invalid permissions'"
-    #   return
-    # end
-
-    user_document_download_tracker = get_user_document_download_tracker(user_id_str)
-    can_access_document = can_access_documents(user_document_download_tracker, current_user_type_api(user))
-
+    can_access_document = can_access_documents(user)
+    user_trial = user.user_trial
     if user && current_user_type_api(user) != "pro" && current_user
-      user_document_download_tracker.downloads += 1
+      user_trial.downloads += 1
     end
+
+    #if Pro user is not confirmed, add a download to the db. 
+    if user && current_user_type_api(user) == "pro" && !user.confirmed_at? && current_user
+      user_trial.downloads += 1
+    end
+
     if user && can_access_document && current_user
       $tracker.track(user_id, 'Valid download', {
         'user_type' => current_user_type_api(user),
@@ -37,23 +35,21 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
         'document_id' => params[:document_id],
         'location' => "API"
       })
-      user_document_download_tracker.save
+      user_trial.save
       super
     else
       if current_user
         redirect_to "http://valid.todolegal.app?error='invalid permissions'"
-      else
-        redirect_to "http://valid.todolegal.app?error=session already in use"
       end
      return
     end
-
-    if  user_document_download_tracker.downloads >= MAXIMUM_BASIC_MONTHLY_DOCUMENTS && current_user_type_api(user) != "pro"
-      if ENV['MAILGUN_KEY']
-        SubscriptionsMailer.free_trial_end(user).deliver
-        SubscriptionsMailer.discount_coupon(user).deliver_later(wait_until: 3.day.from_now)
-      end
-    end
+    
+    # if user.user_trial.downloads >= MAXIMUM_UNCONFIRMED_USER_DOWNLOADS && current_user_type_api(user) != "pro"
+    #   if ENV['MAILGUN_KEY']
+    #     SubscriptionsMailer.free_trial_end(user).deliver
+    #     SubscriptionsMailer.discount_coupon(user).deliver_later(wait_until: 3.day.from_now)
+    #   end
+    # end
     
   end
 

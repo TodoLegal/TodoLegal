@@ -40,7 +40,9 @@ class Api::V1::SessionsController < Devise::SessionsController
     user = User.find_by_id(doorkeeper_token.resource_owner_id)
     render json: {"user": user,
       "user_type": current_user_type_api(user),
-      "confirmed_user": user ? user.confirmed_at? : false
+      "confirmed_user": user ? user.confirmed_at? : false,
+      "can_access": can_access_documents(user),
+      "remaining_free_trial": remaining_free_trial_time(user)
     }
 
     if user

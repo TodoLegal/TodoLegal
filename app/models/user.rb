@@ -12,6 +12,7 @@ class User < ApplicationRecord
   has_many :permissions, through: :user_permissions
   has_one :users_preference, :dependent => :destroy
   has_one :user_notifications_history, :dependent => :destroy
+  has_one :user_trial, :dependent => :destroy
 
   def remember_me
     true
@@ -26,11 +27,15 @@ class User < ApplicationRecord
     @permissionid = UserPermission.find_by(:user_id => self.id)
     if !@permissionid
       return false
-    elsif @permissionid.permission_id==1 
+    elsif @permissionid.permission.name=="Admin" 
       return true
     else
       return false
     end
+   end
+
+   def self.ignore_users_whith_free_trial
+    where.not("EXISTS(SELECT 1 from user_trials where users.id = user_trials.user_id)")
    end
   
   protected

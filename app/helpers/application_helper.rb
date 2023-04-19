@@ -44,6 +44,7 @@ module ApplicationHelper
     Law.count + Document.count + google_drive_covid_documents_count
   end
 
+  #deprecated
   def get_fingerprint
     raw_fingerprint = request.remote_ip +
       browser.to_s +
@@ -54,30 +55,85 @@ module ApplicationHelper
     return hashed_fingerprint
   end
 
+  #deprecated
   def get_user_document_download_tracker(user_id_str)
    fingerprint = get_fingerprint + user_id_str
    user_document_download_tracker = UserDocumentDownloadTracker.find_by_fingerprint(fingerprint)
    if !user_document_download_tracker
      user_document_download_tracker = UserDocumentDownloadTracker.create(fingerprint: fingerprint, downloads: 0, period_start: DateTime.now)
    end
-  #  if user_document_download_tracker.period_start <= 1.month.ago # TODO set time window
-  #    user_document_download_tracker.period_start = DateTime.now
-  #    user_document_download_tracker.downloads = 0
-  #    user_document_download_tracker.save
-  #  end
    return user_document_download_tracker
   end
 
-  #deprecated
-  def can_access_documents(user_document_download_tracker, current_user_type)
-   if current_user_type == "pro"
-     return true
-   elsif current_user_type == "basic"
-     return user_document_download_tracker.downloads < MAXIMUM_BASIC_MONTHLY_DOCUMENTS
-   else
-    #  return user_document_download_tracker.downloads < MAXIMUM_NOT_LOGGGED_MONTHLY_DOCUMENTS
-    return false
-   end
+  def create_preferences(user)
+    default_tags_names = ["Tributario", "Reformas", "Aduanas", "Subsidio", "Mercantil", "Congreso Nacional", "Secretaría de Desarrollo Económico"]
+    default_tags_id = []
+    default_frequency = 1
+
+    default_tags_names.each do | tag_name |
+      tag = Tag.find_by(name: tag_name);
+      if tag
+        default_tags_id.push(tag.id)
+      end
+    end
+
+    preferences = UsersPreference.create(user_id: user.id, mail_frequency: default_frequency, user_preference_tags: default_tags_id)
+
+    return preferences
+  end
+
+  def can_access_documents(user)
+    current_user_type = current_user_type_api(user)
+    user_trial = nil
+    user_preferences = nil
+    
+    if current_user_type != "not logged"
+      user_trial = UserTrial.find_by(user_id: user.id)
+      user_preferences = UsersPreference.find_by(user_id: user.id)
+    end
+
+    if current_user_type == "pro"
+      if !user_trial 
+        user_trial = UserTrial.create(user_id: user.id, active: false)
+      end
+      if !user_preferences
+        user_preferences = create_preferences(user)
+        NotificationsMailer.pro_without_active_notifications(user).deliver
+        enqueue_new_job(user)
+      end
+      return true
+    elsif current_user_type == "basic"
+      if !user_trial
+        user_trial = UserTrial.create(user_id: user.id, trial_start: DateTime.now, trial_end: DateTime.now + 2.weeks, active: true)
+        NotificationsMailer.basic_with_active_notifications(user).deliver
+        SubscriptionsMailer.free_trial_end(user).deliver_later(wait_until: user_trial.trial_end - 1.days)
+        NotificationsMailer.cancel_notifications(user).deliver_later(wait_until: user_trial.trial_end)
+      end
+      if !user_preferences
+        user_preferences = create_preferences(user)
+        enqueue_new_job(user)
+      end
+      return user_trial.active?
+    else
+      return false
+    end
+  end
+
+  def remaining_free_trial_time user
+    user_trial = UserTrial.find_by(user_id: user.id)
+    trial_remaining_time = 0
+    current_user_type = current_user_type_api(user)
+
+    if current_user_type == "pro"
+      return -1
+    end
+
+    if user_trial
+      trial_remaining_time = user_trial.trial_end - user_trial.trial_start
+      trial_remaining_time = (trial_remaining_time/1.day).to_i
+    end
+
+    return trial_remaining_time
   end
 
   def current_user_type user

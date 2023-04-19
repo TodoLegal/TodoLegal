@@ -135,6 +135,35 @@
               </div>
             <% end %>
           </div>
+
+           <!-- Edit phone number -->
+          <div class = "row">
+            <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+              <div class = "col-md-12">
+                <div id="phoneNumber">
+                  <%= current_user.phone_number%>
+                  <span class = "edit-text" onclick = "showDialog('phoneNumber', 'editPhoneNumber')"><i class="fas fa-pencil-alt"></i> Editar número de teléfono</span> 
+                </div>
+                <div class="card" id="editPhoneNumber">
+                  <button type="button" class="close" onclick = "showDialog('phoneNumber', 'editPhoneNumber')" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <div class = "card-body">
+                    <div class="form-group">
+                      <%= f.label :Número_de_teléfono %>
+                      <%= f.text_field :phone_number, autofocus: true, autocomplete: "phone-number", class:"form-control" %>
+                      <label class="confirm-pass-label">Contraseña</label>
+                      <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control"%>
+                      <small id="passwordHelpBlock" class="form-text text-muted">
+                        Ingresa tu contraseña para confirmar los cambios.
+                      </small>
+                      <%= f.submit "Guardar cambios", class: 'submit-btn btn btn-primary'%>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
           <!-- Edit Password -->
           <div class = "row">
             <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
@@ -209,7 +238,7 @@
             </p>
           </div>
           <div class="billboard-actions form-group" id="change-plan-btn-form">
-            <% if @has_pro_permission %>
+           <% if @has_pro_permission %>
                 <a href="https://wa.me/50494714842" class="btn btn-primary">WhatsApp</a>
               <% else %>              
                 <%= button_to "Adquirir Plan Pro", pricing_path, method: :get, params: {activate_pro_account: true}, remote: true, class:"btn btn-primary",  id:"change-plan-button"%>
@@ -381,7 +410,7 @@
     cursor: pointer;
   }
 
-  #editName, #editOccupation, #editEmail, #editPassword{
+  #editName, #editOccupation, #editEmail, #editPassword, #editPhoneNumber{
     width: 450px;
     background: #FFFFFF;
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
@@ -499,7 +528,7 @@
       font-size: 20px;
     }
 
-    #editName, #editOccupation, #editEmail, #editPassword{
+    #editName, #editOccupation, #editEmail, #editPassword, #editPhoneNumber{
       width: 100%;
       background: #FFFFFF;
       box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);

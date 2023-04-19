@@ -1,5 +1,5 @@
 class UsersPreferencesController < ApplicationController
-  before_action :set_users_preference, only: %i[ show edit update destroy ]
+  before_action :set_users_preference, only: [:edit, :update, :destroy]
   include ApplicationHelper
   layout 'onboarding'
   # GET /users_preferences or /users_preferences.json
@@ -12,7 +12,6 @@ class UsersPreferencesController < ApplicationController
     @go_to_law = params[:go_to_law]
     @is_onboarding = params[:is_onboarding]
     @is_monthly = params[:is_monthly]
-    @is_semestral = params[:is_semestral]
     @is_annually = params[:is_annually]
     
     if current_user.blank?
@@ -41,25 +40,27 @@ class UsersPreferencesController < ApplicationController
 
     respond_to do |format|
       if @users_preference.save
-        if params[:redirect_to_valid] == true
-          format.html { redirect_to "https://valid.todolegal.app?preferences=true"}
+        return_to_path = session[:return_to] if session[:return_to]
+        if !params[:redirect_to_valid].blank?
+          if return_to_path
+            format.html { redirect_to confirm_email_view_path}
+          else
+            format.html { redirect_to "https://valid.todolegal.app?user_just_signed_up=true"}
+          end
         elsif !params[:is_monthly].blank?
           format.html { redirect_to checkout_url(is_onboarding:true, go_to_law: params[:go_to_law], is_monthly: params[:is_monthly]) }
-          format.json { render :show, status: :created, location: @users_preference }
-        elsif !params[:is_semestral].blank?
-          format.html { redirect_to checkout_url(is_onboarding:true, go_to_law: params[:go_to_law], is_semestral: params[:is_semestral])}
           format.json { render :show, status: :created, location: @users_preference }
         elsif !params[:is_annually].blank?
           format.html { redirect_to checkout_url(is_onboarding:true, go_to_law: params[:go_to_law], is_annually: params[:is_annually]) }
           format.json { render :show, status: :created, location: @users_preference }
         else
-          format.html { redirect_to "https://valid.todolegal.app"}
+          format.html { redirect_to "https://valid.todolegal.app?user_just_signed_up=false"}
         end
 
         mail_frequency = @users_preference.mail_frequency ? @users_preference.mail_frequency : 0
         
         if mail_frequency > 0
-          MailUserPreferencesJob.set(wait: 1.day).perform_later(current_user)
+          # MailUserPreferencesJob.set(wait: 1.day).perform_later(current_user)
           job = MailUserPreferencesJob.set(wait: @users_preference.mail_frequency.days).perform_later(current_user)
           @users_preference.job_id = job.provider_job_id
           @users_preference.save
@@ -98,6 +99,21 @@ class UsersPreferencesController < ApplicationController
       format.html { redirect_to users_preferences_url, notice: "Users preference was successfully destroyed." }
       format.json { head :no_content }
     end
+  end
+
+  def skip_notifications
+    if process_doorkeeper_redirect_to
+      return
+    end
+
+    respond_to do |format|
+      if @redirect_to_valid
+        format.html { redirect_to "https://valid.todolegal.app?preferences=true"}
+      else
+        format.html { redirect_to "https://valid.todolegal.app?preferences=false"}
+      end
+    end
+
   end
 
   private

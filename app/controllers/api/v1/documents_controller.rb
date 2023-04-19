@@ -8,20 +8,17 @@ class Api::V1::DocumentsController < ApplicationController
   def get_document
     json_document = get_document_json
     can_access_document = true
-    user_id_str = ""
+    user = nil
+    user_trial = nil
     if params[:access_token]
       user = User.find_by_id(doorkeeper_token.resource_owner_id)
-      user_id_str = user.id.to_s
     end
 
-    # if user && current_user_type_api(user) == "pro"
-    #   json_document = json_document.merge(file: url_for(@document.original_file))
-    # else
-    #   json_document = json_document.merge(file: "")
-    # end
+    can_access_document = can_access_documents(user)
 
-    user_document_download_tracker = get_user_document_download_tracker(user_id_str)
-    can_access_document = can_access_documents(user_document_download_tracker, current_user_type_api(user))
+    if user
+      user_trial = UserTrial.find_by(user_id: user.id)
+    end
     
     #get related documents
     related_documents = get_related_documents
@@ -43,7 +40,7 @@ class Api::V1::DocumentsController < ApplicationController
       "tags": get_document_tags,
       "related_documents": related_documents,
       "can_access": can_access_document,
-      "downloads": user_document_download_tracker.downloads,
+      "downloads": user_trial ? user_trial.downloads : 0,
       "user_type": current_user_type_api(user),
     }
   end
@@ -131,14 +128,17 @@ class Api::V1::DocumentsController < ApplicationController
 
     #Extract this into a reusable method
     can_access_document = true
-    user_id_str = ""
+    user = nil
+    user_trial = nil
     if params[:access_token]
       user = User.find_by_id(doorkeeper_token.resource_owner_id)
-      user_id_str = user.id.to_s
     end
 
-    user_document_download_tracker = get_user_document_download_tracker(user_id_str)
-    can_access_document = can_access_documents(user_document_download_tracker, current_user_type_api(user))
+    if user
+      user_trial = UserTrial.find_by(user_id: user.id)
+    end
+
+    can_access_document = can_access_documents(user)
     #this piece of code
     
     if can_access_document
@@ -179,7 +179,7 @@ class Api::V1::DocumentsController < ApplicationController
       })
     end
 
-    render json: { "documents": documents, "count": total_count }
+    render json: { "documents": documents, "count": total_count, "downloads": user_trial ? user_trial.downloads : 1, }
   end
 
 protected
@@ -253,8 +253,10 @@ protected
       ar_document = Document.find_by_id(document["id"])
       if can_access && ar_document.original_file.attached?
         document["file"] = url_for(ar_document.original_file)
+        document["can_access"] = true
       else
         document["file"] = ""
+        document["can_access"] = false
       end
     end
 

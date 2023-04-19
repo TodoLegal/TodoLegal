@@ -1,12 +1,13 @@
 class Api::V1::UsersPreferencesController < ApplicationController
     protect_from_forgery with: :null_session
     include ApplicationHelper
-    before_action :doorkeeper_authorize!, only: [:get_user_preferences, :update]
+    before_action :doorkeeper_authorize!, only: [:get_user_preferences, :update, :deactivate_notifications]
 
     def get_user_preferences
         user_preferences = {
             user_preference_tags: [],
-            mail_frequency: 0
+            mail_frequency: 0,
+            active_notifications: false
         }
 
         if params[:access_token]
@@ -67,9 +68,9 @@ class Api::V1::UsersPreferencesController < ApplicationController
 
                 if default_frequency.to_i > 0
                     #send an email the next day only if the user selected a frequency greater than 1 day
-                    if default_frequency.to_i != 1
-                        MailUserPreferencesJob.set(wait: 1.day).perform_later(@user)
-                    end
+                    # if default_frequency.to_i != 1
+                    #     MailUserPreferencesJob.set(wait: 1.day).perform_later(@user)
+                    # end
                     job = MailUserPreferencesJob.set(wait: default_frequency.to_i.days).perform_later(@user)
                     @preferences.job_id = job.provider_job_id
                     @preferences.save
@@ -82,6 +83,27 @@ class Api::V1::UsersPreferencesController < ApplicationController
                     'location' => "API"
                 })
             end
+            render json: {message: "User successfully updated."}, status: 200
+        else
+            render json: {message: "Unable to update user."}, status: :unprocesable_entity
+        end
+    end
+
+     #/api/v1/users_preferences/deactivate_notifications?access_token=uK1AGqqD_n4u7g3zh46K2Ce8Wo8KCk
+    def deactivate_notifications
+        user = get_user_by_id
+        user_preferences = UsersPreference.find_by(user_id: user.id)
+        if user && user_preferences
+            if user_preferences.active_notifications
+                delete_user_notifications_job(user_preferences.job_id)
+            else
+                delete_user_notifications_job(user_preferences.job_id)
+                
+                enqueue_new_job(user)
+            end
+            user_preferences = UsersPreference.find_by(user_id: user.id)
+            user_preferences.active_notifications = !user_preferences.active_notifications
+            user_preferences.save
             render json: {message: "User successfully updated."}, status: 200
         else
             render json: {message: "Unable to update user."}, status: :unprocesable_entity

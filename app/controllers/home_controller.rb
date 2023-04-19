@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
-  layout 'onboarding', only: [:pricing, :invite_friends, :send_confirmation_email]
+  layout 'onboarding', only: [:pricing, :invite_friends, :send_confirmation_email, :confirm_email_view]
   include ActionView::Helpers::NumberHelper
   include ApplicationHelper
   require 'set'
@@ -157,8 +157,8 @@ class HomeController < ApplicationController
     end
   end
 
-  def piil_home
-  
+  def confirm_email_view
+    
   end
   
   def invite_friends
@@ -166,6 +166,7 @@ class HomeController < ApplicationController
 
   def send_confirmation_email
     @url = "https#{request.original_url[4...-1]}"
+    session[:return_to] = @url
     if current_user && current_user.confirmed_at == nil
       current_user.send_confirmation_instructions
       #redirect_to @url, notice: "Confirmación enviada a tu correo."

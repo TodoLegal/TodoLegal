@@ -44,6 +44,7 @@ module ApplicationHelper
     Law.count + Document.count + google_drive_covid_documents_count
   end
 
+  #deprecated
   def get_fingerprint
     raw_fingerprint = request.remote_ip +
       browser.to_s +
@@ -54,6 +55,7 @@ module ApplicationHelper
     return hashed_fingerprint
   end
 
+  #deprecated
   def get_user_document_download_tracker(user_id_str)
    fingerprint = get_fingerprint + user_id_str
    user_document_download_tracker = UserDocumentDownloadTracker.find_by_fingerprint(fingerprint)
@@ -63,19 +65,48 @@ module ApplicationHelper
    return user_document_download_tracker
   end
 
+  def create_preferences(user)
+    default_tags_names = ["Tributario", "Reformas", "Aduanas", "Subsidio", "Mercantil", "Congreso Nacional", "Secretaría de Desarrollo Económico"]
+    default_tags_id = []
+    default_frequency = 1
+
+    default_tags_names.each do | tag_name |
+      tag = Tag.find_by(name: tag_name);
+      if tag
+        default_tags_id.push(tag.id)
+      end
+    end
+
+    preferences = UsersPreference.create(user_id: user.id, mail_frequency: default_frequency, user_preference_tags: default_tags_id)
+
+    return preferences
+  end
+
   def can_access_documents(user)
     current_user_type = current_user_type_api(user)
     user_trial = nil
+    user_preferences = nil
+    
     if current_user_type != "not logged"
       user_trial = UserTrial.find_by(user_id: user.id)
+      user_preferences = UsersPreference.find_by(user_id: user.id)
     end
 
     if current_user_type == "pro"
+      if !user_preferences
+        created_preferences = create_preferences(user)
+        NotificationsMailer.pro_without_active_notifications(user).deliver
+        enqueue_new_job(user)
+      end
       if !user_trial
         user_trial = UserTrial.create(user_id: user.id, active: false)
       end
       return true
     elsif current_user_type == "basic"
+      if !user_preferences
+        created_preferences = create_preferences(user)
+        enqueue_new_job(user)
+      end
       if !user_trial
         user_trial = UserTrial.create(user_id: user.id, trial_start: DateTime.now, trial_end: DateTime.now + 2.weeks, active: true)
         NotificationsMailer.basic_with_active_notifications(user).deliver
@@ -204,7 +235,7 @@ module ApplicationHelper
   def enqueue_new_job user
     @user_preferences = UsersPreference.find_by(user_id: user.id)
     mail_frequency = @user_preferences.mail_frequency
-    job = MailUserPreferencesJob.set(wait: @user_preferences.mail_frequency.minutes + 5.minutes).perform_later(user)
+    job = MailUserPreferencesJob.set(wait: @user_preferences.mail_frequency.days).perform_later(user)
     @user_preferences.job_id = job.provider_job_id
     @user_preferences.save
   end

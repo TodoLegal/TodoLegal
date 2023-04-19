@@ -51,7 +51,7 @@ class NotificationsMailer < ApplicationMailer
   end
 
   def user_preferences_mail(user, notif_arr) 
-      @user = user
+      @user = User.find_by(email: "carlos@todolegal.app")
       @user_preferences = UsersPreference.find_by(user_id: @user.id)
       @user_notifications_history = UserNotificationsHistory.find_by(user_id: @user.id)
       @documents_to_send = []
@@ -59,7 +59,7 @@ class NotificationsMailer < ApplicationMailer
       @user_type = current_user_type_api(@user)
       
       #change this line to get data from tags_test_data method when testing
-      docs = notif_arr.sort_by{|item| item.tag_id}
+      docs = tags_test_data
 
       current_tag_name = ""
       temp_docs = []

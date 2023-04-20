@@ -223,7 +223,7 @@ class AdminController < ApplicationController
   end
 
   def activate_batch_of_users
-    default_tags_names = ["Tributario", "Reformas", "Aduanas", "Subsidio", "Mercantil", "Congreso Nacional", "Secretaría de Desarrollo Económico"]
+    default_tags_names = ["Tributario", "Reformas y Derogaciones", "Aduanero e Import-Export", "Subsidios", "Mercantil", "Congreso Nacional", "Secretaría de Desarrollo Económico"]
     default_tags_id = []
     default_frequency = 1
 

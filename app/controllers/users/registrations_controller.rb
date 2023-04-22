@@ -122,10 +122,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
       #TODO 
       #Otro if igual al primero con un && is_student y que dentro del envie is_student de param en lugar de is_monthly
       if !params[:is_monthly].blank?
-        user_trial = UserTrial.create(user_id: current_user.id)
+        user_trial = UserTrial.create(user_id: current_user.id, trial_start: DateTime.now, trial_end: DateTime.now + 2.weeks, active: false)
         users_preferences_path(is_onboarding:true, go_to_law: params[:go_to_law], is_monthly: params[:is_monthly])
       elsif !params[:is_annually].blank?
-        user_trial = UserTrial.create(user_id: current_user.id)
+        user_trial = UserTrial.create(user_id: current_user.id, trial_start: DateTime.now, trial_end: DateTime.now + 2.weeks, active: false)
         users_preferences_path(is_onboarding:true, go_to_law: params[:go_to_law], is_annually: params[:is_annually])
       else
         #When user chooses Prueba Gratis

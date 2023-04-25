@@ -94,7 +94,7 @@ module ApplicationHelper
 
     if current_user_type == "pro"
       if !user_trial 
-        user_trial = UserTrial.create(user_id: user.id, active: false)
+        user_trial = UserTrial.create(user_id: user.id, trial_start: DateTime.now, trial_end: DateTime.now + 2.weeks, active: false)
       end
       if !user_preferences
         user_preferences = create_preferences(user)

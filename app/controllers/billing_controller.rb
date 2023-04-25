@@ -197,7 +197,7 @@ class BillingController < ApplicationController
     user_trial = UserTrial.find_by(user_id: user.id)
     
     if !user_trial
-      user_trial = UserTrial.create(user_id: user.id, active: false)
+      user_trial = UserTrial.create(user_id: user.id, trial_start: DateTime.now, trial_end: DateTime.now + 2.weeks, active: false)
     end
 
     # if process_doorkeeper_redirect_to

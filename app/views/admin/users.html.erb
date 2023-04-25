@@ -73,7 +73,7 @@
       <% if user_preferences && user_preferences.active_notifications %>
         <td>
           Activadas
-          <form action="/admin/activate_batch_of_users" method="post">
+          <form action="/admin/deactivate_notifications" method="post">
             <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
             <%= hidden_field_tag :user_id, user.id %>
             <div class="form-inline">

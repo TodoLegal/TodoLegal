@@ -136,7 +136,13 @@ class HomeController < ApplicationController
       @return_to = session[:return_to]
     end
     if current_user
-      $tracker.track(current_user.id, 'Pricing Visited', { })
+      $tracker.track(current_user.id, 'Pricing Visited', { 
+        'utm_source' => params[:utm_source],
+        'utm_medium' => params[:utm_medium],
+        'utm_campaign' => params[:utm_campaign],
+        'utm_content' => params[:utm_content],
+        'utm_term' => params[:utm_term]
+      })
     else
       @is_onboarding = true
       @pricing_onboarding = true

@@ -31,8 +31,11 @@
       <div class="row">
         <div class="pricing-heading col-12">
         <h1 class="title text-center">
-          Ayudamos a más de <strong><%= number_with_precision(User.all.count, :precision => 0, :delimiter => ',') %></strong> personas y organizaciones a estar mejor <strong>informados</strong>.
+          Tu fuente de información legal
         </h1>
+        <p class="body sub-title text-center">
+          Ayudamos a más de <strong><%= number_with_precision(User.all.count, :precision => 0, :delimiter => ',') %></strong> personas y organizaciones a estar mejor <strong>informados</strong>. 
+        </p>
         </div>
       </div>
 
@@ -392,10 +395,16 @@
     }
 
     .title{
-      font-size: 26px;
+      font-size: 32px;
       padding-top: 4%;
       margin-bottom: .5rem;
       font-weight: bold;
+    }
+
+    .sub-title{
+      font-size: 28px;
+      padding-top: 10px;
+      line-height: 1.5em !important;
     }
 
     .image{

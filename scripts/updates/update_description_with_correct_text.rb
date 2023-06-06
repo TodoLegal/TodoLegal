@@ -1,4 +1,4 @@
-json_data = File.read('./tmp/texto_corregido.json')
+json_data = File.read('./scripts/updates/texto_corregido.json')
 data_hash = JSON.parse(json_data)
 
 data_hash.each do | item |
@@ -11,5 +11,7 @@ data_hash.each do | item |
   if document
     document.update(description: item_description, short_description: item_short_description)
   else
+    puts "no hay nada"
+  end
 
 end

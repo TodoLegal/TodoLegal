@@ -1,4 +1,4 @@
-json_data = File.read('./scripts/updates/texto_corregido.json')
+json_data = File.read('./scripts/tmp/texto_corregido.json')
 data_hash = JSON.parse(json_data)
 
 data_hash.each do | item |

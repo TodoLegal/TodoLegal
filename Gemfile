@@ -32,7 +32,7 @@ gem 'capistrano3-nginx'
 gem 'capistrano-bundler'
 gem 'doorkeeper'
 gem 'MailchimpMarketing', :git => 'https://github.com/mailchimp/mailchimp-marketing-ruby.git'
-
+gem 'rack-cors'
 #Support for NewRelic
 gem 'newrelic_rpm'
 #Queue management

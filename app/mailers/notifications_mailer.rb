@@ -136,7 +136,11 @@ class NotificationsMailer < ApplicationMailer
 
   def cancel_notifications user
     @user = user
-    mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: @user.email, subject: '¿Quieres seguir recibiendo notificaciones personalizadas?')
+
+    if current_user_type_api(user) != "pro"
+      mail(from: 'TodoLegal <suscripciones@todolegal.app>', to: @user.email, subject: '¿Quieres seguir recibiendo notificaciones personalizadas?')
+    end
+
     user_trial = @user.user_trial
     user_trial.active = false
     user_trial.save

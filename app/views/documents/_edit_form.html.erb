@@ -38,17 +38,6 @@
         </div>
       </div>
 
-      <div class="row">
-        <div class="col-md-8">
-          <div class="form-group">
-            <%= form.label :url %>
-            <%= form.text_field :url, class: "form-control", maxlength: "50",
-                onkeyup:"charCountUpdate(this.value, 'identifier', 50)" %>
-            <small id="identifier">0 de 50 caracteres</small>
-          </div>
-        </div>
-      </div>
-
       <!-- TODO: Should we remove applicable_laws from database? -->
       <% if false && document.document_type.name == "Sentencia" and document.judgement_auxiliary %>
       <div class="row">

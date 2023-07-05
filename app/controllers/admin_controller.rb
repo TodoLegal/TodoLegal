@@ -131,6 +131,16 @@ class AdminController < ApplicationController
       user_permission = UserPermission.find_by(user: user, permission: permission)
       if !user_permission
         UserPermission.create(user: user, permission: permission)
+        
+        #activates notifications if user was given "Pro" permission
+        if permission.name == "Pro"
+          user_preferences = UsersPreference.find_by(user_id: user.id)
+          if user_preferences
+            delete_user_notifications_job(user_preferences.job_id)
+            enqueue_new_job(user)
+          end
+        end
+        
       else
         @error_message = "El usuario ya tenía estos permisos anteriormente."
       end

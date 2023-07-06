@@ -20,7 +20,7 @@ gem 'rack-mini-profiler'
 gem 'dalli'
 gem 'simple_token_authentication'
 gem 'mixpanel-ruby'
-gem "google-cloud-storage", "~> 1.11", require: false
+gem "google-cloud-storage", "~> 1.44", require: false
 gem 'rack-cors'
 gem 'browser'
 gem 'kaminari'

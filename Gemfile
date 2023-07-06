@@ -4,6 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.0.0'
 
 # My added gems
+gem 'newrelic_rpm'
 gem 'pg'
 gem 'pg_search'
 gem 'thin'
@@ -34,7 +35,7 @@ gem 'doorkeeper'
 gem 'MailchimpMarketing', :git => 'https://github.com/mailchimp/mailchimp-marketing-ruby.git'
 #gem 'rack-cors'
 #Support for NewRelic
-gem 'newrelic_rpm'
+
 #Queue management
 gem 'sidekiq'
 gem 'redis-namespace'

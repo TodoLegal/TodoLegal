@@ -343,7 +343,7 @@ class DocumentsController < ApplicationController
           Rails.root.join(
             "public",
             "autos_acordados",
-            document.id.to_s, file["path"]).to_s
+            document.id.to_s, `#{file["internal_id"]}.pdf`).to_s
         ),
         filename: file["internal_id"] + ".pdf",
         content_type: "application/pdf"

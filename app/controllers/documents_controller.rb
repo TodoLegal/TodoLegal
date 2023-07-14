@@ -97,6 +97,15 @@ class DocumentsController < ApplicationController
           format.html { redirect_to edit_document_path(@document), notice: 'Se han subido Avisos Legales.' }
         elsif params["document"]["auto_process_type"] == "marcas"
           format.html { redirect_to edit_document_path(@document), notice: 'Se han subido Marcas de Fábrica.' }
+        elsif params["document"]["auto_process_type"] == "autos"
+          bucket = get_bucket
+          file = bucket.file @document.original_file.key
+          file.download "tmp/auto_acordado.pdf"
+          slice_autos_acordados @document, Rails.root.join("tmp") + "auto_acordado.pdf"
+          if $discord_bot
+            $discord_bot.send_message($discord_bot_document_upload, "Nuevos autos acordados seccionados en Valid! :scroll:")
+          end
+          format.html { redirect_to gazette_path(@document.publication_number), notice: 'La gaceta se ha partido exitósamente.' }
         else
           format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido una sección de Gaceta.' }
         end
@@ -252,10 +261,13 @@ class DocumentsController < ApplicationController
         addTagIfExists(new_document.id, "Avisos Legales")
         addTagIfExists(new_document.id, "Licitaciones")
       end
+      #adds institutions tags extracted by OCR
       file["institutions"].each do |institution|
         addTagIfExists(new_document.id, institution)
       end
       full_text_lower = file["full_text"].downcase
+      
+      #adds alternative name for institutions tags
       AlternativeTagName.all.each do |alternative_tag_name|
         if isWordInText alternative_tag_name.alternative_name, full_text_lower
           if !DocumentTag.exists?(document_id: new_document.id, tag_id: alternative_tag_name.tag_id)
@@ -285,6 +297,64 @@ class DocumentsController < ApplicationController
     end
     puts "Created related documents"
   end
+
+   #Autos acordados scripts
+   def run_slice_autos_acordados_script document, document_pdf_path
+    puts ">run_slice_autos_acordados_script called"
+    python_return_value = `python3 ~/GazetteSlicer/slice_autos_acordados.py #{ document_pdf_path } '#{ Rails.root.join("public", "autos_acordados") }' '#{document.id}'`
+    begin
+      result = JSON.parse(python_return_value)
+      return result
+    rescue
+      document.description = "Error: on slice autos acordados"
+      document.save
+      return {}
+    end
+   end
+ 
+   def slice_autos_acordados document, document_pdf_path
+    puts "slice_autos_acordados called"
+    json_data = run_slice_autos_acordados_script(document, document_pdf_path)
+    document.url = document.generate_friendly_url
+    document.save
+
+    puts "Creating autos acordados"
+
+    json_data["files"].each do | file |
+      puts "creating auto acordado " + file["issue_id"]
+      name = ""
+      short_description = ""
+      long_description = ""
+      document_type =  DocumentType.find_by_name("Auto Acordado")
+      new_document = Document.create(
+        name: name,
+        issue_id: issue_id,
+        publication_date: file["publication_date"],
+        # publication_number: document.publication_number,
+        short_description: file["short_desscription"],
+        description: file["description"],
+        # full_text: cleanText(file["full_text"]),
+        document_type_id: document_type.id,
+      )
+
+      puts "Uploading file"
+      new_document.original_file.attach(
+        io: File.open(
+          Rails.root.join(
+            "public",
+            "autos_acordados",
+            document.id.to_s, file["path"]).to_s
+        ),
+        filename: file["internal_id"] + ".pdf",
+        content_type: "application/pdf"
+      )
+      #set_content_disposition_attachment new_document.original_file.key, helpers.get_document_title(new_document) + ".pdf"
+      puts "File uploaded"
+
+    end
+
+   end
+ 
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -334,6 +404,11 @@ class DocumentsController < ApplicationController
       elsif auto_process_type == "marcas"
         document_type = DocumentType.find_by_name("Marcas de Fábrica")
         return document_type.id
+      elsif name == "autos"
+        document_type = DocumentType.find_by_name("Auto Acordado")
+        if document_type
+          return document_type.id
+        end
       else
         document_type = DocumentType.find_by_name("Sección de Gaceta")
         return document_type.id

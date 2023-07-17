@@ -404,7 +404,7 @@ class DocumentsController < ApplicationController
       elsif auto_process_type == "marcas"
         document_type = DocumentType.find_by_name("Marcas de Fábrica")
         return document_type.id
-      elsif name == "autos"
+      elsif auto_process_type == "autos"
         document_type = DocumentType.find_by_name("Auto Acordado")
         if document_type
           return document_type.id

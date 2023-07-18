@@ -315,7 +315,7 @@ class DocumentsController < ApplicationController
    def slice_autos_acordados document, document_pdf_path
     puts "slice_autos_acordados called"
     json_data = run_slice_autos_acordados_script(document, document_pdf_path)
-    document.url = document.generate_friendly_url
+    # document.url = document.generate_friendly_url
     document.save
 
     puts "Creating autos acordados"
@@ -352,7 +352,7 @@ class DocumentsController < ApplicationController
       puts "File uploaded"
 
     end
-
+    puts "Created related documents"
    end
  
 

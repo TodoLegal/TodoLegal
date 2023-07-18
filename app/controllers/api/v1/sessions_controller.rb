@@ -53,6 +53,9 @@ class Api::V1::SessionsController < Devise::SessionsController
         'session_date' => DateTime.now - 6.hours,
         'location' => "Valid (API)"
       })
+
+      #updates user info in mixpanel
+      update_mixpanel_user user
     end
   end
 

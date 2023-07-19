@@ -325,16 +325,38 @@ class DocumentsController < ApplicationController
       name = ""
       short_description = ""
       long_description = ""
+      tema = file["tag_tema"]
+      alt_issue_id = file["alt_issue_id"]
+
+      if alt_issue_id != ""
+        alt_issue_id = alt_issue_id[0].upcase + alt_issue_id[1..]
+        name = alt_issue_id
+      end
+
+      if tema != ""
+        tema = tema[0] + tema[1..].downcase
+        if name != ""
+          name = name + " " + tema
+        else
+          name = tema
+        end
+      end
+
+      if name == ""
+        name "Auto Acordado " + file["issue_id"]
+      end
+
       document_type =  DocumentType.find_by_name("Auto Acordado")
       new_document = Document.create(
         name: name,
         issue_id: file["issue_id"],
         publication_date: file["publication_date"],
         # publication_number: document.publication_number,
-        short_description: file["short_desscription"],
+        short_description: file["short_description"],
         description: file["description"],
         # full_text: cleanText(file["full_text"]),
         document_type_id: document_type.id,
+        alternative_issue_id: alt_issue_id
       )
 
       puts "Uploading file"

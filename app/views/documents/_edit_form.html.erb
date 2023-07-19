@@ -38,6 +38,21 @@
         </div>
       </div>
 
+      <div class="row">
+        <div class="col-md-8">
+          <div class="form-group">
+            <% if document.document_type.name == "Sentencia" %>
+              <%= form.label :número_de_expediente %>
+            <% else %>
+              <%= form.label :identificador_de_Emisión_Alternativo %>
+            <% end %>
+            <%= form.text_field :alternative_issue_id, class: "form-control", maxlength: "50",
+                onkeyup:"charCountUpdate(this.value, 'alt_identifier', 50)" %>
+            <small id="alt_identifier">0 de 50 caracteres</small>
+          </div>
+        </div>
+      </div>
+
       <!-- TODO: Should we remove applicable_laws from database? -->
       <% if false && document.document_type.name == "Sentencia" and document.judgement_auxiliary %>
       <div class="row">

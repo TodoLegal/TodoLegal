@@ -321,14 +321,14 @@ class DocumentsController < ApplicationController
     puts "Creating autos acordados"
 
     json_data["files"].each do | file |
-      puts "creating auto acordado " + file["issue_id"]
+      puts "creating auto acordado " + file["internal_id"]
       name = ""
       short_description = ""
       long_description = ""
       document_type =  DocumentType.find_by_name("Auto Acordado")
       new_document = Document.create(
         name: name,
-        issue_id: issue_id,
+        issue_id: file["issue_id"],
         publication_date: file["publication_date"],
         # publication_number: document.publication_number,
         short_description: file["short_desscription"],
@@ -343,7 +343,7 @@ class DocumentsController < ApplicationController
           Rails.root.join(
             "public",
             "autos_acordados",
-            document.id.to_s, `#{file["internal_id"]}.pdf`).to_s
+            document.id.to_s, file["internal_id"] + ".pdf").to_s
         ),
         filename: file["internal_id"] + ".pdf",
         content_type: "application/pdf"

@@ -249,9 +249,11 @@ class ApplicationController < ActionController::Base
   end
   
   def set_newrelic_user_context
-    user_id = current_user.id
-    # Set the user context in New Relic
-    NewRelic::Agent.add_custom_attributes(user_id: user_id)
+    if current_user
+      user_id = current_user.id
+      # Set the user context in New Relic
+      NewRelic::Agent.add_custom_attributes(user_id: user_id)
+    end
   end
 protected
   

@@ -7,6 +7,7 @@ class DocumentsController < ApplicationController
   def index
     @query = params["query"]
     @show_only_judgements = params["judgements"]
+    @show_only_autos = params["autos"]
     if !@query.blank?
       if @query && @query.length == 5 && @query[1] != ','
         @query.insert(2, ",")
@@ -17,6 +18,10 @@ class DocumentsController < ApplicationController
     end
     if @show_only_judgements
       @documents = Document.where(document_type_id: DocumentType.find_by_name("Sentencia")).order('publication_number DESC').page params[:page]
+    end
+
+    if @show_only_autos
+      @documents = Document.where(document_type_id: DocumentType.find_by_name("Auto Acordado")).order('publication_number DESC').page params[:page]
     end
     expires_in 10.minutes
   end
@@ -105,7 +110,7 @@ class DocumentsController < ApplicationController
           if $discord_bot
             $discord_bot.send_message($discord_bot_document_upload, "Nuevos autos acordados seccionados en Valid! :scroll:")
           end
-          format.html { redirect_to gazette_path(@document.publication_number), notice: 'La gaceta se ha partido exitósamente.' }
+          format.html { redirect_to documents_path+"?autos=true", notice: 'Autos acordados se han partido exitosamente.' }
         else
           format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido una sección de Gaceta.' }
         end

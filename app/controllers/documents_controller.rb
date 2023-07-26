@@ -168,6 +168,20 @@ class DocumentsController < ApplicationController
     return text
   end
 
+  def clean_autos_issue_id text
+    text = text.gsub("no", "No")
+    text = text.gsub("actas", "Acta")
+    text = text.gsub("scsj", "SCSJ")
+    text = text.gsub("pcsj", "PCSJ")
+    text = text.gsub("dpcsj","DPCSJ")
+    text = text.gsub("dapj","DAPJ")
+    text = text.gsub("numero", "No.")
+    text = text.gsbu("ssc", "SSC")
+    text = text.gsub("scjycj", "SCJYCJ")
+    text = text.gsub(/[, -]+$/, '')
+    return text
+  end
+
   def set_content_disposition_attachment key, file_name
     bucket = get_bucket
     file = bucket.file key
@@ -332,6 +346,8 @@ class DocumentsController < ApplicationController
       long_description = ""
       tema = file["tag_tema"]
       alt_issue_id = file["alt_issue_id"]
+      materias = file["materias"]
+      alt_issue_id = clean_autos_issue_id(alt_issue_id)
 
       if alt_issue_id != ""
         alt_issue_id = alt_issue_id[0].upcase + alt_issue_id[1..]
@@ -348,7 +364,7 @@ class DocumentsController < ApplicationController
       end
 
       if name == ""
-        name "Auto Acordado " + file["issue_id"]
+        name = "Auto Acordado " + file["issue_id"]
       end
 
       document_type =  DocumentType.find_by_name("Auto Acordado")
@@ -356,13 +372,35 @@ class DocumentsController < ApplicationController
         name: name,
         issue_id: file["issue_id"],
         publication_date: file["publication_date"],
-        # publication_number: document.publication_number,
         short_description: file["short_description"],
         description: file["description"],
-        # full_text: cleanText(file["full_text"]),
+        full_text: cleanText(file["full_text"]),
         document_type_id: document_type.id,
         alternative_issue_id: alt_issue_id
       )
+
+      #tags section
+      addIssuerTagIfExists(new_document.id, "Poder Judicial")
+      addTagIfExists(new_document.id, "Justicia")
+
+      if alt_issue_id.include?("Oficio") || alt_issue_id.include?("oficio")
+        addTagIfExists(new_document.id, "Oficio")
+      else
+        addTagIfExists(new_document.id, "Circular")
+      end
+
+      if alt_issue_id.include?("Resolución") || alt_issue_id.include?("resolución")
+        addTagIfExists(new_document.id, "Resolución")
+      end
+
+      if materias != []
+        addTagIfExists(new_document.id, materias[0])
+      end
+
+      #adds tema tags extracted by OCR
+      file["temas"].each do |tema|
+        addTagIfExists(new_document.id, tema)
+      end
 
       puts "Uploading file"
       new_document.original_file.attach(
@@ -375,7 +413,6 @@ class DocumentsController < ApplicationController
         filename: file["internal_id"] + ".pdf",
         content_type: "application/pdf"
       )
-      #set_content_disposition_attachment new_document.original_file.key, helpers.get_document_title(new_document) + ".pdf"
       puts "File uploaded"
 
     end

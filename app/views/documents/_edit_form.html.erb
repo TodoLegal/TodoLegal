@@ -90,7 +90,7 @@
           </div>
         </div>
         
-        <% if document.document_type.name != "Sentencia" && document.document_type.name != "Auto Acordado"%>
+        <% if document.document_type.name != "Sentencia" && document.document_type.name != "Auto Acordado" && document.document_type.name != "Formato" && document.document_type.name != "Otro"%>
           <div class="form-group col-md-4">
             <%= form.label :número_de_gaceta %>
             <%= form.text_field :publication_number, class: "form-control", disabled:true, id:"gazetteNumber" %>
@@ -113,7 +113,7 @@
           <% end %>
         </div>
           <div class="form-group col-md-4">
-          <% if (document.document_type.name != "Sentencia" && document.document_type.name != "Auto Acordado") and document.position %>
+          <% if (document.document_type.name != "Sentencia" && document.document_type.name != "Auto Acordado" && document.document_type.name != "Formato" && document.document_type.name != "Otro") and document.position %>
             <label class="d-inline"> <strong> Posición en Gaceta </strong> </label>
             <nav aria-label="...">
               <ul class="pagination pagination-sm">

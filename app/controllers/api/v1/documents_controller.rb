@@ -103,6 +103,7 @@ class Api::V1::DocumentsController < ApplicationController
       searchkick_where[:id] = {in: document_ids}
     end
 
+    #if query is not empty returns result based in the boost level given to each field, else, returns results without boost and ordered by publication date
     if query != "*"
       documents = Document.search(
         query,

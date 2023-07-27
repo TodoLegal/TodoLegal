@@ -111,9 +111,19 @@ class DocumentsController < ApplicationController
             $discord_bot.send_message($discord_bot_document_upload, "Nuevos autos acordados seccionados en Valid! :scroll:")
           end
           format.html { redirect_to documents_path+"?autos=true", notice: 'Autos acordados se han partido exitosamente.' }
-        else
-          format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido una sección de Gaceta.' }
+      elsif params["document"]["auto_process_type"] == "formats"
+        format.html { redirect_to edit_document_path(@document), notice: 'Se han subido un nuevo formato.' }
+        if $discord_bot
+          $discord_bot.send_message($discord_bot_document_upload, "Nuevos formato subido a Valid! :scroll:")
         end
+      elsif params["document"]["auto_process_type"] == "others"
+        format.html { redirect_to edit_document_path(@document), notice: 'Se han subido un documento.' }
+        if $discord_bot
+          $discord_bot.send_message($discord_bot_document_upload, "Nuevo documento subido a Valid! :scroll:")
+        end
+      else
+        format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido un documento.' }
+      end
       else
         format.html { render :new }
         format.json { render json: @document.errors, status: :unprocessable_entity }
@@ -471,6 +481,16 @@ class DocumentsController < ApplicationController
         return document_type.id
       elsif auto_process_type == "autos"
         document_type = DocumentType.find_by_name("Auto Acordado")
+        if document_type
+          return document_type.id
+        end
+      elsif auto_process_type == "formats"
+        document_type = DocumentType.find_by_name("Formato")
+        if document_type
+          return document_type.id
+        end
+      elsif auto_process_type == "others"
+        document_type = DocumentType.find_by_name("Otro")
         if document_type
           return document_type.id
         end

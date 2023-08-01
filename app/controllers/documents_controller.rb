@@ -189,6 +189,10 @@ class DocumentsController < ApplicationController
     text = text.gsub("numero", "No.")
     text = text.gsub("ssc", "SSC")
     text = text.gsub("scjycj", "SCJYCJ")
+    text = text.gsub("cjycj", "CJYCJ")
+    text = text.gsub("scsjycj", "SCSJYCJ")
+    text = text.gsub("0i", "01")
+    text = text.gsub("pecsj", "PECSJ")
     text = text.gsub(/[, -]+$/, '')
     return text
   end

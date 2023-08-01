@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :null_session
   before_action :configure_devise_permitted_parameters, if: :devise_controller?
   before_action :miniprofiler
+  before_action :set_newrelic_user_context
   
   #acts_as_token_authentication_handler_for User, if: :json_request?
   skip_before_action :configure_devise_permitted_parameters, if: :json_request?
@@ -247,6 +248,13 @@ class ApplicationController < ActionController::Base
     return result_stream, result_index_items, result_go_to_article, result_has_articles_only
   end
   
+  def set_newrelic_user_context
+    if current_user
+      user_id = current_user.id
+      # Set the user context in New Relic
+      NewRelic::Agent.add_custom_attributes(user_id: user_id)
+    end
+  end
 protected
   
   def after_sign_in_path_for(resource)

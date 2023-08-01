@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_28_101552) do
+ActiveRecord::Schema.define(version: 2023_07_14_174720) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -133,6 +133,7 @@ ActiveRecord::Schema.define(version: 2023_03_28_101552) do
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "alternative_name"
   end
 
   create_table "documents", force: :cascade do |t|
@@ -152,6 +153,8 @@ ActiveRecord::Schema.define(version: 2023_03_28_101552) do
     t.integer "document_type_id"
     t.boolean "is_verified"
     t.datetime "verification_dt"
+    t.string "alternative_issue_id"
+    t.string "internal_id", default: ""
   end
 
   create_table "email_subscriptions", force: :cascade do |t|

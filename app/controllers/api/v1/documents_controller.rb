@@ -235,7 +235,7 @@ protected
     documents = nil
     if @document && @document.document_type.name == "Auto Acordado"
       year_to_retrieve = @document.publication_date.year
-      documents = Document.where("extract(year from publication_date) = ? AND id != ?", year_to_retrieve, @document.id).limit(20)
+      documents = Document.where("extract(year from publication_date) = ? AND document_type_id = ? AND id != ?", year_to_retrieve, @document.document_type_id, @document.id).limit(20)
     else
       documents = Document.where(publication_number: @document.publication_number)
     end

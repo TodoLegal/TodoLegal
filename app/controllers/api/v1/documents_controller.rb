@@ -151,7 +151,7 @@ class Api::V1::DocumentsController < ApplicationController
     documents.each do | document |
       tags = []
       document_tags = DocumentTag.where(document_id: document["id"].to_i)
-      if document_tags.first
+      if document_tags.first && document_tags.first.tag
         puts document_tags.first.tag.name
       end
       document_tags.each do |document_tag|

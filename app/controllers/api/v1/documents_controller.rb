@@ -232,7 +232,13 @@ protected
   end
 
   def get_related_documents
-    Document.where(publication_number: @document.publication_number)
+    documents = nil
+    if @document && @document.document_type.name == "Auto Acordado"
+      year_to_retrieve = @document.publication_date.year
+      documents = Document.where("extract(year from publication_date) = ? AND id != ?", year_to_retrieve, @document.id).limit(20)
+    else
+      documents = Document.where(publication_number: @document.publication_number)
+    end
   end
 
   def document_exists!

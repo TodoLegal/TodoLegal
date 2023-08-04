@@ -233,8 +233,11 @@ protected
 
   def get_related_documents
     documents = nil
-    if @document && @document.document_type.name == "Auto Acordado"
-      year_to_retrieve = @document.publication_date.year
+    if @document && @document&.document_type&.name == "Auto Acordado"
+      #extract the year of the Auto Acordado date
+      year_to_retrieve @document.publication_date&.year
+      #if year_to_retrieve if not nil, use that year, else use 2015
+      year_to_retrieve = year_to_retrieve ? year_to_retrieve : 2015
       documents = Document.where("extract(year from publication_date) = ? AND document_type_id = ? AND id != ?", year_to_retrieve, @document.document_type_id, @document.id).limit(20)
     else
       documents = Document.where(publication_number: @document.publication_number)

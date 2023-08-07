@@ -99,8 +99,22 @@ class DocumentsController < ApplicationController
           JudgementAuxiliary.create(document_id: @document.id, applicable_laws: "")
           format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido una sentencia.' }
         elsif params["document"]["auto_process_type"] == "avisos"
+          bucket = get_bucket
+          file = bucket.file @document.original_file.key
+          file.download "tmp/avisos_legales.pdf"
+          add_stamp_to_unprocessed_document @document, Rails.root.join("tmp") + "avisos_legales.pdf"
+          if $discord_bot
+            $discord_bot.send_message($discord_bot_document_upload, "Nuevos avisos legales subidos en Valid! :scroll:")
+          end
           format.html { redirect_to edit_document_path(@document), notice: 'Se han subido Avisos Legales.' }
         elsif params["document"]["auto_process_type"] == "marcas"
+          bucket = get_bucket
+          file = bucket.file @document.original_file.key
+          file.download "tmp/marcas.pdf"
+          add_stamp_to_unprocessed_document @document, Rails.root.join("tmp") + "marcas.pdf"
+          if $discord_bot
+            $discord_bot.send_message($discord_bot_document_upload, "Nuevas Marcas de Fábrica subidas en Valid! :scroll:")
+          end
           format.html { redirect_to edit_document_path(@document), notice: 'Se han subido Marcas de Fábrica.' }
         elsif params["document"]["auto_process_type"] == "autos"
           bucket = get_bucket
@@ -112,12 +126,29 @@ class DocumentsController < ApplicationController
           end
           format.html { redirect_to documents_path+"?autos=true", notice: 'Autos acordados se han partido exitosamente.' }
       elsif params["document"]["auto_process_type"] == "formats"
-        format.html { redirect_to edit_document_path(@document), notice: 'Se han subido un nuevo formato.' }
+        bucket = get_bucket
+        file = bucket.file @document.original_file.key
+        file.download "tmp/formato.pdf"
+        add_stamp_to_unprocessed_document @document, Rails.root.join("tmp") + "formato.pdf"
         if $discord_bot
-          $discord_bot.send_message($discord_bot_document_upload, "Nuevos formato subido a Valid! :scroll:")
+          $discord_bot.send_message($discord_bot_document_upload, "Nuevo formato subido a Valid! :scroll:")
         end
+        format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido un nuevo formato.' }
+      elsif params["document"]["auto_process_type"] == "comunicados"
+        bucket = get_bucket
+        file = bucket.file @document.original_file.key
+        file.download "tmp/comunicado.pdf"
+        add_stamp_to_unprocessed_document @document, Rails.root.join("tmp") + "comunicado.pdf"
+        if $discord_bot
+          $discord_bot.send_message($discord_bot_document_upload, "Nuevo comunicado subido a Valid! :scroll:")
+        end
+        format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido un nuevo comunicado.' }
       elsif params["document"]["auto_process_type"] == "others"
-        format.html { redirect_to edit_document_path(@document), notice: 'Se han subido un documento.' }
+        bucket = get_bucket
+        file = bucket.file @document.original_file.key
+        file.download "tmp/documento.pdf"
+        add_stamp_to_unprocessed_document @document, Rails.root.join("tmp") + "documento.pdf"
+        format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido un documento.' }
         if $discord_bot
           $discord_bot.send_message($discord_bot_document_upload, "Nuevo documento subido a Valid! :scroll:")
         end
@@ -217,6 +248,21 @@ class DocumentsController < ApplicationController
       document.save
       return {}
     end
+  end
+
+  def add_stamp_to_unprocessed_document document, document_pdf_path
+    document_name = `python3 ~/GazetteSlicer/add_stamp_to_document.py #{ document_pdf_path } '#{ Rails.root.join("public", "documents") }'`
+    document_name = JSON.parse(document_name)
+    document.original_file.attach(
+      io: File.open(
+        Rails.root.join(
+          "public",
+          "documents",
+          document_name).to_s
+      ),
+      filename: document_name,
+      content_type: "application/pdf"
+    )
   end
 
   def process_gazette document, document_pdf_path
@@ -490,6 +536,11 @@ class DocumentsController < ApplicationController
         end
       elsif auto_process_type == "formats"
         document_type = DocumentType.find_by_name("Formato")
+        if document_type
+          return document_type.id
+        end
+      elsif auto_process_type == "comunicados"
+        document_type = DocumentType.find_by_name("Comunicado")
         if document_type
           return document_type.id
         end

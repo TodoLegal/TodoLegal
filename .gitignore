@@ -22,6 +22,7 @@ revisions.log
 token.yaml
 public/gazettes/
 public/autos_acordados/
+public/documents/
 gcs.keyfile
 .rbenv-vars
 config/application.yml

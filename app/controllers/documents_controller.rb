@@ -98,6 +98,15 @@ class DocumentsController < ApplicationController
         elsif params["document"]["auto_process_type"] == "judgement"
           JudgementAuxiliary.create(document_id: @document.id, applicable_laws: "")
           format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido una sentencia.' }
+        elsif params["document"]["auto_process_type"] == "seccion"
+          bucket = get_bucket
+          file = bucket.file @document.original_file.key
+          file.download "tmp/seccion_de_gaceta.pdf"
+          add_stamp_to_unprocessed_document @document, Rails.root.join("tmp") + "seccion_de_gaceta.pdf"
+          if $discord_bot
+            $discord_bot.send_message($discord_bot_document_upload, "Nueva Sección de Gaceta subida en Valid! :scroll:")
+          end
+          format.html { redirect_to edit_document_path(@document), notice: 'Se han subido Avisos Legales.' }
         elsif params["document"]["auto_process_type"] == "avisos"
           bucket = get_bucket
           file = bucket.file @document.original_file.key

@@ -112,12 +112,17 @@ class DocumentsController < ApplicationController
           end
           format.html { redirect_to documents_path+"?autos=true", notice: 'Autos acordados se han partido exitosamente.' }
       elsif params["document"]["auto_process_type"] == "formats"
-        format.html { redirect_to edit_document_path(@document), notice: 'Se han subido un nuevo formato.' }
+        format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido un nuevo formato.' }
         if $discord_bot
-          $discord_bot.send_message($discord_bot_document_upload, "Nuevos formato subido a Valid! :scroll:")
+          $discord_bot.send_message($discord_bot_document_upload, "Nuevo formato subido a Valid! :scroll:")
+        end
+      elsif params["document"]["auto_process_type"] == "comunicados"
+        format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido un nuevo comunicado.' }
+        if $discord_bot
+          $discord_bot.send_message($discord_bot_document_upload, "Nuevo comunicado subido a Valid! :scroll:")
         end
       elsif params["document"]["auto_process_type"] == "others"
-        format.html { redirect_to edit_document_path(@document), notice: 'Se han subido un documento.' }
+        format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido un documento.' }
         if $discord_bot
           $discord_bot.send_message($discord_bot_document_upload, "Nuevo documento subido a Valid! :scroll:")
         end
@@ -490,6 +495,11 @@ class DocumentsController < ApplicationController
         end
       elsif auto_process_type == "formats"
         document_type = DocumentType.find_by_name("Formato")
+        if document_type
+          return document_type.id
+        end
+      elsif auto_process_type == "comunicados"
+        document_type = DocumentType.find_by_name("Comunicado")
         if document_type
           return document_type.id
         end

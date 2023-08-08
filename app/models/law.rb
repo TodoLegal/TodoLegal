@@ -11,7 +11,7 @@ class Law < ApplicationRecord
   has_many :law_modifications, :dependent => :destroy
   has_many :issuer_law_tags, :dependent => :destroy
   has_many :law_tags, :dependent => :destroy
-  has_many :tags, through: :law_tags, :dependent => :destroy
+  has_many :tags, through: :law_tags
 
   pg_search_scope :search_by_name,
                   against: [:name, :creation_number],

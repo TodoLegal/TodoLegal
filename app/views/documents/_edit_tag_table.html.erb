@@ -9,7 +9,7 @@
         <% if issuer %>
             <!-- issuer document tags -->
             <% @document.issuer_document_tags.each do |document_tag| %>
-                <% if document_tag.tag.tag_type.name == tag_name %>
+                <% if document_tag.tag&.tag_type&.name == tag_name %>
                     <tr>
                         <td>
                             <%= document_tag.tag.name %>
@@ -52,7 +52,7 @@
         <% else %>
             <!-- document tags -->
             <% @document.document_tags.each do |document_tag| %>
-                <% if document_tag.tag.tag_type.name == tag_name %>
+                <% if document_tag.tag&.tag_type&.name == tag_name %>
                     <tr>
                         <td>
                             <%= document_tag.tag.name %>

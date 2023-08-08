@@ -6,12 +6,15 @@ class ChaptersController < ApplicationController
   def edit
   end
 
+  def show
+  end
+
   # PATCH/PUT /chapters/1
   # PATCH/PUT /chapters/1.json
   def update
     respond_to do |format|
       if @chapter.update(chapter_params)
-        format.html { redirect_to @chapter, notice: 'Chapter was successfully updated.' }
+        format.html {  redirect_to law_path(@chapter.law, anchor: "chapter_#{@chapter.position}"), notice: 'Chapter was successfully updated.' }
         format.json { render :show, status: :ok, location: @chapter }
       else
         format.html { render :edit }

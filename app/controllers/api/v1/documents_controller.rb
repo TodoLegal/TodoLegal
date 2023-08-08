@@ -242,7 +242,10 @@ protected
     elsif @document & @document.publication_number == nil
       materia_type = TagType.find_by(name: "materia")
       document_tag = @document.tags.find_by(tag_type_id: materia_type.id)
-      documents = Document.joins(:document_tags).where(document_tags: {tag_id: document_tag.id}).last(20)  
+      if !document_tag
+        document_tag = @document.tags.first
+      end
+      documents = Document.joins(:document_tags).where(document_tags: {tag_id: document_tag.id}).order(publication_date: :desc).limit(20)  
     else
       documents = Document.where(publication_number: @document.publication_number)
     end

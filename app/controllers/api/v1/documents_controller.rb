@@ -239,6 +239,13 @@ protected
       #if year_to_retrieve if not nil, use that year, else use 2015
       year_to_retrieve = year_to_retrieve ? year_to_retrieve : 2015
       documents = Document.where("extract(year from publication_date) = ? AND document_type_id = ? AND id != ?", year_to_retrieve, @document.document_type_id, @document.id).limit(20)
+    elsif @document && @document.publication_number == nil
+      materia_type = TagType.find_by(name: "materia")
+      document_tag = @document.tags.find_by(tag_type_id: materia_type.id)
+      if !document_tag
+        document_tag = @document.tags.first
+      end
+      documents = Document.joins(:document_tags).where(document_tags: {tag_id: document_tag.id}).order(publication_date: :desc).limit(20)  
     else
       documents = Document.where(publication_number: @document.publication_number)
     end

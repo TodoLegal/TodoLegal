@@ -37,6 +37,25 @@
   <!-- jQuery Custom Scroller CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
 
+  <script src="/js/tinymce/tinymce.min.js"></script>
+  <script src="/js/tinymce/langs/es_MX.js"></script>
+  <script>
+    tinymce.init({
+      selector: '.tinymce',
+      plugins: 'lists link table code help wordcount',
+      toolbar: 'undo redo | styleselect | bold italic | bullist numlist | alignleft aligncenter alignright alignjustify | outdent indent',
+      language: 'es_MX',
+      setup: function(editor) {
+        editor.on('SkinLoaded', function() {
+          const css = document.createElement("style");
+          css.type = "text/css";
+          css.innerHTML = ".tox .tox-promotion-link, .tox .tox-statusbar__branding svg { display: none; }";
+          document.body.appendChild(css);
+        });
+      }
+    });
+  </script>
+
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Alegreya&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=EB+Garamond&display=swap" rel="stylesheet">

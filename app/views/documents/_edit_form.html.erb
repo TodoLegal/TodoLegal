@@ -150,7 +150,7 @@
             <% else %>
               <%= form.label :descripción_corta %>
             <% end %>
-            <%= form.text_area :short_description, class: "form-control tinymce", maxlength: "250", 
+            <%= form.text_area :short_description, class: "form-control", maxlength: "250", 
                 onkeyup:"charCountUpdate(this.value, 'shortDescription', 250)" %>
             <small id="shortDescription">0 de 250 caracteres</small>
           </div>
@@ -166,7 +166,7 @@
               <%= form.label :descripcion_larga %>
             <% end %>
             <%= form.label :descripcion_larga %>
-            <%= form.text_area :description, class: "form-control tinymce", maxlength: "1250",
+            <%= form.text_area :description, class: "form-control", maxlength: "1250",
                 onkeyup:"charCountUpdate(this.value, 'longDescription', 1250)" %>
             <small id="longDescription">0 de 1250 caracteres</small>
           </div>

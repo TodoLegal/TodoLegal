@@ -19,6 +19,7 @@
                     <% end %>
                 </button>
                 <div class="dropdown-menu dropdown-menu-right">
+
                     <div class="name-container">
                         <div class="circle btn-avatar btn-avatar-large">
                             <% if current_user.first_name.present? && current_user.last_name.present? %>
@@ -29,6 +30,7 @@
                             <%= current_user.first_name + " " + current_user.last_name %>
                         <% end %>
                     </div>
+
                     <% if current_user_is_admin %>
                         <%= link_to('Usuarios', admin_users_path, class:"dropdown-item") %>
                         <%= link_to('CMS(TL)', laws_path, class:"dropdown-item")%>
@@ -49,6 +51,7 @@
                             Habilitar modo edición</a>
                         <% end %>
                     <% end %>
+
                     <%= link_to(destroy_user_session_path, {class: "dropdown-item", method: 'delete' }) do %>
                         <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
                         Cerrar sesión
@@ -56,6 +59,12 @@
                 </div>
             </div>
         </ul>
+    <% elsif %>
+        <% if user_signed_in? %>
+            
+        <% else %>
+            
+        <% end %>
     <% end %>
 </nav>
 

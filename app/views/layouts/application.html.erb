@@ -59,7 +59,11 @@
 <body onclick="onClickBody()">
   <%= render 'layouts/google_analytics_body' %>
 
-  <%= render 'layouts/logged_navbar' %> 
+  <% if user_signed_in? %>
+      <%= render 'layouts/logged_navbar' %>        
+  <% else %>
+      <%= render 'layouts/unlogged_navbar' %> 
+  <% end %>
 
   <% if notice %>
     <div class="alert alert-primary alert-dismissible fade show text-center" role="alert" id="notice">

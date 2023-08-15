@@ -28,7 +28,7 @@
       <%law_tag = LawTag.new %>
       <%= render partial:'edit_table', locals: {law_tag: law_tag, all: @all_materias, tag_type: "materia", table_title: "Materia"}%>
     </div>
-    
+
     <div class="tab-pane fade" id="modifications" role="tabpanel" aria-labelledby="modifications-tab">
       <%law_modification = LawModification.new %>
       <%= render partial:'edit_table', locals: {law_tag: law_modification, all: @all_modifications, tag_type: "modificacion", table_title: "Modificación"}%>
@@ -46,7 +46,7 @@
             <button class="btn btn-outline-primary" type="submit" ><i class="fas fa-search"></i></button>
           </div>
         </form>
-        
+
         <form action="<%= edit_law_path %>" method="get" class="d-inline p-2">
           <div class="form-group">
             <input type="hidden" name="article_number" value="<%=prev_article.to_s%>">
@@ -74,7 +74,6 @@
           <% if @article.errors.any? %>
             <div id="error_explanation">
               <h2><%= pluralize(@article.errors.count, "error") %> prohibited this article from being saved:</h2>
-        
               <ul>
                 <% @article.errors.full_messages.each do |message| %>
                   <li><%= message %></li>
@@ -82,14 +81,16 @@
               </ul>
             </div>
           <% end %>
-        
+
           <div class="form-group">
             <p>Articulo actual: <%= @article_number%></p>
           </div>
-        
+
           <div class="form-group">
-            <%= form.text_area :body, class: 'form-control', rows: '10' %>
+            <%= form.text_area :body, class: 'form-control tinymce', rows: '10' %>
           </div>
+
+
           <!-------------------------------- saved message --------------------------------------------------->
           <%if @article_updated%>
             <div class="alert alert-success alert-dismissible fade show" role="alert" id="savedArticle"> 
@@ -100,7 +101,7 @@
             </div>
           <% end %>
            <!-------------------------------- end of saved message ---------------------------------------------->
-        
+
           <div class="actions d-inline p-2">
             <%= form.submit "Guardar cambios", class: 'btn btn-primary', id:'updateArticle'%>
             &nbsp;&nbsp;
@@ -131,10 +132,8 @@
       <% end %>
     </div>
 
-    
-
     <div class="tab-pane fade" id="index" role="tabpanel" aria-labelledby="index-tab">
-      
+
     </div>
 
   </div>
@@ -153,4 +152,3 @@
     }
   });
 </script>
-  

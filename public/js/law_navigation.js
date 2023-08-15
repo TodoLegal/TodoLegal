@@ -4,6 +4,7 @@ function colapseIndice() {
 }
 
 /* Tabs navigation */
+var sticky_header = null
 var active_tab = "#articulos"
 window.onscroll = function() {onScrollCallback()};
 
@@ -19,7 +20,6 @@ function onScrollCallback()
 {
   if(active_tab == "#articulos")
   {
-    var sticky_header = null
     var sticky_elements = bigger_sections
     if(bigger_sections.length == 0)
       sticky_elements = article_names

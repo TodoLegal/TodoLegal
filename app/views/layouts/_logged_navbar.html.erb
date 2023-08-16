@@ -10,7 +10,6 @@
             <span> Ve a Valid </span> 
         </a>
     </section>
-    <% if current_user_is_admin || current_user_is_editor  %>
         <ul class="navbar-nav" >
             <div class="btn-group">
                 <button type="button" class="btn btn-primary btn-lg btn-avatar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border-radius: 50%;"  data-display="static" id="menu-botton">
@@ -52,6 +51,22 @@
                         <% end %>
                     <% end %>
 
+                    <%= link_to(edit_user_registration_path, {class: "dropdown-item"}) do %>
+                        <i class="fas fa-user" aria-hidden="true"></i>
+                        Tu cuenta
+                    <% end %>
+                    <a class="dropdown-item" href="valid.todolegal.app">
+                        <img  src="/img/top_navbar/valid.png" alt="Card image cap" class="valid--logo--dropdown">
+                        <img  src="/img/icon-valid-gray20px.png" alt="Card image cap" class="valid--logo--dropdown--inverse">
+                        Valid
+                    </a> 
+                    <a class="dropdown-item" href="todolegal.publica.la">
+                        <img  src="/img/ley_abierta_logo.png" alt="Card image cap" class="leyabierta-logo--dropdown">
+                        Ley Abierta
+                    </a> 
+                    <a class="dropdown-item" href="todolegal.publica.la">
+                        Librería
+                    </a>
                     <%= link_to(destroy_user_session_path, {class: "dropdown-item", method: 'delete' }) do %>
                         <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
                         Cerrar sesión
@@ -59,13 +74,6 @@
                 </div>
             </div>
         </ul>
-    <% elsif %>
-        <% if user_signed_in? %>
-            
-        <% else %>
-            
-        <% end %>
-    <% end %>
 </nav>
 
 <style>
@@ -160,6 +168,34 @@
         width: 15%;
     }
 
+    .valid--logo--dropdown{
+        width: 7%;
+    }
+
+    .leyabierta-logo--dropdown{
+        width: 7%;
+    }
+
+    .valid--logo--dropdown--inverse{
+        width: 8%;
+    }
+
+    /* Hide the inverse logo by default */
+    .valid--logo--dropdown--inverse {
+        display: none;
+    }
+
+    /* Show inverse logo when hovering over the link */
+    .dropdown-item:hover .valid--logo--dropdown--inverse {
+        display: inline-block;
+    }
+
+    /* Hide original logo when hovering over the link */
+    .dropdown-item:hover .valid--logo--dropdown {
+        display: none;
+    }
+
+
     @media only screen and (max-width: 767.98px){
         .todolegal{
         margin:0px;
@@ -172,6 +208,18 @@
             left: 0;
             top: 62px;
             border-radius: 0 0 2px 2px;
+        }
+
+        .valid--logo--dropdown{
+            width: 5%;
+        }
+
+        .valid--logo--dropdown--inverse{
+            width: 5%;
+        }
+
+        .leyabierta-logo--dropdown{
+            width: 6%;
         }
     }
 

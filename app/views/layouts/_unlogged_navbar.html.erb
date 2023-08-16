@@ -13,15 +13,15 @@
     <ul class="navbar-nav navbar-dark">
       <li class="nav-item">
         <a class="nav-link nav-link-mobile" href="<%= pricing_path(is_onboarding: true, pricing_onboarding: true) %>">
-        Precio <span class="sr-only">(current)</span>
+          Sucríbete <span class="sr-only">(current)</span>
         </a>
       </li>
     </ul>
     <form class="form-inline">
-        <a class="btn btn-outline-light d-none d-sm-block" href="/users/sign_in" role="button">
+        <a class="nav-link nav-link-mobile" href="/users/sign_in" role="button">
             Inicia Sesión
         </a>
-        <a class="btn btn-primary nav-link-mobile" id="registerButton" href="/users/sign_up" role="button">
+        <a class="nav-link nav-link-mobile" id="registerButton" href="/users/sign_up" role="button">
           Regístrate
         </a>
     </form>
@@ -34,6 +34,14 @@
       z-index: 1040; 
       background: #171F2A;
       padding: 5px 20px;
+  }
+
+  .nav-link{
+    color: white;
+  }
+
+  .nav-link:hover{
+    color: white;
   }
 
   #logo{
@@ -51,7 +59,7 @@
 
     #topNavbar{
       padding: 5px 10vw;
-  }
+    }
 
   }
 
@@ -63,81 +71,83 @@
     vertical-align: middle;
     content: "";
     background: no-repeat center center;
-        background-image: none;
-        background-size: auto;
+    background-image: none;
+    background-size: auto;
     background-size: 100% 100%;
-}
+  }
 
-.navbar-expand-sm .navbar-collapse {
-  flex-grow: 0;
-}
+  .navbar-expand-sm .navbar-collapse {
+    flex-grow: 0;
+  }
 
-nav .navbar-nav li a{
-  color: white !important;
-}
+  nav .navbar-nav li a{
+    color: white !important;
+  }
 
-.navbar-toggler-icon:before,
-.navbar-toggler-icon:after {
-  position: absolute;
-  content: "";
-  margin: auto; 
-  width: 1.5rem;
-}
+  .navbar-toggler-icon:before,
+  .navbar-toggler-icon:after {
+    position: absolute;
+    content: "";
+    margin: auto; 
+    width: 1.5rem;
+  }
 
-.navbar-toggler .navbar-toggler-icon:before,
-.navbar-toggler .navbar-toggler-icon:after {
-  top: 0;
-  bottom: 0;
-  background: transparent;
-  transform: rotate(0):  
-}
+  .navbar-toggler .navbar-toggler-icon:before,
+  .navbar-toggler .navbar-toggler-icon:after {
+    top: 0;
+    bottom: 0;
+    background: transparent;
+    transform: rotate(0):  
+  }
 
-.navbar-toggler .navbar-toggler-icon:before {
-  border-top: 2px solid white;
-  border-bottom: 2px solid white;
-  height: 20px; 
-}
+  .navbar-toggler .navbar-toggler-icon:before {
+    border-top: 2px solid white;
+    border-bottom: 2px solid white;
+    height: 20px; 
+  }
 
-.navbar-toggler .navbar-toggler-icon:after {
-  background: white;
-  height: 2px; 
-}
+  .navbar-toggler .navbar-toggler-icon:after {
+    background: white;
+    height: 2px; 
+  }
 
-@media (max-width: 575.98px) {
+  @media (max-width: 575.98px) {
 
-    .navbar .form-inline,
-    .navbar li {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: flex-end;
-    }
+      .navbar .form-inline,
+      .navbar li {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-end;
+      }
 
-    .navbar .form-inline > div {
-      padding: 0!important; 
-      margin: .5rem 0;
-    }
+      .navbar .form-inline > div {
+        padding: 0!important; 
+        margin: .5rem 0;
+      }
 
-    .navbar-expand-sm .navbar-collapse {
-      min-height: 100vh;
-      padding-top: 30vh;
-    }
+      .navbar-expand-sm .navbar-collapse {
+        min-height: 100vh;
+        padding-top: 30vh;
+      }
 
-    .navbar .nav-link-mobile {
-      text-align: center; 
-      width: 100%;
-      background: none;
-      color: white;
-      padding: .5rem;
-      border: none;
-      margin: auto;
-      font-size: 1.5rem;
-    }
+      .navbar .nav-link-mobile {
+        text-align: center; 
+        width: 100%;
+        background: none;
+        color: white;
+        padding: .5rem;
+        border: none;
+        margin: auto;
+        font-size: 1.5rem;
+      }
 
-}
+  }
 
-.right-nav {
-  display: flex;
-flex-direction: row;
-align-items: center;
-}
+  .right-nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+</style>

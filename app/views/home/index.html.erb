@@ -13,14 +13,14 @@
     <p class="landing-header-text">El navegador legal de Honduras</p>
   </div>
 
-  <div class="container container--home">
+  <div class="container container--landing">
 
     <br />
 
     <div class="row">
-      <div class="col-sm-6 col-md-4 py-2">
+      <div class="col-sm-4 col-md-3 py-2">
         <div class="card card-body h-100 card-with-border landing-cards" style="padding:0px">
-          <a class="" href="<%= google_drive_search_path %>" style="padding:20px">
+          <a class="" href="<%= valid_url %>" style="padding:20px">
             <img class="landing-page-icon" src="/img/valid_icono.svg" />
             <h5 class="landing-card-title">Valid</h5>
             <p class="landing-card-text">Buscador de Decretos, Acuerdos y Gacetas.</p>
@@ -29,7 +29,7 @@
           </a>
         </div>
       </div>
-      <div class="col-sm-6 col-md-4 py-2">
+      <div class="col-sm-4 col-md-3 py-2">
         <div class="card card-body h-100 card-with-border landing-cards" style="padding:0px">
           <a class="" href="<%= home_path %>" style="padding:20px">
             <img class="landing-page-icon" src="/img/Icon-Todolegal-gray128px.svg" />
@@ -40,21 +40,32 @@
           </a>
         </div>
       </div>
-      <div class="col-sm-6 col-md-4 py-2">
+      <div class="col-sm-4 col-md-3 py-2">
         <div class="card card-body h-100 card-with-border landing-cards" style="padding:0px">
           <a class="" href="<%= ley_abierta_url %>?tlclick=home" style="padding:20px" target="_blank">
             <img class="landing-page-icon" src="/img/ley_abierta_icon.svg" />
             <h5 class="landing-card-title">Ley Abierta</h5>
             <p class="landing-card-text">Artículos y podcast sobre temas legales de actualidad y relevancia.</p>
             <p class="count-text"></p>
-            <button type="button btn-lg" class="btn btn-primary landing-page-button open-leyabierta-btn">ABRIR REVISTA</button>
+            <button type="button btn-lg" class="btn btn-danger landing-page-button">ABRIR REVISTA</button>
+          </a>
+        </div>
+      </div>
+      <div class="col-sm-4 col-md-3 py-2">
+        <div class="card card-body h-100 card-with-border landing-cards" style="padding:0px">
+          <a class="" href="<%= libreria_todolegal_url %>?tlclick=home" style="padding:20px" target="_blank">
+            <img class="landing-page-icon" src="/img/ley_abierta_icon.svg" />
+            <h5 class="landing-card-title">Libreria</h5>
+            <p class="landing-card-text">Libros sobre muchos temas legales etc etc.</p>
+            <p class="count-text"></p>
+            <button type="button btn-lg" class="bbtn btn-danger landing-page-button">VISITAR LIBRERÍA</button>
           </a>
         </div>
       </div>
     </div>
 
   <%= render "mailchimp_form" %>
-  </br>
+
 
   </div>
 

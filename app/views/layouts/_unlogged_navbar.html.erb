@@ -1,0 +1,169 @@
+<nav class="navbar sticky-top navbar-expand-sm justify-content-between" id="topNavbar">
+
+  <section class="d-inline-flex">
+    <a href="/" class="navbar-brand text-primary" >
+      <img  src="/img/top_navbar/top_navbar.svg" alt="Card image cap" class="logo img-fluid">
+    </a>
+    <img  src="/img/white_line.png" alt="Card image cap" class="vertical-line d-none d-md-block">
+    <a href="/home" class="navbar-brand text-primary mt-2 ml-2" >
+      <img src="/img/top_navbar/Logo-letras-white.svg" alt="Card image cap" class="todolegal img-fluid">
+    </a>
+  </section>
+
+  <div class="right-nav">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </div>  
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+    <ul class="navbar-nav navbar-dark">
+      <li class="nav-item">
+        <a class="nav-link nav-link-mobile" href="<%= pricing_path(is_onboarding: true, pricing_onboarding: true) %>">
+          Sucríbete <span class="sr-only">(current)</span>
+        </a>
+      </li>
+    </ul>
+    <form class="form-inline">
+        <a class="nav-link nav-link-mobile" href="/users/sign_in" role="button">
+            Inicia Sesión
+        </a>
+        <a class="nav-link nav-link-mobile" id="registerButton" href="/users/sign_up" role="button">
+          Regístrate
+        </a>
+    </form>
+  </div>
+</nav>
+
+<style>
+  #topNavbar{
+      margin-bottom: 0px; 
+      z-index: 1040; 
+      background: #171F2A;
+      padding: 5px 20px;
+  }
+
+  .nav-link{
+    color: white;
+  }
+
+  .nav-link:hover{
+    color: white;
+  }
+
+  #logo{
+    background-color: #171F2A;
+  }
+
+  .navbar-brand{
+    margin-right: 0.5rem;
+  }
+
+  .vertical-line{
+    margin-top: 7px;
+    height: 40px;
+    width: 1px;
+  }
+
+  @media only screen and (max-width: 767.98px){
+    .todolegal{
+      margin:0px;
+      display: none;
+    }
+  }
+
+   @media only screen and (min-width: 1200px){
+
+    #topNavbar{
+      padding: 5px 10vw;
+    }
+
+  }
+
+  .navbar-toggler-icon {
+    display: inline-block;
+    position: relative;
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: middle;
+    content: "";
+    background: no-repeat center center;
+    background-image: none;
+    background-size: auto;
+    background-size: 100% 100%;
+  }
+
+  .navbar-expand-sm .navbar-collapse {
+    flex-grow: 0;
+  }
+
+  nav .navbar-nav li a{
+    color: white !important;
+  }
+
+  .navbar-toggler-icon:before,
+  .navbar-toggler-icon:after {
+    position: absolute;
+    content: "";
+    margin: auto; 
+    width: 1.5rem;
+  }
+
+  .navbar-toggler .navbar-toggler-icon:before,
+  .navbar-toggler .navbar-toggler-icon:after {
+    top: 0;
+    bottom: 0;
+    background: transparent;
+    transform: rotate(0):  
+  }
+
+  .navbar-toggler .navbar-toggler-icon:before {
+    border-top: 2px solid white;
+    border-bottom: 2px solid white;
+    height: 20px; 
+  }
+
+  .navbar-toggler .navbar-toggler-icon:after {
+    background: white;
+    height: 2px; 
+  }
+
+  @media (max-width: 575.98px) {
+
+      .navbar .form-inline,
+      .navbar li {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-end;
+      }
+
+      .navbar .form-inline > div {
+        padding: 0!important; 
+        margin: .5rem 0;
+      }
+
+      .navbar-expand-sm .navbar-collapse {
+        min-height: 100vh;
+        padding-top: 30vh;
+      }
+
+      .navbar .nav-link-mobile {
+        text-align: center; 
+        width: 100%;
+        background: none;
+        color: white;
+        padding: .5rem;
+        border: none;
+        margin: auto;
+        font-size: 1.5rem;
+      }
+
+  }
+
+  .right-nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+</style>

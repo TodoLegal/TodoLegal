@@ -446,7 +446,8 @@ class DocumentsController < ApplicationController
         description: file["description"],
         full_text: cleanText(file["full_text"]),
         document_type_id: document_type.id,
-        alternative_issue_id: alt_issue_id
+        alternative_issue_id: alt_issue_id,
+        internal_id:  file["internal_id"]
       )
 
       #tags section

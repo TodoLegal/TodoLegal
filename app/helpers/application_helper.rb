@@ -182,7 +182,7 @@ module ApplicationHelper
   end
 
   def libreria_todolegal_url
-    "https://todolegal.publica.la/"
+    "https://libreria.todolegal.app/"
   end
 
   def valid_url

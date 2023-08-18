@@ -3,12 +3,18 @@
     <a class="btn navbar-back-arrow" id="navbar-back-button" style="font-size: 1.5rem; color: #171F2A; padding-left: 0px;"> 
         <i class="fas fa-arrow-left"></i>
     </a>
-    <a href="/home" class="navbar-brand text-primary" >
-        <img  src="/img/top_navbar/law_top_navbar.svg" alt="Card image cap" class="gray-logo img-fluid">
-        <img  src="/img/top_navbar/top_navbar.svg" alt="Card image cap" class="white-logo img-fluid">
-         
-        <img src="/img/top_navbar/Logo-letras-white.svg" alt="Card image cap" class="todolegal img-fluid">
-    </a>
+    <section class="d-inline-flex">
+        <a href="/home" class="navbar-brand text-primary" >
+            <img src="/img/logo_landing_mobile.png" alt="Card image cap" class="big-logo img-fluid">
+        </a>
+        <a href="/" class="navbar-brand text-primary d-none d-md-block" >
+            <img  src="/img/top_navbar/top_navbar.svg" alt="Card image cap" class="logo img-fluid">
+        </a>
+        <img  src="/img/white_line.png" alt="Card image cap" class="vertical-line d-none d-sm-block">
+        <a href="/home" class="navbar-brand text-primary mt-2 ml-2" >
+            <img src="/img/top_navbar/Logo-letras-white.svg" alt="Card image cap" class="todolegal img-fluid">
+        </a>
+    </section>
     <ul class="navbar-nav" >
         <div class="btn-group">
             <button type="button" onclick="hideDocumentContainer()" class="btn btn-light search-button" id="hideDocumentContainer-button">
@@ -84,21 +90,27 @@
         padding: 5px 20px;
     }
 
-    .todolegal{
-        margin-left: 18px;
-    }
-
     .white-logo{
       background-color: #171F2A;
     }
 
-    .gray-logo{
+    .big-logo{
         display: none;
     }
 
-    /* .btn-back {
-        display: none;
-    } */
+    .logo{
+      background-color: #171F2A;
+    }
+
+    .navbar-brand{
+        margin-right: 0.5rem;
+    }
+
+    .vertical-line{
+        margin-top: 7px;
+        height: 40px;
+        width: 1px;
+    }
 
     .navbar-back-arrow{
         font-size: 1.5rem; 
@@ -127,10 +139,6 @@
 
     .dropdown-item{
         color: #FFFFFF;
-    }
-
-    .navbar-brand{
-        /* padding-left: 15%; */
     }
 
     .search-button{
@@ -212,9 +220,9 @@
             display: none
         }
 
-        .gray-logo{
+        .big-logo{
             display: block;
-            margin-left: 85%;
+            width: 120px;
         }
 
         .navbar-back-arrow{

@@ -181,6 +181,14 @@ module ApplicationHelper
     "https://leyabierta.todolegal.app/"
   end
 
+  def libreria_todolegal_url
+    "https://libreria.todolegal.app/"
+  end
+
+  def valid_url
+    "https://valid.todolegal.app"
+  end
+
   def non_pro_law_count
     todos_law_count = LawAccess.find_by_name("Todos").laws.count
     basica_law_count = LawAccess.find_by_name("Básica").laws.count

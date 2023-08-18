@@ -79,7 +79,7 @@
 <body onclick="onClickBody()">
   <%= render 'layouts/google_analytics_body' %>
 
-  <% if user_signed_in? %>
+  <% if current_user %>
       <%= render 'layouts/logged_navbar' %>        
   <% else %>
       <%= render 'layouts/unlogged_navbar' %> 

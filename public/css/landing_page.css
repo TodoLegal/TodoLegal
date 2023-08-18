@@ -2,6 +2,10 @@
     padding-top: 5%;
 }
 
+.container--landing {
+    max-width: 1340px;
+}
+
 .landing-cards{
     background: #FFFFFF 0% 0% no-repeat padding-box;
     box-shadow: 6px 11px 17px #00000029;
@@ -23,7 +27,7 @@ a:hover{
 }
 
 .landing-card-title{
-    font: normal normal 900 42px/68px Poppins;
+    font: normal normal 900 32px/68px Poppins;
     letter-spacing: 0px;
     color: #000000;
     margin-bottom: 0px;
@@ -33,7 +37,7 @@ a:hover{
 
 .landing-card-text{
     color: #22252C;
-    font: normal normal normal 20px/30px Poppins;
+    font: normal normal normal 19px/25px Poppins;
     letter-spacing: 0px;
     margin-bottom: 0px;
     opacity: 1;
@@ -55,7 +59,7 @@ a:hover{
 
 .landing-page-button{
     background: #FF5722 0% 0% no-repeat padding-box !important;
-    font: normal normal bold 15px/33px Poppins;
+    font: normal normal bold 14px/33px Poppins;
     letter-spacing: 0px;
     opacity: 1;
     width: 100%

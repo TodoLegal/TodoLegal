@@ -276,6 +276,8 @@ GEM
     nokogiri (1.11.7)
       mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
+    nokogiri (1.11.7-x86_64-darwin)
+      racc (~> 1.4)
     nokogiri (1.11.7-x86_64-linux)
       racc (~> 1.4)
     opus-ruby (1.0.1)
@@ -448,6 +450,7 @@ GEM
 
 PLATFORMS
   aarch64-linux
+  x86_64-darwin-22
   x86_64-linux
 
 DEPENDENCIES

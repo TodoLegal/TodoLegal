@@ -77,7 +77,7 @@ class Api::V1::DocumentsController < ApplicationController
     end
 
     searchkick_where = {
-      name: {not: "Gaceta"}
+      name: { not: 'Gaceta' }
     }
 
     searchkick_where[:publication_date] = {} if from || to
@@ -110,8 +110,8 @@ class Api::V1::DocumentsController < ApplicationController
       fields = ['publication_date^10', 'issue_id^7', 'publication_number^6', 'issuer_document_tag^5',
                 'document_type_name^4', 'name^3', 'description^2', 'short_description^1', 'document_tags']
     else
-      fields = ['publication_date', 'issue_id', 'publication_number', 'issuer_document_tag', 'document_type_name',
-                'name', 'description', 'document_tags']
+      fields = %w[publication_date issue_id publication_number issuer_document_tag document_type_name
+                  name description document_tags]
     end
 
     documents = Document.search(

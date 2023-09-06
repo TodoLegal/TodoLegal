@@ -77,9 +77,12 @@ class Api::V1::DocumentsController < ApplicationController
     end
 
     searchkick_where = {
-      publication_date: {gte: from, lte: to},
-      name: {not: "Gaceta"},
+      name: {not: "Gaceta"}
     }
+
+    searchkick_where[:publication_date] = {} if from || to
+    searchkick_where[:publication_date][:gte] = from if from
+    searchkick_where[:publication_date][:lte] = to if to
 
     if !params["tags"].blank? and params["tags"].kind_of?(Array)
       document_ids = []
@@ -106,7 +109,6 @@ class Api::V1::DocumentsController < ApplicationController
     if query != '*'
       fields = ['publication_date^10', 'issue_id^7', 'publication_number^6', 'issuer_document_tag^5',
                 'document_type_name^4', 'name^3', 'description^2', 'short_description^1', 'document_tags']
-      misspellings = { edit_distance: 2, below: 5 }
     else
       fields = ['publication_date', 'issue_id', 'publication_number', 'issuer_document_tag', 'document_type_name',
                 'name', 'description', 'document_tags']
@@ -116,7 +118,6 @@ class Api::V1::DocumentsController < ApplicationController
       query,
       fields: fields,
       where: searchkick_where,
-      misspellings: misspellings,
       limit: limit,
       offset: params["offset"].to_i,
       order: { publication_date: :desc }

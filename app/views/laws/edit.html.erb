@@ -107,28 +107,33 @@
             &nbsp;&nbsp;
             <u> <%= link_to 'Eliminar Artículo', edit_law_path, class: "d-inline p-2 text-danger"%> </u>
           </div>
-
-          <!-- Modal -->
-          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  ...
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Save changes</button>
+        <% end %>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar un artículo nuevo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                Se agregará el artículo <%= @article_number.to_i + 1%> después de este artículo.
+              </div>
+              <div class="modal-footer">
+                <form action="/laws/insert_article" method="post">
+                <%= hidden_field_tag :id, @law.id %>
+                  <%= hidden_field_tag :article_number, @article_number %>
+                  <div class="form-inline">
+                    <button type="button" class="btn btn-secondary mr-2" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Aceptar</button>
+                  </div>
+                </form>
                 </div>
               </div>
             </div>
           </div>
-        <% end %>
       <% end %>
     </div>
 

@@ -53,6 +53,28 @@
         </div>
       </div>
 
+       <div class="row">
+        
+      </div>
+
+       <div class="row">
+
+        <div class="form-group col-md-4">
+          <div class="form-group">
+            <%= form.label :status %>
+            <%= form.select :status,  options_for_select(['Derogado', 'Vigente', 'Reformado'], document.status), { prompt: 'Selecciona status' }, class: 'form-control mr-2' %>
+          </div>
+        </div>
+        
+        <div class="form-group col-md-4">
+          <div class="form-group">
+            <%= form.label :jararquía %>
+            <%= form.select :hierarchy,  options_for_select(['Constitucional', 'Tratados Internacionales', 'Leyes Primarias', 'Leyes Secundarias'], document.hierarchy), { prompt: 'Selecciona jerarquía' }, class: 'form-control' %>
+          </div>
+        </div>
+
+      </div>
+
       <!-- TODO: Should we remove applicable_laws from database? -->
       <% if false && document.document_type.name == "Sentencia" and document.judgement_auxiliary %>
       <div class="row">

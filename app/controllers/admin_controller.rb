@@ -1,7 +1,7 @@
 class AdminController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_action :authenticate_admin!, only: [:gazette, :users, :download_contributor_users, :download_recieve_information_users, :grant_permission, :revoke_permission, :set_law_access, :deactivate_notifications, :activate_notifications, :activate_batch_of_users]
-  before_action :authenticate_editor!, only: [:gazettes]
+  before_action :authenticate_admin!, only: [:users, :download_contributor_users, :download_recieve_information_users, :grant_permission, :revoke_permission, :set_law_access, :deactivate_notifications, :activate_notifications, :activate_batch_of_users]
+  before_action :authenticate_editor!, only: [:gazette, :gazettes]
   include ApplicationHelper
 
   def gazettes

@@ -1,6 +1,6 @@
 class DocumentTagsController < ApplicationController
     before_action :set_document_tag, only: [:show, :edit, :update, :destroy]
-    before_action :authenticate_admin!, only: [:show, :new, :edit, :create, :update, :destroy]
+    before_action :authenticate_editor!, only: [:show, :new, :edit, :create, :update, :destroy]
   
     # GET /document_tags/1
     # GET /document_tags/1.json

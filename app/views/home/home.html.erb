@@ -22,6 +22,7 @@
   <br/>
   <%= render partial: 'search_law_input', locals: {target_url: '/search_law', home_flag: true } %>
 
+ <% counter = 0 %>
  <div class="row">
     <% if  @tag_ciadi && @tag_ciadi.laws.count != 0 %>
       <div class="col-sm-6 col-md-4 py-2">
@@ -40,6 +41,17 @@
             <a class="" href="<%= tag_path(tag) %>" style="padding:20px">
               <h5 class="card-title"><%= tag.name %></h5>
               <p><%= tag.laws.count %> leyes</p>
+            </a>
+          </div>
+        </div>
+        <% counter += 1 %>
+      <% end %>
+      <% if counter == 4 && @tag_camaras_de_comercio && @tag_camaras_de_comercio.laws.count != 0 %>
+        <div class="col-sm-6 col-md-4 py-2">
+          <div class="card card-body h-100" style="padding:0px">
+            <a class="" href="<%= tag_path(@tag_camaras_de_comercio) %>" style="padding:20px">
+              <h5 class="card-title"><%= @tag_camaras_de_comercio.name %></h5>
+              <p><%= @tag_camaras_de_comercio.laws.count %> leyes y reglamentos</p>
             </a>
           </div>
         </div>

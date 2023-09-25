@@ -198,6 +198,7 @@ class AdminController < ApplicationController
       if user_preferences
         user_preferences.active_notifications = false
         user_preferences.save
+        delete_user_notifications_job(user_preferences.job_id)
       else
         @error_message = "El usuario no tiene preferencias/notificaciones activas."
       end
@@ -218,6 +219,7 @@ class AdminController < ApplicationController
       if user_preferences
         user_preferences.active_notifications = true
         user_preferences.save
+        enqueue_new_job(user)
       else
         @error_message = "El usuario no tiene preferencias/notificaciones activas."
       end

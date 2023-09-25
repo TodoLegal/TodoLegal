@@ -22,8 +22,18 @@
   <br/>
   <%= render partial: 'search_law_input', locals: {target_url: '/search_law', home_flag: true } %>
 
-  <% counter = 0 %>
-  <div class="row">
+ <% counter = 0 %>
+ <div class="row">
+    <% if  @tag_ciadi && @tag_ciadi.laws.count != 0 %>
+      <div class="col-sm-6 col-md-4 py-2">
+        <div class="card card-body h-100" style="padding:0px">
+          <a class="" href="<%= tag_path(@tag_ciadi) %>" style="padding:20px">
+            <h5 class="card-title"><%= @tag_ciadi.name %></h5>
+            <p><%= @tag_ciadi.laws.count %> reglamentos y convenios</p>
+          </a>
+        </div>
+      </div>
+    <% end %>
     <% @tags.each do |tag| %>
       <% if tag.laws.count != 0 %>
         <div class="col-sm-6 col-md-4 py-2">

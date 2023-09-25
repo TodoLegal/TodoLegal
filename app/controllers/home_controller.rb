@@ -14,6 +14,7 @@ class HomeController < ApplicationController
 
   def home
     @tags = Tag.where(tag_type: TagType.find_by_name("materia"))
+    @tag_camaras_de_comercio = Tag.find_by(name: "Cámaras de Comercio")
     expires_in 10.minutes
 
     if params[:is_free_trial]

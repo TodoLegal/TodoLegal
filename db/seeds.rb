@@ -14,6 +14,7 @@ DocumentType.create(name: "Gaceta")
 DocumentType.create(name: "Sección de Gaceta")
 DocumentType.create(name: "Sentencia")
 DocumentType.create(name: "Auto Acordado", alternative_name: "Circular")
+DocumentType.create(name:"Comunicado")
 DocumentType.create(name:"Formato")
 DocumentType.create(name:"Otro")
 

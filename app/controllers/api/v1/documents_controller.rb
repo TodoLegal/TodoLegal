@@ -257,6 +257,8 @@ protected
     else
       documents = Document.where(publication_number: @document.publication_number)
     end
+
+    return documents
   end
 
   def document_exists!

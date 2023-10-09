@@ -4,7 +4,7 @@ class Api::V1::DocumentsController < ApplicationController
   before_action :document_exists!, only: [:get_document]
   before_action :doorkeeper_authorize!, only: [:get_document, :get_documents]
   skip_before_action :doorkeeper_authorize!, unless: :has_access_token?
-  
+
   def get_document
     json_document = get_document_json
     can_access_document = true
@@ -19,7 +19,7 @@ class Api::V1::DocumentsController < ApplicationController
     if user
       user_trial = UserTrial.find_by(user_id: user.id)
     end
-    
+  
     #get related documents
     related_documents = get_related_documents
     related_documents = related_documents.to_json
@@ -91,7 +91,7 @@ class Api::V1::DocumentsController < ApplicationController
           if tag_type.name == "Institución"
             tag.issuer_document_tags.each do |issuer_tag|
               document_ids.push(issuer_tag.document_id)
-            end 
+            end
           else
             tag.documents.each do |document|
               document_ids.push(document.id)
@@ -103,15 +103,113 @@ class Api::V1::DocumentsController < ApplicationController
       searchkick_where[:id] = {in: document_ids}
     end
 
+    date_query = nil
+
+    if valid_date_format?(query)
+      date_query = {
+        match: {
+          publication_date: {
+            query: query,
+            boost: 9
+          }
+        }
+      }
+    end
+
     #if query is not empty returns result based in the boost level given to each field, else, returns results without boost and ordered by publication date
-    if query != "*"
+    if query != '*'
+      should_queries = [
+        {
+          wildcard: {
+            issue_id: {
+              value: "*#{query}*",
+              boost: 8
+            }
+          }
+        },
+        {
+          wildcard: {
+            publication_number: {
+              value: "*#{query}*",
+              boost: 7
+            }
+          }
+        },
+        {
+          terms: {
+            issuer_document_tags: [query],
+            boost: 6
+          }
+        },
+        {
+          wildcard: {
+            document_type_name: {
+              value: "*#{query}*",
+              boost: 5
+            }
+          }
+        },
+        {
+          wildcard: {
+            document_type_alternative_name: {
+              value: "*#{query}*",
+              boost: 5
+            }
+          }
+        },
+        {
+          wildcard: {
+            name: {
+              value: "*#{query}*",
+              boost: 4
+            }
+          }
+        },
+        {
+          wildcard: {
+            description: {
+              value: "*#{query}*",
+              boost: 3
+            }
+          }
+        },
+        {
+          wildcard: {
+            short_description: {
+              value: "*#{query}*",
+              boost: 2
+            }
+          }
+        },
+        {
+          terms: {
+            document_tags: [query],
+              boost: 1
+          }
+        }
+      ]
+
+      should_queries << date_query if date_query
+
       documents = Document.search(
         query,
-        fields: ["name^10", "issue_id^5", "short_description^2", "description"],
         where: searchkick_where,
-        misspellings: {edit_distance: 2, below: 5},
+        misspellings: { edit_distance: 2, below: 5 },
         limit: limit,
-        offset: params["offset"].to_i)
+        offset: params['offset'].to_i,
+        body_options: {
+          query: {
+            bool: {
+              should: should_queries
+            }
+          },
+          sort: [
+            { publication_date: { order: 'desc' } },
+            { issue_id: { order: 'desc', unmapped_type: 'keyword' } },
+            { publication_number: { order: 'desc', unmapped_type: 'keyword' } }
+          ]
+        }
+      )
     else
       documents = Document.search(
         query,
@@ -119,13 +217,13 @@ class Api::V1::DocumentsController < ApplicationController
         where: searchkick_where,
         limit: limit,
         offset: params["offset"].to_i,
-        order: {publication_date: :desc})
+        order: { publication_date: :desc }
+      )
     end
 
     total_count = documents.total_count
     documents = documents.to_json
     documents = JSON.parse(documents)
-
 
     #Extract this into a reusable method
     can_access_document = true
@@ -141,7 +239,6 @@ class Api::V1::DocumentsController < ApplicationController
 
     can_access_document = can_access_documents(user)
     #this piece of code
-    
     if can_access_document
       documents = attach_file_to_documents(documents, true)
     else
@@ -220,7 +317,6 @@ protected
     else
       return document_type.name
     end
-    
   end
 
   def get_document_tags
@@ -280,4 +376,14 @@ protected
     return docs
   end
 
+  private
+
+  def valid_date_format?(date_string)
+    date_format = "%Y-%m-%d"
+    begin
+      !!Date.strptime(date_string, date_format)
+    rescue ArgumentError
+      false
+    end
+  end
 end

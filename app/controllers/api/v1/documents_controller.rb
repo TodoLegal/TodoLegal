@@ -202,7 +202,7 @@ class Api::V1::DocumentsController < ApplicationController
 
       documents = Document.search(
         query,
-        # where: searchkick_where,
+        where: searchkick_where,
         # misspellings: { edit_distance: 2, below: 5 },
         limit: limit,
         offset: params['offset'].to_i,

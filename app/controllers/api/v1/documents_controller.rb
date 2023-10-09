@@ -104,6 +104,7 @@ class Api::V1::DocumentsController < ApplicationController
     end
 
     date_query = nil
+    formatted_query, original_query = both_formats(query)
 
     if valid_date_format?(query)
       date_query = {
@@ -130,7 +131,15 @@ class Api::V1::DocumentsController < ApplicationController
         {
           wildcard: {
             publication_number: {
-              value: "*#{query}*",
+              value: "*#{original_query}*",
+              boost: 7
+            }
+          }
+        },
+        {
+          wildcard: {
+            publication_number: {
+              value: "*#{formatted_query}*",
               boost: 7
             }
           }
@@ -193,8 +202,8 @@ class Api::V1::DocumentsController < ApplicationController
 
       documents = Document.search(
         query,
-        where: searchkick_where,
-        misspellings: { edit_distance: 2, below: 5 },
+        # where: searchkick_where,
+        # misspellings: { edit_distance: 2, below: 5 },
         limit: limit,
         offset: params['offset'].to_i,
         body_options: {
@@ -385,5 +394,15 @@ protected
     rescue ArgumentError
       false
     end
+  end
+
+  def both_formats(str)
+    # Remove any non-numeric characters
+    cleaned_string = str.gsub(/[^0-9]/, '')
+
+    # Convert to integer, format with commas, and then back to string
+    formatted_string = cleaned_string.to_i.to_s(:delimited)
+
+    [cleaned_string, formatted_string]
   end
 end

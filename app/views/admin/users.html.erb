@@ -98,11 +98,7 @@
       <% end %>
 
       <td>
-        <% if check_if_user_has_active_stripe_plan(user) %>
-          Plan activo
-        <% else %> 
-          Sin Plan
-        <% end %>
+        <%= check_if_user_has_active_stripe_plan(user) %>
       </td>
 
     </tr>

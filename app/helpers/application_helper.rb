@@ -178,9 +178,20 @@ module ApplicationHelper
   end
 
   def check_if_user_has_active_stripe_plan user
-    customer = Stripe::Customer.retrieve(user.stripe_customer_id)
-     
-    return current_user_plan_is_active customer
+    stripe_status = "Sin Plan"
+
+    if user.stripe_customer_id
+      customer = Stripe::Customer.retrieve(user.stripe_customer_id)
+      if current_user_plan_is_active(customer)
+        stripe_status = "Activo"
+      else
+        stripe_status = "Downgraded"
+      end
+    else user.stripe_customer_id
+      stripe_status = "Sin Plan"
+    end
+
+    return stripe_status
   end
 
 

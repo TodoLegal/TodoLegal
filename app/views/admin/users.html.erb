@@ -36,6 +36,7 @@
       <th><%= permission.name %></th>
     <% end %>
     <th>Notificaciones</th>
+    <th>Stripe plan</th>
   </tr>
   <% @users.each do |user| %>
     <tr>
@@ -95,6 +96,10 @@
       <% else %>
         <td>Sin preferencias creadas</td>
       <% end %>
+
+      <td>
+        <%= check_if_user_has_active_stripe_plan(user) %>
+      </td>
 
     </tr>
   <% end %>

@@ -177,6 +177,24 @@ module ApplicationHelper
     return false
   end
 
+  def check_if_user_has_active_stripe_plan user
+    stripe_status = "Sin Plan"
+
+    if user.stripe_customer_id
+      customer = Stripe::Customer.retrieve(user.stripe_customer_id)
+      if current_user_plan_is_active(customer)
+        stripe_status = "Activo"
+      else
+        stripe_status = "Downgraded"
+      end
+    else user.stripe_customer_id
+      stripe_status = "Sin Plan"
+    end
+
+    return stripe_status
+  end
+
+
   def ley_abierta_url
     "https://leyabierta.todolegal.app/"
   end
@@ -275,6 +293,7 @@ module ApplicationHelper
       'first_name'      => user.first_name,
       'last_name'      => user.last_name,
       'phone_number'      => user.phone_number,
+      # 'stripe_status'     => user.stripe_customer_id
       'current_sign_in_at'      => user.current_sign_in_at,
       'last_sign_in_at'      => user.last_sign_in_at,
       'current_sign_in_ip'      => user.current_sign_in_ip,

@@ -77,9 +77,12 @@ class Api::V1::DocumentsController < ApplicationController
     end
 
     searchkick_where = {
-      publication_date: {gte: from, lte: to},
-      name: {not: "Gaceta"},
+      name: { not: 'Gaceta' }
     }
+
+    searchkick_where[:publication_date] = {} if from || to
+    searchkick_where[:publication_date][:gte] = from if from
+    searchkick_where[:publication_date][:lte] = to if to
 
     if !params["tags"].blank? and params["tags"].kind_of?(Array)
       document_ids = []
@@ -103,24 +106,22 @@ class Api::V1::DocumentsController < ApplicationController
       searchkick_where[:id] = {in: document_ids}
     end
 
-    #if query is not empty returns result based in the boost level given to each field, else, returns results without boost and ordered by publication date
-    if query != "*"
-      documents = Document.search(
-        query,
-        fields: ["name^10", "issue_id^5", "short_description^2", "description"],
-        where: searchkick_where,
-        misspellings: {edit_distance: 2, below: 5},
-        limit: limit,
-        offset: params["offset"].to_i)
+    if query != '*'
+      fields = ['publication_date^10', 'issue_id^7', 'publication_number^6', 'issuer_document_tag^5',
+                'document_type_name^4', 'name^3', 'description^2', 'short_description^1', 'document_tags']
     else
-      documents = Document.search(
-        query,
-        fields: ["name", "issue_id", "short_description", "description" ],
-        where: searchkick_where,
-        limit: limit,
-        offset: params["offset"].to_i,
-        order: {publication_date: :desc})
+      fields = %w[publication_date issue_id publication_number issuer_document_tag document_type_name
+                  name description document_tags]
     end
+
+    documents = Document.search(
+      query,
+      fields: fields,
+      where: searchkick_where,
+      limit: limit,
+      offset: params["offset"].to_i,
+      order: { publication_date: :desc }
+    )
 
     total_count = documents.total_count
     documents = documents.to_json

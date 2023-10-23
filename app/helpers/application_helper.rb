@@ -196,7 +196,8 @@ module ApplicationHelper
 
   def return_user_plan_status user
     user_status = "Free trial"
-    user_status = user.user_trial.active ? user_status : "Free trial end"
+    user_trial = user.user_trial ? true : false
+    user_status = user.user_trial && user.user_trial.active ? user_status : "Free trial end"
     user_status = user.permissions.find_by_name("Editor") ? "Editor" : user_status
     
     if user.stripe_customer_id
@@ -312,7 +313,7 @@ module ApplicationHelper
       'first_name'      => user.first_name,
       'last_name'      => user.last_name,
       'phone_number'      => user.phone_number,
-      'user_status'     => return_user_plan_status(user)
+      'user_status'     => return_user_plan_status(user),
       'current_sign_in_at'      => user.current_sign_in_at,
       'last_sign_in_at'      => user.last_sign_in_at,
       'current_sign_in_ip'      => user.current_sign_in_ip,

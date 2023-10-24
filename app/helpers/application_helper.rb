@@ -195,24 +195,24 @@ module ApplicationHelper
   end
 
   def return_user_plan_status user
-    user_status = "Free trial"
+    todolegal_status = "Free trial"
     user_trial = user.user_trial ? true : false
-    user_status = user.user_trial && user.user_trial.active ? user_status : "Free trial end"
-    user_status = user.permissions.find_by_name("Editor") ? "Editor" : user_status
-    
+    todolegal_status = user.user_trial && user.user_trial.active ? todolegal_status : "Free trial end"
+    todolegal_status = user.permissions.find_by_name("Editor") ? "Editor" : todolegal_status
+    todolegal_status = user.permissions.find_by_name("Pro") ? "Pro B2B" : todolegal_status
+    todolegal_status = user.permissions.find_by_name("Admin") ? "Admin" : todolegal_status
+
+    stripe_status = "Sin Plan"
     if user.stripe_customer_id
       customer = Stripe::Customer.retrieve(user.stripe_customer_id)
       if current_user_plan_is_active(customer)
-        user_status = "Pro Stripe"
+        stripe_status = "Pro Stripe"
       else
-        user_status = "Downgraded"
+        stripe_status = "Downgraded"
       end
     end
-
-    user_status = user.permissions.find_by_name("Pro") ? "Pro B2B" : user_status
-    user_status = user.permissions.find_by_name("Admin") ? "Admin" : user_status
     
-    return user_status
+    return todolegal_status, stripe_status
   end
 
   def ley_abierta_url
@@ -308,12 +308,14 @@ module ApplicationHelper
   end
 
   def update_mixpanel_user user
+    todolegal_status, stripe_status = return_user_plan_status(user)
     $tracker.people.set(user.id, {
       '$email'            => user.email,
       'first_name'      => user.first_name,
       'last_name'      => user.last_name,
       'phone_number'      => user.phone_number,
-      'user_status'     => return_user_plan_status(user),
+      'stripe_status'     => stripe_status,
+      'todolegal_status' => todolegal_status,
       'current_sign_in_at'      => user.current_sign_in_at,
       'last_sign_in_at'      => user.last_sign_in_at,
       'current_sign_in_ip'      => user.current_sign_in_ip,

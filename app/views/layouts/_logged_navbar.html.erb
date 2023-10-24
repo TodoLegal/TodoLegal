@@ -36,11 +36,11 @@
                 <% end %>
 
                 <% if current_user_is_editor %>
-                    <%= link_to('CMS(TL)', laws_path, class:"dropdown-item")%>
-                    <%= link_to('CMS(Valid)', documents_path, class:"dropdown-item")%>
-                    <%= link_to('CMS(Sentencias)', documents_path+"?judgements=true", class:"dropdown-item")%>
-                    <%= link_to('CMS(Autos Acordados)', documents_path+"?autos=true", class:"dropdown-item")%>
-                    <%= link_to('Gacetas', gazettes_path, class:"dropdown-item")%>
+                    <%= link_to('Lista de Leyes', laws_path, class:"dropdown-item")%>
+                    <%= link_to('Listado Documentos', documents_path, class:"dropdown-item")%>
+                    <%= link_to('Listado Sentencias', documents_path+"?judgements=true", class:"dropdown-item")%>
+                    <%= link_to('Listado Autos Acordados', documents_path+"?autos=true", class:"dropdown-item")%>
+                    <%= link_to('Listado Gacetas', gazettes_path, class:"dropdown-item")%>
                     <% if is_editor_mode_enabled %>
                         <a href="/admin/disable_edit_mode" class="dropdown-item">
                         Deshabilitar modo edición</a>

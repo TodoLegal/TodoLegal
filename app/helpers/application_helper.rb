@@ -172,7 +172,7 @@ module ApplicationHelper
         end
       end
     rescue
-      puts "Todo: Handle Stripe customer error"
+      return false
     end
     return false
   end

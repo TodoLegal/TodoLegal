@@ -87,6 +87,7 @@ class AdminController < ApplicationController
     end
   end
 
+  #DEPRECATED. Delete when possible
   def download_contributor_users
     @users = User.where(is_contributor: true)
     @users.each do |user|
@@ -105,6 +106,7 @@ class AdminController < ApplicationController
     end
   end
 
+  #DEPRECATED. Delete when possible
   def download_recieve_information_users
     @users = User.where(receive_information_emails: true)
     @users.each do |user|

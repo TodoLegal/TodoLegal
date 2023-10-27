@@ -48,6 +48,9 @@
                             <%= link_to('CMS(Sentencias)', documents_path+"?judgements=true", class:"dropdown-item")%>
                             <%= link_to('Gacetas', gazettes_path, class:"dropdown-item")%>
                             <div class="dropdown-divider"></div>
+                        <% end %>
+
+                        <% if current_user_is_editor_tl %>
                             <% if is_editor_mode_enabled %>
                                 <a href="/admin/disable_edit_mode" class="dropdown-item">
                                 Deshabilitar modo edición</a>

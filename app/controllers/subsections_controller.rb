@@ -1,6 +1,6 @@
 class SubsectionsController < ApplicationController
   before_action :set_subsection, only: [:edit, :update]
-  before_action :authenticate_editor!, only: [:edit, :update]
+  before_action :authenticate_editor_tl!, only: [:edit, :update]
 
   # GET /subsections/1/edit
   def edit

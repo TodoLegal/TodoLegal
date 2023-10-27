@@ -1,6 +1,6 @@
 class BooksController < ApplicationController
   before_action :set_book, only: [:edit, :update]
-  before_action :authenticate_editor!, only: [:edit, :update]
+  before_action :authenticate_editor_tl!, only: [:edit, :update]
 
   # GET /books/1/edit
   def edit

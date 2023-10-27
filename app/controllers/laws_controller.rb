@@ -2,7 +2,7 @@ class LawsController < ApplicationController
   layout 'law', only: [:show, :new, :edit]
   before_action :set_law, only: [:show, :edit, :update, :destroy, :insert_article]
   before_action :set_materias, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_editor!, only: [:index, :new, :edit, :create, :update, :destroy]
+  before_action :authenticate_editor_tl!, only: [:index, :new, :edit, :create, :update, :destroy]
 
   # GET /laws
   # GET /laws.json

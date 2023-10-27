@@ -1,6 +1,6 @@
 class SectionsController < ApplicationController
   before_action :set_section, only: [:edit, :update]
-  before_action :authenticate_editor!, only: [:edit, :update]
+  before_action :authenticate_editor_tl!, only: [:edit, :update]
 
   # GET /sections/1/edit
   def edit

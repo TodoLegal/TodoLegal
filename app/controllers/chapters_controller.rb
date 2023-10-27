@@ -1,6 +1,6 @@
 class ChaptersController < ApplicationController
   before_action :set_chapter, only: [:edit, :update]
-  before_action :authenticate_editor!, only: [:edit, :update]
+  before_action :authenticate_editor_tl!, only: [:edit, :update]
 
   # GET /chapters/1/edit
   def edit

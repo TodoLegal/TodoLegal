@@ -1,6 +1,6 @@
 class ArticlesController < ApplicationController
   before_action :set_article, only: [:edit, :update]
-  before_action :authenticate_editor!, only: [:edit, :update]
+  before_action :authenticate_editor_tl!, only: [:edit, :update]
 
   # GET /articles/1/edit
   def edit

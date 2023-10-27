@@ -41,6 +41,9 @@
                     <%= link_to('Listado Sentencias', documents_path+"?judgements=true", class:"dropdown-item")%>
                     <%= link_to('Listado Autos Acordados', documents_path+"?autos=true", class:"dropdown-item")%>
                     <%= link_to('Listado Gacetas', gazettes_path, class:"dropdown-item")%>
+                <% end %>
+
+                <% if current_user_is_editor_tl %>
                     <% if is_editor_mode_enabled %>
                         <a href="/admin/disable_edit_mode" class="dropdown-item">
                         Deshabilitar modo edición</a>

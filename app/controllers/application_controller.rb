@@ -35,6 +35,10 @@ class ApplicationController < ActionController::Base
     current_user != nil && (current_user.permissions.find_by_name("Editor") != nil || current_user.permissions.find_by_name("Admin") != nil)
   end
 
+  def current_user_is_editor_tl
+    current_user && (current_user.permissions.find_by_name("Editor TL") || current_user.permissions.find_by_name("Editor") || current_user.permissions.find_by_name("Admin"))
+  end
+
   def current_user_plan_is_active customer #TODO: remove duplicated code
     begin
       customer.subscriptions.data.each do |subscription|
@@ -71,6 +75,12 @@ class ApplicationController < ActionController::Base
 
   def authenticate_editor!
     if !current_user_is_editor
+      redirect_to "/?error=Invalid+permissions"
+    end
+  end
+
+  def authenticate_editor_tl!
+    if !current_user_is_editor_tl
       redirect_to "/?error=Invalid+permissions"
     end
   end
@@ -164,7 +174,7 @@ class ApplicationController < ActionController::Base
       })
     end
 
-    @user_can_edit_law = current_user_is_editor
+    @user_can_edit_law = current_user_is_editor_tl
     @user_can_access_law = user_can_access_law @law, current_user
     if !@user_can_access_law
       @stream = @stream.take(5)

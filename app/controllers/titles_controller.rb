@@ -1,6 +1,6 @@
 class TitlesController < ApplicationController
   before_action :set_title, only: [:edit, :update]
-  before_action :authenticate_editor!, only: [:edit, :update]
+  before_action :authenticate_editor_tl!, only: [:edit, :update]
 
   # GET /titles/1/edit
   def edit

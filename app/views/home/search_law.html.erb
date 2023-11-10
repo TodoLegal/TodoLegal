@@ -7,10 +7,10 @@
 <div class="container container--results">
 
   <section style="margin-bottom: 40px;">
-    <%= render partial: 'search_law_input', locals: {target_url: '/search_law', home_flag: false} %>
+    <%= render partial: 'search_law_input', locals: {target_url: '/search_law', home_flag: false} , formats: :html%>
   </section>
 
-  <%= render partial: 'search_result', locals:{home_flag: false} %>
+  <%= render partial: 'search_result', locals:{home_flag: false} , formats: :html %>
 
   <%# <%= link_to 'Ir al inicio', root_path %>
 

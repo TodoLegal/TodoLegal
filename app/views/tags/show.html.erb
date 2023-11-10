@@ -9,12 +9,12 @@
 </div>
 
 <nav id="myScrollspy" style="padding: 0px" class="d-block d-sm-none navbar sticky-top navbar-expand-xl navbar-light bg-light">
-  <%= render partial: 'home/search_law_input', locals: {target_url: tag_path(@tag), home_flag: true} %>
+  <%= render partial: 'home/search_law_input', locals: {target_url: tag_path(@tag), home_flag: true} , formats: :html  %>
 </nav>
 
 <div class="container container--results" style="">
   <div class="d-none d-sm-block">
-    <%= render partial: 'home/search_law_input', locals: {target_url: tag_path(@tag), home_flag: true} %>
+    <%= render partial:  'home/search_law_input', locals: {target_url: tag_path(@tag), home_flag: true} , formats: :html %>
   </div>
   
   <% if @tag.name == "Laboral" and @query.blank? %>
@@ -23,7 +23,7 @@
       link: "https://open.spotify.com/episode/13gHK4cyrxUKMqCmOtSqX7?si=ed8dfa059bbf4771?tlclick="+@tag.name,
       name: "¿Cómo evitar problemas laborales en tu empresa?",
       summary: "Escucha este episodio para entender todas las medidas de cumplimiento que debes tomar para evitar problemas laborales."
-    } %>
+    } , formats: :html %>
   <% end %>
 
   <% if @tag.name == "Mercantil" and @query.blank? %>
@@ -32,13 +32,12 @@
       link: "https://pod.link/LeyAbierta/episode/77e3ca84c654c4d709124bf69103d128?tlclick="+@tag.name,
       name: "¿Qué tipo de sociedad me conviene para mi negocio?",
       summary: "¿Es mejor un comerciante individual o una sociedad anónima? ¿Qué tipo de sociedad debería de constituir?"
-    } %>
+    } , formats: :html %>
   <% end %>
 
-  <%= render partial: 'home/search_result.html.erb', locals: {home_flag: true} %>
+  <%= render partial: 'home/search_result.html.erb', locals: {home_flag: true} , formats: :html %>
 
-  <!--
-  <%= link_to 'Ir al inicio', root_path %>-->
+
 </div>
 
 <%= javascript_pack_tag "help_card" %>

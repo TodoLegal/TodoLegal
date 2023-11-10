@@ -35,7 +35,7 @@
   <div class="row">
     <% i = 0 %>
     <% @laws.each do |law| %>
-      <% i+=1 %>
+      <% i+=1 %> 
       <div class="collapsable-law-cards col-sm-6 col-md-4 py-2" style="display:<%= i>6 ? 'none' : 'block' %>">
         <div class="card card-body h-100" style="padding:0px">
           <a class="" href="<%= law_path(law) %>" style="padding:20px">

@@ -25,7 +25,7 @@
             <%= f.password_field :password, autocomplete: "current-password", class: 'form-control'%>
           </div>
 
-          <p class="card-text text-center content" ><%= render partial: "devise/shared/links", locals:{create: false} %></p>
+          <p class="card-text text-center content" ><%= render partial: "devise/shared/links", locals:{create: false} , formats: :html %></p>
 
           <div class="form-group">
             <%= f.submit "Inicia sesión", class: 'btn btn-primary btn-block btn-lg', id:"nextButton", data:{toggle:"popover", placement:"top", trigger:"focus",

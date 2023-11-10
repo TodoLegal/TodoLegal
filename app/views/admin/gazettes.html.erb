@@ -28,12 +28,12 @@
             </div>
           </div>
 
-          <%= render partial: 'gazettes_list', locals: {gazettes: @gazettes_pagination} %>
+          <%= render partial: 'gazettes_list', locals: {gazettes: @gazettes_pagination} , formats: :html %>
 
         </div>
         
         <div class="tab-pane fade" id="missing-gazettes" role="tabpanel" aria-labelledby="missing-gazettes-tab">
-            <%= render partial: 'missing_gazettes', locals: {gazettes: @missing_gazettes} %>
+            <%= render partial: 'missing_gazettes', locals: {gazettes: @missing_gazettes} , formats: :html %>
         </div>
 
     </div>

@@ -57,7 +57,7 @@
     </div>
   <% end %>
   <% if @info_is_searched %>
-    <%= render partial: 'content', locals: {is_mobile: true} %>
+    <%= render partial: 'content', locals: {is_mobile: true}, formats: :html%>
   <% end %>
 </div>
 

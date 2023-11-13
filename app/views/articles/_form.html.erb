@@ -10,10 +10,24 @@
       </ul>
     </div>
   <% end %>
-
+  
   <div class="form-group">
     <%= form.label :number %>
     <%= form.text_field :number, class: 'form-control' %>
+  </div>
+
+  <div class="row">
+    <%= link_to(edit_article_path(get_previous_article(@article)), {class: "d-inline p-2", method: 'get'}) do %>
+      <div class="form-group">
+        <button class="btn btn-outline-secondary" type="button"><i class="fas fa-arrow-left"></i></i></button>
+      </div>
+    <% end %>
+
+    <%= link_to(edit_article_path(get_next_article(@article)), {class: "d-inline p-2", method: 'get'}) do %>
+      <div class="form-group">
+        <button class="btn btn-outline-secondary" type="button"><i class="fas fa-arrow-right"></i></i></button>
+      </div>
+    <% end %>
   </div>
 
   <div class="form-group">
@@ -22,6 +36,7 @@
   </div>
 
   <div class="actions">
-    <%= form.submit class: 'btn btn-primary' %>
+    <%= form.submit "Guardar", class: 'd-inline p-2 btn btn-primary' %>
   </div>
+
 <% end %>

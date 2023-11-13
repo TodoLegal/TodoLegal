@@ -102,10 +102,10 @@
           <% end %>
            <!-------------------------------- end of saved message ---------------------------------------------->
 
-          <div class="actions d-inline p-2">
-            <%= form.submit "Guardar cambios", class: 'btn btn-primary', id:'updateArticle'%>
-            &nbsp;&nbsp;
-            <u> <%= link_to 'Eliminar Artículo', edit_law_path, class: "d-inline p-2 text-danger"%> </u>
+          <div class="actions">
+            <%= form.submit "Guardar cambios", class: 'd-inline p-2 btn btn-primary' %>
+            <%= form.submit "Guardar y Siguiente", class: 'd-inline p-2 btn btn-outline-primary' %>
+             <u> <%= link_to 'Eliminar Artículo', edit_law_path, class: "ml-4 d-inline p-2 text-danger"%> </u>
           </div>
         <% end %>
         <!-- Modal -->

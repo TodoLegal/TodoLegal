@@ -1,0 +1,153 @@
+<p class="resultinfo">
+  <% if home_flag %>
+    <% if @result_count > 0 %>
+      <%= @result_info_text %>
+    <% end %>
+  <% end %>
+  <% if @tag && @query %>
+    Buscar en <a href="/search_law?query=<%= @query%>">todas las materias</a>
+  <% end %>
+</p>
+
+<% if @tag && !@query %>
+  <h4><%= @tag.name %></h4>
+<% end %>
+
+<% if @result_count == 0 %>
+  <div class="container--empty-results">
+    <p class="body">No se han encontrado leyes que coincidan con <strong><%= @query %></strong>.</p>
+    <div class="no-result-message">
+      <img src="/img/img-search-doc.svg" />
+      <p class="body body--secondary">
+        Asegurate de haber escrito la busqueda correctamente, sino intenta con un término similar. Recuerda que puedes refinar tu busqueda por título, palabra clave y número de artículo.
+      </p>
+    </div>
+  </div>
+<% end %>
+
+<% if @laws %>
+  <% if !home_flag %>
+    <section class="d-flex justify-content-between">
+      <label class="resultinfo-articles">En títulos de leyes</label>
+      <span class="resultinfo-articles"> <%= @titles_result_text %></span>
+    </section>
+  <% end %>
+  <div class="row">
+    <% i = 0 %>
+    <% @laws.each do |law| %>
+      <% i+=1 %> 
+      <div class="collapsable-law-cards col-sm-6 col-md-4 py-2" style="display:<%= i>6 ? 'none' : 'block' %>">
+        <div class="card card-body h-100" style="padding:0px">
+          <a class="" href="<%= law_path(law) %>" style="padding:20px">
+            <% if @is_search_law %>
+              <p style="font-size: 15px">
+                <% law.materia_names.each do |materia_name| %>
+                  <span class="badge badge--materia"><%= materia_name %></span>
+                <% end %>
+              </p>
+              <% end %>
+            <h5 class="result-card-title"><%= law.name %></h5>
+            <div class="d-flex justify-content-between document-result-info">
+                <span class="badge-creation badge-secondary"><i class="fas fa-file-alt"></i> <%= law.creation_number %></span>
+                <p class="primaryinfo"><%= law.articles.count %> artículos</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    <% end %>
+    <button id="see_more_laws_link" class="btn btn-outline-primary btn-more-laws" style="margin-top:2%;" onclick="showCollapsableLawCards();return false;">Ver más documentos</button>
+  </div>
+  <hr>
+  <br>
+<% end %>
+
+<% if @grouped_laws && @grouped_laws.size > 0 %>
+  <section class="d-flex justify-content-between articles-result-info">
+    <label class="resultinfo-articles">En el contenido de leyes</label>
+    <span class="resultinfo-articles"> <%= @articles_result_text %></span>
+  </section>
+  <div class="list-group">
+    <% i = 0 %>
+    <% @grouped_laws.each do |grouped_law| %>
+      <% i += 1 %>
+      <div class="collapsable-specific-results-cards list-group-item col-sm-12" style="display:<%= i>6 ? 'none' : 'block' %>; margin-bottom: 10px;">
+        <a class="" href="<%= law_path(grouped_law[:law]) + '?query='+@query %>">
+        <p style="font-size: 15px">
+          <% grouped_law[:materia_names].each do |materia_name| %>
+            <span class="badge badge--materia"><%= materia_name %></span>
+          <% end %>
+        </p>
+        <h5 class="result-card-title"><%= grouped_law[:law].name %></h5>
+        <p class="resultinfo-content"><%= grouped_law[:preview] %></p>
+        <div class="d-flex justify-content-between document-result-info">
+            <span class="badge-creation badge-secondary"><i class="fas fa-file-alt"></i> <%= grouped_law[:law].creation_number %></span>
+            <span class="resultinfo-article-count">
+              <% if grouped_law[:count] == 1 %>
+               <%= grouped_law[:count] %>  artículo
+              <% else %>
+                +<%= grouped_law[:count] %> artículos
+              <% end %>
+            </span>
+        </div>
+        </a>
+      </div>
+    <% end %>
+  </div>
+  <button id="see_more_specific_results_link" class="btn btn-outline-primary btn-block" style="margin-top:2%;" onclick="showCollapsableSpecificResultsCards();return false;">Ver más resultados</button>
+  <br>
+  <br>
+<% end %>
+
+<script>
+visible_collapsable_law_cards = 6
+visible_collapsable_specific_results_cards = 6
+
+collapsable_law_cards_elements = document.getElementsByClassName("collapsable-law-cards")
+collapsable_law_specific_results_elements = document.getElementsByClassName("collapsable-specific-results-cards")
+
+if(collapsable_law_cards_elements.length <= 6)
+{
+  hideSeeMoreLawsLink()
+}
+
+if(collapsable_law_specific_results_elements.length <= 6)
+{
+  hideSeeMoreSpecificResultsLink()
+}
+
+function showCards(cards, visible_cards)
+{
+  for(var i=0; i<visible_cards && i<cards.length; i++)
+  {
+    cards[i].style.display = "flex"
+  }
+}
+
+function showCollapsableLawCards() {
+  visible_collapsable_law_cards += 6
+  if(visible_collapsable_law_cards >= collapsable_law_cards_elements.length)
+  {
+    hideSeeMoreLawsLink()
+  }
+  showCards(collapsable_law_cards_elements, visible_collapsable_law_cards)
+}
+
+function showCollapsableSpecificResultsCards() {
+  visible_collapsable_specific_results_cards += 6
+  if(visible_collapsable_specific_results_cards >= collapsable_law_specific_results_elements.length)
+  {
+    hideSeeMoreSpecificResultsLink()
+  }
+  showCards(collapsable_law_specific_results_elements, visible_collapsable_specific_results_cards)
+}
+
+function hideSeeMoreLawsLink()
+{
+  document.getElementById("see_more_laws_link").style.display = "none"
+}
+
+function hideSeeMoreSpecificResultsLink()
+{
+  document.getElementById("see_more_specific_results_link").style.display = "none"
+}
+</script>

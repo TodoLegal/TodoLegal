@@ -11,6 +11,7 @@ gem 'thin'
 gem 'route_translator'
 gem 'devise'
 gem 'redcarpet'
+gem 'hiredis'
 gem 'google-api-client'
 gem 'whenever', require: false
 gem 'exception_notification'

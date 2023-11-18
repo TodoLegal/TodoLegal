@@ -110,7 +110,7 @@ class Api::V1::DocumentsController < ApplicationController
         fields: ["name^10", "issue_id^5", "short_description^2", "description"],
         where: searchkick_where,
         misspellings: {edit_distance: 2, below: 5},
-        limit: 2,
+        limit: limit,
         offset: params["offset"].to_i)
     else
       documents = Document.search(

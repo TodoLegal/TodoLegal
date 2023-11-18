@@ -274,10 +274,11 @@ protected
   end
 
   def attach_file_to_documents documents, can_access
-    docs = documents
+    document_hash = documents
+    query_array   = document_hash["query"]
 
-    docs.each do | document |
-      ar_document = Document.find_by_id(document["id"])
+    query_array.each do | document |
+      ar_document = Document.find_by_id(document['id'])
       if can_access && ar_document.original_file.attached?
         document["file"] = url_for(ar_document.original_file)
         document["can_access"] = true
@@ -287,7 +288,7 @@ protected
       end
     end
 
-    return docs
+    return query_array
   end
 
 end

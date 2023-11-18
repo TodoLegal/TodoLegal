@@ -11,8 +11,21 @@ Rails.application.configure do
   config.cache_store = :redis_cache_store, {
     url: ENV['REDIS_URL']
   }
+  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
+
   # Do not eager load code on boot.
   config.eager_load = false
+  config.action_controller.perform_caching = true
+  config.action_controller.page_cache_directory = Rails.root.join("public", "cached_pages")
+
+  config.action_mailer.perform_caching = false
+  config.action_mailer.delivery_method = :mailgun
+  config.action_mailer.default_url_options = { host: "devchuco.todolegal.app" }
+  config.action_mailer.mailgun_settings = {
+    api_key: ENV['MAILGUN_KEY'],
+    domain: ENV['MAILGUN_URL']
+  # api_host: 'api.eu.mailgun.net'  # Uncomment this line for EU region domains
+  }
 
   # Show full error reports.
   config.consider_all_requests_local = true
@@ -76,4 +89,5 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
+  config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 end

@@ -29,7 +29,7 @@ class Api::V1::DocumentsController < ApplicationController
       json_document = json_document.merge(file: url_for(@document.original_file))
       related_documents = attach_file_to_documents(related_documents, true)
     else
-      json_document = json_document.merge(file: "")
+      json_document = json_document.merge(file: '')
       related_documents = attach_file_to_documents(related_documents, false)
     end
 
@@ -52,43 +52,43 @@ class Api::V1::DocumentsController < ApplicationController
       user_id = user.id
     end
     limit = 100
-    if !params["limit"].blank?
-      limit = params["limit"]
+    if !params['limit'].blank?
+      limit = params['limit']
     end
-    query = "*"
-    if !params["query"].blank?
-      query = params["query"]
+    query = '*'
+    if !params['query'].blank?
+      query = params['query']
     end
     from = nil
     to = nil
-    if !params["from"].blank?
+    if !params['from'].blank?
       begin
-        Date.parse(params["from"])
-        from = params["from"]
+        Date.parse(params['from'])
+        from = params['from']
       rescue ArgumentError
       end
     end
-    if !params["to"].blank?
+    if !params['to'].blank?
       begin
-        Date.parse(params["to"])
-        to = params["to"]
+        Date.parse(params['to'])
+        to = params['to']
       rescue ArgumentError
       end
     end
 
     searchkick_where = {
       publication_date: {gte: from, lte: to},
-      name: {not: "Gaceta"},
+      name: {not: 'Gaceta'},
     }
 
-    if !params["tags"].blank? and params["tags"].kind_of?(Array)
+    if !params['tags'].blank? and params['tags'].kind_of?(Array)
       document_ids = []
-      params["tags"].each do |tag_name|
+      params['tags'].each do |tag_name|
         tag = Tag.find_by_name(tag_name)
         tag_type = TagType.find_by(id: tag.tag_type_id)
         if tag
           document_ids = []
-          if tag_type.name == "Institución"
+          if tag_type.name == 'Institución'
             tag.issuer_document_tags.each do |issuer_tag|
               document_ids.push(issuer_tag.document_id)
             end 
@@ -104,21 +104,21 @@ class Api::V1::DocumentsController < ApplicationController
     end
 
     #if query is not empty returns result based in the boost level given to each field, else, returns results without boost and ordered by publication date
-    if query != "*"
+    if query != '*'
       documents = Document.search(
         query,
-        fields: ["name^10", "issue_id^5", "short_description^2", "description"],
+        fields: ['name^10', 'issue_id^5', 'short_description^2', 'description'],
         where: searchkick_where,
         misspellings: {edit_distance: 2, below: 5},
         limit: limit,
-        offset: params["offset"].to_i)
+        offset: params['offset'].to_i)
     else
       documents = Document.search(
         query,
-        fields: ["name", "issue_id", "short_description", "description" ],
+        fields: ['name', 'issue_id', 'short_description', 'description' ],
         where: searchkick_where,
         limit: limit,
-        offset: params["offset"].to_i,
+        offset: params['offset'].to_i,
         order: {publication_date: :desc})
     end
 
@@ -150,7 +150,7 @@ class Api::V1::DocumentsController < ApplicationController
 
     documents.each do | document |
       tags = []
-      document_tags = DocumentTag.where(document_id: document["id"].to_i)
+      document_tags = DocumentTag.where(document_id: document['id'].to_i)
       if document_tags.first && document_tags.first.tag
         puts document_tags.first.tag.name
       end
@@ -159,23 +159,23 @@ class Api::V1::DocumentsController < ApplicationController
           if document_tag.tag && document_tag.tag.tag_type
             tags.push({"name": document_tag.tag.name, "type": document_tag.tag.tag_type.name})
           elsif document_tag.tag
-            tags.push({"name": document_tag.tag.name, "type": ""})
+            tags.push({"name": document_tag.tag.name, "type": ''})
           end
         end
       end
-      issuer_name = get_issuer_name document["id"].to_i
-      document["issuer"] = issuer_name
-      document["tags"] = tags
-      document_json_post_process document["id"].to_i, document
+      issuer_name = get_issuer_name document['id'].to_i
+      document['issuer'] = issuer_name
+      document['tags'] = tags
+      document_json_post_process document['id'].to_i, document
     end
 
-    if !params["query"].blank?
+    if !params['query'].blank?
       $tracker.track(user_id, 'Valid Search', {
         'query' => query,
-        'location' => "API",
+        'location' => 'API',
         'limit' => limit,
-        'offset' => params["offset"],
-        'tags' => params["tags"],
+        'offset' => params['offset'],
+        'tags' => params['tags'],
         'results' => total_count
       })
     end
@@ -200,22 +200,22 @@ protected
   def document_json_post_process document_id, document_json
     judgement_auxiliary = JudgementAuxiliary.find_by_document_id(document_id)
     if judgement_auxiliary
-      document_json["applicable_laws"] = judgement_auxiliary.applicable_laws
+      document_json['applicable_laws'] = judgement_auxiliary.applicable_laws
     end
     document_type = Document.find_by_id(document_id).document_type
     if document_type
-      document_json["document_type"] = get_document_type_name(document_id, document_type)
+      document_json['document_type'] = get_document_type_name(document_id, document_type)
     end
-    document_json.delete("full_text")
+    document_json.delete('full_text')
     return document_json
   end
 
   def get_document_type_name document_id, document_type
     case document_type.name
-    when "Sección de Gaceta"
-      act_type_tag = TagType.find_by(name: "Tipo de Acto")
+    when 'Sección de Gaceta'
+      act_type_tag = TagType.find_by(name: 'Tipo de Acto')
       type_name = Document.find_by_id(document_id).tags.find_by(tag_type_id: act_type_tag.id)
-      type_name = type_name ? type_name.name : ""
+      type_name = type_name ? type_name.name : ''
       return type_name
     else
       return document_type.name
@@ -233,7 +233,7 @@ protected
 
   def get_related_documents
     documents = []
-    if @document && @document&.document_type&.name == "Auto Acordado"
+    if @document && @document&.document_type&.name == 'Auto Acordado'
       #extract the year of the Auto Acordado date
       year_to_retrieve = @document.publication_date&.year 
       #if year_to_retrieve if not nil, use that year, else use 2015
@@ -242,13 +242,13 @@ protected
         while documents.length < 20
           #we want a maximum of 20 related documents
           missing_documents = (documents.length - 20).abs
-          temp = Document.where("extract(year from publication_date) = ? AND document_type_id = ? AND id != ?", year_to_retrieve, @document.document_type_id, @document.id).limit(missing_documents)
+          temp = Document.where('extract(year from publication_date) = ? AND document_type_id = ? AND id != ?', year_to_retrieve, @document.document_type_id, @document.id).limit(missing_documents)
           documents = temp ? documents + temp : documents
           year_to_retrieve = year_to_retrieve + 1
         end
       end
     elsif @document && @document.publication_number == nil
-      materia_type = TagType.find_by(name: "materia")
+      materia_type = TagType.find_by(name: 'materia')
       document_tag = @document.tags.find_by(tag_type_id: materia_type.id)
       if !document_tag
         document_tag = @document.tags.first
@@ -264,7 +264,7 @@ protected
   def document_exists!
     @document = Document.find_by_id(params[:id])
     if !@document
-      render json: {"error": "Document not found."}
+      render json: {"error": 'Document not found.'}
       return
     end
   end
@@ -274,20 +274,20 @@ protected
   end
 
   def attach_file_to_documents documents, can_access
-    docs = documents
+    document_hash = documents
+    query_array   = document_hash['query']
 
-    docs.each do | document |
-      ar_document = Document.find_by_id(document["id"])
+    query_array.each do |document|
+      ar_document = Document.find_by_id(document['id'])
       if can_access && ar_document.original_file.attached?
-        document["file"] = url_for(ar_document.original_file)
-        document["can_access"] = true
+        document['file'] = url_for(ar_document.original_file)
+        document['can_access'] = true
       else
-        document["file"] = ""
-        document["can_access"] = false
+        document['file'] = ''
+        document['can_access'] = false
       end
     end
 
-    return docs
+    query_array
   end
-
 end

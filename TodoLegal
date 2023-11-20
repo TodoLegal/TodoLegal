@@ -1,0 +1,57 @@
+server{
+    server_name 0.0.0.0 18.217.101.186 devchuco.todolegal.app www.devchuco.todolegal.app hablame.app;
+    # Tell Nginx and Passenger where your app's 'public' directory is
+    root /home/deploy/TodoLegal/public;
+
+    # Turn on passenger
+    passenger_enabled on;
+    passenger_ruby /usr/local/rbenv/shims/ruby;
+    passenger_friendly_error_pages on;
+    passenger_min_instances 1;
+    #passenger_pre_start https://devchuco.todolegal.app;
+    #passenger_max_pool_size 2;
+
+    listen [::]:443 ssl ipv6only=on; # managed by Certbot
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/devchuco.todolegal.app/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/devchuco.todolegal.app/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+    if (-f $document_root/cached_pages/$uri/index.html) {
+      rewrite (.*) /cached_pages/$1/index.html break;
+    }
+
+    # Other HTML Files
+    if (-f $document_root/cached_pages/$uri.html) {
+      rewrite (.*) /cached_pages/$1.html break;
+    }
+
+    # All
+    if (-f $document_root/cached_pages/$uri) {
+        rewrite (.*) /cached_pages/$1 break;
+    }
+
+
+}
+
+server{
+    if ($host = www.devchuco.todolegal.app) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = devchuco.todolegal.app) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    server_name 0.0.0.0 18.217.101.186 devchuco.todolegal.app www.devchuco.todolegal.app hablame.app;
+    return 404; # managed by Certbot
+
+
+
+
+}

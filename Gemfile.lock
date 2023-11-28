@@ -117,7 +117,7 @@ GEM
     connection_pool (2.2.5)
     crass (1.0.6)
     daemons (1.4.0)
-    dalli (3.2.1)
+    dalli (3.2.3)
     declarative (0.0.20)
     devise (4.8.0)
       bcrypt (~> 3.0)

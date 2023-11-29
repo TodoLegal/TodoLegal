@@ -1,5 +1,5 @@
 require 'capistrano/env_config'
-require 'capistrano/nvm'
+
 
 
 
@@ -49,6 +49,3 @@ require 'capistrano/rbenv'
 set :rbenv_type, :user
 set :rbenv_ruby, '3.0.0'
 
-set :nvm_type, :user # or :system, depends on your nvm setup
-set :nvm_node, 'v0.39.5'
-set :nvm_map_bins, %w{node npm yarn rake}

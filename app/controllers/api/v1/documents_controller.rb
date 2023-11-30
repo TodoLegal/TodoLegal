@@ -141,6 +141,15 @@ class Api::V1::DocumentsController < ApplicationController
 
     can_access_document = can_access_documents(user)
     #this piece of code
+
+    #Temporal access token
+    if params[:temporal_access_token] == ENV['TEMP_ACCESS_TOKEN']
+      temp_user = User.find_by(email: ENV['SESSION_EMAIL'])
+      if temp_user && temp_user.valid_password?(ENV['SESSION_PASSWORD'])
+        sign_in(temp_user) 
+      end
+      can_access_document = true
+    end
     
     if can_access_document
       documents = attach_file_to_documents(documents, true)

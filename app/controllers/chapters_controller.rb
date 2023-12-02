@@ -1,12 +1,9 @@
 class ChaptersController < ApplicationController
   before_action :set_chapter, only: [:edit, :update]
-  before_action :authenticate_editor_tl!, only: [:edit, :update]
+  before_action :authenticate_editor!, only: [:edit, :update]
 
   # GET /chapters/1/edit
   def edit
-  end
-
-  def show
   end
 
   # PATCH/PUT /chapters/1
@@ -14,7 +11,7 @@ class ChaptersController < ApplicationController
   def update
     respond_to do |format|
       if @chapter.update(chapter_params)
-        format.html {  redirect_to law_path(@chapter.law, anchor: "chapter_#{@chapter.position}"), notice: 'Chapter was successfully updated.' }
+        format.html { redirect_to @chapter, notice: 'Chapter was successfully updated.' }
         format.json { render :show, status: :ok, location: @chapter }
       else
         format.html { render :edit }

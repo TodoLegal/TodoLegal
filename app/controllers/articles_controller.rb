@@ -1,7 +1,6 @@
 class ArticlesController < ApplicationController
   before_action :set_article, only: [:edit, :update]
-  before_action :authenticate_editor_tl!, only: [:edit, :update]
-  include ArticlesHelper
+  before_action :authenticate_editor!, only: [:edit, :update]
 
   # GET /articles/1/edit
   def edit
@@ -12,13 +11,7 @@ class ArticlesController < ApplicationController
   def update
     respond_to do |format|
       if @article.update(article_params)
-        if params[:commit] == 'Guardar cambios'
-          format.html { redirect_to edit_law_path(@article.law, article_number: @article.number), notice: 'Article was successfully updated.' }
-        elsif params[:commit] == 'Guardar'
-          format.html { redirect_to law_path(@article.law, query: "/#{@article.number}"), notice: 'Article was successfully updated.' }
-        elsif params[:commit] == 'Guardar y Siguiente'
-          format.html { redirect_to edit_law_path(@article.law, article_number: "#{@article.number.to_i + 1}"), notice: 'Article was successfully updated.' }
-        end
+        format.html { redirect_to edit_law_path(@article.law, article_number: @article.number), notice: 'Article was successfully updated.' }
       else
         format.html { render :edit }
         format.json { render json: @article.errors, status: :unprocessable_entity }
@@ -36,5 +29,4 @@ class ArticlesController < ApplicationController
     def article_params
       params.require(:article).permit(:number, :body, :position, :law_id)
     end
-
 end

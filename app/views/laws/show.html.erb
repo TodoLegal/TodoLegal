@@ -107,7 +107,6 @@
         </div>
         <div class="tab-pane fade show" id="modifications" role="tabpanel" aria-labelledby="modifications-tab">
           <%= render 'modifications_tab' %>
-
         </div>
         <div class="tab-pane fade show" id="related" role="tabpanel" aria-labelledby="related-tab">
           <%= render 'related_tab' %>
@@ -241,11 +240,11 @@
       <% if @show_laboral_related_podcast %>
         <div class="collapsable-law-cards col" style="display:<%= i>6 ? 'none' : 'block' %>">
           <div class="card card-body h-100" style="padding:0px">
-            <a class="" href="https://open.spotify.com/episode/13gHK4cyrxUKMqCmOtSqX7?si=ed8dfa059bbf4771?tlclick=<%= @law.name %>" style="padding:20px" target="_blank">
+            <a class="" href="https://pod.link/LeyAbierta/episode/498a178377610ccf0c7ccf559d1fdf4d?tlclick=<%= @law.name %>" style="padding:20px" target="_blank">
               <p style="font-size: 15px">
                 <span class="badge badge--materia">Podcast</span>
               </p>
-              <h5 class="card-title">¿Cómo evitar problemas laborales en tu empresa?</h5>
+              <h5 class="card-title">Conceptos Generales del Derecho Laboral en Honduras</h5>
               <div class="d-flex justify-content-between document-result-info">
                 <span class="badge-creation badge-secondary"><img class="icon-drive" src="/img/ley_abierta_logo.png"/></span>
               </div>

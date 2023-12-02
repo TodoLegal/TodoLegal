@@ -2,10 +2,6 @@
     padding-top: 5%;
 }
 
-.container--landing {
-    max-width: 1340px;
-}
-
 .landing-cards{
     background: #FFFFFF 0% 0% no-repeat padding-box;
     box-shadow: 6px 11px 17px #00000029;
@@ -27,7 +23,7 @@ a:hover{
 }
 
 .landing-card-title{
-    font: normal normal 900 32px/68px Poppins;
+    font: normal normal 900 42px/68px Poppins;
     letter-spacing: 0px;
     color: #000000;
     margin-bottom: 0px;
@@ -37,7 +33,7 @@ a:hover{
 
 .landing-card-text{
     color: #22252C;
-    font: normal normal normal 19px/25px Poppins;
+    font: normal normal normal 20px/30px Poppins;
     letter-spacing: 0px;
     margin-bottom: 0px;
     opacity: 1;
@@ -59,14 +55,10 @@ a:hover{
 
 .landing-page-button{
     background: #FF5722 0% 0% no-repeat padding-box !important;
-    font: normal normal bold 14px/33px Poppins;
+    font: normal normal bold 15px/33px Poppins;
     letter-spacing: 0px;
     opacity: 1;
     width: 100%
-}
-
-.spacer{
-    padding-top: 6px;
 }
 
 .open-leyabierta-btn{
@@ -76,10 +68,6 @@ a:hover{
 @media only screen and (max-width: 320px){
     .landing-cards{
         padding-top: 0px !important;
-    }
-
-    .spacer{
-        padding-top: 0px;
     }
 }
 
@@ -108,10 +96,6 @@ a:hover{
         text-align: center;
         opacity: 1;
     }
-
-    .spacer{
-        padding-top: 0px;
-    }
   }
 
   /* Tablets */
@@ -130,7 +114,7 @@ a:hover{
     }
 
     .landing-card-title{
-      font-size: 20px;
+      font-size: 27px;
       line-height: 33px;
     }
 
@@ -144,11 +128,11 @@ a:hover{
     }
 
     .landing-card-text{
-        font: normal normal normal 13px/20px Poppins;
+        font: normal normal normal 17px/27px Poppins;
     }
 
     .landing-page-button{
-        font: normal normal bold 10px/20px Poppins;
+        font: normal normal bold 14px/33px Poppins;
     }
 
     .landing-page{
@@ -156,10 +140,6 @@ a:hover{
     }
 
     .count-text{
-        font-size: 11px;
-    }
-
-    .spacer{
-        padding-top: 0px;
+        font-size: 14px;
     }
   }

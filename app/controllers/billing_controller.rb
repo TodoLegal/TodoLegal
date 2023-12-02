@@ -1,8 +1,6 @@
 class BillingController < ApplicationController
   layout 'billing'
   before_action :user_plan_is_inactive!, only: [:charge, :checkout]
-  include ApplicationHelper
-  
   
   def checkout
     if !current_user
@@ -200,13 +198,6 @@ class BillingController < ApplicationController
     
     if !user_trial
       user_trial = UserTrial.create(user_id: user.id, trial_start: DateTime.now, trial_end: DateTime.now + 2.weeks, active: false)
-    end
-
-    #delete notification email job if exists and enqueue a new job
-    user_preferences = UsersPreference.find_by(user_id: user.id)
-    if user_preferences
-      delete_user_notifications_job(user_preferences.job_id)
-      enqueue_new_job(user)
     end
 
     # if process_doorkeeper_redirect_to

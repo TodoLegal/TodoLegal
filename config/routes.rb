@@ -66,7 +66,6 @@ Rails.application.routes.draw do
   get 'users_preferences/skip_notifications', to: 'users_preferences#skip_notifications', as: "skip_notifications"
   get '/confirm_email_view', to: 'home#confirm_email_view', as:"confirm_email_view"
   post "admin/activate_batch_of_users" => "admin#activate_batch_of_users", as: "activate_batch_of_users"
-  post "laws/insert_article", to: "laws#insert_article", as: "insert_article"
 
   get '/rails/active_storage/blobs/redirect/:signed_id/*filename', to: 'active_storage_redirect#show'
   

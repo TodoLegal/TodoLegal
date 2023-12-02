@@ -26,14 +26,6 @@
       <h4> Marcas de Fábrica </h4>
     <% elsif @selected_document_type == "seccion" %>
       <h4> Sección de Gaceta </h4>
-    <% elsif @selected_document_type == "autos" %>
-      <h4> Auto Acordado </h4>
-    <% elsif @selected_document_type == "formats" %>
-      <h4> Formato </h4>
-    <% elsif @selected_document_type == "comunicados" %>
-      <h4> Comunicado </h4>
-    <% elsif @selected_document_type == "others" %>
-      <h4> Otros</h4>
     <% else %>
       <h4> Ninguno </h4>
     <% end %>
@@ -48,20 +40,6 @@
   <br>
 
   <div class="actions">
-    <%= form.submit "Subir", class: 'btn btn-primary', id:'submit-btn', onclick:"showSpinner()" %>
-  </div>
- <div class="spinner-container" style="display: none;">
-    <div class="spinner-border text-primary" role="status">
-      <span class="sr-only">Loading...</span>
-    </div>
+    <%= form.submit "Subir", class: 'btn btn-primary' %>
   </div>
 <% end %>
-
-<script>
-  function showSpinner(){
-    var spinnerContainer = document.querySelector('.spinner-container');
-    var submitButton = document.getElementById('submit-btn');
-    spinnerContainer.style.display = 'block';
-    submitButton.style.display = "none";
-  }
-</script>

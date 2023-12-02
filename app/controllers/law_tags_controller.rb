@@ -1,6 +1,6 @@
 class LawTagsController < ApplicationController
   before_action :set_law_tag, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_editor_tl!, only: [:show, :new, :edit, :create, :update, :destroy]
+  before_action :authenticate_admin!, only: [:show, :new, :edit, :create, :update, :destroy]
 
   # GET /law_tags/1
   # GET /law_tags/1.json

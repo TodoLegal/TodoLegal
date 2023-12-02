@@ -5,7 +5,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :null_session
   before_action :configure_devise_permitted_parameters, if: :devise_controller?
   before_action :miniprofiler
-  before_action :set_newrelic_user_context
   
   #acts_as_token_authentication_handler_for User, if: :json_request?
   skip_before_action :configure_devise_permitted_parameters, if: :json_request?
@@ -35,10 +34,6 @@ class ApplicationController < ActionController::Base
     current_user != nil && (current_user.permissions.find_by_name("Editor") != nil || current_user.permissions.find_by_name("Admin") != nil)
   end
 
-  def current_user_is_editor_tl
-    current_user && (current_user.permissions.find_by_name("Editor TL") || current_user.permissions.find_by_name("Editor") || current_user.permissions.find_by_name("Admin"))
-  end
-
   def current_user_plan_is_active customer #TODO: remove duplicated code
     begin
       customer.subscriptions.data.each do |subscription|
@@ -47,7 +42,7 @@ class ApplicationController < ActionController::Base
         end
       end
     rescue
-      return false
+      puts "Todo: Handle Stripe customer error"
     end
     return false
   end
@@ -75,12 +70,6 @@ class ApplicationController < ActionController::Base
 
   def authenticate_editor!
     if !current_user_is_editor
-      redirect_to "/?error=Invalid+permissions"
-    end
-  end
-
-  def authenticate_editor_tl!
-    if !current_user_is_editor_tl
       redirect_to "/?error=Invalid+permissions"
     end
   end
@@ -174,7 +163,7 @@ class ApplicationController < ActionController::Base
       })
     end
 
-    @user_can_edit_law = current_user_is_editor_tl
+    @user_can_edit_law = current_user_is_editor
     @user_can_access_law = user_can_access_law @law, current_user
     if !@user_can_access_law
       @stream = @stream.take(5)
@@ -258,13 +247,6 @@ class ApplicationController < ActionController::Base
     return result_stream, result_index_items, result_go_to_article, result_has_articles_only
   end
   
-  def set_newrelic_user_context
-    if current_user
-      user_id = current_user.id
-      # Set the user context in New Relic
-      NewRelic::Agent.add_custom_attributes(user_id: user_id)
-    end
-  end
 protected
   
   def after_sign_in_path_for(resource)

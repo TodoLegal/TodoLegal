@@ -9,10 +9,6 @@ module ApplicationHelper
     current_user && (current_user.permissions.find_by_name("Editor") || current_user.permissions.find_by_name("Admin"))
   end
 
-  def current_user_is_editor_tl
-    current_user && (current_user.permissions.find_by_name("Editor TL") || current_user.permissions.find_by_name("Editor") || current_user.permissions.find_by_name("Admin"))
-  end
-
   def current_user_is_pro
     current_user && current_user.permissions.find_by_name("Pro")
   end
@@ -176,59 +172,13 @@ module ApplicationHelper
         end
       end
     rescue
-      return false
+      puts "Todo: Handle Stripe customer error"
     end
     return false
   end
 
-  def check_if_user_has_active_stripe_plan user
-    stripe_status = "Sin Plan"
-
-    if user.stripe_customer_id
-      customer = Stripe::Customer.retrieve(user.stripe_customer_id)
-      if current_user_plan_is_active(customer)
-        stripe_status = "Activo"
-      else
-        stripe_status = "Downgraded"
-      end
-    else user.stripe_customer_id
-      stripe_status = "Sin Plan"
-    end
-
-    return stripe_status
-  end
-
-  def return_user_plan_status user
-    todolegal_status = "Free trial"
-    user_trial = user.user_trial ? true : false
-    todolegal_status = user.user_trial && user.user_trial.active ? todolegal_status : "Free trial end"
-    todolegal_status = user.permissions.find_by_name("Editor") ? "Editor" : todolegal_status
-    todolegal_status = user.permissions.find_by_name("Pro") ? "Pro B2B" : todolegal_status
-    todolegal_status = user.permissions.find_by_name("Admin") ? "Admin" : todolegal_status
-
-    stripe_status = "Sin Plan"
-    if user.stripe_customer_id
-      customer = Stripe::Customer.retrieve(user.stripe_customer_id)
-      if current_user_plan_is_active(customer)
-        stripe_status = "Pro Stripe"
-      else
-        stripe_status = "Downgraded"
-      end
-    end
-    
-    return todolegal_status, stripe_status
-  end
-
   def ley_abierta_url
     "https://leyabierta.todolegal.app/"
-  end
-
-  def libreria_todolegal_url
-    "https://libreria.todolegal.app/"
-  end
-
-  def valid_url
-    "https://valid.todolegal.app"
   end
 
   def non_pro_law_count
@@ -309,23 +259,6 @@ module ApplicationHelper
     end
 
     return tags_names
-  end
-
-  def update_mixpanel_user user
-    todolegal_status, stripe_status = return_user_plan_status(user)
-    $tracker.people.set(user.id, {
-      '$email'            => user.email,
-      'first_name'      => user.first_name,
-      'last_name'      => user.last_name,
-      'phone_number'      => user.phone_number,
-      'stripe_status'     => stripe_status,
-      'todolegal_status' => todolegal_status,
-      'current_sign_in_at'      => user.current_sign_in_at,
-      'last_sign_in_at'      => user.last_sign_in_at,
-      'current_sign_in_ip'      => user.current_sign_in_ip,
-      'last_sign_in_ip'      => user.last_sign_in_ip,
-      'receive_information_emails'      => user.receive_information_emails
-    }, ip = user.current_sign_in_ip, {'$ignore_time' => 'true'});
   end
 
   # def already_logged_in_helper

@@ -36,6 +36,7 @@ Rails.application.configure do
   config.action_controller.perform_caching = true
   config.action_controller.page_cache_directory = Rails.root.join("public", "cached_pages")
   config.hosts << ENV['SERVER_IP']
+  config.hosts << "chunch.es"
   Rails.application.config.hosts << '.todolegal.app'
   # Eager load code on boot. This eager loads most of Rails and
   # your application in memory, allowing both threaded web servers

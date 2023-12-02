@@ -2,11 +2,11 @@
 <% content_for :title, "TodoLegal - El buscador de leyes de Honduras" %>
 
 <div class="jumbotron d-none d-sm-block" align="center" style="padding-top: 0px; padding-bottom: 20px;background-color: #EFF3F8;margin: 0px">
-  <a href="/home"><img align="center" src="/img/logo_landing_mobile.png" class="img-fluid-vertical" height="300"></a>
+  <a href="/"><img align="center" src="/img/logo_landing_mobile.png" class="img-fluid-vertical" height="300"></a>
 </div>
 
 <div class="jumbotron d-block d-sm-none" style="padding-top: 0px; padding-bottom: 0px;background-color: #EFF3F8;margin: 0px">
-  <a href="/home"><img align="center" src="/img/logo_landing_mobile.png" class="img-fluid" height="300"></a>
+  <a href="/"><img align="center" src="/img/logo_landing_mobile.png" class="img-fluid" height="300"></a>
 </div>
 
 <div class="container container--home">
@@ -22,18 +22,7 @@
   <br/>
   <%= render partial: 'search_law_input', locals: {target_url: '/search_law', home_flag: true } %>
 
- <% counter = 0 %>
- <div class="row">
-    <% if  @tag_ciadi && @tag_ciadi.laws.count != 0 %>
-      <div class="col-sm-6 col-md-4 py-2">
-        <div class="card card-body h-100" style="padding:0px">
-          <a class="" href="<%= tag_path(@tag_ciadi) %>" style="padding:20px">
-            <h5 class="card-title"><%= @tag_ciadi.name %></h5>
-            <p><%= @tag_ciadi.laws.count %> reglamentos y convenios</p>
-          </a>
-        </div>
-      </div>
-    <% end %>
+  <div class="row">
     <% @tags.each do |tag| %>
       <% if tag.laws.count != 0 %>
         <div class="col-sm-6 col-md-4 py-2">
@@ -41,17 +30,6 @@
             <a class="" href="<%= tag_path(tag) %>" style="padding:20px">
               <h5 class="card-title"><%= tag.name %></h5>
               <p><%= tag.laws.count %> leyes</p>
-            </a>
-          </div>
-        </div>
-        <% counter += 1 %>
-      <% end %>
-      <% if counter == 4 && @tag_camaras_de_comercio && @tag_camaras_de_comercio.laws.count != 0 %>
-        <div class="col-sm-6 col-md-4 py-2">
-          <div class="card card-body h-100" style="padding:0px">
-            <a class="" href="<%= tag_path(@tag_camaras_de_comercio) %>" style="padding:20px">
-              <h5 class="card-title"><%= @tag_camaras_de_comercio.name %></h5>
-              <p><%= @tag_camaras_de_comercio.laws.count %> leyes y reglamentos</p>
             </a>
           </div>
         </div>

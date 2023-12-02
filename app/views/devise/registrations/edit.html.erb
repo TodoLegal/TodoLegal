@@ -253,6 +253,13 @@
         <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
       <% end %>
 
+      
+      <!-- Cancel Button -->
+      <button type="button" class="btn btn-link btn-delete-account" data-toggle="modal" data-target="#cancelAccountModal" id="delete-account-btn">
+        <i class="fas fa-trash-alt" aria-hidden="true"></i>
+        <span class="">Borrar cuenta</span>
+      </button>
+      <!-- End Cancel Button -->
 
       <!-- Start delet account Modal -->
       <div class="modal fade" id="cancelAccountModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalCenterTitle" aria-hidden="true">

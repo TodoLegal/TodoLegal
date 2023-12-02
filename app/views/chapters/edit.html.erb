@@ -1,7 +1,6 @@
-<div class="container">
-  <h1>Editing Chapter</h1>
+<h1>Editing Chapter</h1>
 
-  <%= render 'form', chapter: @chapter %>
+<%= render 'form', chapter: @chapter %>
 
-  <%= link_to 'Back', @document %>
-</div>
+<%= link_to 'Show', @chapter %> |
+<%= link_to 'Back', chapters_path %>

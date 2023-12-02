@@ -1,8 +1,8 @@
 class LawsController < ApplicationController
   layout 'law', only: [:show, :new, :edit]
-  before_action :set_law, only: [:show, :edit, :update, :destroy, :insert_article]
+  before_action :set_law, only: [:show, :edit, :update, :destroy]
   before_action :set_materias, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_editor_tl!, only: [:index, :new, :edit, :create, :update, :destroy]
+  before_action :authenticate_editor!, only: [:index, :new, :edit, :create, :update, :destroy]
 
   # GET /laws
   # GET /laws.json
@@ -30,7 +30,7 @@ class LawsController < ApplicationController
   def edit
     @article_number = params[:article_number]
     if @article_number
-      @article = @law.articles.find_by(number: ["#{@article_number}", " #{@article_number}"])
+      @article = @law.articles.where('number LIKE ?', "%#{@article_number}%").first
     else
       @article = @law.articles.first
     end
@@ -80,27 +80,6 @@ class LawsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to laws_url, notice: 'Law was successfully destroyed.' }
       format.json { head :no_content }
-    end
-  end
-
-  def insert_article
-    @article_number = params[:article_number]
-    if @article_number
-      @previous_article = @law.articles.find_by(number: ["#{@article_number}", " #{@article_number}"])
-      next_articles = @law.articles.where("position > ?", @previous_article.position).order(position: :asc)
-
-      next_articles.each do | article |
-        article.position = article.position + 1
-        article.save
-      end
-
-      @previous_article_number = (@previous_article.number.to_i + 1).to_s
-      new_article = Article.create(number: @previous_article_number, body: "", position: @previous_article.position + 1, law_id: @law.id)
-      
-      redirect_to edit_law_path(@law, article_number: new_article.number)
-      
-    else
-      redirect_to edit_law_path(@law, article_number: @article_number)
     end
   end
 

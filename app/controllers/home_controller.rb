@@ -13,9 +13,7 @@ class HomeController < ApplicationController
   end
 
   def home
-    @tag_ciadi = Tag.find_by(name: "CIADI")
     @tags = Tag.where(tag_type: TagType.find_by_name("materia"))
-    @tag_camaras_de_comercio = Tag.find_by(name: "Cámaras de Comercio")
     expires_in 10.minutes
 
     if params[:is_free_trial]
@@ -90,12 +88,7 @@ class HomeController < ApplicationController
       @grouped_laws = @grouped_laws.sort_by{|k|k[:count]}.reverse
     else
       @stream.each do |grouped_law|
-        law = {
-          count: grouped_law[1].count,
-          law: Law.find_by_id(grouped_law[0]),
-          preview: ("<b>Artículo " + grouped_law[1].first.number + "</b> ..." + customize_highlight(grouped_law[1].first.pg_search_highlight, @query) + "...").html_safe,
-          tag_text: ""
-        }
+        law = {count: grouped_law[1].count, law: Law.find_by_id(grouped_law[0]), preview: ("<b>Artículo " + grouped_law[1].first.number + "</b> ..." + grouped_law[1].first.pg_search_highlight + "...").html_safe, tag_text: ""}
         law[:materia_names] = law[:law].materia_names
         @grouped_laws.push(law)
         @result_count += grouped_law[1].count
@@ -256,11 +249,6 @@ class HomeController < ApplicationController
   def crash_tester
   end
 
-  def customize_highlight(text, search_query)
-    highlighted_text = text.gsub(/(#{Regexp.escape(search_query)})/i, "<span style='background-color: yellow;'>\\1</span>")
-    highlighted_text.html_safe
-  end  
-
 protected
   def get_folder_files google_drive_data, folder_name
     google_drive_data.each do |file|
@@ -323,4 +311,8 @@ protected
     end
     return result_query
   end
+
+
+
+
 end

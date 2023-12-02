@@ -3,89 +3,55 @@
     <a class="btn navbar-back-arrow" id="navbar-back-button" style="font-size: 1.5rem; color: #171F2A; padding-left: 0px;"> 
         <i class="fas fa-arrow-left"></i>
     </a>
-    <section class="d-inline-flex">
-        <a href="/home" class="text-primary" >
-            <img src="/img/logo_landing_mobile.png" alt="Card image cap" class="big-logo img-fluid">
-        </a>
-        <a href="/" class="navbar-brand text-primary d-none d-md-block" >
-            <img  src="/img/top_navbar/top_navbar.svg" alt="Card image cap" class="logo img-fluid">
-        </a>
-        <img  src="/img/white_line.png" alt="Card image cap" class="vertical-line">
-        <a href="/home" class="navbar-brand text-primary mt-2 ml-2 todolegal" >
-            <img src="/img/top_navbar/Logo-letras-white.svg" alt="Card image cap" class="img-fluid">
-        </a>
-    </section>
+    <a href="/home" class="navbar-brand text-primary" >
+        <img  src="/img/top_navbar/law_top_navbar.svg" alt="Card image cap" class="gray-logo img-fluid">
+        <img  src="/img/top_navbar/top_navbar.svg" alt="Card image cap" class="white-logo img-fluid">
+         
+        <img src="/img/top_navbar/Logo-letras-white.svg" alt="Card image cap" class="todolegal img-fluid">
+    </a>
     <ul class="navbar-nav" >
         <div class="btn-group">
-                <button type="button" onclick="hideDocumentContainer()" class="btn btn-light search-button" id="hideDocumentContainer-button">
-                    <i class="fas fa-search"></i>
+            <button type="button" onclick="hideDocumentContainer()" class="btn btn-light search-button" id="hideDocumentContainer-button">
+                <i class="fas fa-search"></i>
+            </button>
+            <% if current_user_is_admin || current_user_is_editor %>
+                <button type="button" class="btn btn-primary btn-lg btn-avatar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border-radius: 50%;"  data-display="static" id="menu-botton">
+                    <% if current_user.first_name %>
+                        <%= current_user.first_name[0]%>
+                    <% end %>
                 </button>
-                <% if current_user %>
-                    <button type="button" class="btn btn-primary btn-lg btn-avatar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border-radius: 50%;"  data-display="static" id="menu-botton">
-                        <% if current_user.first_name %>
-                            <%= current_user.first_name[0]%>
-                        <% end %>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <div class="name-container">
-                            <div class="circle btn-avatar btn-avatar-large">
-                                <% if current_user.first_name.present? && current_user.last_name.present? %>
-                                    <%= current_user.first_name[0].upcase + current_user.last_name[0].upcase%>
-                                <% end %>
-                            </div>
-                            <% if current_user.first_name && current_user.last_name %>
-                                <%= current_user.first_name + " " + current_user.last_name %>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <div class="name-container">
+                        <div class="circle btn-avatar btn-avatar-large">
+                            <% if current_user.first_name.present? && current_user.last_name.present? %>
+                                <%= current_user.first_name[0].upcase + current_user.last_name[0].upcase%>
                             <% end %>
                         </div>
-                        <% if current_user_is_admin %>
-                            <%= link_to('Usuarios', admin_users_path, class:"dropdown-item") %>
-                            <%= link_to('Administrar temas de preferencia', users_preferences_tags_path, class:"dropdown-item")%>
+                        <% if current_user.first_name && current_user.last_name %>
+                            <%= current_user.first_name + " " + current_user.last_name %>
                         <% end %>
-
-                        <% if current_user_is_editor %>
-                            <%= link_to('CMS(TL)', laws_path, class:"dropdown-item")%>
-                            <%= link_to('CMS(Valid)', documents_path, class:"dropdown-item")%>
-                            <%= link_to('CMS(Sentencias)', documents_path+"?judgements=true", class:"dropdown-item")%>
-                            <%= link_to('Gacetas', gazettes_path, class:"dropdown-item")%>
-                            <div class="dropdown-divider"></div>
-                        <% end %>
-
-                        <% if current_user_is_editor_tl %>
-                            <% if is_editor_mode_enabled %>
-                                <a href="/admin/disable_edit_mode" class="dropdown-item">
-                                Deshabilitar modo edición</a>
-                            <% else %>
-                                <a href="/admin/enable_edit_mode" class="dropdown-item">
-                                Habilitar modo edición</a>
-                            <% end %>
-                        <% end %>
-
-                        <%= link_to(edit_user_registration_path, {class: "dropdown-item"}) do %>
-                            <i class="fas fa-user" aria-hidden="true"></i>
-                            Tu cuenta
-                        <% end %>
-                        <a class="dropdown-item" href="<%= valid_url %>">
-                            <img  src="/img/top_navbar/valid.png" alt="Card image cap" class="valid--logo">
-                            <img  src="/img/icon-valid-gray20px.png" alt="Card image cap" class="valid--logo--inverse">
-                            Valid
-                        </a> 
-                        <a class="dropdown-item" href="<%= ley_abierta_url %>">
-                            <img  src="/img/ley_abierta_icon_white.png" alt="Card image cap" class="leyabierta--logo">
-                            <img  src="/img/ley_abierta_icon.svg" alt="Card image cap" class="leyabierta--logo--inverse">
-                            Ley Abierta
-                        </a> 
-                        <a class="dropdown-item" href="<%= libreria_todolegal_url %>">
-                            <img  src="/img/libreria_TL_blanco.png" alt="Card image cap" class="libreria--logo">
-                            <img  src="/img/libreria_TL_negro.svg" alt="Card image cap" class="libreria--logo--inverse">
-                            Librería
-                        </a>
-                        <%= link_to(destroy_user_session_path, {class: "dropdown-item", method: 'delete' }) do %>
-                            <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
-                            Cerrar sesión
-                        <% end %>
-                    
                     </div>
-                <% end %>
+                    <% if current_user_is_admin %>
+                        <%= link_to('Usuarios', admin_users_path, class:"dropdown-item") %>
+                        <%= link_to('CMS(TL)', laws_path, class:"dropdown-item")%>
+                        <%= link_to('CMS(Valid)', documents_path, class:"dropdown-item")%>
+                        <%= link_to('CMS(Sentencias)', documents_path+"?judgements=true", class:"dropdown-item")%>
+                        <%= link_to('Gacetas', gazettes_path, class:"dropdown-item")%>
+                    <% end %>
+
+                    <% if current_user_is_editor %>
+                        <div class="dropdown-divider"></div>
+                        <% if is_editor_mode_enabled %>
+                            <a href="/admin/disable_edit_mode" class="dropdown-item">
+                            Deshabilitar modo edición</a>
+                        <% else %>
+                            <a href="/admin/enable_edit_mode" class="dropdown-item">
+                            Habilitar modo edición</a>
+                        <% end %>
+                    <% end %>
+                    <%= link_to('Cerrar sesión', destroy_user_session_path, method: :delete, class:"dropdown-item") %>
+                </div>
+            <% end %>
         </div>
     </ul>
 </nav>
@@ -118,29 +84,21 @@
         padding: 5px 20px;
     }
 
+    .todolegal{
+        margin-left: 18px;
+    }
+
     .white-logo{
       background-color: #171F2A;
     }
 
-    .big-logo{
+    .gray-logo{
         display: none;
     }
 
-    .logo{
-      background-color: #171F2A;
-    }
-
-    .navbar-brand{
-        margin-right: 0.5rem;
-    }
-
-    .vertical-line{
-        height: 40px;
-        margin-left: 5%;
-        margin-right: 5%;
-        margin-top: 7px;
-        width: 1px;
-    }
+    /* .btn-back {
+        display: none;
+    } */
 
     .navbar-back-arrow{
         font-size: 1.5rem; 
@@ -169,6 +127,10 @@
 
     .dropdown-item{
         color: #FFFFFF;
+    }
+
+    .navbar-brand{
+        /* padding-left: 15%; */
     }
 
     .search-button{
@@ -216,49 +178,9 @@
         padding-top: .5rem;
     }
 
-
-    .valid--logo, .libreria--logo, .leyabierta--logo{
-        width: 7%;
-    }
-
-    .valid--logo--inverse, .libreria--logo--inverse, .leyabierta--logo--inverse{
-        width: 8%;
-    }
-
-    /* Hide the inverse logo by default */
-    .valid--logo--inverse, .libreria--logo--inverse, .leyabierta--logo--inverse{
-        display: none;
-    }
-
-    /* Show inverse logo when hovering over the link */
-    .dropdown-item:hover .valid--logo--inverse {
-        display: inline-block;
-    }
-
-    .dropdown-item:hover .libreria--logo--inverse {
-        display: inline-block;
-    }
-
-    .dropdown-item:hover .leyabierta--logo--inverse {
-        display: inline-block;
-    }
-
-    /* Hide original logo when hovering over the link */
-    .dropdown-item:hover .valid--logo {
-        display: none;
-    }
-
-    .dropdown-item:hover .libreria--logo {
-        display: none;
-    }
-
-    .dropdown-item:hover .leyabierta--logo {
-        display: none;
-    }
-
     @media only screen and (max-width: 767.98px){
         .todolegal{
-            margin: 0px;
+            margin:0px;
             display: none;
         }
 
@@ -290,14 +212,9 @@
             display: none
         }
 
-        .big-logo{
+        .gray-logo{
             display: block;
-            width: 140px;
-            padding-left: 24px;
-        }
-
-        .vertical-line{
-            display: none;
+            margin-left: 85%;
         }
 
         .navbar-back-arrow{
@@ -307,20 +224,6 @@
         .search-button{
             display: block;
         }
-
-        .valid--logo--inverse, .libreria--logo--inverse, .leyabierta--logo--inverse{
-            width: 6%;
-        }
-        /* Hide the original logo by default */
-        .valid--logo, .libreria--logo, .leyabierta--logo{
-            display: none;
-        }
-
-        /* show the inverse logo by default */
-        .valid--logo--inverse, .libreria--logo--inverse, .leyabierta--logo--inverse{
-            display: inline-block;
-        }
-        
     }
 
    @media only screen and (min-width: 1200px){

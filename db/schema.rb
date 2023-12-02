@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_11_07_080506) do
+ActiveRecord::Schema.define(version: 2023_09_18_084026) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -63,6 +63,62 @@ ActiveRecord::Schema.define(version: 2023_11_07_080506) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "blazer_audits", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "query_id"
+    t.text "statement"
+    t.string "data_source"
+    t.datetime "created_at", precision: 6
+    t.index ["query_id"], name: "index_blazer_audits_on_query_id"
+    t.index ["user_id"], name: "index_blazer_audits_on_user_id"
+  end
+
+  create_table "blazer_checks", force: :cascade do |t|
+    t.bigint "creator_id"
+    t.bigint "query_id"
+    t.string "state"
+    t.string "schedule"
+    t.text "emails"
+    t.text "slack_channels"
+    t.string "check_type"
+    t.text "message"
+    t.datetime "last_run_at", precision: 6
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["creator_id"], name: "index_blazer_checks_on_creator_id"
+    t.index ["query_id"], name: "index_blazer_checks_on_query_id"
+  end
+
+  create_table "blazer_dashboard_queries", force: :cascade do |t|
+    t.bigint "dashboard_id"
+    t.bigint "query_id"
+    t.integer "position"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["dashboard_id"], name: "index_blazer_dashboard_queries_on_dashboard_id"
+    t.index ["query_id"], name: "index_blazer_dashboard_queries_on_query_id"
+  end
+
+  create_table "blazer_dashboards", force: :cascade do |t|
+    t.bigint "creator_id"
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["creator_id"], name: "index_blazer_dashboards_on_creator_id"
+  end
+
+  create_table "blazer_queries", force: :cascade do |t|
+    t.bigint "creator_id"
+    t.string "name"
+    t.text "description"
+    t.text "statement"
+    t.string "data_source"
+    t.string "status"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["creator_id"], name: "index_blazer_queries_on_creator_id"
+  end
+
   create_table "books", force: :cascade do |t|
     t.string "number"
     t.string "name"
@@ -88,7 +144,6 @@ ActiveRecord::Schema.define(version: 2023_11_07_080506) do
     t.text "description"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "difficulty"
   end
 
   create_table "datapoints", force: :cascade do |t|
@@ -134,7 +189,7 @@ ActiveRecord::Schema.define(version: 2023_11_07_080506) do
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "alternative_name"
+    t.string "alternative_name", default: ""
   end
 
   create_table "documents", force: :cascade do |t|
@@ -154,10 +209,11 @@ ActiveRecord::Schema.define(version: 2023_11_07_080506) do
     t.integer "document_type_id"
     t.boolean "is_verified"
     t.datetime "verification_dt"
-    t.string "alternative_issue_id"
+    t.string "alternative_issue_id", default: ""
     t.string "internal_id", default: ""
     t.string "status", default: ""
     t.string "hierarchy", default: ""
+    t.index ["publication_number"], name: "documents_publication_number_idx"
   end
 
   create_table "email_subscriptions", force: :cascade do |t|
@@ -378,6 +434,10 @@ ActiveRecord::Schema.define(version: 2023_11_07_080506) do
     t.string "stripe_customer_id"
     t.string "authentication_token", limit: 30
     t.string "unique_session_id"
+    t.string "otp_secret"
+    t.integer "consumed_timestep"
+    t.boolean "otp_required_for_login"
+    t.string "otp_backup_codes", array: true
     t.text "phone_number", default: ""
     t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
@@ -426,8 +486,39 @@ ActiveRecord::Schema.define(version: 2023_11_07_080506) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "articles", "laws", name: "fkarticles612136"
+  add_foreign_key "blazer_audits", "users", name: "fkblazer_aud600615"
+  add_foreign_key "books", "laws", name: "fkbooks558918"
+  add_foreign_key "chapters", "laws", name: "fkchapters172562"
+  add_foreign_key "datapoints", "datapoint_types", name: "fkdatapoints366673"
+  add_foreign_key "datapoints", "document_tags", name: "fkdatapoints411229"
+  add_foreign_key "datapoints", "documents", name: "fkdatapoints389575"
+  add_foreign_key "document_relationships", "documents", column: "document_1_id", name: "fkdocument_r56720"
+  add_foreign_key "document_relationships", "documents", column: "document_2_id", name: "fkdocument_r86511"
+  add_foreign_key "document_slices", "documents", name: "fkdocument_s465159"
+  add_foreign_key "document_tags", "documents", name: "fkdocument_t194780"
+  add_foreign_key "document_tags", "tags", name: "fkdocument_t865748"
+  add_foreign_key "documents", "document_types", name: "fkdocuments815546"
+  add_foreign_key "issuer_document_tags", "documents", name: "fkissuer_doc600805"
+  add_foreign_key "issuer_document_tags", "documents", name: "fkissuer_doc600806"
+  add_foreign_key "issuer_law_tags", "laws", name: "fkissuer_law852332"
+  add_foreign_key "judgement_auxiliaries", "documents", name: "fkjudgement_84319"
+  add_foreign_key "law_modifications", "laws", name: "fklaw_modifi311331"
+  add_foreign_key "law_tags", "laws", name: "fklaw_tags143995"
+  add_foreign_key "law_tags", "tags", name: "fklaw_tags938607"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
+  add_foreign_key "sections", "laws", name: "fksections543212"
+  add_foreign_key "slice_verification_histories", "users", name: "fkslice_veri437244"
+  add_foreign_key "subsections", "laws", name: "fksubsection327413"
+  add_foreign_key "tags", "tag_types", name: "fktags626530"
+  add_foreign_key "titles", "laws", name: "fktitles935132"
+  add_foreign_key "user_notifications_histories", "users", name: "fkuser_notif762069"
+  add_foreign_key "user_permissions", "permissions", name: "fkuser_permi661658"
+  add_foreign_key "user_permissions", "users", name: "fkuser_permi66316"
+  add_foreign_key "user_trials", "users", name: "fkuser_trial79516"
+  add_foreign_key "users_preferences", "users", name: "fkusers_pref984159"
+  add_foreign_key "users_preferences", "users", name: "fkusers_pref984160"
   add_foreign_key "verification_histories", "datapoints"
   add_foreign_key "verification_histories", "users"
 end

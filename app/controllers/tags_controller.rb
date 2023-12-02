@@ -3,7 +3,7 @@ class TagsController < ApplicationController
   require 'set'
 
   before_action :set_tag, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_editor!, only: [:index, :new, :edit, :create, :update, :destroy]
+  before_action :authenticate_admin!, only: [:index, :new, :edit, :create, :update, :destroy]
 
   # GET /tags
   # GET /tags.json

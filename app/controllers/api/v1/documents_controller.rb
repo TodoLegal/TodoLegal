@@ -103,7 +103,6 @@ class Api::V1::DocumentsController < ApplicationController
       searchkick_where[:id] = {in: document_ids}
     end
 
-    #if query is not empty returns result based in the boost level given to each field, else, returns results without boost and ordered by publication date
     if query != "*"
       documents = Document.search(
         query,
@@ -141,15 +140,6 @@ class Api::V1::DocumentsController < ApplicationController
 
     can_access_document = can_access_documents(user)
     #this piece of code
-
-    #Temporal access token
-    if params[:temporal_access_token] == ENV['TEMP_ACCESS_TOKEN']
-      temp_user = User.find_by(email: ENV['SESSION_EMAIL'])
-      if temp_user && temp_user.valid_password?(ENV['SESSION_PASSWORD'])
-        sign_in(temp_user) 
-      end
-      can_access_document = true
-    end
     
     if can_access_document
       documents = attach_file_to_documents(documents, true)
@@ -160,7 +150,7 @@ class Api::V1::DocumentsController < ApplicationController
     documents.each do | document |
       tags = []
       document_tags = DocumentTag.where(document_id: document["id"].to_i)
-      if document_tags.first && document_tags.first.tag
+      if document_tags.first
         puts document_tags.first.tag.name
       end
       document_tags.each do |document_tag|
@@ -241,33 +231,7 @@ protected
   end
 
   def get_related_documents
-    documents = []
-    if @document && @document&.document_type&.name == "Auto Acordado"
-      #extract the year of the Auto Acordado date
-      year_to_retrieve = @document.publication_date&.year 
-      #if year_to_retrieve if not nil, use that year, else use 2015
-      year_to_retrieve = year_to_retrieve ? year_to_retrieve : 2015
-      if documents&.length < 20
-        while documents.length < 20
-          #we want a maximum of 20 related documents
-          missing_documents = (documents.length - 20).abs
-          temp = Document.where("extract(year from publication_date) = ? AND document_type_id = ? AND id != ?", year_to_retrieve, @document.document_type_id, @document.id).limit(missing_documents)
-          documents = temp ? documents + temp : documents
-          year_to_retrieve = year_to_retrieve + 1
-        end
-      end
-    elsif @document && @document.publication_number == nil
-      materia_type = TagType.find_by(name: "materia")
-      document_tag = @document.tags.find_by(tag_type_id: materia_type.id)
-      if !document_tag
-        document_tag = @document.tags.first
-      end
-      documents = Document.joins(:document_tags).where(document_tags: {tag_id: document_tag.id}).order(publication_date: :desc).limit(20)  
-    else
-      documents = Document.where(publication_number: @document.publication_number)
-    end
-
-    return documents
+    Document.where(publication_number: @document.publication_number)
   end
 
   def document_exists!

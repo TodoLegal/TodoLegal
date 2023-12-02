@@ -6,6 +6,8 @@
 
 <ul>
   <li><%= link_to 'Descargar todos los usuarios', download_all_users_path(format: :csv) %></li>
+  <li><%= link_to 'Descargar suscritos a información', download_recieve_information_users_path(format: :csv) %></li>
+  <li><%= link_to 'Descargar contribuyentes', download_contributor_users_path(format: :csv) %></li>
 </ul>
 
 <section class="mb-4">
@@ -34,7 +36,6 @@
       <th><%= permission.name %></th>
     <% end %>
     <th>Notificaciones</th>
-    <th>Stripe plan</th>
   </tr>
   <% @users.each do |user| %>
     <tr>
@@ -94,10 +95,6 @@
       <% else %>
         <td>Sin preferencias creadas</td>
       <% end %>
-
-      <td>
-        <%= check_if_user_has_active_stripe_plan(user) %>
-      </td>
 
     </tr>
   <% end %>

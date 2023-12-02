@@ -44,30 +44,6 @@
         <%= render partial:'edit_tag_table', locals: {tag_name: "Tema", issuer: false}%>
         <h4> Instituciones relacionadas </h4>
         <%= render partial:'edit_tag_table', locals: {tag_name: "Institución", issuer: false}%>
-    <% elsif @document_type == "Auto Acordado" %>
-        <h4> Materia </h4>
-        <%= render partial:'edit_tag_table', locals: {tag_name: "materia", issuer: false}%>
-        <h4> Forma de Publicación </h4>
-        <%= render partial:'edit_tag_table', locals: {tag_name: "Forma de Publicación", issuer: false}%>
-        <h4> Institución emisora </h4>
-        <%= render partial:'edit_tag_table', locals: {tag_name: "Institución", issuer: true}%>
-        <h4> Tipo de Acto </h4>
-        <%= render partial:'edit_tag_table', locals: {tag_name: "Tipo de Acto", issuer: false}%>
-        <h4> Tema </h4>
-        <%= render partial:'edit_tag_table', locals: {tag_name: "Tema", issuer: false}%>
-    <% else %>
-        <h4> Materia </h4>
-        <%= render partial:'edit_tag_table', locals: {tag_name: "materia", issuer: false}%>
-        <h4> Forma de Publicación </h4>
-        <%= render partial:'edit_tag_table', locals: {tag_name: "Forma de Publicación", issuer: false}%>
-        <h4> Institución emisora </h4>
-        <%= render partial:'edit_tag_table', locals: {tag_name: "Institución", issuer: true}%>
-        <h4> Tipo de Acto </h4>
-        <%= render partial:'edit_tag_table', locals: {tag_name: "Tipo de Acto", issuer: false}%>
-        <h4> Tema </h4>
-        <%= render partial:'edit_tag_table', locals: {tag_name: "Tema", issuer: false}%>
-        <h4> Instituciones relacionadas </h4>
-        <%= render partial:'edit_tag_table', locals: {tag_name: "Institución", issuer: false}%>
     <% end %>
     
 </section>

@@ -1,7 +1,6 @@
 class AdminController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_action :authenticate_admin!, only: [:users, :download_contributor_users, :download_recieve_information_users, :grant_permission, :revoke_permission, :set_law_access, :deactivate_notifications, :activate_notifications, :activate_batch_of_users]
-  before_action :authenticate_editor!, only: [:gazette, :gazettes]
+  before_action :authenticate_admin!, only: [:gazettes, :gazette, :users, :download_contributor_users, :download_recieve_information_users, :grant_permission, :revoke_permission, :set_law_access, :deactivate_notifications, :activate_notifications, :activate_batch_of_users]
   include ApplicationHelper
 
   def gazettes
@@ -87,7 +86,6 @@ class AdminController < ApplicationController
     end
   end
 
-  #DEPRECATED. Delete when possible
   def download_contributor_users
     @users = User.where(is_contributor: true)
     @users.each do |user|
@@ -106,7 +104,6 @@ class AdminController < ApplicationController
     end
   end
 
-  #DEPRECATED. Delete when possible
   def download_recieve_information_users
     @users = User.where(receive_information_emails: true)
     @users.each do |user|
@@ -134,16 +131,6 @@ class AdminController < ApplicationController
       user_permission = UserPermission.find_by(user: user, permission: permission)
       if !user_permission
         UserPermission.create(user: user, permission: permission)
-        
-        #activates notifications if user was given "Pro" permission
-        if permission.name == "Pro"
-          user_preferences = UsersPreference.find_by(user_id: user.id)
-          if user_preferences
-            delete_user_notifications_job(user_preferences.job_id)
-            enqueue_new_job(user)
-          end
-        end
-        
       else
         @error_message = "El usuario ya tenía estos permisos anteriormente."
       end
@@ -200,7 +187,6 @@ class AdminController < ApplicationController
       if user_preferences
         user_preferences.active_notifications = false
         user_preferences.save
-        delete_user_notifications_job(user_preferences.job_id)
       else
         @error_message = "El usuario no tiene preferencias/notificaciones activas."
       end
@@ -221,7 +207,6 @@ class AdminController < ApplicationController
       if user_preferences
         user_preferences.active_notifications = true
         user_preferences.save
-        enqueue_new_job(user)
       else
         @error_message = "El usuario no tiene preferencias/notificaciones activas."
       end

@@ -41,38 +41,12 @@
       <div class="row">
         <div class="col-md-8">
           <div class="form-group">
-            <% if document.document_type.name == "Sentencia" %>
-              <%= form.label :número_de_expediente %>
-            <% else %>
-              <%= form.label :identificador_de_Emisión_Alternativo %>
-            <% end %>
-            <%= form.text_field :alternative_issue_id, class: "form-control", maxlength: "50",
-                onkeyup:"charCountUpdate(this.value, 'alt_identifier', 50)" %>
-            <small id="alt_identifier">0 de 50 caracteres</small>
+            <%= form.label :url %>
+            <%= form.text_field :url, class: "form-control", maxlength: "50",
+                onkeyup:"charCountUpdate(this.value, 'identifier', 50)" %>
+            <small id="identifier">0 de 50 caracteres</small>
           </div>
         </div>
-      </div>
-
-       <div class="row">
-        
-      </div>
-
-       <div class="row">
-
-        <div class="form-group col-md-4">
-          <div class="form-group">
-            <%= form.label :status %>
-            <%= form.select :status,  options_for_select(['Derogado', 'Vigente', 'Reformado'], document.status), { prompt: 'Selecciona status' }, class: 'form-control mr-2' %>
-          </div>
-        </div>
-        
-        <div class="form-group col-md-4">
-          <div class="form-group">
-            <%= form.label :jararquía %>
-            <%= form.select :hierarchy,  options_for_select(['Constitucional', 'Tratados Internacionales', 'Leyes Primarias', 'Leyes Secundarias'], document.hierarchy), { prompt: 'Selecciona jerarquía' }, class: 'form-control' %>
-          </div>
-        </div>
-
       </div>
 
       <!-- TODO: Should we remove applicable_laws from database? -->
@@ -112,7 +86,7 @@
           </div>
         </div>
         
-        <% if document.document_type.name != "Sentencia" && document.document_type.name != "Auto Acordado" && document.document_type.name != "Formato" && document.document_type.name != "Otro"%>
+        <% if document.document_type.name != "Sentencia" %>
           <div class="form-group col-md-4">
             <%= form.label :número_de_gaceta %>
             <%= form.text_field :publication_number, class: "form-control", disabled:true, id:"gazetteNumber" %>
@@ -135,7 +109,7 @@
           <% end %>
         </div>
           <div class="form-group col-md-4">
-          <% if (document.document_type.name != "Sentencia" && document.document_type.name != "Auto Acordado" && document.document_type.name != "Formato" && document.document_type.name != "Otro") and document.position %>
+          <% if document.document_type.name != "Sentencia" and document.position %>
             <label class="d-inline"> <strong> Posición en Gaceta </strong> </label>
             <nav aria-label="...">
               <ul class="pagination pagination-sm">

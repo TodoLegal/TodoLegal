@@ -1,10 +1,9 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.0.0'
+ruby '3.1.2'
 
 # My added gems
-gem 'newrelic_rpm'
 gem 'pg'
 gem 'pg_search'
 gem 'thin'
@@ -32,11 +31,11 @@ gem 'capistrano-rbenv', '~> 2.1', '>= 2.1.4'
 gem 'capistrano3-nginx'
 gem 'capistrano-bundler'
 gem 'doorkeeper'
-gem 'capistrano-nvm', require: false
 gem 'MailchimpMarketing', :git => 'https://github.com/mailchimp/mailchimp-marketing-ruby.git'
-#gem 'rack-cors'
-#Support for NewRelic
+gem 'lol_dba'
 
+#Support for NewRelic
+gem 'newrelic_rpm'
 #Queue management
 gem 'sidekiq'
 gem 'redis-namespace'
@@ -68,9 +67,13 @@ gem 'mailgun-ruby'
 # gem 'bcrypt', '~> 3.1.7'
 gem "actionpack-page_caching"
 #gem 'rack-cors'
-
+gem 'globalid', '~> 1.0'
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
+
+gem 'net-smtp', require: false
+gem 'net-imap', require: false
+gem 'net-pop', require: false
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
@@ -78,6 +81,8 @@ gem 'bootsnap', '>= 1.4.2', require: false
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'bullet'
+
 end
 
 group :development do

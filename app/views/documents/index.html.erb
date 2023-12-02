@@ -17,11 +17,7 @@
     </div>
   </div>
 
-  <% if @show_only_autos %>
-    <%= link_to 'Subir documento', new_document_path(selected_document_type: "autos") %>
-  <% else %>
-    <%= link_to 'Subir documento', new_document_path(selected_document_type: "slice") %>
-  <% end %>
+  <%= link_to 'Subir documento', new_document_path(selected_document_type: "process") %>
   <%= render partial:'edit_table', locals: {documents: @documents}%>
 
   <%=paginate @documents %>

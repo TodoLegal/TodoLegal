@@ -7,7 +7,6 @@ class DocumentsController < ApplicationController
   def index
     @query = params["query"]
     @show_only_judgements = params["judgements"]
-    @show_only_autos = params["autos"]
     if !@query.blank?
       if @query && @query.length == 5 && @query[1] != ','
         @query.insert(2, ",")
@@ -18,10 +17,6 @@ class DocumentsController < ApplicationController
     end
     if @show_only_judgements
       @documents = Document.where(document_type_id: DocumentType.find_by_name("Sentencia")).order('publication_number DESC').page params[:page]
-    end
-
-    if @show_only_autos
-      @documents = Document.where(document_type_id: DocumentType.find_by_name("Auto Acordado")).order('publication_number DESC').page params[:page]
     end
     expires_in 10.minutes
   end
@@ -98,72 +93,13 @@ class DocumentsController < ApplicationController
         elsif params["document"]["auto_process_type"] == "judgement"
           JudgementAuxiliary.create(document_id: @document.id, applicable_laws: "")
           format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido una sentencia.' }
-        elsif params["document"]["auto_process_type"] == "seccion"
-          bucket = get_bucket
-          file = bucket.file @document.original_file.key
-          file.download "tmp/seccion_de_gaceta.pdf"
-          add_stamp_to_unprocessed_document @document, Rails.root.join("tmp") + "seccion_de_gaceta.pdf"
-          if $discord_bot
-            $discord_bot.send_message($discord_bot_document_upload, "Nueva Sección de Gaceta subida en Valid! :scroll:")
-          end
-          format.html { redirect_to edit_document_path(@document), notice: 'Se han subido Avisos Legales.' }
         elsif params["document"]["auto_process_type"] == "avisos"
-          bucket = get_bucket
-          file = bucket.file @document.original_file.key
-          file.download "tmp/avisos_legales.pdf"
-          add_stamp_to_unprocessed_document @document, Rails.root.join("tmp") + "avisos_legales.pdf"
-          if $discord_bot
-            $discord_bot.send_message($discord_bot_document_upload, "Nuevos avisos legales subidos en Valid! :scroll:")
-          end
           format.html { redirect_to edit_document_path(@document), notice: 'Se han subido Avisos Legales.' }
         elsif params["document"]["auto_process_type"] == "marcas"
-          bucket = get_bucket
-          file = bucket.file @document.original_file.key
-          file.download "tmp/marcas.pdf"
-          add_stamp_to_unprocessed_document @document, Rails.root.join("tmp") + "marcas.pdf"
-          if $discord_bot
-            $discord_bot.send_message($discord_bot_document_upload, "Nuevas Marcas de Fábrica subidas en Valid! :scroll:")
-          end
           format.html { redirect_to edit_document_path(@document), notice: 'Se han subido Marcas de Fábrica.' }
-        elsif params["document"]["auto_process_type"] == "autos"
-          bucket = get_bucket
-          file = bucket.file @document.original_file.key
-          file.download "tmp/auto_acordado.pdf"
-          slice_autos_acordados @document, Rails.root.join("tmp") + "auto_acordado.pdf"
-          if $discord_bot
-            $discord_bot.send_message($discord_bot_document_upload, "Nuevos autos acordados seccionados en Valid! :scroll:")
-          end
-          format.html { redirect_to documents_path+"?autos=true", notice: 'Autos acordados se han partido exitosamente.' }
-      elsif params["document"]["auto_process_type"] == "formats"
-        bucket = get_bucket
-        file = bucket.file @document.original_file.key
-        file.download "tmp/formato.pdf"
-        add_stamp_to_unprocessed_document @document, Rails.root.join("tmp") + "formato.pdf"
-        if $discord_bot
-          $discord_bot.send_message($discord_bot_document_upload, "Nuevo formato subido a Valid! :scroll:")
+        else
+          format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido una sección de Gaceta.' }
         end
-        format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido un nuevo formato.' }
-      elsif params["document"]["auto_process_type"] == "comunicados"
-        bucket = get_bucket
-        file = bucket.file @document.original_file.key
-        file.download "tmp/comunicado.pdf"
-        add_stamp_to_unprocessed_document @document, Rails.root.join("tmp") + "comunicado.pdf"
-        if $discord_bot
-          $discord_bot.send_message($discord_bot_document_upload, "Nuevo comunicado subido a Valid! :scroll:")
-        end
-        format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido un nuevo comunicado.' }
-      elsif params["document"]["auto_process_type"] == "others"
-        bucket = get_bucket
-        file = bucket.file @document.original_file.key
-        file.download "tmp/documento.pdf"
-        add_stamp_to_unprocessed_document @document, Rails.root.join("tmp") + "documento.pdf"
-        format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido un documento.' }
-        if $discord_bot
-          $discord_bot.send_message($discord_bot_document_upload, "Nuevo documento subido a Valid! :scroll:")
-        end
-      else
-        format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido un documento.' }
-      end
       else
         format.html { render :new }
         format.json { render json: @document.errors, status: :unprocessable_entity }
@@ -218,25 +154,6 @@ class DocumentsController < ApplicationController
     return text
   end
 
-  def clean_autos_issue_id text
-    text = text.gsub("no", "No")
-    text = text.gsub("actas", "Acta")
-    text = text.gsub("scsj", "SCSJ")
-    text = text.gsub("pcsj", "PCSJ")
-    text = text.gsub("dpcsj","DPCSJ")
-    text = text.gsub("dPCSJ","DPCSJ")
-    text = text.gsub("dapj","DAPJ")
-    text = text.gsub("numero", "No.")
-    text = text.gsub("ssc", "SSC")
-    text = text.gsub("scjycj", "SCJYCJ")
-    text = text.gsub("cjycj", "CJYCJ")
-    text = text.gsub("scsjycj", "SCSJYCJ")
-    text = text.gsub("0i", "01")
-    text = text.gsub("pecsj", "PECSJ")
-    text = text.gsub(/[, -]+$/, '')
-    return text
-  end
-
   def set_content_disposition_attachment key, file_name
     bucket = get_bucket
     file = bucket.file key
@@ -257,21 +174,6 @@ class DocumentsController < ApplicationController
       document.save
       return {}
     end
-  end
-
-  def add_stamp_to_unprocessed_document document, document_pdf_path
-    document_name = `python3 ~/GazetteSlicer/add_stamp_to_document.py #{ document_pdf_path } '#{ Rails.root.join("public", "documents") }'`
-    document_name = JSON.parse(document_name)
-    document.original_file.attach(
-      io: File.open(
-        Rails.root.join(
-          "public",
-          "documents",
-          document_name).to_s
-      ),
-      filename: document_name,
-      content_type: "application/pdf"
-    )
   end
 
   def process_gazette document, document_pdf_path
@@ -350,13 +252,10 @@ class DocumentsController < ApplicationController
         addTagIfExists(new_document.id, "Avisos Legales")
         addTagIfExists(new_document.id, "Licitaciones")
       end
-      #adds institutions tags extracted by OCR
       file["institutions"].each do |institution|
         addTagIfExists(new_document.id, institution)
       end
       full_text_lower = file["full_text"].downcase
-      
-      #adds alternative name for institutions tags
       AlternativeTagName.all.each do |alternative_tag_name|
         if isWordInText alternative_tag_name.alternative_name, full_text_lower
           if !DocumentTag.exists?(document_id: new_document.id, tag_id: alternative_tag_name.tag_id)
@@ -387,110 +286,6 @@ class DocumentsController < ApplicationController
     puts "Created related documents"
   end
 
-   #Autos acordados scripts
-   def run_slice_autos_acordados_script document, document_pdf_path
-    puts ">run_slice_autos_acordados_script called"
-    python_return_value = `python3 ~/GazetteSlicer/slice_autos_acordados.py #{ document_pdf_path } '#{ Rails.root.join("public", "autos_acordados") }' '#{document.id}'`
-    begin
-      result = JSON.parse(python_return_value)
-      return result
-    rescue
-      document.description = "Error: on slice autos acordados"
-      document.save
-      return {}
-    end
-   end
- 
-   def slice_autos_acordados document, document_pdf_path
-    puts "slice_autos_acordados called"
-    json_data = run_slice_autos_acordados_script(document, document_pdf_path)
-    # document.url = document.generate_friendly_url
-    document.save
-
-    puts "Creating autos acordados"
-
-    json_data["files"].each do | file |
-      puts "creating auto acordado " + file["internal_id"]
-      name = ""
-      short_description = ""
-      long_description = ""
-      tema = file["tag_tema"]
-      alt_issue_id = file["alt_issue_id"]
-      materias = file["materias"]
-      alt_issue_id = clean_autos_issue_id(alt_issue_id)
-
-      if alt_issue_id != ""
-        alt_issue_id = alt_issue_id[0].upcase + alt_issue_id[1..]
-        name = alt_issue_id
-      end
-
-      if tema != ""
-        tema = tema[0] + tema[1..].downcase
-        if name != ""
-          name = name + " " + tema
-        else
-          name = tema
-        end
-      end
-
-      if name == ""
-        name = "Auto Acordado " + file["issue_id"]
-      end
-
-      document_type =  DocumentType.find_by_name("Auto Acordado")
-      new_document = Document.create(
-        name: name,
-        issue_id: file["issue_id"],
-        publication_date: file["publication_date"],
-        short_description: file["short_description"],
-        description: file["description"],
-        full_text: cleanText(file["full_text"]),
-        document_type_id: document_type.id,
-        alternative_issue_id: alt_issue_id,
-        internal_id:  file["internal_id"]
-      )
-
-      #tags section
-      addIssuerTagIfExists(new_document.id, "Poder Judicial")
-      addTagIfExists(new_document.id, "Justicia")
-
-      if alt_issue_id.include?("Oficio") || alt_issue_id.include?("oficio")
-        addTagIfExists(new_document.id, "Oficio")
-      else
-        addTagIfExists(new_document.id, "Circular")
-      end
-
-      if alt_issue_id.include?("Resolución") || alt_issue_id.include?("resolución")
-        addTagIfExists(new_document.id, "Resolución")
-      end
-
-      if materias != []
-        addTagIfExists(new_document.id, materias[0])
-      end
-
-      #adds tema tags extracted by OCR
-      file["temas"].each do |tema|
-        addTagIfExists(new_document.id, tema)
-      end
-
-      puts "Uploading file"
-      new_document.original_file.attach(
-        io: File.open(
-          Rails.root.join(
-            "public",
-            "autos_acordados",
-            document.id.to_s, file["internal_id"] + ".pdf").to_s
-        ),
-        filename: file["internal_id"] + ".pdf",
-        content_type: "application/pdf"
-      )
-      puts "File uploaded"
-
-    end
-    puts "Created related documents"
-   end
- 
-
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_document
@@ -499,7 +294,7 @@ class DocumentsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def document_params
-      params.require(:document).permit(:issue_id, :name, :original_file, :url, :publication_date, :publication_number, :description, :short_description, :status, :hierarchy)
+      params.require(:document).permit(:issue_id, :name, :original_file, :url, :publication_date, :publication_number, :description, :short_description)
     end
 
     def get_bucket
@@ -539,26 +334,6 @@ class DocumentsController < ApplicationController
       elsif auto_process_type == "marcas"
         document_type = DocumentType.find_by_name("Marcas de Fábrica")
         return document_type.id
-      elsif auto_process_type == "autos"
-        document_type = DocumentType.find_by_name("Auto Acordado")
-        if document_type
-          return document_type.id
-        end
-      elsif auto_process_type == "formats"
-        document_type = DocumentType.find_by_name("Formato")
-        if document_type
-          return document_type.id
-        end
-      elsif auto_process_type == "comunicados"
-        document_type = DocumentType.find_by_name("Comunicado")
-        if document_type
-          return document_type.id
-        end
-      elsif auto_process_type == "others"
-        document_type = DocumentType.find_by_name("Otro")
-        if document_type
-          return document_type.id
-        end
       else
         document_type = DocumentType.find_by_name("Sección de Gaceta")
         return document_type.id

@@ -15,7 +15,7 @@ gem 'google-api-client'
 gem 'whenever', require: false
 gem 'exception_notification'
 gem 'discordrb'
-gem 'stripe'
+gem 'stripe' 
 gem 'rack-mini-profiler'
 gem 'dalli'
 gem 'simple_token_authentication'

@@ -4,7 +4,7 @@ class Api::V1::DocumentsController < ApplicationController
   before_action :document_exists!, only: [:get_document]
   before_action :doorkeeper_authorize!, only: [:get_document, :get_documents]
   skip_before_action :doorkeeper_authorize!, unless: :has_access_token?
-  
+
   def get_document
     json_document = get_document_json
     can_access_document = true

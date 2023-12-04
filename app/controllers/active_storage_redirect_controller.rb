@@ -16,13 +16,6 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
     elsif current_user
       user = current_user
     end
-
-    #temporal
-    if user
-      can_access_document = can_access_documents(user)
-      user_trial = user.user_trial
-    end
-    #temporal 
     
     if user && current_user_type_api(user) != "pro" && current_user
       user_trial.downloads += 1

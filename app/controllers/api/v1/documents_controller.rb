@@ -288,7 +288,7 @@ protected
     docs.each do | document |
       ar_document = Document.find_by_id(document["id"])
       if can_access && ar_document.original_file.attached?
-        document["file"] = url_for(ar_document.original_file.service_url)
+        document["file"] = url_for(ar_document.original_file)
         document["can_access"] = true
       else
         document["file"] = ""

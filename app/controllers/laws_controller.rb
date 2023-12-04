@@ -13,9 +13,10 @@ class LawsController < ApplicationController
   # GET /laws/1
   # GET /laws/1.json
   def show
-    if params[:id] != @law.friendly_url
-      redirect_to "/?error=Invalid+law+name"
-    end
+    #TODO: analyze why we did this validation and if we need to remove it 
+    # if params[:id] != @law.friendly_url
+    #   redirect_to "/?error=Invalid+law+name"
+    # end
     @show_mercantil_related_podcast = LawTag.find_by(law: @law, tag: Tag.find_by_name("Mercantil")) != nil
     @show_laboral_related_podcast = LawTag.find_by(law: @law, tag: Tag.find_by_name("Laboral")) != nil
     get_raw_law

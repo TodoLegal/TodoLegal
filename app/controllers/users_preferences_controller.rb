@@ -45,7 +45,7 @@ class UsersPreferencesController < ApplicationController
           if return_to_path
             format.html { redirect_to confirm_email_view_path}
           else
-            format.html { redirect_to "https://valid.todolegal.app?user_just_signed_up=true"}
+            format.html { redirect_to "https://valid.todolegal.app?user_just_signed_up=true", allow_other_host: true}
           end
         elsif !params[:is_monthly].blank?
           format.html { redirect_to checkout_url(is_onboarding:true, go_to_law: params[:go_to_law], is_monthly: params[:is_monthly]) }
@@ -54,7 +54,7 @@ class UsersPreferencesController < ApplicationController
           format.html { redirect_to checkout_url(is_onboarding:true, go_to_law: params[:go_to_law], is_annually: params[:is_annually]) }
           format.json { render :show, status: :created, location: @users_preference }
         else
-          format.html { redirect_to "https://valid.todolegal.app?user_just_signed_up=false"}
+          format.html { redirect_to "https://valid.todolegal.app?user_just_signed_up=false", allow_other_host: true}
         end
 
         mail_frequency = @users_preference.mail_frequency ? @users_preference.mail_frequency : 0
@@ -108,9 +108,9 @@ class UsersPreferencesController < ApplicationController
 
     respond_to do |format|
       if @redirect_to_valid
-        format.html { redirect_to "https://valid.todolegal.app?preferences=true"}
+        format.html { redirect_to "https://valid.todolegal.app?preferences=true", allow_other_host: true }
       else
-        format.html { redirect_to "https://valid.todolegal.app?preferences=false"}
+        format.html { redirect_to "https://valid.todolegal.app?preferences=false", allow_other_host: true }
       end
     end
 

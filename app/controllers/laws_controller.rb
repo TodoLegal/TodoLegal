@@ -29,9 +29,11 @@ class LawsController < ApplicationController
 
   # GET /laws/1/edit
   def edit
+    @active_tab = "general"
     @article_number = params[:article_number]
     if @article_number
       @article = @law.articles.find_by(number: ["#{@article_number}", " #{@article_number}"])
+      @active_tab = "articles"
     else
       @article = @law.articles.first
     end

@@ -120,7 +120,7 @@
           <a class="uncolored_link articles-preview" id="link_article_count_<%= article_iterator %>" href="<%= law_path(@law) + '?query=/'+@query+"/"+(stream.number.lstrip)%>"  aria-controls="articulos" aria-selected="true">
           <h6 class="article-name" style="color: #111;font-weight:bold; display: block;">Artículo <%= stream.number %><br>
             <% if @user_can_edit_law && is_editor_mode_enabled %>
-              <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_article_path(stream) %>
+              <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_law_path(stream.law, article_number: stream.number ) %>
             <% end %>
           </h6>
           </a>
@@ -137,7 +137,7 @@
         <div align="justify" onclick="onClickArticle(<%= article_iterator %>)" class="article-p" article_id="<%= article_iterator %>" last_bigger_section="<%= bigger_section_iterator - 1 %>" next_bigger_section="<%= bigger_section_iterator %>" id="article_count_<%= article_iterator %>">
           <b class="article-name" align="justify" style="color: #111;font-weight:bold; display: block;">Artículo <%= stream.number %><br>
             <% if @user_can_edit_law && is_editor_mode_enabled %>
-              <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_article_path(stream) %>
+              <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_law_path(stream.law, article_number: stream.number ) %>
             <% end %>
           </b>
           <% if @highlight_enabled %>

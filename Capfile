@@ -1,6 +1,8 @@
 require 'capistrano/env_config'
 
 
+
+
 # Load DSL and set up stages
 require "capistrano/setup"
 
@@ -46,3 +48,4 @@ require 'capistrano/rbenv'
 
 set :rbenv_type, :user
 set :rbenv_ruby, '3.0.0'
+

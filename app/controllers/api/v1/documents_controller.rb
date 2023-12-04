@@ -141,7 +141,7 @@ class Api::V1::DocumentsController < ApplicationController
 
     can_access_document = can_access_documents(user)
     #this piece of code
-    
+
     if can_access_document
       documents = attach_file_to_documents(documents, true)
     else

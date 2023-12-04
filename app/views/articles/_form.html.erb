@@ -10,7 +10,7 @@
       </ul>
     </div>
   <% end %>
-
+  
   <div class="form-group">
     <%= form.label :number %>
     <%= form.text_field :number, class: 'form-control' %>
@@ -22,6 +22,7 @@
   </div>
 
   <div class="actions">
-    <%= form.submit class: 'btn btn-primary' %>
+    <%= form.submit "Guardar cambios", class: 'd-inline p-2 btn btn-primary' %>
   </div>
+
 <% end %>

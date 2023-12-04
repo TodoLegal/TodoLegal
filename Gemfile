@@ -32,6 +32,7 @@ gem 'capistrano-rbenv', '~> 2.1', '>= 2.1.4'
 gem 'capistrano3-nginx'
 gem 'capistrano-bundler'
 gem 'doorkeeper'
+gem 'capistrano-nvm', require: false
 gem 'MailchimpMarketing', :git => 'https://github.com/mailchimp/mailchimp-marketing-ruby.git'
 #gem 'rack-cors'
 #Support for NewRelic

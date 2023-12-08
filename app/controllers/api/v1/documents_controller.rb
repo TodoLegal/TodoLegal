@@ -27,10 +27,10 @@ class Api::V1::DocumentsController < ApplicationController
 
     if can_access_document and @document.original_file.attached?
       json_document = json_document.merge(file: url_for(@document.original_file))
-      related_documents = attach_file_to_documents(related_documents, true)
+      related_documents = attach_file_to_documents_v2(related_documents, true)
     else
       json_document = json_document.merge(file: '')
-      related_documents = attach_file_to_documents(related_documents, false)
+      related_documents = attach_file_to_documents_v2(related_documents, false)
     end
 
     issuer_name = get_issuer_name @document.id
@@ -285,4 +285,22 @@ protected
 
     documents['query']
   end
+
+  def attach_file_to_documents_v2 documents, can_access
+    docs = documents
+
+    docs.each do | document |
+      ar_document = Document.find_by_id(document["id"])
+      if can_access && ar_document.original_file.attached?
+        document["file"] = url_for(ar_document.original_file)
+        document["can_access"] = true
+      else
+        document["file"] = ""
+        document["can_access"] = false
+      end
+    end
+
+    return docs
+  end
+
 end

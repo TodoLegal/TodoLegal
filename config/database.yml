@@ -16,7 +16,7 @@ default: &default
 
 development:
   <<: *default
-  database: todolegaldb_development
+  database: default
   pool: 5
 
 
@@ -30,7 +30,7 @@ test:
 production:
   primary:
    <<: *default
-   database: todolegaldb_production
+   database: default
    pool: 22
    checkout_timeout: 6
    url: <%= ENV.fetch("DB_URL") { "" } %>

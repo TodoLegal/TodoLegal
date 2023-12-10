@@ -185,14 +185,14 @@ class HomeController < ApplicationController
       #redirect_to @url, notice: "Confirmación enviada a tu correo."
       if params[:redirect_to]
         @valid_url = params[:redirect_to]
-        redirect_to "#{@valid_url}?confirmation_email_sent"
+        redirect_to "#{@valid_url}?confirmation_email_sent", allow_other_host: true
         flash[:notice] = "Confirmación enviada a tu correo."
       else
         redirect_back(fallback_location: @url)
         flash[:notice] = "Confirmación enviada a tu correo."
       end
     else
-      redirect_to @url, notice: "Cuenta ya ha sido confirmada."
+      redirect_to @url, notice: "Cuenta ya ha sido confirmada.", allow_other_host: true
     end
   end
 

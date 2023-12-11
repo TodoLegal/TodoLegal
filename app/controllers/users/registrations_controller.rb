@@ -48,7 +48,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
             @current_period_end_day = @current_period_end.day
           end
         end
-      rescue
+      rescue => e
+        Rails.logger.error e.message
         @customer = nil
         @current_user_plan_is_active = false
       end

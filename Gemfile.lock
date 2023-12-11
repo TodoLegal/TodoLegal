@@ -437,7 +437,7 @@ GEM
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
     stringio (3.1.0)
-    stripe (10.2.0)
+    stripe (5.55.0)
     thin (1.8.2)
       daemons (~> 1.0, >= 1.0.9)
       eventmachine (~> 1.0, >= 1.0.4)
@@ -533,7 +533,7 @@ DEPENDENCIES
   simple_token_authentication
   spring
   spring-watcher-listen
-  stripe
+  stripe (~> 5.37)
   thin
   turbolinks
   tzinfo-data

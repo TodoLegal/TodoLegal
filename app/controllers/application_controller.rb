@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
       respond_to do |format|
         return_to_path = session[:return_to]
         session[:return_to] = nil
-        format.html { redirect_to return_to_path }
+        format.html { redirect_to return_to_path, allow_other_host: true }
       end
       return true
     end

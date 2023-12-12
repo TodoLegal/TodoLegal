@@ -108,7 +108,11 @@
         <div class="form-group col-md-4">
           <%= form.label :fecha_de_publicación %>
           <div class="form-inline">
-            <%= form.date_select :publication_date, {:order => [:day, :month, :year]}, {:class => 'form-control mr-2'} %>
+            <%= form.date_select :publication_date, {:order => [:day, :month, :year],
+              start_year: Date.current.year - 122, # Start from 1900 (current year - 122)
+              end_year: Date.current.year },  
+              {:class => 'form-control mr-2'} 
+            %>
           </div>
         </div>
         

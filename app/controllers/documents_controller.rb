@@ -8,6 +8,8 @@ class DocumentsController < ApplicationController
     @query = params["query"]
     @show_only_judgements = params["judgements"]
     @show_only_autos = params["autos"]
+    @processed_documents = params["processed_documents"]
+
     if !@query.blank?
       if @query && @query.length == 5 && @query[1] != ','
         @query.insert(2, ",")
@@ -16,6 +18,7 @@ class DocumentsController < ApplicationController
     else
       @documents = Document.all.order('publication_number DESC').page params[:page]
     end
+
     if @show_only_judgements
       @documents = Document.where(document_type_id: DocumentType.find_by_name("Sentencia")).order('publication_number DESC').page params[:page]
     end
@@ -23,6 +26,15 @@ class DocumentsController < ApplicationController
     if @show_only_autos
       @documents = Document.where(document_type_id: DocumentType.find_by_name("Auto Acordado")).order('publication_number DESC').page params[:page]
     end
+
+    if params[:last_documents]
+      limit = params[:last_documents].to_i
+      last_documents = Document.order('created_at DESC').limit(limit)
+      @documents = Kaminari.paginate_array(last_documents).page(params[:page])
+    else
+      @documents = Document.all.order('publication_number DESC').page(params[:page])
+    end
+
     expires_in 10.minutes
   end
 
@@ -388,7 +400,7 @@ class DocumentsController < ApplicationController
   end
 
    #Autos acordados scripts
-   def run_slice_autos_acordados_script document, document_pdf_path
+  def run_slice_autos_acordados_script document, document_pdf_path
     puts ">run_slice_autos_acordados_script called"
     python_return_value = `python3 ~/GazetteSlicer/slice_autos_acordados.py #{ document_pdf_path } '#{ Rails.root.join("public", "autos_acordados") }' '#{document.id}'`
     begin
@@ -399,9 +411,9 @@ class DocumentsController < ApplicationController
       document.save
       return {}
     end
-   end
+  end
  
-   def slice_autos_acordados document, document_pdf_path
+  def slice_autos_acordados document, document_pdf_path
     puts "slice_autos_acordados called"
     json_data = run_slice_autos_acordados_script(document, document_pdf_path)
     # document.url = document.generate_friendly_url
@@ -488,8 +500,108 @@ class DocumentsController < ApplicationController
 
     end
     puts "Created related documents"
-   end
- 
+  end
+   
+  #batch processing
+
+  def run_process_document_batch_script
+    puts ">run_process_documents_batch called"
+    python_return_value = `python3 ~/GazetteSlicer/process_documents_batch.py` 
+    begin
+      result = JSON.parse(python_return_value)
+      return result
+    rescue
+      Rails.logger.error(`Error on process batch: #{python_return_value}`)
+      return {}
+    end
+  end
+
+  def process_documents_batch
+    puts ">slice_gazette called"
+    json_data = run_slice_gazette_script(document, document_pdf_path)
+
+    document_count = 0
+    puts "Creating related documents"
+    json_data["files"].each do |file|
+      puts "Creating: " + file["name"]
+      name = ""
+      issue_id = ""
+      publication_number = file["publication_number"]
+      publication_date = file["publication_date"]
+      document_type = file["document_type"]
+      short_description = ""
+      long_description = ""
+
+      if document_type == "Marcas de Fábrica"
+        name = file["name"]
+        short_description = "Esta es la sección de marcas de Fábrica de la Gaceta " + publication_number + " de fecha " + publication_date + "."
+      elsif document_type == "Avisos Legales"
+        name = file["name"]
+        short_description = "Esta es la sección de avisos legales de la Gaceta " + publication_number + " de fecha " + publication_date + "."
+      elsif document_type== "Gaceta"
+        short_description = "Esta es la gaceta número " + publication_number + " de fecha " + publication_date + "."
+      else
+        issue_id = file["name"]
+        short_description = cleanText(file["short_description"])
+        long_description = cleanText(file["description"])
+      end
+
+      new_document = Document.create(
+        name: name,
+        issue_id: issue_id,
+        publication_date: publication_date,
+        publication_number: publication_number,
+        short_description: short_description,
+        description: long_description,
+        full_text: cleanText(file["full_text"]),
+        document_type_id: get_part_document_type_id(document_type),
+        publish: false
+      )
+
+      addTagIfExists(new_document.id, file["tag"])
+      addIssuerTagIfExists(new_document.id, file["issuer"])
+      addTagIfExists(new_document.id, "Gaceta")
+      if document_type == "Marcas de Fábrica"
+        addIssuerTagIfExists(new_document.id, "Varios")
+        addTagIfExists(new_document.id, "Marcas")
+        addTagIfExists(new_document.id, "Mercantil")
+        addTagIfExists(new_document.id, "Propiedad Intelectual")
+      elsif document_type == "Avisos Legales"
+        addIssuerTagIfExists(new_document.id, "Varios")
+        addTagIfExists(new_document.id, "Avisos Legales")
+        addTagIfExists(new_document.id, "Licitaciones")
+      end
+      #adds institutions tags extracted by OCR
+      file["institutions"].each do |institution|
+        addTagIfExists(new_document.id, institution)
+      end
+      full_text_lower = file["full_text"].downcase
+      
+      #adds alternative name for institutions tags
+      AlternativeTagName.all.each do |alternative_tag_name|
+        if isWordInText alternative_tag_name.alternative_name, full_text_lower
+          if !DocumentTag.exists?(document_id: new_document.id, tag_id: alternative_tag_name.tag_id)
+            DocumentTag.create(document_id: new_document.id, tag_id: alternative_tag_name.tag_id)
+          end
+        end
+      end
+      new_document.url = new_document.generate_friendly_url
+      new_document.save
+
+      puts "Uploading file"
+      base_path = Rails.root.join('..', 'GazetteSlicer', 'stamped_documents')
+      file_path = File.join(base_path, file['path'])
+      new_document.original_file.attach(
+        io: File.open(file_path),
+        filename: "#{file['document_type']}.pdf",
+        content_type: 'application/pdf'
+      )
+
+      document_count += 1
+    end
+
+    redirect_to documents_path(last_documents: 100, processed_documents: document_count), notice: "Batch processed successfully. #{document_count} documents uploaded."
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.

@@ -6,6 +6,9 @@
   <% else %>
     <h1>Documentos</h1>
   <% end %>
+  <%= link_to 'Procesar batch de documentos', process_documents_batch_path, method: :post, class: 'btn btn-primary' %>
+  <%= content_tag(:p, "Documentos procesados en este batch: #{@processed_documents}") if @processed_documents.present? %>
+  <hr/>
   <div class="row justify-content-end">
     <div class="col-6">
       <form action="<%= documents_path %>" method="get">

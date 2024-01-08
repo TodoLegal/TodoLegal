@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_03_055202) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_12_092543) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
   enable_extension "pg_trgm"
@@ -213,6 +213,8 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_03_055202) do
     t.string "internal_id", default: ""
     t.string "status", default: ""
     t.string "hierarchy", default: ""
+    t.boolean "publish", default: false
+    t.text "comments", default: ""
     t.index ["publication_number"], name: "documents_publication_number_idx"
   end
 

@@ -1,6 +1,7 @@
 class DocumentsController < ApplicationController
   before_action :set_document, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_editor!, only: [:index, :show, :new, :edit, :create, :update, :destroy]
+  include DocumentsHelper
 
   # GET /documents
   # GET /documents.json
@@ -506,7 +507,7 @@ class DocumentsController < ApplicationController
 
   def run_process_document_batch_script
     puts ">run_process_documents_batch called"
-    python_return_value = `python3 ~/GazetteSlicer/process_documents_batch.py` 
+    python_return_value = `python3 /home/carlosvilla/Github/TodoLegal-Repos/GazetteSlicer/process_documents_batch.py` 
     begin
       result = JSON.parse(python_return_value)
       return result
@@ -518,7 +519,7 @@ class DocumentsController < ApplicationController
 
   def process_documents_batch
     puts ">slice_gazette called"
-    json_data = run_slice_gazette_script(document, document_pdf_path)
+    json_data = run_process_document_batch_script()
 
     document_count = 0
     puts "Creating related documents"
@@ -531,6 +532,17 @@ class DocumentsController < ApplicationController
       document_type = file["document_type"]
       short_description = ""
       long_description = ""
+      
+      #Check if document exists, if documents exists and is from 2021 backwards, delete it
+      date_string = publication_date
+      date = DateTime.parse(date_string)
+      year = date.year
+      document_deleted = delete_duplicated_document(publication_number, document_type) if year <= 2021
+      if document_deleted
+        Rails.logger.info("==============================================================================")
+        Rails.logger.info("Documento eliminado")
+        Rails.logger.info("==============================================================================")
+      end
 
       if document_type == "Marcas de Fábrica"
         name = file["name"]
@@ -541,7 +553,7 @@ class DocumentsController < ApplicationController
       elsif document_type== "Gaceta"
         short_description = "Esta es la gaceta número " + publication_number + " de fecha " + publication_date + "."
       else
-        issue_id = file["name"]
+        issue_id = file["issue_id"]
         short_description = cleanText(file["short_description"])
         long_description = cleanText(file["description"])
       end
@@ -589,10 +601,10 @@ class DocumentsController < ApplicationController
       new_document.save
 
       puts "Uploading file"
-      base_path = Rails.root.join('..', 'GazetteSlicer', 'stamped_documents')
-      file_path = File.join(base_path, file['path'])
+      # base_path = Rails.root.join('..', 'GazetteSlicer', 'stamped_documents')
+      # file_path = File.join(base_path, file['path'])
       new_document.original_file.attach(
-        io: File.open(file_path),
+        io: File.open(file['path']),
         filename: "#{file['document_type']}.pdf",
         content_type: 'application/pdf'
       )
@@ -600,7 +612,7 @@ class DocumentsController < ApplicationController
       document_count += 1
     end
 
-    redirect_to documents_path(last_documents: 100, processed_documents: document_count), notice: "Batch processed successfully. #{document_count} documents uploaded."
+    redirect_to documents_path(last_documents: document_count, processed_documents: document_count), notice: "Batch processed successfully. #{document_count} documents uploaded."
   end
 
   private

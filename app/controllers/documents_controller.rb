@@ -525,8 +525,8 @@ class DocumentsController < ApplicationController
     puts "Creating related documents"
     json_data["files"].each do |file|
       puts "Creating: " + file["name"]
-      name = ""
-      issue_id = ""
+      name = file["name"]
+      issue_id = file["issue_id"]
       publication_number = file["publication_number"]
       publication_date = file["publication_date"]
       document_type = file["document_type"]
@@ -545,15 +545,12 @@ class DocumentsController < ApplicationController
       end
 
       if document_type == "Marcas de Fábrica"
-        name = file["name"]
         short_description = "Esta es la sección de marcas de Fábrica de la Gaceta " + publication_number + " de fecha " + publication_date + "."
       elsif document_type == "Avisos Legales"
-        name = file["name"]
         short_description = "Esta es la sección de avisos legales de la Gaceta " + publication_number + " de fecha " + publication_date + "."
       elsif document_type== "Gaceta"
         short_description = "Esta es la gaceta número " + publication_number + " de fecha " + publication_date + "."
       else
-        issue_id = file["issue_id"]
         short_description = cleanText(file["short_description"])
         long_description = cleanText(file["description"])
       end
@@ -612,6 +609,9 @@ class DocumentsController < ApplicationController
       document_count += 1
     end
 
+    #delete local files after uploading them
+    delete_current_batch_files
+
     redirect_to documents_path(last_documents: document_count, processed_documents: document_count), notice: "Batch processed successfully. #{document_count} documents uploaded."
   end
 
@@ -650,46 +650,6 @@ class DocumentsController < ApplicationController
       end
     end
 
-    def get_document_type auto_process_type
-      if !auto_process_type
-        return DocumentType.find_by_name("Ninguno").id
-      elsif auto_process_type == "slice" or auto_process_type == "process"
-        return get_gazette_document_type_id
-      elsif auto_process_type == "judgement"
-        return get_sentence_document_type_id
-      elsif auto_process_type == "avisos"
-        document_type = DocumentType.find_by_name("Avisos Legales")
-        return document_type.id
-      elsif auto_process_type == "marcas"
-        document_type = DocumentType.find_by_name("Marcas de Fábrica")
-        return document_type.id
-      elsif auto_process_type == "autos"
-        document_type = DocumentType.find_by_name("Auto Acordado")
-        if document_type
-          return document_type.id
-        end
-      elsif auto_process_type == "formats"
-        document_type = DocumentType.find_by_name("Formato")
-        if document_type
-          return document_type.id
-        end
-      elsif auto_process_type == "comunicados"
-        document_type = DocumentType.find_by_name("Comunicado")
-        if document_type
-          return document_type.id
-        end
-      elsif auto_process_type == "others"
-        document_type = DocumentType.find_by_name("Otro")
-        if document_type
-          return document_type.id
-        end
-      else
-        document_type = DocumentType.find_by_name("Sección de Gaceta")
-        return document_type.id
-      end
-      return DocumentType.find_by_name("Ninguno").id
-    end
-
     def get_empty_document_type_id
       document_type = DocumentType.find_by_name("Ninguno")
       if document_type
@@ -714,23 +674,4 @@ class DocumentsController < ApplicationController
       return nil
     end
 
-    def get_part_document_type_id name
-      if name == "Avisos Legales"
-        document_type = DocumentType.find_by_name("Avisos Legales")
-        if document_type
-          return document_type.id
-        end
-      elsif name == "Marcas de Fábrica"
-        document_type = DocumentType.find_by_name("Marcas de Fábrica")
-        if document_type
-          return document_type.id
-        end
-      else
-        document_type = DocumentType.find_by_name("Sección de Gaceta")
-        if document_type
-          return document_type.id
-        end
-      end
-      return nil
-    end
 end

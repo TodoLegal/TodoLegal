@@ -519,7 +519,11 @@ class DocumentsController < ApplicationController
 
   def process_documents_batch
     puts ">slice_gazette called"
-    json_data = run_process_document_batch_script()
+    # json_data = run_process_document_batch_script()
+
+    #Extract the files data from the generated json
+    json_data = File.read('processed_files.json')
+    json_data = JSON.parse(json_data)
 
     document_count = 0
     puts "Creating related documents"

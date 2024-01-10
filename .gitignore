@@ -26,6 +26,7 @@ public/documents/
 gcs.keyfile
 .rbenv-vars
 config/application.yml
+processed_files.json
 
 config/database.yml
 #Gemfile.lock

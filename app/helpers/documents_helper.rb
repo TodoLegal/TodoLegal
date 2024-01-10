@@ -14,7 +14,7 @@ module DocumentsHelper
 
     return false unless document
   
-    if document.created_at >= 2.hours.ago
+    if document.created_at >= 30.minutes.ago
       document.destroy
       puts "=============================================================================="
       puts "Documento eliminado aca"
@@ -40,13 +40,69 @@ module DocumentsHelper
       if document_type
         return document_type.id
       end
-    else
+    elsif name == "Acuerdo" || name == "Decreto" || name == "Certificación"
       document_type = DocumentType.find_by_name("Sección de Gaceta")
       if document_type
         return document_type.id
       end
+    elsif name == "Adedum"
+      document_type = DocumentType.find_by_name("Ademdum")
+      if document_type
+        return document_type.id
+      end
+    elsif name == "Acta"
+      document_type = DocumentType.find_by_name("Acta")
+      if document_type
+        return document_type.id
+      end
+    elsif name == "Auto Acordado"
+      document_type = DocumentType.find_by_name("Auto Acordado")
+      if document_type
+        return document_type.id
+      end
+    elsif name == "Contrato"
+      document_type = DocumentType.find_by_name("Contrato")
+      if document_type
+        return document_type.id
+      end
+    elsif name == "Convenio"
+      document_type = DocumentType.find_by_name("Convenio")
+      if document_type
+        return document_type.id
+      end
+    elsif name == "Fe de Erratas"
+      document_type = DocumentType.find_by_name("Fe de Erratas")
+      if document_type
+        return document_type.id
+      end
+    elsif name == "Licitación"
+      document_type = DocumentType.find_by_name("Licitación")
+      if document_type
+        return document_type.id
+      end
+    elsif name == "Oficio"
+      document_type = DocumentType.find_by_name("Oficio")
+      if document_type
+        return document_type.id
+      end
+    elsif name == "Reglamento"
+      document_type = DocumentType.find_by_name("Reglamento")
+      if document_type
+        return document_type.id
+      end
+    elsif name == "Resolución"
+      document_type = DocumentType.find_by_name("Resolución")
+      if document_type
+        return document_type.id
+      end
+    elsif name == "Tratado"
+      document_type = DocumentType.find_by_name("Tratado")
+      if document_type
+        return document_type.id
+      end
+    else
+      document_type = DocumentType.find_by_name("Otro")
     end
-    document_type = DocumentType.find_by_name("Otro")
     return document_type
   end
 

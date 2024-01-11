@@ -10,15 +10,12 @@ module DocumentsHelper
 
 
   def delete_duplicated_document(publication_number, publication_date)
-    document = Document.find_by(publication_number: publication_number, publication_date: publication_date)
-
-    return false unless document
+    documents = Document.where(publication_number: publication_number, publication_date: publication_date)
   
-    if document.created_at >= 30.minutes.ago
-      document.destroy
-      puts "=============================================================================="
-      puts "Documento eliminado aca"
-      puts "=============================================================================="
+    if documents&.last&.created_at <= 30.minutes.ago
+      documents.each do | document |
+        document.destroy
+      end
       return true
     end
     false
@@ -38,7 +35,7 @@ module DocumentsHelper
       total_time_seconds: json_data['total_time_seconds'],
       total_time_minutes: json_data['total_time_minutes']
     }
-    
+
   end
 
   def get_part_document_type_id name
@@ -123,6 +120,7 @@ module DocumentsHelper
     return document_type
   end
 
+  #Change path
   def delete_current_batch_files
     # Deletes files with TL stamp
     directory_path = '../GazetteSlicer/stamped_documents/'

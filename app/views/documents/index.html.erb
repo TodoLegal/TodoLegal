@@ -7,6 +7,7 @@
     <h1>Documentos</h1>
   <% end %>
   <%if current_user_is_admin %>
+    <%= render "batch_statistics_table" %>
     <form action="/documents/process_documents_batch" method="post">
       <div class="form-inline">
         <button type="submit" class="btn btn-primary">Procesar batch de documentos</button>

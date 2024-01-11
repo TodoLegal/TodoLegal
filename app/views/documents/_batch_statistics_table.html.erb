@@ -1,0 +1,30 @@
+<table class="table table-sm"">
+  <thead>
+    <tr>
+      <th class="table--headers" scope="col">Total documentos procesados</th>
+      <th class="table--headers"scope="col">Total páginas procesadas</th>
+      <th class="table--headers"scope="col">Total tiempo de procesamiento en segundos</th>
+      <th class="table--headers"scope="col">Total tiempo de procesamiento en minutos</th>
+    </tr>
+  </thead>
+  <tbody> 
+    <tr>
+        <td>
+            <%= @total_files %>
+        </td>
+        <td>
+            <%= @total_pages %>
+        </td>
+        <td> 
+            <%= @total_time_seconds %>
+        </td>
+        <td> 
+            <%= @total_time_minutes %>
+        </td>
+    </tr>
+  </tbody>
+</table>
+
+<style>
+    tr:hover {background-color:#c8ced4;}
+</style>

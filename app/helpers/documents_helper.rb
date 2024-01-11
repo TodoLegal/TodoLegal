@@ -24,6 +24,23 @@ module DocumentsHelper
     false
   end
 
+  def get_documents_batch_statistics
+    file_path = Rails.root.join('documents_batch_statistics.json')
+
+    return nil unless File.exist?(file_path)
+
+    file_content = File.read(file_path)
+    json_data = JSON.parse(file_content)
+
+    {
+      total_files: json_data['total_files'],
+      total_pages: json_data['total_pages'],
+      total_time_seconds: json_data['total_time_seconds'],
+      total_time_minutes: json_data['total_time_minutes']
+    }
+    
+  end
+
   def get_part_document_type_id name
     if name == "Avisos Legales"
       document_type = DocumentType.find_by_name("Avisos Legales")

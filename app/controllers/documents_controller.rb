@@ -11,6 +11,20 @@ class DocumentsController < ApplicationController
     @show_only_autos = params["autos"]
     @processed_documents = params["processed_documents"]
 
+    #get batch statistics 
+    batch_statistics = get_documents_batch_statistics
+    @total_files = 0
+    @total_pages = 0
+    @total_time_seconds = 0
+    @total_time_minutes = 0
+
+    if batch_statistics
+      @total_files = batch_statistics[:total_files]
+      @total_pages = batch_statistics[:total_pages]
+      @total_time_seconds = batch_statistics[:total_time_seconds]
+      @total_time_minutes = batch_statistics[:total_time_minutes]
+    end
+
     if !@query.blank?
       if @query && @query.length == 5 && @query[1] != ','
         @query.insert(2, ",")

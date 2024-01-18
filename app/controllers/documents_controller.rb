@@ -23,6 +23,8 @@ class DocumentsController < ApplicationController
       @total_pages = batch_statistics[:total_pages]
       @total_time_seconds = batch_statistics[:total_time_seconds]
       @total_time_minutes = batch_statistics[:total_time_minutes]
+      @average_time_per_document = @total_files/@total_time_seconds
+      @average_pages_per_document = @total_pages/@total_files
     end
 
     if !@query.blank?

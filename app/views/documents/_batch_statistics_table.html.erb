@@ -3,8 +3,10 @@
     <tr>
       <th class="table--headers" scope="col">Total documentos procesados</th>
       <th class="table--headers"scope="col">Total páginas procesadas</th>
+      <th class="table--headers"scope="col">Promedio de paginas por documento</th>
       <th class="table--headers"scope="col">Total tiempo de procesamiento en segundos</th>
       <th class="table--headers"scope="col">Total tiempo de procesamiento en minutos</th>
+            <th class="table--headers"scope="col">Promedio de tiempo por documento</th>
     </tr>
   </thead>
   <tbody> 
@@ -17,6 +19,12 @@
         </td>
         <td> 
             <%= @total_time_seconds %>
+        </td>
+        <td> 
+            <%= @total_time_minutes %>
+        </td>
+        <td> 
+            <%= @total_time_minutes %>
         </td>
         <td> 
             <%= @total_time_minutes %>

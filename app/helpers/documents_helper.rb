@@ -12,7 +12,7 @@ module DocumentsHelper
   def delete_duplicated_document(publication_number, publication_date)
     documents = Document.where(publication_number: publication_number, publication_date: publication_date)
   
-    if documents&.last&.created_at <= 30.minutes.ago
+    if documents&.last&.created_at <= 1.year.ago
       documents.each do | document |
         document.destroy
       end
@@ -137,7 +137,7 @@ module DocumentsHelper
     end
 
     #Deletes downloaded files
-    directory_path = '../GazetteSlicer/examples/batch-examples/'
+    directory_path = '../GazetteSlicer/data'
     if Dir.exist?(directory_path)
       Dir.foreach(directory_path) do |file|
         next if file == '.' || file == '..'  # Skip current and parent directory references

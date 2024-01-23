@@ -11,8 +11,8 @@ module DocumentsHelper
 
   def delete_duplicated_document(publication_number, publication_date)
     documents = Document.where(publication_number: publication_number, publication_date: publication_date)
-  
-    if documents&.last&.created_at <= 1.year.ago
+
+    if documents.count != 0 && documents&.last&.created_at <= 1.year.ago
       documents.each do | document |
         document.destroy
       end
@@ -54,8 +54,18 @@ module DocumentsHelper
       if document_type
         return document_type.id
       end
-    elsif name == "Acuerdo" || name == "Decreto" || name == "Certificación"
-      document_type = DocumentType.find_by_name("Sección de Gaceta")
+    elsif name == "Acuerdo"
+      document_type = DocumentType.find_by_name("Acuerdo")
+      if document_type
+        return document_type.id
+      end
+    elsif name == "Decreto"
+      document_type = DocumentType.find_by_name("Decreto")
+      if document_type
+        return document_type.id
+      end
+    elsif name == "Certificación"
+      document_type = DocumentType.find_by_name("Certificación")
       if document_type
         return document_type.id
       end

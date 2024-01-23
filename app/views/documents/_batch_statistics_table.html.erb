@@ -1,0 +1,55 @@
+<table class="table batch--table table-sm">
+  <tbody>
+    <tr>
+      <td class="table--headers">Total documentos procesados:</td>
+      <td><%= @total_files %></td>
+    </tr>
+    <tr>
+      <td class="table--headers">Total páginas procesadas:</td>
+      <td><%= @total_pages %></td>
+    </tr>
+    <tr>
+      <td class="table--headers">Promedio de paginas por documento:</td>
+      <td><%= @average_pages_per_document %></td>
+    </tr>
+    <tr>
+      <td class="table--headers">Total tiempo de procesamiento en segundos:</td>
+      <td><%= @total_time_seconds %></td>
+    </tr>
+    <tr>
+      <td class="table--headers">Total tiempo de procesamiento en minutos:</td>
+      <td><%= @total_time_minutes %></td>
+    </tr>
+    <tr>
+      <td class="table--headers">Promedio de tiempo por documento en segundos:</td>
+      <td><%= @average_time_per_document %></td>
+    </tr>
+  </tbody>
+</table>
+
+<style>
+  .batch--table {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .table--headers {
+    font-weight: bold;
+  }
+
+  .batch--table tr {
+    display: table-row;
+  }
+
+  .batch--table td {
+    display: table-cell;
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+
+  tr:hover {
+    background-color: #c8ced4;
+  }
+</style>

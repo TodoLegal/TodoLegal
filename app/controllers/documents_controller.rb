@@ -622,8 +622,9 @@ class DocumentsController < ApplicationController
       puts "Uploading file"
       # base_path = Rails.root.join('..', 'GazetteSlicer', 'stamped_documents')
       # file_path = File.join(base_path, file['path'])
+      file_path = File.join("../", file['path'])
       new_document.original_file.attach(
-        io: File.open(file['path']),
+        io: File.open(file_path),
         filename: "#{file['document_type']}.pdf",
         content_type: 'application/pdf'
       )

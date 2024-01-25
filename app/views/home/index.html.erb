@@ -18,33 +18,31 @@
     <br />
 
     <div class="row">
-      <div class="col-sm-4 col-md-3 py-2">
+      <div class="col-sm-6 col-md-4 py-2">
         <div class="card card-body h-100 card-with-border landing-cards" style="padding:0px">
           <a class="" href="<%= valid_url %>" style="padding:20px">
             <img class="landing-page-icon" src="/img/valid_icono.svg" />
             <h5 class="landing-card-title">Valid</h5>
             <p class="landing-card-text">Buscador de Decretos, Acuerdos y Gacetas.</p>
             <p class="count-text"><%= valid_gazettes_count %> gacetas</p>
-            <p class="spacer">
-            </p>
+            &nbsp;&nbsp;&nbsp;
             <button type="button btn-lg" class="btn btn-danger landing-page-button">INICIAR BÚSQUEDA</button>
           </a>
         </div>
       </div>
-      <div class="col-sm-4 col-md-3 py-2">
+      <div class="col-sm-6 col-md-4 py-2">
         <div class="card card-body h-100 card-with-border landing-cards" style="padding:0px">
           <a class="" href="<%= home_path %>" style="padding:20px">
             <img class="landing-page-icon" src="/img/Icon-Todolegal-gray128px.svg" />
             <h5 class="landing-card-title">TodoLegal</h5>
             <p class="landing-card-text">Buscador de Leyes y Códigos.</p>
             <p class="count-text"><%= law_count %> leyes</p>
-            <p class="spacer">
-            </p>
+            &nbsp;&nbsp;&nbsp;
             <button type="button btn-lg" class="btn btn-danger landing-page-button">INICIAR BÚSQUEDA</button>
           </a>
         </div>
       </div>
-      <div class="col-sm-4 col-md-3 py-2">
+      <div class="col-sm-6 col-md-4 py-2">
         <div class="card card-body h-100 card-with-border landing-cards" style="padding:0px">
           <a class="" href="<%= ley_abierta_url %>?tlclick=home" style="padding:20px" target="_blank">
             <img class="landing-page-icon" src="/img/ley_abierta_icon.svg" />
@@ -55,18 +53,6 @@
           </a>
         </div>
       </div>
-      <div class="col-sm-4 col-md-3 py-2">
-        <div class="card card-body h-100 card-with-border landing-cards" style="padding:0px">
-          <a class="" href="<%= libreria_todolegal_url %>?tlclick=home" style="padding:20px" target="_blank">
-            <img class="landing-page-icon" src="/img/libreria_TL_negro.svg" />
-            <h5 class="landing-card-title">La Librería</h5>
-            <p class="landing-card-text">La librería dígital de Textos y Doctrina Jurídica más completa de Centroamérica.</p>
-            <p class="count-text"></p>
-            <button type="button btn-lg" class="btn btn-danger landing-page-button">INICIAR BÚSQUEDA</button>
-          </a>
-        </div>
-      </div>
-    </div>
 
   <%= render "mailchimp_form" %>
 
@@ -80,9 +66,9 @@
     padding-top: 5%;
 }
 
-.container--landing {
+/* .container--landing {
     max-width: 1340px;
-}
+} */
 
 .landing-cards{
     background: #FFFFFF 0% 0% no-repeat padding-box;
@@ -105,7 +91,7 @@ a:hover{
 }
 
 .landing-card-title{
-    font: normal normal 900 32px/68px Poppins;
+    font: normal normal 900 42px/68px Poppins;
     letter-spacing: 0px;
     color: #000000;
     margin-bottom: 0px;
@@ -115,7 +101,7 @@ a:hover{
 
 .landing-card-text{
     color: #22252C;
-    font: normal normal normal 19px/25px Poppins;
+    font: normal normal normal 20px/30px Poppins;
     letter-spacing: 0px;
     margin-bottom: 0px;
     opacity: 1;
@@ -137,7 +123,7 @@ a:hover{
 
 .landing-page-button{
     background: #FF5722 0% 0% no-repeat padding-box !important;
-    font: normal normal bold 14px/33px Poppins;
+    font: normal normal bold 15px/33px Poppins;
     letter-spacing: 0px;
     opacity: 1;
     width: 100%

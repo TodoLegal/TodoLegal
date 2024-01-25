@@ -1,6 +1,7 @@
 class DocumentsController < ApplicationController
   before_action :set_document, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_editor!, only: [:index, :show, :new, :edit, :create, :update, :destroy]
+  include DocumentsHelper
 
   # GET /documents
   # GET /documents.json
@@ -8,6 +9,26 @@ class DocumentsController < ApplicationController
     @query = params["query"]
     @show_only_judgements = params["judgements"]
     @show_only_autos = params["autos"]
+    @processed_documents = params["processed_documents"]
+
+    #get batch statistics 
+    batch_statistics = get_documents_batch_statistics
+    @total_files = 0
+    @total_pages = 0
+    @total_time_seconds = 0
+    @total_time_minutes = 0
+    @average_pages_per_document = 0
+    @average_time_per_document = 0
+
+    if batch_statistics
+      @total_files = batch_statistics[:total_files]
+      @total_pages = batch_statistics[:total_pages]
+      @total_time_seconds = batch_statistics[:total_time_seconds]
+      @total_time_minutes = batch_statistics[:total_time_minutes]
+      @average_pages_per_document = @total_pages/@total_files
+      @average_time_per_document = @total_time_seconds/@total_files
+    end
+
     if !@query.blank?
       if @query && @query.length == 5 && @query[1] != ','
         @query.insert(2, ",")
@@ -16,6 +37,7 @@ class DocumentsController < ApplicationController
     else
       @documents = Document.all.order('publication_number DESC').page params[:page]
     end
+
     if @show_only_judgements
       @documents = Document.where(document_type_id: DocumentType.find_by_name("Sentencia")).order('publication_number DESC').page params[:page]
     end
@@ -23,6 +45,15 @@ class DocumentsController < ApplicationController
     if @show_only_autos
       @documents = Document.where(document_type_id: DocumentType.find_by_name("Auto Acordado")).order('publication_number DESC').page params[:page]
     end
+
+    if params[:last_documents]
+      limit = params[:last_documents].to_i
+      last_documents = Document.order('created_at DESC').limit(limit)
+      @documents = Kaminari.paginate_array(last_documents).page(params[:page])
+    else
+      @documents = Document.all.order('publication_number DESC').page(params[:page])
+    end
+
     expires_in 10.minutes
   end
 
@@ -388,7 +419,7 @@ class DocumentsController < ApplicationController
   end
 
    #Autos acordados scripts
-   def run_slice_autos_acordados_script document, document_pdf_path
+  def run_slice_autos_acordados_script document, document_pdf_path
     puts ">run_slice_autos_acordados_script called"
     python_return_value = `python3 ~/GazetteSlicer/slice_autos_acordados.py #{ document_pdf_path } '#{ Rails.root.join("public", "autos_acordados") }' '#{document.id}'`
     begin
@@ -399,9 +430,9 @@ class DocumentsController < ApplicationController
       document.save
       return {}
     end
-   end
+  end
  
-   def slice_autos_acordados document, document_pdf_path
+  def slice_autos_acordados document, document_pdf_path
     puts "slice_autos_acordados called"
     json_data = run_slice_autos_acordados_script(document, document_pdf_path)
     # document.url = document.generate_friendly_url
@@ -488,8 +519,123 @@ class DocumentsController < ApplicationController
 
     end
     puts "Created related documents"
-   end
- 
+  end
+   
+  #batch processing
+
+  def run_process_document_batch_script
+    puts ">run_process_documents_batch called"
+    python_return_value = `python3 /home/carlosvilla/Github/TodoLegal-Repos/GazetteSlicer/process_documents_batch.py` 
+    begin
+      result = JSON.parse(python_return_value)
+      return result
+    rescue
+      Rails.logger.error(`Error on process batch: #{python_return_value}`)
+      return {}
+    end
+  end
+
+  def process_documents_batch
+    puts ">slice_gazette called"
+    # json_data = run_process_document_batch_script()
+
+    #Extract the files data from the generated json
+    json_data = File.read('processed_files.json')
+    json_data = JSON.parse(json_data)
+
+    document_count = 0
+    puts "Creating related documents"
+    json_data["files"].each do |file|
+      puts "Creating: " + file["name"]
+      name = file["name"]
+      issue_id = file["issue_id"]
+      publication_number = file["publication_number"]
+      publication_date = file["publication_date"]
+      document_type = file["document_type"]
+      short_description = ""
+      long_description = ""
+      
+      #Check if document exists, if documents exists and is from 2021 backwards, delete it
+      date_string = publication_date
+      date = DateTime.parse(date_string)
+      year = date.year
+      document_deleted = delete_duplicated_document(publication_number, date) if year <= 2021
+      if document_deleted
+        Rails.logger.info("==============================================================================")
+        Rails.logger.info("Documento eliminado")
+        Rails.logger.info("==============================================================================")
+      end
+
+      if document_type == "Marcas de Fábrica"
+        short_description = "Esta es la sección de Marcas de Fábrica de la Gaceta " + publication_number + " de fecha " + publication_date + "."
+      elsif document_type == "Avisos Legales"
+        short_description = "Esta es la sección de avisos legales de la Gaceta " + publication_number + " de fecha " + publication_date + "."
+      elsif document_type== "Gaceta"
+        short_description = "Esta es la gaceta número " + publication_number + " de fecha " + publication_date + "."
+      else
+        short_description = cleanText(file["short_description"])
+        long_description = cleanText(file["description"])
+      end
+
+      new_document = Document.create(
+        name: name,
+        issue_id: issue_id,
+        publication_date: publication_date,
+        publication_number: publication_number,
+        short_description: short_description,
+        description: long_description,
+        full_text: cleanText(file["full_text"]),
+        document_type_id: get_part_document_type_id(document_type),
+        publish: false
+      )
+
+      addTagIfExists(new_document.id, file["tag"])
+      addIssuerTagIfExists(new_document.id, file["issuer"])
+      addTagIfExists(new_document.id, "Gaceta")
+      if document_type == "Marcas de Fábrica"
+        addIssuerTagIfExists(new_document.id, "Varios")
+        addTagIfExists(new_document.id, "Marcas")
+        addTagIfExists(new_document.id, "Mercantil")
+        addTagIfExists(new_document.id, "Propiedad Intelectual")
+      elsif document_type == "Avisos Legales"
+        addIssuerTagIfExists(new_document.id, "Varios")
+        addTagIfExists(new_document.id, "Avisos Legales")
+        addTagIfExists(new_document.id, "Licitaciones")
+      end
+      #adds institutions tags extracted by OCR
+      file["institutions"].each do |institution|
+        addTagIfExists(new_document.id, institution)
+      end
+      full_text_lower = file["full_text"].downcase
+      
+      #adds alternative name for institutions tags
+      AlternativeTagName.all.each do |alternative_tag_name|
+        if isWordInText alternative_tag_name.alternative_name, full_text_lower
+          if !DocumentTag.exists?(document_id: new_document.id, tag_id: alternative_tag_name.tag_id)
+            DocumentTag.create(document_id: new_document.id, tag_id: alternative_tag_name.tag_id)
+          end
+        end
+      end
+      new_document.url = new_document.generate_friendly_url
+      new_document.save
+
+      puts "Uploading file"
+      # base_path = Rails.root.join('..', 'GazetteSlicer', 'stamped_documents')
+      # file_path = File.join(base_path, file['path'])
+      new_document.original_file.attach(
+        io: File.open(file['path']),
+        filename: "#{file['document_type']}.pdf",
+        content_type: 'application/pdf'
+      )
+
+      document_count += 1
+    end
+
+    #delete local files after uploading them
+    delete_current_batch_files
+
+    redirect_to documents_path(last_documents: document_count, processed_documents: document_count), notice: "Batch processed successfully. #{document_count} documents uploaded."
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -526,46 +672,6 @@ class DocumentsController < ApplicationController
       end
     end
 
-    def get_document_type auto_process_type
-      if !auto_process_type
-        return DocumentType.find_by_name("Ninguno").id
-      elsif auto_process_type == "slice" or auto_process_type == "process"
-        return get_gazette_document_type_id
-      elsif auto_process_type == "judgement"
-        return get_sentence_document_type_id
-      elsif auto_process_type == "avisos"
-        document_type = DocumentType.find_by_name("Avisos Legales")
-        return document_type.id
-      elsif auto_process_type == "marcas"
-        document_type = DocumentType.find_by_name("Marcas de Fábrica")
-        return document_type.id
-      elsif auto_process_type == "autos"
-        document_type = DocumentType.find_by_name("Auto Acordado")
-        if document_type
-          return document_type.id
-        end
-      elsif auto_process_type == "formats"
-        document_type = DocumentType.find_by_name("Formato")
-        if document_type
-          return document_type.id
-        end
-      elsif auto_process_type == "comunicados"
-        document_type = DocumentType.find_by_name("Comunicado")
-        if document_type
-          return document_type.id
-        end
-      elsif auto_process_type == "others"
-        document_type = DocumentType.find_by_name("Otro")
-        if document_type
-          return document_type.id
-        end
-      else
-        document_type = DocumentType.find_by_name("Sección de Gaceta")
-        return document_type.id
-      end
-      return DocumentType.find_by_name("Ninguno").id
-    end
-
     def get_empty_document_type_id
       document_type = DocumentType.find_by_name("Ninguno")
       if document_type
@@ -590,23 +696,4 @@ class DocumentsController < ApplicationController
       return nil
     end
 
-    def get_part_document_type_id name
-      if name == "Avisos Legales"
-        document_type = DocumentType.find_by_name("Avisos Legales")
-        if document_type
-          return document_type.id
-        end
-      elsif name == "Marcas de Fábrica"
-        document_type = DocumentType.find_by_name("Marcas de Fábrica")
-        if document_type
-          return document_type.id
-        end
-      else
-        document_type = DocumentType.find_by_name("Sección de Gaceta")
-        if document_type
-          return document_type.id
-        end
-      end
-      return nil
-    end
 end

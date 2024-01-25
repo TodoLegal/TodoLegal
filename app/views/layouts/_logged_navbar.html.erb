@@ -67,11 +67,6 @@
                     <img  src="/img/ley_abierta_icon_white.png" alt="Card image cap" class="leyabierta--logo">
                     <img  src="/img/ley_abierta_icon.svg" alt="Card image cap" class="leyabierta--logo--inverse">
                     Ley Abierta
-                </a> 
-                <a class="dropdown-item" href="<%= libreria_todolegal_url %>">
-                    <img  src="/img/libreria_TL_blanco.png" alt="Card image cap" class="libreria--logo">
-                    <img  src="/img/libreria_TL_negro.svg" alt="Card image cap" class="libreria--logo--inverse">
-                    Librería
                 </a>
                 <%= link_to(destroy_user_session_path, {class: "dropdown-item", method: 'delete' }) do %>
                     <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
@@ -181,16 +176,16 @@
         text-decoration: none;
     }
 
-    .valid--logo, .libreria--logo, .leyabierta--logo{
+    .valid--logo, .leyabierta--logo{
         width: 7%;
     }
 
-    .valid--logo--inverse, .libreria--logo--inverse, .leyabierta--logo--inverse{
+    .valid--logo--inverse, .leyabierta--logo--inverse{
         width: 8%;
     }
 
     /* Hide the inverse logo by default */
-    .valid--logo--inverse, .libreria--logo--inverse, .leyabierta--logo--inverse{
+    .valid--logo--inverse, .leyabierta--logo--inverse{
         display: none;
     }
 

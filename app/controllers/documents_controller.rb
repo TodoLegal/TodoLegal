@@ -567,7 +567,7 @@ class DocumentsController < ApplicationController
       end
 
       if document_type == "Marcas de Fábrica"
-        short_description = "Esta es la sección de marcas de Fábrica de la Gaceta " + publication_number + " de fecha " + publication_date + "."
+        short_description = "Esta es la sección de Marcas de Fábrica de la Gaceta " + publication_number + " de fecha " + publication_date + "."
       elsif document_type == "Avisos Legales"
         short_description = "Esta es la sección de avisos legales de la Gaceta " + publication_number + " de fecha " + publication_date + "."
       elsif document_type== "Gaceta"

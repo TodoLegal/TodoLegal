@@ -73,11 +73,6 @@
                             <img  src="/img/ley_abierta_icon_white.png" alt="Card image cap" class="leyabierta--logo">
                             <img  src="/img/ley_abierta_icon.svg" alt="Card image cap" class="leyabierta--logo--inverse">
                             Ley Abierta
-                        </a> 
-                        <a class="dropdown-item" href="<%= libreria_todolegal_url %>">
-                            <img  src="/img/libreria_TL_blanco.png" alt="Card image cap" class="libreria--logo">
-                            <img  src="/img/libreria_TL_negro.svg" alt="Card image cap" class="libreria--logo--inverse">
-                            Librería
                         </a>
                         <%= link_to(destroy_user_session_path, {class: "dropdown-item", method: 'delete' }) do %>
                             <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
@@ -217,16 +212,16 @@
     }
 
 
-    .valid--logo, .libreria--logo, .leyabierta--logo{
+    .valid--logo, .leyabierta--logo{
         width: 7%;
     }
 
-    .valid--logo--inverse, .libreria--logo--inverse, .leyabierta--logo--inverse{
+    .valid--logo--inverse, .leyabierta--logo--inverse{
         width: 8%;
     }
 
     /* Hide the inverse logo by default */
-    .valid--logo--inverse, .libreria--logo--inverse, .leyabierta--logo--inverse{
+    .valid--logo--inverse, .leyabierta--logo--inverse{
         display: none;
     }
 
@@ -235,7 +230,7 @@
         display: inline-block;
     }
 
-    .dropdown-item:hover .libreria--logo--inverse {
+    .dropdown-item:hover {
         display: inline-block;
     }
 
@@ -248,7 +243,7 @@
         display: none;
     }
 
-    .dropdown-item:hover .libreria--logo {
+    .dropdown-item:hover {
         display: none;
     }
 
@@ -308,16 +303,16 @@
             display: block;
         }
 
-        .valid--logo--inverse, .libreria--logo--inverse, .leyabierta--logo--inverse{
+        .valid--logo--inverse, .leyabierta--logo--inverse{
             width: 6%;
         }
         /* Hide the original logo by default */
-        .valid--logo, .libreria--logo, .leyabierta--logo{
+        .valid--logo, .leyabierta--logo{
             display: none;
         }
 
         /* show the inverse logo by default */
-        .valid--logo--inverse, .libreria--logo--inverse, .leyabierta--logo--inverse{
+        .valid--logo--inverse, .leyabierta--logo--inverse{
             display: inline-block;
         }
         

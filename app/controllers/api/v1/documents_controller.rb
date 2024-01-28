@@ -79,6 +79,7 @@ class Api::V1::DocumentsController < ApplicationController
     searchkick_where = {
       publication_date: {gte: from, lte: to},
       name: {not: 'Gaceta'},
+      publish: true
     }
 
     if !params['tags'].blank? and params['tags'].kind_of?(Array)

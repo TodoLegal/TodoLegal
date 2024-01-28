@@ -5,9 +5,11 @@ acuerdo_type = DocumentType.find_by(name: "Acuerdo")
 gaceta_type = DocumentType.find_by(name: "Gaceta")
 otro_type = DocumentType.find_by(name: "Otro")
 
-Document.all.each do | document |
+documents_with_no_document_type_id = Document.where(document_type_id: [nil, ""]).limit(100)
 
-  if !document.document_type
+documents_with_no_document_type_id.all.each do | document |
+
+  if !document.document_type_id
     if document.name == "Marcas de Fábrica"
       document.document_type_id = marcas_type.id
     elsif document.name == "Avisos Legales"
@@ -22,7 +24,10 @@ Document.all.each do | document |
       document.document_type_id = otro_type.id
     end
   end
+end
 
+
+Document.all.each do | document |
   if !document.publish
     document.publish = true
     document.save

@@ -69,13 +69,23 @@ module DocumentsHelper
       if document_type
         return document_type.id
       end
-    elsif name == "Adedum"
-      document_type = DocumentType.find_by_name("Ademdum")
+    elsif name == "Comunicado"
+      document_type = DocumentType.find_by_name("Comunicado")
+      if document_type
+        return document_type.id
+      end
+    elsif name == "Adendum"
+      document_type = DocumentType.find_by_name("Adendum")
       if document_type
         return document_type.id
       end
     elsif name == "Acta"
       document_type = DocumentType.find_by_name("Acta")
+      if document_type
+        return document_type.id
+      end
+    elsif name == "Avance"
+      document_type = DocumentType.find_by_name("Avance")
       if document_type
         return document_type.id
       end
@@ -99,6 +109,11 @@ module DocumentsHelper
       if document_type
         return document_type.id
       end
+    elsif name == "Formato"
+      document_type = DocumentType.find_by_name("Formato")
+      if document_type
+        return document_type.id
+      end
     elsif name == "Licitación"
       document_type = DocumentType.find_by_name("Licitación")
       if document_type
@@ -119,6 +134,11 @@ module DocumentsHelper
       if document_type
         return document_type.id
       end
+    elsif name == "Sentencia"
+      document_type = DocumentType.find_by_name("Sentencia")
+      if document_type
+        return document_type.id
+      end
     elsif name == "Tratado"
       document_type = DocumentType.find_by_name("Tratado")
       if document_type
@@ -133,7 +153,7 @@ module DocumentsHelper
   #Change path
   def delete_current_batch_files
     # Deletes files with TL stamp
-    directory_path = '../GazetteSlicer/stamped_documents/'
+    directory_path = '../../../GazetteSlicer/stamped_documents/'
     if Dir.exist?(directory_path)
       Dir.foreach(directory_path) do |file|
         next if file == '.' || file == '..'  # Skip current and parent directory references
@@ -147,7 +167,7 @@ module DocumentsHelper
     end
 
     #Deletes downloaded files
-    directory_path = '../GazetteSlicer/data'
+    directory_path = '../../../GazetteSlicer/data'
     if Dir.exist?(directory_path)
       Dir.foreach(directory_path) do |file|
         next if file == '.' || file == '..'  # Skip current and parent directory references

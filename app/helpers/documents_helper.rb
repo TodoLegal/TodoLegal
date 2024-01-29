@@ -147,7 +147,7 @@ module DocumentsHelper
     else
       document_type = DocumentType.find_by_name("Otro")
     end
-    return document_type
+    return document_type.id
   end
 
   #Change path

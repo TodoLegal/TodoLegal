@@ -1,8 +1,8 @@
 module DocumentsHelper
 
-  def check_document_duplicity(publication_number, document_type)
+  def check_document_duplicity(publication_number, document_type, issue_id)
     # Check if a document with the same publication_number and document_type exists
-    existing_document = Document.find_by(publication_number: publication_number, document_type: document_type)
+    existing_document = Document.find_by(publication_number: publication_number, document_type: document_type, issue_id: issue_id)
   
     # Return true if a document already exists, false otherwise
     existing_document.present?

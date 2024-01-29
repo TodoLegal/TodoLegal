@@ -367,7 +367,9 @@ class DocumentsController < ApplicationController
         document_type_id: get_part_document_type_id(name),
         start_page: file["start_page"],
         end_page: file["end_page"],
-        position: file["position"])
+        position: file["position"],
+        publish: true
+      )
       addTagIfExists(new_document.id, file["tag"])
       addIssuerTagIfExists(new_document.id, file["issuer"])
       addTagIfExists(new_document.id, "Gaceta")
@@ -478,7 +480,8 @@ class DocumentsController < ApplicationController
         full_text: cleanText(file["full_text"]),
         document_type_id: document_type.id,
         alternative_issue_id: alt_issue_id,
-        internal_id:  file["internal_id"]
+        internal_id:  file["internal_id"],
+        publish: true
       )
 
       #tags section
@@ -554,6 +557,12 @@ class DocumentsController < ApplicationController
       document_type = file["document_type"]
       short_description = ""
       long_description = ""
+
+      #check if document already in data base
+      if check_document_duplicity(publication_number, document_type, issue_id)
+        puts "Document already exists. Skipping..."
+        next  # Skip the rest of the loop and move to the next iteration
+      end
       
       #Check if document exists, if documents exists and is from 2021 backwards, delete it
       date_string = publication_date
@@ -618,6 +627,7 @@ class DocumentsController < ApplicationController
       end
       new_document.url = new_document.generate_friendly_url
       new_document.save
+      document_count += 1
 
       puts "Uploading file"
       # base_path = Rails.root.join('..', 'GazetteSlicer', 'stamped_documents')
@@ -627,8 +637,6 @@ class DocumentsController < ApplicationController
         filename: "#{file['document_type']}.pdf",
         content_type: 'application/pdf'
       )
-
-      document_count += 1
     end
 
     #delete local files after uploading them

@@ -145,7 +145,7 @@ module DocumentsHelper
         return document_type.id
       end
     else
-      document_type = DocumentType.find_by_name("Otros")
+      document_type = DocumentType.find_by_name("Otro")
     end
     return document_type
   end

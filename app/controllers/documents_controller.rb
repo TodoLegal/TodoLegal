@@ -634,7 +634,6 @@ class DocumentsController < ApplicationController
         filename: "#{file['document_type']}.pdf",
         content_type: 'application/pdf'
       )
-      
     end
 
     #delete local files after uploading them

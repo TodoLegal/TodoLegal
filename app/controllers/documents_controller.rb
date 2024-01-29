@@ -554,6 +554,12 @@ class DocumentsController < ApplicationController
       document_type = file["document_type"]
       short_description = ""
       long_description = ""
+
+      #check if document already in data base
+      if check_document_duplicity(publication_number, document_type, issue_id)
+        puts "Document already exists. Skipping..."
+        next  # Skip the rest of the loop and move to the next iteration
+      end
       
       #Check if document exists, if documents exists and is from 2021 backwards, delete it
       date_string = publication_date

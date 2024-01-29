@@ -367,7 +367,9 @@ class DocumentsController < ApplicationController
         document_type_id: get_part_document_type_id(name),
         start_page: file["start_page"],
         end_page: file["end_page"],
-        position: file["position"])
+        position: file["position"],
+        publish: true
+      )
       addTagIfExists(new_document.id, file["tag"])
       addIssuerTagIfExists(new_document.id, file["issuer"])
       addTagIfExists(new_document.id, "Gaceta")
@@ -478,7 +480,8 @@ class DocumentsController < ApplicationController
         full_text: cleanText(file["full_text"]),
         document_type_id: document_type.id,
         alternative_issue_id: alt_issue_id,
-        internal_id:  file["internal_id"]
+        internal_id:  file["internal_id"],
+        publish: true
       )
 
       #tags section

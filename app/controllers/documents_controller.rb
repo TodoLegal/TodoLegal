@@ -624,6 +624,7 @@ class DocumentsController < ApplicationController
       end
       new_document.url = new_document.generate_friendly_url
       new_document.save
+      document_count += 1
 
       puts "Uploading file"
       # base_path = Rails.root.join('..', 'GazetteSlicer', 'stamped_documents')
@@ -633,8 +634,6 @@ class DocumentsController < ApplicationController
         filename: "#{file['document_type']}.pdf",
         content_type: 'application/pdf'
       )
-
-      document_count += 1
     end
 
     #delete local files after uploading them

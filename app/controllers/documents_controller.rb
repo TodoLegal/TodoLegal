@@ -218,8 +218,12 @@ class DocumentsController < ApplicationController
           end
         end
         if params[:commit] == 'Guardar cambios'
+          @document.publish = true
+          @document.save
           format.html { redirect_to edit_document_path(@document), notice: 'Document was successfully updated.' }
         elsif params[:commit] == 'Guardar y siguiente'
+          document.publish = true
+          @document.save
           format.html { redirect_to edit_document_path(get_next_document @document), notice: 'Document was successfully updated.' }
         elsif params[:commit] == 'Subir nueva sentencia'
           format.html { redirect_to new_document_path + "?selected_document_type=judgement" }

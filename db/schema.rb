@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_12_092543) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_12_051741) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
   enable_extension "pg_trgm"
@@ -157,6 +157,15 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_12_092543) do
     t.datetime "last_verified_at", precision: nil
     t.boolean "is_empty_field"
     t.integer "datapoint_type_id"
+  end
+
+  create_table "document_histories", force: :cascade do |t|
+    t.integer "document_id"
+    t.integer "user_id"
+    t.datetime "published_at"
+    t.text "comments"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "document_relationships", force: :cascade do |t|
@@ -325,6 +334,15 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_12_092543) do
 
   create_table "permissions", force: :cascade do |t|
     t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "publisher_user_histories", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "total_published_documents"
+    t.integer "total_time"
+    t.integer "skipped_documents", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

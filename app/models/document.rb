@@ -6,6 +6,7 @@ class Document < ApplicationRecord
   has_many :document_tags, :dependent => :destroy
   has_many :tags, through: :document_tags, :dependent => :destroy
   has_one :judgement_auxiliary
+  has_many :document_histories, :dependent => :destroy
 
   belongs_to :document_type
 

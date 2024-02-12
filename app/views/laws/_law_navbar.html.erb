@@ -20,7 +20,6 @@
                 <button type="button" onclick="hideDocumentContainer()" class="btn btn-light search-button" id="hideDocumentContainer-button">
                     <i class="fas fa-search"></i>
                 </button>
-                <% if current_user %>
                     <button type="button" class="btn btn-primary btn-lg btn-avatar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border-radius: 50%;"  data-display="static" id="menu-botton">
                         <% if current_user.first_name %>
                             <%= current_user.first_name[0]%>
@@ -80,7 +79,6 @@
                         <% end %>
                     
                     </div>
-                <% end %>
         </div>
     </ul>
 </nav>
@@ -243,9 +241,9 @@
         display: none;
     }
 
-    .dropdown-item:hover {
+    /* .dropdown-item:hover {
         display: none;
-    }
+    } */
 
     .dropdown-item:hover .leyabierta--logo {
         display: none;

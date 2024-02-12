@@ -13,6 +13,9 @@ class User < ApplicationRecord
   has_one :users_preference, :dependent => :destroy
   has_one :user_notifications_history, :dependent => :destroy
   has_one :user_trial, :dependent => :destroy
+  has_many :verification_histories
+  has_many :verifier_user_histories
+  has_many :publisher_user_histories, :dependent => :destroy
 
   def remember_me
     true

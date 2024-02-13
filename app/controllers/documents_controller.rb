@@ -19,14 +19,40 @@ class DocumentsController < ApplicationController
     @total_time_minutes = 0
     @average_pages_per_document = 0
     @average_time_per_document = 0
+    @average_time_per_page = 0
 
     if batch_statistics
+
+      
+
       @total_files = batch_statistics[:total_files]
       @total_pages = batch_statistics[:total_pages]
       @total_time_seconds = batch_statistics[:total_time_seconds]
       @total_time_minutes = batch_statistics[:total_time_minutes]
+      @total_time_hours = @total_time_minutes/60
+
       @average_pages_per_document = @total_pages/@total_files
       @average_time_per_document = @total_time_seconds/@total_files
+      @average_time_per_page = @total_time_seconds/@total_pages
+      
+      #numbers to just one decimal and add commas
+      @total_time_seconds = @total_time_seconds.round(1)
+      @total_time_minutes = @total_time_minutes.round(1)
+      @total_time_hours = @total_time_hours.round(1)
+      @average_pages_per_document = @average_pages_per_document.round(1)
+      @average_time_per_document = @average_time_per_document.round(1)
+      @average_time_per_page = @average_time_per_page.round(1)
+
+      #convert to string with commas
+      @total_files_string = ActionController::Base.helpers.number_with_delimiter(@total_files)
+      @total_pages_string = ActionController::Base.helpers.number_with_delimiter(@total_pages)
+      @total_time_seconds_string = ActionController::Base.helpers.number_with_delimiter(@total_time_seconds)
+      @total_time_minutes_string = ActionController::Base.helpers.number_with_delimiter(@total_time_minutes)
+      @total_time_hours_string = ActionController::Base.helpers.number_with_delimiter(@total_time_hours)
+      @average_pages_per_document_string = ActionController::Base.helpers.number_with_delimiter(@average_pages_per_document)
+      @average_time_per_document_string = ActionController::Base.helpers.number_with_delimiter(@average_time_per_document)
+      @average_time_per_page_string = ActionController::Base.helpers.number_with_delimiter(@average_time_per_page)
+
     end
 
     if !@query.blank?

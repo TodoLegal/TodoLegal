@@ -1,3 +1,3 @@
 class DocumentHistory < ApplicationRecord
-  belonngs_to :document
+  belongs_to :document
 end

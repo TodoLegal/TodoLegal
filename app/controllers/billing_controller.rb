@@ -227,7 +227,7 @@ class BillingController < ApplicationController
       customer: current_user.stripe_customer_id,
       return_url: 'https://todolegal.app/users/edit',
     })
-    redirect_to portal_session.url
+    redirect_to portal_session.url, allow_other_host: true
   end
 
 protected

@@ -23,8 +23,6 @@ class DocumentsController < ApplicationController
 
     if batch_statistics
 
-      
-
       @total_files = batch_statistics[:total_files]
       @total_pages = batch_statistics[:total_pages]
       @total_time_seconds = batch_statistics[:total_time_seconds]
@@ -103,6 +101,9 @@ class DocumentsController < ApplicationController
   # GET /documents/1/edit
   def edit
     @document_type = nil
+    @redirect_url = params["return_to"]
+    session[:redirect_url] = @redirect_url if @redirect_url
+
     if @document.document_type
       @document_type = @document.document_type.name
     end
@@ -246,7 +247,12 @@ class DocumentsController < ApplicationController
         if params[:commit] == 'Guardar cambios'
           @document.publish = true
           @document.save
-          format.html { redirect_to edit_document_path(@document), notice: 'Document was successfully updated.' }
+          #redirect to provided url if exists
+          if session[:redirect_url]
+            format.html { redirect_to session[:redirect_url], allow_other_host: true, notice: 'Document was successfully updated.' }
+          else
+            format.html { redirect_to edit_document_path(@document), notice: 'Document was successfully updated.' }
+          end
         elsif params[:commit] == 'Guardar y siguiente'
           document.publish = true
           @document.save

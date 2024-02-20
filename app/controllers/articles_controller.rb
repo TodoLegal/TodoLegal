@@ -1,5 +1,5 @@
 class ArticlesController < ApplicationController
-  before_action :set_article, only: [:edit, :update]
+  before_action :set_article, only: [:edit, :update, :destroy]
   before_action :authenticate_editor_tl!, only: [:edit, :update]
   include ArticlesHelper
 
@@ -23,6 +23,18 @@ class ArticlesController < ApplicationController
       end
     end
   end
+
+  # DELETE /articles/1
+  # DELETE /articles/1.json
+  def destroy
+    law_url = law_path(@article.law)
+    @article.destroy
+    respond_to do |format|
+      format.html { redirect_to law_url, notice: 'Artículo eliminado exitosamente.' }
+      format.json { head :no_content }
+    end
+  end
+  
 
   private
     # Use callbacks to share common setup or constraints between actions.

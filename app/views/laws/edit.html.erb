@@ -109,7 +109,7 @@
           <div class="actions">
             <%= form.submit "Guardar cambios", class: 'd-inline p-2 btn btn-primary' %>
             <%= form.submit "Guardar y Siguiente", class: 'd-inline p-2 btn btn-outline-primary' %>
-             <u> <%= link_to 'Eliminar Artículo', edit_law_path, class: "ml-4 d-inline p-2 text-danger"%> </u>
+             <u> <%= button_to 'Eliminar Artículo', article_path(@article), method: :delete, data: { confirm: 'Are you sure?' }, class: "ml-4 d-inline p-2 text-danger"%> </u>
           </div>
         <% end %>
         <!-- Modal -->

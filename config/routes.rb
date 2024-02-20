@@ -28,7 +28,7 @@ Rails.application.routes.draw do
   resources :chapters, only: [:edit, :update]
   resources :sections, only: [:edit, :update]
   resources :subsections, only: [:edit, :update]
-  resources :articles, only: [:edit, :update]
+  resources :articles, only: [:edit, :update, :destroy]
 
 
   root :to => "home#index"

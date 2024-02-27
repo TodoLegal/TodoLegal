@@ -13,11 +13,11 @@ module ApplicationHelper
     current_user && (current_user.permissions.find_by_name("Editor TL") || current_user.permissions.find_by_name("Editor") || current_user.permissions.find_by_name("Admin"))
   end
 
-  def current_user_permission
-    permission_name = "invalid"
-    permission_name = "Editor D2" if current_user.permissions.find_by_name("Editor D2")
-    permission_name = "Editor" if current_user_is_editor
-    permission_name = "Admin" if current_user_is_admin
+  def current_user_permission user
+    permission_name = ""
+    permission_name = "Editor D2" if user.permissions.find_by_name("Editor D2")
+    permission_name = "Editor" if user.permissions.find_by_name("Editor")
+    permission_name = "Admin" if user.permissions.find_by_name("Admin")
 
     return permission_name
   end

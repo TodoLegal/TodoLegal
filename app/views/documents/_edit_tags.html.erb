@@ -1,23 +1,60 @@
 <section class="tags--section">
+
     <% if @document_type == "Avisos Legales" %>
-        <h4> Tema </h4>
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <h4> Tema </h4>
+            </div>
+            <% if @redirect_url %>
+                <div class="col-md-6 text-right">
+                    <a type="button" href="<%= @redirect_url%>" class="d-inline p-2 btn btn-primary text-white">Regresar a PIIL</a>
+                </div>
+            <% end %>
+        </div>
         <%= render partial:'edit_tag_table', locals: {tag_name: "Tema", issuer: false}%>
         <h4> Forma de Publicación </h4>
         <%= render partial:'edit_tag_table', locals: {tag_name: "Forma de Publicación", issuer: false}%>
     <% elsif @document_type == "Marcas de Fábrica" %>
-        <h4> Tema </h4>
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <h4> Tema </h4>
+            </div>
+            <% if @redirect_url %>
+                <div class="col-md-6 text-right">
+                    <a type="button" href="<%= @redirect_url%>" class="d-inline p-2 btn btn-primary text-white">Regresar a PIIL</a>
+                </div>
+            <% end %>
+        </div>
         <%= render partial:'edit_tag_table', locals: {tag_name: "Tema", issuer: false}%>
         <h4> Materia </h4>
         <%= render partial:'edit_tag_table', locals: {tag_name: "materia", issuer: false}%>
         <h4> Forma de Publicación </h4>
         <%= render partial:'edit_tag_table', locals: {tag_name: "Forma de Publicación", issuer: false}%>
     <% elsif  @document_type == "Gaceta" %>
-        <h4> Forma de Publicación </h4>
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <h4> Forma de Publicación </h4>
+            </div>
+            <% if @redirect_url %>
+                <div class="col-md-6 text-right">
+                    <a type="button" href="<%= @redirect_url%>" class="d-inline p-2 btn btn-primary text-white">Regresar a PIIL</a>
+                </div>
+            <% end %>
+        </div>
         <%= render partial:'edit_tag_table', locals: {tag_name: "Forma de Publicación", issuer: false}%>
         <h4> Institución emisora </h4>
         <%= render partial:'edit_tag_table', locals: {tag_name: "Institución", issuer: true}%>
     <% elsif  @document_type == "Sentencia" %>
-        <h4> Materia </h4>
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <h4> Materia </h4>
+            </div>
+            <% if @redirect_url %>
+                <div class="col-md-6 text-right">
+                    <a type="button" href="<%= @redirect_url%>" class="d-inline p-2 btn btn-primary text-white">Regresar a PIIL</a>
+                </div>
+            <% end %>
+        </div>
         <%= render partial:'edit_tag_table', locals: {tag_name: "materia", issuer: false}%>
         <h4> Institución </h4>
         <%= render partial:'edit_tag_table', locals: {tag_name: "Institución", issuer: false}%>
@@ -32,7 +69,16 @@
         <h4> Ponente </h4>
         <%= render partial:'edit_tag_table', locals: {tag_name: "Ponente", issuer: true}%>
     <% elsif @document_type == "Sección de Gaceta" %>
-        <h4> Materia </h4>
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <h4> Materia </h4>
+            </div>
+            <% if @redirect_url %>
+                <div class="col-md-6 text-right">
+                    <a type="button" href="<%= @redirect_url%>" class="d-inline p-2 btn btn-primary text-white">Regresar a PIIL</a>
+                </div>
+            <% end %>
+        </div>
         <%= render partial:'edit_tag_table', locals: {tag_name: "materia", issuer: false}%>
         <h4> Forma de Publicación </h4>
         <%= render partial:'edit_tag_table', locals: {tag_name: "Forma de Publicación", issuer: false}%>
@@ -45,7 +91,16 @@
         <h4> Instituciones relacionadas </h4>
         <%= render partial:'edit_tag_table', locals: {tag_name: "Institución", issuer: false}%>
     <% elsif @document_type == "Auto Acordado" %>
-        <h4> Materia </h4>
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <h4> Materia </h4>
+            </div>
+            <% if @redirect_url %>
+                <div class="col-md-6 text-right">
+                    <a type="button" href="<%= @redirect_url%>" class="d-inline p-2 btn btn-primary text-white">Regresar a PIIL</a>
+                </div>
+            <% end %>
+        </div>
         <%= render partial:'edit_tag_table', locals: {tag_name: "materia", issuer: false}%>
         <h4> Forma de Publicación </h4>
         <%= render partial:'edit_tag_table', locals: {tag_name: "Forma de Publicación", issuer: false}%>
@@ -56,7 +111,16 @@
         <h4> Tema </h4>
         <%= render partial:'edit_tag_table', locals: {tag_name: "Tema", issuer: false}%>
     <% else %>
-        <h4> Materia </h4>
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <h4> Materia </h4>
+            </div>
+            <% if @redirect_url %>
+                <div class="col-md-6 text-right">
+                    <a type="button" href="<%= @redirect_url%>" class="d-inline p-2 btn btn-primary text-white">Regresar a PIIL</a>
+                </div>
+            <% end %>
+        </div>
         <%= render partial:'edit_tag_table', locals: {tag_name: "materia", issuer: false}%>
         <h4> Forma de Publicación </h4>
         <%= render partial:'edit_tag_table', locals: {tag_name: "Forma de Publicación", issuer: false}%>

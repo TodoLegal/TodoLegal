@@ -1,6 +1,9 @@
 <div class="container">
   <h1>Editando Documento</h1>
+  <% if @datapoint_type == "general" || @datapoint_type.nil? %>
     <%= render 'edit_form', document: @document %>
-    <hr/>
+  <% end %>
+  <% if @datapoint_type == "tag" || @datapoint_type.nil? %>
     <%= render partial: 'edit_tags', locals: { document: @document, doc_type: @document_type } %>
+  <% end %>
 </div>

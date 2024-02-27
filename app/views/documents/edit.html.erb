@@ -1,6 +1,6 @@
 <div class="container">
   <h1>Editando Documento</h1>
-  <% if @datapoint_type == "general" || @datapoint_type.nil? %>
+  <% if @datapoint_type == "document" || @datapoint_type.nil? %>
     <%= render 'edit_form', document: @document %>
   <% end %>
   <% if @datapoint_type == "tag" || @datapoint_type.nil? %>

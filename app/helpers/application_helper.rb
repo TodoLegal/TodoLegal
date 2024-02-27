@@ -14,8 +14,8 @@ module ApplicationHelper
   end
 
   def current_user_permission
-    permission_name = "not logged"
-    permission_name = "Editor D1" if current_user.permissions.find_by_name("Editor D1")
+    permission_name = "invalid"
+    permission_name = "Editor D2" if current_user.permissions.find_by_name("Editor D2")
     permission_name = "Editor" if current_user_is_editor
     permission_name = "Admin" if current_user_is_admin
 

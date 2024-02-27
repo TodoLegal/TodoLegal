@@ -215,8 +215,10 @@
             <% if document.document_type.name == "Sentencia" %>
               <%= form.submit "Subir nueva sentencia", class: "d-inline p-2 btn btn-outline-secondary" %>
             <% else %>
-              <% if @is_next_document_valid %>
+              <% if @is_next_document_valid && (@redirect_url == nil) %>
                 <%= form.submit "Guardar y siguiente", class: "d-inline p-2 btn btn-outline-secondary" %>
+              <% elsif @redirect_url %>
+                <%= form.submit "Guardar y regresar a PIIL", class: "d-inline p-2 btn btn-outline-secondary" %>
               <% else %>
                 <a type="button" class="d-inline p-2 btn btn-outline-secondary" disabled="true">Guardar y siguiente</a>
               <% end %>

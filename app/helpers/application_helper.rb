@@ -255,6 +255,7 @@ module ApplicationHelper
   end
 
   def valid_gazettes_count
+    #Todo: Change this to a more efficient query
     Document.where.not(publication_number: nil).group_by(&:publication_number).count
   end
 

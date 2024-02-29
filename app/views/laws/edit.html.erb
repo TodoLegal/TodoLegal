@@ -106,13 +106,16 @@
           <% end %>
            <!-------------------------------- end of saved message ---------------------------------------------->
 
-          <div class="actions">
+          <div class="actions d-flex">
             <%= form.submit "Guardar cambios", class: 'd-inline p-2 btn btn-primary' %>
-            <%= form.submit "Guardar y Siguiente", class: 'd-inline p-2 btn btn-outline-primary' %>
-             <u> <%= button_to 'Eliminar Artículo', article_path(@article), method: :delete, data: { confirm: 'Are you sure?' }, class: "ml-4 d-inline p-2 text-danger"%> </u>
-          </div>
+            <%= form.submit "Guardar y Siguiente", class: 'd-inline p-2 ml-2 btn btn-outline-primary' %>
+          
         <% end %>
         <!-- Modal -->
+            <%= button_to @article, method: :delete, data: { confirm: '¿Estás Seguro que deseas eliminarlo?' }, class:"btn btn-outline-danger ml-4 d-inline p-2" do %>
+              <i class="fas fa-trash-alt"></i>
+            <% end %>
+          </div>
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog" role="document">
             <div class="modal-content">

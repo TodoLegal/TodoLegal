@@ -19,6 +19,7 @@ class IssuerDocumentTagsController < ApplicationController
     # POST /issuer_document_tags
     # POST /issuer_document_tags.json
     def create
+      redirect_url = params[:issuer_document_tag][:return_to]
       if document_tag_params[:tag_id].to_i != 0
         @issuer_document_tag = IssuerDocumentTag.new(document_id: document_tag_params[:document_id], tag_id: document_tag_params[:tag_id])
       else
@@ -29,7 +30,11 @@ class IssuerDocumentTagsController < ApplicationController
 
       respond_to do |format|
         if @issuer_document_tag.save
-          format.html { redirect_to edit_document_path(@issuer_document_tag.document), notice: 'Se ha añadido el tag exitosamente.' }
+          if redirect_url
+            format.html { redirect_to edit_document_path(@issuer_document_tag.document, return_to: redirect_url, datapoint_type: "tag" ), notice: 'Se ha añadido el tag exitosamente.' }
+          else
+            format.html { redirect_to edit_document_path(@issuer_document_tag.document), notice: 'Se ha añadido el tag exitosamente.' }
+          end
           format.json { render :show, status: :created, location: @issuer_document_tag.document }
         else
           format.html { render :new }
@@ -55,10 +60,15 @@ class IssuerDocumentTagsController < ApplicationController
     # DELETE /issuer_document_tags/1
     # DELETE /issuer_document_tags/1.json
     def destroy
+      redirect_url = params[:return_to]
       document = @issuer_document_tag.document
       @issuer_document_tag.destroy
       respond_to do |format|
-        format.html { redirect_to edit_document_path(document), notice: 'Se ha eliminado el tag exitosamente.' }
+        if redirect_url
+          format.html { redirect_to edit_document_path(document, return_to: redirect_url, datapoint_type: "tag" ), notice: 'Se ha eliminado el tag exitosamente.' }
+        else
+          format.html { redirect_to edit_document_path(document), notice: 'Se ha eliminado el tag exitosamente.' }
+        end
         format.json { head :no_content }
       end
     end
@@ -71,6 +81,6 @@ class IssuerDocumentTagsController < ApplicationController
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def document_tag_params
-        params.require(:issuer_document_tag).permit(:document_id, :tag_id, :tag_type)
+        params.require(:issuer_document_tag).permit(:document_id, :tag_id, :tag_type, :return_to)
       end
 end

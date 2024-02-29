@@ -19,7 +19,7 @@ class DocumentTagsController < ApplicationController
     # POST /document_tags
     # POST /document_tags.json
     def create
-
+      redirect_url = params[:document_tag][:return_to]
       if document_tag_params[:tag_id].to_i != 0
         @document_tag = DocumentTag.new(document_id: document_tag_params[:document_id], tag_id: document_tag_params[:tag_id])
       else
@@ -30,7 +30,11 @@ class DocumentTagsController < ApplicationController
 
       respond_to do |format|
         if @document_tag.save
-          format.html { redirect_to edit_document_path(@document_tag.document), notice: 'Se ha añadido el tag exitosamente.' }
+          if redirect_url.present?
+            format.html { redirect_to edit_document_path(@document_tag.document, return_to: redirect_url, datapoint_type: "tag" ), notice: 'Se ha añadido el tag exitosamente.' }
+          else
+            format.html { redirect_to edit_document_path(@document_tag.document), notice: 'Se ha añadido el tag exitosamente.' }
+          end
           format.json { render :show, status: :created, location: @document_tag.document }
         else
           format.html { render :new }
@@ -56,10 +60,15 @@ class DocumentTagsController < ApplicationController
     # DELETE /document_tags/1
     # DELETE /document_tags/1.json
     def destroy
+      redirect_url = params[:return_to]
       document = @document_tag.document
       @document_tag.destroy
       respond_to do |format|
-        format.html { redirect_to edit_document_path(document), notice: 'Se ha eliminado el tag exitosamente.' }
+        if redirect_url.present?
+          format.html { redirect_to edit_document_path(document, return_to: redirect_url, datapoint_type: "tag" ), notice: 'Se ha eliminado el tag exitosamente.' }
+        else
+          format.html { redirect_to edit_document_path(document), notice: 'Se ha eliminado el tag exitosamente.' }
+        end
         format.json { head :no_content }
       end
     end
@@ -72,7 +81,7 @@ class DocumentTagsController < ApplicationController
   
       # Never trust parameters from the scary internet, only allow the white list through.
       def document_tag_params
-        params.require(:document_tag).permit(:document_id, :tag_id, :tag_type)
+        params.require(:document_tag).permit(:document_id, :tag_id, :tag_type, :return_to)
       end
   end
   

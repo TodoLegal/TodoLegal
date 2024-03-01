@@ -15,7 +15,7 @@
                             <%= document_tag.tag.name %>
                         </td>
                         <td>
-                            <%= button_to issuer_document_tag_path(document_tag, return_to: @redirect_url), method: :delete, data: { confirm: 'Are you sure?', toggle:"modal", target:"#modal-center"}, class:"btn btn-outline-danger", onclick:"myFunction()"  do %>
+                            <%= button_to issuer_document_tag_path(document_tag, return_to: @redirect_url), method: :delete, data: { confirm: '¿Estás Seguro que deseas eliminarlo?'}, class:"btn btn-outline-danger"  do %>
                                 <i class="fas fa-trash-alt"></i>
                             <% end %>
                         </td>
@@ -61,7 +61,7 @@
                             <%= document_tag.tag.name %>
                         </td>
                         <td>
-                            <%= button_to document_tag_path(document_tag, return_to: @redirect_url), method: :delete, data: { confirm: 'Are you sure?', toggle:"modal", target:"#modal-center"}, class:"btn btn-outline-danger", onclick:"myFunction()"  do %>
+                            <%= button_to document_tag_path(document_tag, return_to: @redirect_url), method: :delete, data: { confirm: '¿Estás seguro que deseas eliminarlo?' }, class:"btn btn-outline-danger" do %>
                                 <i class="fas fa-trash-alt"></i>
                             <% end %>
                         </td>

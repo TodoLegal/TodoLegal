@@ -31,7 +31,7 @@ class DocumentTagsController < ApplicationController
       respond_to do |format|
         if @document_tag.save
           if redirect_url.present?
-            format.html { redirect_to edit_document_path(@document_tag.document, return_to: redirect_url, datapoint_type: "tag" ), notice: 'Se ha añadido el tag exitosamente.' }
+            format.html { redirect_to edit_document_path(@document_tag.document, return_to: redirect_url), notice: 'Se ha añadido el tag exitosamente.' }
           else
             format.html { redirect_to edit_document_path(@document_tag.document), notice: 'Se ha añadido el tag exitosamente.' }
           end
@@ -65,7 +65,7 @@ class DocumentTagsController < ApplicationController
       @document_tag.destroy
       respond_to do |format|
         if redirect_url.present?
-          format.html { redirect_to edit_document_path(document, return_to: redirect_url, datapoint_type: "tag" ), notice: 'Se ha eliminado el tag exitosamente.' }
+          format.html { redirect_to edit_document_path(document, return_to: redirect_url), notice: 'Se ha eliminado el tag exitosamente.' }
         else
           format.html { redirect_to edit_document_path(document), notice: 'Se ha eliminado el tag exitosamente.' }
         end

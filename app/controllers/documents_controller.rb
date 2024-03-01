@@ -102,7 +102,6 @@ class DocumentsController < ApplicationController
   def edit
     @document_type = nil
     @redirect_url = params["return_to"]
-    @datapoint_type = params["datapoint_type"]
     session[:redirect_url] = @redirect_url if @redirect_url
 
     if @document.document_type
@@ -250,7 +249,7 @@ class DocumentsController < ApplicationController
           @document.save
           #redirect to provided url if exists
           if session[:redirect_url]
-            format.html { redirect_to edit_document_path(@document, return_to: session[:redirect_url], datapoint_type: "document"), notice: 'Document was successfully updated.' }
+            format.html { redirect_to edit_document_path(@document, return_to: session[:redirect_url]), notice: 'Document was successfully updated.' }
           else
             format.html { redirect_to edit_document_path(@document), notice: 'Document was successfully updated.' }
           end

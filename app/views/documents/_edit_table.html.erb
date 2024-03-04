@@ -4,6 +4,8 @@
       <th class="table--headers" scope="col">Título</th>
       <th class="table--headers"scope="col">Fecha de publicación</th>
       <th class="table--headers"scope="col">Número de publicación</th>
+       <th class="table--headers"scope="col">Fecha de subida</th>
+       <th class="table--headers"scope="col">Hora de subida</th>
       <th class="acciones--tableHeader" scope="col">Acciones</th>
     </tr>
   </thead>
@@ -19,8 +21,11 @@
             <td> 
                 <%= document.publication_number %>
             </td>
-            <td> 
-                <%= document.position %>
+            <td>
+                <%= document.created_at.strftime("%Y-%m-%d") %>
+            </td>
+            <td>
+                <%= document.created_at.strftime("%H:%M:%S") %>
             </td>
             <td>
                 <div class="btn-group" role="group" aria-label="Basic mixed styles example">

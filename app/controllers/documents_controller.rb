@@ -237,9 +237,15 @@ class DocumentsController < ApplicationController
   def update
     respond_to do |format|
       if @document.update(document_params)
-        #if params[:original_file]
-        #  run_gazette_script @document
-        #end
+
+        #add stamp to document if it has been updated
+        if params[:document].key?("original_file")
+          bucket = get_bucket
+          file = bucket.file @document.original_file.key
+          file.download "tmp/documento.pdf"
+          add_stamp_to_unprocessed_document @document, Rails.root.join("tmp") + "documento.pdf"
+        end
+        
         if !params[:document]["applicable_laws"].blank?
           judgement_auxiliary = JudgementAuxiliary.find_by_document_id(@document.id)
           if judgement_auxiliary

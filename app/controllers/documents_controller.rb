@@ -276,9 +276,15 @@ class DocumentsController < ApplicationController
   # DELETE /documents/1
   # DELETE /documents/1.json
   def destroy
+    comes_from_gazette = params[:gazette]
+
     @document.destroy
     respond_to do |format|
-      format.html { redirect_to documents_url, notice: 'Document was successfully destroyed.' }
+      if comes_from_gazette.present?
+        format.html { redirect_to gazette_path(@document.publication_number), notice: 'Document was successfully destroyed.' }
+      else
+        format.html { redirect_to documents_url, notice: 'Document was successfully destroyed.' }
+      end
       format.json { head :no_content }
     end
   end

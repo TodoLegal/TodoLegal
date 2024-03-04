@@ -144,7 +144,9 @@ class DocumentsController < ApplicationController
           file.download "tmp/gazette.pdf"
           slice_gazette @document, Rails.root.join("tmp") + "gazette.pdf"
           if $discord_bot
-            $discord_bot.send_message($discord_bot_document_upload, "Nueva gaceta seccionada en Valid! " + @document.publication_number + " :scroll:")
+            publication_number = @document.publication_number
+            discord_message = "Nueva gaceta seccionada en Valid! [#{publication_number}](https://todolegal.app/admin/gazettes/#{publication_number}) :scroll:"
+            $discord_bot.send_message($discord_bot_document_upload, discord_message)
           end
           format.html { redirect_to gazette_path(@document.publication_number), notice: 'La gaceta se ha partido exitósamente.' }
         elsif params["document"]["auto_process_type"] == "process"
@@ -165,7 +167,9 @@ class DocumentsController < ApplicationController
           file.download "tmp/seccion_de_gaceta.pdf"
           add_stamp_to_unprocessed_document @document, Rails.root.join("tmp") + "seccion_de_gaceta.pdf"
           if $discord_bot
-            $discord_bot.send_message($discord_bot_document_upload, "Nueva Sección de Gaceta subida en Valid! :scroll:")
+            document_id = @document.id
+            discord_message = "Nueva sección de gaceta subida en Valid! [#{document_id}](https://todolegal.app/documents/#{document_id}) :scroll:"
+            $discord_bot.send_message($discord_bot_document_upload, discord_message)
           end
           format.html { redirect_to edit_document_path(@document), notice: 'Se han subido Avisos Legales.' }
         elsif params["document"]["auto_process_type"] == "avisos"
@@ -195,36 +199,36 @@ class DocumentsController < ApplicationController
             $discord_bot.send_message($discord_bot_document_upload, "Nuevos autos acordados seccionados en Valid! :scroll:")
           end
           format.html { redirect_to documents_path+"?autos=true", notice: 'Autos acordados se han partido exitosamente.' }
-      elsif params["document"]["auto_process_type"] == "formats"
-        bucket = get_bucket
-        file = bucket.file @document.original_file.key
-        file.download "tmp/formato.pdf"
-        add_stamp_to_unprocessed_document @document, Rails.root.join("tmp") + "formato.pdf"
-        if $discord_bot
-          $discord_bot.send_message($discord_bot_document_upload, "Nuevo formato subido a Valid! :scroll:")
+        elsif params["document"]["auto_process_type"] == "formats"
+          bucket = get_bucket
+          file = bucket.file @document.original_file.key
+          file.download "tmp/formato.pdf"
+          add_stamp_to_unprocessed_document @document, Rails.root.join("tmp") + "formato.pdf"
+          if $discord_bot
+            $discord_bot.send_message($discord_bot_document_upload, "Nuevo formato subido a Valid! :scroll:")
+          end
+          format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido un nuevo formato.' }
+        elsif params["document"]["auto_process_type"] == "comunicados"
+          bucket = get_bucket
+          file = bucket.file @document.original_file.key
+          file.download "tmp/comunicado.pdf"
+          add_stamp_to_unprocessed_document @document, Rails.root.join("tmp") + "comunicado.pdf"
+          if $discord_bot
+            $discord_bot.send_message($discord_bot_document_upload, "Nuevo comunicado subido a Valid! :scroll:")
+          end
+          format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido un nuevo comunicado.' }
+        elsif params["document"]["auto_process_type"] == "others"
+          bucket = get_bucket
+          file = bucket.file @document.original_file.key
+          file.download "tmp/documento.pdf"
+          add_stamp_to_unprocessed_document @document, Rails.root.join("tmp") + "documento.pdf"
+          format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido un documento.' }
+          if $discord_bot
+            $discord_bot.send_message($discord_bot_document_upload, "Nuevo documento subido a Valid! :scroll:")
+          end
+        else
+          format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido un documento.' }
         end
-        format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido un nuevo formato.' }
-      elsif params["document"]["auto_process_type"] == "comunicados"
-        bucket = get_bucket
-        file = bucket.file @document.original_file.key
-        file.download "tmp/comunicado.pdf"
-        add_stamp_to_unprocessed_document @document, Rails.root.join("tmp") + "comunicado.pdf"
-        if $discord_bot
-          $discord_bot.send_message($discord_bot_document_upload, "Nuevo comunicado subido a Valid! :scroll:")
-        end
-        format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido un nuevo comunicado.' }
-      elsif params["document"]["auto_process_type"] == "others"
-        bucket = get_bucket
-        file = bucket.file @document.original_file.key
-        file.download "tmp/documento.pdf"
-        add_stamp_to_unprocessed_document @document, Rails.root.join("tmp") + "documento.pdf"
-        format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido un documento.' }
-        if $discord_bot
-          $discord_bot.send_message($discord_bot_document_upload, "Nuevo documento subido a Valid! :scroll:")
-        end
-      else
-        format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido un documento.' }
-      end
       else
         format.html { render :new }
         format.json { render json: @document.errors, status: :unprocessable_entity }

@@ -59,7 +59,7 @@ class DocumentsController < ApplicationController
       end
       @documents = Document.where(publication_number: @query).order('publication_number DESC').page params[:page]
     else
-      @documents = Document.all.order('publication_number DESC').page params[:page]
+      @documents = Document.all.order('publication_number ASC').page params[:page]
     end
 
     if @show_only_judgements
@@ -74,8 +74,11 @@ class DocumentsController < ApplicationController
       limit = params[:last_documents].to_i
       last_documents = Document.order('created_at DESC').limit(limit)
       @documents = Kaminari.paginate_array(last_documents).page(params[:page])
-    else
-      @documents = Document.all.order('publication_number DESC').page(params[:page])
+    end
+
+    if params[:last_hours]
+      last_documents = Document.where("created_at >= ?", 24.hours.ago).order('created_at DESC')
+      @documents = Kaminari.paginate_array(last_documents).page(params[:page])
     end
 
     expires_in 10.minutes

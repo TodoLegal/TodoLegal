@@ -29,7 +29,7 @@
                     <%= button_to(edit_document_path(document), {class:"btn btn-outline-secondary", method: :get}) do %>
                         <i class="fas fa-edit"></i>
                     <% end %>
-                    <%= button_to document, method: :delete, data: { confirm: '¿Estás Seguro que deseas eliminarlo?' }, class:"btn btn-outline-danger" do %>
+                    <%= button_to document_path(document, gazette: true), method: :delete, data: { confirm: '¿Estás Seguro que deseas eliminarlo?' }, class:"btn btn-outline-danger" do %>
                         <i class="fas fa-trash-alt"></i>
                     <% end %>
                 </div>

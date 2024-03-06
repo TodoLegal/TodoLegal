@@ -1,0 +1,2 @@
+class Summatory < ApplicationRecord
+end

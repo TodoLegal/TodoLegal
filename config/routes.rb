@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :summatories
   resources :verification_histories
   resources :datapoints
   resources :users_preferences, only: [:index, :edit, :update, :create]

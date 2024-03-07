@@ -40,7 +40,7 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
       super
     else
       if current_user
-        redirect_to "http://valid.todolegal.app?error='invalid permissions'", allow_other_host: true
+        redirect_to "http://valid.todolegal.app?error='invalid permissions'"
       end
      return
     end

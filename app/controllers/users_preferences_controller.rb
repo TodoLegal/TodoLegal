@@ -15,7 +15,7 @@ class UsersPreferencesController < ApplicationController
     @is_annually = params[:is_annually]
     
     if current_user.blank?
-      redirect_to "https://todolegal.app/users/sign_in", allow_other_host: true
+      redirect_to "https://todolegal.app/users/sign_in"
     end
 
   end

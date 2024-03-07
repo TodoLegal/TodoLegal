@@ -4,10 +4,6 @@ class TitlesController < ApplicationController
 
   # GET /titles/1/edit
   def edit
-    @law = @title.law
-  end
-
-  def show
   end
 
   # PATCH/PUT /titles/1
@@ -15,7 +11,7 @@ class TitlesController < ApplicationController
   def update
     respond_to do |format|
       if @title.update(title_params)
-        format.html { redirect_to law_path(@title.law, anchor: "title_#{@title.position}"), notice: 'Title was successfully updated.' }
+        format.html { redirect_to @title, notice: 'Title was successfully updated.' }
         format.json { render :show, status: :ok, location: @title }
       else
         format.html { render :edit }

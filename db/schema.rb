@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_06_034231) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_26_094048) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
   enable_extension "pg_trgm"
@@ -376,12 +376,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_06_034231) do
     t.integer "law_id"
   end
 
-  create_table "summatories", force: :cascade do |t|
-    t.integer "count_sum"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "tag_types", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -489,10 +483,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_06_034231) do
     t.boolean "is_tag_available"
   end
 
-  create_table "v_count_sum", id: false, force: :cascade do |t|
-    t.decimal "sum"
-  end
-
   create_table "verification_histories", force: :cascade do |t|
     t.integer "datapoint_id"
     t.integer "user_id"
@@ -517,39 +507,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_06_034231) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "articles", "laws", name: "fkarticles612136"
-  add_foreign_key "blazer_audits", "users", name: "fkblazer_aud600615"
-  add_foreign_key "books", "laws", name: "fkbooks558918"
-  add_foreign_key "chapters", "laws", name: "fkchapters172562"
-  add_foreign_key "datapoints", "datapoint_types", name: "fkdatapoints366673"
-  add_foreign_key "datapoints", "document_tags", name: "fkdatapoints411229"
-  add_foreign_key "datapoints", "documents", name: "fkdatapoints389575"
-  add_foreign_key "document_relationships", "documents", column: "document_1_id", name: "fkdocument_r56720"
-  add_foreign_key "document_relationships", "documents", column: "document_2_id", name: "fkdocument_r86511"
-  add_foreign_key "document_slices", "documents", name: "fkdocument_s465159"
-  add_foreign_key "document_tags", "documents", name: "fkdocument_t194780"
-  add_foreign_key "document_tags", "tags", name: "fkdocument_t865748"
-  add_foreign_key "documents", "document_types", name: "fkdocuments815546"
-  add_foreign_key "issuer_document_tags", "documents", name: "fkissuer_doc600805"
-  add_foreign_key "issuer_document_tags", "documents", name: "fkissuer_doc600806"
-  add_foreign_key "issuer_law_tags", "laws", name: "fkissuer_law852332"
-  add_foreign_key "judgement_auxiliaries", "documents", name: "fkjudgement_84319"
-  add_foreign_key "law_modifications", "laws", name: "fklaw_modifi311331"
-  add_foreign_key "law_tags", "laws", name: "fklaw_tags143995"
-  add_foreign_key "law_tags", "tags", name: "fklaw_tags938607"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
-  add_foreign_key "sections", "laws", name: "fksections543212"
-  add_foreign_key "slice_verification_histories", "users", name: "fkslice_veri437244"
-  add_foreign_key "subsections", "laws", name: "fksubsection327413"
-  add_foreign_key "tags", "tag_types", name: "fktags626530"
-  add_foreign_key "titles", "laws", name: "fktitles935132"
-  add_foreign_key "user_notifications_histories", "users", name: "fkuser_notif762069"
-  add_foreign_key "user_permissions", "permissions", name: "fkuser_permi661658"
-  add_foreign_key "user_permissions", "users", name: "fkuser_permi66316"
-  add_foreign_key "user_trials", "users", name: "fkuser_trial79516"
-  add_foreign_key "users_preferences", "users", name: "fkusers_pref984159"
-  add_foreign_key "users_preferences", "users", name: "fkusers_pref984160"
   add_foreign_key "verification_histories", "datapoints"
   add_foreign_key "verification_histories", "users"
 end

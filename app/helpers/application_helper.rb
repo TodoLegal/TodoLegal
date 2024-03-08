@@ -255,8 +255,7 @@ module ApplicationHelper
   end
 
   def valid_gazettes_count
-    #Todo: Change this to a more efficient query
-    Document.where.not(publication_number: nil).group_by(&:publication_number).count
+    Summatory.first.count_sum
   end
 
   def user_browser_language_is_english

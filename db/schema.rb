@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_26_094048) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_08_020821) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
   enable_extension "pg_trgm"
@@ -374,6 +374,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_26_094048) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "law_id"
+  end
+
+  create_table "summatories", force: :cascade do |t|
+    t.integer "count_sum"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "tag_types", force: :cascade do |t|

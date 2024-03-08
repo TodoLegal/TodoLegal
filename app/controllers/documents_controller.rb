@@ -727,16 +727,20 @@ class DocumentsController < ApplicationController
     end
 
     def addTagIfExists document_id, tag_name
-      tag = Tag.find_by_name(tag_name)
-      if tag
-        DocumentTag.create(document_id: document_id, tag_id: tag.id)
+      if !tag_name.empty?
+        tag = Tag.find_by_name(tag_name)
+        if tag
+          DocumentTag.create(document_id: document_id, tag_id: tag.id)
+        end
       end
     end
 
-    def addIssuerTagIfExists document_id, issuer_tag_name
-      tag = Tag.find_by_name(issuer_tag_name)
-      if tag
-        IssuerDocumentTag.create(document_id: document_id, tag_id: tag.id)
+    def addIssuerTagIfExists(document_id, issuer_tag_name)
+      if !issuer_tag_name.empty?
+        tag = Tag.find_by_name(issuer_tag_name)
+        if tag 
+          IssuerDocumentTag.create(document_id: document_id, tag_id: tag.id)
+        end
       end
     end
 

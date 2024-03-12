@@ -459,6 +459,13 @@ class DocumentsController < ApplicationController
       end
       new_document.url = new_document.generate_friendly_url
       new_document.save
+
+      download_name = if issue_id.present?
+                        issue_id
+                      else name.present?
+                        name
+                      end
+
       puts "Uploading file"
       new_document.original_file.attach(
         io: File.open(
@@ -467,7 +474,7 @@ class DocumentsController < ApplicationController
             "gazettes",
             document.id.to_s, file["path"]).to_s
         ),
-        filename: document.name + ".pdf",
+        filename: download_name.name + ".pdf",
         content_type: "application/pdf"
       )
       #set_content_disposition_attachment new_document.original_file.key, helpers.get_document_title(new_document) + ".pdf"
@@ -689,12 +696,20 @@ class DocumentsController < ApplicationController
       new_document.save
       document_count += 1
 
+      download_name = if issue_id.present?
+                        issue_id
+                      elsif name.present?
+                        name
+                      else
+                        document_type
+                      end
+
       puts "Uploading file"
       # base_path = Rails.root.join('..', 'GazetteSlicer', 'stamped_documents')
       # file_path = File.join(base_path, file['path'])
       new_document.original_file.attach(
         io: File.open(file['path']),
-        filename: "#{file['document_type']}.pdf",
+        filename: "#{download_name}.pdf",
         content_type: 'application/pdf'
       )
     end

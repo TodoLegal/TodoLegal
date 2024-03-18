@@ -6,6 +6,10 @@ class UsersPreferencesController < ApplicationController
   def index
     @tags = UsersPreferencesTag.joins(:tag).where(users_preferences_tags: {is_tag_available: true}).select(:tag_id, :name)
     @users_preference = UsersPreference.new
+    @reforma_tag_id = Tag.find_by(name: "Reforma").id
+    @tributario_tag_id = Tag.find_by(name: "Tributario").id
+    @congreso_tag_id = Tag.find_by(name: "Congreso Nacional").id
+    @default_selected_tags = [@reforma_tag_id, @tributario_tag_id, @congreso_tag_id]
 
     #onboarding parameters
     @redirect_to_valid = params[:redirect_to_valid]

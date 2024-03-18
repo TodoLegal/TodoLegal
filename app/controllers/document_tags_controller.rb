@@ -32,6 +32,23 @@ class DocumentTagsController < ApplicationController
         if @document_tag.save
           if redirect_url.present?
             format.html { redirect_to edit_document_path(@document_tag.document, return_to: redirect_url), notice: 'Se ha añadido el tag exitosamente.' }
+
+            #create new datapoint
+            datapoint_type = ""
+
+            tag_type = TagType.find_by(name: @document_tag.tag.tag_type.name)
+
+            if tag_type.name == "materia"
+              datapoint_type = DatapointType.find_by(name: "Materia")
+            elsif tag_type.name == "Tema"
+              datapoint_type = DatapointType.find_by(name: "Tema")
+            elsif tag_type.name == "Tipo de Acto"
+              datapoint_type = DatapointType.find_by(name: "Tipo de Acto")
+            end
+
+            if datapoint_type.present?
+              datapoint = Datapoint.create(document_id: @document_tag.document.id, document_tag_id: @document_tag.id, datapoint_type_id: datapoint_type.id, status: :pendiente, is_active: true, is_empty_field: false) 
+            end
           else
             format.html { redirect_to edit_document_path(@document_tag.document), notice: 'Se ha añadido el tag exitosamente.' }
           end

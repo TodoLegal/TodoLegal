@@ -88,7 +88,6 @@ class Api::V1::DocumentsController < ApplicationController
         tag = Tag.find_by_name(tag_name)
         tag_type = TagType.find_by(id: tag.tag_type_id)
         if tag
-          document_ids = []
           if tag_type.name == 'Institución'
             tag.issuer_document_tags.each do |issuer_tag|
               document_ids.push(issuer_tag.document_id)

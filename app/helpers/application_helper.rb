@@ -54,7 +54,7 @@ module ApplicationHelper
   end
 
   def all_document_count
-    Law.count + Document.count + google_drive_covid_documents_count
+    Law.count + Document.where(publish: true) + google_drive_covid_documents_count
   end
 
   #deprecated
@@ -251,7 +251,7 @@ module ApplicationHelper
   end
 
   def valid_document_count
-    Document.where.not(name: "Gaceta").count
+    Document.where.not(name: "Gaceta").where(publish: true).count
   end
 
   def valid_gazettes_count

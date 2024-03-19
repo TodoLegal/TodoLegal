@@ -97,6 +97,22 @@ $('.clipboard').on('click', function() {
     document.getElementById("clipboard-alert").style.display = "block";
 })
 
+$('.clipboard-editor').on('click', function() {
+
+    //Extract last part of URL
+    let url = window.location.href;
+    let url_parts = url.split('/');
+    let last_part = url_parts[url_parts.length - 1];
+
+    $("body").append($temp);
+    $temp.val(last_part).select();
+    document.execCommand("copy");
+    $temp.remove();
+    // $("p").text("URL copied!");
+    document.getElementById("clipboard-alert").style.display = "block";
+})
+
+
 //close clipboard message
 var clipboard_button = document.getElementById("clipboard-button");
 clipboard_button.addEventListener('click', function(){

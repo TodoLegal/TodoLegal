@@ -11,7 +11,8 @@
     Descarga ilimitada de documentos.
   </li>    
 <li class="d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>
-    Más de <%= valid_gazettes_count %> gacetas, <%= valid_document_count %> documentos oficiales y <%= law_count %> leyes.
+    Más de <%= number_with_precision(valid_gazettes_count, :precision => 0, :delimiter => ',') %> gacetas, 
+    <%= number_with_precision(valid_document_count, :precision => 0, :delimiter => ',') %> documentos oficiales y <%= law_count %> leyes.
   </li>
   <li class="d-sm-block"><span class="fa-li"><i class="fas fa-check"></i></span>
     Búsquedas avanzadas.

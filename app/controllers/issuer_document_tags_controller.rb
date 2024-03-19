@@ -31,6 +31,13 @@ class IssuerDocumentTagsController < ApplicationController
       respond_to do |format|
         if @issuer_document_tag.save
           if redirect_url
+            #create new datapoint
+            datapoint_type = DatapointType.find_by(name: "Issuer")
+
+            if datapoint_type.present?
+              datapoint = Datapoint.create(document_id: @issuer_document_tag.document.id, document_tag_id: @issuer_document_tag.id, datapoint_type_id: datapoint_type.id, status: :pendiente, is_active: true, is_empty_field: false) 
+            end
+            
             format.html { redirect_to edit_document_path(@issuer_document_tag.document, return_to: redirect_url), notice: 'Se ha añadido el tag exitosamente.' }
           else
             format.html { redirect_to edit_document_path(@issuer_document_tag.document), notice: 'Se ha añadido el tag exitosamente.' }

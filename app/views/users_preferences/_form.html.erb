@@ -30,7 +30,7 @@
 
   <section class="preference-tags">
     <% tag_counter = 0 %>
-    <%= form.collection_check_boxes :user_preference_tags, @tags, :tag_id, :name, include_hidden: false do |b| %>
+    <%= form.collection_check_boxes :user_preference_tags, @tags, :tag_id, :name, { checked: @default_selected_tags }, include_hidden: false do |b| %>
       <% tag_counter = tag_counter + 1 %>
       <% if tag_counter < 12 %> 
         <p class="form-check">

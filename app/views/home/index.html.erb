@@ -24,7 +24,7 @@
             <img class="landing-page-icon" src="/img/valid_icono.svg" />
             <h5 class="landing-card-title">Valid</h5>
             <p class="landing-card-text">Buscador de Decretos, Acuerdos y Gacetas.</p>
-            <p class="count-text"><%= valid_gazettes_count %> gacetas</p>
+            <p class="count-text"><%= number_with_precision(valid_document_count, :precision => 0, :delimiter => ',') %> documentos oficiales</p>
             &nbsp;&nbsp;&nbsp;
             <button type="button btn-lg" class="btn btn-danger landing-page-button">INICIAR BÚSQUEDA</button>
           </a>

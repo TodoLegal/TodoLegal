@@ -48,9 +48,15 @@
     <div class="desktop-menu-item" style="padding-bottom: 10px;">
       <form class="form-inline" action="<%= law_path(@law) %>" method="get" id="search-law-form">
         <div class="input-group">
-          <button type="button" class="btn btn-outline-secondary  desktop-menu-item clipboard btn-share">
-            <i class="fas fa-share subbar-icon"></i>
-          </button>
+          <% if @user_can_edit_law && is_editor_mode_enabled %>
+            <button type="button" class="btn btn-outline-secondary  desktop-menu-item clipboard-editor btn-share">
+              <i class="fas fa-share subbar-icon"></i>
+            </button>
+          <% else %>
+            <button type="button" class="btn btn-outline-secondary  desktop-menu-item clipboard btn-share">
+              <i class="fas fa-share subbar-icon"></i>
+            </button>
+          <% end %>
           <input type="text" class="form-control" name="query" type="search" placeholder="Buscar" value="<%= @query %>" aria-label="Buscar">
           <div class="input-group-append">
             <button class="btn btn-secondary" style="background-color: #FF5722;border-color: #FF5722;" type="submit" onclick="document.getElementById('loading-spinner').style.display = 'block';document.getElementById('search-law-form').style.display = 'none'">

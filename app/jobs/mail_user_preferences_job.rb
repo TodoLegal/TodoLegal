@@ -25,7 +25,7 @@ class MailUserPreferencesJob < ApplicationJob
       end
 
       #if tag is Mercantil, discard documents that are Marcas de Fabrica 
-      if @current_tag.id == @mercantil_tag_id
+      if @current_tag && @current_tag.id == @mercantil_tag_id
         temp = temp.where("name NOT LIKE \'%Marcas de Fábrica%\'")
       end
 

@@ -21,6 +21,12 @@ class Document < ApplicationRecord
                     }
                   }
 
+  def search_data
+    {
+      name: name,
+    }
+  end
+
   def generate_friendly_url
     [name.parameterize.tr('-',''), publication_number.parameterize.tr('-','')].join('-')
   end

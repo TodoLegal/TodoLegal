@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  fingerprint: 1
+#   downloads: 1
+#   period_start: 2021-01-08 22:41:52
+
+two:
+  fingerprint: 2
+#   downloads: 1
+#   period_start: 2021-01-08 22:41:52

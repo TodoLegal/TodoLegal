@@ -1,5 +1,8 @@
 <div class="container">
-  <h1>Editando Documento</h1>
-    <%= render 'edit_form', document: @document %>
-    <%= render partial: 'edit_tags', locals: { document: @document, doc_type: @document_type } %>
+  <h1>
+    <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back%>
+    Editando Documento
+  </h1>
+  <%= render 'edit_form', document: @document %>
+  <%= render partial: 'edit_tags', locals: { document: @document, doc_type: @document_type } %>
 </div>

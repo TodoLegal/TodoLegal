@@ -25,6 +25,7 @@ class Document < ApplicationRecord
     {
       name: name,
       description: description,
+      short_description: short_description,
     }
   end
 

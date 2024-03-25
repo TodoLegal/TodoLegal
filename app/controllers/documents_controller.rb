@@ -10,7 +10,7 @@ class DocumentsController < ApplicationController
     @show_only_judgements = params["judgements"]
     @show_only_autos = params["autos"]
     @processed_documents = params["processed_documents"]
-
+    @last_24_hours = params["last_hours"]
     #get batch statistics 
     batch_statistics = get_documents_batch_statistics
     @total_files = 0
@@ -76,7 +76,7 @@ class DocumentsController < ApplicationController
       @documents = Kaminari.paginate_array(last_documents).page(params[:page])
     end
 
-    if params[:last_hours]
+    if @last_24_hours.present?
       last_documents = Document.where("created_at >= ?", 24.hours.ago).order('created_at DESC')
       @documents = Kaminari.paginate_array(last_documents).page(params[:page])
     end
@@ -136,6 +136,13 @@ class DocumentsController < ApplicationController
     @document.document_type_id = get_document_type(params["document"]["auto_process_type"])
     respond_to do |format|
       if @document.save
+
+        #add user that uploaded the document
+        if current_user
+          @document.uploaded_by = current_user.first_name + " " + current_user.last_name
+          @document.save
+        end
+
         # download file
         bucket = get_bucket
         file = bucket.file @document.original_file.key

@@ -6,6 +6,7 @@
       <th class="table--headers"scope="col">Número de publicación</th>
        <th class="table--headers"scope="col">Fecha de subida</th>
        <th class="table--headers"scope="col">Hora de subida</th>
+       <th class="table--headers"scope="col">Usuario</th>
       <th class="acciones--tableHeader" scope="col">Acciones</th>
     </tr>
   </thead>
@@ -26,6 +27,9 @@
             </td>
             <td>
                 <%= document.created_at.strftime("%H:%M:%S") %>
+            </td>
+            <td>
+                <%= document.uploaded_by %>
             </td>
             <td>
                 <div class="btn-group" role="group" aria-label="Basic mixed styles example">

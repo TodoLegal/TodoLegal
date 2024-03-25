@@ -27,6 +27,11 @@
     </div>
   </div>
 
+  <%if @last_24_hours.present? %>
+    <a href="https://piil.todolegal.app">Regresar a PIIL</a>
+    <span> | </span>
+  <% end %>
+    
   <% if @show_only_autos %>
     <%= link_to 'Subir documento', new_document_path(selected_document_type: "autos") %>
   <% else %>

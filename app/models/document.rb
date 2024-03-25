@@ -26,6 +26,10 @@ class Document < ApplicationRecord
       name: name,
       description: description,
       short_description: short_description,
+      publication_date: publication_date.strftime('%d-%m-%Y'), # For "dd-mm-yyyy" format
+      publication_date_slash: publication_date.strftime('%d/%m/%Y'), # For "dd/mm/yyyy" format
+      issue_id: issue_id,
+      publication_number: publication_number,
     }
   end
 

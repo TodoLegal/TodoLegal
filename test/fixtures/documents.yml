@@ -4,8 +4,30 @@ one:
   name: 'Avisos Legales'
   description: 'Se constituye la organización cuya denominación será: JUNTA ADMINISTRADORA DE AGUA Y SANEAMIENTO LA MONTAÑITA DE LA COMUNIDAD DE LA FLORIDA, como una asociación efectiva de la comunidad para la construcción, operación y mantenimiento del sistema de agua potable de acuerdo con las normas, procedimientos y reglamentaciones vigentes, establecidos en la Ley Marco del Sector Agua Potable y Saneamien...'
   short_description: 'primera descriptción corta'
+  publication_date: '2020-03-20'
+  issue_id: 'PCM-081-2014'
+  publication_number: '35,205'
 
 two:
   name: 'PCM- 005-2020'
   description: 'Nombrar a la ciudadana CARLA MARIA HENRIQUEZ GUTIERREZ, en el cargo de Directora del Programa de Sistemas de Centros de Innovación Tecnológica y Agrícola (SCITA), dependiente de la Secretaría de Estado en el Despacho de Educación.'
   short_description: 'segunda descriptción corta'
+  publication_date: '2020-02-10'
+  issue_id: 'Certificación'
+  publication_number: '35,171'
+
+publication_number:
+  name: '031-2020'
+  description: 'Ratificar la aprobación del crédito al Gobierno de la República, con fondos provenientes del desembo de los miembros de su Directorio. El referido crédito ha sido otorgado por el BCH en respuesta a la solicitud presentada (), dado el caso de emergencia y calamidad pública nacional causado por la crisis provocada por la pandemia millones novecientos dieciséis mil Derechos Especiales de Crédito N...'
+  short_description: ''
+  publication_date: '2020-04-21'
+  issue_id: ''
+  publication_number: '35,231'
+
+issue_id:
+  name: 'Marcas de Fábricacion'
+  description:
+  short_description: ''
+  publication_date: '2010-09-21'
+  issue_id: '36,111'
+  publication_number: 33,611

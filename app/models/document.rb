@@ -24,6 +24,7 @@ class Document < ApplicationRecord
   def search_data
     {
       name: name,
+      description: description,
     }
   end
 

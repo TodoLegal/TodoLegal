@@ -16,4 +16,15 @@ class DocumentTest < ActiveSupport::TestCase
     refute_includes results, @existing_document, "A document with a nonexistent name should not be present in the results"
     assert_empty results, "No results should be returned for a nonexistent document name"
   end
+
+  test "document can be found by its description" do
+    results = Document.search(@document.description)
+    assert_includes results, @document, "The document should be found by its description"
+  end
+
+  test "document with a nonexistent description is not present in the results" do
+    results = Document.search(@nonexistent_description)
+    refute_includes results, @document, "A document with a nonexistent description should not be present in the results"
+    assert_empty results, "No results should be returned for a nonexistent description"
+  end
 end

@@ -711,6 +711,12 @@ class DocumentsController < ApplicationController
                         document_type
                       end
 
+      #add user that uploaded the document
+      if current_user
+        @document.uploaded_by = current_user.first_name + " " + current_user.last_name
+        @document.save
+      end
+
       puts "Uploading file"
       # base_path = Rails.root.join('..', 'GazetteSlicer', 'stamped_documents')
       # file_path = File.join(base_path, file['path'])

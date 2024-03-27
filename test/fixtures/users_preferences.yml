@@ -2,12 +2,12 @@
 
 one:
   user_id: 1
-  users_preferences_tags_id: 1
-  mail_sent_at: 2022-05-23 22:56:28
+  # users_preferences_tags_id: 1
+  # mail_sent_at: 2022-05-23 22:56:28
   mail_frequency: 1
 
 two:
   user_id: 1
-  users_preferences_tags_id: 1
-  mail_sent_at: 2022-05-23 22:56:28
+  # users_preferences_tags_id: 1
+  # mail_sent_at: 2022-05-23 22:56:28
   mail_frequency: 1

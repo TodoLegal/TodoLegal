@@ -2,8 +2,8 @@
 
 one:
   tag_id: 1
-  alternative_name: MyString
+  alternative_name: 'secretaria de salud'
 
 two:
-  tag_id: 1
-  alternative_name: MyString
+  tag_id: 2
+  alternative_name: 'insep'

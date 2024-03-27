@@ -117,7 +117,7 @@ class Api::V1::DocumentsController < ApplicationController
           {name: {factor: 4, modifier: "none"}},
           {description: {factor: 3, modifier: "none"}},
           {short_description: {factor: 2, modifier: "none"}},
-          # {"document_tags.tag_name": {factor: 1, modifier: "none"}} # Lowest priority
+          {"document_tags.tag_name": {factor: 1, modifier: "none"}} # Lowest priority
         ],
         where: searchkick_where,
         misspellings: {edit_distance: 2, below: 5},

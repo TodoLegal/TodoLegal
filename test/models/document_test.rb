@@ -92,4 +92,20 @@ class DocumentTest < ActiveSupport::TestCase
     assert_not results.empty?, "The search should return at least one document for the publication_number '#{search_term}'."
     assert_equal @publication_number_document.id, results.first.id, "The search should return the correct document with publication_number '#{search_term}'."
   end
+
+  test "documents are found by associated tag names" do
+    document_with_tag = documents(:one)
+    results = Document.search(document_with_tag.tags.first.name)
+
+    assert_not results.empty?, "Expected to find documents."
+    assert_includes results.map(&:id), document_with_tag.id, "Document associated with 'Penal' tag should be found."
+  end
+
+  test "documents are found by multiple associated tag names" do
+    document_with_tags = documents(:two)
+    results = Document.search(document_with_tags.tags.map(&:name).join(' '))
+
+    assert_not results.empty?, "Expected to find documents."
+    assert_includes results.map(&:id), document_with_tags.id, "Document associated with multiple tags should be found."
+  end
 end

@@ -2,8 +2,6 @@
 
 one:
   name: Penal
-  tag_type_id: 1
 
 two:
   name: Civil
-  tag_type_id: 2

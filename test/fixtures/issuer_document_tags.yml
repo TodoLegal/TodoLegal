@@ -7,3 +7,7 @@ one:
 two:
   document: two
   tag: two
+
+issue_document_tag:
+  document: one
+  tag: Conatel

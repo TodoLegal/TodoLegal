@@ -111,9 +111,9 @@ class Api::V1::DocumentsController < ApplicationController
           {publication_date: {factor: 10, modifier: "none"}}, # Highest priority
           {issue_id: {factor: 9, modifier: "none"}},
           {publication_number: {factor: 8, modifier: "none"}},
-          # {"issuer_document_tags.tag_name": {factor: 7, modifier: "none"}},
-          # {"document_type.name": {factor: 6, modifier: "none"}},
-          # {"document_type.alternative_name": {factor: 5, modifier: "none"}},
+          {"issuer_document_tags.tag_name": {factor: 7, modifier: "none"}},
+          {"document_type_name": {factor: 6, modifier: "none"}},
+          {"document_type_alternative_name": {factor: 5, modifier: "none"}},
           {name: {factor: 4, modifier: "none"}},
           {description: {factor: 3, modifier: "none"}},
           {short_description: {factor: 2, modifier: "none"}},

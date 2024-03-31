@@ -108,4 +108,33 @@ class DocumentTest < ActiveSupport::TestCase
     assert_not results.empty?, "Expected to find documents."
     assert_includes results.map(&:id), document_with_tags.id, "Document associated with multiple tags should be found."
   end
+
+  test "should find document by associated issuer document tag name 'Penal'" do
+    search_term = documents(:one).issuer_document_tags.first.tag.name
+    results = Document.search(search_term)
+
+    assert_not results.empty?, "Expected to find documents by tag name."
+    assert_includes results.map(&:id), documents(:one).id, "Document with the 'Penal' tag should be found."
+  end
+
+  test "should find document by document_type name" do
+    search_term = documents(:one).document_type.name # 'Oficio'
+    results = Document.search(search_term)
+
+    assert_not results.empty?, "Expected to find documents with document type '#{search_term}'."
+    results.each do |document|
+      assert_equal search_term, document.document_type.name, "Found document should have '#{search_term}' document type."
+    end
+  end
+
+  test "should find document by document_type's alternative_name" do
+    alternative_name = documents(:auto).document_type.alternative_name
+    search_term = "#{alternative_name}"
+
+    results = Document.search(search_term)
+
+    assert_not results.empty?, "Expected to find documents by alternative_name."
+    found_by_alternative_name = results.any? { |doc| doc.document_type.alternative_name == alternative_name }
+    assert found_by_alternative_name , "Document should be found by document_type's alternative_name."
+  end
 end

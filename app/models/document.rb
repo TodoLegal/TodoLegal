@@ -28,11 +28,13 @@ class Document < ApplicationRecord
       name: name,
       description: description,
       short_description: short_description,
-      publication_date: publication_date.strftime('%d-%m-%Y'), # For "dd-mm-yyyy" format
-      publication_date_slash: publication_date.strftime('%d/%m/%Y'), # For "dd/mm/yyyy" format
+      publication_date: publication_date.present? ? publication_date.strftime('%d-%m-%Y') : 'Unknown Date',
+      publication_date_slash: publication_date.present? ? publication_date.strftime('%d/%m/%Y') : 'Unknown Date',
       issue_id: issue_id,
       publication_number: publication_number,
-      tag_names: tags.pluck(:name).join(' '),
+      tag_names: (issuer_document_tags.includes(:tag).map(&:tag) + document_tags.includes(:tag).map(&:tag)).uniq.map(&:name).join(' '),
+      document_type_name: document_type&.name,
+      document_type_alternative_name: document_type&.alternative_name
     }
   end
 

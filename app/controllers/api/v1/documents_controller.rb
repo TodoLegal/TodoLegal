@@ -108,21 +108,22 @@ class Api::V1::DocumentsController < ApplicationController
       documents = Document.search(
         query,
         fields: [
-          {publication_date: {factor: 10, modifier: "none"}}, # Highest priority
-          {issue_id: {factor: 9, modifier: "none"}},
-          {publication_number: {factor: 8, modifier: "none"}},
-          {"issuer_document_tags.tag_name": {factor: 7, modifier: "none"}},
-          {"document_type_name": {factor: 6, modifier: "none"}},
-          {"document_type_alternative_name": {factor: 5, modifier: "none"}},
-          {name: {factor: 4, modifier: "none"}},
-          {description: {factor: 3, modifier: "none"}},
-          {short_description: {factor: 2, modifier: "none"}},
-          {"document_tags.tag_name": {factor: 1, modifier: "none"}} # Lowest priority
+        "publication_date^10", # Highest priority
+        "issue_id^9",
+        "publication_number^8",
+        "issuer_document_tags.tag_name^7",
+        "document_type_name^6",
+        "document_type_alternative_name^5",
+        "name^4",
+        "description^3",
+        "short_description^2",
+        "document_tags.tag_name^1" # Lowest priority
         ],
         where: searchkick_where,
         misspellings: {edit_distance: 2, below: 5},
         limit: limit,
-        offset: params['offset'].to_i)
+        offset: params['offset'].to_i
+      )
     else
       documents = Document.search(
         query,
@@ -130,7 +131,8 @@ class Api::V1::DocumentsController < ApplicationController
         where: searchkick_where,
         limit: limit,
         offset: params['offset'].to_i,
-        order: {publication_date: :desc})
+        order: {publication_date: :desc}
+      )
     end
 
     total_count = documents.total_count

@@ -107,19 +107,43 @@ class Api::V1::DocumentsController < ApplicationController
     if query != '*'
       documents = Document.search(
         query,
-        fields: ['name^10', 'issue_id^5', 'short_description^2', 'description'],
+        fields: [
+        "publication_date^10", # Highest priority
+        "issue_id^9",
+        "publication_number^8",
+        "issuer_document_tags.tag_name^7",
+        "document_type_name^6",
+        "document_type_alternative_name^5",
+        "name^4",
+        "description^3",
+        "short_description^2",
+        "document_tags.tag_name^1" # Lowest priority
+        ],
         where: searchkick_where,
         misspellings: {edit_distance: 2, below: 5},
         limit: limit,
-        offset: params['offset'].to_i)
+        offset: params['offset'].to_i
+      )
     else
       documents = Document.search(
         query,
-        fields: ['name', 'issue_id', 'short_description', 'description' ],
+        fields: [
+          "publication_date", # Highest priority
+          "issue_id",
+          "publication_number",
+          "issuer_document_tags.tag_name",
+          "document_type_name",
+          "document_type_alternative_name",
+          "name",
+          "description",
+          "short_description",
+          "document_tags.tag_name" # Lowest priority
+        ],
         where: searchkick_where,
         limit: limit,
         offset: params['offset'].to_i,
-        order: {publication_date: :desc})
+        order: {publication_date: :desc}
+      )
     end
 
     total_count = documents.total_count

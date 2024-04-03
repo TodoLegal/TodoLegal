@@ -137,4 +137,21 @@ class DocumentTest < ActiveSupport::TestCase
     found_by_alternative_name = results.any? { |doc| doc.document_type.alternative_name == alternative_name }
     assert found_by_alternative_name , "Document should be found by document_type's alternative_name."
   end
+
+  test 'should find only published documents' do
+    results = Document.search('*', where: { publish: true })
+
+    assert_not results.empty?, 'Expected to find published documents.'
+    results.each do |document|
+      assert document.publish, 'Each found document should be published.'
+    end
+  end
+
+  test 'should not find unpublished documents when filtering for published' do
+    results = Document.search('*', where: { publish: true })
+
+    results.each do |document|
+      refute_equal false, document.publish, 'Unpublished documents should not be found.'
+    end
+  end
 end

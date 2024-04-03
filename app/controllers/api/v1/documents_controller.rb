@@ -127,7 +127,18 @@ class Api::V1::DocumentsController < ApplicationController
     else
       documents = Document.search(
         query,
-        fields: ['name', 'issue_id', 'short_description', 'description' ],
+        fields: [
+          "publication_date", # Highest priority
+          "issue_id",
+          "publication_number",
+          "issuer_document_tags.tag_name",
+          "document_type_name",
+          "document_type_alternative_name",
+          "name",
+          "description",
+          "short_description",
+          "document_tags.tag_name" # Lowest priority
+        ],
         where: searchkick_where,
         limit: limit,
         offset: params['offset'].to_i,

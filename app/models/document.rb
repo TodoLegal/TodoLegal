@@ -34,7 +34,8 @@ class Document < ApplicationRecord
       publication_number: publication_number,
       tag_names: (issuer_document_tags.includes(:tag).map(&:tag) + document_tags.includes(:tag).map(&:tag)).uniq.map(&:name).join(' '),
       document_type_name: document_type&.name,
-      document_type_alternative_name: document_type&.alternative_name
+      document_type_alternative_name: document_type&.alternative_name,
+      publish: publish
     }
   end
 

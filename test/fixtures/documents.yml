@@ -8,6 +8,7 @@ one:
   issue_id: 'PCM-081-2014'
   publication_number: '35,205'
   document_type: one
+  publish: true
 
 two:
   name: 'PCM- 005-2020'
@@ -17,6 +18,7 @@ two:
   issue_id: 'Certificación'
   publication_number: '35,171'
   document_type: two
+  publish: false
 
 publication_number:
   name: '031-2020'
@@ -26,6 +28,7 @@ publication_number:
   issue_id: ''
   publication_number: '35,231'
   document_type: two
+  publish: true
 
 issue_id:
   name: 'Marcas de Fábrica'
@@ -35,6 +38,7 @@ issue_id:
   issue_id: '36,111'
   publication_number: 33,611
   document_type: two
+  publish: true
 
 auto:
   name: 'Auto Acordado'
@@ -44,3 +48,4 @@ auto:
   issue_id: 'PCM-181-2014'
   publication_number: '35,305'
   document_type: auto
+  publish: true

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_25_090120) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_09_095452) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
   enable_extension "pg_trgm"
@@ -467,6 +467,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_25_090120) do
     t.boolean "otp_required_for_login"
     t.string "otp_backup_codes", array: true
     t.text "phone_number", default: ""
+    t.string "provider"
+    t.string "uid"
     t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true

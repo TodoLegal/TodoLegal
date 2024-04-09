@@ -18,7 +18,7 @@
         <div class="col-md-8">
           <div class="form-group">
             <%= form.label :tipo_de_Documento %>
-            <%= form.select :document_type_id, options_for_select(DocumentType.all.map{ |dt| [dt.name, dt.id] }, @document.document_type_id), {}, { class: "form-control", id: "documentType" } %>
+            <%= form.text_field "", value: @document.document_type.name, class: "form-control", disabled:true, id:"documentType" %>
           </div>
         </div>
       </div>

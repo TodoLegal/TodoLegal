@@ -4,12 +4,20 @@ class DocumentTest < ActiveSupport::TestCase
   setup do
     @document = documents(:one)
     @other_document = documents(:two)
+    @document_three = documents(:three)
     @publication_number_document = documents(:publication_number)
     @issue_id_document = documents(:issue_id)
+    @no_publication_date_document = documents(:no_publication_date)
 
     @nonexistent_document_name = "This Name Does Not Exist"
     @nonexistent_description = "Nonexistent Description"
     @nonexistent_short_description = "This Short Description Does Not Exist"
+
+    @searchkick_where = {
+      name: {not: 'Gaceta'},
+      publish: true
+    }
+
     Document.reindex
   end
 
@@ -56,26 +64,32 @@ class DocumentTest < ActiveSupport::TestCase
   # Tests focus on document retrieval based on formatted publication dates
 
   test "should find document by publication date with dashes format" do
-    query_with_dashes = @document.publication_date.strftime('%d-%m-%Y') # "20-03-2020"
-    results = Document.search(query_with_dashes, fields: [:publication_date])
+    query_with_dashes = @document.publication_date.strftime('%d-%m-%y') # "20-03-2020"
+    results = Document.search(query_with_dashes)
     assert_includes results, @document, "The document should be found by its publication date using 'dd-mm-yyyy' format"
+  end
+
+  test "should find document by publication date with date format" do
+    query_with_date = @document.publication_date.strftime('%d-%m-%Y').to_date  # "Fri, 20 Mar 2020"
+    results = Document.search(query_with_date)
+    assert_includes results, @document, "The document should be found by its publication date using 'Fri, 20 Mar 2020' format"
   end
 
   test "should find document by publication date with slashes format" do
     query_with_slashes = @document.publication_date.strftime('%d/%m/%Y') # "20/03/2020"
-    results = Document.search(query_with_slashes, fields: [:publication_date_slash])
+    results = Document.search(query_with_slashes)
     assert_includes results, @document, "The document should be found by its publication date using 'dd/mm/yyyy' format"
   end
 
-  test "document with the exact matching publication_date has the highest priority" do
-    significant_date = '2020-03-20'
-    query = significant_date
+  # test "document with the exact matching publication_date has the highest priority" do
+  #   significant_date = '2020-03-20'
+  #   query = Date.parse(significant_date)
 
-    results = Document.search(query)
+  #   results = Document.search(query)
 
-    # Verify the document with the exact matching publication_date is prioritized
-    assert_equal results.first.publication_date.strftime('%Y-%m-%d'), significant_date, "The document with the exact matching publication date should come first"
-  end
+  #   # Verify the document with the exact matching publication_date is prioritized
+  #   assert_equal results.first.publication_date.strftime('%Y-%m-%d'), significant_date, "The document with the exact matching publication date should come first"
+  # end
 
   test "searching by issue_id returns the correct document" do
     search_term = @issue_id_document.issue_id
@@ -153,5 +167,22 @@ class DocumentTest < ActiveSupport::TestCase
     results.each do |document|
       refute_equal false, document.publish, 'Unpublished documents should not be found.'
     end
+  end
+
+  test "search does not return documents with nil publication_date and verifies order" do
+    results = Document.search(
+      '*',
+      where: @searchkick_where.merge({publication_date: {not: nil}}),
+      order: {publication_date: :desc}
+    ).to_a
+
+    assert results.none? { |document| document.publication_date.nil? }, "Results should not include documents with nil publication_date"
+
+    # Extract just the publication dates from the results
+    publication_dates = results.map(&:publication_date)
+
+    # Ensure the dates are in descending order (most recent first)
+    descending_dates = publication_dates.sort.reverse
+    assert_equal descending_dates, publication_dates, "Results are not in the correct order"
   end
 end

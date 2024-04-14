@@ -4,7 +4,7 @@ class Api::V1::DocumentsController < ApplicationController
   before_action :document_exists!, only: [:get_document]
   before_action :doorkeeper_authorize!, only: [:get_document, :get_documents]
   skip_before_action :doorkeeper_authorize!, unless: :has_access_token?
-  
+
   def get_document
     json_document = get_document_json
     can_access_document = true
@@ -19,7 +19,7 @@ class Api::V1::DocumentsController < ApplicationController
     if user
       user_trial = UserTrial.find_by(user_id: user.id)
     end
-    
+
     #get related documents
     related_documents = get_related_documents
     related_documents = related_documents.to_json
@@ -79,7 +79,7 @@ class Api::V1::DocumentsController < ApplicationController
     searchkick_where = {
       publication_date: {gte: from, lte: to},
       name: {not: 'Gaceta'},
-      publish: true
+      publish: true,
     }
 
     if !params['tags'].blank? and params['tags'].kind_of?(Array)
@@ -91,7 +91,7 @@ class Api::V1::DocumentsController < ApplicationController
           if tag_type.name == 'Institución'
             tag.issuer_document_tags.each do |issuer_tag|
               document_ids.push(issuer_tag.document_id)
-            end 
+            end
           else
             tag.documents.each do |document|
               document_ids.push(document.id)
@@ -120,7 +120,7 @@ class Api::V1::DocumentsController < ApplicationController
         "document_tags.tag_name^1" # Lowest priority
         ],
         where: searchkick_where,
-        misspellings: {edit_distance: 2, below: 5},
+        misspellings: {edit_distance: 2, below: 5}, #https://github.com/ankane/searchkick?tab=readme-ov-file#misspellings
         limit: limit,
         offset: params['offset'].to_i
       )
@@ -139,7 +139,7 @@ class Api::V1::DocumentsController < ApplicationController
           "short_description",
           "document_tags.tag_name" # Lowest priority
         ],
-        where: searchkick_where,
+        where: searchkick_where.merge!({publication_date: {not: nil}}),
         limit: limit,
         offset: params['offset'].to_i,
         order: {publication_date: :desc}
@@ -244,7 +244,7 @@ protected
     else
       return document_type.name
     end
-    
+
   end
 
   def get_document_tags

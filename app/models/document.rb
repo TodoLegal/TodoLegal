@@ -39,11 +39,6 @@ class Document < ApplicationRecord
       publish: publish
     }
 
-    # if publication_date.present?
-    #   data[:publication_date] = publication_date.to_date
-    #   data[:publication_date_slash] = publication_date.strftime('%Y/%m/%d')
-    # end
-
     data
   end
 

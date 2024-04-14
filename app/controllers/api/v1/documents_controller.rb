@@ -103,12 +103,60 @@ class Api::V1::DocumentsController < ApplicationController
       searchkick_where[:id] = {in: document_ids}
     end
 
+    def parse_spanish_date_to_iso(date_string)
+      months = {
+        'enero' => '01', 'febrero' => '02', 'marzo' => '03', 'abril' => '04',
+        'mayo' => '05', 'junio' => '06', 'julio' => '07', 'agosto' => '08',
+        'septiembre' => '09', 'octubre' => '10', 'noviembre' => '11', 'diciembre' => '12'
+      }
+
+      # Regex to match "20 de mayo" and "15 de junio del 2024"
+      if date_string =~ /(\d{1,2}) de (\w+)( del (\d{4}))?/
+        day = $1
+        month = months[$2.downcase]
+        year = $4 || Date.today.year  # Use current year if year is not specified
+        field_to_search = :publication_date
+        Date.new(year.to_i, month.to_i, day.to_i).strftime('%Y-%m-%d')
+      else
+        date_string
+      end
+    end
+
     #if query is not empty returns result based in the boost level given to each field, else, returns results without boost and ordered by publication date
     if query != '*'
+      begin
+        query = query.gsub(/\"/, '')  # Remove quotes before parsing
+
+        formatted_query = parse_spanish_date_to_iso(query)
+
+        field_to_search = nil
+
+        # Check if the query matches specific date formats
+        if query.match?(/^\d{2}\/\d{2}\/\d{4}$/)  # Matches "dd/mm/yyyy"
+          parsed_date = Date.strptime(query, '%d/%m/%Y')
+          formatted_query = parsed_date.strftime('%d/%m/%Y')
+          field_to_search = :publication_date_slash
+        elsif query.match?(/^\d{2}-\d{2}-\d{4}$/)  # Matches "dd-mm-yyyy"
+          parsed_date = Date.strptime(query, '%d-%m-%Y')
+          formatted_query = parsed_date.strftime('%d-%m-%Y')
+          field_to_search = :publication_date_dashes
+        end
+
+        if field_to_search && params['from'].blank? && params['to'].blank?
+          # Use parsed date for exact date searching in the determined field
+          searchkick_where[field_to_search] = formatted_query
+        end
+      rescue ArgumentError
+        # If it's not a valid date, just use the query as a keyword for other fields
+        formatted_query = query
+      end
+
       documents = Document.search(
-        query,
+        formatted_query,
         fields: [
         "publication_date^10", # Highest priority
+        "publication_date_dashes^10",
+        "publication_date_slashes^10",
         "issue_id^9",
         "publication_number^8",
         "issuer_document_tags.tag_name^7",

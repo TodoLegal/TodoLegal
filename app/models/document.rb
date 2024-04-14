@@ -30,7 +30,7 @@ class Document < ApplicationRecord
       short_description: short_description,
       publication_date: publication_date.present? ? publication_date.strftime('%d-%m-%Y').to_date : nil,
       publication_date_dashes: publication_date.present? ? publication_date.strftime('%d-%m-%Y') : nil,
-      publication_date_slash: publication_date.present? ? publication_date.strftime('%d/%m/%Y') : nil,
+      publication_date_slashes: publication_date.present? ? publication_date.strftime('%d/%m/%Y') : nil,
       issue_id: issue_id,
       publication_number: publication_number,
       tag_names: (issuer_document_tags.includes(:tag).map(&:tag) + document_tags.includes(:tag).map(&:tag)).uniq.map(&:name).join(' '),

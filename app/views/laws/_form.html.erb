@@ -38,6 +38,14 @@
             </div>
           </div>
         </div>
+        <div class="row">
+          <div class="col-md-8">
+            <div class="form-group">
+              <%= form.label :estado_de_revisión %>
+              <%= form.select :revision_status,  options_for_select(['Actualizado', 'No actualizado'], law.revision_status), { prompt: 'Selecciona estado' }, class: 'form-control' %>
+            </div>
+          </div>
+        </div>
         <%= form.submit "Actualizar", class: "d-inline p-2 btn btn-primary"%>
         &nbsp;&nbsp;
         <u> <%= link_to 'Cancelar', law_path, class: "d-inline p-2 text-danger"%> </u>

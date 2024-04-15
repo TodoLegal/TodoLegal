@@ -1,11 +1,16 @@
 <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
 <div class="container">
   <p id="notice"><%= notice %></p>
-  <% if @show_only_judgements %>
-    <h1>Sentencias</h1>
-  <% else %>
-    <h1>Documentos</h1>
-  <% end %>
+  <h1>
+    <% if @last_24_hours.present? %>
+      <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, "https://piil.todolegal.app" %>
+    <% end %>
+    <% if @show_only_judgements %>
+      Sentencias
+    <% else %>
+      Documentos
+    <% end %>
+  </h1>
   <%if current_user_is_admin %>
     <%= render "batch_statistics_table" %>
     <form action="/documents/process_documents_batch" method="post">
@@ -26,11 +31,6 @@
       </form>
     </div>
   </div>
-
-  <%if @last_24_hours.present? %>
-    <a href="https://piil.todolegal.app">Regresar a PIIL</a>
-    <span> | </span>
-  <% end %>
     
   <% if @show_only_autos %>
     <%= link_to 'Subir documento', new_document_path(selected_document_type: "autos") %>

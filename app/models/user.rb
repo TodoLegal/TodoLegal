@@ -2,8 +2,9 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable, :confirmable,
-         :recoverable, :rememberable, :validatable, :trackable
-  
+         :recoverable, :rememberable, :validatable, :trackable,
+         :omniauthable, omniauth_providers: [:google_oauth2]
+           
   acts_as_token_authenticatable
 
   # validate :email_uniqueness, on: create
@@ -37,9 +38,13 @@ class User < ApplicationRecord
     end
    end
 
-   def self.ignore_users_whith_free_trial
-    where.not("EXISTS(SELECT 1 from user_trials where users.id = user_trials.user_id)")
-   end
+  def self.ignore_users_whith_free_trial
+  where.not("EXISTS(SELECT 1 from user_trials where users.id = user_trials.user_id)")
+  end
+
+  def self.from_google(u)
+    create_with(uid: u[:uid], provider: 'google', password: Devise.friendly_token[0, 20]).find_or_create_by!(email: u[:email])
+  end
   
   protected
   def confirmation_required?

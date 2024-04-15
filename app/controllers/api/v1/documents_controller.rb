@@ -325,9 +325,11 @@ protected
       if !document_tag
         document_tag = @document.tags.first
       end
-      documents = Document.joins(:document_tags).where(document_tags: {tag_id: document_tag.id}).order(publication_date: :desc).limit(20)  
+      documents = Document.joins(:document_tags).where(document_tags: {tag_id: document_tag.id})
+                                                .where(documents: {publish: true})
+                                                .order(publication_date: :desc).limit(20)  
     else
-      documents = Document.where(publication_number: @document.publication_number)
+      documents = Document.where(publication_number: @document.publication_number, publish: true)
     end
 
     return documents

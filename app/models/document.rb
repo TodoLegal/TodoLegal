@@ -33,10 +33,10 @@ class Document < ApplicationRecord
       publication_date_slashes: publication_date.present? ? publication_date.strftime('%d/%m/%Y') : nil,
       issue_id: issue_id,
       publication_number: publication_number,
-      tag_names: (issuer_document_tags.includes(:tag).map(&:tag) + document_tags.includes(:tag).map(&:tag)).uniq.map(&:name).join(' '),
       document_type_name: document_type&.name,
       document_type_alternative_name: document_type&.alternative_name,
-      publish: publish
+      publish: publish,
+      document_tags_name: document_tags.map(&:tag).map(&:name),
     }
 
     data

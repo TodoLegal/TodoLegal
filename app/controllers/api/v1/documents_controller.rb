@@ -165,7 +165,7 @@ class Api::V1::DocumentsController < ApplicationController
         "name^4",
         "description^3",
         "short_description^2",
-        "document_tags.tag_name^1" # Lowest priority
+        "document_tags_name^1" # Lowest priority
         ],
         where: searchkick_where,
         misspellings: {edit_distance: 2, below: 5}, #https://github.com/ankane/searchkick?tab=readme-ov-file#misspellings

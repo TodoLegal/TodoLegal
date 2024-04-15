@@ -4,7 +4,7 @@ class Api::V1::DocumentsController < ApplicationController
   before_action :document_exists!, only: [:get_document]
   before_action :doorkeeper_authorize!, only: [:get_document, :get_documents]
   skip_before_action :doorkeeper_authorize!, unless: :has_access_token?
-  
+
   def get_document
     json_document = get_document_json
     can_access_document = true
@@ -19,7 +19,7 @@ class Api::V1::DocumentsController < ApplicationController
     if user
       user_trial = UserTrial.find_by(user_id: user.id)
     end
-    
+
     #get related documents
     related_documents = get_related_documents
     related_documents = related_documents.to_json
@@ -78,7 +78,8 @@ class Api::V1::DocumentsController < ApplicationController
 
     searchkick_where = {
       publication_date: {gte: from, lte: to},
-      publish: true
+      name: {not: 'Gaceta'},
+      publish: true,
     }
 
     if !params['tags'].blank? and params['tags'].kind_of?(Array)
@@ -90,7 +91,7 @@ class Api::V1::DocumentsController < ApplicationController
           if tag_type.name == 'Institución'
             tag.issuer_document_tags.each do |issuer_tag|
               document_ids.push(issuer_tag.document_id)
-            end 
+            end
           else
             tag.documents.each do |document|
               document_ids.push(document.id)
@@ -102,23 +103,95 @@ class Api::V1::DocumentsController < ApplicationController
       searchkick_where[:id] = {in: document_ids}
     end
 
+    def parse_spanish_date_to_iso(date_string)
+      months = {
+        'enero' => '01', 'febrero' => '02', 'marzo' => '03', 'abril' => '04',
+        'mayo' => '05', 'junio' => '06', 'julio' => '07', 'agosto' => '08',
+        'septiembre' => '09', 'octubre' => '10', 'noviembre' => '11', 'diciembre' => '12'
+      }
+
+      # Regex to match "20 de mayo" and "15 de junio del 2024"
+      if date_string =~ /(\d{1,2}) de (\w+)( del (\d{4}))?/
+        day = $1
+        month = months[$2.downcase]
+        year = $4 || Date.today.year  # Use current year if year is not specified
+        field_to_search = :publication_date
+        Date.new(year.to_i, month.to_i, day.to_i).strftime('%Y-%m-%d')
+      else
+        date_string
+      end
+    end
+
     #if query is not empty returns result based in the boost level given to each field, else, returns results without boost and ordered by publication date
     if query != '*'
+      begin
+        query = query.gsub(/\"/, '')  # Remove quotes before parsing
+
+        formatted_query = parse_spanish_date_to_iso(query)
+
+        field_to_search = nil
+
+        # Check if the query matches specific date formats
+        if query.match?(/^\d{2}\/\d{2}\/\d{4}$/)  # Matches "dd/mm/yyyy"
+          parsed_date = Date.strptime(query, '%d/%m/%Y')
+          formatted_query = parsed_date.strftime('%d/%m/%Y')
+          field_to_search = :publication_date_slash
+        elsif query.match?(/^\d{2}-\d{2}-\d{4}$/)  # Matches "dd-mm-yyyy"
+          parsed_date = Date.strptime(query, '%d-%m-%Y')
+          formatted_query = parsed_date.strftime('%d-%m-%Y')
+          field_to_search = :publication_date_dashes
+        end
+
+        if field_to_search && params['from'].blank? && params['to'].blank?
+          # Use parsed date for exact date searching in the determined field
+          searchkick_where[field_to_search] = formatted_query
+        end
+      rescue ArgumentError
+        # If it's not a valid date, just use the query as a keyword for other fields
+        formatted_query = query
+      end
+
       documents = Document.search(
-        query,
-        fields: ['name^10', 'issue_id^5', 'short_description^2', 'description'],
+        formatted_query,
+        fields: [
+        "publication_date^10", # Highest priority
+        "publication_date_dashes^10",
+        "publication_date_slashes^10",
+        "issue_id^9",
+        "publication_number^8",
+        "issuer_document_tags.tag_name^7",
+        "document_type_name^6",
+        "document_type_alternative_name^5",
+        "name^4",
+        "description^3",
+        "short_description^2",
+        "document_tags.tag_name^1" # Lowest priority
+        ],
         where: searchkick_where,
-        misspellings: {edit_distance: 2, below: 5},
+        misspellings: {edit_distance: 2, below: 5}, #https://github.com/ankane/searchkick?tab=readme-ov-file#misspellings
         limit: limit,
-        offset: params['offset'].to_i)
+        offset: params['offset'].to_i
+      )
     else
       documents = Document.search(
         query,
-        fields: ['name', 'issue_id', 'short_description', 'description' ],
-        where: searchkick_where,
+        fields: [
+          "publication_date", # Highest priority
+          "issue_id",
+          "publication_number",
+          "issuer_document_tags.tag_name",
+          "document_type_name",
+          "document_type_alternative_name",
+          "name",
+          "description",
+          "short_description",
+          "document_tags.tag_name" # Lowest priority
+        ],
+        where: searchkick_where.merge!({publication_date: {not: nil}}),
         limit: limit,
         offset: params['offset'].to_i,
-        order: {publication_date: :desc})
+        order: {publication_date: :desc}
+      )
     end
 
     total_count = documents.total_count
@@ -219,7 +292,7 @@ protected
     else
       return document_type.name
     end
-    
+
   end
 
   def get_document_tags

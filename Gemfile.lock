@@ -317,6 +317,9 @@ GEM
       oauth2 (~> 2.0)
       omniauth (~> 2.0)
       omniauth-oauth2 (~> 1.8)
+    omniauth-microsoft-office365 (0.0.8)
+      omniauth
+      omniauth-oauth2
     omniauth-oauth2 (1.8.0)
       oauth2 (>= 1.4, < 3)
       omniauth (~> 2.0)
@@ -551,6 +554,7 @@ DEPENDENCIES
   mixpanel-ruby
   newrelic_rpm
   omniauth-google-oauth2
+  omniauth-microsoft-office365
   omniauth-rails_csrf_protection
   pg
   pg_search

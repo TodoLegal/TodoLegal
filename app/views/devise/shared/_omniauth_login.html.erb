@@ -1,0 +1,11 @@
+<%- if devise_mapping.omniauthable? %>
+  <%- resource_class.omniauth_providers.each do |provider| %>
+    <%= form_for "Login",
+      url: omniauth_authorize_path(resource_name, provider),
+      method: :post,
+      data: {turbo: "false"} do |f| 
+    %>
+      <%= f.submit "Inicia sesión con Google", type: "image", src: url_for("/img/web_light_rd_na@1x.png") %>
+    <% end %>
+  <% end %>
+<% end %>

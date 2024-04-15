@@ -34,7 +34,8 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
         'user_type' => current_user_type_api(user),
         'document_name' => params[:document_name],
         'document_id' => params[:document_id],
-        'location' => "API"
+        'location' => "API",
+        'document_url' => request.original_url
       })
       user_trial.save
       super

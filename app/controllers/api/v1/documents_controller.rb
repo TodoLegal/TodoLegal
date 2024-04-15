@@ -159,7 +159,7 @@ class Api::V1::DocumentsController < ApplicationController
         "publication_date_slashes^10",
         "issue_id^9",
         "publication_number^8",
-        "issuer_document_tags.tag_name^7",
+        "issuer_document_tags_name^7",
         "document_type_name^6",
         "document_type_alternative_name^5",
         "name^4",

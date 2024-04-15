@@ -37,6 +37,7 @@ class Document < ApplicationRecord
       document_type_alternative_name: document_type&.alternative_name,
       publish: publish,
       document_tags_name: document_tags.map(&:tag).map(&:name),
+      issuer_document_tags_name: issuer_document_tags.map { |idt| idt.tag&.name }.compact,
     }
 
     data

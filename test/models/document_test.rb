@@ -10,6 +10,8 @@ class DocumentTest < ActiveSupport::TestCase
     @no_publication_date_document = documents(:no_publication_date)
     @document_tags = document_tags(:one)
     @tag_one = tags(:one)
+    @enag_tag = tags(:enag)
+    @issuer_document_tags = issuer_document_tags(:enag_document_tag)
 
     @nonexistent_document_name = "This Name Does Not Exist"
     @nonexistent_description = "Nonexistent Description"
@@ -125,13 +127,13 @@ class DocumentTest < ActiveSupport::TestCase
     assert_includes results.map(&:id), document_with_tags.id, "Document associated with multiple tags should be found."
   end
 
-  # test "should find document by associated issuer document tag name 'Penal'" do
-  #   search_term = documents(:one).issuer_document_tags.first.tag.name
-  #   results = Document.search(search_term)
+  test "should find document by associated issuer document tag name 'ENAG'" do
+    search_term = tags(:enag).name
+    results = Document.search(search_term)
 
-  #   assert_not results.empty?, "Expected to find documents by tag name."
-  #   assert_includes results.map(&:id), documents(:one).id, "Document with the 'Penal' tag should be found."
-  # end
+    assert_not results.empty?, "Expected to find documents by tag name."
+    assert_includes results.map(&:id), documents(:two).id, "Document with the 'ENAG' tag should be found."
+  end
 
   test "should find document by document_type name" do
     search_term = documents(:one).document_type.name # 'Oficio'

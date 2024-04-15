@@ -123,11 +123,13 @@ class Api::V1::DocumentsController < ApplicationController
     end
 
     #if query is not empty returns result based in the boost level given to each field, else, returns results without boost and ordered by publication date
-    if query != '*'
+    if query != '*' || from || to
+      formatted_query = query
+
       begin
         query = query.gsub(/\"/, '')  # Remove quotes before parsing
 
-        formatted_query = parse_spanish_date_to_iso(query)
+        formatted_query = parse_spanish_date_to_iso(query) if to.blank? && from.blank?
 
         field_to_search = nil
 
@@ -142,7 +144,7 @@ class Api::V1::DocumentsController < ApplicationController
           field_to_search = :publication_date_dashes
         end
 
-        if field_to_search && params['from'].blank? && params['to'].blank?
+        if field_to_search && to.blank? && from.blank?
           # Use parsed date for exact date searching in the determined field
           searchkick_where[field_to_search] = formatted_query
         end

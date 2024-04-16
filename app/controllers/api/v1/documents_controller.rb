@@ -179,15 +179,17 @@ class Api::V1::DocumentsController < ApplicationController
         query,
         fields: [
           "publication_date", # Highest priority
+          "publication_date_dashes",
+          "publication_date_slashes",
           "issue_id",
           "publication_number",
-          "issuer_document_tags.tag_name",
+          "issuer_document_tags_name",
           "document_type_name",
           "document_type_alternative_name",
           "name",
           "description",
           "short_description",
-          "document_tags.tag_name" # Lowest priority
+          "document_tags_name" # Lowest priority
         ],
         where: searchkick_where.merge!({publication_date: {not: nil}}),
         limit: limit,

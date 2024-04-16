@@ -170,7 +170,7 @@ class Api::V1::DocumentsController < ApplicationController
         "document_tags_name^1" # Lowest priority
         ],
         where: searchkick_where,
-        misspellings: {edit_distance: 2, below: 5}, #https://github.com/ankane/searchkick?tab=readme-ov-file#misspellings
+        misspellings: {edit_distance: 2, below: 2}, #https://github.com/ankane/searchkick?tab=readme-ov-file#misspellings
         limit: limit,
         offset: params['offset'].to_i
       )

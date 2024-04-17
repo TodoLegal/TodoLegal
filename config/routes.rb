@@ -15,7 +15,13 @@ Rails.application.routes.draw do
   resources :user_permissions
   resources :permissions
   resources :law_modifications
-  devise_for :users, controllers: { confirmations: 'users/confirmations', registrations: "users/registrations", sessions: "users/sessions", passwords: "users/passwords" }
+  devise_for :users, controllers: { 
+    confirmations: 'users/confirmations', 
+    registrations: "users/registrations", 
+    sessions: "users/sessions",
+    omniauth_callbacks: 'users/omniauth_callbacks', 
+    passwords: "users/passwords" 
+  }
   get "/token_login/:authentication_token" => "home#token_login", as: "token_login"
   resources :law_tags
   resources :document_tags

@@ -34,6 +34,9 @@ gem 'capistrano3-nginx'
 gem 'capistrano-bundler'
 gem 'doorkeeper'
 gem 'MailchimpMarketing', :git => 'https://github.com/mailchimp/mailchimp-marketing-ruby.git'
+gem 'omniauth-google-oauth2'
+gem 'omniauth-microsoft-office365'
+gem 'omniauth-rails_csrf_protection'
 #gem 'rack-cors'
 #Support for NewRelic
 

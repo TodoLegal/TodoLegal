@@ -26,7 +26,7 @@
                 <%= document.created_at.strftime("%Y-%m-%d") %>
             </td>
             <td>
-                <%= document.created_at.strftime("%H:%M:%S") %>
+                <%= (document.created_at - 6.hours).strftime("%H:%M:%S") %> 
             </td>
             <td>
                 <%= document.uploaded_by %>

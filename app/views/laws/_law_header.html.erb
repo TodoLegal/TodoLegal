@@ -6,15 +6,28 @@
 </h1>
 
 <p>
-<% if @law.creation_number && @law.creation_number != "" %>
-  <span class="badge-creation badge-secondary"><i class="fas fa-file-alt"></i> <%= @law.creation_number %></span>
-<% end %>
-<% if !@highlight_enabled %>
-  <span class="badge badge-articles"><%= @articles_count %> artículos en total</span>
-<% else %>
-  <span class="badge badge-secondary"><%= @articles_count %> resultados encontrados</span>
-<% end %>
+  <% if @law.creation_number && @law.creation_number != "" %>
+    <span class="badge-creation badge-secondary"><i class="fas fa-file-alt"></i> <%= @law.creation_number %></span>
+  <% end %>
+  <% if !@highlight_enabled %>
+    <span class="badge badge-articles"><%= @articles_count %> artículos en total</span>
+  <% else %>
+    <span class="badge badge-secondary"><%= @articles_count %> resultados encontrados</span>
+  <% end %>
+</p>
 
+<p> 
+  <% if @law.revision_status != "" %>
+    <% if @law.revision_status == "Actualizado" %>
+      <i class="fas fa-check-circle" style="color: #34b233;"></i>
+    <% end %>
+    Documento <strong><% if @law.revision_status == "Actualizado" %> totalmente<% end %> <%= @law.revision_status.downcase %></strong>
+  <% end %>
+</p>
+<p> 
+  <% if @law.revision_status != "" %>
+    <span class="badge-creation badge-secondary"> <i class="fas fa-clock"></i> Última revisión: <%= @law.updated_at.strftime("%d-%m-%Y") %></span>
+  <% end %>
 </p>
 <!--
 <% if @highlight_enabled %>

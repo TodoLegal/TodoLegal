@@ -631,6 +631,7 @@ class DocumentsController < ApplicationController
       document_type = file["document_type"]
       short_description = ""
       long_description = ""
+      publish = false
 
       #check if document already in data base
       if check_document_duplicity(publication_number, document_type, issue_id)
@@ -651,10 +652,13 @@ class DocumentsController < ApplicationController
 
       if document_type == "Marcas de Fábrica"
         short_description = "Esta es la sección de Marcas de Fábrica de la Gaceta " + publication_number + " de fecha " + publication_date + "."
+        publish = true
       elsif document_type == "Avisos Legales"
         short_description = "Esta es la sección de avisos legales de la Gaceta " + publication_number + " de fecha " + publication_date + "."
+        publish = true
       elsif document_type== "Gaceta"
         short_description = "Esta es la gaceta número " + publication_number + " de fecha " + publication_date + "."
+        publish = true
       else
         short_description = cleanText(file["short_description"])
         long_description = cleanText(file["description"])
@@ -669,7 +673,7 @@ class DocumentsController < ApplicationController
         description: long_description,
         full_text: cleanText(file["full_text"]),
         document_type_id: get_part_document_type_id(document_type),
-        publish: false
+        publish: publish
       )
 
       addTagIfExists(new_document.id, file["tag"])

@@ -18,7 +18,14 @@
 
 <p> 
   <% if @law.revision_status != "" %>
+    <% if @law.revision_status == "Actualizado" %>
+      <i class="fas fa-check-circle" style="color: #34b233;"></i>
+    <% end %>
     Documento <strong><% if @law.revision_status == "Actualizado" %> totalmente<% end %> <%= @law.revision_status.downcase %></strong>
+  <% end %>
+</p>
+<p> 
+  <% if @law.revision_status != "" %>
     <span class="badge-creation badge-secondary"> <i class="fas fa-clock"></i> Última revisión: <%= @law.updated_at.strftime("%d-%m-%Y") %></span>
   <% end %>
 </p>

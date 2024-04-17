@@ -43,7 +43,12 @@ class User < ApplicationRecord
   end
 
   def self.from_google(u)
-    create_with(uid: u[:uid], provider: 'google', password: Devise.friendly_token[0, 20]).find_or_create_by!(email: u[:email])
+    create_with(uid: u[:uid], provider: 'google', password: Devise.friendly_token[0, 20]).find_or_create_by!(email: u[:email]) do | user |
+      user.first_name = u[:first_name]
+      user.last_name = u[:last_name]
+      user.confirmed_at = DateTime.now
+      user.skip_confirmation!
+    end
   end
   
   protected

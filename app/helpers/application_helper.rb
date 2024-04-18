@@ -251,7 +251,7 @@ module ApplicationHelper
   end
 
   def valid_document_count
-    Document.where.not(name: "Gaceta").where(publish: true).count
+    Document.where(publish: true).count
   end
 
   def valid_gazettes_count

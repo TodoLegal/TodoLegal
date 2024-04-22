@@ -28,7 +28,10 @@
                                                     Hola <%= @user.first_name %>,
                                                 </p>
                                                 <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">
-                                                    Se han procesado los documentos que subiste a la plataforma. Puedes revisarlos <a href="<%= @document_link %>">aquí</a>.
+                                                    <%= @message %> 
+                                                    <% if @process_status == "success" %>
+                                                        Puedes revisarlos <a href="<%= @document_link %>">aquí</a>.
+                                                    <% end %>
                                                 </p>
                                             </td>
                                         </tr>

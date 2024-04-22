@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Documentos procesados</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+
+    <body style="margin: 0; padding: 0; background-color: #F2F5F8;">
+        <!-- Inicio del Header -->
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: 0px auto; border-spacing: 0px;">
+            <tbody>
+                <tr>
+                    <td style="text-align: center;">
+                        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: auto;">
+                            <tr>
+                                <td></td>
+                                <td width="540">
+                                    <table border="0" cellpadding="0" cellspacing="0" width="100%" >
+                                        <tr>
+                                            <a class="back-image" data-toggle="modal" data-target="#cancelModalTodolegal">
+                                                <img style="height: 15vh; max-height: 110px; margin: 2vh auto 0;" border="0" alt="Logo TodoLegal" src="https://todolegal.app/img/logo_landing_mobile.png"/>
+                                            </a>
+                                        </tr>
+                                        <tr>
+                                            <td style="background-color: #FFFFFF; text-align: left; padding: 40px;">
+                                                <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">
+                                                    Hola <%= @user.first_name %>,
+                                                </p>
+                                                <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">
+                                                    <%= @message %> 
+                                                    <% if @process_status == "success" %>
+                                                        Puedes revisarlos <a href="<%= @document_link %>">aquí</a>.
+                                                    <% end %>
+                                                </p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="background-color: #171F2A; text-align: center; padding: 40px;">
+                                                <p style="font-family: Helvetica, Arial, sans-serif; color:#FFFFFF; font-size: 14px; ">
+                                                    Este es un correo autogenerado y lo estás recibiendo porque creaste una cuenta en TodoLegal. Si no hiciste esta solicitud, envíanos un correo a <a href="mailto:info@todolegal.app" target="_blank" style="color: #A6B9D3; text-decoration: underline;">info@todolegal.app</a> o escribenos en el chat de <a href="https://todolegal.app" target="_blank" style="color: #A6B9D3; text-decoration: underline;">todolegal.app</a>.
+                                                </p>
+                                                <p style="font-family: Helvetica, Arial, sans-serif; color:#FFFFFF; font-size: 14px;">
+                                                    By TODOLEGAL LLC 2023
+                                                </p>
+                                            </td>
+                                            
+                                        </tr>
+                                    </table>
+                                    
+                                </td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- Fin del Header -->
+    </body>
+
+</html>

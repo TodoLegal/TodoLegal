@@ -209,23 +209,21 @@ module ApplicationHelper
 
   def return_user_plan_status user
     todolegal_status = "Free trial"
-    user_trial = user.user_trial ? true : false
-    todolegal_status = user.user_trial && user.user_trial.active ? todolegal_status : "Free trial end"
+    # user_trial = user.user_trial ? true : false
+    todolegal_status = user.user_trial && user.user_trial.active ? todolegal_status : "Basic"
     todolegal_status = user.permissions.find_by_name("Editor") ? "Editor" : todolegal_status
     todolegal_status = user.permissions.find_by_name("Pro") ? "Pro B2B" : todolegal_status
-    todolegal_status = user.permissions.find_by_name("Admin") ? "Admin" : todolegal_status
+    # todolegal_status = user.permissions.find_by_name("Admin") ? "Admin" : todolegal_status
 
-    stripe_status = "Sin Plan"
+    # stripe_status = "Sin Plan"
     if user.stripe_customer_id
       customer = Stripe::Customer.retrieve(user.stripe_customer_id)
       if current_user_plan_is_active(customer)
-        stripe_status = "Pro Stripe"
-      else
-        stripe_status = "Downgraded"
+        todolegal_status = "Pro Stripe"
       end
     end
     
-    return todolegal_status, stripe_status
+    return todolegal_status
   end
 
   def ley_abierta_url

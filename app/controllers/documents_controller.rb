@@ -150,6 +150,9 @@ class DocumentsController < ApplicationController
           get_gazette_document_type_id #this is maybe a misplaced and useless call to this method, delete later?
           file.download "tmp/gazette.pdf"
           slice_gazette @document, Rails.root.join("tmp") + "gazette.pdf"
+          # document_pdf_path = (Rails.root.join("tmp") + "gazette.pdf").to_s
+          # DocumentProcessingJob.perform_later(@document, document_pdf_path, current_user)
+
           if $discord_bot
             publication_number = @document.publication_number
             discord_message = "Nueva gaceta seccionada en Valid! [#{publication_number}](https://todolegal.app/admin/gazettes/#{publication_number}) :scroll:"
@@ -481,7 +484,7 @@ class DocumentsController < ApplicationController
             "gazettes",
             document.id.to_s, file["path"]).to_s
         ),
-        filename: download_name.name + ".pdf",
+        filename: download_name + ".pdf",
         content_type: "application/pdf"
       )
       #set_content_disposition_attachment new_document.original_file.key, helpers.get_document_title(new_document) + ".pdf"

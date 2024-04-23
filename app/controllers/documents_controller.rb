@@ -147,18 +147,18 @@ class DocumentsController < ApplicationController
         bucket = get_bucket
         file = bucket.file @document.original_file.key
         if params["document"]["auto_process_type"] == "slice"
-          # get_gazette_document_type_id #this is maybe a misplaced and useless call to this method, delete later?
+          get_gazette_document_type_id #this is maybe a misplaced and useless call to this method, delete later?
           file.download "tmp/gazette.pdf"
-          # slice_gazette @document, Rails.root.join("tmp") + "gazette.pdf"
-          document_pdf_path = (Rails.root.join("tmp") + "gazette.pdf").to_s
-          DocumentProcessingJob.perform_later(@document, document_pdf_path, current_user)
+          slice_gazette @document, Rails.root.join("tmp") + "gazette.pdf"
+          # document_pdf_path = (Rails.root.join("tmp") + "gazette.pdf").to_s
+          # DocumentProcessingJob.perform_later(@document, document_pdf_path, current_user)
 
-          # if $discord_bot
-          #   publication_number = @document.publication_number
-          #   discord_message = "Nueva gaceta seccionada en Valid! [#{publication_number}](https://todolegal.app/admin/gazettes/#{publication_number}) :scroll:"
-          #   $discord_bot.send_message($discord_bot_document_upload, discord_message)
-          # end
-          format.html { redirect_to documents_path, notice: 'El documento está siendo procesado, se le enviará un correo y notificacion de discord cuando todo esté listo.' }
+          if $discord_bot
+            publication_number = @document.publication_number
+            discord_message = "Nueva gaceta seccionada en Valid! [#{publication_number}](https://todolegal.app/admin/gazettes/#{publication_number}) :scroll:"
+            $discord_bot.send_message($discord_bot_document_upload, discord_message)
+          end
+          format.html { redirect_to gazette_path(@document.publication_number), notice: 'La gaceta se ha partido exitósamente.' }
         elsif params["document"]["auto_process_type"] == "process"
           file.download "tmp/gazette.pdf"
           process_gazette @document, Rails.root.join("tmp") + "gazette.pdf"

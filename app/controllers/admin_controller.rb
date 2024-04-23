@@ -70,21 +70,23 @@ class AdminController < ApplicationController
   end
 
   def download_all_users
-    @users = User.all
-    @users.each do |user|
-      if user.first_name == nil
-        user.first_name = ""
-      end
-      if user.last_name == nil
-        user.last_name = ""
-      end
-    end
-    respond_to do |format|
-      format.csv do
-        headers['Content-Disposition'] = "attachment; filename=\"TL_all_users\""
-        headers['Content-Type'] ||= 'text/csv'
-      end
-    end
+    UsersDownloadJob.perform_later current_user
+    redirect_back(fallback_location: root_path, notice: "Los usuarios se están extrayendo de la base de datos, se te enviará un correo con el archivo CSV adjunto.")
+    # @users = User.all
+    # @users.each do |user|
+    #   if user.first_name == nil
+    #     user.first_name = ""
+    #   end
+    #   if user.last_name == nil
+    #     user.last_name = ""
+    #   end
+    # end
+    # respond_to do |format|
+    #   format.csv do
+    #     headers['Content-Disposition'] = "attachment; filename=\"TL_all_users\""
+    #     headers['Content-Type'] ||= 'text/csv'
+    #   end
+    # end
   end
 
   #DEPRECATED. Delete when possible

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_15_093021) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_29_201724) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
   enable_extension "pg_trgm"
@@ -290,6 +290,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_15_093021) do
     t.string "status", default: ""
     t.string "hierarchy", default: ""
     t.string "revision_status", default: ""
+    t.date "revision_date"
   end
 
   create_table "oauth_access_grants", force: :cascade do |t|

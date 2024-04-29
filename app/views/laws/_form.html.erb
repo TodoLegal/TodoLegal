@@ -46,6 +46,26 @@
             </div>
           </div>
         </div>
+        <div class="row">
+          <div class="col-md-8">
+            <div class="form-group">
+              <%= form.label :estatus %>
+              <%= form.select :status,  options_for_select(['Derogado', 'Vigente', 'Reformado'], law.status), { prompt: 'Selecciona estado' }, class: 'form-control' %>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-md-8">
+            <%= form.label :fecha_de_revisión %>
+            <div class="form-inline">
+              <%= form.date_select :revision_date, {:order => [:day, :month, :year],
+                start_year: Date.current.year - 122, # Start from 1900 (current year - 122)
+                end_year: Date.current.year },  
+                {:class => 'form-control mr-2'} 
+              %>
+            </div>
+          </div>
+        </div>
         <%= form.submit "Actualizar", class: "d-inline p-2 btn btn-primary"%>
         &nbsp;&nbsp;
         <u> <%= link_to 'Cancelar', law_path, class: "d-inline p-2 text-danger"%> </u>

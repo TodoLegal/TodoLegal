@@ -331,21 +331,29 @@ module ApplicationHelper
     }, ip = user.current_sign_in_ip, {'$ignore_time' => 'true'});
   end
 
-  # def already_logged_in_helper
-  #   Warden::Manager.after_set_user only: :fetch do |record, warden, options|
-  #     scope = options[:scope]
-  #     if record.devise_modules.include?(:session_limitable) && warden.authenticated?(scope) && options[:store] != false
-  #     #Log Inicio
-  #      if record.unique_session_id != warden.session(scope)['unique_session_id'] && !record.skip_session_limitable? &&  !warden.session(scope)['devise.skip_session_limitable']
-  #       return true
-  #      end
-  #     end
-  #   end
-  #   return false
-  # end
-
-  #def send_confirmation_email
-  #  current_user.send_confirmation_instructions
-  #end
+  def removeAccents(text)
+    accents_map = {
+      "A" => /[ÁÀÃÂÄ]/,
+      "a" => /[áàãâä]/,
+      "E" => /[ÉÈÊË]/,
+      "e" => /[éèêë]/,
+      "I" => /[ÍÌÎÏ]/,
+      "i" => /[íìîï]/,
+      "O" => /[ÓÒÔÕÖ]/,
+      "o" => /[óòôõö]/,
+      "U" => /[ÚÙÛÜ]/,
+      "u" => /[úùûü]/,
+      "C" => /Ç/,
+      "c" => /ç/,
+      "N" => /Ñ/,
+      "n" => /ñ/
+    }
+  
+    accents_map.each do |unaccented, pattern|
+      text.gsub!(pattern, unaccented)
+    end
+  
+    return text
+  end
 
 end

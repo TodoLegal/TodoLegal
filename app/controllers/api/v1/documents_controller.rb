@@ -130,7 +130,7 @@ class Api::V1::DocumentsController < ApplicationController
       begin
         query = query.gsub(/\"/, '')  # Remove quotes before parsing
 
-        formatted_query = parse_spanish_date_to_iso(query) if to.blank? && from.blank?
+        formatted_query = parse_spanish_date_to_iso(query) if to.blank? && from.blank? && params['tags'].blank? && query != "*"
 
         field_to_search = nil
 

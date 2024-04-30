@@ -46,6 +46,11 @@
                 <% end %>
               </p>
               <% end %>
+            <p style="font-size: 15px">
+              <% if law.status && law.status == "Derogado" %>
+                <span class="badge badge--materia" style="background: #f25265; color: white;"><%= law.status %></span>
+              <% end %>
+            </p>
             <h5 class="result-card-title"><%= law.name %></h5>
             <div class="d-flex justify-content-between document-result-info">
                 <span class="badge-creation badge-secondary"><i class="fas fa-file-alt"></i> <%= law.creation_number %></span>
@@ -75,6 +80,9 @@
         <p style="font-size: 15px">
           <% grouped_law[:materia_names].each do |materia_name| %>
             <span class="badge badge--materia"><%= materia_name %></span>
+          <% end %>
+          <% if grouped_law[:law].status && grouped_law[:law].status == "Derogado" %>
+            <span class="badge badge--materia" style="background: #f25265; color: white;"><%= grouped_law[:law].status %></span>
           <% end %>
         </p>
         <h5 class="result-card-title"><%= grouped_law[:law].name %></h5>

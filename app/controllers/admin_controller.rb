@@ -1,7 +1,8 @@
 class AdminController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_action :authenticate_admin!, only: [:users, :download_contributor_users, :download_recieve_information_users, :grant_permission, :revoke_permission, :set_law_access, :deactivate_notifications, :activate_notifications, :activate_batch_of_users]
+  before_action :authenticate_admin!, only: [:users, :grant_permission, :revoke_permission, :set_law_access, :deactivate_notifications, :activate_notifications, :activate_batch_of_users]
   before_action :authenticate_editor!, only: [:gazette, :gazettes]
+  require 'MailchimpMarketing'
   include ApplicationHelper
 
   def gazettes
@@ -72,59 +73,6 @@ class AdminController < ApplicationController
   def download_all_users
     UsersDownloadJob.perform_later current_user
     redirect_back(fallback_location: root_path, notice: "Los usuarios se están extrayendo de la base de datos, se te enviará un correo con el archivo CSV adjunto.")
-    # @users = User.all
-    # @users.each do |user|
-    #   if user.first_name == nil
-    #     user.first_name = ""
-    #   end
-    #   if user.last_name == nil
-    #     user.last_name = ""
-    #   end
-    # end
-    # respond_to do |format|
-    #   format.csv do
-    #     headers['Content-Disposition'] = "attachment; filename=\"TL_all_users\""
-    #     headers['Content-Type'] ||= 'text/csv'
-    #   end
-    # end
-  end
-
-  #DEPRECATED. Delete when possible
-  def download_contributor_users
-    @users = User.where(is_contributor: true)
-    @users.each do |user|
-      if user.first_name == nil
-        user.first_name = ""
-      end
-      if user.last_name == nil
-        user.last_name = ""
-      end
-    end
-    respond_to do |format|
-      format.csv do
-        headers['Content-Disposition'] = "attachment; filename=\"TL_contributors_users\""
-        headers['Content-Type'] ||= 'text/csv'
-      end
-    end
-  end
-
-  #DEPRECATED. Delete when possible
-  def download_recieve_information_users
-    @users = User.where(receive_information_emails: true)
-    @users.each do |user|
-      if user.first_name == nil
-        user.first_name = ""
-      end
-      if user.last_name == nil
-        user.last_name = ""
-      end
-    end
-    respond_to do |format|
-      format.csv do
-        headers['Content-Disposition'] = "attachment; filename=\"TL_recieve_information_users\""
-        headers['Content-Type'] ||= 'text/csv'
-      end
-    end
   end
 
   def grant_permission
@@ -235,10 +183,6 @@ class AdminController < ApplicationController
   end
 
 
-  def get_users_with_free_trial_activated
-    User.joins(:user_trial).count
-  end
-
   def activate_batch_of_users
     default_tags_names = ["Tributario", "Reformas y Derogaciones", "Aduanero e Import-Export", "Subsidios", "Mercantil", "Congreso Nacional", "Secretaría de Desarrollo Económico"]
     default_tags_id = []
@@ -283,6 +227,29 @@ class AdminController < ApplicationController
 
     redirect_to admin_users_url
 
+  end
+
+  def mailchimp
+    
+    @list_members = []
+    @suscribed = []
+    begin
+      client = MailchimpMarketing::Client.new
+      client.set_config({ api_key: ENV['MAILCHIMP_API_KEY'], server: ENV['MAILCHIMP_DC'] })
+    
+      response = client.lists.get_list_members_info(ENV['MAILCHIMP_LIST_ID'])
+      response['members'].each do |member|
+        @list_members << {id: member['id'], name: member['full_name'], email: member['email_address'], status: member['status']}
+        if member['status'] == 'subscribed'
+          @suscribed << {id: member['id'], name: member['full_name'], email: member['email_address'], status: member['status']}
+        end 
+      end
+      # puts "============================================================================================="
+      # puts @list_members
+      # puts "============================================================================================="
+    rescue MailchimpMarketing::ApiError => e
+      puts "Error: #{e}"
+    end
   end
 
 

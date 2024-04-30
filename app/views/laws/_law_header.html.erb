@@ -17,16 +17,32 @@
 </p>
 
 <p> 
-  <% if @law.revision_status != "" %>
-    <% if @law.revision_status == "Actualizado" %>
+  <% if @law.status != "" %>
+    <% if @law.status == "Derogado" %>
+      <i class="fas fa-hand-paper" style="color: #cf142b;"></i>
+      <span style="color: #cf142b;"><%= @law.status %><span>
+    <% else %>
       <i class="fas fa-check-circle" style="color: #34b233;"></i>
+      <span><%= @law.status %><span>
     <% end %>
-    Documento <strong><% if @law.revision_status == "Actualizado" %> totalmente<% end %> <%= @law.revision_status.downcase %></strong>
+    
+  <% end %>
+</p>
+
+<p> 
+  <% if @law.revision_status == "Actualizado" || @law.revision_status == "" %>
+    <i class="fas fa-check-circle" style="color: #34b233;"></i>
+    Documento <strong><%= @law.revision_status.downcase %></strong>
+  <% else %>
+    <i class="fas fa-hand-paper" style="color: #cf142b;"></i>
+    Documento en Proceso de Revisión
   <% end %>
 </p>
 <p> 
-  <% if @law.revision_status != "" %>
-    <span class="badge-creation badge-secondary"> <i class="fas fa-clock"></i> Última revisión: <%= @law.updated_at.strftime("%d-%m-%Y") %></span>
+  <% if @law.revision_date %>
+    <span class="badge-creation badge-secondary"> <i class="fas fa-clock"></i>
+      Última revisión: <%= @law.revision_date.strftime("%d-%m-%Y") %>
+    </span>
   <% end %>
 </p>
 <!--

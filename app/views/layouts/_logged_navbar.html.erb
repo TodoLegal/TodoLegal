@@ -31,6 +31,7 @@
 
                 <% if current_user_is_admin %>
                     <%= link_to('Usuarios', admin_users_path, class:"dropdown-item") %>
+                    <%= link_to('Administrar listas de mailchimp', admin_mailchimp_path, class:"dropdown-item") %>
                     <%= link_to('Administrar temas de preferencia', users_preferences_tags_path, class:"dropdown-item")%>
                     
                 <% end %>
@@ -40,6 +41,7 @@
                     <%= link_to('Listado Documentos', documents_path, class:"dropdown-item")%>
                     <%= link_to('Listado Sentencias', documents_path+"?judgements=true", class:"dropdown-item")%>
                     <%= link_to('Listado Autos Acordados', documents_path+"?autos=true", class:"dropdown-item")%>
+                    <%= link_to('Otros', documents_path+"?other=true", class:"dropdown-item")%>
                     <%= link_to('Listado Gacetas', gazettes_path, class:"dropdown-item")%>
                 <% end %>
 

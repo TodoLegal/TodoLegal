@@ -1,0 +1,23 @@
+<div class="container">
+  <h1> Administracion de Mailchimp</h1>
+  <table  border="1">
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Nombre</th>
+        <th>Estatus</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @list_members.each do |member| %>
+        <tr>
+          <td><%= member[:email] %></td>
+          <td><%= member[:name] %></td>
+          <td><%= member[:status] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <button class="btn btn-primary mt-4 mb-4" type="submit" type="button">Actualizar listas de mailchimp</button>
+</div>

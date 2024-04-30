@@ -9,6 +9,7 @@ class DocumentsController < ApplicationController
     @query = params["query"]
     @show_only_judgements = params["judgements"]
     @show_only_autos = params["autos"]
+    @show_only_others = params["other"]
     @processed_documents = params["processed_documents"]
     @last_24_hours = params["last_hours"]
     #get batch statistics 
@@ -68,6 +69,10 @@ class DocumentsController < ApplicationController
 
     if @show_only_autos
       @documents = Document.where(document_type_id: DocumentType.find_by_name("Auto Acordado")).order('publication_number DESC').page params[:page]
+    end
+
+    if @show_only_others
+      @documents = Document.where(document_type_id: DocumentType.find_by_name("Otro")).order('publication_number DESC').page params[:page]
     end
 
     if params[:last_documents]

@@ -73,6 +73,7 @@ Rails.application.routes.draw do
   post "admin/activate_batch_of_users" => "admin#activate_batch_of_users", as: "activate_batch_of_users"
   post "laws/insert_article", to: "laws#insert_article", as: "insert_article"
   post "documents/process_documents_batch", to: "documents#process_documents_batch", as: "process_documents_batch"
+  get 'application/external_redirect', to: 'application#external_redirect',  as: "external_redirect"
 
   get '/rails/active_storage/blobs/redirect/:signed_id/*filename', to: 'active_storage_redirect#show'
   

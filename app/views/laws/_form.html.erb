@@ -50,7 +50,7 @@
           <div class="col-md-8">
             <div class="form-group">
               <%= form.label :estatus %>
-              <%= form.select :status,  options_for_select(['Derogado', 'Vigente', 'Reformado'], law.status), { prompt: 'Selecciona estado' }, class: 'form-control' %>
+              <%= form.select :status,  options_for_select(['Derogado', 'Vigente'], law.status), { prompt: 'Selecciona estado' }, class: 'form-control' %>
             </div>
           </div>
         </div>

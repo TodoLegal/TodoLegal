@@ -39,7 +39,7 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
         'document_name' => params[:document_name],
         'document_id' => params[:document_id],
         'location' => "API",
-        'document_url' => `https://test.valid.todolegal.app/#{document_type}/honduras/#{downloaded_document.url}/#{downloaded_document.id}`
+        'document_url' => "https://valid.todolegal.app/#{document_type}/honduras/#{downloaded_document.url}/#{downloaded_document.id}"
       })
       user_trial.save
       super

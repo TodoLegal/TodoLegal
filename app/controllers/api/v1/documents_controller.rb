@@ -82,23 +82,25 @@ class Api::V1::DocumentsController < ApplicationController
     }
 
     def setup_search_filters_based_on_tags(searchkick_where)
-      issuer_document_tags_names = []
-      document_tags_names = []
+      issuer_tags = []
+      document_tags = []
 
       params['tags'].each do |tag_name|
         tag = Tag.find_by_name(tag_name)
-
         next unless tag
 
-        if tag.issuer_document_tags.present?
-          issuer_document_tags_names << tag_name
-        else
-          document_tags_names << tag_name
-        end
+        issuer_tags << tag_name if tag.issuer_document_tags.any?
+        document_tags << tag_name if tag.document_tags.any?
       end
 
-      searchkick_where[:issuer_document_tags_name] = issuer_document_tags_names unless issuer_document_tags_names.empty?
-      searchkick_where[:document_tags_name] = document_tags_names unless document_tags_names.empty?
+      if issuer_tags.any? && document_tags.any?
+        searchkick_where[:issuer_document_tags_name] = issuer_tags
+        searchkick_where[:document_tags_name] = document_tags
+      elsif issuer_tags.any?
+        searchkick_where[:issuer_document_tags_name] = issuer_tags
+      elsif document_tags.any?
+        searchkick_where[:document_tags_name] = document_tags
+      end
     end
 
     setup_search_filters_based_on_tags(searchkick_where) if params['tags'].present? && params['tags'].is_a?(Array)

@@ -95,12 +95,14 @@ class Api::V1::DocumentsController < ApplicationController
       end
 
       if issuer_tags.any? && document_tags.any?
-        searchkick_where[:issuer_document_tags_name] = issuer_tags
-        searchkick_where[:document_tags_name] = document_tags
+        searchkick_where[:issuer_document_tags_name] = issuer_tags.size > 1 ? { all: issuer_tags } : issuer_tags
+        searchkick_where[:document_tags_name] = document_tags.size > 1 ? { all: document_tags } : document_tags
       elsif issuer_tags.any?
-        searchkick_where[:issuer_document_tags_name] = issuer_tags
+        searchkick_where[:issuer_document_tags_name] = issuer_tags.size > 1 ? { all: issuer_tags } : issuer_tags
       elsif document_tags.any?
-        searchkick_where[:document_tags_name] = document_tags
+        searchkick_where[:document_tags_name] = document_tags.size > 1 ? { all: document_tags } : document_tags
+      elsif document_tags.empty? && issuer_tags.empty?
+        searchkick_where[:document_tags_name] = -1
       end
     end
 

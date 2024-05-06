@@ -265,13 +265,26 @@ class ApplicationController < ActionController::Base
       NewRelic::Agent.add_custom_attributes(user_id: user_id)
     end
   end
+
+# Redirects to the external URL
+def external_redirect
+  redirect_to params[:url], allow_other_host: true
+end
+
 protected
-  
+
   def after_sign_in_path_for(resource)
-    if session[:return_to]
+    
+    #TODO: add condition to check is user is in onboarding
+    if session[:is_onboarding].present?
+      #TODO: add redirects to users preferences
+      # if $discord_bot
+      #   $discord_bot.send_message($discord_bot_channel_notifications, "Se ha registrado un nuevo usuario usando Google :tada:")
+      # end
+    elsif session[:return_to].present?
       return_to_path = session[:return_to]
       session[:return_to] = nil
-      return return_to_path
+      external_redirect_path(url: return_to_path)
     else
       signed_in_path
     end

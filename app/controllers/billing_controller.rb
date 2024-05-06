@@ -200,6 +200,9 @@ class BillingController < ApplicationController
     
     if !user_trial
       user_trial = UserTrial.create(user_id: user.id, trial_start: DateTime.now, trial_end: DateTime.now + 2.weeks, active: false)
+    else
+      user_trial.active = false
+      user_trial.save
     end
 
     #delete notification email job if exists and enqueue a new job

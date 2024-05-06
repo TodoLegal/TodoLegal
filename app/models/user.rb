@@ -3,7 +3,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable, :confirmable,
          :recoverable, :rememberable, :validatable, :trackable,
-         :omniauthable, omniauth_providers: [:google_oauth2]
+         :omniauthable, omniauth_providers: [:google_oauth2, :microsoft_office365]
            
   acts_as_token_authenticatable
 
@@ -44,6 +44,15 @@ class User < ApplicationRecord
 
   def self.from_google(u)
     create_with(uid: u[:uid], provider: 'google', password: Devise.friendly_token[0, 20]).find_or_create_by!(email: u[:email]) do | user |
+      user.first_name = u[:first_name]
+      user.last_name = u[:last_name]
+      user.confirmed_at = DateTime.now
+      user.skip_confirmation!
+    end
+  end
+
+  def self.from_microsoft(u)
+    create_with(uid: u[:uid], provider: 'microsoft', password: Devise.friendly_token[0, 20]).find_or_create_by!(email: u[:email]) do | user |
       user.first_name = u[:first_name]
       user.last_name = u[:last_name]
       user.confirmed_at = DateTime.now

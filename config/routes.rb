@@ -60,6 +60,7 @@ Rails.application.routes.draw do
   get 'admin/disable_edit_mode', to: 'admin#disable_edit_mode', as: "disable_edit_mode"
   get 'admin/gazettes', to: 'admin#gazettes', as: "gazettes"
   get 'admin/mailchimp', to: 'admin#mailchimp', as: "admin_mailchimp"
+  post '/admin/mailchimp/update', to: 'admin#update_mailchimp', as: 'admin_mailchimp_update'
   get 'admin/gazettes/:publication_number', to: 'admin#gazette', as: "gazette"
   get "signed_in" => "home#index", as: "signed_in"
   get "signed_up" => "home#index", as: "signed_up"

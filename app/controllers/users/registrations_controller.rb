@@ -106,11 +106,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
       'receive_information_emails'      => current_user.receive_information_emails
       })
     
-    if ENV['MAILGUN_KEY']
-      current_user.send_confirmation_instructions
+      if ENV['MAILGUN_KEY']
+        current_user.send_confirmation_instructions
+      end
     end
 
-    end
     if $discord_bot
       $discord_bot.send_message($discord_bot_channel_notifications, "Se ha registrado un nuevo usuario :tada:")
     end

@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
-  layout 'onboarding', only: [:pricing, :invite_friends, :send_confirmation_email, :confirm_email_view]
+  layout 'onboarding', only: [:pricing, :invite_friends, :send_confirmation_email, :confirm_email_view, :phone_number]
   include ActionView::Helpers::NumberHelper
   include ApplicationHelper
   require 'set'
@@ -168,6 +168,10 @@ class HomeController < ApplicationController
     else
       @select_pro_plan_path = checkout_path
     end
+  end
+
+  def phone_number
+   
   end
 
   def confirm_email_view

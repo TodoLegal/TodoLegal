@@ -1,0 +1,54 @@
+<div class="container">
+  <div style="text-align:center;">
+        <a class="logos">
+            <img class="logo-img" border="0" alt="Logo TodoLegal" href="/" src="/img/Icon-Todolegal-gray20px.svg"/>
+        </a>
+        <a class="logos">
+            <img class="logo-img" border="0" alt="Logo Valid" href="/" src="/img/Icon-Valid-gray20px.svg"/>
+        </a>
+    </div>
+  <div class="card card--onboarding bg-white rounded">
+    <div class="card-body">
+      <h3 class="card-title">Ingresa tu número de teléfono</h3>
+      
+      <div class="form-group">
+        <input autocomplete="phone-number" class="form-control" id="phone" type="text" value="" name="user[phone_number]">
+      </div>
+      <%=link_to skip_notifications_path, class:"btn btn-primary btn-lg continue-btn", method: :get do %>
+        Continuar
+      <% end %>
+    </div>
+  </div>
+</div>
+
+
+<style>
+
+ .logo-img{
+    height: 12vh;
+    max-height: 110px;
+    margin: 2vh auto 0;
+    margin-bottom: 2rem;
+  }
+
+  .continue-btn{
+    margin-left: 35%;
+    max-width: 30%;
+  }
+
+  @media only screen and (max-width: 992.98px) {
+    .continue-btn{
+      /* margin-left: 0%; */
+    }
+        
+    .logo-img{
+        height: 112px;
+    }
+  }
+
+  .card-text{
+    font-size: 1.2em;
+    text-align: left !important;
+  }
+
+</style>

@@ -60,6 +60,7 @@ Rails.application.routes.draw do
   get 'admin/disable_edit_mode', to: 'admin#disable_edit_mode', as: "disable_edit_mode"
   get 'admin/gazettes', to: 'admin#gazettes', as: "gazettes"
   get 'admin/mailchimp', to: 'admin#mailchimp', as: "admin_mailchimp"
+  post '/admin/mailchimp/update', to: 'admin#update_mailchimp', as: 'admin_mailchimp_update'
   get 'admin/gazettes/:publication_number', to: 'admin#gazette', as: "gazette"
   get "signed_in" => "home#index", as: "signed_in"
   get "signed_up" => "home#index", as: "signed_up"
@@ -70,6 +71,7 @@ Rails.application.routes.draw do
   post "admin/activate_notifications" => "admin#activate_notifications", as: "activate_notifications"
   get 'users_preferences/skip_notifications', to: 'users_preferences#skip_notifications', as: "skip_notifications"
   get '/confirm_email_view', to: 'home#confirm_email_view', as:"confirm_email_view"
+  get '/phone_number', to: 'home#phone_number', as:"phone_number_view"
   post "admin/activate_batch_of_users" => "admin#activate_batch_of_users", as: "activate_batch_of_users"
   post "laws/insert_article", to: "laws#insert_article", as: "insert_article"
   post "documents/process_documents_batch", to: "documents#process_documents_batch", as: "process_documents_batch"

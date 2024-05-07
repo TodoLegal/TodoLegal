@@ -1,5 +1,7 @@
 class ApplicationController < ActionController::Base
   include Devise::Controllers::Rememberable
+  include ApplicationHelper
+
   require 'csv'
   # before_action :already_logged_in
   protect_from_forgery with: :null_session
@@ -273,14 +275,76 @@ end
 
 protected
 
+  def clean_session
+    session[:pricing_onboarding] = nil
+    session[:is_onboarding] = nil
+    session[:go_to_checkout] = nil
+    session[:go_to_law] = nil
+    session[:is_monthly] = nil
+    session[:is_annually] = nil
+  end
+
+  def after_sign_up_do
+    if current_user
+      update_mixpanel_user current_user
+      $tracker.track(current_user.id, 'Sign Up', {
+      '$email'            => current_user.email,
+      'first_name'      => current_user.first_name,
+      'last_name'      => current_user.last_name,
+      'phone_number'    => current_user.phone_number,
+      'current_sign_in_at'      => current_user.current_sign_in_at,
+      'last_sign_in_at'      => current_user.last_sign_in_at,
+      'current_sign_in_ip'      => current_user.current_sign_in_ip,
+      'last_sign_in_ip'      => current_user.last_sign_in_ip,
+      'receive_information_emails'      => current_user.receive_information_emails
+      })
+
+      if ENV['MAILGUN_KEY']
+        current_user.send_confirmation_instructions
+      end
+    end
+    
+    if $discord_bot
+      $discord_bot.send_message($discord_bot_channel_notifications, "Se ha registrado un nuevo usuario a traves de #{current_user.provider} :tada:")
+    end
+
+
+    session[:user_just_signed_up] = true
+    go_to_law = session[:go_to_law]
+    go_to_checkout = session[:go_to_checkout]
+    is_monthly = session[:is_monthly]
+    is_annually = session[:is_annually]
+    if session[:pricing_onboarding]
+      #TODO 
+      #Otro if igual al primero con un && is_student y que dentro del envie is_student de param en lugar de is_monthly
+      clean_session
+      if is_monthly
+        user_trial = UserTrial.create(user_id: current_user.id, trial_start: DateTime.now, trial_end: DateTime.now + 2.weeks, active: false)
+        users_preferences_path(is_onboarding:true, go_to_law: go_to_law, is_monthly: is_monthly)
+      elsif is_annually
+        user_trial = UserTrial.create(user_id: current_user.id, trial_start: DateTime.now, trial_end: DateTime.now + 2.weeks, active: false)
+        users_preferences_path(is_onboarding:true, go_to_law: go_to_law, is_annually: is_annually)
+      else
+        #When user chooses Prueba Gratis
+        user_trial = UserTrial.create(user_id: current_user.id, trial_start: DateTime.now, trial_end: DateTime.now + 2.weeks, active: true)
+        if ENV['MAILGUN_KEY']
+          # SubscriptionsMailer.welcome_basic_user(current_user).deliver
+          # SubscriptionsMailer.free_trial_end(current_user).deliver_later(wait_until: user_trial.trial_end - 1.days)
+          # NotificationsMailer.cancel_notifications(current_user).deliver_later(wait_until: user_trial.trial_end)
+        end
+        users_preferences_path(is_onboarding:true, redirect_to_valid:true)
+      end
+    else
+      clean_session
+      pricing_path(is_onboarding:true, go_to_law: go_to_law, go_to_checkout: go_to_checkout, user_just_registered: true)
+    end
+  end
+
   def after_sign_in_path_for(resource)
     
     #TODO: add condition to check is user is in onboarding
-    if session[:is_onboarding].present?
-      #TODO: add redirects to users preferences
-      # if $discord_bot
-      #   $discord_bot.send_message($discord_bot_channel_notifications, "Se ha registrado un nuevo usuario usando Google :tada:")
-      # end
+    if session[:pricing_onboarding].present?
+      after_sign_up_do
     elsif session[:return_to].present?
       return_to_path = session[:return_to]
       session[:return_to] = nil

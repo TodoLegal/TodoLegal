@@ -213,7 +213,7 @@ module ApplicationHelper
     todolegal_status = user.user_trial && user.user_trial.active ? todolegal_status : "Basic"
     todolegal_status = user.permissions.find_by_name("Editor") ? "Editor" : todolegal_status
     todolegal_status = user.permissions.find_by_name("Pro") ? "Pro B2B" : todolegal_status
-    # todolegal_status = user.permissions.find_by_name("Admin") ? "Admin" : todolegal_status
+    todolegal_status = user.permissions.find_by_name("Admin") ? "Admin" : todolegal_status
 
     # stripe_status = "Sin Plan"
     if user.stripe_customer_id

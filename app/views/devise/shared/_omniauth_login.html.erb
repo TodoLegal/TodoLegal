@@ -1,10 +1,20 @@
 <div class="divider">
-  <hr class="left"/><span>Or</span><hr class="right"/>
+  <hr class="left"/><span>También</span><hr class="right"/>
 </div>
 <%- if devise_mapping.omniauthable? %>
   <%- resource_class.omniauth_providers.each do |provider| %>
     <%= form_for "Login",
-      url: omniauth_authorize_path(resource_name, provider, return_to: session[:return_to]),
+      url: omniauth_authorize_path(
+        resource_name, 
+        provider, 
+        return_to: session[:return_to], 
+        go_to_checkout: @go_to_checkout,
+        go_to_law: @go_to_law,
+        is_monthly: @is_monthly,
+        is_annually: @is_annually,
+        pricing_onboarding: @pricing_onboarding,
+        is_onboarding: @is_onboarding 
+      ),
       method: :post,
       data: {turbo: "false"} do |f| 
     %>

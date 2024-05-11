@@ -282,7 +282,7 @@ class AdminController < ApplicationController
 
         plan_status = return_user_plan_status(user)
         if plan_status == "Basic"
-          client.lists.delete_list_member('66cca5097f', member['id'])
+          client.lists.delete_list_member(ENV['MAILCHIMP_LIST_ID'], member['id'])
         end
       end
     rescue MailchimpMarketing::ApiError => e

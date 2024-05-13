@@ -284,6 +284,7 @@ protected
     session[:is_annually] = nil
   end
 
+  #this after sign up flow (method) is just for third party authentication (google, microsoft, etc)
   def after_sign_up_do
     if current_user
       update_mixpanel_user current_user

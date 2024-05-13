@@ -327,7 +327,8 @@ module ApplicationHelper
       'last_sign_in_at'      => user.last_sign_in_at,
       'current_sign_in_ip'      => user.current_sign_in_ip,
       'last_sign_in_ip'      => user.last_sign_in_ip,
-      'receive_information_emails'      => user.receive_information_emails
+      'receive_information_emails'      => user.receive_information_emails,
+      'email_confirmed'     => user.confirmed_at?
     }, ip = user.current_sign_in_ip, {'$ignore_time' => 'true'});
   end
 

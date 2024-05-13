@@ -68,11 +68,11 @@ class DocumentsController < ApplicationController
     end
 
     if @show_only_autos
-      @documents = Document.where(document_type_id: DocumentType.find_by_name("Auto Acordado")).order('publication_number DESC').page params[:page]
+      @documents = Document.where(document_type_id: DocumentType.find_by_name("Auto Acordado")).order('publication_date DESC').page params[:page]
     end
 
     if @show_only_others
-      @documents = Document.where(document_type_id: DocumentType.find_by_name("Otro")).order('publication_number DESC').page params[:page]
+      @documents = Document.where(document_type_id: DocumentType.find_by_name("Otro")).order('publication_date DESC').page params[:page]
     end
 
     if params[:last_documents]

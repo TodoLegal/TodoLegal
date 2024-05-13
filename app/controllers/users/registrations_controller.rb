@@ -174,6 +174,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     end
   end
 
+  #overrides application helper method
   def update_mixpanel_user user
     $tracker.people.set(user.id, {
       '$email'            => user.email,

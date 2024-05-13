@@ -193,7 +193,7 @@ class Api::V1::DocumentsController < ApplicationController
       )
     end
 
-    total_count = documents.total_count
+    total_count = valid_document_count
     documents = documents.to_json
     documents = JSON.parse(documents)
 

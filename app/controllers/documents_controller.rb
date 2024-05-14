@@ -163,7 +163,8 @@ class DocumentsController < ApplicationController
           #   discord_message = "Nueva gaceta seccionada en Valid! [#{publication_number}](https://todolegal.app/admin/gazettes/#{publication_number}) :scroll:"
           #   $discord_bot.send_message($discord_bot_document_upload, discord_message)
           # end
-          format.html { redirect_to gazette_path(@document.publication_number), notice: 'La gaceta se ha partido exitósamente.' }
+          # format.html { redirect_to gazette_path(@document.publication_number), notice: 'La gaceta se ha partido exitósamente.' }
+          format.html { redirect_to documents_path, notice: 'El documento esta siendo procesado. Se te enviará un correo y una notificación de discord cuando esté listo.' }
         elsif params["document"]["auto_process_type"] == "process"
           file.download "tmp/gazette.pdf"
           process_gazette @document, Rails.root.join("tmp") + "gazette.pdf"

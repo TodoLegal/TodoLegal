@@ -115,6 +115,7 @@ include DocumentsHelper
   def run_slice_gazette_script document, document_pdf_path
     puts ">run_slice_gazette_script called"
     python_return_value = `python3 ~/GazetteSlicer/slice_gazette.py #{ document_pdf_path } '#{ Rails.root.join("public", "gazettes") }' '#{document.id}'`
+    document_link = "https://test.todolegal.app/documents/#{document.id}/edit"
     begin
       result = JSON.parse(python_return_value)
       return result
@@ -129,7 +130,8 @@ include DocumentsHelper
 
   def process_gazette document, document_pdf_path
     puts ">process_gazette called"
-    python_return_value = `python3 ~/GazetteSlicer/slice_gazette.py #{ document_pdf_path }`
+    python_return_value = `python3 ~/GazetteSlicer/process_gazette.py #{ document_pdf_path }`
+    document_link = "https://test.todolegal.app/documents/#{document.id}/edit"
     json_data = {}
     begin
       json_data = JSON.parse(python_return_value)

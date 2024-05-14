@@ -9,10 +9,9 @@
     </div>
   <div class="card card--onboarding bg-white rounded">
     <div class="card-body">
-      <h3 class="card-title">Ingresa tu número de teléfono</h3>
-      
       <%= form_with url: phone_number_update_path, local: true do %>
         <div class="form-group">
+          <label for="phone">Número de teléfono</label>
           <input autocomplete="phone-number" class="form-control" id="phone" type="text" value="" name="phone_number">
         </div>
         <button type="submit" class="btn btn-primary btn-lg continue-btn">Continuar</button>

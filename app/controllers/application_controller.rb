@@ -275,15 +275,6 @@ end
 
 protected
 
-  def clean_session
-    session[:pricing_onboarding] = nil
-    session[:is_onboarding] = nil
-    session[:go_to_checkout] = nil
-    session[:go_to_law] = nil
-    session[:is_monthly] = nil
-    session[:is_annually] = nil
-  end
-
   #this after sign up flow (method) is just for third party authentication (google, microsoft, etc)
   def after_sign_up_do
     if current_user
@@ -329,9 +320,9 @@ protected
         #When user chooses Prueba Gratis
         user_trial = UserTrial.create(user_id: current_user.id, trial_start: DateTime.now, trial_end: DateTime.now + 2.weeks, active: true)
         if ENV['MAILGUN_KEY']
-          # SubscriptionsMailer.welcome_basic_user(current_user).deliver
-          # SubscriptionsMailer.free_trial_end(current_user).deliver_later(wait_until: user_trial.trial_end - 1.days)
-          # NotificationsMailer.cancel_notifications(current_user).deliver_later(wait_until: user_trial.trial_end)
+          SubscriptionsMailer.welcome_basic_user(current_user).deliver
+          SubscriptionsMailer.free_trial_end(current_user).deliver_later(wait_until: user_trial.trial_end - 1.days)
+          NotificationsMailer.cancel_notifications(current_user).deliver_later(wait_until: user_trial.trial_end)
         end
         phone_number_view_path(is_onboarding:true, redirect_to_valid:true)
       end
@@ -343,7 +334,7 @@ protected
 
   def after_sign_in_path_for(resource)
     
-    #TODO: add condition to check is user is in onboarding
+    #checks if user is in onboarding
     if session[:pricing_onboarding].present?
       after_sign_up_do
     elsif session[:return_to].present?

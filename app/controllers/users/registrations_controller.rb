@@ -10,6 +10,14 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # GET /resource/sign_up
   def new
+    #store the params in the session to use them after the user signs up
+    session[:go_to_law] = params[:go_to_law]
+    session[:go_to_checkout] = params[:go_to_checkout]
+    session[:is_monthly] = params[:is_monthly]
+    session[:is_annually] = params[:is_annually]
+    session[:pricing_onboarding] = params[:pricing_onboarding]
+
+    #store the params in the instance variables to use them in the view
     @go_to_law = params[:go_to_law]
     @go_to_checkout = params[:go_to_checkout]
     @is_monthly = params[:is_monthly]
@@ -115,19 +123,19 @@ class Users::RegistrationsController < Devise::RegistrationsController
       $discord_bot.send_message($discord_bot_channel_notifications, "Se ha registrado un nuevo usuario :tada:")
     end
 
-    #TODO
-    #Validate student email.
+    go_to_law = session[:go_to_law]
+    go_to_checkout = session[:go_to_checkout]
+    is_monthly = session[:is_monthly]
+    is_annually = session[:is_annually]
 
     session[:user_just_signed_up] = true
-    if params[:pricing_onboarding]
-      #TODO 
-      #Otro if igual al primero con un && is_student y que dentro del envie is_student de param en lugar de is_monthly
-      if !params[:is_monthly].blank?
+    if session[:pricing_onboarding]
+      if is_monthly
         user_trial = UserTrial.create(user_id: current_user.id, trial_start: DateTime.now, trial_end: DateTime.now + 2.weeks, active: false)
-        users_preferences_path(is_onboarding:true, go_to_law: params[:go_to_law], is_monthly: params[:is_monthly])
-      elsif !params[:is_annually].blank?
+        users_preferences_path(is_onboarding:true, go_to_law: go_to_law, is_monthly: is_monthly)
+      elsif is_annually
         user_trial = UserTrial.create(user_id: current_user.id, trial_start: DateTime.now, trial_end: DateTime.now + 2.weeks, active: false)
-        users_preferences_path(is_onboarding:true, go_to_law: params[:go_to_law], is_annually: params[:is_annually])
+        users_preferences_path(is_onboarding:true, go_to_law: go_to_law, is_annually: is_annually)
       else
         #When user chooses Prueba Gratis
         user_trial = UserTrial.create(user_id: current_user.id, trial_start: DateTime.now, trial_end: DateTime.now + 2.weeks, active: true)
@@ -140,7 +148,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
         users_preferences_path(is_onboarding:true, redirect_to_valid:true)
       end
     else
-      pricing_path(is_onboarding:true, go_to_law: params[:go_to_law], go_to_checkout: params[:go_to_checkout], user_just_registered: true)
+      pricing_path(is_onboarding:true, go_to_law: go_to_law, go_to_checkout: go_to_checkout, user_just_registered: true)
     end
   end
 

@@ -11,11 +11,11 @@
     <div class="card-body">
       <h3 class="card-title">Ingresa tu número de teléfono</h3>
       
-      <div class="form-group">
-        <input autocomplete="phone-number" class="form-control" id="phone" type="text" value="" name="user[phone_number]">
-      </div>
-      <%=link_to skip_notifications_path, class:"btn btn-primary btn-lg continue-btn", method: :get do %>
-        Continuar
+      <%= form_with url: phone_number_update_path, local: true do %>
+        <div class="form-group">
+          <input autocomplete="phone-number" class="form-control" id="phone" type="text" value="" name="phone_number">
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg continue-btn">Continuar</button>
       <% end %>
     </div>
   </div>

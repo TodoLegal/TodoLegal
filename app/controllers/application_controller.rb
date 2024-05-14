@@ -318,13 +318,13 @@ protected
     if session[:pricing_onboarding]
       #TODO 
       #Otro if igual al primero con un && is_student y que dentro del envie is_student de param en lugar de is_monthly
-      clean_session
+      # clean_session
       if is_monthly
         user_trial = UserTrial.create(user_id: current_user.id, trial_start: DateTime.now, trial_end: DateTime.now + 2.weeks, active: false)
-        users_preferences_path(is_onboarding:true, go_to_law: go_to_law, is_monthly: is_monthly)
+        phone_number_view_path(is_onboarding:true, go_to_law: go_to_law, is_monthly: is_monthly)
       elsif is_annually
         user_trial = UserTrial.create(user_id: current_user.id, trial_start: DateTime.now, trial_end: DateTime.now + 2.weeks, active: false)
-        users_preferences_path(is_onboarding:true, go_to_law: go_to_law, is_annually: is_annually)
+        phone_number_view_path(is_onboarding:true, go_to_law: go_to_law, is_annually: is_annually)
       else
         #When user chooses Prueba Gratis
         user_trial = UserTrial.create(user_id: current_user.id, trial_start: DateTime.now, trial_end: DateTime.now + 2.weeks, active: true)
@@ -333,10 +333,10 @@ protected
           # SubscriptionsMailer.free_trial_end(current_user).deliver_later(wait_until: user_trial.trial_end - 1.days)
           # NotificationsMailer.cancel_notifications(current_user).deliver_later(wait_until: user_trial.trial_end)
         end
-        users_preferences_path(is_onboarding:true, redirect_to_valid:true)
+        phone_number_view_path(is_onboarding:true, redirect_to_valid:true)
       end
     else
-      clean_session
+      # clean_session
       pricing_path(is_onboarding:true, go_to_law: go_to_law, go_to_checkout: go_to_checkout, user_just_registered: true)
     end
   end

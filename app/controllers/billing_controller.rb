@@ -218,7 +218,13 @@ class BillingController < ApplicationController
 
     respond_to do |format|
       if params["go_to_law"].blank?
-        format.html { redirect_to confirm_email_view_path, notice: I18n.t(:charge_complete) }
+        if user.confirmed_at?
+          if process_doorkeeper_redirect_to
+            return
+          end
+        else
+          format.html { redirect_to confirm_email_view_path, notice: I18n.t(:charge_complete) }
+        end
       else
         format.html { redirect_to Law.find_by_id(params["go_to_law"]), notice: I18n.t(:charge_complete) }
       end

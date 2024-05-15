@@ -393,11 +393,7 @@ protected
     end
     return true
   end
-
-  def isWordInText word, text
-    return /[^a-zA-Z0-9]#{word}[^a-zA-Z0-9]/.match(text)
-  end
-
+  
   def already_logged_in
     Warden::Manager.after_set_user only: :fetch do |record, warden, options|
       scope = options[:scope]

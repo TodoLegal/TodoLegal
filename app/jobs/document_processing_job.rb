@@ -102,11 +102,11 @@ include DocumentsHelper
     puts "Created related documents"
     document_link = "https://test.todolegal.app/admin/gazettes/#{document.publication_number}"
     process_status = "success"
-    # if $discord_bot
-    #   publication_number = @document.publication_number
-    #   discord_message = "Nueva gaceta seccionada en Valid! [#{publication_number}](https://todolegal.app/admin/gazettes/#{publication_number}) :scroll:"
-    #   $discord_bot.send_message($discord_bot_document_upload, discord_message)
-    # end
+    if $discord_bot
+      publication_number = document.publication_number
+      discord_message = "Nueva gaceta seccionada en Valid! [#{publication_number}](https://todolegal.app/admin/gazettes/#{publication_number}) :scroll:"
+      $discord_bot.send_message($discord_bot_document_upload, discord_message)
+    end
     DocumentProcessingMailer.document_processing_complete(user, document_link, process_status).deliver
   end
 

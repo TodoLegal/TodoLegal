@@ -213,7 +213,7 @@ module ApplicationHelper
     todolegal_status = user.user_trial && user.user_trial.active ? todolegal_status : "Basic"
     todolegal_status = user.permissions.find_by_name("Editor") ? "Editor" : todolegal_status
     todolegal_status = user.permissions.find_by_name("Pro") ? "Pro B2B" : todolegal_status
-    # todolegal_status = user.permissions.find_by_name("Admin") ? "Admin" : todolegal_status
+    todolegal_status = user.permissions.find_by_name("Admin") ? "Admin" : todolegal_status
 
     # stripe_status = "Sin Plan"
     if user.stripe_customer_id
@@ -327,7 +327,8 @@ module ApplicationHelper
       'last_sign_in_at'      => user.last_sign_in_at,
       'current_sign_in_ip'      => user.current_sign_in_ip,
       'last_sign_in_ip'      => user.last_sign_in_ip,
-      'receive_information_emails'      => user.receive_information_emails
+      'receive_information_emails'      => user.receive_information_emails,
+      'email_confirmed'     => user.confirmed_at?
     }, ip = user.current_sign_in_ip, {'$ignore_time' => 'true'});
   end
 

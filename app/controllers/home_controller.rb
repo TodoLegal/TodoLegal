@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
-  layout 'onboarding', only: [:pricing, :invite_friends, :send_confirmation_email, :confirm_email_view]
+  layout 'onboarding', only: [:pricing, :invite_friends, :send_confirmation_email, :confirm_email_view, :phone_number]
   include ActionView::Helpers::NumberHelper
   include ApplicationHelper
   require 'set'
@@ -167,6 +167,41 @@ class HomeController < ApplicationController
       @select_pro_plan_path = "/users/sign_up"
     else
       @select_pro_plan_path = checkout_path
+    end
+  end
+
+  def phone_number
+    go_to_law = session[:go_to_law]
+    go_to_checkout = session[:go_to_checkout]
+    is_monthly = session[:is_monthly]
+    is_annually = session[:is_annually]
+
+    if request.post?
+      new_phone_number = params[:phone_number]
+  
+      # # Validate the new phone number format
+      # unless valid_phone_number?(new_phone_number)
+      #   # Handle invalid phone number format
+      #   return
+      # end
+  
+      # Update the phone number
+      if current_user.update(phone_number: new_phone_number)
+        if session[:pricing_onboarding]
+          if is_monthly
+            redirect_to users_preferences_path(is_onboarding:true, go_to_law: go_to_law, is_monthly: is_monthly)
+          elsif is_annually
+            redirect_to users_preferences_path(is_onboarding:true, go_to_law: go_to_law, is_annually: is_annually)
+          else
+            redirect_to users_preferences_path(is_onboarding:true, redirect_to_valid:true)
+          end
+        else
+          redirect_to pricing_path(is_onboarding:true, go_to_law: go_to_law, go_to_checkout: go_to_checkout, user_just_registered: true)
+        end
+      else
+        format.html { render :phone_number }
+        format.json { render json: @document.errors, status: :unprocessable_entity }
+      end
     end
   end
 

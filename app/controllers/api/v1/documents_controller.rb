@@ -202,7 +202,7 @@ class Api::V1::DocumentsController < ApplicationController
       )
     end
 
-    total_count = document.total_count
+    total_count = documents.total_count
     if total_count >= 10000
       total_count = valid_document_count
     end

@@ -30,14 +30,12 @@
 </p>
 
 <p> 
-  <% if @law.revision_status != "" %>
-    <% if @law.revision_status == "Actualizado" %>
-      <i class="fas fa-check-circle" style="color: #34b233;"></i>
-      Documento <strong><%= @law.revision_status.downcase %></strong>
-    <% else %>
-      <i class="fas fa-hand-paper" style="color: #cf142b;"></i>
-      Documento en Proceso de Revisión
-    <% end %>
+  <% if @law.revision_status == "Actualizado" || @law.revision_status == "" %>
+    <i class="fas fa-check-circle" style="color: #34b233;"></i>
+    Documento <strong><%= @law.revision_status.downcase %></strong>
+  <% else %>
+    <i class="fas fa-hand-paper" style="color: #cf142b;"></i>
+    Documento en Proceso de Revisión
   <% end %>
 </p>
 <p> 

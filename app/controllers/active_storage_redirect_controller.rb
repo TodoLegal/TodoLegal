@@ -29,10 +29,12 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
       user_trial.downloads += 1
     end
 
-    downloaded_document = Document.find_by_id(params[:document_id])
-    document_type = downloaded_document.document_type.name.downcase.gsub(/\s+/, "-")
-    document_type = removeAccents document_type
-
+    document_type = "documento"
+    if downloaded_document.document_type
+      document_type = downloaded_document.document_type?.name.downcase.gsub(/\s+/, "-")
+      document_type = removeAccents document_type
+    end
+    
     if user && can_access_document && current_user
       $tracker.track(user_id, 'Valid download', {
         'user_type' => current_user_type_api(user),

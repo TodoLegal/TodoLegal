@@ -50,13 +50,7 @@ class UsersPreferencesController < ApplicationController
         return_to_path = session[:return_to] if session[:return_to]
         if !params[:redirect_to_valid].blank?
           if return_to_path
-            if current_user.confirmed_at?
-              if process_doorkeeper_redirect_to
-                return
-              end
-            else
-              format.html { redirect_to confirm_email_view_path}
-            end
+            format.html { redirect_to confirm_email_view_path}
           else
             format.html { redirect_to "https://valid.todolegal.app?user_just_signed_up=true", allow_other_host: true}
           end

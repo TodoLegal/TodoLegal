@@ -1,11 +1,6 @@
 class Document < ApplicationRecord
   include PgSearch
-  searchkick language: 'spanish', mappings: {
-    properties: {
-      document_tags_name: { type: "keyword" },
-      issuer_document_tags_name: { type: "keyword" }
-    }
-  }
+  searchkick language: 'spanish'
 
   has_many :issuer_document_tags, :dependent => :destroy
 

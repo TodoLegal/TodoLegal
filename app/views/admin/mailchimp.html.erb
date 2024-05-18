@@ -3,32 +3,21 @@
   <table  border="1">
     <thead>
       <tr>
-        <th>Status</th>
-        <th>Cantidad</th>
+        <th>Email</th>
+        <th>Nombre</th>
+        <th>Estatus</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>Suscribed</td>
-        <td><%= @suscribed %></td>
-      </tr>
-      <tr>
-        <td>Unsuscribed</td>
-        <td><%= @unsuscribed %></td>
-      </tr>
-      <tr>
-        <td>Pending</td>
-        <td><%= @pending %></td>
-      </tr>
-      <tr>
-        <td>Archived</td>
-        <td><%= @archived %></td>
-      </tr>
+      <% @list_members.each do |member| %>
+        <tr>
+          <td><%= member[:email] %></td>
+          <td><%= member[:name] %></td>
+          <td><%= member[:status] %></td>
+        </tr>
+      <% end %>
     </tbody>
   </table>
 
-  
-  <%= form_tag admin_mailchimp_update_path, method: :post do %>
-    <button class="btn btn-primary mt-4 mb-4" type="submit">Actualizar lista de mailchimp</button>
-  <% end %>
+  <button class="btn btn-primary mt-4 mb-4" type="submit" type="button">Actualizar listas de mailchimp</button>
 </div>

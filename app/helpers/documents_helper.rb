@@ -21,10 +21,6 @@ module DocumentsHelper
     false
   end
 
-  def isWordInText word, text
-    return /[^a-zA-Z0-9]#{word}[^a-zA-Z0-9]/.match(text)
-  end
-
   def get_documents_batch_statistics
     file_path = Rails.root.join('documents_batch_statistics.json')
 

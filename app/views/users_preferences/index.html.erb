@@ -15,14 +15,8 @@
             <p class="preferences-p2"> 
                 Si deseas programar tus notificaciones personalizadas en otro momento, puedes darle click a  
                 <% if @redirect_to_valid %>
-                    <% if current_user.confirmed_at? %>
-                        <%=link_to skip_notifications_path, method: :get do %>
-                            <span class="skip-btn">omitir.</span>
-                        <% end %>
-                    <% else %>
-                        <%=link_to confirm_email_view_path(redirect_to_valid: @redirect_to_valid), method: :get do %>
-                            <span class="skip-btn">omitir.</span>
-                        <% end %>
+                    <%=link_to confirm_email_view_path(redirect_to_valid: @redirect_to_valid), method: :get do %>
+                        <span class="skip-btn">omitir.</span>
                     <% end %>
                 <% elsif @is_monthly %>
                     <%=link_to checkout_path(is_monthly: true, is_onboarding:true), method: :get do %>
@@ -35,16 +29,9 @@
                 <% end %>
             </p>
             <% if @redirect_to_valid %>
-                <% if current_user.confirmed_at? %> 
-                    <%=link_to skip_notifications_path, method: :get do %>
-                        <span class="skip-btn">Omitir</span>
-                        <i class="fas fa-arrow-right"></i>
-                    <% end %>
-                <% else %>
-                    <%=link_to confirm_email_view_path(redirect_to_valid: @redirect_to_valid), method: :get do %>
-                        <span class="skip-btn">Omitir</span>
-                        <i class="fas fa-arrow-right"></i>
-                    <% end %>
+                <%=link_to confirm_email_view_path(redirect_to_valid: @redirect_to_valid), method: :get do %>
+                    <span class="skip-btn">Omitir</span>
+                    <i class="fas fa-arrow-right"></i>
                 <% end %>
             <% elsif @is_monthly %>
                 <%=link_to checkout_path(is_monthly: true, is_onboarding:true), method: :get do %>

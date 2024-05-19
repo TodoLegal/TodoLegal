@@ -2,41 +2,39 @@
 
 <section>
   <div class="container">
-    
-    <% if @go_to_law %>
-      <input type="hidden" id="go_to_law" name="go_to_law" value="<%= @go_to_law %>">
-    <% end %>
-    <% if @go_to_checkout %>
-      <input type="hidden" id="go_to_checkout" name="go_to_checkout" value="<%= @go_to_checkout %>">
-    <% end %>
-    <% if @is_monthly %>
-      <input type="hidden" id="is_monthly" name="is_monthly" value="<%= @is_monthly %>">
-    <% end %>
-    <% if @is_annually %>
-      <input type="hidden" id="is_annually" name="is_annually" value="<%= @is_annually %>">
-    <% end %>
-    <% if @is_student %>
-      <input type="hidden" id="is_student" name="is_student" value="<%= @is_student %>">
-    <% end %>
-    <% if @pricing_onboarding %>
-      <input type="hidden" id="pricing_onboarding" name="pricing_onboarding" value="<%= @pricing_onboarding %>">
-    <% end %>
-    <!-------------------------------- Register Card ------------------------------------------->
-    <div style="text-align:center;">
-      <a class="back-image" href="/">
-        <img class="image" border="0" alt="Logo TodoLegal" href="/" src="/img/Icon-Todolegal-gray20px.svg"/>
-      </a>
-      <a class="back-image" href="/">
-        <img class="image" border="0" alt="Logo Valid" href="/" src="/img/Icon-Valid-gray20px.svg"/>
-      </a>
-    </div>
-    <div class="card card--onboarding bg-white rounded">
-      <!-------------------------------- Card Body ------------------------------------------->
-      <div class="card-body">
-        <h2 class="card-title text-center">Crea tu cuenta</h2>
-        <p class="content text-center">Si ya tienes una cuenta <%= render "devise/shared/links" %></p>
-    
-        <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+      <% if @go_to_law %>
+        <input type="hidden" id="go_to_law" name="go_to_law" value="<%= @go_to_law %>">
+      <% end %>
+      <% if @go_to_checkout %>
+        <input type="hidden" id="go_to_checkout" name="go_to_checkout" value="<%= @go_to_checkout %>">
+      <% end %>
+      <% if @is_monthly %>
+        <input type="hidden" id="is_monthly" name="is_monthly" value="<%= @is_monthly %>">
+      <% end %>
+      <% if @is_annually %>
+        <input type="hidden" id="is_annually" name="is_annually" value="<%= @is_annually %>">
+      <% end %>
+      <% if @is_student %>
+        <input type="hidden" id="is_student" name="is_student" value="<%= @is_student %>">
+      <% end %>
+      <% if @pricing_onboarding %>
+        <input type="hidden" id="pricing_onboarding" name="pricing_onboarding" value="<%= @pricing_onboarding %>">
+      <% end %>
+      <!-------------------------------- Register Card ------------------------------------------->
+      <div style="text-align:center;">
+        <a class="back-image" href="/">
+          <img class="image" border="0" alt="Logo TodoLegal" href="/" src="/img/Icon-Todolegal-gray20px.svg"/>
+        </a>
+        <a class="back-image" href="/">
+          <img class="image" border="0" alt="Logo Valid" href="/" src="/img/Icon-Valid-gray20px.svg"/>
+        </a>
+      </div>
+      <div class="card card--onboarding bg-white rounded">
+        <!-------------------------------- Card Body ------------------------------------------->
+        <div class="card-body">
+          <h2 class="card-title text-center">Crea tu cuenta</h2>
+          <p class="content text-center">Si ya tienes una cuenta <%= render "devise/shared/links" %></p>
           <%= render "devise/shared/error_messages", resource: resource%>
           <div class="form-group">
             <div class="row">
@@ -77,14 +75,13 @@
             data-container="body" data-toggle="popover" data-placement="top" data-trigger="focus"
             data-content="Complete todos los campos." onclick="required()">Crear cuenta</button>
           </div>
-          <%= javascript_pack_tag "form_validator" %>
-        <% end %>
-        <%= render partial: 'devise/shared/omniauth_login' %>
+        </div>
+        <!-------------------------------- End of Card Body ------------------------------------------->
       </div>
-      <!-------------------------------- End of Card Body ------------------------------------------->
-    </div>
-    <p class="content text-center">Al crear una cuenta, accedes a los <a href="https://policies.todolegal.app/terms/" target="_blank">Términos y condiciones</a></p>
-    <!-------------------------------- End of Register Card ------------------------------------------->
+      <p class="content text-center">Al crear una cuenta, accedes a los <a href="https://policies.todolegal.app/terms/" target="_blank">Términos y condiciones</a></p>
+          <!-------------------------------- End of Register Card ------------------------------------------->
+      <%= javascript_pack_tag "form_validator" %>
+    <% end %>
   </div>
 </section>
 

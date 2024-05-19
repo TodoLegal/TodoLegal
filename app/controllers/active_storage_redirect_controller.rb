@@ -32,7 +32,7 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
     downloaded_document = Document.find_by_id(params[:document_id])
     document_type = "document"
     if downloaded_document && downloaded_document.document_type
-      document_type = downloaded_document.document_type?.name.downcase.gsub(/\s+/, "-")
+      document_type = downloaded_document.document_type.name.downcase.gsub(/\s+/, "-")
       document_type = removeAccents document_type
     end
 

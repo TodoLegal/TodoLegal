@@ -29,20 +29,23 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
       user_trial.downloads += 1
     end
 
-    document_type = "documento"
-    if downloaded_document.document_type
-      document_type = downloaded_document.document_type?.name.downcase.gsub(/\s+/, "-")
+    downloaded_document = Document.find_by_id(params[:document_id])
+    document_type = "document"
+    if downloaded_document && downloaded_document.document_type
+      document_type = downloaded_document.document_type.name.downcase.gsub(/\s+/, "-")
       document_type = removeAccents document_type
     end
-    
+
     if user && can_access_document && current_user
-      $tracker.track(user_id, 'Valid download', {
-        'user_type' => current_user_type_api(user),
-        'document_name' => params[:document_name],
-        'document_id' => params[:document_id],
-        'location' => "API",
-        'document_url' => "https://valid.todolegal.app/#{document_type}/honduras/#{downloaded_document.url}/#{downloaded_document.id}"
-      })
+      if downloaded_document
+        $tracker.track(user_id, 'Valid download', {
+          'user_type' => current_user_type_api(user),
+          'document_name' => params[:document_name],
+          'document_id' => params[:document_id],
+          'location' => "API",
+          'document_url' => "https://valid.todolegal.app/#{document_type}/honduras/#{downloaded_document.url}/#{downloaded_document.id}"
+        })
+      end
       user_trial.save
       super
     else

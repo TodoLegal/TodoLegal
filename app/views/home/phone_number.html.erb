@@ -1,0 +1,53 @@
+<div class="container">
+  <div style="text-align:center;">
+        <a class="logos">
+            <img class="logo-img" border="0" alt="Logo TodoLegal" href="/" src="/img/Icon-Todolegal-gray20px.svg"/>
+        </a>
+        <a class="logos">
+            <img class="logo-img" border="0" alt="Logo Valid" href="/" src="/img/Icon-Valid-gray20px.svg"/>
+        </a>
+    </div>
+  <div class="card card--onboarding bg-white rounded">
+    <div class="card-body">
+      <%= form_with url: phone_number_update_path, local: true do %>
+        <div class="form-group">
+          <label for="phone">Número de teléfono</label>
+          <input autocomplete="phone-number" class="form-control" id="phone" type="text" value="" name="phone_number">
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg continue-btn">Continuar</button>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+
+<style>
+
+ .logo-img{
+    height: 12vh;
+    max-height: 110px;
+    margin: 2vh auto 0;
+    margin-bottom: 2rem;
+  }
+
+  .continue-btn{
+    margin-left: 35%;
+    max-width: 30%;
+  }
+
+  @media only screen and (max-width: 992.98px) {
+    .continue-btn{
+      /* margin-left: 0%; */
+    }
+        
+    .logo-img{
+        height: 112px;
+    }
+  }
+
+  .card-text{
+    font-size: 1.2em;
+    text-align: left !important;
+  }
+
+</style>

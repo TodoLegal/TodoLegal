@@ -229,27 +229,67 @@ class AdminController < ApplicationController
 
   end
 
+  def setup_mailchimp_client
+    client = MailchimpMarketing::Client.new
+    client.set_config({ api_key: ENV['MAILCHIMP_API_KEY'], server: ENV['MAILCHIMP_DC']})
+    client
+  end
+
+  def get_list_members(client, list_id)
+    response = client.lists.get_list_members_info(list_id, { count: 500 })
+    response['members']
+  end
+
   def mailchimp
     
     @list_members = []
-    @suscribed = []
+    @suscribed = 0
+    @unsuscribed = 0
+    @pending = 0
+    @archived = 0
+
     begin
-      client = MailchimpMarketing::Client.new
-      client.set_config({ api_key: ENV['MAILCHIMP_API_KEY'], server: ENV['MAILCHIMP_DC'] })
-    
-      response = client.lists.get_list_members_info(ENV['MAILCHIMP_LIST_ID'])
-      response['members'].each do |member|
-        @list_members << {id: member['id'], name: member['full_name'], email: member['email_address'], status: member['status']}
+      client = setup_mailchimp_client
+      members = get_list_members(client, ENV['MAILCHIMP_LIST_ID'])
+
+      members.each do |member|
         if member['status'] == 'subscribed'
-          @suscribed << {id: member['id'], name: member['full_name'], email: member['email_address'], status: member['status']}
-        end 
+          @list_members << {id: member['id'], name: member['full_name'], email: member['email_address'], status: member['status']}
+          @suscribed += 1
+        elsif member['status'] == 'unsubscribed'
+          @list_members << {id: member['id'], name: member['full_name'], email: member['email_address'], status: member['status']}
+          @unsuscribed += 1
+        elsif member['status'] == 'archived'
+          @list_members << {id: member['id'], name: member['full_name'], email: member['email_address'], status: member['status']}
+          @archived += 1
+        elsif member['status'] == 'pending'
+          @pending += 1
+        end
       end
-      # puts "============================================================================================="
-      # puts @list_members
-      # puts "============================================================================================="
     rescue MailchimpMarketing::ApiError => e
       puts "Error: #{e}"
     end
+  end
+
+  def update_mailchimp
+    begin
+      client = setup_mailchimp_client
+      members = get_list_members(client, ENV['MAILCHIMP_LIST_ID'])
+  
+      members.each do |member|
+        user = User.find_by(email: member['email_address'])
+        next if user.nil?
+
+        plan_status = return_user_plan_status(user)
+        if plan_status == "Basic"
+          client.lists.delete_list_member(ENV['MAILCHIMP_LIST_ID'], member['id'])
+        end
+      end
+    rescue MailchimpMarketing::ApiError => e
+      flash[:error] = "Error: #{e}"
+    end
+  
+    redirect_to admin_mailchimp_path, notice: "Se ha actualizado la lista en Mailchimp."
   end
 
 

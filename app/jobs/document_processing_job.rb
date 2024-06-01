@@ -5,8 +5,8 @@ include DocumentsHelper
 
   def perform(document, document_pdf_path, user)
     puts ">slice_gazette called"
-    json_data = run_slice_gazette_script(document, document_pdf_path)
-    process_gazette document, document_pdf_path
+    json_data = run_slice_gazette_script(document, document_pdf_path, user)
+    process_gazette document, document_pdf_path, user
     document.start_page = 0
     document.end_page = json_data["page_count"] - 1
     document.url = document.generate_friendly_url
@@ -102,19 +102,20 @@ include DocumentsHelper
     puts "Created related documents"
     document_link = "https://test.todolegal.app/admin/gazettes/#{document.publication_number}"
     process_status = "success"
-    # if $discord_bot
-    #   publication_number = @document.publication_number
-    #   discord_message = "Nueva gaceta seccionada en Valid! [#{publication_number}](https://todolegal.app/admin/gazettes/#{publication_number}) :scroll:"
-    #   $discord_bot.send_message($discord_bot_document_upload, discord_message)
-    # end
+    if $discord_bot
+      publication_number = document.publication_number
+      discord_message = "Nueva gaceta seccionada en Valid! [#{publication_number}](https://todolegal.app/admin/gazettes/#{publication_number}) :scroll:"
+      $discord_bot.send_message($discord_bot_document_upload, discord_message)
+    end
     DocumentProcessingMailer.document_processing_complete(user, document_link, process_status).deliver
   end
 
   private
 
-  def run_slice_gazette_script document, document_pdf_path
+  def run_slice_gazette_script document, document_pdf_path, user
     puts ">run_slice_gazette_script called"
     python_return_value = `python3 ~/GazetteSlicer/slice_gazette.py #{ document_pdf_path } '#{ Rails.root.join("public", "gazettes") }' '#{document.id}'`
+    document_link = "https://test.todolegal.app/documents/#{document.id}/edit"
     begin
       result = JSON.parse(python_return_value)
       return result
@@ -127,9 +128,10 @@ include DocumentsHelper
     end
   end
 
-  def process_gazette document, document_pdf_path
+  def process_gazette document, document_pdf_path, user
     puts ">process_gazette called"
-    python_return_value = `python3 ~/GazetteSlicer/slice_gazette.py #{ document_pdf_path }`
+    python_return_value = `python3 ~/GazetteSlicer/process_gazette.py #{ document_pdf_path }`
+    document_link = "https://test.todolegal.app/documents/#{document.id}/edit"
     json_data = {}
     begin
       json_data = JSON.parse(python_return_value)

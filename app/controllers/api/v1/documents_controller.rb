@@ -198,6 +198,9 @@ class Api::V1::DocumentsController < ApplicationController
     end
 
     total_count = documents.total_count
+    if total_count >= 10000
+      total_count = valid_document_count
+    end
     documents = documents.to_json
     documents = JSON.parse(documents)
 
@@ -310,7 +313,7 @@ protected
     documents = []
     if @document && @document&.document_type&.name == 'Auto Acordado'
       #extract the year of the Auto Acordado date
-      year_to_retrieve = @document.publication_date&.year 
+      year_to_retrieve = @document.publication_date&.year
       #if year_to_retrieve if not nil, use that year, else use 2015
       year_to_retrieve = year_to_retrieve ? year_to_retrieve : 2015
       if documents&.length < 20

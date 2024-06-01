@@ -81,31 +81,26 @@ class Api::V1::DocumentsController < ApplicationController
       publish: true,
     }
 
-    def setup_search_filters_based_on_tags(searchkick_where)
-      issuer_tags = []
-      document_tags = []
-
+    if !params['tags'].blank? and params['tags'].kind_of?(Array)
+      document_ids = []
       params['tags'].each do |tag_name|
         tag = Tag.find_by_name(tag_name)
-        next unless tag
-
-        issuer_tags << tag_name if tag.issuer_document_tags.any?
-        document_tags << tag_name if tag.document_tags.any?
+        tag_type = TagType.find_by(id: tag.tag_type_id)
+        if tag
+          if tag_type.name == 'Institución'
+            tag.issuer_document_tags.each do |issuer_tag|
+              document_ids.push(issuer_tag.document_id)
+            end
+          else
+            tag.documents.each do |document|
+              document_ids.push(document.id)
+            end
+          end
+          document_ids = document_ids.uniq
+        end
       end
-
-      if issuer_tags.any? && document_tags.any?
-        searchkick_where[:issuer_document_tags_name] = issuer_tags.size > 1 ? { all: issuer_tags } : issuer_tags
-        searchkick_where[:document_tags_name] = document_tags.size > 1 ? { all: document_tags } : document_tags
-      elsif issuer_tags.any?
-        searchkick_where[:issuer_document_tags_name] = issuer_tags.size > 1 ? { all: issuer_tags } : issuer_tags
-      elsif document_tags.any?
-        searchkick_where[:document_tags_name] = document_tags.size > 1 ? { all: document_tags } : document_tags
-      elsif document_tags.empty? && issuer_tags.empty?
-        searchkick_where[:document_tags_name] = -1
-      end
+      searchkick_where[:id] = {in: document_ids}
     end
-
-    setup_search_filters_based_on_tags(searchkick_where) if params['tags'].present? && params['tags'].is_a?(Array)
 
     def parse_spanish_date_to_iso(date_string)
       months = {
@@ -127,13 +122,13 @@ class Api::V1::DocumentsController < ApplicationController
     end
 
     #if query is not empty returns result based in the boost level given to each field, else, returns results without boost and ordered by publication date
-    if query != '*' || from || to || params['tags']
+    if query != '*' || from || to
       formatted_query = query
 
       begin
         query = query.gsub(/\"/, '')  # Remove quotes before parsing
 
-        formatted_query = parse_spanish_date_to_iso(query) if to.blank? && from.blank? && params['tags'].blank? && query != "*"
+        formatted_query = parse_spanish_date_to_iso(query) if to.blank? && from.blank?
 
         field_to_search = nil
 
@@ -333,9 +328,11 @@ protected
       if !document_tag
         document_tag = @document.tags.first
       end
-      documents = Document.joins(:document_tags).where(document_tags: {tag_id: document_tag.id}).order(publication_date: :desc).limit(20)  
+      documents = Document.joins(:document_tags).where(document_tags: {tag_id: document_tag.id})
+                                                .where(documents: {publish: true})
+                                                .order(publication_date: :desc).limit(20)  
     else
-      documents = Document.where(publication_number: @document.publication_number)
+      documents = Document.where(publication_number: @document.publication_number, publish: true)
     end
 
     return documents
@@ -382,4 +379,5 @@ protected
 
     return docs
   end
+
 end

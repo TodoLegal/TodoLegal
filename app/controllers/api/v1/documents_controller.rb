@@ -198,6 +198,9 @@ class Api::V1::DocumentsController < ApplicationController
     end
 
     total_count = documents.total_count
+    if total_count >= 10000
+      total_count = valid_document_count
+    end
     documents = documents.to_json
     documents = JSON.parse(documents)
 

@@ -28,10 +28,7 @@
                                                     Hola <%= @user.first_name %>,
                                                 </p>
                                                 <p style="font-family: Helvetica, Arial, sans-serif; color:#171F2A; font-size: 18px; ">
-                                                    <%= @message %> 
-                                                    <% if @process_status == "success" %>
-                                                        Puedes revisarlos <a href="<%= @document_link %>">aquí</a>.
-                                                    <% end %>
+                                                    <%= @message %> Puedes revisarlo <a href="<%= @document_link %>">aquí</a>.
                                                 </p>
                                             </td>
                                         </tr>

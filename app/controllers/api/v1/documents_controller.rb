@@ -122,11 +122,13 @@ class Api::V1::DocumentsController < ApplicationController
     end
 
     #if query is not empty returns result based in the boost level given to each field, else, returns results without boost and ordered by publication date
-    if query != '*'
+    if query != '*' || from || to
+      formatted_query = query
+
       begin
         query = query.gsub(/\"/, '')  # Remove quotes before parsing
 
-        formatted_query = parse_spanish_date_to_iso(query)
+        formatted_query = parse_spanish_date_to_iso(query) if to.blank? && from.blank?
 
         field_to_search = nil
 
@@ -141,7 +143,7 @@ class Api::V1::DocumentsController < ApplicationController
           field_to_search = :publication_date_dashes
         end
 
-        if field_to_search && params['from'].blank? && params['to'].blank?
+        if field_to_search && to.blank? && from.blank?
           # Use parsed date for exact date searching in the determined field
           searchkick_where[field_to_search] = formatted_query
         end
@@ -158,16 +160,16 @@ class Api::V1::DocumentsController < ApplicationController
         "publication_date_slashes^10",
         "issue_id^9",
         "publication_number^8",
-        "issuer_document_tags.tag_name^7",
+        "issuer_document_tags_name^7",
         "document_type_name^6",
         "document_type_alternative_name^5",
         "name^4",
         "description^3",
         "short_description^2",
-        "document_tags.tag_name^1" # Lowest priority
+        "document_tags_name^1" # Lowest priority
         ],
         where: searchkick_where,
-        misspellings: {edit_distance: 2, below: 5}, #https://github.com/ankane/searchkick?tab=readme-ov-file#misspellings
+        misspellings: {edit_distance: 2, below: 2}, #https://github.com/ankane/searchkick?tab=readme-ov-file#misspellings
         limit: limit,
         offset: params['offset'].to_i
       )
@@ -176,15 +178,17 @@ class Api::V1::DocumentsController < ApplicationController
         query,
         fields: [
           "publication_date", # Highest priority
+          "publication_date_dashes",
+          "publication_date_slashes",
           "issue_id",
           "publication_number",
-          "issuer_document_tags.tag_name",
+          "issuer_document_tags_name",
           "document_type_name",
           "document_type_alternative_name",
           "name",
           "description",
           "short_description",
-          "document_tags.tag_name" # Lowest priority
+          "document_tags_name" # Lowest priority
         ],
         where: searchkick_where.merge!({publication_date: {not: nil}}),
         limit: limit,
@@ -193,7 +197,10 @@ class Api::V1::DocumentsController < ApplicationController
       )
     end
 
-    total_count = valid_document_count
+    total_count = documents.total_count
+    if total_count >= 10000
+      total_count = valid_document_count
+    end
     documents = documents.to_json
     documents = JSON.parse(documents)
 
@@ -306,7 +313,7 @@ protected
     documents = []
     if @document && @document&.document_type&.name == 'Auto Acordado'
       #extract the year of the Auto Acordado date
-      year_to_retrieve = @document.publication_date&.year 
+      year_to_retrieve = @document.publication_date&.year
       #if year_to_retrieve if not nil, use that year, else use 2015
       year_to_retrieve = year_to_retrieve ? year_to_retrieve : 2015
       if documents&.length < 20

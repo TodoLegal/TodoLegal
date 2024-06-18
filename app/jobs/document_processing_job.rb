@@ -5,8 +5,8 @@ include DocumentsHelper
 
   def perform(document, document_pdf_path, user)
     puts ">slice_gazette called"
-    json_data = run_slice_gazette_script(document, document_pdf_path)
-    process_gazette document, document_pdf_path
+    json_data = run_slice_gazette_script(document, document_pdf_path, user)
+    process_gazette document, document_pdf_path, user
     document.start_page = 0
     document.end_page = json_data["page_count"] - 1
     document.url = document.generate_friendly_url
@@ -112,7 +112,7 @@ include DocumentsHelper
 
   private
 
-  def run_slice_gazette_script document, document_pdf_path
+  def run_slice_gazette_script document, document_pdf_path, user
     puts ">run_slice_gazette_script called"
     python_return_value = `python3 ~/GazetteSlicer/slice_gazette.py #{ document_pdf_path } '#{ Rails.root.join("public", "gazettes") }' '#{document.id}'`
     document_link = "https://test.todolegal.app/documents/#{document.id}/edit"
@@ -128,7 +128,7 @@ include DocumentsHelper
     end
   end
 
-  def process_gazette document, document_pdf_path
+  def process_gazette document, document_pdf_path, user
     puts ">process_gazette called"
     python_return_value = `python3 ~/GazetteSlicer/process_gazette.py #{ document_pdf_path }`
     document_link = "https://test.todolegal.app/documents/#{document.id}/edit"

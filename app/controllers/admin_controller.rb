@@ -240,6 +240,7 @@ class AdminController < ApplicationController
     response['members']
   end
 
+  #set info to show in the mailchimp view
   def mailchimp
     
     @list_members = []
@@ -271,24 +272,63 @@ class AdminController < ApplicationController
     end
   end
 
+  def active_users
+    # Return all the users that are not 'Basic' users
+    users = User.all.select do |user|
+      return_user_plan_status(user) != "Basic"
+    end
+    users
+  end
+
+  #update mailchimp list with the users status
   def update_mailchimp
     begin
       client = setup_mailchimp_client
       members = get_list_members(client, ENV['MAILCHIMP_LIST_ID'])
-  
+      active_tl_users = active_users()
+    
+      # Convert members to a hash for quick lookup
+      members_hash = members.index_by { |member| member['email_address'] }
+    
+      # Check every active user
+      active_tl_users.each do |user|
+        begin
+          member = members_hash[user.email]
+    
+          if member
+            # If the user is in the members list, update their status to "subscribed"
+            user.update(status: "subscribed")
+          else
+            # If the user is not in the members list, add them to the list as "subscribed"
+            client.lists.add_list_member(ENV['MAILCHIMP_LIST_ID'], {
+              email_address: user.email,
+              status: "subscribed"
+            })
+            user.update(status: "subscribed")
+          end
+        rescue => e
+          Rails.logger.error("Error in adding a user to the list: #{e}")
+        end
+      end
+    
+      # If a user is in the members list but not in the active users list, archive them
       members.each do |member|
-        user = User.find_by(email: member['email_address'])
-        next if user.nil?
-
-        plan_status = return_user_plan_status(user)
-        if plan_status == "Basic"
-          client.lists.delete_list_member(ENV['MAILCHIMP_LIST_ID'], member['id'])
+        begin
+          user = User.find_by(email: member['email_address'])
+          next if user.nil?
+          plan_status = return_user_plan_status(user)
+          if plan_status == "Basic"
+            client.lists.delete_list_member(ENV['MAILCHIMP_LIST_ID'], member['id'])
+            user.update(status: "archived")
+          end
+        rescue => e
+          Rails.logger.error("Error in archiving a user: #{e}")
         end
       end
     rescue MailchimpMarketing::ApiError => e
       flash[:error] = "Error: #{e}"
     end
-  
+    
     redirect_to admin_mailchimp_path, notice: "Se ha actualizado la lista en Mailchimp."
   end
 

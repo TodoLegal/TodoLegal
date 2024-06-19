@@ -294,17 +294,28 @@ class AdminController < ApplicationController
       active_tl_users.each do |user|
         begin
           member = members_hash[user.email]
-    
+          
           if member
-            # If the user is in the members list, update their status to "subscribed"
-            user.update(status: "subscribed")
+            # If the user is in the members list, check their status
+            if member['status'] == 'subscribed'
+              # If the member is subscribed, update the user status to "subscribed"
+              user.update(status: "subscribed")
+            elsif member['status'] == 'unsubscribed'
+              # If the member is unsubscribed, update the user status to "unsubscribed"
+              user.update(status: "unsubscribed")
+            end
           else
             # If the user is not in the members list, add them to the list as "subscribed"
-            client.lists.add_list_member(ENV['MAILCHIMP_LIST_ID'], {
+            new_member = client.lists.add_list_member(ENV['MAILCHIMP_LIST_ID'], {
               email_address: user.email,
               status: "subscribed"
             })
             user.update(status: "subscribed")
+
+            # Add the current year as a tag
+            client.lists.update_list_member_tags(ENV['MAILCHIMP_LIST_ID'], new_member['id'], {
+              tags: [{ name: Time.now.year.to_s, status: 'active' }]
+            })
           end
         rescue => e
           Rails.logger.error("Error in adding a user to the list: #{e}")
@@ -317,7 +328,7 @@ class AdminController < ApplicationController
           user = User.find_by(email: member['email_address'])
           next if user.nil?
           plan_status = return_user_plan_status(user)
-          if plan_status == "Basic"
+          if plan_status == "Basic" || member['status'] == 'unsubscribed'
             client.lists.delete_list_member(ENV['MAILCHIMP_LIST_ID'], member['id'])
             user.update(status: "archived")
           end

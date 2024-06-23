@@ -306,16 +306,19 @@ class AdminController < ApplicationController
             end
           else
             # If the user is not in the members list, add them to the list as "subscribed"
-            new_member = client.lists.add_list_member(ENV['MAILCHIMP_LIST_ID'], {
-              email_address: user.email,
-              status: "subscribed"
-            })
-            user.update(status: "subscribed")
 
-            # Add the current year as a tag
-            client.lists.update_list_member_tags(ENV['MAILCHIMP_LIST_ID'], new_member['id'], {
-              tags: [{ name: Time.now.year.to_s, status: 'active' }]
-            })
+            if user.status != "unsubscribed"
+              new_member = client.lists.add_list_member(ENV['MAILCHIMP_LIST_ID'], {
+                email_address: user.email,
+                status: "subscribed"
+              })
+              user.update(status: "subscribed")
+
+              # Add the current year as a tag
+              client.lists.update_list_member_tags(ENV['MAILCHIMP_LIST_ID'], new_member['id'], {
+                tags: [{ name: Time.now.year.to_s, status: 'active' }]
+              })
+            end
           end
         rescue => e
           Rails.logger.error("Error in adding a user to the list: #{e}")
@@ -328,8 +331,13 @@ class AdminController < ApplicationController
           user = User.find_by(email: member['email_address'])
           next if user.nil?
           plan_status = return_user_plan_status(user)
-          if plan_status == "Basic" || member['status'] == 'unsubscribed'
+          if plan_status != "Basic" && member['status'] == 'unsubscribed'
             client.lists.delete_list_member(ENV['MAILCHIMP_LIST_ID'], member['id'])
+            #unsubscribe the user will prevent the user to receive any email from mailchimp
+            user.update(status: "unsubscribed")
+          elsif plan_status == "Basic" && member['status'] == 'subscribed'
+            client.lists.delete_list_member(ENV['MAILCHIMP_LIST_ID'], member['id'])
+            #archive the user will prevent the user to receive any email from mailchimp, but if the user is reactivated, it will be able to receive emails again
             user.update(status: "archived")
           end
         rescue => e

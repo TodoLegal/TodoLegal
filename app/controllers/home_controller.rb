@@ -10,6 +10,15 @@ class HomeController < ApplicationController
     #end
     # @tags = Tag.where(tag_type: TagType.find_by_name("materia"))
     render action: "index", layout: "landing"
+    if current_user
+      $tracker.track(current_user.id, 'Site Visit (TL)', { 
+        'utm_source' => params[:utm_source],
+        'utm_medium' => params[:utm_medium],
+        'utm_campaign' => params[:utm_campaign],
+        'utm_content' => params[:utm_content],
+        'utm_term' => params[:utm_term]
+      })
+    end
   end
 
   def home
@@ -29,6 +38,14 @@ class HomeController < ApplicationController
         'has_notifications_activated': UsersPreference.find_by(user_id: current_user.id) != nil,
         'session_date' => DateTime.now - 6.hours,
         'location' => "TL Home"
+      })
+
+      $tracker.track(current_user.id, 'Site Visit (TL)', { 
+        'utm_source' => params[:utm_source],
+        'utm_medium' => params[:utm_medium],
+        'utm_campaign' => params[:utm_campaign],
+        'utm_content' => params[:utm_content],
+        'utm_term' => params[:utm_term]
       })
     end
   end

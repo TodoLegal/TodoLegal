@@ -26,6 +26,15 @@
       <div class="row">
         <div class="col-md-8">
           <div class="form-group">
+            <%= form.label :documento_Publicado %>
+            <%= form.select :publish, options_for_select([['Sí', true], ['No', false]], @document.publish), {}, { class: "form-control", id: "publish" } %>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-8">
+          <div class="form-group">
             <% if document.document_type.name == "Sentencia" %>
               <%= form.label :número_de_expediente %>
             <% else %>
@@ -222,6 +231,9 @@
               <% else %>
                 <a type="button" class="d-inline p-2 btn btn-outline-secondary" disabled="true">Guardar y siguiente</a>
               <% end %>
+            <% end %>
+            <%= button_to [@document], method: :delete, data: { confirm: '¿Estás Seguro que deseas eliminarlo?' }, class:"d-inline ml-4 btn btn-outline-danger" do %>
+              <i class="fas fa-trash-alt"></i>
             <% end %>
           </div>
     <% end %> 

@@ -16,12 +16,12 @@ function trimArticlesforPreview() {
           break;
         }
         if (nodes[j].nodeType == Node.ELEMENT_NODE){
-          if (nodes[j].previousSibling.nodeType == Node.TEXT_NODE){
+          if (nodes[j].previousSibling && nodes[j].previousSibling.nodeType == Node.TEXT_NODE){
             left = nodes[j].previousSibling.textContent.slice(-67);
             temp = left.split(/^[^\s]*\s/);
             left = temp[1];
           }
-          if(nodes[j].nextSibling.nodeType == Node.TEXT_NODE){
+          if(nodes[j].nextSibling && nodes[j].nextSibling.nodeType == Node.TEXT_NODE){
             right = nodes[j].nextSibling.textContent.slice(0, 65) + "... ";
           }
           resultText += left + nodes[j].outerHTML + right;

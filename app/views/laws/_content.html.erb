@@ -126,7 +126,7 @@
           </a>
           <% if @highlight_enabled %>
             <a class="uncolored_link articles-preview" id="link_article_count_<%= article_iterator %>" href="<%= law_path(@law) + '?query=/'+@query+"/"+(stream.number.lstrip)%>"  aria-controls="articulos" aria-selected="true">
-              <%= stream.pg_search_highlight.html_safe %>
+              <%= stream.pg_search_highlight.gsub(/<(?!\/?b(?=>|\s.*>))\/?.*?>/, '').html_safe %>
             </a>
             <hr>
           <% else %>
@@ -141,7 +141,7 @@
             <% end %>
           </b>
           <% if @highlight_enabled %>
-            <%= stream.pg_search_highlight.html_safe %>.
+            <%= stream.pg_search_highlight.gsub(/<(?!\/?b(?=>|\s.*>))\/?.*?>/, '').html_safe %>.
           <% else %>
             <%= stream.class.markdown.render(stream.body).html_safe %>
           <% end %>

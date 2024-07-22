@@ -141,7 +141,7 @@
             <% end %>
           </b>
           <% if @highlight_enabled %>
-            <%= stream.pg_search_highlight.html_safe %>.
+            <%= stream.pg_search_highlight.gsub(/<(?!\/?b(?=>|\s.*>))\/?.*?>/, '').html_safe %>.
           <% else %>
             <%= stream.class.markdown.render(stream.body).html_safe %>
           <% end %>

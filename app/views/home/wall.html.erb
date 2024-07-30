@@ -1,0 +1,83 @@
+<div class="container">
+  <div style="text-align:center;">
+        <a class="logos" href="<%= home_path %>">
+            <img class="logo-img" border="0" alt="Logo TodoLegal" href="/" src="/img/Icon-Todolegal-gray20px.svg"/>
+        </a>
+        <a class="logos" href="<%= home_path %>">
+            <img class="logo-img" border="0" alt="Logo Valid" href="/" src="/img/Icon-Valid-gray20px.svg"/>
+        </a>
+    </div>
+  <div class="card text-center">
+    <div class="card-body">
+      <% if current_user %>
+        <% if !current_user.confirmed_at? %>
+          <h3 class="card-title">Confirma tu correo</h3>
+          <p class="card-text">
+            Tu cuenta fue creada exitosamente. Para poder utilizar la herramienta, debes activar tu cuenta en el correo que te acabamos de enviar.
+          </p>
+          <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+            <%= link_to send_confirmation_email_path, class:"btn btn-primary btn-lg mr-4", method: :post do %>
+              Reenviar correo
+            <% end %>
+            <a href="https://wa.me/50494714842" class="btn btn-primary btn-lg">
+              WhatsApp
+            </a>
+          </div>
+        <% elsif return_user_plan_status(current_user) != "Basic" %>
+          <h3 class="card-title">Adquiere Suscrición Pro</h3>
+            <p class="card-text">
+              Para visualizar este contenido debes ser Usuario Profesional. Adquiere tu Suscripción Profesional por L.299.00 al mes.
+            </p>
+            <%=link_to pricing_path, class:"btn btn-primary btn-lg continue-btn" do %>
+              Ver Precios
+            <% end %>
+        <% end %>
+      <% else %>
+        <h3 class="card-title">Crea tu cuenta</h3>
+        <p class="card-text">
+          Para visualizar este contenido debes ser Usuario Profesional. Adquiere tu Suscripción Profesional por L.299.00 al mes.
+        </p>
+        <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+          <%= link_to pricing_path, class:"btn btn-primary btn-lg mr-4" do %>
+            Ver Planes
+          <% end %>
+          <a href="/users/sign_in" class="btn btn-primary btn-lg">
+            Iniciar Sesión
+          </a>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+
+<style>
+
+ .logo-img{
+    height: 12vh;
+    max-height: 110px;
+    margin: 2vh auto 0;
+    margin-bottom: 2rem;
+  }
+
+  .continue-btn{
+    margin-left: 35%;
+    max-width: 30%;
+  }
+
+  @media only screen and (max-width: 992.98px) {
+    .continue-btn{
+      /* margin-left: 0%; */
+    }
+        
+    .logo-img{
+        height: 112px;
+    }
+  }
+
+  .card-text{
+    font-size: 1.2em;
+    text-align: left !important;
+  }
+
+</style>

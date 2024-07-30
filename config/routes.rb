@@ -37,7 +37,7 @@ Rails.application.routes.draw do
   resources :articles, only: [:edit, :update, :destroy]
 
 
-  root :to => "home#index"
+  root :to => "home#index" #change this to home#home after launching the TodoLegal site
   get '/search_law', to: 'home#search_law'
   get '/pricing', to: 'home#pricing'
   get '/invite_friends', to: 'home#invite_friends'
@@ -77,6 +77,7 @@ Rails.application.routes.draw do
   post "laws/insert_article", to: "laws#insert_article", as: "insert_article"
   post "documents/process_documents_batch", to: "documents#process_documents_batch", as: "process_documents_batch"
   get 'application/external_redirect', to: 'application#external_redirect',  as: "external_redirect"
+  get '/wall', to: 'home#wall', as:"wall"
 
   get '/rails/active_storage/blobs/redirect/:signed_id/*filename', to: 'active_storage_redirect#show'
   

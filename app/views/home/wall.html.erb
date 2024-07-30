@@ -26,16 +26,21 @@
         <% elsif return_user_plan_status(current_user) == "Basic" %>
           <h3 class="card-title">Adquiere Suscrición Pro</h3>
             <p class="card-text">
-              Para visualizar este contenido debes ser Usuario Profesional. Adquiere tu Suscripción Profesional por L.299.00 al mes.
+              Tu cuenta ha <b>vencido</b>, para seguir usando nuestras herramientas debes tener una <b>Suscripción Activa</b>.
             </p>
-            <%=link_to pricing_path, class:"btn btn-primary btn-lg continue-btn" do %>
-              Ver Precios
-            <% end %>
+            <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+              <%= link_to pricing_path, class:"btn btn-primary btn-lg mr-4" do %>
+                Ver Planes
+              <% end %>
+              <a href="https://wa.me/50494714842" class="btn btn-primary btn-lg">
+                Contáctanos 
+              </a>
+            </div>
         <% end %>
       <% else %>
         <h3 class="card-title">Crea tu cuenta</h3>
         <p class="card-text">
-          Para visualizar este contenido debes ser Usuario Profesional. Adquiere tu Suscripción Profesional por L.299.00 al mes.
+          Para visualizar este contenido debes tener una <b>Suscripción Activa</b>. Crea una cuenta o inicia sesión con tu usuario.
         </p>
         <div class="btn-group" role="group" aria-label="Basic mixed styles example">
           <%= link_to pricing_path, class:"btn btn-primary btn-lg mr-4" do %>

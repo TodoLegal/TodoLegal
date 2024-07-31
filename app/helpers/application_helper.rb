@@ -15,6 +15,7 @@ module ApplicationHelper
 
   def current_user_permission user
     permission_name = ""
+    permission_name = "Pro" if user.permissions.find_by_name("Pro")
     permission_name = "Editor D2" if user.permissions.find_by_name("Editor D2")
     permission_name = "Editor" if user.permissions.find_by_name("Editor")
     permission_name = "Admin" if user.permissions.find_by_name("Admin")
@@ -355,6 +356,15 @@ module ApplicationHelper
     end
   
     return text
+  end
+
+  def clean_session
+    session[:pricing_onboarding] = nil
+    session[:is_onboarding] = nil
+    session[:go_to_checkout] = nil
+    session[:go_to_law] = nil
+    session[:is_monthly] = nil
+    session[:is_annually] = nil
   end
 
 end

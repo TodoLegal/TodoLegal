@@ -78,6 +78,7 @@ Rails.application.routes.draw do
   post "documents/process_documents_batch", to: "documents#process_documents_batch", as: "process_documents_batch"
   get 'application/external_redirect', to: 'application#external_redirect',  as: "external_redirect"
   get '/wall', to: 'home#wall', as:"wall"
+  get 'admin/laws_hyperlinks', to: 'admin#laws_hyperlinks', as: "laws_hyperlinks"
 
   get '/rails/active_storage/blobs/redirect/:signed_id/*filename', to: 'active_storage_redirect#show'
   

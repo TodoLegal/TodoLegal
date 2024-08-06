@@ -1,0 +1,23 @@
+
+<div class="container">
+  <h1> Enlaces en Leyes </h1>
+  <table  border="1">
+    <thead>
+      <tr>
+        <th>Ley</th>
+        <th>Artículo</th>
+        <th>Texto</th>
+        <th>Hipervinculo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @hyperlinks.each do |hyperlink| %>
+        <tr>
+          <td><%= link_to hyperlink[:law].name, law_path(hyperlink[:law]) %></td>
+          <td><%= link_to hyperlink[:article].number, edit_law_path(hyperlink[:law], article_number: hyperlink[:article].number) %></td>
+          <td><%= hyperlink[:hyperlink_text] %></td>
+          <td><%= link_to hyperlink[:hyperlink], hyperlink[:hyperlink] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>

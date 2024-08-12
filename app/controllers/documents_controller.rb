@@ -283,7 +283,7 @@ class DocumentsController < ApplicationController
             format.html { redirect_to edit_document_path(@document), notice: 'Document was successfully updated.' }
           end
         elsif params[:commit] == 'Guardar y siguiente'
-          document.publish = true
+          @document.publish = true
           @document.save
           format.html { redirect_to edit_document_path(get_next_document @document), notice: 'Document was successfully updated.' }
         elsif params[:commit] == 'Guardar y regresar a PIIL'

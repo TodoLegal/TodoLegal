@@ -229,11 +229,11 @@
               <% elsif @redirect_url %>
                 <%= form.submit "Guardar y regresar a PIIL", class: "d-inline p-2 btn btn-outline-secondary" %>
               <% else %>
-                <a type="button" class="d-inline p-2 btn btn-outline-secondary" disabled="true">Guardar y siguiente</a>
+                <button type="button" class="d-inline p-2 btn btn-outline-secondary" disabled="true">Guardar y siguiente</button>
               <% end %>
             <% end %>
-          </div> 
-    <% end %> 
+          </div>
+    <% end %>
           <div class="col-md-3 btns-section">
             <%= button_to [@document], method: :delete, data: { confirm: '¿Estás Seguro que deseas eliminarlo?' }, class:"delete-document-btn ml-4 btn btn-outline-danger" do %>
               <i class="fas fa-trash-alt"></i>

@@ -260,6 +260,20 @@
     const element = document.getElementById( elementId );
     element.innerHTML= str.length + ' de ' + maxLength + ' caracteres'; 
   }
+
+  //paste text without formatting and replace new lines with space
+  document.querySelectorAll('textarea').forEach(function(textarea) {
+    textarea.addEventListener('paste', function(e) {
+      e.preventDefault();
+      var text = e.clipboardData.getData('text/plain');
+      text = text.replace(/\r?\n|\r/g, " "); // replace new lines with space
+      var start = textarea.selectionStart;
+      var end = textarea.selectionEnd;
+      textarea.value = textarea.value.substring(0, start) + text + textarea.value.substring(end);
+      textarea.selectionStart = textarea.selectionEnd = start + text.length;
+    });
+  });
+  
 </script>
 
 <style>

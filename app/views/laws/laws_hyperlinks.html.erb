@@ -4,7 +4,7 @@
 
   <div class="row justify-content-between">
     <div class="col-6 mt-2 mb-2">
-      <%= button_to 'Actualizar Estado automaticamente', laws_automatic_update_hyperlink_status_path, class:"btn btn-primary", method: :post %>
+      <%= button_to 'Revisar enlaces Valid', laws_automatic_update_hyperlink_status_path, class:"btn btn-primary", method: :post %>
       <div class="form-inline mt-2">
         <span class="mr-2">Ordenar por: </span>
         <%= form_with url: laws_hyperlinks_laws_path, method: :get do %>

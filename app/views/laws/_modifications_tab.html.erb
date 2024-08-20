@@ -19,10 +19,13 @@
 <% end %>
 -->
 <div class="container" style="margin-top: 15px;">
-  <h2 class="text-center"> <i class="fas fa-wrench"></i> </h2>
-  <h3 class="text-center"> 
-    En construcción 
-  </h3>
+  <ul>
+    <% @hyperlinks.each do |hyperlink| %>
+      <li>
+        <%= link_to hyperlink.hyperlink, hyperlink.hyperlink %>
+      </li>
+    <% end %>
+  </ul>
 </div>
 
 <style>

@@ -19,6 +19,7 @@ class LawsController < ApplicationController
     # end
     @show_mercantil_related_podcast = LawTag.find_by(law: @law, tag: Tag.find_by_name("Mercantil")) != nil
     @show_laboral_related_podcast = LawTag.find_by(law: @law, tag: Tag.find_by_name("Laboral")) != nil
+    @hyperlinks = @law.law_hyperlinks
     get_raw_law
   end
 

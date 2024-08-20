@@ -8,7 +8,7 @@ class Article < ApplicationRecord
   include PgSearch
 
   belongs_to :law, touch: true
-
+  has_many :law_hyperlinks, :dependent => :destroy
   #pg_search_scope :search_by_body, against: :body
 
   pg_search_scope :search_by_body_highlighted,

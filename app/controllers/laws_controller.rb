@@ -2,7 +2,7 @@ class LawsController < ApplicationController
   layout 'law', only: [:show, :new, :edit]
   before_action :set_law, only: [:show, :edit, :update, :destroy, :insert_article]
   before_action :set_materias, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_editor_tl!, only: [:index, :new, :edit, :create, :update, :destroy]
+  before_action :authenticate_editor_tl!, only: [:index, :new, :edit, :create, :update, :destroy, :laws_hyperlinks]
 
   # GET /laws
   # GET /laws.json
@@ -19,6 +19,7 @@ class LawsController < ApplicationController
     # end
     @show_mercantil_related_podcast = LawTag.find_by(law: @law, tag: Tag.find_by_name("Mercantil")) != nil
     @show_laboral_related_podcast = LawTag.find_by(law: @law, tag: Tag.find_by_name("Laboral")) != nil
+    @hyperlinks = @law.law_hyperlinks
     get_raw_law
   end
 
@@ -84,6 +85,78 @@ class LawsController < ApplicationController
       format.html { redirect_to laws_url, notice: 'Law was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def laws_hyperlinks 
+    get_hyperlinks
+    @hyperlinks.each do |hyperlink|
+      LawHyperlink.find_or_create_by(
+        law_id: hyperlink[:law].id,
+        article_id: hyperlink[:article].id,
+        hyperlink_text: hyperlink[:hyperlink_text],
+        hyperlink: hyperlink[:hyperlink]
+      )
+    end
+
+    status = params[:status]
+
+    if params[:query].present?
+      @law_hyperlinks = LawHyperlink.joins(:law).where("laws.name LIKE ?", "%#{params[:query]}%")
+    else
+      @law_hyperlinks = LawHyperlink.all
+    end
+
+    @law_hyperlinks = @law_hyperlinks.where(status: status) if status.present?
+  end
+
+  def get_hyperlinks
+    # Define a regular expression to match Markdown hyperlinks
+    hyperlink_regex = /\[([^\]]*)\]\(([^\)]*)\)|<a href="([^"]*)">([^<]*)<\/a>/
+    @hyperlinks = []
+    # Iterate over all laws
+    Law.all.each do |law|
+      # Iterate over all articles of the law
+      law.articles.each do |article|
+        # Find all hyperlinks in the article body
+        article.body.scan(hyperlink_regex) do |match|
+          # Check which part of the match array contains the data
+          if match[0] && match[1]
+            hyperlink_text = match[0]
+            hyperlink = match[1]
+          else
+            hyperlink_text = match[3]
+            hyperlink = match[2]
+          end
+          # Store the law name, article number, hyperlink text, and the hyperlink in the hyperlinks array
+          @hyperlinks << { law: law, article: article, hyperlink_text: hyperlink_text, hyperlink: hyperlink }
+        end
+      end
+    end
+  end
+
+  def automatic_update_hyperlink_status
+    LawHyperlink.all.each do |law_hyperlink|
+      if law_hyperlink.hyperlink.start_with?('https://valid.todolegal.app', 'https://test.valid.todolegal.app')
+        id = law_hyperlink.hyperlink.split('/').last
+        document = Document.find_by(id: id)
+        
+        if document
+          law_hyperlink.update(status: 'activo')
+        else
+          law_hyperlink.update(status: 'inactivo')
+        end
+      end
+    end
+  
+    redirect_to laws_hyperlinks_laws_path, notice: 'Se actualizaron los status de los hyperlinks.'
+  end
+
+  def update_hyperlink_status
+    params[:status].each do |id, status|
+      LawHyperlink.find(id).update(status: status)
+    end
+  
+    redirect_to laws_hyperlinks_laws_path, notice: 'Se actualizaron los status de los hyperlinks.'
   end
 
   def insert_article

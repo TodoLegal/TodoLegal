@@ -12,6 +12,7 @@ class Law < ApplicationRecord
   has_many :issuer_law_tags, :dependent => :destroy
   has_many :law_tags, :dependent => :destroy
   has_many :tags, through: :law_tags
+  has_many :law_hyperlinks
 
   pg_search_scope :search_by_name,
                   against: [:name, :creation_number],

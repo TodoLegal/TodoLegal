@@ -55,6 +55,7 @@ module LawsHelper
     end
     
     def get_previous_article current_article
+        #error: undefined method `law' for nil:NilClass
         previous_article = current_article.law.articles.find_by(number:  [" #{current_article.number.to_i - 1}", "#{current_article.number.to_i - 1}"])
         return previous_article
     end

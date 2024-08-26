@@ -1,31 +1,34 @@
-<!-- 
-<% if @law.law_modifications.size != 0 %>
-<p>
-  <p>
-    <% @law.law_modifications.each do |law_modification| %>
-      <%= law_modification.name %>
-      <% if law_modification != @law.law_modifications.last %>
-        ,
-      <% end %>
-    <% end %>
-  </p>
-</p>
-<% end %>
-
-<% if @law.modifications && @law.modifications != "" %>
-<p>
-  <p>Modificaciones: <%= @law.modifications %></p>
-</p>
-<% end %>
--->
 <div class="container" style="margin-top: 15px;">
-  <ul>
-    <% @hyperlinks.each do |hyperlink| %>
-      <li>
-        <%= link_to hyperlink.hyperlink, hyperlink.hyperlink %>
-      </li>
-    <% end %>
-  </ul>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Artículo</th>
+        <th>Texto</th>
+        <th>Documento Relacionado</th>
+        <th>Enlace</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @hyperlinks.each do |hyperlink| %>
+        <tr>
+          <td><%= link_to hyperlink.article.number, @law.friendly_url + "?query=/" + hyperlink.article.number.to_s %></td> <!-- Assuming the article number can be accessed like this -->
+          <td><%= hyperlink.hyperlink_text %></td>
+          <% if hyperlink.linked_document_type == "Law" %>
+            <td>
+              <% law = Law.find_by_id(hyperlink.linked_document_id) %>
+              <%= link_to law.name, law_path(law) if law %>
+            </td>
+          <% else %>
+            <td>
+              <% document = Document.find_by_id(hyperlink.linked_document_id) %>
+              <%= link_to document.name, hyperlink.hyperlink if document %>
+            </td>
+          <% end %>
+          <td><%= link_to "Click aquí", hyperlink.hyperlink %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 </div>
 
 <style>

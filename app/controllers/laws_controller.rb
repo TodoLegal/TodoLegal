@@ -94,7 +94,9 @@ class LawsController < ApplicationController
         law_id: hyperlink[:law].id,
         article_id: hyperlink[:article].id,
         hyperlink_text: hyperlink[:hyperlink_text],
-        hyperlink: hyperlink[:hyperlink]
+        hyperlink: hyperlink[:hyperlink],
+        linked_document_type: hyperlink[:document_type],
+        linked_document_id: hyperlink[:document]&.id
       )
     end
 
@@ -127,11 +129,34 @@ class LawsController < ApplicationController
             hyperlink_text = match[3]
             hyperlink = match[2]
           end
-          # Store the law name, article number, hyperlink text, and the hyperlink in the hyperlinks array
-          @hyperlinks << { law: law, article: article, hyperlink_text: hyperlink_text, hyperlink: hyperlink }
+          # Extract the document from the hyperlink
+          document = extract_document_from_url(hyperlink)
+          # Determine the type of the document
+          document_type = document.nil? ? nil : document.class.name
+          # Store the law name, article number, hyperlink text, the hyperlink, the document, and the document type in the hyperlinks array
+          @hyperlinks << { law: law, article: article, hyperlink_text: hyperlink_text, hyperlink: hyperlink, document: document, document_type: document_type }
         end
       end
     end
+  end
+
+  def extract_document_from_url url
+    matched_id = ""
+    matched_document = nil
+    if url.start_with?("../../laws/") || url.start_with?("https://todolegal.app/laws/") || url.start_with?("https://test.todolegal.app/laws/")
+      match = url.match(/\/laws\/(\d+)/)
+      matched_id =  match[1] if match
+      matched_document = Law.find_by(id: matched_id)
+    elsif url.start_with?(/\d+/)
+      match = url.match(/^(\d+)/)
+      matched_id =  match[1] if match
+      matched_document = Law.find_by(id: matched_id)
+    elsif url.start_with?("https://valid.todolegal.app/") || url.start_with?("https://test.valid.todolegal.app/")
+      match = url.match(/\/(\d+)$/)
+      matched_id =  match[1] if match
+      matched_document = Document.find_by(id: matched_id)
+    end
+    matched_document
   end
 
   def automatic_update_hyperlink_status
@@ -148,15 +173,16 @@ class LawsController < ApplicationController
       end
     end
   
-    redirect_to laws_hyperlinks_laws_path, notice: 'Se actualizaron los status de los hyperlinks.'
+    redirect_to laws_hyperlinks_laws_path, notice: 'Se actualizó el Estado de los Enlaces de Valid.'
   end
 
   def update_hyperlink_status
-    params[:status].each do |id, status|
-      LawHyperlink.find(id).update(status: status)
+    if params[:status]
+      params[:status].each do |id, status|
+        LawHyperlink.find(id).update(status: status)
+      end
     end
-  
-    redirect_to laws_hyperlinks_laws_path, notice: 'Se actualizaron los status de los hyperlinks.'
+    redirect_to laws_hyperlinks_laws_path, notice: 'Se actualizó el Estado de los Enlaces.'
   end
 
   def insert_article

@@ -93,10 +93,10 @@ class LawsController < ApplicationController
       law_hyperlink = LawHyperlink.find_or_initialize_by(
         law_id: hyperlink[:law].id,
         article_id: hyperlink[:article].id,
-        hyperlink_text: hyperlink[:hyperlink_text],
-        linked_document_type: hyperlink[:document_type],
-        linked_document_id: hyperlink[:document]&.id
+        hyperlink_text: hyperlink[:hyperlink_text]
       )
+      law_hyperlink.linked_document_type = hyperlink[:document_type]
+      law_hyperlink.linked_document_id = hyperlink[:document]&.id
       law_hyperlink.hyperlink = hyperlink[:hyperlink]
       law_hyperlink.save
     end

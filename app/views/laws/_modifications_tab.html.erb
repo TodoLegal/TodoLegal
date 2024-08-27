@@ -21,10 +21,14 @@
           <% else %>
             <td>
               <% document = Document.find_by_id(hyperlink.linked_document_id) %>
-              <%= link_to document.name, hyperlink.hyperlink if document %>
+              <%= link_to get_document_name(document), hyperlink.hyperlink if document %>
             </td>
           <% end %>
-          <td><%= link_to "Click aquí", hyperlink.hyperlink %></td>
+          <% if hyperlink.linked_document_type == "Law" %>
+            <td><%= link_to '<i class="fas fa-book"></i>'.html_safe, hyperlink.hyperlink %></td>
+          <% else %> <!-- Assuming the hyperlink is a URL -->
+            <td><%= link_to '<i class="fas fa-file-pdf"></i>'.html_safe, hyperlink.hyperlink %></td> <!-- Assuming the hyperlink is a URL -->
+          <% end %>
         </tr>
       <% end %>
     </tbody>

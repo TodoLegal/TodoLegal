@@ -60,4 +60,12 @@ module LawsHelper
         return previous_article
     end
 
+    def get_document_name document
+        if document 
+            document.name != "" ? document.name : document.issue_id
+        else
+            return ""
+        end
+    end
+
 end

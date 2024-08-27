@@ -399,6 +399,7 @@ class DocumentsController < ApplicationController
     document.description = ""
     document.issue_id = json_data["gazette"]["number"]
     document.url = document.generate_friendly_url
+    document.publish = true
     document.save
     addIssuerTagIfExists(document.id, "ENAG")
     addTagIfExists(document.id, "Gaceta")

@@ -1,28 +1,38 @@
-<!-- 
-<% if @law.law_modifications.size != 0 %>
-<p>
-  <p>
-    <% @law.law_modifications.each do |law_modification| %>
-      <%= law_modification.name %>
-      <% if law_modification != @law.law_modifications.last %>
-        ,
-      <% end %>
-    <% end %>
-  </p>
-</p>
-<% end %>
-
-<% if @law.modifications && @law.modifications != "" %>
-<p>
-  <p>Modificaciones: <%= @law.modifications %></p>
-</p>
-<% end %>
--->
 <div class="container" style="margin-top: 15px;">
-  <h2 class="text-center"> <i class="fas fa-wrench"></i> </h2>
-  <h3 class="text-center"> 
-    En construcción 
-  </h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Artículo</th>
+        <th>Texto</th>
+        <th>Documento Relacionado</th>
+        <th>Enlace</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @hyperlinks.each do |hyperlink| %>
+        <tr>
+          <td><%= link_to hyperlink.article.number, @law.friendly_url + "?query=/" + hyperlink.article.number.to_s %></td> <!-- Assuming the article number can be accessed like this -->
+          <td><%= hyperlink.hyperlink_text %></td>
+          <% if hyperlink.linked_document_type == "Law" %>
+            <td>
+              <% law = Law.find_by_id(hyperlink.linked_document_id) %>
+              <%= link_to law.name, law_path(law) if law %>
+            </td>
+          <% else %>
+            <td>
+              <% document = Document.find_by_id(hyperlink.linked_document_id) %>
+              <%= link_to get_document_name(document), hyperlink.hyperlink if document %>
+            </td>
+          <% end %>
+          <% if hyperlink.linked_document_type == "Law" %>
+            <td><%= link_to '<i class="fas fa-book"></i>'.html_safe, hyperlink.hyperlink %></td>
+          <% else %> <!-- Assuming the hyperlink is a URL -->
+            <td><%= link_to '<i class="fas fa-file-pdf"></i>'.html_safe, hyperlink.hyperlink %></td> <!-- Assuming the hyperlink is a URL -->
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 </div>
 
 <style>

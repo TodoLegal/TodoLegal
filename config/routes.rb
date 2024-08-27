@@ -28,7 +28,10 @@ Rails.application.routes.draw do
   resources :issuer_document_tags
   resources :tags
   resources :tag_types
-  resources :laws
+  resources :laws do
+    get :laws_hyperlinks, path: 'hyperlinks', on: :collection
+    patch :update_hyperlink_status, path: 'update_hyperlink_status' , on: :collection
+  end
   resources :titles, only: [:edit, :update]
   resources :books, only: [:edit, :update]
   resources :chapters, only: [:edit, :update]
@@ -78,7 +81,7 @@ Rails.application.routes.draw do
   post "documents/process_documents_batch", to: "documents#process_documents_batch", as: "process_documents_batch"
   get 'application/external_redirect', to: 'application#external_redirect',  as: "external_redirect"
   get '/wall', to: 'home#wall', as:"wall"
-  get 'admin/laws_hyperlinks', to: 'admin#laws_hyperlinks', as: "laws_hyperlinks"
+  post 'laws/automatic_update_hyperlink_status', to: 'laws#automatic_update_hyperlink_status'
 
   get '/rails/active_storage/blobs/redirect/:signed_id/*filename', to: 'active_storage_redirect#show'
   

@@ -1,6 +1,6 @@
 class AdminController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_action :authenticate_admin!, only: [:users, :grant_permission, :revoke_permission, :set_law_access, :deactivate_notifications, :activate_notifications, :activate_batch_of_users, :laws_hyperlinks]
+  before_action :authenticate_admin!, only: [:users, :grant_permission, :revoke_permission, :set_law_access, :deactivate_notifications, :activate_notifications, :activate_batch_of_users]
   before_action :authenticate_editor!, only: [:gazette, :gazettes]
   require 'MailchimpMarketing'
   include ApplicationHelper
@@ -349,31 +349,6 @@ class AdminController < ApplicationController
     end
     
     redirect_to admin_mailchimp_path, notice: "Se ha actualizado la lista en Mailchimp."
-  end
-
-  def laws_hyperlinks
-    # Define a regular expression to match Markdown hyperlinks
-    hyperlink_regex = /\[([^\]]*)\]\(([^\)]*)\)|<a href="([^"]*)">([^<]*)<\/a>/
-    @hyperlinks = []
-    # Iterate over all laws
-    Law.all.each do |law|
-      # Iterate over all articles of the law
-      law.articles.each do |article|
-        # Find all hyperlinks in the article body
-        article.body.scan(hyperlink_regex) do |match|
-          # Check which part of the match array contains the data
-          if match[0] && match[1]
-            hyperlink_text = match[0]
-            hyperlink = match[1]
-          else
-            hyperlink_text = match[3]
-            hyperlink = match[2]
-          end
-          # Store the law name, article number, hyperlink text, and the hyperlink in the hyperlinks array
-          @hyperlinks << { law: law, article: article, hyperlink_text: hyperlink_text, hyperlink: hyperlink }
-        end
-      end
-    end
   end
 
   def check_hyperlink(hyperlink)

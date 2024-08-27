@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_17_051235) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_26_093201) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
   enable_extension "pg_trgm"
@@ -263,6 +263,18 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_17_051235) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "law_hyperlinks", force: :cascade do |t|
+    t.integer "law_id"
+    t.integer "article_id"
+    t.text "hyperlink_text"
+    t.text "hyperlink"
+    t.string "status", default: "pendiente"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "linked_document_type", default: ""
+    t.integer "linked_document_id"
   end
 
   create_table "law_modifications", force: :cascade do |t|

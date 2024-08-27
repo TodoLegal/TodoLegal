@@ -1,0 +1,57 @@
+
+<div class="container">
+  <h1> <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, laws_hyperlinks_laws_path%> Enlaces en Leyes </h1>
+
+  <div class="row justify-content-between">
+    <div class="col-6 mt-2 mb-2">
+      <%= button_to 'Revisar enlaces Valid', laws_automatic_update_hyperlink_status_path, class:"btn btn-primary", method: :post %>
+      <div class="form-inline mt-2">
+        <span class="mr-2">Ordenar por: </span>
+        <%= form_with url: laws_hyperlinks_laws_path, method: :get do %>
+          <%= select_tag :status, options_for_select(['pendiente', 'activo', 'inactivo'], params[:status]), include_blank: true, onchange: "this.form.submit();" %>
+        <% end %>
+      </div>
+    </div>
+    <div class="col-6">
+      <%= form_with(url: laws_hyperlinks_laws_path, method: :get, local: true) do |form| %>
+        <div class="input-group mb-3">
+          <input name="query" type="text" class="form-control"  value="<%= @query %>" placeholder="Nombre de la ley" aria-label="Nombre de la ley" aria-describedby="buttonSubmit">
+          <button type="submit" class="btn btn-outline-primary" id="buttonSubmit">Buscar</button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      Total de enlaces: <%= @law_hyperlinks.count %>
+    </div>
+  </div>
+
+  <%= form_with url: update_hyperlink_status_laws_path, method: :patch do %>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Ley</th>
+          <th>Artículo</th>
+          <th>Texto</th>
+          <th>Hipervinculo</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @law_hyperlinks.each do |hyperlink| %>
+          <tr>
+            <td><%= link_to hyperlink.law.name, law_path(hyperlink.law) %></td>
+            <td><%= link_to hyperlink.article.number, edit_law_path(hyperlink.law, article_number: hyperlink.article.number) %></td>
+            <td><%= hyperlink.hyperlink_text %></td>
+            <td><%= link_to hyperlink.hyperlink, hyperlink.hyperlink %></td>
+            <td><%= select_tag "status[#{hyperlink.id}]", options_for_select(['pendiente', 'activo', 'inactivo'], hyperlink.status) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <%= submit_tag 'Actualizar Estado', class:"btn btn-primary mt-2" %>
+  <% end %>
+</div>

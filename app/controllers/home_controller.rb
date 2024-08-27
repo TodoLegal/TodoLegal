@@ -226,6 +226,17 @@ class HomeController < ApplicationController
   end
 
   def wall
+    if current_user 
+      if current_user.confirmed_at && return_user_plan_status(current_user) == "Basic"
+        $tracker.track(current_user.id, 'Wall Ver Planes TodoLegal', {
+          'user_type' => return_user_plan_status(current_user),
+        })
+      end
+    else
+      $tracker.track('', 'Wall Crear Cuenta TodoLegal', {
+          'user_type' => 'Anonymous',
+        })
+    end
   end
   
   def invite_friends

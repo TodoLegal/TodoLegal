@@ -90,14 +90,15 @@ class LawsController < ApplicationController
   def laws_hyperlinks 
     get_hyperlinks
     @hyperlinks.each do |hyperlink|
-      LawHyperlink.find_or_create_by(
+      law_hyperlink = LawHyperlink.find_or_initialize_by(
         law_id: hyperlink[:law].id,
         article_id: hyperlink[:article].id,
         hyperlink_text: hyperlink[:hyperlink_text],
-        hyperlink: hyperlink[:hyperlink],
         linked_document_type: hyperlink[:document_type],
         linked_document_id: hyperlink[:document]&.id
       )
+      law_hyperlink.hyperlink = hyperlink[:hyperlink]
+      law_hyperlink.save
     end
 
     status = params[:status]

@@ -94,7 +94,7 @@
             <% end %>
           </p>
           <h5 class="result-card-title"><%= grouped_law[:law].name %></h5>
-          <p class="resultinfo-content"><%= grouped_law[:preview] %></p>
+          <p class="resultinfo-content"><%= grouped_law[:preview].gsub(/<(?!\/?b(?=>|\s.*>))\/?.*?>/, '').html_safe %></p>
           <div class="d-flex justify-content-between document-result-info">
               <span class="badge-creation badge-secondary"><i class="fas fa-file-alt"></i> <%= grouped_law[:law].creation_number %></span>
               <span class="resultinfo-article-count">

@@ -20,6 +20,8 @@ class LawsController < ApplicationController
     @show_mercantil_related_podcast = LawTag.find_by(law: @law, tag: Tag.find_by_name("Mercantil")) != nil
     @show_laboral_related_podcast = LawTag.find_by(law: @law, tag: Tag.find_by_name("Laboral")) != nil
     @hyperlinks = @law.law_hyperlinks
+    @hyperlinks = @law.law_hyperlinks
+    @hyperlinks = @hyperlinks.to_a.sort_by { |hyperlink| hyperlink.article.number.strip.to_i } if @hyperlinks.present?
     get_raw_law
   end
 
@@ -139,6 +141,11 @@ class LawsController < ApplicationController
         end
       end
     end
+    # # Sort the hyperlinks by article number in ascending order
+    # puts "=================================================================="
+    # puts "Hyperlinks: " + @hyperlinks.to_s
+    # puts "=================================================================="
+    # @hyperlinks.sort_by! { |hyperlink| hyperlink[:article].number.strip.to_i }
   end
 
   def extract_document_from_url url

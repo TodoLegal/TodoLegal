@@ -112,6 +112,9 @@ class LawsController < ApplicationController
     end
 
     @law_hyperlinks = @law_hyperlinks.where(status: status) if status.present?
+
+    # Paginate the results
+    @law_hyperlinks = @law_hyperlinks.page params[:page]
   end
 
   def get_hyperlinks

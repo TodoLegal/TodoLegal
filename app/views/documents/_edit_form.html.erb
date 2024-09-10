@@ -263,16 +263,24 @@
 
   //paste text without formatting and replace new lines with space
   document.querySelectorAll('textarea').forEach(function(textarea) {
-    textarea.addEventListener('paste', function(e) {
-      e.preventDefault();
-      var text = e.clipboardData.getData('text/plain');
-      text = text.replace(/\r?\n|\r/g, " "); // replace new lines with space
-      var start = textarea.selectionStart;
-      var end = textarea.selectionEnd;
-      textarea.value = textarea.value.substring(0, start) + text + textarea.value.substring(end);
-      textarea.selectionStart = textarea.selectionEnd = start + text.length;
-    });
+  textarea.addEventListener('paste', function(e) {
+    e.preventDefault();
+    var text = e.clipboardData.getData('text/plain');
+    text = text.replace(/\r?\n|\r/g, " "); // replace new lines with space
+
+    // Check if pasting the text will exceed the maximum length
+    var maxLength = textarea.getAttribute('maxlength');
+    if (maxLength && textarea.value.length + text.length > maxLength) {
+      // If it will, truncate the text to the maximum length
+      text = text.substring(0, maxLength - textarea.value.length);
+    }
+
+    var start = textarea.selectionStart;
+    var end = textarea.selectionEnd;
+    textarea.value = textarea.value.substring(0, start) + text + textarea.value.substring(end);
+    textarea.selectionStart = textarea.selectionEnd = start + text.length;
   });
+});
   
 </script>
 

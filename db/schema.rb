@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_26_093201) do
+ActiveRecord::Schema[7.1].define(version: 2024_09_10_063811) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
   enable_extension "pg_trgm"
@@ -60,6 +60,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_26_093201) do
     t.integer "law_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["law_id"], name: "index_articles_on_law_id"
+    t.index ["number"], name: "index_articles_on_number"
   end
 
   create_table "blazer_audits", force: :cascade do |t|
@@ -303,6 +305,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_26_093201) do
     t.string "hierarchy", default: ""
     t.string "revision_status", default: ""
     t.date "revision_date"
+    t.index ["name"], name: "index_laws_on_name"
   end
 
   create_table "oauth_access_grants", force: :cascade do |t|

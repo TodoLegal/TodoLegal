@@ -90,19 +90,6 @@ class LawsController < ApplicationController
   end
 
   def laws_hyperlinks 
-    get_hyperlinks
-    @hyperlinks.each do |hyperlink|
-      law_hyperlink = LawHyperlink.find_or_initialize_by(
-        law_id: hyperlink[:law].id,
-        article_id: hyperlink[:article].id,
-        hyperlink_text: hyperlink[:hyperlink_text]
-      )
-      law_hyperlink.linked_document_type = hyperlink[:document_type]
-      law_hyperlink.linked_document_id = hyperlink[:document]&.id
-      law_hyperlink.hyperlink = hyperlink[:hyperlink]
-      law_hyperlink.save
-    end
-
     status = params[:status]
 
     if params[:query].present?
@@ -115,6 +102,30 @@ class LawsController < ApplicationController
 
     # Paginate the results
     @law_hyperlinks = @law_hyperlinks.page params[:page]
+  end
+
+  #search for new hyperlinks in all laws
+  def generate_hyperlinks
+    get_hyperlinks
+    new_hyperlinks_count = 0
+    @hyperlinks.each do |hyperlink|
+      law_hyperlink = LawHyperlink.find_or_initialize_by(
+        law_id: hyperlink[:law].id,
+        article_id: hyperlink[:article].id,
+        hyperlink_text: hyperlink[:hyperlink_text]
+      )
+
+      if law_hyperlink.new_record?
+        new_hyperlinks_count += 1
+      end
+
+      law_hyperlink.linked_document_type = hyperlink[:document_type]
+      law_hyperlink.linked_document_id = hyperlink[:document]&.id
+      law_hyperlink.hyperlink = hyperlink[:hyperlink]
+      law_hyperlink.save
+    end
+
+    redirect_to laws_hyperlinks_laws_path, notice: "#{new_hyperlinks_count} nuevos enlaces generados exitosamente."
   end
 
   def get_hyperlinks

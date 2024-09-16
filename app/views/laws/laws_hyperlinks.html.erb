@@ -51,7 +51,8 @@
         <% end %>
       </tbody>
     </table>
-
-    <%= submit_tag 'Actualizar Estado', class:"btn btn-primary mt-2" %>
+    <%=paginate @law_hyperlinks %>
+    <%= submit_tag 'Actualizar Estado', class:"btn btn-primary mt-2 d-inline p-2" %>
   <% end %>
+  <%= button_to 'Generar nuevos enlaces', generate_hyperlinks_laws_path, class:"btn btn-primary mt-2 d-inline p-2", method: :post %>
 </div>

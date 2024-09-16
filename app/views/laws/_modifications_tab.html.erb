@@ -26,8 +26,9 @@
           <% end %>
           <% if hyperlink.linked_document_type == "Law" %>
             <td><%= link_to '<i class="fas fa-book"></i>'.html_safe, hyperlink.hyperlink %></td>
-          <% else %> <!-- Assuming the hyperlink is a URL -->
-            <td><%= link_to '<i class="fas fa-file-pdf"></i>'.html_safe, hyperlink.hyperlink %></td> <!-- Assuming the hyperlink is a URL -->
+          <% else %>
+            <td><%= link_to '<img class="image icon-valid" border="0" alt="Logo Valid" href="/" src="/img/Icon-Valid-gray20px.svg"/>'.html_safe, hyperlink.hyperlink %></td>
+            
           <% end %>
         </tr>
       <% end %>
@@ -41,4 +42,8 @@
       min-height: 800px;
     }
   }
+  .icon-valid {
+    width: 20px;
+    height: 20px;
+  } 
 </style>

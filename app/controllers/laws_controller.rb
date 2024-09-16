@@ -20,6 +20,8 @@ class LawsController < ApplicationController
     @show_mercantil_related_podcast = LawTag.find_by(law: @law, tag: Tag.find_by_name("Mercantil")) != nil
     @show_laboral_related_podcast = LawTag.find_by(law: @law, tag: Tag.find_by_name("Laboral")) != nil
     @hyperlinks = @law.law_hyperlinks
+    @hyperlinks = @law.law_hyperlinks
+    @hyperlinks = @hyperlinks.to_a.sort_by { |hyperlink| hyperlink.article.number.strip.to_i } if @hyperlinks.present?
     get_raw_law
   end
 
@@ -88,19 +90,6 @@ class LawsController < ApplicationController
   end
 
   def laws_hyperlinks 
-    get_hyperlinks
-    @hyperlinks.each do |hyperlink|
-      law_hyperlink = LawHyperlink.find_or_initialize_by(
-        law_id: hyperlink[:law].id,
-        article_id: hyperlink[:article].id,
-        hyperlink_text: hyperlink[:hyperlink_text]
-      )
-      law_hyperlink.linked_document_type = hyperlink[:document_type]
-      law_hyperlink.linked_document_id = hyperlink[:document]&.id
-      law_hyperlink.hyperlink = hyperlink[:hyperlink]
-      law_hyperlink.save
-    end
-
     status = params[:status]
 
     if params[:query].present?
@@ -110,6 +99,33 @@ class LawsController < ApplicationController
     end
 
     @law_hyperlinks = @law_hyperlinks.where(status: status) if status.present?
+
+    # Paginate the results
+    @law_hyperlinks = @law_hyperlinks.page params[:page]
+  end
+
+  #search for new hyperlinks in all laws
+  def generate_hyperlinks
+    get_hyperlinks
+    new_hyperlinks_count = 0
+    @hyperlinks.each do |hyperlink|
+      law_hyperlink = LawHyperlink.find_or_initialize_by(
+        law_id: hyperlink[:law].id,
+        article_id: hyperlink[:article].id,
+        hyperlink_text: hyperlink[:hyperlink_text]
+      )
+
+      if law_hyperlink.new_record?
+        new_hyperlinks_count += 1
+      end
+
+      law_hyperlink.linked_document_type = hyperlink[:document_type]
+      law_hyperlink.linked_document_id = hyperlink[:document]&.id
+      law_hyperlink.hyperlink = hyperlink[:hyperlink]
+      law_hyperlink.save
+    end
+
+    redirect_to laws_hyperlinks_laws_path, notice: "#{new_hyperlinks_count} nuevos enlaces generados exitosamente."
   end
 
   def get_hyperlinks
@@ -139,6 +155,11 @@ class LawsController < ApplicationController
         end
       end
     end
+    # # Sort the hyperlinks by article number in ascending order
+    # puts "=================================================================="
+    # puts "Hyperlinks: " + @hyperlinks.to_s
+    # puts "=================================================================="
+    # @hyperlinks.sort_by! { |hyperlink| hyperlink[:article].number.strip.to_i }
   end
 
   def extract_document_from_url url

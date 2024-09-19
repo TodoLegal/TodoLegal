@@ -63,30 +63,17 @@ class HomeController < ApplicationController
 
   def search_law
     @query = params[:query]
-    @laws = findLaws @query
-    @stream = findArticles @query
+    @laws = findLaws(@query)
+    @stream = findArticles(@query)
     @result_count = @laws.size
-    @articles_count = @stream.size
+    @articles_count = @stream.values.flatten.size
     @is_search_law = true
-    legal_documents = Set[]
-
-    #if @query
-    #  if redirectOnSpecialCode @query
-    #    return
-    #  end
-    #end
-
-    @laws.each do |law|
-      legal_documents.add(law.id)
-    end
-
+    legal_documents = Set.new(@laws.map(&:id))
+  
     @grouped_laws = []
-
-    @tokens = []
-    if @query
-      @tokens = @query.scan(/\w+|\W/)
-    end
-
+  
+    @tokens = @query ? @query.scan(/\w+|\W/) : []
+  
     if @tokens.first == '/'
       articles_query = []
       law_name_query = ""
@@ -97,48 +84,46 @@ class HomeController < ApplicationController
           law_name_query = token
         end
       end
-      @stream = Article.where(law: Law.all.search_by_name(law_name_query)).where(number: articles_query).group_by(&:law_id)
-      @stream.each do |grouped_law|
-        law = {count: grouped_law[1].count, law: Law.find_by_id(grouped_law[0]), preview: ("<b>Artículo " + grouped_law[1].first.number + "</b> " + grouped_law[1].first.body[0,300] + "...").html_safe}
-        law[:materia_names] = law[:law].materia_names
-        @grouped_laws.push(law)
-        @result_count = @grouped_laws.count
-      end
-      @grouped_laws = @grouped_laws.sort_by{|k|k[:count]}.reverse
+  
+      @stream = Article.where(law: Law.search_by_name(law_name_query)).where(number: articles_query).group_by(&:law_id)
     else
-      @stream.each do |grouped_law|
-        law = {
-          count: grouped_law[1].count,
-          law: Law.find_by_id(grouped_law[0]),
-          preview: ("<b>Artículo " + grouped_law[1].first.number + "</b> ..." + customize_highlight(grouped_law[1].first.pg_search_highlight, @query) + "...").html_safe,
-          tag_text: ""
-        }
-        law[:materia_names] = law[:law].materia_names
-        @grouped_laws.push(law)
-        @result_count += grouped_law[1].count
-        legal_documents.add(grouped_law[0])
-      end
-      @grouped_laws = @grouped_laws.sort_by{|k|k[:count]}.reverse
-      @legal_documents_count = legal_documents.size
-      if @result_count == 1
-        @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' resultado encontrado'
-      else
-        @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' resultados encontrados'
-      end
-      titles_result = number_with_delimiter(@laws.size, :delimiter => ',')
-      if @laws.size == 1
-        @titles_result_text = titles_result.to_s + ' resultado'
-      else
-        @titles_result_text = titles_result.to_s + ' resultados'
-      end 
-      articles_result = number_with_delimiter(@result_count - @laws.size, :delimiter => ',')
-      if @result_count == 1
-        @articles_result_text = articles_result.to_s + ' resultado'
-      else
-        @articles_result_text = articles_result.to_s + ' resultados'
-      end 
+      @stream = findArticles(@query)
     end
-
+  
+    law_ids = @stream.keys
+    laws = Law.where(id: law_ids).index_by(&:id)
+  
+    @stream.each do |law_id, articles|
+      law = laws[law_id]
+      next unless law
+  
+      preview_text = if @tokens.first == '/'
+                       "<b>Artículo #{articles.first.number}</b> #{articles.first.body[0, 300]}..."
+                     else
+                       "<b>Artículo #{articles.first.number}</b> ...#{customize_highlight(articles.first.pg_search_highlight, @query)}..."
+                     end
+  
+      law_data = {
+        count: articles.count,
+        law: law,
+        preview: preview_text.html_safe,
+        materia_names: law.materia_names,
+        tag_text: ""
+      }
+      @grouped_laws.push(law_data)
+      @result_count += articles.count
+      legal_documents.add(law_id)
+    end
+  
+    @grouped_laws.sort_by! { |k| -k[:count] }
+    @legal_documents_count = legal_documents.size
+  
+    @result_info_text = "#{number_with_delimiter(@result_count, delimiter: ',')} resultado#{'s' if @result_count != 1} encontrado#{'s' if @result_count != 1}"
+    titles_result = number_with_delimiter(@laws.size, delimiter: ',')
+    @titles_result_text = "#{titles_result} resultado#{'s' if @laws.size != 1}"
+    articles_result = number_with_delimiter(@result_count - @laws.size, delimiter: ',')
+    @articles_result_text = "#{articles_result} resultado#{'s' if @result_count != 1}"
+  
     if current_user
       $tracker.track(current_user.id, 'Site Search', {
         'query' => @query,

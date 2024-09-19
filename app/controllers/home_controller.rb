@@ -62,21 +62,33 @@ class HomeController < ApplicationController
   end
 
   def search_law
+    # Retrieve the search query from the request parameters
     @query = params[:query]
+  
+    # Find laws and articles based on the query
     @laws = findLaws(@query)
     @stream = findArticles(@query)
+  
+    # Initialize result counts
     @result_count = @laws.size
     @articles_count = @stream.values.flatten.size
     @is_search_law = true
+  
+    # Initialize a set to store unique law IDs
     legal_documents = Set.new(@laws.map(&:id))
   
+    # Initialize an array to store grouped laws
     @grouped_laws = []
   
+    # Tokenize the query into words and non-word characters
     @tokens = @query ? @query.scan(/\w+|\W/) : []
   
+    # Special case handling if the query starts with '/'
     if @tokens.first == '/'
       articles_query = []
       law_name_query = ""
+  
+      # Parse tokens to separate article numbers and law name
       @tokens.each do |token|
         if is_number(token)
           articles_query.push(token)
@@ -85,24 +97,32 @@ class HomeController < ApplicationController
         end
       end
   
+      # Find articles based on the parsed law name and article numbers
       @stream = Article.where(law: Law.search_by_name(law_name_query)).where(number: articles_query).group_by(&:law_id)
     else
+      # Find articles based on the query
       @stream = findArticles(@query)
     end
   
+    # Get the unique law IDs from the articles
     law_ids = @stream.keys
+  
+    # Find laws by their IDs and index them by ID for quick lookup
     laws = Law.where(id: law_ids).index_by(&:id)
   
+    # Process each group of articles
     @stream.each do |law_id, articles|
       law = laws[law_id]
       next unless law
   
+      # Generate a preview text for the first article in the group
       preview_text = if @tokens.first == '/'
                        "<b>Artículo #{articles.first.number}</b> #{articles.first.body[0, 300]}..."
                      else
                        "<b>Artículo #{articles.first.number}</b> ...#{customize_highlight(articles.first.pg_search_highlight, @query)}..."
                      end
   
+      # Create a hash to store law data
       law_data = {
         count: articles.count,
         law: law,
@@ -110,20 +130,29 @@ class HomeController < ApplicationController
         materia_names: law.materia_names,
         tag_text: ""
       }
+  
+      # Add the law data to the grouped laws array
       @grouped_laws.push(law_data)
+  
+      # Update the result count and add the law ID to the set of legal documents
       @result_count += articles.count
       legal_documents.add(law_id)
     end
   
+    # Sort the grouped laws by the count of articles in descending order
     @grouped_laws.sort_by! { |k| -k[:count] }
+  
+    # Update the count of unique legal documents
     @legal_documents_count = legal_documents.size
   
+    # Generate user-friendly result texts
     @result_info_text = "#{number_with_delimiter(@result_count, delimiter: ',')} resultado#{'s' if @result_count != 1} encontrado#{'s' if @result_count != 1}"
     titles_result = number_with_delimiter(@laws.size, delimiter: ',')
     @titles_result_text = "#{titles_result} resultado#{'s' if @laws.size != 1}"
     articles_result = number_with_delimiter(@result_count - @laws.size, delimiter: ',')
     @articles_result_text = "#{articles_result} resultado#{'s' if @result_count != 1}"
   
+    # Track the search activity if a user is logged in
     if current_user
       $tracker.track(current_user.id, 'Site Search', {
         'query' => @query,

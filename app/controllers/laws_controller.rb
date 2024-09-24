@@ -165,7 +165,7 @@ class LawsController < ApplicationController
   def extract_document_from_url url
     matched_id = ""
     matched_document = nil
-    if url.start_with?("../../laws/") || url.start_with?("../") || url.start_with?("https://todolegal.app/laws/") || url.start_with?("https://test.todolegal.app/laws/")
+    if url.start_with?("../../laws/") || url.start_with?("../") || url.start_with?("https://todolegal.app/laws/") || url.start_with?("https://www.todolegal.app/laws/") || url.start_with?("https://test.todolegal.app/laws/")
       match = url.match(/\/laws\/(\d+)/)
       matched_id =  match[1] if match
       matched_document = Law.find_by(id: matched_id)

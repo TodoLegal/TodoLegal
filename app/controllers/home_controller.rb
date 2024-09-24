@@ -107,8 +107,8 @@ class HomeController < ApplicationController
     # Get the unique law IDs from the articles
     law_ids = @stream.keys
   
-    # Find laws by their IDs and index them by ID for quick lookup
-    laws = Law.where(id: law_ids).index_by(&:id)
+    # Find laws by their IDs and index them by ID for quick lookup, including eager loading of tags
+    laws = Law.where(id: law_ids).includes(:tags).index_by(&:id)
   
     # Process each group of articles
     @stream.each do |law_id, articles|

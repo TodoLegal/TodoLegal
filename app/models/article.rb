@@ -5,11 +5,10 @@ class CustomRender < Redcarpet::Render::HTML
 end
 
 class Article < ApplicationRecord
-  include PgSearch
+  include PgSearch::Model
 
   belongs_to :law, touch: true
-  has_many :law_hyperlinks, :dependent => :destroy
-  #pg_search_scope :search_by_body, against: :body
+  has_many :law_hyperlinks, dependent: :destroy
 
   pg_search_scope :search_by_body_highlighted,
                   against: :body,
@@ -30,7 +29,7 @@ class Article < ApplicationRecord
                     }
                   }
 
-pg_search_scope :search_by_body_trimmed,
+  pg_search_scope :search_by_body_trimmed,
                   against: :body,
                   ignoring: :accents,
                   using: {
@@ -49,7 +48,7 @@ pg_search_scope :search_by_body_trimmed,
                     }
                   }
 
-pg_search_scope :search_by_body_highlighted_and_trimmed,
+  pg_search_scope :search_by_body_highlighted_and_trimmed,
                   against: :body,
                   ignoring: :accents,
                   using: {
@@ -69,25 +68,25 @@ pg_search_scope :search_by_body_highlighted_and_trimmed,
                   }
 
   pg_search_scope :roughly_spelled_like,
-  against: :body,
-  using: {
-    tsearch: {
-      highlight: {
-        StartSel: '<b style="color: var(--c-highlight)">',
-        StopSel: '</b>',
-        MaxWords: 123,
-        MinWords: 456,
-        ShortWord: 4,
-        HighlightAll: true,
-        MaxFragments: 3,
-        FragmentDelimiter: '&hellip;'
-      }
-    }
-  }
+                  against: :body,
+                  using: {
+                    tsearch: {
+                      highlight: {
+                        StartSel: '<b style="color: var(--c-highlight)">',
+                        StopSel: '</b>',
+                        MaxWords: 123,
+                        MinWords: 456,
+                        ShortWord: 4,
+                        HighlightAll: true,
+                        MaxFragments: 3,
+                        FragmentDelimiter: '&hellip;'
+                      }
+                    }
+                  }
 
   class << self
     def markdown
-      Redcarpet::Markdown.new(CustomRender, :tables => true)
+      @markdown ||= Redcarpet::Markdown.new(CustomRender, tables: true)
     end
   end
 end

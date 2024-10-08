@@ -63,3 +63,4 @@ es:
       not_saved:
         one: "Ha ocurrido 1 error:"
         other: "Han ocurrido %{count} errores:"
+      taken: "ya está registrado"

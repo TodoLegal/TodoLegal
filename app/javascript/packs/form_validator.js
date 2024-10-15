@@ -55,6 +55,24 @@ if(email){
     });
 }
 
+var confirmEmail = document.getElementById("confirmEmail");
+if(confirmEmail){
+    bootstrapValidate(confirmEmail, 'matches:#email:Tus correos deben ser iguales', function (isValid){
+    if(isValid)
+    {
+        $('#nextButton').unbind();
+        $('#nextButton').popover('hide')
+    } else
+    {
+        $('#nextButton').click(function (e) {
+        $('#nextButton').popover('show')
+        e.preventDefault();
+        e.stopPropagation();
+        });
+    }
+    });
+}
+
 var email2 = document.getElementById("email2")
 if(email2){
     bootstrapValidate(email2, 'email:Debes ingresar un correo válido', function (isValid){

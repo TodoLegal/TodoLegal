@@ -37,7 +37,6 @@
         <p class="content text-center">Si ya tienes una cuenta <%= render "devise/shared/links" %></p>
     
         <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-          <%= render "devise/shared/error_messages", resource: resource%>
           <div class="form-group">
             <div class="row">
               <div class="col-md-6 form-group">
@@ -53,6 +52,12 @@
           <div class="form-group">
             <%= f.label :Correo_eléctronico %><br />
             <%= f.email_field :email, autocomplete: "email", class:"form-control", id:"email"%>
+            <%= render "devise/shared/error_messages", resource: resource%>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :Confirma_tu_correo_eléctronico %><br />
+            <%= f.email_field :email, autocomplete: "email", class:"form-control", id:"confirmEmail"%>
           </div>
 
           <div class="form-group">
@@ -60,17 +65,13 @@
             <%= f.text_field :phone_number, autocomplete: "phone-number", class:"form-control", id:"phone"%>
           </div>
 
-          <div class="form-group">
+          <div class="form-group password-container">
             <%= f.label :Contraseña %><br />
             <%= f.password_field :password, autocomplete: "new-password", class: "form-control", id:"password"%>
+            <i class="fas fa-eye toggle-password" id="togglePassword" role="button" onclick="togglePassword()"></i>
             <small id="passwordHelpBlock" class="form-text text-muted">
               <em>(Mínimo <%= @minimum_password_length %> caracteres)</em>
             </small>
-          </div>
-
-          <div class="form-group">
-            <%= f.label :Confirma_tu_contraseña %><br />
-            <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control", id:"confirmPassword"%>
           </div>
           <div class="form-group">
             <button type="submit" class="btn btn-primary btn-block btn-next btn-lg" id="nextButton"  
@@ -129,42 +130,30 @@
     }
   });
 
-  //triggers registerButton click on enter when second card is focused
-  // var input = document.getElementById("profileInfo");
-  // input.addEventListener("keypress", function(event) {
-  //   if ( event.keyCode === 13 ) {
-  //     event.preventDefault();
-  //     document.getElementById("registerButton").click();
-  //   }
-  // });
+  function togglePassword () {
+    const item = document.getElementById('togglePassword');
+    const input = document.getElementById('password');
+    const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+    input.setAttribute('type', type);
+    if (type === 'password') {
+        item.classList.remove('fa-eye-slash');
+        item.classList.add('fa-eye');
+    } else {
+        item.classList.remove('fa-eye');
+        item.classList.add('fa-eye-slash');
+    }
+  }
 
-  // addEventListener("change", function(event){
-  //   $('.form-check').each(function() {
-  //     if($(this).children().is(":checked")) {
-  //       this.classList.add('checked');
-  //     } else {
-  //       this.classList.remove('checked');
-  //     }
-  //   });
-  // });
-
-//show the other field when radio button "Otro" is selected
-  // function showOtherField(field){
-  //   if(field === "Otro")
-  //   {
-  //     document.getElementById("otherField").style.display = "block";
-  //   }else
-  //   {
-  //     document.getElementById("otherField").style.display = "none";
-  //   }
-  // }
-
-  // //send occupation extra param
-  // function sendParameter(){
-  //   var param = document.getElementById("otherOccupation").value;
-  //   console.log(param);
-  //   document.getElementById("hiddenField").value = param;
-  // }
+  // Show/hide the eye icon based on password length
+  const passwordInput = document.getElementById('password');
+  const togglePasswordIcon = document.getElementById('togglePassword');
+  passwordInput.addEventListener('input', function () {
+    if (passwordInput.value.length >= 6) {
+      togglePasswordIcon.style.display = "block";
+    } else {
+      togglePasswordIcon.style.display = "none";
+    }
+  });
 
 </script>
 
@@ -324,6 +313,18 @@
     margin: 2rem auto;
     line-height: 1.25rem;
     text-align: center;
+  }
+
+  .password-container {
+    position: relative;
+  }
+
+  .password-container .toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
   }
 
   @media only screen and (max-width: 767.98px){

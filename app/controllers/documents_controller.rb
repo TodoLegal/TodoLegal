@@ -369,14 +369,23 @@ class DocumentsController < ApplicationController
   def add_stamp_to_unprocessed_document document, document_pdf_path
     document_name = `python3 ~/GazetteSlicer/add_stamp_to_document.py #{ document_pdf_path } '#{ Rails.root.join("public", "documents") }'`
     document_name = JSON.parse(document_name)
+
+    # Construct the new document name
+    issue_id = document.issue_id || document.id
+    issuer_document_tag = document.issuer_document_tags&.first&.tag&.name
+    new_document_name = "TodoLegal-#{issue_id}"
+    new_document_name += "-#{issuer_document_tag}" if issuer_document_tag.present?
+    new_document_name += ".pdf"
+
+    # Rename the file
+    old_path = Rails.root.join("public", "documents", document_name).to_s
+    new_path = Rails.root.join("public", "documents", new_document_name).to_s
+    File.rename(old_path, new_path)
+
+    # Attach the renamed file to the document
     document.original_file.attach(
-      io: File.open(
-        Rails.root.join(
-          "public",
-          "documents",
-          document_name).to_s
-      ),
-      filename: document_name,
+      io: File.open(new_path),
+      filename: new_document_name,
       content_type: "application/pdf"
     )
   end

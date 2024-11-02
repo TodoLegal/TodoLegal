@@ -276,6 +276,7 @@ class DocumentsController < ApplicationController
         if params[:commit] == 'Guardar cambios'
           @document.publish = true
           @document.save
+          add_name_to_document(@document)
           #redirect to provided url if exists
           if session[:redirect_url]
             format.html { redirect_to edit_document_path(@document, return_to: session[:redirect_url]), notice: 'Document was successfully updated.' }
@@ -283,10 +284,12 @@ class DocumentsController < ApplicationController
             format.html { redirect_to edit_document_path(@document), notice: 'Document was successfully updated.' }
           end
         elsif params[:commit] == 'Guardar y siguiente'
+          add_name_to_document(@document)
           @document.publish = true
           @document.save
           format.html { redirect_to edit_document_path(get_next_document @document), notice: 'Document was successfully updated.' }
         elsif params[:commit] == 'Guardar y regresar a PIIL'
+          add_name_to_document(@document)
           @document.publish = true
           @document.save
           #redirect to provided url
@@ -377,6 +380,33 @@ class DocumentsController < ApplicationController
           document_name).to_s
       ),
       filename: document_name,
+      content_type: "application/pdf"
+    )
+  end
+
+  def add_name_to_document(document)
+    # Download the file
+    bucket = get_bucket
+    file = bucket.file(document.original_file.key)
+    download_path = Rails.root.join("tmp", "documento.pdf")
+    file.download(download_path.to_s)
+  
+    # Construct the new document name
+    issue_id = document.issue_id || document.id
+    issuer_document_tag = document.issuer_document_tags&.first&.tag&.name
+    new_document_name = "TodoLegal-#{issue_id}"
+    new_document_name += "-#{issuer_document_tag}" if issuer_document_tag.present?
+    new_document_name += ".pdf"
+  
+    # Rename the file
+    old_path = download_path.to_s
+    new_path = Rails.root.join("tmp", new_document_name).to_s
+    File.rename(old_path, new_path)
+  
+    # Attach the renamed file to the document
+    document.original_file.attach(
+      io: File.open(new_path),
+      filename: new_document_name,
       content_type: "application/pdf"
     )
   end

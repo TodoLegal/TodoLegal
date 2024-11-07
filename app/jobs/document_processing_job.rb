@@ -8,7 +8,11 @@ include DocumentsHelper
     json_data = run_slice_gazette_script(document, document_pdf_path, user)
     process_gazette document, document_pdf_path, user
     document.start_page = 0
-    document.end_page = json_data["page_count"] - 1
+    if json_data.key?("page_count")
+      document.end_page = json_data["page_count"] - 1
+    else
+      document.end_page = json_data["page_count"]
+    end
     document.url = document.generate_friendly_url
     document.save
     # set_content_disposition_attachment document.original_file.key, document.name + ".pdf"

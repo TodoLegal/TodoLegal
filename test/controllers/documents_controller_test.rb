@@ -38,6 +38,21 @@ class DocumentsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to document_url(@document)
   end
 
+  test "should update document, set publish to true, and redirect to next document" do
+    new_name = "New Document Name"
+    
+    # Stub the get_next_document method to return a specific document
+    next_document = documents(:two)
+    DocumentsController.any_instance.stubs(:get_next_document).returns(next_document)
+  
+    patch document_url(@document), params: { document: { name: new_name, publish: true }, commit: "Guardar y siguiente" }
+    @document.reload
+  
+    assert_equal new_name, @document.name
+    assert_equal true, @document.publish
+    assert_redirected_to edit_document_url(next_document)
+  end
+
   test "should destroy document" do
     assert_difference('Document.count', -1) do
       delete document_url(@document)

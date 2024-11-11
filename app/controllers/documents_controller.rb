@@ -154,16 +154,9 @@ class DocumentsController < ApplicationController
         if params["document"]["auto_process_type"] == "slice"
           get_gazette_document_type_id #this is maybe a misplaced and useless call to this method, delete later?
           file.download "tmp/gazette.pdf"
-          # slice_gazette @document, Rails.root.join("tmp") + "gazette.pdf"
           document_pdf_path = (Rails.root.join("tmp") + "gazette.pdf").to_s
           DocumentProcessingJob.perform_later(@document, document_pdf_path, current_user)
 
-          # if $discord_bot
-          #   publication_number = @document.publication_number
-          #   discord_message = "Nueva gaceta seccionada en Valid! [#{publication_number}](https://todolegal.app/admin/gazettes/#{publication_number}) :scroll:"
-          #   $discord_bot.send_message($discord_bot_document_upload, discord_message)
-          # end
-          # format.html { redirect_to gazette_path(@document.publication_number), notice: 'La gaceta se ha partido exitósamente.' }
           format.html { redirect_to documents_path, notice: 'El documento esta siendo procesado. Se te enviará un correo y una notificación de discord cuando esté listo.' }
         elsif params["document"]["auto_process_type"] == "process"
           file.download "tmp/gazette.pdf"
@@ -276,6 +269,7 @@ class DocumentsController < ApplicationController
         if params[:commit] == 'Guardar cambios'
           @document.publish = true
           @document.save
+          add_name_to_document(@document)
           #redirect to provided url if exists
           if session[:redirect_url]
             format.html { redirect_to edit_document_path(@document, return_to: session[:redirect_url]), notice: 'Document was successfully updated.' }
@@ -283,10 +277,12 @@ class DocumentsController < ApplicationController
             format.html { redirect_to edit_document_path(@document), notice: 'Document was successfully updated.' }
           end
         elsif params[:commit] == 'Guardar y siguiente'
+          add_name_to_document(@document)
           @document.publish = true
           @document.save
           format.html { redirect_to edit_document_path(get_next_document @document), notice: 'Document was successfully updated.' }
         elsif params[:commit] == 'Guardar y regresar a PIIL'
+          add_name_to_document(@document)
           @document.publish = true
           @document.save
           #redirect to provided url
@@ -377,6 +373,33 @@ class DocumentsController < ApplicationController
           document_name).to_s
       ),
       filename: document_name,
+      content_type: "application/pdf"
+    )
+  end
+
+  def add_name_to_document(document)
+    # Download the file
+    bucket = get_bucket
+    file = bucket.file(document.original_file.key)
+    download_path = Rails.root.join("tmp", "documento.pdf")
+    file.download(download_path.to_s)
+  
+    # Construct the new document name
+    issue_id = document.issue_id || document.id
+    issuer_document_tag = document.issuer_document_tags&.first&.tag&.name
+    new_document_name = "TodoLegal-#{issue_id}"
+    new_document_name += "-#{issuer_document_tag}" if issuer_document_tag.present?
+    new_document_name += ".pdf"
+  
+    # Rename the file
+    old_path = download_path.to_s
+    new_path = Rails.root.join("tmp", new_document_name).to_s
+    File.rename(old_path, new_path)
+  
+    # Attach the renamed file to the document
+    document.original_file.attach(
+      io: File.open(new_path),
+      filename: new_document_name,
       content_type: "application/pdf"
     )
   end

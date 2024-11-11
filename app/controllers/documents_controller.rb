@@ -507,7 +507,16 @@ class DocumentsController < ApplicationController
                       end
 
       puts "Uploading file"
-      add_name_to_document(new_document)
+      new_document.original_file.attach(
+        io: File.open(
+          Rails.root.join(
+            "public",
+            "gazettes",
+            document.id.to_s, file["path"]).to_s
+        ),
+        filename: download_name + ".pdf",
+        content_type: "application/pdf"
+      )
       #set_content_disposition_attachment new_document.original_file.key, helpers.get_document_title(new_document) + ".pdf"
       puts "File uploaded"
     end

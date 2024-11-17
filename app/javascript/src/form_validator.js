@@ -1,5 +1,6 @@
 //validate if input fields were filled with the right format and activates the popover when needed
 
+console.log("formValidator is loaded");
 var name = document.getElementById("name");
 if(name){
 
@@ -126,33 +127,3 @@ if(confirmPassword){
     }
     });
 }
-
-//prevent nextButton click is input fields are empty
-// function required ()
-// {
-//     try{  
-//         var name = document.getElementById("name").value;
-//         var lastName = document.getElementById("lastName").value;
-//         var email = document.getElementById("email").value;
-//         var password = document.getElementById("password").value;
-//         var confirmPassword = document.getElementById("confirmPassword").value;
-//     }catch{
-//         console.log("error")
-//     }
-
-//     if( (name.trim() == "") || (lastName.trim() == "") || (email.trim() == "") || (password.trim() == "") || (confirmPassword.trim() == "") || (isValid == false) )
-//     {
-//         $('#nextButton').popover('show')
-//         event.preventDefault();
-//         event.stopPropagation();
-//     }
-//     else
-//     {
-//         $('#nextButton').unbind();
-//         $('#nextButton').popover('hide')
-//         var profileInfo = document.getElementById("profileInfo");
-//         if (profileInfo)
-//             profileInfo.focus(); 
-//     }
-  
-// }

@@ -31,8 +31,6 @@ class DocumentTagsController < ApplicationController
       respond_to do |format|
         if @document_tag.save
           if redirect_url.present?
-            format.html { redirect_to edit_document_path(@document_tag.document, return_to: redirect_url), notice: 'Se ha añadido el tag exitosamente.' }
-
             #create new datapoint
             datapoint_type = ""
 
@@ -49,11 +47,28 @@ class DocumentTagsController < ApplicationController
             if datapoint_type.present?
               datapoint = Datapoint.create(document_id: @document_tag.document.id, document_tag_id: @document_tag.id, datapoint_type_id: datapoint_type.id, status: :pendiente, is_active: true, is_empty_field: false) 
             end
+
+            format.html { redirect_to edit_document_path(@document_tag.document, return_to: redirect_url), notice: 'Se ha añadido el tag exitosamente.' }
           else
+            format.turbo_stream do
+              render turbo_stream: turbo_stream.replace(
+                "new_tag_#{@document_tag.tag.tag_type.name}_false", 
+                partial: "documents/edit_tag_table", 
+                locals: {
+                  document: @document_tag.document, 
+                  tag_name: @document_tag.tag.tag_type.name, 
+                  issuer: false 
+                }
+              )
+            end
             format.html { redirect_to edit_document_path(@document_tag.document), notice: 'Se ha añadido el tag exitosamente.' }
           end
+          
           format.json { render :show, status: :created, location: @document_tag.document }
         else
+          format.turbo_stream do
+            render turbo_stream: turbo_stream.replace("new_tag_form", partial: "document_tags/form", locals: { document_tag: @document_tag })
+          end
           format.html { render :new }
           format.json { render json: @document_tag.errors, status: :unprocessable_entity }
         end
@@ -100,5 +115,5 @@ class DocumentTagsController < ApplicationController
       def document_tag_params
         params.require(:document_tag).permit(:document_id, :tag_id, :tag_type, :return_to)
       end
-  end
+end
   

@@ -1,102 +1,12 @@
-<table class="table table-bordered" id="edit_table">
-    <thead>
-    <tr>
-        <th scope="col">Tag</th>
-        <th scope="col">Acciones</th>
-    </tr>
-    </thead>
-    <tbody>
-        <% if issuer %>
-            <!-- issuer document tags -->
-            <% @document.issuer_document_tags.each do |document_tag| %>
-                <% if document_tag.tag&.tag_type&.name == tag_name %>
-                    <tr>
-                        <td>
-                            <%= document_tag.tag.name %>
-                        </td>
-                        <td>
-                            <%= button_to issuer_document_tag_path(document_tag, return_to: @redirect_url), method: :delete, data: { confirm: '¿Estás Seguro que deseas eliminarlo?'}, class:"btn btn-outline-danger"  do %>
-                                <i class="fas fa-trash-alt"></i>
-                            <% end %>
-                        </td>
-                    </tr>
-                <% end %>
-            <% end %>
+<%= turbo_frame_tag "new_tag_#{tag_name}_#{issuer}" do %>
+    <table class="table table-bordered" id="edit_table">
+        <thead>
+        <tr>
+            <th scope="col">Tag</th>
+            <th scope="col">Acciones</th>
+        </tr>
+        </thead>
+        <%= render partial: "document_tags/document_tag", locals: {document: document, tag_name: tag_name, issuer: issuer} %>
 
-            <tr> 
-                <% document_tag = IssuerDocumentTag.new %>
-                <%= form_with(model: document_tag, local: true) do |form|%>
-                    <% if document_tag.errors.any? %>
-                        <div id="error_explanation">
-                        <h2><%= pluralize(document_tag.errors.count, "error") %> prohibited this document_tag from being saved:</h2>
-                            <ul>
-                            <% document_tag.errors.full_messages.each do |message| %>
-                                <li><%= message %></li>
-                            <% end %>
-                            </ul>
-                        </div>
-                    <% end %>
-                    <td>
-                        <% tag_type = TagType.find_by(name: tag_name) %>
-                        <% if tag_type %>
-                            <%= form.hidden_field :document_id, value: @document.id %>
-                            <%= form.hidden_field :tag_type, value: tag_name %>
-                            <% if @redirect_url %>
-                                <%= form.hidden_field :return_to, value: @redirect_url %>
-                            <% end %>
-                            <%= form.collection_select(:tag_id, Tag.where(tag_type_id: tag_type.id), :id, :name, {:prompt=>true}, {:class=>'form-control js-example-basic-single', :id=>tag_type.id+700}) %>
-                        <% end %>
-                    <td>
-                    <%= form.submit "Agregar tag", class: 'btn btn-primary' %>
-                    </td>
-                <% end %>
-            </tr>
-
-        <% else %>
-            <!-- document tags -->
-            <% @document.document_tags.each do |document_tag| %>
-                <% if document_tag.tag&.tag_type&.name == tag_name %>
-                    <tr>
-                        <td>
-                            <%= document_tag.tag.name %>
-                        </td>
-                        <td>
-                            <%= button_to document_tag_path(document_tag, return_to: @redirect_url), method: :delete, data: { confirm: '¿Estás seguro que deseas eliminarlo?' }, class:"btn btn-outline-danger" do %>
-                                <i class="fas fa-trash-alt"></i>
-                            <% end %>
-                        </td>
-                    </tr>
-                <% end %>
-            <% end %>
-            <tr> 
-                <% document_tag = DocumentTag.new %>
-                <%= form_with(model: document_tag, local: true) do |form|%>
-                    <% if document_tag.errors.any? %>
-                        <div id="error_explanation">
-                        <h2><%= pluralize(document_tag.errors.count, "error") %> prohibited this document_tag from being saved:</h2>
-                            <ul>
-                            <% document_tag.errors.full_messages.each do |message| %>
-                                <li><%= message %></li>
-                            <% end %>
-                            </ul>
-                        </div>
-                    <% end %>
-                    <td>
-                        <% tag_type = TagType.find_by(name: tag_name) %>
-                        <% if tag_type %>
-                            <%= form.hidden_field :document_id, value: @document.id %>
-                            <%= form.hidden_field :tag_type, value: tag_name %>
-                            <% if @redirect_url %>
-                                <%= form.hidden_field :return_to, value: @redirect_url %>
-                            <% end %>
-                            <%= form.collection_select(:tag_id, Tag.where(tag_type_id: tag_type.id), :id, :name, {:prompt=>true}, {:class=>'form-control js-example-basic-single', :id=>tag_type.id}) %>
-                        <% end %>
-                    <td>
-                    <%= form.submit "Agregar tag", class: 'btn btn-primary' %>
-                    </td>
-                <% end %>
-            </tr>
-        <% end %>
-    </tbody>
-
-</table>
+    </table>
+<% end %>

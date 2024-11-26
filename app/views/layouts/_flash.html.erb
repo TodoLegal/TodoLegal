@@ -1,0 +1,10 @@
+<%= turbo_frame_tag "autosave_flash" do %>
+  <% flash.each do | type, message | %>
+    <div class="alert alert-primary alert-dismissible fade show text-center" role="success">
+      <%= message %>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  <% end %>
+<% end %>

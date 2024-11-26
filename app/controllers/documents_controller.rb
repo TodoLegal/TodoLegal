@@ -269,11 +269,15 @@ class DocumentsController < ApplicationController
         if params[:commit] == 'Guardar cambios'
           @document.publish = true
           @document.save
-          add_name_to_document(@document)
+          # add_name_to_document(@document)
           #redirect to provided url if exists
           if session[:redirect_url]
             format.html { redirect_to edit_document_path(@document, return_to: session[:redirect_url]), notice: 'Document was successfully updated.' }
           else
+            flash.now[:notice] = 'Document was successfully updated.'
+            format.turbo_stream do 
+              render turbo_stream: turbo_stream.replace("autosave_flash", partial: "layouts/flash")
+            end
             format.html { redirect_to edit_document_path(@document), notice: 'Document was successfully updated.' }
           end
         elsif params[:commit] == 'Guardar y siguiente'
@@ -290,8 +294,19 @@ class DocumentsController < ApplicationController
         elsif params[:commit] == 'Subir nueva sentencia'
           format.html { redirect_to new_document_path + "?selected_document_type=judgement" }
         end
+
+        # if neither of the above conditions are met, then the autosave is being called
+        flash.now[:notice] = 'Document was successfully updated.'
+        format.turbo_stream do 
+          render turbo_stream: turbo_stream.replace("autosave_flash", partial: "layouts/flash")
+        end
+        format.html { redirect_to edit_document_path(@document), notice: 'Document was successfully updated.' }
         format.json { render :show, status: :ok, location: @document }
       else
+        format.turbo_stream do
+          flash.now[:alert] = "There was an error updating the document."
+          render turbo_stream: turbo_stream.replace("autosave_flash", partial: "layouts/flash")
+        end
         format.html { render :edit }
         format.json { render json: @document.errors, status: :unprocessable_entity }
       end

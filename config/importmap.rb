@@ -22,3 +22,4 @@ pin "javascript/src/preferences_validator", preload: false
 pin "javascript/src/stripe_integration", preload: false
 pin "javascript/src/trim_articles_for_preview", preload: false
 
+pin "lodash.debounce" # @4.0.8

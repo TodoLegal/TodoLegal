@@ -1,7 +1,10 @@
  <div class="card">
     <div class="card-body">
 
-    <%= form_with(model: document, local: true) do |form| %>
+    <%= form_with(model: document, data: {
+      controller: "document-autosave",
+      autosave_delay: "250",  
+    }) do |form| %>
       <% if document.errors.any? %>
         <div id="error_explanation">
           <h2><%= pluralize(document.errors.count, "error") %> prohibited this document from being saved:</h2>
@@ -177,6 +180,10 @@
         </div>
       </div>
 
+      <%= turbo_frame_tag "autosave_flash" do %>
+        <%= render "layouts/flash" %>
+      <% end %>
+
       <div class="row">
         <div class="col-md-8">
           <div class="form-group">
@@ -186,12 +193,14 @@
               <%= form.label :descripción_corta %>
             <% end %>
             <%= form.text_area :short_description, class: "form-control", maxlength: "250", 
-                onkeyup:"charCountUpdate(this.value, 'shortDescription', 250)" %>
+                data: { action: "keyup->document-autosave#save" },
+                onkeyup: "charCountUpdate(this.value, 'shortDescription', 250)" 
+            %>
             <small id="shortDescription">0 de 250 caracteres</small>
           </div>
         </div>
       </div>
-
+      
       <div class="row">
         <div class="col-md-8">
           <div class="form-group">
@@ -202,6 +211,7 @@
             <% end %>
             <%= form.label :descripcion_larga %>
             <%= form.text_area :description, class: "form-control", maxlength: "1250",
+                data: { action: "keyup->document-autosave#save" },
                 onkeyup:"charCountUpdate(this.value, 'longDescription', 1250)" %>
             <small id="longDescription">0 de 1250 caracteres</small>
           </div>

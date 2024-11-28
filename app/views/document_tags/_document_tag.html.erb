@@ -18,18 +18,19 @@
 
         <tr> 
             <% document_tag = IssuerDocumentTag.new %>
-            <%= form_with(model: document_tag, local: true, data: { turbo_stream: true }) do |form|%>
-                <% if document_tag.errors.any? %>
-                    <div id="error_explanation">
-                    <h2><%= pluralize(document_tag.errors.count, "error") %> prohibited this document_tag from being saved:</h2>
-                        <ul>
-                        <% document_tag.errors.full_messages.each do |message| %>
-                            <li><%= message %></li>
-                        <% end %>
-                        </ul>
-                    </div>
-                <% end %>
-                <td>
+           
+            <td>
+                <%= form_with(model: document_tag, local: true, data: { turbo_stream: true }) do |form|%>
+                    <% if document_tag.errors.any? %>
+                        <div id="error_explanation">
+                        <h2><%= pluralize(document_tag.errors.count, "error") %> prohibited this document_tag from being saved:</h2>
+                            <ul>
+                            <% document_tag.errors.full_messages.each do |message| %>
+                                <li><%= message %></li>
+                            <% end %>
+                            </ul>
+                        </div>
+                    <% end %>
                     <% tag_type = TagType.find_by(name: tag_name) %>
                     <% if tag_type %>
                         <%= form.hidden_field :document_id, value: document.id %>
@@ -39,10 +40,8 @@
                         <% end %>
                         <%= form.collection_select(:tag_id, Tag.where(tag_type_id: tag_type.id), :id, :name, {:prompt=>true}, {:class=>'form-control js-example-basic-single', :id=>tag_type.id+700}) %>
                     <% end %>
-                <td>
-                    <%= form.submit "Agregar tag", class: 'btn btn-primary' %>
-                </td>
-            <% end %>
+                <% end %>
+            </td>
         </tr>
 
     <% else %>
@@ -63,19 +62,19 @@
             <% end %>
         <% end %>
         <tr> 
-            <% document_tag = DocumentTag.new %>
-            <%= form_with(model: document_tag, local: true, data: { turbo_stream: true }) do |form|%>
-                <% if document_tag.errors.any? %>
-                    <div id="error_explanation">
-                    <h2><%= pluralize(document_tag.errors.count, "error") %> prohibited this document_tag from being saved:</h2>
-                        <ul>
-                        <% document_tag.errors.full_messages.each do |message| %>
-                            <li><%= message %></li>
-                        <% end %>
-                        </ul>
-                    </div>
-                <% end %>
-                <td>
+            <td>
+                <% document_tag = DocumentTag.new %>
+                <%= form_with(model: document_tag, data: { turbo_stream: true }) do |form|%>
+                    <% if document_tag.errors.any? %>
+                        <div id="error_explanation">
+                        <h2><%= pluralize(document_tag.errors.count, "error") %> prohibited this document_tag from being saved:</h2>
+                            <ul>
+                            <% document_tag.errors.full_messages.each do |message| %>
+                                <li><%= message %></li>
+                            <% end %>
+                            </ul>
+                        </div>
+                    <% end %>
                     <% tag_type = TagType.find_by(name: tag_name) %>
                     <% if tag_type %>
                         <%= form.hidden_field :document_id, value: document.id %>
@@ -85,11 +84,8 @@
                         <% end %>
                         <%= form.collection_select(:tag_id, Tag.where(tag_type_id: tag_type.id), :id, :name, {:prompt=>true}, {class: 'form-control js-example-basic-single', id: tag_type.id, onchange: "this.form.requestSubmit()"}) %>
                     <% end %>
-                <td>
-                <%= form.submit "Agregar tag", class: 'btn btn-primary' %>
-                </td>
-            <% end %>
+                <% end %>
+            </td>
         </tr>
-        
     <% end %>
 </tbody>

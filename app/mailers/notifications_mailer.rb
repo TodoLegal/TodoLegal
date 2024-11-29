@@ -42,7 +42,6 @@ class NotificationsMailer < ApplicationMailer
 
     if !user_trial && current_user_type_api(user) != "pro"
       user_trial = UserTrial.create(user_id: user.id, trial_start: DateTime.now, trial_end: DateTime.now + 2.weeks, active: true)
-      NotificationsMailer.basic_with_active_notifications(user).deliver
       SubscriptionsMailer.free_trial_end(user).deliver_later(wait_until: user_trial.trial_end - 1.days)
       NotificationsMailer.cancel_notifications(user).deliver_later(wait_until: user_trial.trial_end)
     end

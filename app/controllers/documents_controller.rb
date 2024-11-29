@@ -676,7 +676,7 @@ class DocumentsController < ApplicationController
       date_string = publication_date
       date = DateTime.parse(date_string)
       year = date.year
-      document_deleted = delete_duplicated_document(publication_number, date) if year <= 2021
+      document_deleted = delete_duplicated_document(publication_number, date) if year <= 2019
       if document_deleted
         Rails.logger.info("==============================================================================")
         Rails.logger.info("Documento eliminado")

@@ -3,7 +3,7 @@
 
     <%= form_with(model: document, data: {
       controller: "document-autosave",
-      autosave_delay: "250",  
+      autosave_delay: "500",  
     }) do |form| %>
       <% if document.errors.any? %>
         <div id="error_explanation">

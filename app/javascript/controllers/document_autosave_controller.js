@@ -12,9 +12,8 @@ export default class extends Controller {
     // Set the URL to point to 'documents/:id/edit'
     this.url = this.form.action;
     // Get the autosave delay from the form's data-auotsave_delay attribute
-    const auotsave_delay = this.form.dataset.auotsave_delay;
-    this.autosaveDelayAsInt = parseInt(auotsave_delay);
-
+    const autosaveDelay = this.form.dataset.autosaveDelay;
+    this.autosaveDelayAsInt = parseInt(autosaveDelay);
     const requestToDelay = () => this.sendRequest(this.url, this.formData);
 
     // Debounce the request to avoid sending multiple requests

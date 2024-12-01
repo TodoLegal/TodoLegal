@@ -77,9 +77,6 @@ class DocumentTagsController < ApplicationController
           
           format.json { render :show, status: :created, location: @document_tag.document }
         else
-          format.turbo_stream do
-            render turbo_stream: turbo_stream.replace("new_tag_form", partial: "document_tags/form", locals: { document_tag: @document_tag })
-          end
           format.html { render :new }
           format.json { render json: @document_tag.errors, status: :unprocessable_entity }
         end

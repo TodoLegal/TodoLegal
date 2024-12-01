@@ -37,9 +37,30 @@ class IssuerDocumentTagsController < ApplicationController
             if datapoint_type.present?
               datapoint = Datapoint.create(document_id: @issuer_document_tag.document.id, document_tag_id: @issuer_document_tag.id, datapoint_type_id: datapoint_type.id, status: :pendiente, is_active: true, is_empty_field: false) 
             end
-            
+            format.turbo_stream do
+              render turbo_stream: turbo_stream.replace(
+                "new_tag_#{@issuer_document_tag.tag.tag_type.name}_true", 
+                partial: "documents/edit_tag_table", 
+                locals: {
+                  document: @issuer_document_tag.document, 
+                  tag_name: @issuer_document_tag.tag.tag_type.name, 
+                  issuer: true 
+                }
+              )
+            end
             format.html { redirect_to edit_document_path(@issuer_document_tag.document, return_to: redirect_url), notice: 'Se ha añadido el tag exitosamente.' }
           else
+            format.turbo_stream do
+              render turbo_stream: turbo_stream.replace(
+                "new_tag_#{@issuer_document_tag.tag.tag_type.name}_true", 
+                partial: "documents/edit_tag_table", 
+                locals: {
+                  document: @issuer_document_tag.document, 
+                  tag_name: @issuer_document_tag.tag.tag_type.name, 
+                  issuer: true 
+                }
+              )
+            end
             format.html { redirect_to edit_document_path(@issuer_document_tag.document), notice: 'Se ha añadido el tag exitosamente.' }
           end
           format.json { render :show, status: :created, location: @issuer_document_tag.document }

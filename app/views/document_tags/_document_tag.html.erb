@@ -8,7 +8,7 @@
                         <%= document_tag.tag.name %>
                     </td>
                     <td>
-                        <%= button_to document_tag_path(document_tag, return_to: @redirect_url), method: :delete, data: { confirm: '¿Estás seguro que deseas eliminarlo?' }, class:"btn btn-outline-danger", remote: true do %>
+                        <%= button_to issuer_document_tag_path(document_tag, return_to: @redirect_url), method: :delete, data: { confirm: '¿Estás seguro que deseas eliminarlo?' }, class:"btn btn-outline-danger", remote: true do %>
                             <i class="fas fa-trash-alt"></i>
                         <% end %>
                     </td>
@@ -17,10 +17,9 @@
         <% end %>
 
         <tr> 
-            <% document_tag = IssuerDocumentTag.new %>
-           
             <td>
-                <%= form_with(model: document_tag, local: true, data: { turbo_stream: true }) do |form|%>
+                <% document_tag = IssuerDocumentTag.new %>
+                <%= form_with(model: document_tag, data: { turbo_stream: true }) do |form|%>
                     <% if document_tag.errors.any? %>
                         <div id="error_explanation">
                         <h2><%= pluralize(document_tag.errors.count, "error") %> prohibited this document_tag from being saved:</h2>
@@ -38,7 +37,7 @@
                         <% if @redirect_url %>
                             <%= form.hidden_field :return_to, value: @redirect_url %>
                         <% end %>
-                        <%= form.collection_select(:tag_id, Tag.where(tag_type_id: tag_type.id), :id, :name, {:prompt=>true}, {:class=>'form-control js-example-basic-single', :id=>tag_type.id+700}) %>
+                        <%= form.collection_select(:tag_id, Tag.where(tag_type_id: tag_type.id), :id, :name, {:prompt=>true}, {class: 'form-control js-example-basic-single', id: tag_type.id+700, onchange: "this.form.requestSubmit()"}) %>
                     <% end %>
                 <% end %>
             </td>

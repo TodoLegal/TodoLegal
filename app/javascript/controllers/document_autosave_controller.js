@@ -4,7 +4,6 @@ import debounce from "lodash.debounce";
 // Connects to data-controller="document-autosave"
 export default class extends Controller {
   connect() {
-    console.log("Connected to document-autosave controller");
     // Send form data to the documents controller, edit action
     this.form = this.element.closest("form");
     this.formData = new FormData(this.form);
@@ -24,7 +23,6 @@ export default class extends Controller {
   }
 
   save() {
-    console.log("Saving document...");
     this.formData = new FormData(this.form);
 
     // Call the debounced request with the new form
@@ -32,7 +30,6 @@ export default class extends Controller {
   }
 
   sendRequest( url, formData ) {
-    console.log("sending request to " + url);
 
     // Fetch and trigger turbo_stream response
     

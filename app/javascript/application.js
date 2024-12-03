@@ -11,6 +11,3 @@ import "controllers"
 // Controller files must be named *_controller.js.
 
 import { application } from "controllers/application"
-
-// import DocumentAutosaveController from "controllers/document_autosave_controller"
-// application.register("document-autosave", DocumentAutosaveController)

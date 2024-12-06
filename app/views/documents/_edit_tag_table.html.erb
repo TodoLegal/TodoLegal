@@ -9,4 +9,18 @@
         <%= render partial: "document_tags/document_tag", locals: {document: document, tag_name: tag_name, issuer: issuer} %>
 
     </table>
+
+    <script> 
+        document.querySelectorAll(`.new_tag_<%=tag_name.parameterize%>_<%=issuer%>`).forEach((el)=>{
+            let settings = {
+                create: true,
+                sortField: {
+                    field: "text",
+                    direction: "asc"
+                }
+            };
+            new TomSelect(el,settings);
+        });
+    </script>
+
 <% end %>

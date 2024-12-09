@@ -278,7 +278,7 @@ class DocumentsController < ApplicationController
           end
           flash.now[:notice] = 'Cambios guardados'
           format.turbo_stream do
-            render turbo_stream: turbo_stream.replace("autosave_flash", partial: "layouts/flash")
+            render turbo_stream: turbo_stream.replace("autosave_flash", partial: "layouts/flash", locals: {fade_timeout: "0"})
           end
         elsif params[:commit] == 'Guardar y siguiente'
           add_name_to_document(@document)
@@ -297,7 +297,7 @@ class DocumentsController < ApplicationController
           # if neither of the above conditions are met, then the autosave is being called
           flash.now[:notice] = 'Cambios guardados automaticamente'
           format.turbo_stream do
-            render turbo_stream: turbo_stream.replace("autosave_flash", partial: "layouts/flash")
+            render turbo_stream: turbo_stream.replace("autosave_flash", partial: "layouts/flash", locals: {fade_timeout: "2000"})
           end
           format.html { redirect_to edit_document_path(@document), notice: 'Document was successfully updated.' }
           format.json { render :show, status: :ok, location: @document }

@@ -1,6 +1,13 @@
 <%= turbo_frame_tag "autosave_flash" do %>
   <% flash.each do | type, message | %>
-    <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+    <!-- check if fade_timeout exists, if it doesn't exist it means this alert is being called from another form that is not the document form.
+    In that case, we don't want the alert to fade out, so we add the default value "0" -->
+    <% fade_timeout = fade_timeout || "0" %>
+    <div class="alert alert-success alert-dismissible fade show text-center animate__fadeOut" 
+      role="alert" 
+      data-controller="alert"
+      data-fade-timeout=<%= fade_timeout %>
+    >      
       <%= message %>
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>

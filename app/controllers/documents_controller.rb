@@ -278,7 +278,15 @@ class DocumentsController < ApplicationController
           end
           flash.now[:notice] = 'Cambios guardados'
           format.turbo_stream do
-            render turbo_stream: turbo_stream.replace("autosave_flash", partial: "layouts/flash", locals: {fade_timeout: "0"})
+            render turbo_stream: turbo_stream.replace(
+              "autosave_flash_document", 
+              partial: "layouts/flash", 
+              locals: {
+                alert_origin: "document",
+                alert_type: "success",
+                fade_timeout: "0"
+              }
+            )
           end
         elsif params[:commit] == 'Guardar y siguiente'
           add_name_to_document(@document)
@@ -297,15 +305,31 @@ class DocumentsController < ApplicationController
           # if neither of the above conditions are met, then the autosave is being called
           flash.now[:notice] = 'Cambios guardados automaticamente'
           format.turbo_stream do
-            render turbo_stream: turbo_stream.replace("autosave_flash", partial: "layouts/flash", locals: {fade_timeout: "2000"})
+            render turbo_stream: turbo_stream.replace(
+              "autosave_flash_document", 
+              partial: "layouts/flash", 
+              locals: {
+                alert_origin: "document",
+                alert_type: "success",
+                fade_timeout: "2000"
+              }
+            )
           end
           format.html { redirect_to edit_document_path(@document), notice: 'Document was successfully updated.' }
           format.json { render :show, status: :ok, location: @document }
         end
       else
+        flash.now[:alert] = "There was an error updating the document."
         format.turbo_stream do
-          flash.now[:alert] = "There was an error updating the document."
-          render turbo_stream: turbo_stream.replace("autosave_flash", partial: "layouts/flash")
+          render turbo_stream: turbo_stream.replace(
+            "autosave_flash_document", 
+            partial: "layouts/flash", 
+            locals: {
+              alert_origin: "document",
+              alert_type: "danger",
+              fade_timeout: "0"
+            }
+          )
         end
         format.html { render :edit }
         format.json { render json: @document.errors, status: :unprocessable_entity }

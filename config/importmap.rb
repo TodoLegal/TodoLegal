@@ -13,13 +13,15 @@ pin "@hotwired/stimulus-loading", to: "stimulus-loading.js"
 pin_all_from "app/javascript/controllers", under: "controllers"
 pin_all_from "app/javascript/channels", under: "channels"
 # pin_all_from 'app/javascript/src', under: 'src'
-pin "javascript/src/clear_sarchInput", preload: false
-pin "javascript/src/form_validator", preload: false
-pin "javasript/src/help_card", preload: false
-pin "javascript/src/hide_card", preload: false
-pin "javascript/src/law_subbar_actions", preload: false
-pin "javascript/src/preferences_validator", preload: false
-pin "javascript/src/stripe_integration", preload: false
-pin "javascript/src/trim_articles_for_preview", preload: false
+pin "clear_searchInput", preload: false
+pin "form_validator", preload: false
+pin "help_card", preload: false
+pin "hide_card", preload: false
+pin "law_subbar_actions", preload: false
+pin "preferences_validator", preload: false
+pin "stripe_integration", preload: false
+pin "trim_articles_for_preview", preload: false
 
 pin "lodash.debounce" # @4.0.8
+pin "trix"
+pin "@rails/actiontext", to: "actiontext.esm.js"

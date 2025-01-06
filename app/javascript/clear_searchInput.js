@@ -1,3 +1,4 @@
+console.log("clear_searchInput.js is loaded");
 var input_fields = document.getElementsByClassName("search-input");
 var clear_buttons = document.getElementsByClassName("clear--text");
 

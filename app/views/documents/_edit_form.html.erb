@@ -1,7 +1,11 @@
  <div class="card">
     <div class="card-body">
 
-    <%= form_with(model: document, local: true) do |form| %>
+    <%= form_with(model: document, data: {
+      controller: "document-autosave document-form-validator",
+      autosave_delay: "500",
+      action: "submit->document-form-validator#validate"  
+    }) do |form| %>
       <% if document.errors.any? %>
         <div id="error_explanation">
           <h2><%= pluralize(document.errors.count, "error") %> prohibited this document from being saved:</h2>
@@ -41,7 +45,9 @@
               <%= form.label :identificador_de_Emisión %>
             <% end %>
             <%= form.text_field :issue_id, class: "form-control", maxlength: "50",
-                onkeyup:"charCountUpdate(this.value, 'identifier', 50)" %>
+                data: { document_form_validator_target: "issueId" },
+                onkeyup:"charCountUpdate(this.value, 'identifier', 50)" 
+            %>
             <small id="identifier">0 de 50 caracteres</small>
           </div>
         </div>
@@ -62,23 +68,29 @@
         </div>
       </div>
 
-       <div class="row">
-        
-      </div>
-
-       <div class="row">
+      <div class="row">
 
         <div class="form-group col-md-4">
           <div class="form-group">
             <%= form.label :status %>
-            <%= form.select :status,  options_for_select(['Derogado', 'Vigente', 'Reformado'], document.status), { prompt: 'Selecciona status' }, class: 'form-control mr-2' %>
+            <%= form.select :status,  
+                options_for_select(['Derogado', 'Vigente', 'Reformado'], document.status), 
+                { prompt: 'Selecciona status' }, 
+                class: 'form-control mr-2', 
+                data: { document_form_validator_target: "status" }
+            %>
           </div>
         </div>
         
         <div class="form-group col-md-4">
           <div class="form-group">
             <%= form.label :jararquía %>
-            <%= form.select :hierarchy,  options_for_select(['Constitucional', 'Tratados Internacionales', 'Leyes Primarias', 'Leyes Secundarias'], document.hierarchy), { prompt: 'Selecciona jerarquía' }, class: 'form-control' %>
+            <%= form.select :hierarchy, 
+                options_for_select(['Constitucional', 'Tratados Internacionales', 'Leyes Primarias', 'Leyes Secundarias'], document.hierarchy), 
+                { prompt: 'Selecciona jerarquía' }, 
+                class: 'form-control',
+                data: { document_form_validator_target: "hierarchy" }
+            %>
           </div>
         </div>
 
@@ -86,16 +98,16 @@
 
       <!-- TODO: Should we remove applicable_laws from database? -->
       <% if false && document.document_type.name == "Sentencia" and document.judgement_auxiliary %>
-      <div class="row">
-        <div class="col-md-8">
-          <div class="form-group">
-            <%= form.label :relación_normativa %>
-            <%= form.text_field :applicable_laws, value: document.judgement_auxiliary.applicable_laws, class: "form-control", maxlength: "50",
-                onkeyup:"charCountUpdate(this.value, 'identifier', 50)" %>
-            <small id="identifier">0 de 50 caracteres</small>
+        <div class="row">
+          <div class="col-md-8">
+            <div class="form-group">
+              <%= form.label :relación_normativa %>
+              <%= form.text_field :applicable_laws, value: document.judgement_auxiliary.applicable_laws, class: "form-control", maxlength: "50",
+                  onkeyup:"charCountUpdate(this.value, 'identifier', 50)" %>
+              <small id="identifier">0 de 50 caracteres</small>
+            </div>
           </div>
         </div>
-      </div>
       <% end %>
 
       <% if document.document_type.name != "Sentencia" %>
@@ -104,7 +116,9 @@
             <div class="form-group">
               <%= form.label :nombre %>
               <%= form.text_field :name, class: "form-control", maxlength: "100",
-                  onkeyup:"charCountUpdate(this.value, 'name', 100)" %>
+                  data: { document_form_validator_target: "name" },
+                  onkeyup:"charCountUpdate(this.value, 'name', 100)" 
+                %>
               <small id="name">0 de 100 caracteres</small>
             </div>
           </div>
@@ -128,7 +142,11 @@
         <% if document.document_type.name != "Sentencia" && document.document_type.name != "Auto Acordado" && document.document_type.name != "Formato" && document.document_type.name != "Otro"%>
           <div class="form-group col-md-4">
             <%= form.label :número_de_gaceta %>
-            <%= form.text_field :publication_number, class: "form-control", disabled:true, id:"gazetteNumber" %>
+            <%= form.text_field :publication_number, class: "form-control", 
+              disabled:true, 
+              id:"gazetteNumber", 
+              data: { document_form_validator_target: "publicationNumber" }
+            %>
             <div class="custom-control custom-switch">
               <input type="checkbox" class="custom-control-input" id="inputSwitch" onclick="toggleEdition()">
               <label class="custom-control-label" for="inputSwitch">Habilitar edición</label>
@@ -186,12 +204,14 @@
               <%= form.label :descripción_corta %>
             <% end %>
             <%= form.text_area :short_description, class: "form-control", maxlength: "250", 
-                onkeyup:"charCountUpdate(this.value, 'shortDescription', 250)" %>
+                data: { action: "keyup->document-autosave#save", document_form_validator_target: "shortDescription" },
+                onkeyup: "charCountUpdate(this.value, 'shortDescription', 250)" 
+            %>
             <small id="shortDescription">0 de 250 caracteres</small>
           </div>
         </div>
       </div>
-
+      
       <div class="row">
         <div class="col-md-8">
           <div class="form-group">
@@ -202,6 +222,7 @@
             <% end %>
             <%= form.label :descripcion_larga %>
             <%= form.text_area :description, class: "form-control", maxlength: "1250",
+                data: { action: "keyup->document-autosave#save", document_form_validator_target: "description" },
                 onkeyup:"charCountUpdate(this.value, 'longDescription', 1250)" %>
             <small id="longDescription">0 de 1250 caracteres</small>
           </div>
@@ -214,6 +235,12 @@
             <%= form.label :original_file %>
             <%= form.file_field :original_file, class: "form-control" %>
           </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-8">
+          <%= turbo_frame_tag "autosave_flash_document" %>
         </div>
       </div>
 

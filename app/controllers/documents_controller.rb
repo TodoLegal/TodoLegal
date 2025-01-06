@@ -269,12 +269,24 @@ class DocumentsController < ApplicationController
         if params[:commit] == 'Guardar cambios'
           @document.publish = true
           @document.save
-          add_name_to_document(@document)
+          # add_name_to_document(@document)
           #redirect to provided url if exists
           if session[:redirect_url]
             format.html { redirect_to edit_document_path(@document, return_to: session[:redirect_url]), notice: 'Document was successfully updated.' }
           else
             format.html { redirect_to edit_document_path(@document), notice: 'Document was successfully updated.' }
+          end
+          flash.now[:notice] = 'Cambios guardados'
+          format.turbo_stream do
+            render turbo_stream: turbo_stream.replace(
+              "autosave_flash_document", 
+              partial: "layouts/flash", 
+              locals: {
+                alert_origin: "document",
+                alert_type: "success",
+                fade_timeout: "0"
+              }
+            )
           end
         elsif params[:commit] == 'Guardar y siguiente'
           add_name_to_document(@document)
@@ -289,9 +301,36 @@ class DocumentsController < ApplicationController
           format.html { redirect_to session[:redirect_url], allow_other_host: true, notice: 'Document was successfully updated.' }
         elsif params[:commit] == 'Subir nueva sentencia'
           format.html { redirect_to new_document_path + "?selected_document_type=judgement" }
+        else
+          # if neither of the above conditions are met, then the autosave is being called
+          flash.now[:notice] = 'Cambios guardados automaticamente'
+          format.turbo_stream do
+            render turbo_stream: turbo_stream.replace(
+              "autosave_flash_document", 
+              partial: "layouts/flash", 
+              locals: {
+                alert_origin: "document",
+                alert_type: "success",
+                fade_timeout: "2000"
+              }
+            )
+          end
+          format.html { redirect_to edit_document_path(@document), notice: 'Document was successfully updated.' }
+          format.json { render :show, status: :ok, location: @document }
         end
-        format.json { render :show, status: :ok, location: @document }
       else
+        flash.now[:alert] = "There was an error updating the document."
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace(
+            "autosave_flash_document", 
+            partial: "layouts/flash", 
+            locals: {
+              alert_origin: "document",
+              alert_type: "danger",
+              fade_timeout: "0"
+            }
+          )
+        end
         format.html { render :edit }
         format.json { render json: @document.errors, status: :unprocessable_entity }
       end
@@ -778,7 +817,7 @@ class DocumentsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def document_params
-      params.require(:document).permit(:issue_id, :name, :original_file, :url, :publication_date, :publication_number, :description, :short_description, :status, :hierarchy, :document_type_id, :publish)
+      params.require(:document).permit(:issue_id, :alternative_issue_id, :name, :original_file, :url, :publication_date, :publication_number, :description, :short_description, :status, :hierarchy, :document_type_id, :publish)
     end
 
     def get_bucket

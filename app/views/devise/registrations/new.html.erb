@@ -78,7 +78,9 @@
             data-container="body" data-toggle="popover" data-placement="top" data-trigger="focus"
             data-content="Complete todos los campos." onclick="required()">Crear cuenta</button>
           </div>
-          <%= javascript_pack_tag "form_validator" %>
+          <% content_for :head do %>
+            <%= javascript_import_module_tag "form_validator" %>
+          <% end %>
         <% end %>
         <%= render partial: 'devise/shared/omniauth_login' %>
       </div>

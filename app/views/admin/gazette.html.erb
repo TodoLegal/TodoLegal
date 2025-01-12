@@ -1,5 +1,5 @@
 
-<%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+<%= javascript_import_module_tag 'application', 'data-turbo-track': 'reload' %>
 <div class="container">
   <%= render partial:'gazettes_table', locals: {documents: @documents}%>
 </div>

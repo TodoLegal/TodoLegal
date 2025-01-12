@@ -838,3 +838,8 @@ footer p a {
 .document-result-info{
     margin-top: 25px;
 }
+
+
+.is-invalid {
+    box-shadow: 0 0 0 .2rem rgba(220, 53, 69, .25);
+}

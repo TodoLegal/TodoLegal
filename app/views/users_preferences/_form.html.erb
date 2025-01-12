@@ -1,4 +1,6 @@
-<%= form_with(model: users_preference) do |form| %>
+<%= form_with(model: users_preference, data:{
+  turbo:false
+}) do |form| %>
 
     <% if @go_to_law %>
       <input type="hidden" id="go_to_law" name="go_to_law" value="<%= @go_to_law %>">

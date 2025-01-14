@@ -789,8 +789,8 @@ class DocumentsController < ApplicationController
 
       #add user that uploaded the document
       if current_user
-        @document.uploaded_by = current_user.first_name + " " + current_user.last_name
-        @document.save
+        new_document.uploaded_by = current_user.first_name + " " + current_user.last_name
+        new_document.save
       end
 
       puts "Uploading file"

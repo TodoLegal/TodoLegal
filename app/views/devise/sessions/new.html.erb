@@ -31,7 +31,7 @@
             <%= f.submit "Inicia sesión", class: 'btn btn-primary btn-block btn-lg', id:"nextButton", data:{toggle:"popover", placement:"top", trigger:"focus",
                 content:"Complete todos los campos."}, :onclick => "required()" %>
           </div>
-          <%= javascript_pack_tag "form_validator" %>
+          <%= javascript_import_module_tag "formValidator" %>
         <% end %>
         <%= render partial: 'devise/shared/omniauth_login' %>
       </div>

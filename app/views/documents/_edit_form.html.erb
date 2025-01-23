@@ -4,6 +4,7 @@
     <%= form_with(model: document, data: {
       controller: "document-autosave document-form-validator",
       autosave_delay: "500",
+      document_type: @document_type,
       action: "submit->document-form-validator#validate"  
     }) do |form| %>
       <% if document.errors.any? %>

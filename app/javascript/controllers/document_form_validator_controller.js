@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="document-form-validator"
 export default class extends Controller {
-  static targets = ["issueId", "name", "shortDescription", "description"]
+  static targets = ["issueId", "shortDescription", "description"]
 
   connect() {
   }

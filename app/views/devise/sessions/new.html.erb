@@ -12,7 +12,7 @@
           ¿No tienes una cuenta aún?<br/>
           <%= link_to "Regístrate", pricing_path %><br />
         </p>
-        <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+        <%= form_for(resource, as: resource_name, url: session_path(resource_name), data:{turbo:false}) do |f| %>
           <%= render "devise/shared/flash_and_notice", resource: resource%>
           <%= hidden_field_tag :go_to_document, @go_to_document %>
           <div class="form-group">
@@ -29,9 +29,9 @@
 
           <div class="form-group">
             <%= f.submit "Inicia sesión", class: 'btn btn-primary btn-block btn-lg', id:"nextButton", data:{toggle:"popover", placement:"top", trigger:"focus",
-                content:"Complete todos los campos."}, :onclick => "required()" %>
+                content:"Complete todos los campos."}, :onclick => "requiredField()" %>
           </div>
-          <%= javascript_import_module_tag "formValidator" %>
+          <%= javascript_import_module_tag "form_validator" %>
         <% end %>
         <%= render partial: 'devise/shared/omniauth_login' %>
       </div>
@@ -40,7 +40,7 @@
 </section>
 
 <script>
-  function required(){
+  function requiredField(event){
     var email = document.getElementById("email").value;
      
     if( email.trim() == "")

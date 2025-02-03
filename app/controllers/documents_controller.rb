@@ -269,7 +269,7 @@ class DocumentsController < ApplicationController
         if params[:commit] == 'Guardar cambios'
           @document.publish = true
           @document.save
-          # add_name_to_document(@document)
+          add_name_to_document(@document)
           #redirect to provided url if exists
           if session[:redirect_url]
             format.html { redirect_to edit_document_path(@document, return_to: session[:redirect_url]), notice: 'Document was successfully updated.' }

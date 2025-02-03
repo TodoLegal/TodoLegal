@@ -3,7 +3,7 @@
     <img class="card-img-top" src="/img/logo_landing.png" alt="Card image cap" class="img-fluid">
     <div class="card-body">
       <h3 class="card-title text-center">Cambia tu contraseña</h3>
-      <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
+      <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }, data:{turbo:false}) do |f| %>
         <%= render "devise/shared/error_messages", resource: resource %>
         <%= f.hidden_field :reset_password_token %>
 

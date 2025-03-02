@@ -42,6 +42,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       begin
         @customer = Stripe::Customer.retrieve(current_user.stripe_customer_id)
         subscriptions = Stripe::Subscription.list(customer: @customer.id)
+        @current_user_plan_is_active = current_user_plan_is_active @customer
         if subscriptions.data.size > 0
           if subscriptions.data.first.cancel_at
             @cancel_at = Time.at(subscriptions.data.first.cancel_at)

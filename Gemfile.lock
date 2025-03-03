@@ -577,7 +577,7 @@ DEPENDENCIES
   spring
   spring-watcher-listen
   stimulus-rails
-  stripe
+  stripe (~> 13.4.1)
   thin
   turbo-rails
   tzinfo-data

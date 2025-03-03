@@ -180,14 +180,12 @@ module ApplicationHelper
 
   def current_user_plan_is_active customer
     begin
-      subscriptions = Stripe::Subscription.list(customer: customer.id)
-      subscriptions.data.each do |subscription|
+      customer.subscriptions.data.each do |subscription|
         if subscription.plan.product == STRIPE_SUBSCRIPTION_PRODUCT and subscription.plan.active
           return true
         end
       end
-    rescue => e
-      Rails.logger.error e.message
+    rescue
       return false
     end
     return false
@@ -225,6 +223,7 @@ module ApplicationHelper
         todolegal_status = "Pro Stripe"
       end
     end
+    
     return todolegal_status
   end
 

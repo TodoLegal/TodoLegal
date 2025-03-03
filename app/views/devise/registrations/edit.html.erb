@@ -222,30 +222,30 @@
             <input type="submit" class="btn btn-primary" value="Manejar Suscripción Pro">
           </form>
         <% else %>
-          <h5> Plan activo </h5>  
-          <p> <%= @has_pro_permission ? "Pro" : "Básico" %> </p>
-          <div class="billboard billboard--account">
-            <div class="billboard-content">
-              <h5 class="billboard-title">
-                <%= @has_pro_permission ? "Tu plan está activo" : "¿Listo para cambiar tu plan?" %>
-              </h5>
-              <p class="billboard-body">
-                <% if @has_pro_permission %>
-                  Si quieres contactarte con uno de nuestros agentes de ventas, nos puedes escribir a info@todolegal.app o nos puedes contactar por WhatsApp.
-                <% else %>              
-                  Tendrás acceso a más de <%= number_with_precision(valid_document_count, :precision => 0, :delimiter => ',') %> documentos de legislación hondureña.
-                <% end %>
-              </p>
-            </div>
-            <div class="billboard-actions form-group" id="change-plan-btn-form">
+        <h5> Plan activo </h5>  
+        <p> <%= @has_pro_permission ? "Pro" : "Básico" %> </p>
+        <div class="billboard billboard--account">
+          <div class="billboard-content">
+            <h5 class="billboard-title">
+              <%= @has_pro_permission ? "Tu plan está activo" : "¿Listo para cambiar tu plan?" %>
+            </h5>
+            <p class="billboard-body">
               <% if @has_pro_permission %>
+                Si quieres contactarte con uno de nuestros agentes de ventas, nos puedes escribir a info@todolegal.app o nos puedes contactar por WhatsApp.
+              <% else %>              
+                Tendrás acceso a más de <%= (all_document_count/10) * 10 %> documentos de legislación hondureña.
+              <% end %>
+            </p>
+          </div>
+          <div class="billboard-actions form-group" id="change-plan-btn-form">
+           <% if @has_pro_permission %>
                 <a href="https://wa.me/50494714842" class="btn btn-primary">WhatsApp</a>
               <% else %>              
                 <%= button_to "Adquirir Plan Pro", pricing_path, method: :get, params: {activate_pro_account: true}, remote: true, class:"btn btn-primary",  id:"change-plan-button"%>
               <% end %>
-            </div>
           </div>
-        <% end %>
+        </div>
+      <% end %>
       </section>
       <hr>
 

@@ -24,7 +24,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       flash[:alert] = t 'devise.omniauth_callbacks.failure', kind: 'Google', reason: "#{auth.info.email} is not authorized."
       redirect_to new_user_session_path
     end
-   end
+  end
 
   def microsoft_office365
     user = User.from_microsoft(from_microsoft_params)
@@ -57,7 +57,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
      }
    end
 
-   def from_microsoft_params
+  def from_microsoft_params
     @from_microsoft_params ||= {
       uid: auth.uid,
       email: auth.info.email,

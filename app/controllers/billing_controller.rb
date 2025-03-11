@@ -1,4 +1,5 @@
 class BillingController < ApplicationController
+  rescue_from ActionController::UnknownFormat, with: :handle_unknown_format
   layout 'billing'
   before_action :user_plan_is_inactive!, only: [:charge, :checkout]
   include ApplicationHelper
@@ -224,9 +225,11 @@ class BillingController < ApplicationController
           end
         else
           format.html { redirect_to confirm_email_view_path, notice: I18n.t(:charge_complete) }
+          format.json { render json: { message: I18n.t(:charge_complete) }, status: :ok }
         end
       else
         format.html { redirect_to Law.find_by_id(params["go_to_law"]), notice: I18n.t(:charge_complete) }
+        format.json { render json: { message: I18n.t(:charge_complete) }, status: :ok }
       end
     end
   end
@@ -240,6 +243,26 @@ class BillingController < ApplicationController
   end
 
 protected
+#handle unknown format error after stripe payment (charge)
+def handle_unknown_format
+  # Get the user based on the email parameter
+  user = User.find_by_email(params["email"])
+  
+  if params["go_to_law"].blank?
+    if user&.confirmed_at?
+      if process_doorkeeper_redirect_to
+        return
+      else
+        redirect_to root_path, notice: I18n.t(:charge_complete)
+      end
+    else
+      redirect_to confirm_email_view_path, notice: I18n.t(:charge_complete)
+    end
+  else
+    redirect_to Law.find_by_id(params["go_to_law"]), notice: I18n.t(:charge_complete)
+  end
+end
+
   def user_plan_is_inactive!
     if current_user && current_user.stripe_customer_id
       begin

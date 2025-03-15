@@ -388,19 +388,6 @@ class DocumentsController < ApplicationController
     end
   end
 
-  def run_slice_gazette_script document, document_pdf_path
-    puts ">run_slice_gazette_script called"
-    python_return_value = `python3 ~/GazetteSlicer/slice_gazette.py #{ document_pdf_path } '#{ Rails.root.join("public", "gazettes") }' '#{document.id}'`
-    begin
-      result = JSON.parse(python_return_value)
-      return result
-    rescue
-      document.description = "Error: on slice gazette"
-      document.save
-      return {}
-    end
-  end
-
   def add_stamp_to_unprocessed_document document, document_pdf_path
     document_name = `python3 ~/GazetteSlicer/add_stamp_to_document.py #{ document_pdf_path } '#{ Rails.root.join("public", "documents") }'`
     document_name = JSON.parse(document_name)
@@ -443,6 +430,7 @@ class DocumentsController < ApplicationController
     )
   end
 
+  #Process full gazette without slicing
   def process_gazette document, document_pdf_path
     puts ">process_gazette called"
     python_return_value = `python3 ~/GazetteSlicer/process_gazette.py #{ document_pdf_path }`
@@ -685,7 +673,6 @@ class DocumentsController < ApplicationController
   end
 
   def process_documents_batch
-    puts ">slice_gazette called"
     # json_data = run_process_document_batch_script()
 
     #Extract the files data from the generated json

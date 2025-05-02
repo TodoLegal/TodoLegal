@@ -421,7 +421,9 @@ class DocumentsController < ApplicationController
       document.short_description = result["short_description"] if result["short_description"].present?
       
       # Add materia tag if present
-      addTagIfExists(document.id, result["materia"]) if result["materia"].present?
+      if result["materia"].present?
+        addTagIfExists(document.id, result["materia"]) if result["materia"].present?
+      end
       
       # Save the document
       document.save
@@ -535,7 +537,10 @@ class DocumentsController < ApplicationController
       addIssuerTagIfExists(new_document.id, file["issuer"])
       addTagIfExists(new_document.id, "Gaceta")
       #add materia tag
-      addTagIfExists(new_document.id, file["materia"])
+      if file["materia"].present?
+        addTagIfExists(new_document.id, file["materia"])
+      end
+      
       if file["name"] == "Marcas de Fábrica"
         addIssuerTagIfExists(new_document.id, "Varios")
         addTagIfExists(new_document.id, "Marcas")
@@ -774,6 +779,11 @@ class DocumentsController < ApplicationController
       addTagIfExists(new_document.id, file["tag"])
       addIssuerTagIfExists(new_document.id, file["issuer"])
       addTagIfExists(new_document.id, "Gaceta")
+
+      if file["materia"].present?
+        addTagIfExists(new_document.id, file["materia"])
+      end
+
       if document_type == "Marcas de Fábrica"
         addIssuerTagIfExists(new_document.id, "Varios")
         addTagIfExists(new_document.id, "Marcas")

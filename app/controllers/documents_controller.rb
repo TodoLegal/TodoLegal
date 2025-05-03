@@ -175,6 +175,7 @@ class DocumentsController < ApplicationController
           file = bucket.file @document.original_file.key
           file.download "tmp/seccion_de_gaceta.pdf"
           add_stamp_to_unprocessed_document @document, Rails.root.join("tmp") + "seccion_de_gaceta.pdf"
+          extract_text_from_document @document, Rails.root.join("tmp") + "seccion_de_gaceta.pdf", "slice"
           if $discord_bot
             document_id = @document.id
             discord_message = "Nueva sección de gaceta subida en Valid! [#{document_id}](https://todolegal.app/documents/#{document_id}) :scroll:"
@@ -186,6 +187,7 @@ class DocumentsController < ApplicationController
           file = bucket.file @document.original_file.key
           file.download "tmp/avisos_legales.pdf"
           add_stamp_to_unprocessed_document @document, Rails.root.join("tmp") + "avisos_legales.pdf"
+          extract_text_from_document Rails.root.join("tmp") + "seccion_de_gaceta.pdf", "avisos"
           if $discord_bot
             $discord_bot.send_message($discord_bot_document_upload, "Nuevos avisos legales subidos en Valid! :scroll:")
           end
@@ -195,6 +197,7 @@ class DocumentsController < ApplicationController
           file = bucket.file @document.original_file.key
           file.download "tmp/marcas.pdf"
           add_stamp_to_unprocessed_document @document, Rails.root.join("tmp") + "marcas.pdf"
+          extract_text_from_document @document, Rails.root.join("tmp") + "seccion_de_gaceta.pdf", "marcas"
           if $discord_bot
             $discord_bot.send_message($discord_bot_document_upload, "Nuevas Marcas de Fábrica subidas en Valid! :scroll:")
           end
@@ -231,6 +234,7 @@ class DocumentsController < ApplicationController
           file = bucket.file @document.original_file.key
           file.download "tmp/documento.pdf"
           add_stamp_to_unprocessed_document @document, Rails.root.join("tmp") + "documento.pdf"
+          extract_text_from_document @document, Rails.root.join("tmp") + "seccion_de_gaceta.pdf", "otros"
           format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido un documento.' }
           if $discord_bot
             $discord_bot.send_message($discord_bot_document_upload, "Nuevo documento subido a Valid! :scroll:")
@@ -403,6 +407,38 @@ class DocumentsController < ApplicationController
     )
   end
 
+  def extract_text_from_document(document, document_pdf_path, document_type)
+    # Extract text from the PDF
+    extracted_text = `python3 ~/GazetteSlicer/src/data_processing/process_single_document.py #{ document_pdf_path } #{ document_type }`
+    
+    begin
+      # Parse the JSON string to get the result
+      result = JSON.parse(extracted_text)
+      
+      # Update the document with the extracted information
+      document.full_text = result["full_text"] if result["full_text"].present?
+      document.description = result["description"] if result["description"].present?
+      document.short_description = result["short_description"] if result["short_description"].present?
+      
+      # Add materia tag if present
+      if result["materia"].present?
+        addTagIfExists(document.id, result["materia"]) if result["materia"].present?
+      end
+      
+      # Save the document
+      document.save
+      return true
+    rescue JSON::ParserError => e
+      Rails.logger.error "Failed to parse JSON from extract_text_from_document: #{e.message}"
+      Rails.logger.error "Raw output: #{extracted_text.inspect}"
+      
+      # Set error message in document
+      document.description = "Error: Failed to parse text from document"
+      document.save
+      return false
+    end
+  end
+
   def add_name_to_document(document)
     # Download the file
     bucket = get_bucket
@@ -500,6 +536,11 @@ class DocumentsController < ApplicationController
       addTagIfExists(new_document.id, file["tag"])
       addIssuerTagIfExists(new_document.id, file["issuer"])
       addTagIfExists(new_document.id, "Gaceta")
+      #add materia tag
+      if file["materia"].present?
+        addTagIfExists(new_document.id, file["materia"])
+      end
+      
       if file["name"] == "Marcas de Fábrica"
         addIssuerTagIfExists(new_document.id, "Varios")
         addTagIfExists(new_document.id, "Marcas")
@@ -738,6 +779,11 @@ class DocumentsController < ApplicationController
       addTagIfExists(new_document.id, file["tag"])
       addIssuerTagIfExists(new_document.id, file["issuer"])
       addTagIfExists(new_document.id, "Gaceta")
+
+      if file["materia"].present?
+        addTagIfExists(new_document.id, file["materia"])
+      end
+
       if document_type == "Marcas de Fábrica"
         addIssuerTagIfExists(new_document.id, "Varios")
         addTagIfExists(new_document.id, "Marcas")

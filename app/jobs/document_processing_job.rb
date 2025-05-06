@@ -59,6 +59,10 @@ include DocumentsHelper
         addTagIfExists(new_document.id, file["tag"])
         addIssuerTagIfExists(new_document.id, file["issuer"])
         addTagIfExists(new_document.id, "Gaceta")
+        #add materia tag
+        if file["materia"].present?
+          addTagIfExists(new_document.id, file["materia"])
+        end
         if file["name"] == "Marcas de Fábrica"
           addIssuerTagIfExists(new_document.id, "Varios")
           addTagIfExists(new_document.id, "Marcas")
@@ -143,8 +147,8 @@ include DocumentsHelper
       unless result.is_a?(Hash) && result["page_count"].is_a?(Integer) && result["files"].is_a?(Array)
         raise "Invalid JSON structure from slice_gazette.py"
       end
-    return result
-    rescue
+      return result
+    rescue => e
       puts "Error in run_slice_gazette_script: #{e.message}"
       puts "Python output: #{python_return_value.inspect}"
       Rails.logger.error "Error in run_slice_gazette_script: #{e.message}"

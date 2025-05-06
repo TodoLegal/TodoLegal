@@ -59,6 +59,10 @@ include DocumentsHelper
         addTagIfExists(new_document.id, file["tag"])
         addIssuerTagIfExists(new_document.id, file["issuer"])
         addTagIfExists(new_document.id, "Gaceta")
+        #add materia tag
+        if file["materia"].present?
+          addTagIfExists(new_document.id, file["materia"])
+        end
         if file["name"] == "Marcas de Fábrica"
           addIssuerTagIfExists(new_document.id, "Varios")
           addTagIfExists(new_document.id, "Marcas")

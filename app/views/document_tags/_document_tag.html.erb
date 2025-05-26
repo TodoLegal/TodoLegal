@@ -81,7 +81,7 @@
                         <% if @redirect_url %>
                             <%= form.hidden_field :return_to, value: @redirect_url %>
                         <% end %>
-                        <%= form.collection_select(:tag_id, Tag.where(tag_type_id: tag_type.id), :id, :name, {:prompt=>true}, {class: "form-control new_tag_#{tag_name.parameterize}_#{issuer}", id: tag_type.id, onchange: "this.form.requestSubmit()"}) %>
+                        <%= form.collection_select(:tag_id, Tag.where(tag_type_id: tag_type.id).where.not(name: "Justicia"), :id, :name, {:prompt=>true}, {class: "form-control new_tag_#{tag_name.parameterize}_#{issuer}", id: tag_type.id, onchange: "this.form.requestSubmit()"}) %>
                     <% end %>
                 <% end %>
             </td>

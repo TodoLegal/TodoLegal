@@ -40,31 +40,9 @@
       </div>
 
       <div class="row row-eq-height">
-      
-        <% if !current_user || @user_just_registered%>
-          <!-- Card - Plan Basico  -->
-          <div class="col-lg-4 col-md-12">
-            <div class="card card--dark-100" id="pro-mensual">
-              <div class="card-body">
-                <h5 class="card-title">Prueba</h5>
-                <h6 class="card-price">Gratis</h6>
-                  <%= render 'basic_pricing_description' %>
-              </div>
-              <% if @pricing_onboarding %>
-                <div class="card-bottom">
-                  <%= button_to "Iniciar prueba", @select_pro_plan_path, method: :get, params: {is_onboarding: @is_onboarding, pricing_onboarding: @pricing_onboarding, go_to_law: @go_to_law}, class:"btn btn-block btn-primary btn-pricing"%>
-                </div>
-              <% else %>
-                <div class="card-bottom">
-                  <a href="https://valid.todolegal.app" class="btn btn-block btn-primary btn-pricing"%>Iniciar prueba</a>
-                </div>
-              <% end %>
-            </div>
-          </div>
-        <% end %>
 
          <!-- Pro Tier mensual  -->
-        <div class="col-lg-4 col-md-12" id="proMensual">
+        <div class="col-lg-4 col-md-12 hide-plan" id="proMensual">
           <div class="card card--dark-100">
             <div class="card-body">
               <h5 class="card-title">Profesional Mensual</h5>
@@ -98,7 +76,7 @@
         </div>
 
         <!-- Pro Tier anual -->
-        <div class="col-lg-4 col-md-12 hide-plan" id="proAnual">
+        <div class="col-lg-4 col-md-12" id="proAnual">
           <div class="card card--dark-100">
             <div class="card-body">
               <h5 class="card-title">Profesional Anual</h5>
@@ -143,6 +121,28 @@
           </div>
         </div>
         <!-- End Enterprise -->
+
+        <% if !current_user || @user_just_registered%>
+          <!-- Card - Plan Basico  -->
+          <div class="col-lg-4 col-md-12">
+            <div class="card card--dark-100" id="pro-mensual">
+              <div class="card-body">
+                <h5 class="card-title">Prueba</h5>
+                <h6 class="card-price">Gratis</h6>
+                  <%= render 'basic_pricing_description' %>
+              </div>
+              <% if @pricing_onboarding %>
+                <div class="card-bottom">
+                  <%= button_to "Iniciar prueba", @select_pro_plan_path, method: :get, params: {is_onboarding: @is_onboarding, pricing_onboarding: @pricing_onboarding, go_to_law: @go_to_law}, class:"btn btn-block btn-primary btn-pricing"%>
+                </div>
+              <% else %>
+                <div class="card-bottom">
+                  <a href="https://valid.todolegal.app" class="btn btn-block btn-primary btn-pricing"%>Iniciar prueba</a>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
         
       </div>
 

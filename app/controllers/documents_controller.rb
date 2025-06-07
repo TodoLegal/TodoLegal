@@ -531,7 +531,7 @@ class DocumentsController < ApplicationController
         start_page: file["start_page"],
         end_page: file["end_page"],
         position: file["position"],
-        publish: true
+        publish: false
       )
       addTagIfExists(new_document.id, file["tag"])
       addIssuerTagIfExists(new_document.id, file["issuer"])
@@ -620,8 +620,6 @@ class DocumentsController < ApplicationController
     json_data["files"].each do | file |
       puts "creating auto acordado " + file["internal_id"]
       name = ""
-      short_description = ""
-      long_description = ""
       tema = file["tag_tema"]
       alt_issue_id = file["alt_issue_id"]
       materias = file["materias"]

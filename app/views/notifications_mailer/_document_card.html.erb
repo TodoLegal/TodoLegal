@@ -27,6 +27,13 @@
                    
                         <%= document[:doc].name %>
                 </p>
+                <% if document[:doc].respond_to?(:issuer_tags) && document[:doc].issuer_tags.present? %>
+                    <p class="doc-card-subtitle"
+                        style="color: #494949; font-family: 'Lato', Helvetica, Arial, sans-serif; font-style: normal; font-weight: 400; font-size: 14px; line-height: 17px; margin-top: 0.1rem; margin-bottom: 0.5rem;"
+                    >
+                        <strong>Institución emisora:</strong> <%= document[:doc].issuer_tags.join(", ") %>
+                    </p>
+                <% end %>
                 <p class="doc-card-subtitle"
                     style="color: #494949; font-family: 'Lato', Helvetica, Arial, sans-serif; font-style: normal; font-weight: 400; font-size: 14px; line-height: 17px; margin-bottom: 0.1rem; margin-top: 0rem;"
                 >

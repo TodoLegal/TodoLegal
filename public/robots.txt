@@ -61,5 +61,4 @@ Disallow: /
 
 # Allow all other bots
 User-agent: *
-Disallow: /terms
-Disallow: /privacy
+Disallow:

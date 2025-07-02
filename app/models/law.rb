@@ -13,6 +13,35 @@ class Law < ApplicationRecord
   has_many :law_tags, dependent: :destroy
   has_many :tags, through: :law_tags
   has_many :law_hyperlinks
+  
+  # Nueva relación para obtener documentos que modifican esta ley
+  has_many :modifying_documents, through: :law_modifications, source: :document
+
+  # Enum para los estados de la ley
+  enum status: {
+    vigente: 'vigente',
+    derogado: 'derogado'
+  }
+
+  # Method to check if the law has been repealed
+  def repealed?
+    status == 'derogado'
+  end
+
+  # Method to check if the law has been amended
+  def amended?
+    law_modifications.where(modification_type: 'amend').exists?
+  end
+
+  # Method to get all amendments to the law
+  def amendments
+    law_modifications.where(modification_type: 'amend')
+  end
+
+  # Method to get the repeal of the law (if it exists)
+  def repeal
+    law_modifications.find_by(modification_type: 'repeal')
+  end
 
   pg_search_scope :search_by_name,
                   against: [:name, :creation_number],

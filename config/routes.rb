@@ -80,6 +80,7 @@ Rails.application.routes.draw do
   post "admin/activate_batch_of_users" => "admin#activate_batch_of_users", as: "activate_batch_of_users"
   post "laws/insert_article", to: "laws#insert_article", as: "insert_article"
   post "documents/process_documents_batch", to: "documents#process_documents_batch", as: "process_documents_batch"
+  post "documents/process_cnbs_batch", to: "documents#process_cnbs_batch", as: "process_cnbs_batch"
   get 'application/external_redirect', to: 'application#external_redirect',  as: "external_redirect"
   get '/wall', to: 'home#wall', as:"wall"
   post 'laws/automatic_update_hyperlink_status', to: 'laws#automatic_update_hyperlink_status'

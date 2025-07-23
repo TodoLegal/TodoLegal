@@ -13,10 +13,23 @@
   </h1>
   <%if current_user_is_admin %>
     <%= render "batch_statistics_table" %>
-    <form action="/documents/process_documents_batch" method="post">
-      <div class="form-inline">
-        <button type="submit" class="btn btn-primary">Procesar batch de documentos</button>
+    <div class="row">
+      <div class="col-4">
+        <form action="/documents/process_documents_batch" method="post">
+          <div class="form-inline">
+            <button type="submit" class="btn btn-primary">Procesar batch de documentos</button>
+          </div>
+        </form>
       </div>
+      <div class="col-3">
+        <form action="/documents/process_cnbs_batch" method="post">
+          <div class="form-inline">
+            <button type="submit" class="btn btn-success">Procesar batch CNBS</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  
     </form>
     <%= content_tag(:p, "Documentos procesados en este batch: #{@processed_documents}") if @processed_documents.present? %>
     <hr/>

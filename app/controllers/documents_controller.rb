@@ -2,6 +2,7 @@ class DocumentsController < ApplicationController
   before_action :set_document, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_editor!, only: [:index, :show, :new, :edit, :create, :update, :destroy]
   include DocumentsHelper
+  include DocumentTagManagement
 
   # GET /documents
   # GET /documents.json
@@ -712,6 +713,22 @@ class DocumentsController < ApplicationController
     redirect_to documents_path(last_documents: document_count, processed_documents: document_count), notice: "Batch processed successfully. #{document_count} documents uploaded."
   end
 
+  def process_cnbs_batch
+    processor = DocumentJsonBatchProcessor.new(current_user)
+    result = processor.process('processed_cnbs_files.json')
+    
+    Rails.logger.info "Batch processing completed. #{result.summary}"
+    
+    if result.errors.any?
+      Rails.logger.error "Batch processing errors: #{result.errors.join('; ')}"
+    end
+    
+    redirect_to documents_path(
+      last_documents: result.success_count, 
+      processed_documents: result.success_count
+    ), notice: "JSON batch processed successfully. #{result.summary}"
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_document
@@ -731,24 +748,6 @@ class DocumentsController < ApplicationController
 
     def get_next_document document
       Document.where(publication_number: document.publication_number).find_by(position: document.position + 1 )
-    end
-
-    def addTagIfExists document_id, tag_name
-      if !tag_name.empty?
-        tag = Tag.find_by_name(tag_name)
-        if tag
-          DocumentTag.create(document_id: document_id, tag_id: tag.id)
-        end
-      end
-    end
-
-    def addIssuerTagIfExists(document_id, issuer_tag_name)
-      if !issuer_tag_name.empty?
-        tag = Tag.find_by_name(issuer_tag_name)
-        if tag 
-          IssuerDocumentTag.create(document_id: document_id, tag_id: tag.id)
-        end
-      end
     end
 
     def get_empty_document_type_id

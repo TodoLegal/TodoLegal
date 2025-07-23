@@ -14,8 +14,8 @@
         <!-- Display existing relationships -->
         <% if document.source_relationships.any? || document.target_relationships.any? %>
           <div class="existing-relationships mb-4">
-            <h5>Relaciones Existentes</h5>
-            
+            <h6>Relaciones Existentes</h6>
+
             <!-- Documents this document amends/repeals -->
             <% if document.amended_documents.any? %>
               <div class="relationship-group mb-3">
@@ -27,7 +27,6 @@
                                   document_path(relationship.target_document), 
                                   class: "text-decoration-none", target: "_blank" %>
                       <div>
-                        <small class="text-muted">ID: <%= relationship.target_document.id %></small>
                         <%= button_to document_relationship_path(relationship, return_to: @redirect_url, current_document_id: document.id), 
                                       method: :delete, 
                                       data: { confirm: '¿Estás seguro que deseas eliminar esta relación?' }, 
@@ -52,7 +51,6 @@
                                   document_path(relationship.target_document), 
                                   class: "text-decoration-none", target: "_blank" %>
                       <div>
-                        <small class="text-muted">ID: <%= relationship.target_document.id %></small>
                         <%= button_to document_relationship_path(relationship, return_to: @redirect_url, current_document_id: document.id), 
                                       method: :delete, 
                                       data: { confirm: '¿Estás seguro que deseas eliminar esta relación?' }, 
@@ -78,7 +76,6 @@
                                   document_path(relationship.source_document), 
                                   class: "text-decoration-none", target: "_blank" %>
                       <div>
-                        <small class="text-muted">ID: <%= relationship.source_document.id %></small>
                         <%= button_to document_relationship_path(relationship, return_to: @redirect_url, current_document_id: document.id), 
                                       method: :delete, 
                                       data: { confirm: '¿Estás seguro que deseas eliminar esta relación?' }, 
@@ -103,7 +100,6 @@
                                   document_path(relationship.source_document), 
                                   class: "text-decoration-none", target: "_blank" %>
                       <div>
-                        <small class="text-muted">ID: <%= relationship.source_document.id %></small>
                         <%= button_to document_relationship_path(relationship, return_to: @redirect_url, current_document_id: document.id), 
                                       method: :delete, 
                                       data: { confirm: '¿Estás seguro que deseas eliminar esta relación?' }, 
@@ -126,8 +122,6 @@
 
         <!-- Add new relationship form -->
         <div class="add-relationship" data-controller="document-relationships">
-          <h5>Agregar Nueva Relación</h5>
-          
           <% document_relationship = DocumentRelationship.new %>
           <%= form_with(model: document_relationship, data: { 
                 turbo_stream: true, 
@@ -174,9 +168,6 @@
                     "Reformado por" y "Derogado por" indican que otro documento modifica a este.<br>
                     "Reforma a" y "Deroga a" indican que este documento modifica a otro.
                   </small>
-                  <div class="modification-help-text mt-1">
-                    <small class="text-info">Selecciona un tipo de modificación.</small>
-                  </div>
                 </div>
               </div>
               

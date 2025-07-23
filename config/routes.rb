@@ -26,6 +26,7 @@ Rails.application.routes.draw do
   resources :law_tags
   resources :document_tags
   resources :issuer_document_tags
+  resources :document_relationships
   resources :tags
   resources :tag_types
   resources :laws do

@@ -1,0 +1,256 @@
+<section class="document-relationships-section">
+  <h4>Relaciones del Documento</h4>
+  
+  <div class="row">
+    <div class="col-md-12">
+      <%= turbo_frame_tag "autosave_flash_relationships" %>
+    </div>
+  </div>
+
+  <%= turbo_frame_tag "document_relationships_section" do %>
+    <div class="card">
+      <div class="card-body">
+        
+        <!-- Display existing relationships -->
+        <% if document.source_relationships.any? || document.target_relationships.any? %>
+          <div class="existing-relationships mb-4">
+            <h5>Relaciones Existentes</h5>
+            
+            <!-- Documents this document amends/repeals -->
+            <% if document.amended_documents.any? %>
+              <div class="relationship-group mb-3">
+                <strong>Este documento reforma a:</strong>
+                <ul class="list-group list-group-flush">
+                  <% document.source_relationships.where(modification_type: 'amend').each do |relationship| %>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      <%= link_to relationship.target_document.name || "Documento ##{relationship.target_document.id}", 
+                                  document_path(relationship.target_document), 
+                                  class: "text-decoration-none", target: "_blank" %>
+                      <div>
+                        <small class="text-muted">ID: <%= relationship.target_document.id %></small>
+                        <%= button_to document_relationship_path(relationship, return_to: @redirect_url, current_document_id: document.id), 
+                                      method: :delete, 
+                                      data: { confirm: '¿Estás seguro que deseas eliminar esta relación?' }, 
+                                      class: "btn btn-outline-danger btn-sm ms-2", 
+                                      remote: true do %>
+                          <i class="fas fa-trash-alt"></i>
+                        <% end %>
+                      </div>
+                    </li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+            <% if document.repealed_documents.any? %>
+              <div class="relationship-group mb-3">
+                <strong>Este documento deroga a:</strong>
+                <ul class="list-group list-group-flush">
+                  <% document.source_relationships.where(modification_type: 'repeal').each do |relationship| %>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      <%= link_to relationship.target_document.name || "Documento ##{relationship.target_document.id}", 
+                                  document_path(relationship.target_document), 
+                                  class: "text-decoration-none", target: "_blank" %>
+                      <div>
+                        <small class="text-muted">ID: <%= relationship.target_document.id %></small>
+                        <%= button_to document_relationship_path(relationship, return_to: @redirect_url, current_document_id: document.id), 
+                                      method: :delete, 
+                                      data: { confirm: '¿Estás seguro que deseas eliminar esta relación?' }, 
+                                      class: "btn btn-outline-danger btn-sm ms-2", 
+                                      remote: true do %>
+                          <i class="fas fa-trash-alt"></i>
+                        <% end %>
+                      </div>
+                    </li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+            <!-- Documents that amend/repeal this document -->
+            <% if document.amending_documents.any? %>
+              <div class="relationship-group mb-3">
+                <strong>Este documento es reformado por:</strong>
+                <ul class="list-group list-group-flush">
+                  <% document.target_relationships.where(modification_type: 'amend').each do |relationship| %>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      <%= link_to relationship.source_document.name || "Documento ##{relationship.source_document.id}", 
+                                  document_path(relationship.source_document), 
+                                  class: "text-decoration-none", target: "_blank" %>
+                      <div>
+                        <small class="text-muted">ID: <%= relationship.source_document.id %></small>
+                        <%= button_to document_relationship_path(relationship, return_to: @redirect_url, current_document_id: document.id), 
+                                      method: :delete, 
+                                      data: { confirm: '¿Estás seguro que deseas eliminar esta relación?' }, 
+                                      class: "btn btn-outline-danger btn-sm ms-2", 
+                                      remote: true do %>
+                          <i class="fas fa-trash-alt"></i>
+                        <% end %>
+                      </div>
+                    </li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+            <% if document.repealing_documents.any? %>
+              <div class="relationship-group mb-3">
+                <strong>Este documento es derogado por:</strong>
+                <ul class="list-group list-group-flush">
+                  <% document.target_relationships.where(modification_type: 'repeal').each do |relationship| %>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      <%= link_to relationship.source_document.name || "Documento ##{relationship.source_document.id}", 
+                                  document_path(relationship.source_document), 
+                                  class: "text-decoration-none", target: "_blank" %>
+                      <div>
+                        <small class="text-muted">ID: <%= relationship.source_document.id %></small>
+                        <%= button_to document_relationship_path(relationship, return_to: @redirect_url, current_document_id: document.id), 
+                                      method: :delete, 
+                                      data: { confirm: '¿Estás seguro que deseas eliminar esta relación?' }, 
+                                      class: "btn btn-outline-danger btn-sm ms-2", 
+                                      remote: true do %>
+                          <i class="fas fa-trash-alt"></i>
+                        <% end %>
+                      </div>
+                    </li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <div class="no-relationships mb-4">
+            <p class="text-muted">Este documento no tiene relaciones registradas.</p>
+          </div>
+        <% end %>
+
+        <!-- Add new relationship form -->
+        <div class="add-relationship" data-controller="document-relationships">
+          <h5>Agregar Nueva Relación</h5>
+          
+          <% document_relationship = DocumentRelationship.new %>
+          <%= form_with(model: document_relationship, data: { 
+                turbo_stream: true, 
+                action: "submit->document-relationships#submit" 
+              }) do |form| %>
+            <% if document_relationship.errors.any? %>
+              <div id="error_explanation" class="alert alert-danger">
+                <h6><%= pluralize(document_relationship.errors.count, "error") %> impidieron guardar esta relación:</h6>
+                <ul class="mb-0">
+                  <% document_relationship.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+            <%= form.hidden_field :source_document_id, value: document.id %>
+            <%= form.hidden_field :target_document_id, value: document.id %>
+            <% if @redirect_url %>
+              <%= form.hidden_field :return_to, value: @redirect_url %>
+            <% end %>
+
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <%= form.label :modification_type, "Tipo de Modificación", class: "form-label" %>
+                  <%= form.select :modification_type, 
+                      options_for_select([
+                        ['Reformado por', 'amended_by'],
+                        ['Derogado por', 'repealed_by'],
+                        ['Reforma a', 'amends'],
+                        ['Deroga a', 'repeals']
+                      ]), 
+                      { prompt: 'Selecciona el tipo de relación' }, 
+                      { 
+                        class: "form-control", 
+                        required: true,
+                        data: { 
+                          "document-relationships-target": "modificationTypeSelect",
+                          action: "change->document-relationships#modificationTypeChanged"
+                        }
+                      } %>
+                  <small class="form-text text-muted">
+                    "Reformado por" y "Derogado por" indican que otro documento modifica a este.<br>
+                    "Reforma a" y "Deroga a" indican que este documento modifica a otro.
+                  </small>
+                  <div class="modification-help-text mt-1">
+                    <small class="text-info">Selecciona un tipo de modificación.</small>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <div class="form-group">
+                  <%= form.label :document_url, "URL del Documento Relacionado", class: "form-label" %>
+                  <%= form.text_field :document_url, 
+                      class: "form-control", 
+                      placeholder: "https://todolegal.app/documents/123 o /documents/123", 
+                      required: true,
+                      data: { 
+                        "document-relationships-target": "documentUrlInput",
+                        action: "input->document-relationships#documentUrlChanged"
+                      } %>
+                  <small class="form-text text-muted">
+                    Pega aquí la URL del documento relacionado. El ID se extraerá automáticamente.
+                  </small>
+                  <div class="document-preview mt-1"></div>
+                </div>
+              </div>
+              
+              <div class="col-md-2">
+                <div class="form-group">
+                  <%= form.label :submit, "&nbsp;".html_safe, class: "form-label" %>
+                  <%= form.submit "Agregar Relación", 
+                      class: "btn btn-secondary w-100", 
+                      disabled: true,
+                      data: { "document-relationships-target": "submitButton" } %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</section>
+
+<style>
+  .document-relationships-section {
+    margin-top: 2rem;
+  }
+  
+  .relationship-group {
+    border-left: 3px solid #007bff;
+    padding-left: 1rem;
+  }
+  
+  .relationship-group strong {
+    color: #495057;
+    font-size: 0.95rem;
+  }
+  
+  .list-group-item {
+    border-left: none;
+    border-right: none;
+    padding: 0.75rem 0;
+  }
+  
+  .list-group-item:first-child {
+    border-top: none;
+  }
+  
+  .list-group-item:last-child {
+    border-bottom: none;
+  }
+  
+  .add-relationship {
+    border-top: 1px solid #dee2e6;
+    padding-top: 1.5rem;
+  }
+  
+  .no-relationships {
+    text-align: center;
+    padding: 2rem 0;
+  }
+</style>

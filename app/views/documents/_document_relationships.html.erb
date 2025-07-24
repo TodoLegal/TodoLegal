@@ -18,13 +18,13 @@
 
             <!-- Documents this document amends/repeals -->
             <% if document.amended_documents.any? %>
-              <div class="relationship-group mb-3">
+              <div class="relationship-group relationship-group-amends mb-3">
                 <strong>Este documento reforma a:</strong>
                 <ul class="list-group list-group-flush">
                   <% document.source_relationships.where(modification_type: 'amend').each do |relationship| %>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                      <%= link_to relationship.target_document.name || "Documento ##{relationship.target_document.id}", 
-                                  document_path(relationship.target_document), 
+                      <%= link_to document_display_text(relationship.target_document), 
+                                  edit_document_path(relationship.target_document), 
                                   class: "text-decoration-none", target: "_blank" %>
                       <div>
                         <%= button_to document_relationship_path(relationship, return_to: @redirect_url, current_document_id: document.id), 
@@ -42,13 +42,13 @@
             <% end %>
 
             <% if document.repealed_documents.any? %>
-              <div class="relationship-group mb-3">
+              <div class="relationship-group relationship-group-repeals mb-3">
                 <strong>Este documento deroga a:</strong>
                 <ul class="list-group list-group-flush">
                   <% document.source_relationships.where(modification_type: 'repeal').each do |relationship| %>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                      <%= link_to relationship.target_document.name || "Documento ##{relationship.target_document.id}", 
-                                  document_path(relationship.target_document), 
+                      <%= link_to document_display_text(relationship.target_document), 
+                                  edit_document_path(relationship.target_document), 
                                   class: "text-decoration-none", target: "_blank" %>
                       <div>
                         <%= button_to document_relationship_path(relationship, return_to: @redirect_url, current_document_id: document.id), 
@@ -67,13 +67,13 @@
 
             <!-- Documents that amend/repeal this document -->
             <% if document.amending_documents.any? %>
-              <div class="relationship-group mb-3">
+              <div class="relationship-group relationship-group-amended-by mb-3">
                 <strong>Este documento es reformado por:</strong>
                 <ul class="list-group list-group-flush">
                   <% document.target_relationships.where(modification_type: 'amend').each do |relationship| %>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                      <%= link_to relationship.source_document.name || "Documento ##{relationship.source_document.id}", 
-                                  document_path(relationship.source_document), 
+                      <%= link_to document_display_text(relationship.source_document), 
+                                  edit_document_path(relationship.source_document), 
                                   class: "text-decoration-none", target: "_blank" %>
                       <div>
                         <%= button_to document_relationship_path(relationship, return_to: @redirect_url, current_document_id: document.id), 
@@ -91,13 +91,13 @@
             <% end %>
 
             <% if document.repealing_documents.any? %>
-              <div class="relationship-group mb-3">
+              <div class="relationship-group relationship-group-repealed-by mb-3">
                 <strong>Este documento es derogado por:</strong>
                 <ul class="list-group list-group-flush">
                   <% document.target_relationships.where(modification_type: 'repeal').each do |relationship| %>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                      <%= link_to relationship.source_document.name || "Documento ##{relationship.source_document.id}", 
-                                  document_path(relationship.source_document), 
+                      <%= link_to document_display_text(relationship.source_document), 
+                                  edit_document_path(relationship.source_document), 
                                   class: "text-decoration-none", target: "_blank" %>
                       <div>
                         <%= button_to document_relationship_path(relationship, return_to: @redirect_url, current_document_id: document.id), 
@@ -113,10 +113,6 @@
                 </ul>
               </div>
             <% end %>
-          </div>
-        <% else %>
-          <div class="no-relationships mb-4">
-            <p class="text-muted">Este documento no tiene relaciones registradas.</p>
           </div>
         <% end %>
 
@@ -214,6 +210,23 @@
   .relationship-group {
     border-left: 3px solid #007bff;
     padding-left: 1rem;
+  }
+  
+  /* Specific colors for each relationship type */
+  .relationship-group-amended-by {
+    border-left-color: #4a90e2; /* Blue - reformado por */
+  }
+  
+  .relationship-group-repealed-by {
+    border-left-color: #d63031; /* Red - derogado por */
+  }
+  
+  .relationship-group-amends {
+    border-left-color: #00b894; /* Green - reforma a */
+  }
+  
+  .relationship-group-repeals {
+    border-left-color: #e17055; /* Orange - deroga a */
   }
   
   .relationship-group strong {

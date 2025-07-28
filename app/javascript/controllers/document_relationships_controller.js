@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="document-relationships"
 export default class extends Controller {
-  static targets = ["modificationTypeSelect", "documentUrlInput", "submitButton"]
+  static targets = ["modificationTypeSelect", "urlInput", "submitButton"]
 
   connect() {
     console.log("Connected to document-relationships controller");
@@ -11,11 +11,13 @@ export default class extends Controller {
 
   // Validate form inputs
   validateForm() {
+    if (!this.hasModificationTypeSelectTarget || !this.hasUrlInputTarget) return;
+    
     const modificationType = this.modificationTypeSelectTarget.value;
-    const documentUrl = this.documentUrlInputTarget.value.trim();
+    const url = this.urlInputTarget.value.trim();
     
     // Enable submit button only if both fields are filled
-    const isValid = modificationType && documentUrl && this.isValidUrl(documentUrl);
+    const isValid = modificationType && url && this.isValidUrl(url);
     this.submitButtonTarget.disabled = !isValid;
     
     if (isValid) {
@@ -43,46 +45,18 @@ export default class extends Controller {
   // Handle modification type change
   modificationTypeChanged() {
     this.validateForm();
-    this.updateHelpText();
+    this.extractAndShowId();
   }
 
-  // Handle document URL input change
-  documentUrlChanged() {
+  // Handle URL input change
+  urlChanged() {
     this.validateForm();
-    this.extractAndShowDocumentId();
-  }
-
-  // Update help text based on selected modification type
-  updateHelpText() {
-    const modificationType = this.modificationTypeSelectTarget.value;
-    const helpTextElement = this.element.querySelector('.modification-help-text');
-    
-    if (!helpTextElement) return;
-
-    let helpText = '';
-    switch(modificationType) {
-      case 'amended_by':
-        helpText = 'Este documento será marcado como reformado por el documento de la URL.';
-        break;
-      case 'repealed_by':
-        helpText = 'Este documento será marcado como derogado por el documento de la URL.';
-        break;
-      case 'amends':
-        helpText = 'Este documento reformará al documento de la URL.';
-        break;
-      case 'repeals':
-        helpText = 'Este documento derogará al documento de la URL.';
-        break;
-      default:
-        helpText = 'Selecciona un tipo de modificación.';
-    }
-    
-    helpTextElement.textContent = helpText;
+    this.extractAndShowId();
   }
 
   // Extract document ID from URL and show preview
-  extractAndShowDocumentId() {
-    const url = this.documentUrlInputTarget.value.trim();
+  extractAndShowId() {
+    const url = this.urlInputTarget.value.trim();
     const previewElement = this.element.querySelector('.document-preview');
     
     if (!previewElement) return;
@@ -92,7 +66,7 @@ export default class extends Controller {
       return;
     }
 
-    const documentId = this.extractDocumentId(url);
+    const documentId = this.extractId(url);
     
     if (documentId) {
       previewElement.innerHTML = `
@@ -112,7 +86,7 @@ export default class extends Controller {
   }
 
   // Extract document ID from URL
-  extractDocumentId(url) {
+  extractId(url) {
     const patterns = [
       /documents\/(\d+)/,     // documents/123
       /\/(\d+)(?:\/|$)/       // /123 or /123/
@@ -140,14 +114,16 @@ export default class extends Controller {
 
   // Reset form after successful submission
   reset() {
-    this.modificationTypeSelectTarget.value = '';
-    this.documentUrlInputTarget.value = '';
+    if (this.hasModificationTypeSelectTarget) {
+      this.modificationTypeSelectTarget.value = '';
+    }
+    if (this.hasUrlInputTarget) {
+      this.urlInputTarget.value = '';
+    }
+    
     this.validateForm();
     
     const previewElement = this.element.querySelector('.document-preview');
     if (previewElement) previewElement.innerHTML = '';
-    
-    const helpTextElement = this.element.querySelector('.modification-help-text');
-    if (helpTextElement) helpTextElement.textContent = 'Selecciona un tipo de modificación.';
   }
 }

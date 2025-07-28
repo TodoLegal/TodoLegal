@@ -24,6 +24,8 @@ class DocumentRelationshipsController < ApplicationController
     modification_type = params[:document_relationship][:modification_type]
     current_document_id = params[:document_relationship][:source_document_id] || params[:document_relationship][:target_document_id]
     
+    current_document = Document.find(current_document_id)
+    
     # Extract document ID from URL
     extracted_document_id = extract_document_id_from_url(document_url)
     
@@ -63,8 +65,6 @@ class DocumentRelationshipsController < ApplicationController
       return
     end
 
-    current_document = Document.find(current_document_id)
-
     respond_to do |format|
       if @document_relationship.save
         if redirect_url.present?
@@ -83,7 +83,7 @@ class DocumentRelationshipsController < ApplicationController
                   alert_origin: "relationships",
                   alert_type: "success",
                   remove_alert: "true",
-                  fade_timeout: "2000"
+                  fade_timeout: "3000"
                 }
               )
             ]
@@ -156,7 +156,7 @@ class DocumentRelationshipsController < ApplicationController
                 alert_origin: "relationships",
                 alert_type: "success",
                 remove_alert: "true",
-                fade_timeout: "2000"
+                fade_timeout: "3000"
               }
             )
           ]

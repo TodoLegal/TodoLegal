@@ -1,0 +1,57 @@
+<% if document.source_relationships.any? || document.target_relationships.any? || document.law_modifications.any? %>
+  <div class="existing-relationships mb-4">
+    <h6>Relaciones Existentes</h6>
+
+    <!-- Documents this document amends/repeals -->
+    <% if document.amended_documents.any? || document.amended_laws.any? %>
+      <div class="relationship-group relationship-group-amends mb-3">
+        <strong>Este documento reforma a:</strong>
+        <ul class="list-group list-group-flush">
+          <% document.source_relationships.where(modification_type: 'amend').each do |relationship| %>
+            <%= render 'documents/relationships/relationship_item', item: relationship, document: document %>
+          <% end %>
+          <% document.law_modifications.where(modification_type: 'amend').each do |modification| %>
+            <%= render 'documents/relationships/relationship_item', item: modification, document: document, is_law: true %>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <% if document.repealed_documents.any? || document.repealed_laws.any? %>
+      <div class="relationship-group relationship-group-repeals mb-3">
+        <strong>Este documento deroga a:</strong>
+        <ul class="list-group list-group-flush">
+          <% document.source_relationships.where(modification_type: 'repeal').each do |relationship| %>
+            <%= render 'documents/relationships/relationship_item', item: relationship, document: document %>
+          <% end %>
+          <% document.law_modifications.where(modification_type: 'repeal').each do |modification| %>
+            <%= render 'documents/relationships/relationship_item', item: modification, document: document, is_law: true %>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <!-- Documents that amend/repeal this document -->
+    <% if document.amending_documents.any? %>
+      <div class="relationship-group relationship-group-amended-by mb-3">
+        <strong>Este documento es reformado por:</strong>
+        <ul class="list-group list-group-flush">
+          <% document.target_relationships.where(modification_type: 'amend').each do |relationship| %>
+            <%= render 'documents/relationships/relationship_item', item: relationship, document: document %>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <% if document.repealing_documents.any? %>
+      <div class="relationship-group relationship-group-repealed-by mb-3">
+        <strong>Este documento es derogado por:</strong>
+        <ul class="list-group list-group-flush">
+          <% document.target_relationships.where(modification_type: 'repeal').each do |relationship| %>
+            <%= render 'documents/relationships/relationship_item', item: relationship, document: document %>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  </div>
+<% end %>

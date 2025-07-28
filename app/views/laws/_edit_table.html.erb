@@ -29,7 +29,7 @@
             <% if tag_type != "modificacion"%>
               <%= x.tag.name %> 
             <% else %>
-              <%= x.name %> 
+              <%= x.document.name.presence || x.document.issue_id.presence || "Documento ##{x.document.id}" %> 
             <% end %>
           </td>
           <td>

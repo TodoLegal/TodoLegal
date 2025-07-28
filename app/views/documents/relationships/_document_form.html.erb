@@ -1,0 +1,74 @@
+<div class="document-relationship-form mb-4" data-controller="document-relationships">
+  <h6>Agregar Relación con Documento</h6>
+  <% document_relationship = DocumentRelationship.new %>
+  <%= form_with(model: document_relationship, data: { 
+        turbo_stream: true, 
+        action: "submit->document-relationships#submit" 
+      }) do |form| %>
+    <% if document_relationship.errors.any? %>
+      <div id="error_explanation" class="alert alert-danger">
+        <h6><%= pluralize(document_relationship.errors.count, "error") %> impidieron guardar esta relación:</h6>
+        <ul class="mb-0">
+          <% document_relationship.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <%= form.hidden_field :source_document_id, value: document.id %>
+    <%= form.hidden_field :target_document_id, value: document.id %>
+    <% if @redirect_url %>
+      <%= form.hidden_field :return_to, value: @redirect_url %>
+    <% end %>
+
+    <div class="row">
+      <div class="col-md-4">
+        <div class="form-group">
+          <%= form.label :modification_type, "Tipo de Modificación", class: "form-label" %>
+          <%= form.select :modification_type, 
+              options_for_select([
+                ['Reformado por', 'amended_by'],
+                ['Derogado por', 'repealed_by'],
+                ['Reforma a', 'amends'],
+                ['Deroga a', 'repeals']
+              ]), 
+              { prompt: 'Selecciona el tipo de relación' }, 
+              { 
+                class: "form-control", 
+                required: true,
+                data: { 
+                  "document-relationships-target": "modificationTypeSelect",
+                  action: "change->document-relationships#modificationTypeChanged"
+                }
+              } %>
+        </div>
+      </div>
+      
+      <div class="col-md-6">
+        <div class="form-group">
+          <%= form.label :document_url, "URL del Documento Relacionado", class: "form-label" %>
+          <%= form.text_field :document_url, 
+              class: "form-control", 
+              placeholder: "https://todolegal.app/documents/123", 
+              required: true,
+              data: { 
+                "document-relationships-target": "urlInput",
+                action: "input->document-relationships#urlChanged"
+              } %>
+          <div class="document-preview mt-1"></div>
+        </div>
+      </div>
+      
+      <div class="col-md-2">
+        <div class="form-group">
+          <%= form.label :submit, "&nbsp;".html_safe, class: "form-label" %>
+          <%= form.submit "Agregar Relación", 
+              class: "btn btn-secondary w-100", 
+              disabled: true,
+              data: { "document-relationships-target": "submitButton" } %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

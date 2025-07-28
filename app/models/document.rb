@@ -94,6 +94,16 @@ class Document < ApplicationRecord
     target_relationships.where(modification_type: 'amend').map(&:source_document)
   end
 
+  # Laws that this document has repealed
+  def repealed_laws
+    law_modifications.where(modification_type: 'repeal').map(&:law)
+  end
+
+  # Laws that this document has amended
+  def amended_laws
+    law_modifications.where(modification_type: 'amend').map(&:law)
+  end
+
   # Check if the document has been repealed
   def repealed?
     status == 'derogado' || target_relationships.where(modification_type: 'repeal').exists?

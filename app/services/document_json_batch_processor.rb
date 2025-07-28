@@ -127,6 +127,14 @@ class DocumentJsonBatchProcessor
     # Add issuer as issuer tag if present
     addIssuerTagIfExists(document.id, file_data['issuer']) if file_data['issuer'].present?
 
+    # Add materia tag
+    materia_tag = Tag.find_by(name: 'Bancario')
+    addTagIfExists(document.id, materia_tag.name) if materia_tag
+
+    # Add tipo de acto tag
+    tipo_acto_tag = Tag.find_by(name: "Circular CNBS")
+    addTagIfExists(document.id, tipo_acto_tag.name) if tipo_acto_tag
+
     # Add each tag from the tags array
     tags = file_data['tags'] || []
     tags = [tags] unless tags.is_a?(Array) # Handle single tag as string
@@ -137,10 +145,6 @@ class DocumentJsonBatchProcessor
   end
 
   def attach_document_file(document, file_path, document_number)
-    puts "oooooooooooooooooooooooooooooooo"
-    puts "Entering attach_document_file"
-    puts "Attaching file for document #{document_number} at path: #{file_path}"
-    puts "ooooooooooooooooooooooooooooooooo"
     return unless file_path.present?
     
     download_name = if document.issue_id.present?

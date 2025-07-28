@@ -30,8 +30,10 @@
     </div>
 
     <div class="tab-pane fade<%= ' show active' if @active_tab == 'modifications' %>" id="modifications" role="tabpanel" aria-labelledby="modifications-tab">
-      <%law_modification = LawModification.new %>
-      <%= render partial:'edit_table', locals: {law_tag: law_modification, all: @all_modifications, tag_type: "modificacion", table_title: "Modificación"}%>
+      <div class="container-fluid mt-3">
+        <!-- Display existing law modifications -->
+        <%= render 'law_modifications_display' %>
+      </div>
     </div>
 
     <div class="tab-pane fade<%= ' show active' if @active_tab == 'articles' %>" id="articles" role="tabpanel" aria-labelledby="articles-tab">

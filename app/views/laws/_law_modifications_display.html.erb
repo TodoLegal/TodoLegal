@@ -1,0 +1,41 @@
+<div class="law-modifications-display">
+  <% if @law.law_modifications.any? %>
+    <div class="existing-modifications mb-4">
+      <% @law.law_modifications.group_by(&:modification_type).each do |type, modifications| %>
+        <div class="modification-group <%= case type
+                                          when 'amend' then 'relationship-group-amended-by'
+                                          when 'repeal' then 'relationship-group-repealed-by'
+                                          end %> mb-3">
+          <strong>
+            <% case type %>
+            <% when 'amend' %>
+              Esta ley fue reformada por:
+            <% when 'repeal' %>
+              Esta ley fue derogada por:
+            <% end %>
+          </strong>
+          <ul class="list-group list-group-flush">
+            <% modifications.each do |modification| %>
+              <li class="list-group-item">
+                <div>
+                  <%= link_to "#{modification.document.document_type.name}: #{modification.document.name.presence || modification.document.issue_id.presence || "Documento ##{modification.document.id}"}", 
+                              edit_document_path(modification.document), 
+                              class: "text-decoration-none", target: "_blank" %>
+                  <small class="text-muted d-block">
+                    <% if modification.modification_date %>
+                      <%= modification.modification_date.strftime("%d/%m/%Y") %>
+                    <% end %>
+                  </small>
+                </div>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="no-modifications text-center py-4">
+      <p class="text-muted">No hay modificaciones registradas para esta ley.</p>
+    </div>
+  <% end %>
+</div>

@@ -78,7 +78,7 @@ class NotificationsMailer < ApplicationMailer
       @user_type = current_user_type_api(@user)
       
       #change this line to get data from tags_test_data method when testing
-      docs = notif_arr.sort_by{|item| item.tag_id}
+      docs = notif_arr.sort_by{|item| item.is_a?(Hash) ? item["tag_id"] : item.tag_id}
 
       current_tag_name = ""
       temp_docs = []
@@ -86,16 +86,20 @@ class NotificationsMailer < ApplicationMailer
       @act_type_tag = TagType.find_by(name: "Tipo de Acto")
       
       docs.each do |doc|
-        tag = Tag.find_by(id: doc.tag_id)
+        # Handle both hash and ActiveRecord object formats
+        tag_id = doc.is_a?(Hash) ? doc["tag_id"] : doc.tag_id
+        doc_id = doc.is_a?(Hash) ? doc["id"] : doc.id
+        
+        tag = Tag.find_by(id: tag_id)
 
         act_type_tag = nil
 
         #obtains the Tipo de Acto tag from each document
-        act_type_tag = Tag.joins(:document_tags).where( document_tags: {document_id: doc.id}).where(tags: {tag_type_id: @act_type_tag.id})
+        act_type_tag = Tag.joins(:document_tags).where( document_tags: {document_id: doc_id}).where(tags: {tag_type_id: @act_type_tag.id})
         act_type_tag = act_type_tag.first ? act_type_tag.first.name : nil
 
         # Get issuer tags if available
-        issuer_tags = doc.respond_to?(:issuer_tags) ? doc.issuer_tags : []
+        issuer_tags = doc.is_a?(Hash) ? doc["issuer_tags"] : (doc.respond_to?(:issuer_tags) ? doc.issuer_tags : [])
 
         if tag.name != current_tag_name || doc == docs.last
 

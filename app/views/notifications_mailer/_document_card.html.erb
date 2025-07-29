@@ -19,25 +19,38 @@
                     style="font-family: 'Lato', Helvetica, Arial, sans-serif; font-style: normal; font-weight: 700; font-size: 16px; line-height: 19px; margin-bottom: 0.5rem;"
                 >
                     
-                        <%= document[:doc].issue_id %> <%= document[:act_type] %> 
+                        <%= document[:doc].is_a?(Hash) ? document[:doc]["issue_id"] : document[:doc].issue_id %> <%= document[:act_type] %> 
                 </p>
                 <p class="doc-card-title"
                     style="font-family: 'Lato', Helvetica, Arial, sans-serif; font-style: normal; font-weight: 700; font-size: 16px; line-height: 19px; margin-bottom: 0.5rem;"
                 >
                    
-                        <%= document[:doc].name %>
+                        <%= document[:doc].is_a?(Hash) ? document[:doc]["name"] : document[:doc].name %>
                 </p>
+                <% if document[:doc].respond_to?(:issuer_tags) && document[:doc].issuer_tags.present? %>
+                    <p class="doc-card-subtitle"
+                        style="color: #494949; font-family: 'Lato', Helvetica, Arial, sans-serif; font-style: normal; font-weight: 400; font-size: 14px; line-height: 17px; margin-top: 0.1rem; margin-bottom: 0.5rem;"
+                    >
+                        <strong>Institución emisora:</strong> <%= document[:doc].issuer_tags.join(", ") %>
+                    </p>
+                <% elsif document[:doc].is_a?(Hash) && document[:issuer_tags].present? %>
+                    <p class="doc-card-subtitle"
+                        style="color: #494949; font-family: 'Lato', Helvetica, Arial, sans-serif; font-style: normal; font-weight: 400; font-size: 14px; line-height: 17px; margin-top: 0.1rem; margin-bottom: 0.5rem;"
+                    >
+                        <strong>Institución emisora:</strong> <%= document[:issuer_tags].join(", ") %>
+                    </p>
+                <% end %>
                 <p class="doc-card-subtitle"
                     style="color: #494949; font-family: 'Lato', Helvetica, Arial, sans-serif; font-style: normal; font-weight: 400; font-size: 14px; line-height: 17px; margin-bottom: 0.1rem; margin-top: 0rem;"
                 >
-                    <%= document[:doc].publication_date %>
+                    <%= document[:doc].is_a?(Hash) ? document[:doc]["publication_date"] : document[:doc].publication_date %>
                 </p>
                 <p class="doc-card-subtitle"
                     style="color: #494949; font-family: 'Lato', Helvetica, Arial, sans-serif; font-style: normal; font-weight: 400; font-size: 14px; line-height: 17px; margin-top: 0.1rem; margin-bottom: 0.5rem;"
                 >
-                Gaceta: <%= document[:doc].publication_number %>
+                Gaceta: <%= document[:doc].is_a?(Hash) ? document[:doc]["publication_number"] : document[:doc].publication_number %>
                 </p>
-                <%= link_to "https://valid.todolegal.app/gaceta/honduras/#{form_url_field(document[:doc])}/#{document[:doc].id}", class:"share" do %>
+                <%= link_to "https://valid.todolegal.app/gaceta/honduras/#{form_url_field(document[:doc])}/#{document[:doc].is_a?(Hash) ? document[:doc]["id"] : document[:doc].id}", class:"share" do %>
                     
                     <button
                         type="button"
@@ -50,7 +63,7 @@
                 <p class="doc-card-description"
                     style="font-family: 'Lato', Helvetica, Arial, sans-serif; font-style: normal; font-weight: 400; font-size: 16px; line-height: 19px;"
                 >
-                    <%= document[:doc].description %>
+                    <%= document[:doc].is_a?(Hash) ? document[:doc]["description"] : document[:doc].description %>
                 </p>
             </div>
             <% if document != group[:documents].last %>

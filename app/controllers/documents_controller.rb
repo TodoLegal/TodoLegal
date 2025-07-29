@@ -2,6 +2,7 @@ class DocumentsController < ApplicationController
   before_action :set_document, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_editor!, only: [:index, :show, :new, :edit, :create, :update, :destroy]
   include DocumentsHelper
+  include DocumentTagManagement
 
   # GET /documents
   # GET /documents.json
@@ -383,15 +384,6 @@ class DocumentsController < ApplicationController
     return text
   end
 
-  def set_content_disposition_attachment key, file_name
-    bucket = get_bucket
-    file = bucket.file key
-    file.update do |file|
-      file.content_type = "application/pdf"
-      file.content_disposition = "attachment; filename=" + file_name
-    end
-  end
-
   def add_stamp_to_unprocessed_document document, document_pdf_path
     document_name = `python3 ~/GazetteSlicer/add_stamp_to_document.py #{ document_pdf_path } '#{ Rails.root.join("public", "documents") }'`
     document_name = JSON.parse(document_name)
@@ -491,111 +483,7 @@ class DocumentsController < ApplicationController
     addTagIfExists(document.id, "Gaceta")
   end
 
-  def slice_gazette document, document_pdf_path
-    puts ">slice_gazette called"
-    json_data = run_slice_gazette_script(document, document_pdf_path)
-    process_gazette document, document_pdf_path
-    document.start_page = 0
-    document.end_page = json_data["page_count"] - 1
-    document.url = document.generate_friendly_url
-    document.save
-    # set_content_disposition_attachment document.original_file.key, document.name + ".pdf"
-    # create the related documents
-    puts "Creating related documents"
-    json_data["files"].each do |file|
-      puts "Creating: " + file["name"]
-      name = ""
-      issue_id = ""
-      short_description = ""
-      long_description = ""
-      if file["name"] == "Marcas de Fábrica"
-        name = file["name"]
-        short_description = "Esta es la sección de marcas de Fábrica de la Gaceta " + document.publication_number + " de fecha " + document.publication_date.to_s + "."
-      elsif file["name"] == "Avisos Legales"
-        name = file["name"]
-        short_description = "Esta es la sección de avisos legales de la Gaceta " + document.publication_number + " de fecha " + document.publication_date.to_s + "."
-      else
-        issue_id = file["name"]
-        short_description = cleanText(file["short_description"])
-        long_description = cleanText(file["description"])
-      end
-      new_document = Document.create(
-        name: name,
-        issue_id: issue_id,
-        publication_date: document.publication_date,
-        publication_number: document.publication_number,
-        short_description: short_description,
-        description: long_description,
-        full_text: cleanText(file["full_text"]),
-        document_type_id: get_part_document_type_id(name),
-        start_page: file["start_page"],
-        end_page: file["end_page"],
-        position: file["position"],
-        publish: true
-      )
-      addTagIfExists(new_document.id, file["tag"])
-      addIssuerTagIfExists(new_document.id, file["issuer"])
-      addTagIfExists(new_document.id, "Gaceta")
-      #add materia tag
-      if file["materia"].present?
-        addTagIfExists(new_document.id, file["materia"])
-      end
-      
-      if file["name"] == "Marcas de Fábrica"
-        addIssuerTagIfExists(new_document.id, "Varios")
-        addTagIfExists(new_document.id, "Marcas")
-        addTagIfExists(new_document.id, "Mercantil")
-        addTagIfExists(new_document.id, "Propiedad Intelectual")
-      elsif file["name"] == "Avisos Legales"
-        addIssuerTagIfExists(new_document.id, "Varios")
-        addTagIfExists(new_document.id, "Avisos Legales")
-        addTagIfExists(new_document.id, "Licitaciones")
-      end
-      #adds institutions tags extracted by OCR
-      file["institutions"].each do |institution|
-        addTagIfExists(new_document.id, institution)
-      end
-      full_text_lower = file["full_text"].downcase
-      
-      #adds alternative name for institutions tags
-      AlternativeTagName.all.each do |alternative_tag_name|
-        if isWordInText alternative_tag_name.alternative_name, full_text_lower
-          if !DocumentTag.exists?(document_id: new_document.id, tag_id: alternative_tag_name.tag_id)
-            DocumentTag.create(document_id: new_document.id, tag_id: alternative_tag_name.tag_id)
-          end
-        end
-      end
-      new_document.url = new_document.generate_friendly_url
-      new_document.save
-
-      download_name = if issue_id.present?
-                        issue_id
-                      else name.present?
-                        name
-                      end
-
-      puts "Uploading file"
-      new_document.original_file.attach(
-        io: File.open(
-          Rails.root.join(
-            "public",
-            "gazettes",
-            document.id.to_s, file["path"]).to_s
-        ),
-        filename: download_name + ".pdf",
-        content_type: "application/pdf"
-      )
-      #set_content_disposition_attachment new_document.original_file.key, helpers.get_document_title(new_document) + ".pdf"
-      puts "File uploaded"
-    end
-    json_data["errors"].each do |error|
-      puts "Error found!"
-      puts error.to_s
-    end
-    puts "Created related documents"
-  end
-
-   #Autos acordados scripts
+  #Autos acordados scripts
   def run_slice_autos_acordados_script document, document_pdf_path
     puts ">run_slice_autos_acordados_script called"
     python_return_value = `python3 ~/GazetteSlicer/slice_autos_acordados.py #{ document_pdf_path } '#{ Rails.root.join("public", "autos_acordados") }' '#{document.id}'`
@@ -620,8 +508,6 @@ class DocumentsController < ApplicationController
     json_data["files"].each do | file |
       puts "creating auto acordado " + file["internal_id"]
       name = ""
-      short_description = ""
-      long_description = ""
       tema = file["tag_tema"]
       alt_issue_id = file["alt_issue_id"]
       materias = file["materias"]
@@ -698,23 +584,8 @@ class DocumentsController < ApplicationController
     end
     puts "Created related documents"
   end
-   
-  #batch processing
-
-  def run_process_document_batch_script
-    puts ">run_process_documents_batch called"
-    python_return_value = `python3 /home/carlosvilla/Github/TodoLegal-Repos/GazetteSlicer/process_documents_batch.py` 
-    begin
-      result = JSON.parse(python_return_value)
-      return result
-    rescue
-      Rails.logger.error(`Error on process batch: #{python_return_value}`)
-      return {}
-    end
-  end
 
   def process_documents_batch
-    # json_data = run_process_document_batch_script()
 
     #Extract the files data from the generated json
     json_data = File.read('processed_files.json')
@@ -842,6 +713,22 @@ class DocumentsController < ApplicationController
     redirect_to documents_path(last_documents: document_count, processed_documents: document_count), notice: "Batch processed successfully. #{document_count} documents uploaded."
   end
 
+  def process_cnbs_batch
+    processor = DocumentJsonBatchProcessor.new(current_user)
+    result = processor.process('processed_cnbs_files.json')
+    
+    Rails.logger.info "Batch processing completed. #{result.summary}"
+    
+    if result.errors.any?
+      Rails.logger.error "Batch processing errors: #{result.errors.join('; ')}"
+    end
+    
+    redirect_to documents_path(
+      last_documents: result.success_count, 
+      processed_documents: result.success_count
+    ), notice: "JSON batch processed successfully. #{result.summary}"
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_document
@@ -861,24 +748,6 @@ class DocumentsController < ApplicationController
 
     def get_next_document document
       Document.where(publication_number: document.publication_number).find_by(position: document.position + 1 )
-    end
-
-    def addTagIfExists document_id, tag_name
-      if !tag_name.empty?
-        tag = Tag.find_by_name(tag_name)
-        if tag
-          DocumentTag.create(document_id: document_id, tag_id: tag.id)
-        end
-      end
-    end
-
-    def addIssuerTagIfExists(document_id, issuer_tag_name)
-      if !issuer_tag_name.empty?
-        tag = Tag.find_by_name(issuer_tag_name)
-        if tag 
-          IssuerDocumentTag.create(document_id: document_id, tag_id: tag.id)
-        end
-      end
     end
 
     def get_empty_document_type_id

@@ -1,0 +1,72 @@
+<div class="law-modification-form" data-controller="law-modifications">
+  <h6>Agregar Modificación de Ley</h6>
+  <% law_modification = LawModification.new %>
+  <%= form_with(model: law_modification, data: { 
+        turbo_stream: true, 
+        action: "submit->law-modifications#submit" 
+      }) do |form| %>
+    <% if law_modification.errors.any? %>
+      <div id="error_explanation_law" class="alert alert-danger">
+        <h6><%= pluralize(law_modification.errors.count, "error") %> impidieron guardar esta modificación:</h6>
+        <ul class="mb-0">
+          <% law_modification.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <%= form.hidden_field :document_id, value: document.id %>
+    <% if @redirect_url %>
+      <%= form.hidden_field :return_to, value: @redirect_url %>
+    <% end %>
+    <%= form.hidden_field :current_document_id, value: document.id %>
+
+    <div class="row">
+      <div class="col-md-4">
+        <div class="form-group">
+          <%= form.label :modification_type, "Tipo de Modificación", class: "form-label" %>
+          <%= form.select :modification_type, 
+              options_for_select([
+                ['Reforma a', 'amend'],
+                ['Deroga a', 'repeal']
+              ]), 
+              { prompt: 'Selecciona el tipo de modificación' }, 
+              { 
+                class: "form-control", 
+                required: true,
+                data: { 
+                  "law-modifications-target": "modificationTypeSelect",
+                  action: "change->law-modifications#modificationTypeChanged"
+                }
+              } %>
+        </div>
+      </div>
+      
+      <div class="col-md-6">
+        <div class="form-group">
+          <%= form.label :law_url, "URL de la Ley Relacionada", class: "form-label" %>
+          <%= form.text_field :law_url, 
+              class: "form-control", 
+              placeholder: "https://todolegal.app/laws/123", 
+              required: true,
+              data: { 
+                "law-modifications-target": "urlInput",
+                action: "input->law-modifications#urlChanged"
+              } %>
+          <div class="law-preview mt-1"></div>
+        </div>
+      </div>
+      
+      <div class="col-md-2">
+        <div class="form-group">
+          <%= form.label :submit, "&nbsp;".html_safe, class: "form-label" %>
+          <%= form.submit "Agregar Relación", 
+              class: "btn btn-secondary w-100", 
+              disabled: true,
+              data: { "law-modifications-target": "submitButton" } %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

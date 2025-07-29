@@ -75,7 +75,7 @@
           <div class="form-group">
             <%= form.label :status %>
             <%= form.select :status,  
-                options_for_select(['Derogado', 'Vigente', 'Reformado'], document.status), 
+                options_for_select(['derogado', 'vigente', 'reformado'], document.status), 
                 { prompt: 'Selecciona status' }, 
                 class: 'form-control mr-2', 
                 data: { document_form_validator_target: "status" }

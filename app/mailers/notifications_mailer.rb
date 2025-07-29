@@ -8,33 +8,51 @@ class NotificationsMailer < ApplicationMailer
     #(email =~ email_regex)
   end
 
+  # This method is used to get the test data for the user preferences email.
+  # It retrieves documents with specific tags and their associated issuer tags.
+  # The tags are hardcoded for testing purposes.
+  # The method returns an array of documents sorted by tag_id.
+  #
+  # @return [Array<Document>] An array of documents with their associated tags and issuer tags.
   def tags_test_data
-
     @docs_array = []
     @tags_array = [1, 3, 5, 17, 51]
 
     @tema_tag_id = TagType.find_by(name: "tema").id
     @materia_tag_id = TagType.find_by(name: "materia").id
+    @institution_tag_type = TagType.find_by(name: "Institución").id
 
     docs = []
     @tags_array.each do |tag|
-      temp = Document.joins(:document_tags).where('publication_date > ?',(Date.today - 3000.day).to_datetime).where('document_tags.tag_id'=> tag).select(:tag_id, :id, :name, :issue_id, :publication_number, :publication_date, :description, :url)
+      # Get documents with regular tags
+      temp = Document.joins(:document_tags)
+        .where('publication_date > ?', (Date.today - 3000.day).to_datetime)
+        .where('document_tags.tag_id' => tag)
+        .select(:tag_id, :id, :name, :issue_id, :publication_number, :publication_date, :description, :url)
         
       if temp.length > 0
-        temp.each do | doc |
-          docs.push( doc )
+        temp.each do |doc|
+          # Get the document with associated issuer tags
+          full_doc = Document.includes(:issuer_document_tags).find(doc.id)
+          
+          # Get issuer tags for the document
+          issuer_tags = full_doc.issuer_document_tags.map do |idt|
+            Tag.find_by(id: idt.tag_id)&.name
+          end.compact
+          
+          # Add issuer tags as an attribute to the document
+          doc.instance_variable_set(:@issuer_tags, issuer_tags)
+          doc.define_singleton_method(:issuer_tags) { @issuer_tags }
+          
+          docs.push(doc)
         end
       end
-
     end
 
-    docs.each do |doc|
-      @docs_array.push(doc)
-    end
-
-    docs = @docs_array.sort_by{|item| item.tag_id }
-
-    return docs
+    docs = docs.uniq{|document| document.id}
+    sorted_docs = docs.sort_by{|item| item.tag_id }
+    
+    return sorted_docs
   end
 
   def remaining_trial user
@@ -49,6 +67,8 @@ class NotificationsMailer < ApplicationMailer
     return remaining_free_trial_time(user)
   end
 
+  # /rails/mailers
+  # This method sends an email to the user with their preferences and notifications.
   def user_preferences_mail(user, notif_arr) 
       @user = user
       @user_preferences = UsersPreference.find_by(user_id: @user.id)
@@ -58,7 +78,7 @@ class NotificationsMailer < ApplicationMailer
       @user_type = current_user_type_api(@user)
       
       #change this line to get data from tags_test_data method when testing
-      docs = notif_arr.sort_by{|item| item.tag_id}
+      docs = notif_arr.sort_by{|item| item.is_a?(Hash) ? item["tag_id"] : item.tag_id}
 
       current_tag_name = ""
       temp_docs = []
@@ -66,13 +86,20 @@ class NotificationsMailer < ApplicationMailer
       @act_type_tag = TagType.find_by(name: "Tipo de Acto")
       
       docs.each do |doc|
-        tag = Tag.find_by(id: doc.tag_id)
+        # Handle both hash and ActiveRecord object formats
+        tag_id = doc.is_a?(Hash) ? doc["tag_id"] : doc.tag_id
+        doc_id = doc.is_a?(Hash) ? doc["id"] : doc.id
+        
+        tag = Tag.find_by(id: tag_id)
 
         act_type_tag = nil
 
         #obtains the Tipo de Acto tag from each document
-        act_type_tag = Tag.joins(:document_tags).where( document_tags: {document_id: doc.id}).where(tags: {tag_type_id: @act_type_tag.id})
+        act_type_tag = Tag.joins(:document_tags).where( document_tags: {document_id: doc_id}).where(tags: {tag_type_id: @act_type_tag.id})
         act_type_tag = act_type_tag.first ? act_type_tag.first.name : nil
+
+        # Get issuer tags if available
+        issuer_tags = doc.is_a?(Hash) ? doc["issuer_tags"] : (doc.respond_to?(:issuer_tags) ? doc.issuer_tags : [])
 
         if tag.name != current_tag_name || doc == docs.last
 
@@ -87,7 +114,8 @@ class NotificationsMailer < ApplicationMailer
 
             temp_docs.push({
               doc: doc,
-              act_type: act_type_tag
+              act_type: act_type_tag,
+              issuer_tags: issuer_tags
             })
             current_tag_name = tag.name
           end
@@ -104,7 +132,8 @@ class NotificationsMailer < ApplicationMailer
 
         temp_docs.push({
           doc: doc,
-          act_type: act_type_tag
+          act_type: act_type_tag,
+          issuer_tags: issuer_tags
         })
       end
 

@@ -19,7 +19,11 @@ class DocumentJsonBatchProcessor
     
     # Delete processed files after successful processing
     if @result.success_count > 0
-      delete_processed_files(json_data["files"])
+      Rails.logger.info "Processing completed with #{@result.success_count} successful documents. Starting file cleanup..."
+      cleanup_result = delete_processed_files(json_data["files"])
+      Rails.logger.info "Cleanup result: #{cleanup_result}"
+    else
+      Rails.logger.info "No successful documents processed. Skipping file cleanup."
     end
     
     @result
@@ -233,24 +237,102 @@ class DocumentJsonBatchProcessor
 
   def delete_processed_files(files)
     Rails.logger.info "Starting file cleanup after batch processing"
+    Rails.logger.info "Total files to process: #{files.length}"
     deleted_count = 0
     error_count = 0
+    skipped_count = 0
 
-    files.each do |file_data|
+    files.each_with_index do |file_data, index|
       file_path = file_data['path']
-      next unless file_path.present? && File.exist?(file_path)
+      
+      Rails.logger.info "Processing file #{index + 1}: #{file_path}"
+      
+      if file_path.blank?
+        Rails.logger.warn "File #{index + 1}: No path provided"
+        skipped_count += 1
+        next
+      end
+      
+      # Convert relative path to absolute path
+      # Handle different relative path patterns
+      absolute_path = if file_path.start_with?('/')
+                        # Already absolute path
+                        file_path
+                      else
+                        # Convert relative path to absolute, relative to Rails root
+                        File.expand_path(file_path, Rails.root)
+                      end
+      
+      # Additional check: if the resolved path doesn't exist, try alternative patterns
+      unless File.exist?(absolute_path)
+        # Try with different relative patterns
+        alternative_patterns = [
+          file_path.gsub('../GazetteSlicer/', '../../../GazetteSlicer/'),
+          file_path.gsub('../../../GazetteSlicer/', '../GazetteSlicer/'),
+          file_path.gsub('../GazetteSlicer/', '../../GazetteSlicer/'),
+          file_path.gsub('../../GazetteSlicer/', '../GazetteSlicer/')
+        ].uniq.reject { |p| p == file_path }
+        
+        alternative_patterns.each do |alt_path|
+          alt_absolute = File.expand_path(alt_path, Rails.root)
+          if File.exist?(alt_absolute)
+            Rails.logger.info "Found file using alternative path: #{alt_path} -> #{alt_absolute}"
+            absolute_path = alt_absolute
+            break
+          end
+        end
+      end
+      
+      unless File.exist?(absolute_path)
+        Rails.logger.warn "File #{index + 1}: File does not exist at path: #{absolute_path}"
+        skipped_count += 1
+        next
+      end
 
       begin
-        File.delete(file_path)
+        # Delete the main file
+        File.delete(absolute_path)
         deleted_count += 1
-        Rails.logger.info "Deleted file: #{file_path}"
+        Rails.logger.info "Successfully deleted file: #{absolute_path}"
+        
+        # Also try to delete file with same name in data directory
+        filename = File.basename(absolute_path)
+        
+        # Both stamped_documents and data are in the same GazetteSlicer directory
+        # Just replace stamped_documents with data  in the path
+        data_path = absolute_path.gsub('/stamped_documents/', '/data/')
+        if File.exist?(data_path)
+          begin
+            if File.readable?(data_path) && File.writable?(data_path)
+              File.delete(data_path)
+              Rails.logger.info "Successfully deleted corresponding data file: #{data_path}"
+              deleted_count += 1
+            else
+              Rails.logger.warn "Permission denied for data file: #{data_path}"
+            end
+          rescue => data_error
+            Rails.logger.warn "Error deleting data file #{data_path}: #{data_error.message}"
+          end
+        else
+          Rails.logger.warn "Data file not found: #{data_path}"
+        end
+        
       rescue => e
         error_count += 1
-        Rails.logger.error "Error deleting file #{file_path}: #{e.message}"
+        Rails.logger.error "Error deleting file #{absolute_path}: #{e.class} - #{e.message}"
+        Rails.logger.error "Backtrace: #{e.backtrace.first(3).join(', ')}"
       end
     end
 
-    Rails.logger.info "File cleanup completed: #{deleted_count} files deleted, #{error_count} errors"
+    Rails.logger.info "File cleanup completed: #{deleted_count} files deleted, #{error_count} errors, #{skipped_count} skipped"
+    
+    # Return summary for debugging
+    {
+      deleted: deleted_count,
+      errors: error_count,
+      skipped: skipped_count,
+      total: files.length
+    }
   end
 
   # Result object to track processing statistics

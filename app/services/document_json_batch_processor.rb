@@ -189,9 +189,39 @@ class DocumentJsonBatchProcessor
     return nil if date_string.blank?
 
     begin
-      Date.parse(date_string)&.strftime("%Y-%m-%d")
-    rescue
-      Rails.logger.warn "Could not parse date '#{date_string}', setting to nil"
+      # Handle Spanish date format like "19 de enero de 2022"
+      if date_string.match?(/\d+\s+de\s+\w+\s+de\s+\d+/)
+        spanish_months = {
+          'enero' => 'January',
+          'febrero' => 'February',
+          'marzo' => 'March',
+          'abril' => 'April',
+          'mayo' => 'May',
+          'junio' => 'June',
+          'julio' => 'July',
+          'agosto' => 'August',
+          'septiembre' => 'September',
+          'octubre' => 'October',
+          'noviembre' => 'November',
+          'diciembre' => 'December'
+        }
+        
+        # Convert Spanish month names to English
+        english_date = date_string.dup
+        spanish_months.each do |spanish, english|
+          english_date.gsub!(spanish, english)
+        end
+        
+        # Remove "de" words and clean up
+        english_date = english_date.gsub(/\s+de\s+/, ' ').strip
+        
+        Date.parse(english_date)&.strftime("%Y-%m-%d")
+      else
+        # Try parsing as-is for other formats
+        Date.parse(date_string)&.strftime("%Y-%m-%d")
+      end
+    rescue => e
+      Rails.logger.warn "Could not parse date '#{date_string}': #{e.message}, setting to nil"
       nil
     end
   end

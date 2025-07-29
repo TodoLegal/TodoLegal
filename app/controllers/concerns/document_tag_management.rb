@@ -43,7 +43,7 @@ module DocumentTagManagement
                        "Avisos Legales"
                      when "certificación"
                        "Certificación"
-                     when "circular", "circulares"
+                     when "circular CNBS", "circulares cnbs", "circular cnbs"
                        "Circular CNBS"
                      when "comunicado"
                        "Comunicado"

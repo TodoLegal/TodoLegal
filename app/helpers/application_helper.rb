@@ -276,12 +276,33 @@ module ApplicationHelper
   end
 
   def form_url_field document
-    if !document.url.blank?
-      return document.url
-    elsif !document.issue_id.blank?
-      return I18n.transliterate(document.issue_id.gsub(/\s/, "-"))
-    elsif !document.name.blank?
-      return I18n.transliterate(document.name.gsub(/\s/, "-"))
+    # Handle both hash objects (from job processing) and ActiveRecord objects
+    if document.is_a?(Hash)
+      # Hash object from job processing - check if it has nested :doc structure or is flat
+      if document[:doc]
+        # Nested structure: document[:doc] contains the actual document data
+        doc_data = document[:doc]
+      else
+        # Flat structure: document itself contains the document data
+        doc_data = document
+      end
+      
+      url = doc_data["url"] || doc_data[:url]
+      issue_id = doc_data["issue_id"] || doc_data[:issue_id]
+      name = doc_data["name"] || doc_data[:name]
+    else
+      # ActiveRecord object
+      url = document.url
+      issue_id = document.issue_id
+      name = document.name
+    end
+
+    if !url.blank?
+      return url
+    elsif !issue_id.blank?
+      return I18n.transliterate(issue_id.gsub(/\s/, "-"))
+    elsif !name.blank?
+      return I18n.transliterate(name.gsub(/\s/, "-"))
     else
       return "documento"
     end

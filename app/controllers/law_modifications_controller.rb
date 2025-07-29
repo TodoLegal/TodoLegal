@@ -179,13 +179,15 @@ class LawModificationsController < ApplicationController
       # Handle different URL patterns:
       # https://todolegal.app/laws/123
       # https://todolegal.app/laws/123/edit
+      # https://todolegal.app/laws/169-codigo-penal
+      # https://todolegal.app/laws/169-codigo-penal/edit
       # /laws/123
       # /laws/123/edit
       # laws/123
       
       url_patterns = [
-        %r{laws/(\d+)(?:/edit)?/?$},  # Match laws/ID or laws/ID/edit
-        %r{/(\d+)(?:/edit)?/?$}       # Fallback for just /ID
+        %r{laws/(\d+)(?:-[^/]+)?(?:/edit)?/?$},  # Match laws/ID or laws/ID-slug or laws/ID/edit or laws/ID-slug/edit
+        %r{/(\d+)(?:/edit)?/?$}                  # Fallback for just /ID
       ]
       
       url_patterns.each do |pattern|

@@ -1,0 +1,29 @@
+<li class="list-group-item d-flex justify-content-between align-items-center">
+  <% if local_assigns[:is_law] %>
+    <%= link_to item.law.name, 
+                edit_law_path(item.law), 
+                class: "text-decoration-none", target: "_blank" %>
+    <div>
+      <%= button_to law_modification_path(item, return_to: @redirect_url, current_document_id: document.id), 
+                    method: :delete, 
+                    data: { confirm: '¿Estás seguro que deseas eliminar esta modificación de ley?' }, 
+                    class: "btn btn-outline-danger btn-sm", 
+                    remote: true do %>
+        <i class="fas fa-trash-alt"></i>
+      <% end %>
+    </div>
+  <% else %>
+    <%= link_to document_display_text(item.respond_to?(:target_document) ? item.target_document : item.source_document), 
+                edit_document_path(item.respond_to?(:target_document) ? item.target_document : item.source_document), 
+                class: "text-decoration-none", target: "_blank" %>
+    <div>
+      <%= button_to document_relationship_path(item, return_to: @redirect_url, current_document_id: document.id), 
+                    method: :delete, 
+                    data: { confirm: '¿Estás seguro que deseas eliminar esta relación?' }, 
+                    class: "btn btn-outline-danger btn-sm ms-2", 
+                    remote: true do %>
+        <i class="fas fa-trash-alt"></i>
+      <% end %>
+    </div>
+  <% end %>
+</li>

@@ -320,3 +320,43 @@ a.article:hover {
 .articles-result-info{
     margin-bottom: 10px;
 }
+
+/* Law Modifications Display Styles */
+
+.law-modifications-display .modification-group {
+  border-left: 3px solid #007bff;
+  padding-left: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Specific colors for each relationship type */
+.law-modifications-display .modification-group.relationship-group-amended-by {
+  border-left-color: #4a90e2; /* Blue - reformado por */
+}
+
+.law-modifications-display .modification-group.relationship-group-repealed-by {
+  border-left-color: #d63031; /* Red - derogado por */
+}
+
+.law-modifications-display .modification-group strong {
+  color: #495057;
+  font-size: 0.95rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.law-modifications-display .list-group-item {
+  border: none;
+  border-bottom: 1px solid #dee2e6;
+  padding: 0.75rem 0;
+}
+
+.law-modifications-display .list-group-item:last-child {
+  border-bottom: none;
+}
+
+.law-modifications-display .no-modifications {
+  background-color: #f8f9fa;
+  border-radius: 0.25rem;
+  margin: 1rem 0;
+}

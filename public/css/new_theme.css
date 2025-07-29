@@ -843,3 +843,60 @@ footer p a {
 .is-invalid {
     box-shadow: 0 0 0 .2rem rgba(220, 53, 69, .25);
 }
+
+/* Document Relationships Styles */
+
+.document-relationships-section {
+  margin-top: 2rem;
+}
+
+.relationship-group {
+  border-left: 3px solid #007bff;
+  padding-left: 1rem;
+}
+
+/* Specific colors for each relationship type */
+.relationship-group-amended-by {
+  border-left-color: #4a90e2; /* Blue - reformado por */
+}
+
+.relationship-group-repealed-by {
+  border-left-color: #d63031; /* Red - derogado por */
+}
+
+.relationship-group-amends {
+  border-left-color: #00b894; /* Green - reforma a */
+}
+
+.relationship-group-repeals {
+  border-left-color: #e17055; /* Orange - deroga a */
+}
+
+.relationship-group strong {
+  color: #495057;
+  font-size: 0.95rem;
+}
+
+.list-group-item {
+  border-left: none;
+  border-right: none;
+  padding: 0.75rem 0;
+}
+
+.list-group-item:first-child {
+  border-top: none;
+}
+
+.list-group-item:last-child {
+  border-bottom: none;
+}
+
+.add-relationship {
+  border-top: 1px solid #dee2e6;
+  padding-top: 1.5rem;
+}
+
+.no-relationships {
+  text-align: center;
+  padding: 2rem 0;
+}

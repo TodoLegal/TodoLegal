@@ -1,5 +1,19 @@
 module DocumentsHelper
 
+  # Formats document display text with type, name, issue_id priority
+  def document_display_text(document)
+    return "Documento sin información" unless document
+
+    # Get document type name
+    type_name = document.document_type&.name || "Documento"
+    
+    # Get primary identifier (name > issue_id > id)
+    identifier = document.name.presence || document.issue_id.presence || "##{document.id}"
+    
+    # Format: "Tipo: Identifier"
+    "#{type_name}: #{identifier}"
+  end
+
   def check_document_duplicity(publication_number, document_type, issue_id)
     # Check if a document with the same publication_number and document_type exists
     existing_document = Document.find_by(publication_number: publication_number, document_type: document_type, issue_id: issue_id)

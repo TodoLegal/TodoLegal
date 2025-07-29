@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_12_11_071809) do
+ActiveRecord::Schema[7.1].define(version: 2025_07_02_000002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
   enable_extension "pg_trgm"
@@ -182,11 +182,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_11_071809) do
   end
 
   create_table "document_relationships", force: :cascade do |t|
-    t.integer "document_1_id"
-    t.integer "document_2_id"
-    t.string "relationship"
+    t.integer "source_document_id"
+    t.integer "target_document_id"
+    t.string "modification_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "details", default: ""
+    t.date "modification_date"
+    t.index ["modification_type"], name: "index_document_relationships_on_modification_type"
+    t.index ["source_document_id"], name: "index_document_relationships_on_source_document_id"
+    t.index ["target_document_id"], name: "index_document_relationships_on_target_document_id"
   end
 
   create_table "document_slices", force: :cascade do |t|
@@ -292,9 +297,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_11_071809) do
 
   create_table "law_modifications", force: :cascade do |t|
     t.integer "law_id"
-    t.string "name"
+    t.string "modification_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "document_id"
+    t.date "modification_date"
+    t.text "details", default: ""
+    t.string "affected_articles"
+    t.index ["document_id"], name: "index_law_modifications_on_document_id"
+    t.index ["modification_date"], name: "index_law_modifications_on_modification_date"
+    t.index ["modification_type"], name: "index_law_modifications_on_modification_type"
   end
 
   create_table "law_tags", force: :cascade do |t|
@@ -549,6 +561,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_11_071809) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "document_edition_histories", "datapoints"
   add_foreign_key "document_edition_histories", "users"
+  add_foreign_key "law_modifications", "documents"
+  add_foreign_key "law_modifications", "laws"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "verification_histories", "datapoints"

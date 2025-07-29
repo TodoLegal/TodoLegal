@@ -16,6 +16,12 @@ class DocumentJsonBatchProcessor
     return @result unless json_data
 
     process_documents(json_data["files"])
+    
+    # Delete processed files after successful processing
+    if @result.success_count > 0
+      delete_processed_files(json_data["files"])
+    end
+    
     @result
   end
 
@@ -131,9 +137,9 @@ class DocumentJsonBatchProcessor
     materia_tag = Tag.find_by(name: 'Bancario')
     addTagIfExists(document.id, materia_tag.name) if materia_tag
 
-    # Add tipo de acto tag
-    tipo_acto_tag = Tag.find_by(name: "Circular CNBS")
-    addTagIfExists(document.id, tipo_acto_tag.name) if tipo_acto_tag
+    # Add Forma de Publicacion tag
+    forma_publicacion_tag = Tag.find_by(name: "Circular CNBS")
+    addTagIfExists(document.id, forma_publicacion_tag.name) if forma_publicacion_tag
 
     # Add each tag from the tags array
     tags = file_data['tags'] || []
@@ -193,6 +199,28 @@ class DocumentJsonBatchProcessor
   def get_uploader_name
     return nil unless @current_user
     "#{@current_user.first_name} #{@current_user.last_name}"
+  end
+
+  def delete_processed_files(files)
+    Rails.logger.info "Starting file cleanup after batch processing"
+    deleted_count = 0
+    error_count = 0
+
+    files.each do |file_data|
+      file_path = file_data['path']
+      next unless file_path.present? && File.exist?(file_path)
+
+      begin
+        File.delete(file_path)
+        deleted_count += 1
+        Rails.logger.info "Deleted file: #{file_path}"
+      rescue => e
+        error_count += 1
+        Rails.logger.error "Error deleting file #{file_path}: #{e.message}"
+      end
+    end
+
+    Rails.logger.info "File cleanup completed: #{deleted_count} files deleted, #{error_count} errors"
   end
 
   # Result object to track processing statistics

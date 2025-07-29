@@ -230,8 +230,7 @@ class LegalRelationshipProcessor
       modification = LawModification.find_or_create_by(
         document: source_item,
         law: target_item,
-        modification_type: modification_type,
-        modification_date: Date.current
+        modification_type: modification_type
       )
       
       if modification.persisted?

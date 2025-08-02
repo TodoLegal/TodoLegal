@@ -116,19 +116,39 @@ class DocumentJsonBatchProcessor
   end
 
   def duplicate_exists?(attributes)
-    return false if attributes[:issue_id].blank?
-    
-    # More comprehensive duplicate check
-    existing = Document.where(
-      issue_id: attributes[:issue_id].to_s.strip,
-      document_type_id: attributes[:document_type_id]
-    ).exists?
-    
-    if existing
-      Rails.logger.info "Duplicate found: issue_id='#{attributes[:issue_id]}', document_type_id='#{attributes[:document_type_id]}'"
+    # Handle documents with valid issue_id
+    if attributes[:issue_id].present? && attributes[:issue_id].to_s.strip != ""
+      existing = Document.where(
+        issue_id: attributes[:issue_id].to_s.strip,
+        document_type_id: attributes[:document_type_id]
+      ).exists?
+      
+      if existing
+        Rails.logger.info "Duplicate found by issue_id: issue_id='#{attributes[:issue_id]}', document_type_id='#{attributes[:document_type_id]}'"
+      end
+      
+      return existing
     end
     
-    existing
+    # Handle documents with empty/blank issue_id - check by description and document_type
+    if attributes[:description].present? && attributes[:description].to_s.strip != ""
+      existing = Document.where(
+        document_type_id: attributes[:document_type_id]
+      ).where(
+        "(issue_id IS NULL OR issue_id = '' OR TRIM(issue_id) = '') AND TRIM(description) = ?",
+        attributes[:description].to_s.strip
+      ).exists?
+      
+      if existing
+        Rails.logger.info "Duplicate found by description: document_type_id='#{attributes[:document_type_id]}', description='#{attributes[:description].to_s.strip.truncate(100)}'"
+      end
+      
+      return existing
+    end
+    
+    # If both issue_id and description are blank, log warning but don't block creation
+    Rails.logger.warn "Document has both blank issue_id and description - cannot check for duplicates effectively"
+    false
   end
 
   def create_document(attributes)

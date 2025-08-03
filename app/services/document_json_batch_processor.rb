@@ -116,21 +116,64 @@ class DocumentJsonBatchProcessor
   end
 
   def duplicate_exists?(attributes)
-    # Use the existing helper method for consistency
-    check_document_duplicity(nil, nil, attributes[:issue_id])
+    # Handle documents with valid issue_id
+    if attributes[:issue_id].present? && attributes[:issue_id].to_s.strip != ""
+      existing = Document.where(
+        issue_id: attributes[:issue_id].to_s.strip,
+        document_type_id: attributes[:document_type_id]
+      ).exists?
+      
+      if existing
+        Rails.logger.info "Duplicate found by issue_id: issue_id='#{attributes[:issue_id]}', document_type_id='#{attributes[:document_type_id]}'"
+      end
+      
+      return existing
+    end
+    
+    # Handle documents with empty/blank issue_id - check by description and document_type
+    if attributes[:description].present? && attributes[:description].to_s.strip != ""
+      existing = Document.where(
+        document_type_id: attributes[:document_type_id]
+      ).where(
+        "(issue_id IS NULL OR issue_id = '' OR TRIM(issue_id) = '') AND TRIM(description) = ?",
+        attributes[:description].to_s.strip
+      ).exists?
+      
+      if existing
+        Rails.logger.info "Duplicate found by description: document_type_id='#{attributes[:document_type_id]}', description='#{attributes[:description].to_s.strip.truncate(100)}'"
+      end
+      
+      return existing
+    end
+    
+    # If both issue_id and description are blank, log warning but don't block creation
+    Rails.logger.warn "Document has both blank issue_id and description - cannot check for duplicates effectively"
+    false
   end
 
   def create_document(attributes)
-    document = Document.new(attributes.compact)
-    
-    if document.save
-      document
-    else
-      error_msg = document.errors.full_messages.join(', ')
-      Rails.logger.error "Error creating document: #{error_msg}"
-      @result.add_error("Error creating document: #{error_msg}")
-      nil
+    # Use database transaction with constraint handling
+    Document.transaction do
+      document = Document.new(attributes.compact)
+      
+      if document.save
+        document
+      else
+        error_msg = document.errors.full_messages.join(', ')
+        Rails.logger.error "Error creating document: #{error_msg}"
+        @result.add_error("Error creating document: #{error_msg}")
+        nil
+      end
     end
+  rescue ActiveRecord::RecordNotUnique => e
+    # Handle database constraint violation
+    Rails.logger.warn "Duplicate document prevented by database constraint: issue_id='#{attributes[:issue_id]}', document_type_id='#{attributes[:document_type_id]}'"
+    @result.add_error("Duplicate document: #{attributes[:issue_id]} already exists")
+    nil
+  rescue => e
+    Rails.logger.error "Unexpected error creating document: #{e.message}"
+    @result.add_error("Error creating document: #{e.message}")
+    nil
   end
 
   def add_document_tags(document, file_data)

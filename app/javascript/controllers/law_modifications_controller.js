@@ -35,8 +35,8 @@ export default class extends Controller {
     
     // Check for law ID in URL patterns
     const patterns = [
-      /laws\/(\d+)/,          // laws/123
-      /\/(\d+)(?:\/|$)/       // /123 or /123/
+      /laws\/(\d+)(?:-[^/]+)?/,     // laws/123 or laws/123-slug
+      /\/(\d+)(?:\/|$)/             // /123 or /123/
     ];
     
     return patterns.some(pattern => pattern.test(url));
@@ -88,8 +88,8 @@ export default class extends Controller {
   // Extract law ID from URL
   extractId(url) {
     const patterns = [
-      /laws\/(\d+)/,          // laws/123
-      /\/(\d+)(?:\/|$)/       // /123 or /123/
+      /laws\/(\d+)(?:-[^/]+)?/,     // laws/123 or laws/123-slug
+      /\/(\d+)(?:\/|$)/             // /123 or /123/
     ];
     
     for (const pattern of patterns) {

@@ -35,7 +35,7 @@ class Document < ApplicationRecord
   # Validations
   validates :issue_id, uniqueness: { 
     scope: :document_type_id, 
-    message: "ya existe para este tipo de documento",
+    message: "This document already exists for this type",
     allow_blank: true 
   }
 

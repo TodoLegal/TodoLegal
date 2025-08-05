@@ -35,10 +35,13 @@ class Api::V1::DocumentsController < ApplicationController
 
     issuer_name = get_issuer_name @document.id
 
+    document_modifications = get_document_modifications
+
     render json: {"document": json_document,
       "issuer": issuer_name,
       "tags": get_document_tags,
       "related_documents": related_documents,
+      "modifications": document_modifications,
       "can_access": can_access_document,
       "downloads": user_trial ? user_trial.downloads : 0,
       "user_type": current_user_type_api(user),
@@ -307,6 +310,31 @@ protected
       tags.push({"name": tag.name, "type": tag.tag_type.name})
     end
     return tags
+  end
+
+  def get_document_modifications
+    {
+      modifications_by_this_document: {
+        amended: format_modified_documents(@document.amended_documents),
+        repealed: format_modified_documents(@document.repealed_documents)
+      },
+      modifications_to_this_document: {
+        amended_by: format_modified_documents(@document.amending_documents),
+        repealed_by: format_modified_documents(@document.repealing_documents)
+      }
+    }
+  end
+
+  def format_modified_documents(documents)
+    documents.map do |doc|
+      {
+        id: doc.id,
+        name: doc.name,
+        issue_id: doc.issue_id,
+        document_type: doc.document_type&.name,
+        publication_date: doc.publication_date
+      }
+    end
   end
 
   def get_related_documents

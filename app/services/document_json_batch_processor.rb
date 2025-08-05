@@ -7,10 +7,14 @@ class DocumentJsonBatchProcessor
   def initialize(current_user = nil)
     @current_user = current_user
     @result = ProcessingResult.new
+    @failed_documents_file = "failed_documents.txt"
   end
 
   def process(json_file_path = 'processed_files.json')
     Rails.logger.info "Starting JSON batch processing from #{json_file_path}"
+    
+    # Initialize failed documents log file
+    initialize_failed_documents_log
     
     json_data = load_json_data(json_file_path)
     return @result unless json_data
@@ -26,10 +30,55 @@ class DocumentJsonBatchProcessor
       Rails.logger.info "No successful documents processed. Skipping file cleanup."
     end
     
+    # Log summary of failed documents
+    finalize_failed_documents_log
+    
     @result
   end
 
   private
+
+  def initialize_failed_documents_log
+    File.open(@failed_documents_file, 'w') do |file|
+      file.write "Failed Documents Processing Log\n"
+      file.write "Generated: #{Time.current}\n"
+      file.write "#{'=' * 60}\n"
+      file.write "Format: [REASON] - Document Path - Additional Info\n"
+      file.write "#{'=' * 60}\n"
+      file.write "\n"
+    end
+    Rails.logger.info "Failed documents will be logged to: #{@failed_documents_file}"
+  end
+
+  def log_failed_document(file_path, reason, additional_info = nil)
+    timestamp = Time.current.strftime('%H:%M:%S')
+    log_entry = "[#{timestamp}] [#{reason}] - #{file_path || 'Unknown path'}"
+    log_entry += " - #{additional_info}" if additional_info
+    
+    File.open(@failed_documents_file, 'a') do |file|
+      file.write "#{log_entry}\n"
+    end
+  end
+
+  def finalize_failed_documents_log
+    if @result.errors.any?
+      File.open(@failed_documents_file, 'a') do |file|
+        file.write "\n"
+        file.write "#{'=' * 60}\n"
+        file.write "SUMMARY:\n"
+        file.write "Total successful documents: #{@result.success_count}\n"
+        file.write "Total failed documents: #{@result.error_count}\n"
+        file.write "Failed documents logged above\n"
+        file.write "#{'=' * 60}\n"
+      end
+      Rails.logger.info "Failed documents logged to: #{@failed_documents_file}"
+      Rails.logger.info "Total failures: #{@result.error_count}"
+    else
+      # Delete the file if no failures occurred
+      File.delete(@failed_documents_file) if File.exist?(@failed_documents_file)
+      Rails.logger.info "All documents processed successfully. No failure log created."
+    end
+  end
 
   def load_json_data(json_file_path)
     unless File.exist?(json_file_path)
@@ -49,39 +98,55 @@ class DocumentJsonBatchProcessor
     files.each_with_index do |file_data, index|
       process_single_document(file_data, index + 1)
     rescue => e
+      file_path = file_data.is_a?(Hash) ? file_data['path'] : 'Unknown path'
       Rails.logger.error "Error processing document #{index + 1}: #{e.message}"
       @result.add_error("Document #{index + 1}: #{e.message}")
+      log_failed_document(file_path, "UNEXPECTED_ERROR", e.message)
     end
   end
 
   def process_single_document(file_data, document_number)
+    file_path = file_data['path'] if file_data.is_a?(Hash)
+    
     Rails.logger.info "Processing document #{document_number}: #{file_data['issue_id'] || 'No Issue ID'}"
     
     # Ensure file_data is a hash
     unless file_data.is_a?(Hash)
-      @result.add_error("Document #{document_number}: Invalid data format")
+      error_msg = "Invalid data format"
+      @result.add_error("Document #{document_number}: #{error_msg}")
+      log_failed_document(file_path, "INVALID_FORMAT", "Document data is not a hash")
       return
     end
     
     # Extract and validate required fields
     document_attributes = extract_document_attributes(file_data)
-    return unless validate_required_fields(document_attributes, document_number, file_data['path'])
+    unless validate_required_fields(document_attributes, document_number, file_data['path'])
+      log_failed_document(file_data['path'], "MISSING_FIELDS", "Required fields missing")
+      return
+    end
 
     # Check for duplicates
     if duplicate_exists?(document_attributes)
       Rails.logger.info "Document already exists. Skipping..."
+      log_failed_document(file_data['path'], "DUPLICATE", "Document already exists in database")
       return
     end
 
     # Create and save document
     document = create_document(document_attributes)
-    return unless document&.persisted?
+    unless document&.persisted?
+      log_failed_document(file_data['path'], "CREATION_FAILED", "Document creation or validation failed")
+      return
+    end
 
     # Add tags and issuer
     add_document_tags(document, file_data)
     
     # Attach file
-    attach_document_file(document, file_data['path'], document_number)
+    unless attach_document_file(document, file_data['path'], document_number)
+      log_failed_document(file_data['path'], "FILE_ATTACHMENT_FAILED", "Could not attach file to document")
+      return
+    end
     
     @result.increment_success
     Rails.logger.info "Document created successfully with ID: #{document.id}"
@@ -198,7 +263,7 @@ class DocumentJsonBatchProcessor
   end
 
   def attach_document_file(document, file_path, document_number)
-    return unless file_path.present?
+    return false unless file_path.present?
     
     download_name = if document.issue_id.present?
                         document.issue_id
@@ -214,7 +279,7 @@ class DocumentJsonBatchProcessor
       error_msg = "File not found at path: #{file_path}"
       Rails.logger.warn error_msg
       @result.add_error("Document #{document_number}: #{error_msg}")
-      return
+      return false
     end
 
     begin
@@ -224,10 +289,12 @@ class DocumentJsonBatchProcessor
         content_type: get_content_type(file_path)
       )
       Rails.logger.info "File attached successfully: #{download_name}"
+      return true
     rescue => e
       error_msg = "Error attaching file: #{e.message}"
       Rails.logger.error error_msg
       @result.add_error("Document #{document.id}: #{error_msg}")
+      return false
     end
   end
 
@@ -339,8 +406,6 @@ class DocumentJsonBatchProcessor
         Rails.logger.info "Successfully deleted file: #{absolute_path}"
         
         # Also try to delete file with same name in data directory
-        filename = File.basename(absolute_path)
-        
         # Both stamped_documents and data are in the same GazetteSlicer directory
         # Just replace stamped_documents with data  in the path
         data_path = absolute_path.gsub('/stamped_documents/', '/data/')

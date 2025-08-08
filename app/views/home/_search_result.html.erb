@@ -38,7 +38,7 @@
       <% i+=1 %>
       <div class="collapsable-law-cards col-sm-6 col-md-4 py-2" style="display:<%= i>6 ? 'none' : 'block' %>">
         <div class="card card-body h-100" style="padding:0px">
-          <% if !current_user || (current_user && (return_user_plan_status(current_user) == "Basic" || !current_user.confirmed_at?)) %>
+          <% if !current_user || !@user_is_premium %>
             <a class="" href="<%= wall_path %>" style="padding:20px">
           <% else %>
             <a class="" href="<%= law_path(law) %>" style="padding:20px">
@@ -58,7 +58,7 @@
             <h5 class="result-card-title"><%= law.name %></h5>
             <div class="d-flex justify-content-between document-result-info">
                 <span class="badge-creation badge-secondary"><i class="fas fa-file-alt"></i> <%= law.creation_number %></span>
-                <p class="primaryinfo"><%= law.articles.count %> artículos</p>
+                <p class="primaryinfo"><%= @article_counts[law.id] || 0 %> artículos</p>
             </div>
           </a>
         </div>
@@ -80,7 +80,7 @@
     <% @grouped_laws.each do |grouped_law| %>
       <% i += 1 %>
       <div class="collapsable-specific-results-cards list-group-item col-sm-12" style="display:<%= i>6 ? 'none' : 'block' %>; margin-bottom: 10px;">
-        <% if !current_user || (current_user && (return_user_plan_status(current_user) == "Basic" || !current_user.confirmed_at?)) %>
+        <% if !current_user || !@user_is_premium %>
           <a class="" href="<%= wall_path %>" style="padding:20px">
         <% else %>
           <a class="" href="<%= law_path(grouped_law[:law]) + '?query='+@query %>">
@@ -109,7 +109,7 @@
       </div>
     <% end %>
   </div>
-  <% if !current_user || (current_user && (return_user_plan_status(current_user) == "Basic" || !current_user.confirmed_at?)) %>
+  <% if !current_user || !@user_is_premium %>
     <a class="" href="<%= wall_path %>" style="padding:20px">
     <a class="btn btn-outline-primary btn-block"  href="<%= wall_path %>" style="margin-top:2%;" >Ver más resultados</a>
   <% else %>

@@ -24,11 +24,19 @@ class TagsController < ApplicationController
     
     if @query
       @query = params[:query]
-      @laws = @tag.laws.search_by_name(@query).with_pg_search_highlight
+      @laws = @tag.laws.search_by_name(@query).with_pg_search_highlight.with_tags_and_articles
       @stream = Article.where(law: @tag.laws).search_by_body_highlighted(@query).group_by(&:law_id)
       @result_count = @laws.size
       @articles_count = @stream.size
       legal_documents = Set[]
+
+      # Cache user plan status once to avoid repeated Stripe API calls
+      @user_plan_status = current_user ? return_user_plan_status(current_user) : "Basic"
+      @user_is_premium = current_user && @user_plan_status != "Basic" && current_user.confirmed_at?
+
+      # Preload article counts in a single query to avoid N+1
+      law_ids = @laws.pluck(:id)
+      @article_counts = Article.where(law_id: law_ids).group(:law_id).count
 
       @laws.each do |law|
         legal_documents.add(law.id)
@@ -72,10 +80,20 @@ class TagsController < ApplicationController
       end
     else
       @laws = @tag.laws
+        .with_tags_and_articles
         .left_joins(:articles)
         .group(:id)
         .order('COUNT(articles.id) DESC')
       @result_count = @laws.count.values.size
+      
+      # Cache user plan status once to avoid repeated Stripe API calls
+      @user_plan_status = current_user ? return_user_plan_status(current_user) : "Basic"
+      @user_is_premium = current_user && @user_plan_status != "Basic" && current_user.confirmed_at?
+
+      # Preload article counts in a single query to avoid N+1
+      law_ids = @laws.pluck(:id)
+      @article_counts = Article.where(law_id: law_ids).group(:law_id).count
+      
       if @result_count == 1
         @result_info_text = number_with_delimiter(@result_count, :delimiter => ',').to_s + ' ley'
       else

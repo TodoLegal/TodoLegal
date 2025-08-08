@@ -17,13 +17,13 @@
 </p>
 
 <p> 
-  <% if @law.status != "" %>
-    <% if @law.status == "Derogado" %>
+  <% if @law.status %>
+    <% if @law.repealed? %>
       <i class="fas fa-hand-paper" style="color: #cf142b;"></i>
-      <span style="color: #cf142b;"><%= @law.status %><span>
+      <span style="color: #cf142b;"><%= @law.status.humanize %></span>
     <% else %>
       <i class="fas fa-check-circle" style="color: #34b233;"></i>
-      <span><%= @law.status %><span>
+      <span><%= @law.status.humanize %></span>
     <% end %>
     
   <% end %>

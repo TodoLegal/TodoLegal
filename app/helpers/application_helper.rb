@@ -300,9 +300,9 @@ module ApplicationHelper
     if !url.blank?
       return url
     elsif !issue_id.blank?
-      return I18n.transliterate(issue_id.gsub(/\s/, "-"))
+      return I18n.transliterate(issue_id.gsub(/\s/, "-").gsub(/\\/, "-").gsub(/\./, "-"))
     elsif !name.blank?
-      return I18n.transliterate(name.gsub(/\s/, "-"))
+      return I18n.transliterate(name.gsub(/\s/, "-").gsub(/\\/, "-").gsub(/\./, "-"))
     else
       return "documento"
     end
@@ -310,7 +310,6 @@ module ApplicationHelper
 
   def enqueue_new_job user
     @user_preferences = UsersPreference.find_by(user_id: user.id)
-    mail_frequency = @user_preferences.mail_frequency
     job = MailUserPreferencesJob.set(wait: @user_preferences.mail_frequency.days).perform_later(user)
     @user_preferences.job_id = job.provider_job_id
     @user_preferences.save

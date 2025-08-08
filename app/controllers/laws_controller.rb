@@ -41,11 +41,6 @@ class LawsController < ApplicationController
       @article = @law.articles.first
     end
 
-    # @law_materias = []
-    # materia_tag_type = TagType.find_by_name("materia")
-    # @all_materias = Tag.where(tag_type: materia_tag_type)
-    # @law_materias = LawTag.where(law_id: @law.id, tag_id: @all_materias)
-
     @law_modifications = @law.law_modifications
   end
 

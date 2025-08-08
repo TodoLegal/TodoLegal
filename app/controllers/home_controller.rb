@@ -65,9 +65,13 @@ class HomeController < ApplicationController
     # Retrieve the search query from the request parameters
     @query = params[:query]
   
-    # Find laws and articles based on the query
-    @laws = findLaws(@query)
+    # Find laws and articles based on the query with eager loading
+    @laws = findLaws(@query).limit(50)
     @stream = findArticles(@query)
+  
+    # Cache user plan status once to avoid repeated Stripe API calls
+    @user_plan_status = current_user ? return_user_plan_status(current_user) : "Basic"
+    @user_is_premium = current_user && @user_plan_status != "Basic" && current_user.confirmed_at?
   
     # Initialize result counts
     @result_count = @laws.size
@@ -108,38 +112,41 @@ class HomeController < ApplicationController
     law_ids = @stream.keys
   
     # Find laws by their IDs and index them by ID for quick lookup, including eager loading of tags
-    laws = Law.where(id: law_ids).includes(:tags).index_by(&:id)
+    laws = Law.where(id: law_ids).includes(law_tags: { tag: :tag_type }).index_by(&:id)
+    
+    # Preload article counts in a single query to avoid N+1
+    @article_counts = Article.where(law_id: (@laws.pluck(:id) + law_ids).uniq)
+                            .group(:law_id)
+                            .count
   
     # Process each group of articles
     @stream.each do |law_id, articles|
       law = laws[law_id]
       next unless law
-  
+
       # Generate a preview text for the first article in the group
       preview_text = if @tokens.first == '/'
                        "<b>Artículo #{articles.first.number}</b> #{articles.first.body[0, 300]}..."
                      else
                        "<b>Artículo #{articles.first.number}</b> ...#{customize_highlight(articles.first.pg_search_highlight, @query)}..."
                      end
-  
-      # Create a hash to store law data
+
+      # Create a hash to store law data using preloaded materia names
       law_data = {
         count: articles.count,
         law: law,
         preview: preview_text.html_safe,
-        materia_names: law.materia_names,
+        materia_names: law.materia_names, # This now uses preloaded associations
         tag_text: ""
       }
-  
+
       # Add the law data to the grouped laws array
       @grouped_laws.push(law_data)
-  
+
       # Update the result count and add the law ID to the set of legal documents
       @result_count += articles.count
       legal_documents.add(law_id)
-    end
-  
-    # Sort the grouped laws by the count of articles in descending order
+    end    # Sort the grouped laws by the count of articles in descending order
     @grouped_laws.sort_by! { |k| -k[:count] }
   
     # Update the count of unique legal documents

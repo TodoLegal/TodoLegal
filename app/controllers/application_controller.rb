@@ -344,7 +344,7 @@ protected
   end
 
   def findLaws query
-    @laws = Law.all.search_by_name(query).with_pg_search_highlight
+    Law.search_by_name(query).with_pg_search_highlight.includes(law_tags: { tag: :tag_type })
   end
 
   def findArticles query

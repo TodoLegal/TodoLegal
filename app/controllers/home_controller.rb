@@ -67,15 +67,13 @@ class HomeController < ApplicationController
   
     # Find laws and articles based on the query with eager loading
     @laws = findLaws(@query).limit(50)
-    @stream = findArticles(@query)
-  
+
     # Cache user plan status once to avoid repeated Stripe API calls
     @user_plan_status = current_user ? return_user_plan_status(current_user) : "Basic"
     @user_is_premium = current_user && @user_plan_status != "Basic" && current_user.confirmed_at?
   
     # Initialize result counts
     @result_count = @laws.size
-    @articles_count = @stream.values.flatten.size
     @is_search_law = true
   
     # Initialize a set to store unique law IDs
@@ -101,21 +99,32 @@ class HomeController < ApplicationController
         end
       end
   
-      # Find articles based on the parsed law name and article numbers
-      @stream = Article.where(law: Law.search_by_name(law_name_query)).where(number: articles_query).group_by(&:law_id)
+      # Find articles based on the parsed law name and article numbers using optimized approach
+      # First get the matching articles without loading them all into memory
+      matching_articles = Article.joins(:law)
+                                 .where(laws: { id: Law.search_by_name(law_name_query).select(:id) })
+                                 .where(number: articles_query)
+      
+      # Group them efficiently
+      @stream = {}
+      matching_articles.find_each do |article|
+        @stream[article.law_id] ||= []
+        @stream[article.law_id] << article
+      end
     else
       # Find articles based on the query
       @stream = findArticles(@query)
     end
   
-    # Get the unique law IDs from the articles
-    law_ids = @stream.keys
+    # Get the unique law IDs from the articles (clean them to avoid pg_search conflicts)
+    law_ids = @stream.keys.map(&:to_i).uniq
   
     # Find laws by their IDs and index them by ID for quick lookup, including eager loading of tags
     laws = Law.where(id: law_ids).includes(law_tags: { tag: :tag_type }).index_by(&:id)
     
-    # Preload article counts in a single query to avoid N+1
-    @article_counts = Article.where(law_id: (@laws.pluck(:id) + law_ids).uniq)
+    # Preload article counts in a single query to avoid N+1 (use fresh query to avoid pg_search conflicts)
+    all_law_ids = (@laws.pluck(:id) + law_ids).uniq
+    @article_counts = Article.where(law_id: all_law_ids)
                             .group(:law_id)
                             .count
   
@@ -132,8 +141,9 @@ class HomeController < ApplicationController
                      end
 
       # Create a hash to store law data using preloaded materia names
+      articles_count = articles.count # Count the articles once 
       law_data = {
-        count: articles.count,
+        count: articles_count,
         law: law,
         preview: preview_text.html_safe,
         materia_names: law.materia_names, # This now uses preloaded associations
@@ -144,7 +154,7 @@ class HomeController < ApplicationController
       @grouped_laws.push(law_data)
 
       # Update the result count and add the law ID to the set of legal documents
-      @result_count += articles.count
+      @result_count += articles_count
       legal_documents.add(law_id)
     end    # Sort the grouped laws by the count of articles in descending order
     @grouped_laws.sort_by! { |k| -k[:count] }

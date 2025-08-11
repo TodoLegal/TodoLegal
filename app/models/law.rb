@@ -71,19 +71,20 @@ class Law < ApplicationRecord
   end
 
   # Add scope for preloading
-  scope :with_tags_and_articles, -> { 
-    includes(law_tags: { tag: :tag_type }, articles: []) 
+  scope :with_tags, -> { 
+    includes(law_tags: { tag: :tag_type })
   }
 
   def materias
     if law_tags.loaded?
       # Use preloaded associations when available
-      materia_tag_type = TagType.find_by_name('materia')
+      materia_tag_type = TagType.materia  # Use cached version
       return [] unless materia_tag_type
       law_tags.select { |lt| lt.tag&.tag_type_id == materia_tag_type.id }.map(&:tag).compact
     else
       # Fallback to original query when not preloaded
-      materia_tag_type = TagType.find_by_name('materia')
+      Rails.logger.warn "Law#materias called without preloaded associations for Law ID: #{id}"
+      materia_tag_type = TagType.materia  # Use cached version
       return [] unless materia_tag_type
       @materias ||= tags.where(tag_type_id: materia_tag_type.id)
     end
@@ -92,23 +93,15 @@ class Law < ApplicationRecord
   def materia_names
     if law_tags.loaded?
       # Use preloaded associations to avoid N+1 queries
-      materia_tag_type = TagType.find_by_name('materia')
+      materia_tag_type = TagType.materia  # Use cached version
       return [] unless materia_tag_type
       @materia_names ||= law_tags.select { |lt| lt.tag&.tag_type_id == materia_tag_type.id }
                                 .map { |lt| lt.tag&.name }
                                 .compact
     else
-      # Fallback to original implementation
+      # Fallback to original implementation with warning
+      Rails.logger.warn "Law#materia_names called without preloaded associations for Law ID: #{id}"
       @materia_names ||= materias.pluck(:name)
-    end
-  end
-
-  # Add method to get article count from preloaded data or cache
-  def articles_count_optimized
-    if articles.loaded?
-      articles.size
-    else
-      cached_articles_count
     end
   end
 

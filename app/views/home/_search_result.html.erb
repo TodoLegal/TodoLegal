@@ -51,7 +51,7 @@
               </p>
               <% end %>
             <p style="font-size: 15px">
-              <% if law.status && law.status == "Derogado" %>
+              <% if law.status && law.repealed? %>
                 <span class="badge badge--materia" style="background: #f25265; color: white;"><%= law.status %></span>
               <% end %>
             </p>
@@ -89,7 +89,7 @@
             <% grouped_law[:materia_names].each do |materia_name| %>
               <span class="badge badge--materia"><%= materia_name %></span>
             <% end %>
-            <% if grouped_law[:law].status && grouped_law[:law].status == "Derogado" %>
+            <% if grouped_law[:law].status && grouped_law[:law].status == "derogado" %>
               <span class="badge badge--materia" style="background: #f25265; color: white;"><%= grouped_law[:law].status %></span>
             <% end %>
           </p>

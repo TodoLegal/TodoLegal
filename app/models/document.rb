@@ -33,11 +33,11 @@ class Document < ApplicationRecord
   has_one_attached :original_file
 
   # Validations
-  validates :issue_id, uniqueness: { 
-    scope: :document_type_id, 
-    message: "This document already exists for this type",
-    allow_blank: true 
-  }
+  # validates :issue_id, uniqueness: { 
+  #   scope: :document_type_id, 
+  #   message: "This document already exists for this type",
+  #   allow_blank: true 
+  # }
 
   pg_search_scope :search_by_all,
                   against: [:name, :description, :publication_number],

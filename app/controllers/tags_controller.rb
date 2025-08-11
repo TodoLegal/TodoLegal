@@ -24,7 +24,7 @@ class TagsController < ApplicationController
     
     if @query
       @query = params[:query]
-      @laws = @tag.laws.search_by_name(@query).with_pg_search_highlight.with_tags_and_articles
+      @laws = @tag.laws.search_by_name(@query).with_pg_search_highlight.with_tags
       @stream = Article.where(law: @tag.laws).search_by_body_highlighted(@query).group_by(&:law_id)
       @result_count = @laws.size
       @articles_count = @stream.size
@@ -80,7 +80,7 @@ class TagsController < ApplicationController
       end
     else
       @laws = @tag.laws
-        .with_tags_and_articles
+        .with_tags
         .left_joins(:articles)
         .group(:id)
         .order('COUNT(articles.id) DESC')

@@ -344,11 +344,20 @@ protected
   end
 
   def findLaws query
-    Law.search_by_name(query).with_pg_search_highlight.includes(law_tags: { tag: :tag_type })
+    Law.search_by_name(query)
+       .with_pg_search_highlight
+       .with_tags
   end
 
   def findArticles query
-    Article.search_by_body_trimmed(query).with_pg_search_highlight.group_by(&:law_id)
+    return {} if query.blank?
+    matching_articles = Article.search_by_body_trimmed(query)
+                               .with_pg_search_highlight
+                               .limit(1000)  # Reasonable limit to prevent memory issues
+                               .group_by(&:law_id)
+    
+    # Limit to 5 articles per law for performance
+    matching_articles.transform_values { |articles| articles.take(5) }
   end
 
   def configure_devise_permitted_parameters

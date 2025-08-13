@@ -83,7 +83,7 @@
         <% if !current_user || !@user_is_premium %>
           <a class="" href="<%= wall_path %>" style="padding:20px">
         <% else %>
-          <a class="" href="<%= law_path(grouped_law[:law]) + '?query='+@query %>">
+          <a class="" href="<%= law_path(grouped_law[:law], query: @query) %>">
         <% end %>
           <p style="font-size: 15px">
             <% grouped_law[:materia_names].each do |materia_name| %>

@@ -354,7 +354,7 @@ protected
 
     # Phase 1 (cheap): gather candidate IDs per law WITHOUT highlights.
     law_article_ids = Article.search_by_body_trimmed(query)
-                             .limit(500)
+                             .limit(300)
                              .pluck(:id, :law_id)
 
     # Bucket top-N per law to keep results balanced and to bound Phase 2 workload.

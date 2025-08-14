@@ -344,17 +344,18 @@ protected
   end
 
   def findLaws query
-    Law.search_by_name(query)
-       .with_pg_search_highlight
-       .with_tags
+   Law.search_by_name(query)
+      .with_tags
+      .select(:id, :name, :creation_number, :status)
   end
 
   def findArticles query
     return {} if query.blank?
     matching_articles = Article.search_by_body_trimmed(query)
-                               .with_pg_search_highlight
-                               .limit(1000)  # Reasonable limit to prevent memory issues
-                               .group_by(&:law_id)
+                          .select(:id, :law_id, :number, :body)
+                          .with_pg_search_highlight
+                          .limit(300)
+                          .group_by(&:law_id)
     
     # Limit to 5 articles per law for performance
     matching_articles.transform_values { |articles| articles.take(5) }

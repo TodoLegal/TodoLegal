@@ -5,11 +5,13 @@ module LawsHelper
     end
 
     def all_document_count
-        Law.count + Document.count
+        Rails.cache.fetch('all_document_count', expires_in: 1.hour) do
+            Law.count + Document.count
+        end
     end
 
     def current_law_article
-        @articles = @current_law.articles.order(:position)
+        @articles = @current_law.articles.select(:id, :number, :body, :position).order(:position)
         
         if params[:query]
             @tokens = params[:query].scan(/\w+|\W/)
@@ -29,17 +31,17 @@ module LawsHelper
             article_body = nil
             article = @articles.where('number LIKE ?', "%#{params[:articles].first}%").first
             if article
-                article_body = @articles.where('number LIKE ?', "%#{params[:articles].first}%").first.body
+                article_body = article.body  # Use the already loaded article
             end
 
-            article_text =  @current_law.articles.first.body
+            article_text = @current_law.articles.select(:body).first&.body || ""
             if article_body
                 article_text = article_body
             end
             return "Artículo " + "#{params[:articles].first}. " + article_text
         else
-            article_body =  @current_law&.articles&.first&.body
-            return "Artículo 1. " + article_body
+            article_body = @current_law&.articles&.select(:body)&.first&.body
+            return "Artículo 1. " + (article_body || "")
         end
         # if @article_number
         #     return @law.articles.where('number LIKE ?', "%#{@article_number}%").first

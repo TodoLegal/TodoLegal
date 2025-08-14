@@ -66,7 +66,8 @@ class HomeController < ApplicationController
     @query = params[:query]
   
     # Find laws and articles based on the query with eager loading
-    @laws = findLaws(@query).limit(50)
+  # Force-load to avoid COUNT(*) on relation when calling size
+    @laws = findLaws(@query).limit(50).to_a
 
     # Cache user plan status once to avoid repeated Stripe API calls
     @user_plan_status = current_user ? return_user_plan_status(current_user) : "Basic"
@@ -123,7 +124,7 @@ class HomeController < ApplicationController
     laws = Law.where(id: law_ids).includes(law_tags: { tag: :tag_type }).index_by(&:id)
     
     # Preload article counts in a single query to avoid N+1 (use fresh query to avoid pg_search conflicts)
-    all_law_ids = (@laws.pluck(:id) + law_ids).uniq
+    all_law_ids = ((@laws.map(&:id)) + law_ids).uniq
     @article_counts = Article.where(law_id: all_law_ids)
                             .group(:law_id)
                             .count

@@ -352,29 +352,14 @@ protected
   def findArticles query
     return {} if query.blank?
 
-    # Phase 1 (cheap): gather candidate IDs per law WITHOUT highlights.
-    law_article_ids = Article.search_by_body_trimmed(query)
-                             .limit(300)
-                             .pluck(:id, :law_id)
-
-    # Bucket top-N per law to keep results balanced and to bound Phase 2 workload.
-    ids_by_law = Hash.new { |h, k| h[k] = [] }
-    law_article_ids.each do |id, law_id|
-      list = ids_by_law[law_id]
-      list << id if list.size < 5
-    end
-
-    selected_ids = ids_by_law.values.flatten
-    return {} if selected_ids.empty?
-
-    # Phase 2 (expensive): run highlights ONLY on the small selected subset.
-    highlighted = Article.search_by_body_trimmed(query)
-                         .with_pg_search_highlight
-                         .where(id: selected_ids)
-                         .select(:id, :law_id, :number, :body)
-
-    # Group articles by law_id for the caller (HomeController#search_law) to render.
-    highlighted.group_by(&:law_id)
+   matching_articles = Article.search_by_body_trimmed(query)
+                          .select(:id, :law_id, :number, :body)
+                          .with_pg_search_highlight
+                          .limit(300)
+                          .group_by(&:law_id)
+    
+    # Limit to 5 articles per law for performance
+    matching_articles.transform_values { |articles| articles.take(5) }
   end
 
   def configure_devise_permitted_parameters

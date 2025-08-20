@@ -26,7 +26,7 @@ def export_laws_to_json(dry_run: false)
   ).map do |law|
     # Get materia tags for this law
     materia_tags = law.tags.where(tag_type: materia_tag_type)
-    materia_names = materia_tags.pluck(:name)
+    materia_names = materia_tags.pluck(:name).join(', ')
     
     # Determine revision date (using updated_at as proxy since no specific revision_date field exists)
     revision_date = law.updated_at&.strftime('%Y-%m-%d')
@@ -34,7 +34,7 @@ def export_laws_to_json(dry_run: false)
     {
       id: law.id,
       name: law.name,
-      materia_type_tag_names: materia_names,
+      materias: materia_names,
       full_url: "https://todolegal.app/laws/#{law.friendly_url}",
       creation_number: law.creation_number,
       revision_date: revision_date,
@@ -72,8 +72,8 @@ def export_laws_to_json(dry_run: false)
   # Display summary
   puts "\nSummary:"
   puts "Total laws: #{laws_data.count}"
-  puts "Laws with materia tags: #{laws_data.count { |law| law[:materia_type_tag_names].any? }}"
-  puts "Laws without materia tags: #{laws_data.count { |law| law[:materia_type_tag_names].empty? }}"
+  puts "Laws with materia tags: #{laws_data.count { |law| !law[:materias].empty? }}"
+  puts "Laws without materia tags: #{laws_data.count { |law| law[:materias].empty? }}"
   
 end
 

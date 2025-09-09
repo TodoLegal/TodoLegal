@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_07_02_000002) do
+ActiveRecord::Schema[7.1].define(version: 2025_09_05_000002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
   enable_extension "pg_trgm"
@@ -159,6 +159,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_02_000002) do
     t.datetime "last_verified_at", precision: nil
     t.boolean "is_empty_field"
     t.integer "datapoint_type_id"
+    t.integer "target_document_id"
+    t.index ["target_document_id"], name: "index_datapoints_on_target_document_id"
   end
 
   create_table "document_edition_histories", force: :cascade do |t|
@@ -559,6 +561,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_02_000002) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "datapoints", "documents", column: "target_document_id"
   add_foreign_key "document_edition_histories", "datapoints"
   add_foreign_key "document_edition_histories", "users"
   add_foreign_key "law_modifications", "documents"

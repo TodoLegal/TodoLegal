@@ -7,8 +7,8 @@ module DocumentsHelper
     # Get document type name
     type_name = document.document_type&.name || "Documento"
     
-    # Get primary identifier (name > issue_id > id)
-    identifier = document.name.presence || document.issue_id.presence || "##{document.id}"
+    # Get primary identifier (issue_id > name > id)
+    identifier = document.issue_id.presence || document.name.presence || "##{document.id}"
     
     # Format: "Tipo: Identifier"
     "#{type_name}: #{identifier}"

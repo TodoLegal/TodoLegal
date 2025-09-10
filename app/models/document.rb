@@ -13,6 +13,8 @@ class Document < ApplicationRecord
   belongs_to :document_type
 
   # Document-document relationships
+  # source relationships are those where this document is the source (i.e., it modifies or repeals another document)
+  # target relationships are those where this document is the target (i.e., it is modified or repealed by another document)
   has_many :source_relationships, class_name: 'DocumentRelationship', 
            foreign_key: 'source_document_id', dependent: :destroy
   has_many :target_relationships, class_name: 'DocumentRelationship', 

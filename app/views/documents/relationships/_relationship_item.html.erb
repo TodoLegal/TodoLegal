@@ -13,8 +13,19 @@
       <% end %>
     </div>
   <% else %>
-    <%= link_to document_display_text(item.respond_to?(:target_document) ? item.target_document : item.source_document), 
-                edit_document_path(item.respond_to?(:target_document) ? item.target_document : item.source_document), 
+    <% 
+      # Determine which document to display based on the relationship context
+      if item.respond_to?(:target_document) && item.respond_to?(:source_document)
+        # For DocumentRelationship objects, show the "other" document
+        related_document = (item.source_document == document) ? item.target_document : item.source_document
+      else
+        # Fallback for other relationship types
+        related_document = item.respond_to?(:target_document) ? item.target_document : item.source_document
+      end
+    %>
+    
+    <%= link_to document_display_text(related_document), 
+                edit_document_path(related_document), 
                 class: "text-decoration-none", target: "_blank" %>
     <div>
       <%= button_to document_relationship_path(item, return_to: @redirect_url, current_document_id: document.id), 

@@ -50,7 +50,7 @@ class DocumentRelationshipsController < ApplicationController
       @document_relationship = DocumentRelationship.new(
         source_document_id: extracted_document_id,
         target_document_id: current_document_id,
-        modification_type: modification_type.gsub('ed_by', '')
+        modification_type: modification_type.gsub('ed_by', '') # 'amended_by' -> 'amend', 'repealed_by' -> 'repeal'
       )
     when 'amends', 'repeals'
       # Current document is source, URL document is target

@@ -4,7 +4,7 @@
 
 class LegalRelationshipProcessor
   def initialize(json_file_path = nil)
-    @json_file_path = json_file_path || Rails.root.join('..', 'GazetteSlicer', 'legal_relationships.json')
+    @json_file_path = json_file_path || Rails.root.join('..', '..', '..', 'GazetteSlicer', 'legal_relationships.json')
     @stats = {
       processed: 0,
       relationships_created: 0,
@@ -147,22 +147,31 @@ class LegalRelationshipProcessor
   end
 
   def find_law(issue_id)
+    # Clean issue_id if it contains references to articles, numerals, etc.
+    cleaned_issue_id = extract_law_name(issue_id)
     # Try to find by creation_number (most common identifier for laws)
-    law = Law.find_by(creation_number: issue_id)
+    law = Law.find_by(creation_number: cleaned_issue_id)
     return law if law
     
     # Try by name if creation_number doesn't work
-    law = Law.find_by(name: issue_id)
+    law = Law.find_by(name: cleaned_issue_id)
     return law if law
     
     # Try fuzzy matching for laws
-    variations = generate_issue_id_variations(issue_id)
+    variations = generate_issue_id_variations(cleaned_issue_id)
     variations.each do |variation|
       law = Law.find_by(creation_number: variation) || Law.find_by(name: variation)
       return law if law
     end
     
     nil
+  end
+  # Extracts the law name from an issue_id string by removing everything before 'Ley', 'Norma', 'Reglamento', 'Código', or 'Manual'
+  def extract_law_name(issue_id)
+    return issue_id if issue_id.blank?
+    # Regex to match any of the keywords (case-insensitive, with or without accents)
+    match = issue_id.match(/(Ley|Norma|Reglamento|C[oó]digo|Manual).*/i)
+    match ? match[0].strip : issue_id
   end
 
   def generate_issue_id_variations(issue_id)
@@ -178,6 +187,12 @@ class LegalRelationshipProcessor
       clean_id = issue_id.sub(/^No\./, '').strip
       variations << clean_id
       variations << "No. #{clean_id}"
+    elsif issue_id.start_with?('Circular CNBS')
+      clean_id = issue_id.sub(/^Circular CNBS /, '').strip
+      variations << clean_id
+    elsif issue_id.start_with?('Resolución')
+      clean_id = issue_id.sub(/^Resolución /, '').strip
+      variations << clean_id
     else
       variations << "No.#{issue_id}"
       variations << "No. #{issue_id}"

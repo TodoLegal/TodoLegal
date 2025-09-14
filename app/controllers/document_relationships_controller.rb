@@ -72,8 +72,8 @@ class DocumentRelationshipsController < ApplicationController
           format.turbo_stream do
             render turbo_stream: [
               turbo_stream.replace(
-                "document_relationships_section",
-                partial: "documents/document_relationships",
+                "document_relationships_section", #element ID in the view
+                partial: "documents/relationships/document_relationships_section",
                 locals: { document: current_document }
               ),
               turbo_stream.replace(
@@ -94,8 +94,8 @@ class DocumentRelationshipsController < ApplicationController
           format.turbo_stream do
             render turbo_stream: [
               turbo_stream.replace(
-                "document_relationships_section",
-                partial: "documents/document_relationships",
+                "document_relationships_section", #element ID in the view
+                partial: "documents/relationships/document_relationships_section",
                 locals: { document: current_document }
               )
             ]
@@ -146,7 +146,7 @@ class DocumentRelationshipsController < ApplicationController
           render turbo_stream: [
             turbo_stream.replace(
               "document_relationships_section",
-              partial: "documents/document_relationships",
+              partial: "documents/relationships/document_relationships_section",
               locals: { document: document }
             ),
             turbo_stream.replace(
@@ -168,7 +168,7 @@ class DocumentRelationshipsController < ApplicationController
           render turbo_stream: [
             turbo_stream.replace(
               "document_relationships_section",
-              partial: "documents/document_relationships",
+              partial: "documents/relationships/document_relationships_section",
               locals: { document: document }
             )
           ]

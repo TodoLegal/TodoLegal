@@ -1,4 +1,4 @@
-<section class="document-relationships-section">
+<section class="document-relationships-container">
   <h4>Relaciones del Documento</h4>
   
   <div class="row">
@@ -6,20 +6,5 @@
       <%= turbo_frame_tag "autosave_flash_relationships" %>
     </div>
   </div>
-
-  <%= turbo_frame_tag "document_relationships_section" do %>
-    <div class="card">
-      <div class="card-body">
-        
-        <!-- Display existing relationships -->
-        <%= render 'documents/relationships/existing_relationships', document: document %>
-
-        <!-- Add new relationship forms -->
-        <div class="add-relationship">
-          <%= render 'documents/relationships/document_form', document: document %>
-          <%= render 'documents/relationships/law_form', document: document %>
-        </div>
-      </div>
-    </div>
-  <% end %>
+  <%= render partial: "documents/relationships/document_relationships_section", locals: { document: document } %>
 </section>

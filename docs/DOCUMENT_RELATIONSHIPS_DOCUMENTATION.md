@@ -107,6 +107,7 @@ end
 - **Validation**: Ensures referenced documents exist
 - **Error handling**: Graceful failure for invalid URLs
 
+
 ## User Interface Implementation
 
 ### 1. Turbo Framework Integration
@@ -117,12 +118,63 @@ end
 - **Modern UX**: Feels like a single-page application
 - **Rails integration**: Works naturally with Rails conventions
 
-**Implementation Pattern**:
+**Implementation Pattern:**
+
+The relationships UI is structured for clarity and Turbo efficiency:
+
+- `documents/_document_relationships.html.erb`: Contains the section container, the static title `<h4>Relaciones del Documento</h4>`, the flash area, and renders the turbo frame partial.
+- `documents/relationships/_document_relationships_section.html.erb`: Contains only the content inside the turbo frame (`document_relationships_section`).
+
+```erb
+<section class="document-relationships-container">
+  <h4>Relaciones del Documento</h4>
+  <div class="row">
+    <div class="col-md-12">
+      <%= turbo_frame_tag "autosave_flash_relationships" %>
+    </div>
+  </div>
+  <%= render partial: "documents/relationships/document_relationships_section", locals: { document: document } %>
+</section>
+```
+
 ```erb
 <%= turbo_frame_tag "document_relationships_section" do %>
-  <!-- Relationship content -->
+  <!-- Relationship content (card, forms, etc.) -->
 <% end %>
 ```
+
+This pattern ensures:
+- The title and section container are rendered only once and remain static.
+- Only the content inside the turbo frame is replaced when relationships are added or removed.
+- Turbo Stream responses update only the relevant frame, never duplicating the title or container.
+
+**Turbo Stream Response Example:**
+When a relationship is created or deleted, the controller responds with:
+```ruby
+turbo_stream.replace(
+  "document_relationships_section",
+  partial: "documents/relationships/document_relationships_section",
+  locals: { document: current_document }
+)
+```
+This ensures only the turbo frame content is updated, not the title or section container.
+
+### 2. Common Mistakes and Solutions
+
+#### Mistake: Duplicated Titles or Section Containers
+**Problem:** If the title `<h4>` or section container is placed inside the turbo frame partial, every Turbo update will duplicate these elements in the DOM.
+
+**Solution:** Always keep static elements (like section titles or containers) outside the turbo frame. Only dynamic, updatable content should be inside the turbo frame partial.
+
+#### Mistake: Turbo Frame Not Updating as Expected
+**Problem:** If the turbo frame tag's ID in the view does not match the ID used in the Turbo Stream response, the frame will not update.
+
+**Solution:** Ensure the turbo frame tag and the Turbo Stream response use the exact same ID string.
+
+#### Mistake: Rendering the Full Partial in Both the Main View and Turbo Frame
+**Problem:** Rendering the same partial both outside and inside the turbo frame can lead to duplicated content.
+
+**Solution:** Use a wrapper partial for static content and a separate partial for the turbo frame content. Render the turbo frame partial only where dynamic updates are needed.
 
 ### 2. Stimulus Controllers (Ready for Implementation)
 

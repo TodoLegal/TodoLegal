@@ -30,9 +30,8 @@
     <div>
       <%= button_to document_relationship_path(item, return_to: @redirect_url, current_document_id: document.id), 
                     method: :delete, 
-                    data: { confirm: '¿Estás seguro que deseas eliminar esta relación?' }, 
-                    class: "btn btn-outline-danger btn-sm ms-2", 
-                    remote: true do %>
+                    data: { turbo_confirm: '¿Estás seguro que deseas eliminar esta relación?' }, 
+                    class: "btn btn-outline-danger btn-sm ms-2" do %>
         <i class="fas fa-trash-alt"></i>
       <% end %>
     </div>

@@ -261,11 +261,7 @@
               <% end %>
             <% end %>
           </div>
-    <% end %>
           <div class="col-md-3 btns-section">
-            <%= button_to [@document], method: :delete, data: { confirm: '¿Estás Seguro que deseas eliminarlo?' }, class:"delete-document-btn ml-4 btn btn-outline-danger" do %>
-              <i class="fas fa-trash-alt"></i>
-            <% end %>  
             <% if @document.original_file.attached? %>
               <%= button_to(url_for(@document.original_file), {class:"btn btn-link download-btn", method: :get}) do %>
                 Descargar archivo
@@ -273,7 +269,21 @@
             <% end %>
           </div>
         </div>
-      </div> 
+      </div>
+    <% end %>
+
+    <div class="row">
+      <div class="col-md-12 btns-section mt-3 d-flex align-items-center">
+        <label class="mb-0" for="delete-document-btn"><strong>Eliminar documento</strong></label>
+        <%= button_to [@document], 
+                      method: :delete, 
+                      data: { turbo_confirm: '¿Estás seguro que deseas eliminar este documento?' }, 
+                      class:"delete-document-btn ml-4 btn btn-outline-danger", 
+                      id: "delete-document-btn" do %>
+          <i class="fas fa-trash-alt"></i>
+        <% end %>
+      </div>
+    </div>
   </div>
 </div>
 

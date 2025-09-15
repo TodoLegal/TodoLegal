@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<% (1..@pages).each do |page| %>
+  <sitemap>
+    <loc>https://todolegal.app/api/v1/sitemap_documents_<%= page %>.xml</loc>
+    <lastmod><%= Date.current.strftime('%Y-%m-%d') %></lastmod>
+  </sitemap>
+<% end %>
+</sitemapindex>

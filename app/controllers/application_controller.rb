@@ -355,11 +355,11 @@ protected
    matching_articles = Article.search_by_body_trimmed(query)
                           .select(:id, :law_id, :number, :body)
                           .with_pg_search_highlight
-                          .limit(300)
+                          .limit(200)
                           .group_by(&:law_id)
-    
-    # Limit to 5 articles per law for performance
-    matching_articles.transform_values { |articles| articles.take(5) }
+
+    # Limit to 20 articles per law for performance
+    matching_articles.transform_values { |articles| articles.take(20) }
   end
 
   def configure_devise_permitted_parameters

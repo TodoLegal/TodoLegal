@@ -79,9 +79,9 @@
     <% i = 0 %>
     <% @grouped_laws.each do |grouped_law| %>
       <% i += 1 %>
-      <div class="collapsable-specific-results-cards list-group-item col-sm-12" style="display:<%= i>6 ? 'none' : 'block' %>; margin-bottom: 10px;">
+      <div class="collapsable-specific-results-cards list-group-item col-sm-12" style="display:<%= i>6 ? 'none' : 'block' %>; margin-bottom: 10px; padding:20px">
         <% if !current_user || !@user_is_premium %>
-          <a class="" href="<%= wall_path %>" style="padding:20px">
+          <a class="" href="<%= wall_path %>">
         <% else %>
           <a class="" href="<%= law_path(grouped_law[:law], query: @query) %>">
         <% end %>

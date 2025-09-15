@@ -70,8 +70,8 @@ docs/SITEMAP_DOCUMENTATION.md                  # Full documentation
 ## Cron Job
 
 ```bash
-# Runs daily at 2:00 AM
-0 2 * * * cd /path/to/app && RAILS_ENV=production bundle exec rake sitemap:daily_regenerate
+# Runs daily at 12:00 AM (midnight)
+0 0 * * * cd /path/to/app && RAILS_ENV=production bundle exec rake sitemap:daily_regenerate
 ```
 
 ## Monitoring Thresholds

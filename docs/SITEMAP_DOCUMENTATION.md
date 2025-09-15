@@ -25,7 +25,7 @@ This document provides comprehensive documentation for the TodoLegal sitemap imp
 - **Total Documents**: ~35,000
 - **Current Strategy**: Single sitemap (`/api/v1/sitemap.xml`)
 - **Cache Duration**: 24 hours
-- **Regeneration**: Daily at 2:00 AM
+- **Regeneration**: Daily at 12:00 AM
 
 ### Core Components
 
@@ -114,8 +114,8 @@ end
 
 ```ruby
 # config/schedule.rb
-# Sitemap regeneration - runs daily at 2 AM
-every 1.day, at: '2:00 am' do
+# Sitemap regeneration - runs daily at 12:00 AM
+every 1.day, at: '12:00 am' do
   rake "sitemap:daily_regenerate"
 end
 ```
@@ -279,11 +279,19 @@ curl https://todolegal.app/api/v1/sitemap_documents_2.xml
 
 #### Step 3: Update Search Engines
 1. **Google Search Console**:
-   - Remove old sitemap: `sitemap.xml`
-   - Add new sitemap: `sitemap_index.xml`
+   - Go to [Google Search Console](https://search.google.com/search-console)
+   - Select your property: `valid.todolegal.app`
+   - Navigate to: Indexing → Sitemaps
+   - Remove old sitemap: `https://todolegal.app/api/v1/sitemap.xml`
+   - Add new sitemap: `https://todolegal.app/api/v1/sitemap_index.xml`
+   - Submit and verify "Success" status
 
 2. **Bing Webmaster Tools**:
-   - Same process as Google
+   - Go to [Bing Webmaster Tools](https://www.bing.com/webmasters)
+   - Select your site
+   - Navigate to: Sitemaps
+   - Remove old sitemap: `https://todolegal.app/api/v1/sitemap.xml`
+   - Submit new sitemap: `https://todolegal.app/api/v1/sitemap_index.xml`
 
 #### Step 4: Monitor Transition
 ```bash
@@ -452,7 +460,7 @@ end
 ## Maintenance Schedule
 
 ### Daily (Automated)
-- Cache regeneration at 2:00 AM
+- Cache regeneration at 12:00 AM
 
 ### Weekly (Manual)
 - Check document growth: `rails runner "puts Document.where(publish: true).count"`

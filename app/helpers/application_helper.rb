@@ -388,4 +388,77 @@ module ApplicationHelper
     session[:is_annually] = nil
   end
 
+  # Sitemap helper methods
+  def document_sitemap_url(document)
+    document_type_slug = get_document_type_slug(document)
+    url_slug = get_document_url_slug(document)
+    
+    "https://valid.todolegal.app/#{document_type_slug}/honduras/#{url_slug}/#{document.id}"
+  end
+  
+  def get_document_type_slug(document)
+    return 'documento' unless document.document_type
+    
+    # Handle special case for 'Sección de Gaceta'
+    if document.document_type.name == 'Sección de Gaceta'
+      act_type_tag = TagType.find_by(name: 'Tipo de Acto')
+      type_name = document.tags.find_by(tag_type_id: act_type_tag&.id)
+      return (type_name&.name || 'seccion-de-gaceta').parameterize
+    end
+    
+    document.document_type.name.parameterize
+  end
+  
+  def get_document_url_slug(document)
+    # Priority: url > name > issue_id > fallback
+    if document.url.present?
+      document.url
+    elsif document.name.present?
+      document.name.parameterize
+    elsif document.issue_id.present?
+      # Clean and parameterize issue_id
+      document.issue_id.gsub(/[\/\\]/, '-').parameterize
+    else
+      'documento'
+    end
+  end
+  
+  def document_priority(document)
+    # Simple uniform priority for all documents
+    # TODO: Uncomment advanced logic below when you want document type-based prioritization
+    0.8
+    
+    # Advanced priority logic (use when you want SEO differentiation):
+    # case document.document_type&.name
+    # when 'Ley', 'Decreto', 'Constitución'
+    #   0.9  # Highest priority - fundamental legal documents
+    # when 'Acuerdo', 'Resolución', 'Reglamento'
+    #   0.8  # High priority - important regulatory documents
+    # when 'Auto Acordado', 'Sentencia'
+    #   0.7  # Medium-high priority - judicial decisions
+    # when 'Gaceta'
+    #   0.6  # Medium priority - official publications
+    # else
+    #   0.5  # Default priority - other documents
+    # end
+  end
+  
+  def document_changefreq(document)
+    # Simple uniform frequency for all documents
+    # TODO: Uncomment advanced logic below when you want document type-based frequencies
+    'monthly'
+    
+    # Advanced frequency logic (use when you want crawling optimization):
+    # case document.document_type&.name
+    # when 'Ley', 'Decreto', 'Constitución'
+    #   'yearly'   # Very stable content - fundamental documents rarely get page updates
+    # when 'Gaceta', 'Avisos Legales'
+    #   'never'    # Published once, page content won't change
+    # when 'Sentencia'
+    #   'monthly'  # Might have related documents or updates added to the page
+    # else
+    #   'monthly'  # Default for other document types
+    # end
+  end
+
 end

@@ -67,39 +67,31 @@ class DocumentRelationshipsController < ApplicationController
 
     respond_to do |format|
       if @document_relationship.save
+        flash.now[:notice] = 'Relación de documento creada exitosamente'
+        format.turbo_stream do
+          render turbo_stream: [
+            turbo_stream.replace(
+              "document_relationships_section",
+              partial: "documents/relationships/document_relationships_section",
+              locals: { document: current_document }
+            ),
+            turbo_stream.replace(
+              "autosave_flash_relationships",
+              partial: "layouts/flash",
+              locals: {
+                alert_origin: "relationships",
+                alert_type: "success",
+                remove_alert: "true",
+                fade_timeout: "3000"
+              }
+            )
+          ]
+        end
         if redirect_url.present?
-          flash.now[:notice] = 'Relación de documento creada exitosamente'
-          format.turbo_stream do
-            render turbo_stream: [
-              turbo_stream.replace(
-                "document_relationships_section",
-                partial: "documents/document_relationships",
-                locals: { document: current_document }
-              ),
-              turbo_stream.replace(
-                "autosave_flash_relationships",
-                partial: "layouts/flash",
-                locals: {
-                  alert_origin: "relationships",
-                  alert_type: "success",
-                  remove_alert: "true",
-                  fade_timeout: "3000"
-                }
-              )
-            ]
-          end
+          #TODO: create a relationship datapoint when creating a relationship. Do it in a service object
+          # Do the same for the document tags, use the same datapoint creation service object
           format.html { redirect_to edit_document_path(current_document, return_to: redirect_url), notice: 'Relación creada exitosamente.' }
         else
-          flash.now[:notice] = 'Relación de documento creada exitosamente'
-          format.turbo_stream do
-            render turbo_stream: [
-              turbo_stream.replace(
-                "document_relationships_section",
-                partial: "documents/document_relationships",
-                locals: { document: current_document }
-              )
-            ]
-          end
           format.html { redirect_to edit_document_path(current_document), notice: 'Relación creada exitosamente.' }
         end
         format.json { render :show, status: :created, location: @document_relationship }
@@ -140,39 +132,29 @@ class DocumentRelationshipsController < ApplicationController
     @document_relationship.destroy
     
     respond_to do |format|
+      flash.now[:notice] = 'Relación eliminada exitosamente'
+      format.turbo_stream do
+        render turbo_stream: [
+          turbo_stream.replace(
+            "document_relationships_section",
+            partial: "documents/relationships/document_relationships_section",
+            locals: { document: document }
+          ),
+          turbo_stream.replace(
+            "autosave_flash_relationships",
+            partial: "layouts/flash",
+            locals: {
+              alert_origin: "relationships",
+              alert_type: "info",
+              remove_alert: "true",
+              fade_timeout: "3000"
+            }
+          )
+        ]
+      end
       if redirect_url.present?
-        flash.now[:notice] = 'Relación eliminada exitosamente'
-        format.turbo_stream do
-          render turbo_stream: [
-            turbo_stream.replace(
-              "document_relationships_section",
-              partial: "documents/document_relationships",
-              locals: { document: document }
-            ),
-            turbo_stream.replace(
-              "autosave_flash_relationships",
-              partial: "layouts/flash",
-              locals: {
-                alert_origin: "relationships",
-                alert_type: "success",
-                remove_alert: "true",
-                fade_timeout: "3000"
-              }
-            )
-          ]
-        end
         format.html { redirect_to edit_document_path(document, return_to: redirect_url), notice: 'Relación eliminada exitosamente.' }
       else
-        flash.now[:notice] = 'Relación eliminada exitosamente'
-        format.turbo_stream do
-          render turbo_stream: [
-            turbo_stream.replace(
-              "document_relationships_section",
-              partial: "documents/document_relationships",
-              locals: { document: document }
-            )
-          ]
-        end
         format.html { redirect_to edit_document_path(document), notice: 'Relación eliminada exitosamente.' }
       end
       format.json { head :no_content }

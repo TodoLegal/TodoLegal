@@ -127,6 +127,11 @@ Rails.application.routes.draw do
           patch "/deactivate_notifications", to: 'users_preferences#deactivate_notifications'
         end
       end
+      
+      # Sitemap routes
+      get 'sitemap.xml', to: 'sitemap#index', defaults: { format: 'xml' }
+      get 'sitemap_index.xml', to: 'sitemap#sitemap_index', defaults: { format: 'xml' }
+      get 'sitemap_documents_:page.xml', to: 'sitemap#documents', defaults: { format: 'xml' }
     end
   end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html

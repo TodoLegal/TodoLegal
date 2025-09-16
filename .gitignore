@@ -28,6 +28,7 @@ gcs.keyfile
 config/application.yml
 processed_files.json
 documents_batch_statistics.json
+/performance_reports/
 
 config/database.yml
 #Gemfile.lock

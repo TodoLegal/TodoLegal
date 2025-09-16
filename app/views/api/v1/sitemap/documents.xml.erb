@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<% @documents.each do |document| %>
+  <url>
+    <loc><%= document_sitemap_url(document) %></loc>
+    <lastmod><%= (document.updated_at || document.created_at).strftime('%Y-%m-%d') %></lastmod>
+    <changefreq><%= document_changefreq(document) %></changefreq>
+    <priority><%= document_priority(document) %></priority>
+  </url>
+<% end %>
+</urlset>

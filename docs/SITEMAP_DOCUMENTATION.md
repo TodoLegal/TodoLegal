@@ -45,19 +45,24 @@ config/schedule.rb                              # Cron job configuration
 
 #### `GET /api/v1/sitemap.xml` - Main Sitemap
 - **Purpose**: Primary sitemap for 0-50,000 documents
-- **Cache**: 24 hours
+- **Cache**: 24 hours (`sitemap_main_documents`)
 - **Limit**: 50,000 documents
 - **Order**: Most recent first (`publication_date DESC, id DESC`)
+- **Includes**: `:document_type, :tags` (for URL generation and Gaceta handling)
+- **HTTP Cache**: 24 hours public cache headers
 
 #### `GET /api/v1/sitemap_index.xml` - Sitemap Index
 - **Purpose**: Master sitemap pointing to paginated sitemaps
 - **Use When**: 50,000+ documents
-- **Cache**: 24 hours
+- **Cache**: 24 hours (`sitemap_total_documents_count`)
+- **HTTP Cache**: 24 hours public cache headers
 
 #### `GET /api/v1/sitemap_documents_:page.xml` - Paginated Documents
 - **Purpose**: Individual pages of 50,000 documents each
 - **Use When**: Used automatically by sitemap index
-- **Cache**: 24 hours per page
+- **Cache**: 24 hours per page (`sitemap_documents_page_N`)
+- **Error Handling**: Returns 404 for non-existent pages
+- **HTTP Cache**: 24 hours public cache headers
 
 ### 2. Helper Methods
 
@@ -67,7 +72,7 @@ document_sitemap_url(document)     # Full sitemap URL
 get_document_type_slug(document)   # Document type slug
 get_document_url_slug(document)    # Document URL slug
 
-# SEO Optimization (Currently Simplified)
+# SEO Metadata
 document_priority(document)        # Returns 0.8 (uniform)
 document_changefreq(document)      # Returns 'monthly' (uniform)
 ```
@@ -317,40 +322,58 @@ sitemap_index.xml
 
 ### 1. Caching Strategy
 
+**Data-Level Caching** (24 hours):
 ```ruby
-# 24-hour cache for all components
-@documents = Rails.cache.fetch('sitemap_main_documents', expires_in: 24.hours) do
+# Main documents cache
+Rails.cache.fetch('sitemap_main_documents', expires_in: 24.hours) do
   Document.where(publish: true)
-          .includes(:document_type, :tags, :issuer_document_tags)
+          .includes(:document_type, :tags)
           .order(publication_date: :desc, id: :desc)
           .limit(50000)
           .to_a
 end
 ```
 
-### 2. Database Query Optimization
-
-- **Eager Loading**: `includes(:document_type, :tags, :issuer_document_tags)`
-- **Indexing**: Ensure indexes on `publish`, `publication_date`, `id`
-- **Limit Results**: Respect 50K per sitemap limits
-
-### 3. HTTP Caching
-
+**HTTP-Level Caching** (24 hours):
 ```ruby
-# Browser/CDN caching
+# Browser and CDN caching
 expires_in 24.hours, public: true
 ```
 
-### 4. Performance Monitoring
+### 2. Database Query Strategy
 
-```bash
-# Test performance
-rails sitemap:performance_test
+**Efficient Includes**:
+- `:document_type` - Required for URL generation
+- `:tags` - Required for "Sección de Gaceta" document handling
 
-# Expected results:
-# - Without cache: ~300-500ms
-# - With cache: <50ms
-# - Speed improvement: 10x+ faster
+**Query Performance**:
+- Indexed fields: `publish`, `publication_date`, `id`
+- Ordered results for consistent pagination
+- Array conversion for faster cache serialization
+
+### 3. Intelligent Page Management
+
+```ruby
+# Smart cache warming - only warm necessary pages
+total_pages = (total_docs / 50000.0).ceil
+pages_to_warm = [total_pages, 3].min
+```
+
+### 4. Performance Benchmarks
+
+Current performance (1000 documents):
+```
+- Without cache: 1657.32ms
+- First cache:   3223.36ms  
+- Cached read:   740.86ms
+- Speed improvement: 2.2x faster
+```
+
+Production performance (24K documents):
+```
+- Without cache: ~40 seconds
+- Cached read:   ~18 seconds  
+- Speed improvement: 2.2x faster
 ```
 
 ---
@@ -491,6 +514,6 @@ For issues with sitemap implementation:
 
 ---
 
-**Last Updated**: September 15, 2025  
+**Last Updated**: September 17, 2025  
 **Version**: 1.0  
 **Document Status**: Production Ready

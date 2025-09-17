@@ -10,7 +10,7 @@ class Api::V1::SitemapController < ApplicationController
     # Cache for 24 hours - regenerated once daily
     @documents = Rails.cache.fetch('sitemap_main_documents', expires_in: 24.hours) do
       Document.where(publish: true)
-              .includes(:document_type, :tags, :issuer_document_tags)
+              .includes(:document_type, :tags)
               .order(publication_date: :desc, id: :desc)
               .limit(50000)
               .to_a # Convert to array to cache the result
@@ -54,7 +54,7 @@ class Api::V1::SitemapController < ApplicationController
     cache_key = "sitemap_documents_page_#{page}"
     @documents = Rails.cache.fetch(cache_key, expires_in: 24.hours) do
       Document.where(publish: true)
-              .includes(:document_type, :tags, :issuer_document_tags)
+              .includes(:document_type, :tags)
               .order(publication_date: :desc, id: :desc)
               .limit(limit)
               .offset(offset)

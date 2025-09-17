@@ -10,9 +10,6 @@ every 1.day, at: '12:00 am' do
   rake "sitemap:daily_regenerate"
 end
 
-# every 5.minutes do
-#   command "/root/TodoLegal/update_google_drive_doc.sh"
-# end
 #
 # every 4.days do
 #   runner "AnotherModel.prune_old_records"

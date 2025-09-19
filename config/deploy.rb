@@ -1,9 +1,12 @@
 # config valid for current version and patch releases of Capistrano
-
+require 'whenever/capistrano'
 
 set :application, "TodoLegal"
 set :repo_url, "https://github.com/TodoLegal/TodoLegal.git"
 set :passenger_restart_command, '/usr/bin/passenger-config restart-app'
+set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" } # All cron jobs will have a consistent identifier 
+set :whenever_command, "bundle exec whenever"
+set :whenever_environment, -> { fetch(:rails_env, fetch(:stage)) }
 
 append :linked_files, "config/master.key"
 append :linked_files, "config/credentials.yml.enc"

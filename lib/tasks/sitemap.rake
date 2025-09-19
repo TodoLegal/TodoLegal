@@ -27,7 +27,7 @@ namespace :sitemap do
     puts "- Warming main sitemap cache..."
     Rails.cache.fetch('sitemap_main_documents', expires_in: 24.hours) do
       Document.where(publish: true)
-              .includes(:document_type, :tags, :issuer_document_tags)
+              .includes(:document_type, :tags)
               .order(publication_date: :desc, id: :desc)
               .limit(50000)
               .to_a
@@ -48,7 +48,7 @@ namespace :sitemap do
       offset = (page - 1) * 50000
       Rails.cache.fetch("sitemap_documents_page_#{page}", expires_in: 24.hours) do
         Document.where(publish: true)
-                .includes(:document_type, :tags, :issuer_document_tags)
+                .includes(:document_type, :tags)
                 .order(publication_date: :desc, id: :desc)
                 .limit(50000)
                 .offset(offset)
@@ -88,20 +88,20 @@ namespace :sitemap do
     # Test without cache
     Rails.cache.clear
     start_time = Time.current
-    Document.where(publish: true).includes(:document_type, :tags, :issuer_document_tags).limit(1000).to_a
+    Document.where(publish: true).includes(:document_type, :tags).limit(1000).to_a
     uncached_time = Time.current - start_time
     
     # Test with cache
     start_time = Time.current
     Rails.cache.fetch('test_documents', expires_in: 1.hour) do
-      Document.where(publish: true).includes(:document_type, :tags, :issuer_document_tags).limit(1000).to_a
+      Document.where(publish: true).includes(:document_type, :tags).limit(1000).to_a
     end
     first_cached_time = Time.current - start_time
     
     # Test cached retrieval
     start_time = Time.current
     Rails.cache.fetch('test_documents', expires_in: 1.hour) do
-      Document.where(publish: true).includes(:document_type, :tags, :issuer_document_tags).limit(1000).to_a
+      Document.where(publish: true).includes(:document_type, :tags).limit(1000).to_a
     end
     cached_time = Time.current - start_time
     

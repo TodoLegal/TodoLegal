@@ -1,5 +1,4 @@
 # config valid for current version and patch releases of Capistrano
-require 'whenever/capistrano'
 
 set :application, "TodoLegal"
 set :repo_url, "https://github.com/TodoLegal/TodoLegal.git"

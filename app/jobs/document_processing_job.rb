@@ -1,9 +1,42 @@
 class DocumentProcessingJob < ApplicationJob
-queue_as :default
-include ApplicationHelper
-include DocumentsHelper
+  queue_as :default
+  include ApplicationHelper
+  include DocumentsHelper
+  
+  require 'open3'
+  require 'timeout'
+  
+  # Configure Sidekiq timeout and retry settings
+  sidekiq_options retry: 1, dead: true, queue: 'default'
 
   def perform(document, document_pdf_path, user)
+    Rails.logger.info "Starting DocumentProcessingJob for document #{document.id}"
+    
+    # Add overall job timeout (30 minutes total)
+    begin
+      Timeout::timeout(1800) do
+        perform_processing(document, document_pdf_path, user)
+      end
+    rescue Timeout::Error
+      error_msg = "DocumentProcessingJob timed out after 30 minutes for document #{document.id}"
+      Rails.logger.error error_msg
+
+      document.description = "Error: Document processing timed out after 30 minutes"
+      document.save
+      
+      document_link = "https://todolegal.app/documents/#{document.id}/edit"
+      DocumentProcessingMailer.document_processing_complete(user, document_link, "error").deliver
+      raise error_msg
+    rescue => e
+      Rails.logger.error "DocumentProcessingJob failed for document #{document.id}: #{e.message}"
+      Rails.logger.error e.backtrace.join("\n")
+      raise
+    end
+  end
+
+  private
+
+  def perform_processing(document, document_pdf_path, user)
     puts ">slice_gazette called"
     json_data = run_slice_gazette_script(document, document_pdf_path, user)
     process_gazette document, document_pdf_path, user
@@ -133,48 +166,184 @@ include DocumentsHelper
     end
     
     DocumentProcessingMailer.document_processing_complete(user, document_link, process_status).deliver
+    
+    Rails.logger.info "DocumentProcessingJob completed successfully for document #{document.id}"
   end
 
   private
 
   def run_slice_gazette_script document, document_pdf_path, user
     puts ">run_slice_gazette_script called"
-    python_return_value = `python3 ~/GazetteSlicer/slice_gazette.py #{ document_pdf_path } '#{ Rails.root.join("public", "gazettes") }' '#{document.id}'`
+    Rails.logger.info "Starting gazette slicing for document #{document.id}"
+    
+    cmd = [
+      "python3", 
+      "#{ENV['HOME']}/GazetteSlicer/slice_gazette.py", 
+      document_pdf_path,
+      Rails.root.join("public", "gazettes").to_s,
+      document.id.to_s
+    ]
+    
+    stdout_str = ""
+    stderr_str = ""
     document_link = "https://todolegal.app/documents/#{document.id}/edit"
+    
     begin
-      result = JSON.parse(python_return_value)
-      # Ensure the result has the expected structure
-      unless result.is_a?(Hash) && result["page_count"].is_a?(Integer) && result["files"].is_a?(Array)
-        raise "Invalid JSON structure from slice_gazette.py"
+      # Add 15-minute timeout for gazette slicing (large PDFs can take time)
+      Timeout::timeout(900) do
+        Rails.logger.info "Executing Python command: #{cmd.join(' ')}"
+        stdout_str, stderr_str, status = Open3.capture3(*cmd)
+        
+        unless status.success?
+          error_msg = "Python script failed with exit code #{status.exitstatus}: #{stderr_str.truncate(500)}"
+          Rails.logger.error error_msg
+          Rails.logger.error "Python stdout: #{stdout_str.inspect}" if stdout_str.present?
+          raise error_msg
+        end
+        
+        Rails.logger.info "Python script completed successfully"
       end
-      return result
-    rescue => e
-      puts "Error in run_slice_gazette_script: #{e.message}"
-      puts "Python output: #{python_return_value.inspect}"
-      Rails.logger.error "Error in run_slice_gazette_script: #{e.message}"
-      Rails.logger.error "Python output: #{python_return_value.inspect}"
-      document.description = "Error: on slice gazette - #{e.message.truncate(200)}"
+    rescue Timeout::Error
+      error_msg = "Gazette slicing script timed out after 10 minutes"
+      Rails.logger.error error_msg
+      Rails.logger.error "Command was: #{cmd.join(' ')}"
+      document.description = "Error: Gazette slicing timed out - process took longer than 10 minutes"
       document.save
       process_status = "error"
       DocumentProcessingMailer.document_processing_complete(user, document_link, process_status).deliver
-      return { "page_count" => 0, "files" => [] }  # Return a default structure instead of empty hash
+      return { "page_count" => 0, "files" => [] }
+    end
+    
+    # Validate and parse the JSON output
+    begin
+      if stdout_str.blank?
+        raise "Python script returned empty output"
+      end
+      
+      result = JSON.parse(stdout_str)
+      
+      # Ensure the result has the expected structure
+      unless result.is_a?(Hash) && result["page_count"].is_a?(Integer) && result["files"].is_a?(Array)
+        raise "Invalid JSON structure from slice_gazette.py. Expected Hash with 'page_count' (Integer) and 'files' (Array), got: #{result.class}"
+      end
+      
+      Rails.logger.info "Successfully parsed JSON with #{result['files']&.length || 0} files and #{result['page_count']} pages"
+      return result
+      
+    rescue JSON::ParserError => e
+      error_msg = "Failed to parse Python output as JSON: #{e.message}"
+      Rails.logger.error error_msg
+      Rails.logger.error "Python stdout: #{stdout_str.inspect}"
+      Rails.logger.error "Python stderr: #{stderr_str.inspect}" if stderr_str.present?
+      
+      document.description = "Error: Invalid JSON response from gazette slicer - #{e.message.truncate(200)}"
+      document.save
+      process_status = "error"
+      DocumentProcessingMailer.document_processing_complete(user, document_link, process_status).deliver
+      return { "page_count" => 0, "files" => [] }
+      
+    rescue => e
+      error_msg = "Error in run_slice_gazette_script: #{e.message}"
+      Rails.logger.error error_msg
+      Rails.logger.error "Python stdout: #{stdout_str.inspect}"
+      Rails.logger.error "Python stderr: #{stderr_str.inspect}" if stderr_str.present?
+      Rails.logger.error e.backtrace.join("\n")
+      
+      document.description = "Error: Gazette slicing failed - #{e.message.truncate(200)}"
+      document.save
+      process_status = "error"
+      DocumentProcessingMailer.document_processing_complete(user, document_link, process_status).deliver
+      return { "page_count" => 0, "files" => [] }
     end
   end
 
   def process_gazette document, document_pdf_path, user
     puts ">process_gazette called"
-    python_return_value = `python3 ~/GazetteSlicer/process_gazette.py #{ document_pdf_path }`
+    Rails.logger.info "Starting gazette processing for document #{document.id}"
+    
+    cmd = [
+      "python3", 
+      "#{ENV['HOME']}/GazetteSlicer/process_gazette.py", 
+      document_pdf_path
+    ]
+    
+    stdout_str = ""
+    stderr_str = ""
     document_link = "https://todolegal.app/documents/#{document.id}/edit"
-    json_data = {}
+    
     begin
-      json_data = JSON.parse(python_return_value)
-    rescue
-      document.description = "Error: on process gazette"
+      # Add 13-minute timeout for gazette processing
+      Timeout::timeout(780) do
+        Rails.logger.info "Executing Python command: #{cmd.join(' ')}"
+        stdout_str, stderr_str, status = Open3.capture3(*cmd)
+        
+        unless status.success?
+          error_msg = "Python process_gazette script failed with exit code #{status.exitstatus}: #{stderr_str.truncate(500)}"
+          Rails.logger.error error_msg
+          Rails.logger.error "Python stdout: #{stdout_str.inspect}" if stdout_str.present?
+          raise error_msg
+        end
+        
+        Rails.logger.info "Python process_gazette script completed successfully"
+      end
+    rescue Timeout::Error
+      error_msg = "Gazette processing script timed out after 5 minutes"
+      Rails.logger.error error_msg
+      Rails.logger.error "Command was: #{cmd.join(' ')}"
+      document.description = "Error: Gazette processing timed out"
       document.save
       process_status = "error"
       DocumentProcessingMailer.document_processing_complete(user, document_link, process_status).deliver
       return
     end
+    
+    # Parse and validate the JSON output
+    begin
+      if stdout_str.blank?
+        raise "Python process_gazette script returned empty output"
+      end
+      
+      json_data = JSON.parse(stdout_str)
+      
+      # Validate expected structure
+      unless json_data.is_a?(Hash) && json_data["gazette"].is_a?(Hash)
+        raise "Invalid JSON structure from process_gazette.py. Expected Hash with 'gazette' key, got: #{json_data.class}"
+      end
+      
+      gazette_data = json_data["gazette"]
+      unless gazette_data["number"].present? && gazette_data["date"].present?
+        raise "Missing required gazette data: number=#{gazette_data['number'].inspect}, date=#{gazette_data['date'].inspect}"
+      end
+      
+      Rails.logger.info "Successfully processed gazette: number=#{gazette_data['number']}, date=#{gazette_data['date']}"
+      
+    rescue JSON::ParserError => e
+      error_msg = "Failed to parse process_gazette output as JSON: #{e.message}"
+      Rails.logger.error error_msg
+      Rails.logger.error "Python stdout: #{stdout_str.inspect}"
+      Rails.logger.error "Python stderr: #{stderr_str.inspect}" if stderr_str.present?
+      
+      document.description = "Error: Invalid JSON response from gazette processor"
+      document.save
+      process_status = "error"
+      DocumentProcessingMailer.document_processing_complete(user, document_link, process_status).deliver
+      return
+      
+    rescue => e
+      error_msg = "Error in process_gazette: #{e.message}"
+      Rails.logger.error error_msg
+      Rails.logger.error "Python stdout: #{stdout_str.inspect}"
+      Rails.logger.error "Python stderr: #{stderr_str.inspect}" if stderr_str.present?
+      Rails.logger.error e.backtrace.join("\n")
+      
+      document.description = "Error: Gazette processing failed - #{e.message.truncate(200)}"
+      document.save
+      process_status = "error"
+      DocumentProcessingMailer.document_processing_complete(user, document_link, process_status).deliver
+      return
+    end
+    
+    # Update document with gazette information
     document.name = "Gaceta"
     document.publication_number = json_data["gazette"]["number"]
     document.publication_date = json_data["gazette"]["date"]
@@ -183,8 +352,11 @@ include DocumentsHelper
     document.issue_id = json_data["gazette"]["number"]
     document.url = document.generate_friendly_url
     document.save
+    
     addIssuerTagIfExists(document.id, "ENAG")
     addTagIfExists(document.id, "Gaceta")
+    
+    Rails.logger.info "Document updated successfully with gazette data"
   end
 
   def addIssuerTagIfExists(document_id, issuer_tag_name)

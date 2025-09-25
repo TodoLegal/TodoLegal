@@ -1,33 +1,66 @@
+# DocumentProcessingJob - Processes PDF gazettes with enhanced reliability and error handling
+#
+# This job handles the complete processing pipeline for PDF gazette documents:
+# 1. Extracts metadata (gazette number, date) via Python script
+# 2. Slices PDF into individual sections and extracts content
+# 3. Creates related Document records with proper tagging
+# 4. Uploads processed files and sends notifications
+#
+# Key improvements made (September 2025):
+# - Added comprehensive timeout protection (30min job, 15min/13min scripts)
+# - Replaced unsafe backtick execution with Open3.capture3
+# - Enhanced error handling with graceful failures
+# - Improved logging and debugging capabilities
+# - Proper JSON validation and error recovery
+#
+# @see docs/DOCUMENT_PROCESSING_JOB.md for comprehensive documentation
+# @see docs/DOCUMENT_PROCESSING_QUICK_REFERENCE.md for troubleshooting guide
 class DocumentProcessingJob < ApplicationJob
   queue_as :default
   include ApplicationHelper
   include DocumentsHelper
   
-  require 'open3'
-  require 'timeout'
+  # Required libraries for safe subprocess execution and timeout management
+  require 'open3'    # Safe subprocess execution with proper stdout/stderr capture
+  require 'timeout'  # Timeout protection to prevent infinite hangs
   
-  # Configure Sidekiq timeout and retry settings
+  # Sidekiq configuration optimized for heavy document processing
+  # retry: 1 - Limited retries since jobs are resource-intensive
+  # dead: true - Keep failed jobs in dead queue for investigation
+  # queue: 'default' - Can be changed to 'document_processing' for dedicated processing
   sidekiq_options retry: 1, dead: true, queue: 'default'
 
+  # Main job entry point with comprehensive error handling and timeout protection
+  #
+  # @param document [Document] The gazette document to process
+  # @param document_pdf_path [String] Absolute path to the PDF file
+  # @param user [User] User who initiated the processing (for notifications)
+  #
+  # @raises [Timeout::Error] If job exceeds 30-minute limit
+  # @raises [StandardError] For any unhandled exceptions during processing
   def perform(document, document_pdf_path, user)
     Rails.logger.info "Starting DocumentProcessingJob for document #{document.id}"
     
-    # Add overall job timeout (30 minutes total)
+    # Overall job timeout protection (30 minutes)
+    # This prevents jobs from hanging indefinitely and consuming system resources
     begin
-      Timeout::timeout(1800) do
+      Timeout::timeout(1800) do  # 30 minutes = 1800 seconds
         perform_processing(document, document_pdf_path, user)
       end
     rescue Timeout::Error
       error_msg = "DocumentProcessingJob timed out after 30 minutes for document #{document.id}"
       Rails.logger.error error_msg
 
+      # Update document with error information for user visibility
       document.description = "Error: Document processing timed out after 30 minutes"
       document.save
       
+      # Notify user of the failure
       document_link = "https://todolegal.app/documents/#{document.id}/edit"
       DocumentProcessingMailer.document_processing_complete(user, document_link, "error").deliver
       raise error_msg
     rescue => e
+      # Log any unexpected errors with full context
       Rails.logger.error "DocumentProcessingJob failed for document #{document.id}: #{e.message}"
       Rails.logger.error e.backtrace.join("\n")
       raise
@@ -36,6 +69,18 @@ class DocumentProcessingJob < ApplicationJob
 
   private
 
+  # Core processing logic separated from timeout wrapper for clarity
+  #
+  # Processing flow:
+  # 1. Extract gazette metadata (number, date) via process_gazette
+  # 2. Slice PDF and extract content via run_slice_gazette_script  
+  # 3. Create related documents from extracted sections
+  # 4. Apply tags and upload file attachments
+  # 5. Send completion notifications
+  #
+  # @param document [Document] The gazette document to process
+  # @param document_pdf_path [String] Absolute path to the PDF file  
+  # @param user [User] User who initiated the processing
   def perform_processing(document, document_pdf_path, user)
     puts ">slice_gazette called"
     json_data = run_slice_gazette_script(document, document_pdf_path, user)
@@ -172,6 +217,38 @@ class DocumentProcessingJob < ApplicationJob
 
   private
 
+  # Executes Python script to slice gazette PDF into individual sections
+  # 
+  # This method handles the core PDF processing logic:
+  # - Calls slice_gazette.py to extract individual gazette sections
+  # - Processes OCR content extraction for each section
+  # - Returns structured JSON with file paths and metadata
+  #
+  # @param document [Document] The gazette document being processed
+  # @param document_pdf_path [String] Absolute path to source PDF file
+  # @param user [User] User for error notifications
+  #
+  # @return [Hash] Structured data with 'page_count' and 'files' array,
+  #                or safe default { "page_count" => 0, "files" => [] } on error
+  #
+  # @raises [Timeout::Error] If script execution exceeds 15 minutes
+  # 
+  # Expected JSON structure:
+  # {
+  #   "page_count": 25,
+  #   "files": [
+  #     {
+  #       "name": "Decreto 123-2025",
+  #       "path": "relative/path/to/file.pdf", 
+  #       "start_page": 1,
+  #       "end_page": 3,
+  #       "full_text": "Extracted content...",
+  #       "institutions": ["MINED", "MINSAL"],
+  #       "tag": "Education",
+  #       "issuer": "Ministry"
+  #     }
+  #   ]
+  # }
   def run_slice_gazette_script document, document_pdf_path, user
     puts ">run_slice_gazette_script called"
     Rails.logger.info "Starting gazette slicing for document #{document.id}"
@@ -257,6 +334,28 @@ class DocumentProcessingJob < ApplicationJob
     end
   end
 
+  # Executes Python script to extract gazette metadata (number and date)
+  #
+  # This method processes the gazette PDF to extract:
+  # - Official gazette number
+  # - Publication date
+  # - Basic gazette information for document indexing
+  #
+  # @param document [Document] The gazette document being processed
+  # @param document_pdf_path [String] Absolute path to source PDF file  
+  # @param user [User] User for error notifications
+  #
+  # @return [void] Updates the document directly with extracted metadata
+  #
+  # @raises [Timeout::Error] If script execution exceeds 13 minutes
+  #
+  # Expected JSON structure:
+  # {
+  #   "gazette": {
+  #     "number": "123",
+  #     "date": "2025-09-25"
+  #   }
+  # }
   def process_gazette document, document_pdf_path, user
     puts ">process_gazette called"
     Rails.logger.info "Starting gazette processing for document #{document.id}"
@@ -359,6 +458,11 @@ class DocumentProcessingJob < ApplicationJob
     Rails.logger.info "Document updated successfully with gazette data"
   end
 
+  # Safely adds a document tag if the tag exists in the system
+  #
+  # @param document_id [Integer] ID of the document to tag
+  # @param issuer_tag_name [String] Name of the issuer tag to add
+  # @return [void]
   def addIssuerTagIfExists(document_id, issuer_tag_name)
     if !issuer_tag_name.empty?
       tag = Tag.find_by_name(issuer_tag_name)
@@ -368,6 +472,11 @@ class DocumentProcessingJob < ApplicationJob
     end
   end
 
+  # Safely adds a document tag if the tag exists in the system
+  #
+  # @param document_id [Integer] ID of the document to tag
+  # @param tag_name [String] Name of the tag to add
+  # @return [void]
   def addTagIfExists document_id, tag_name
     if !tag_name.empty?
       tag = Tag.find_by_name(tag_name)
@@ -377,6 +486,13 @@ class DocumentProcessingJob < ApplicationJob
     end
   end
 
+  # Cleans extracted text by removing leading non-alphabetic characters
+  # 
+  # This is used to clean up OCR output that may have leading symbols,
+  # numbers, or formatting artifacts
+  #
+  # @param text [String] Raw text to clean
+  # @return [String] Cleaned text starting with alphabetic character
   def cleanText text
     while text && !text.blank? and !(text[0] =~ /[A-Za-z]/)
       text[0] = ''

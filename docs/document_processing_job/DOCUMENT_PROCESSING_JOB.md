@@ -207,7 +207,7 @@ Restart Sidekiq after:
 ```bash
 sudo systemctl restart sidekiq
 # or
-bundle exec sidekiqctl restart /path/to/sidekiq.pid
+sudo service sidekiq restart
 ```
 
 ## Troubleshooting Guide
@@ -334,11 +334,6 @@ Error Occurs
 - Consider job batching for multiple small documents
 
 ---
-
-## Related Documentation
-- [Sidekiq Configuration](../config/initializers/sidekiq.rb)
-- [DocumentProcessingMailer](../app/mailers/document_processing_mailer.rb)
-- [Gazette Processing Scripts Documentation](../docs/GAZETTE_PROCESSING_SCRIPTS.md)
 
 **Last Updated**: September 25, 2025  
 **Version**: 2.0  

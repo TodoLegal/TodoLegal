@@ -1,6 +1,5 @@
 # config valid for current version and patch releases of Capistrano
 
-
 set :application, "TodoLegal"
 set :repo_url, "https://github.com/TodoLegal/TodoLegal.git"
 set :passenger_restart_command, '/usr/bin/passenger-config restart-app'

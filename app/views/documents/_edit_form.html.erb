@@ -263,9 +263,7 @@
           </div>
           <div class="col-md-3 btns-section">
             <% if @document.original_file.attached? %>
-              <%= button_to(url_for(@document.original_file), {class:"btn btn-link download-btn", method: :get}) do %>
-                Descargar archivo
-              <% end %>
+              <%= link_to "Descargar archivo", url_for(@document.original_file), {class:"btn btn-link download-btn", method: :get} %>
             <% end %>
           </div>
         </div>

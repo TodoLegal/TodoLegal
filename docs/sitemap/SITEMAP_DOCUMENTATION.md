@@ -398,14 +398,7 @@ rails runner "puts 'Published: #{Document.where(publish: true).count}/50000'"
 
 ### Transition Steps
 
-#### Step 1: Update robots.txt
-```diff
-# In React app's public/robots.txt
-- Sitemap: https://todolegal.app/api/v1/sitemap.xml
-+ Sitemap: https://todolegal.app/api/v1/sitemap_index.xml
-```
-
-#### Step 2: Test New Endpoints
+#### Step 1: Test New Endpoints
 ```bash
 # Test sitemap index
 curl https://todolegal.app/api/v1/sitemap_index.xml
@@ -417,7 +410,7 @@ curl https://todolegal.app/api/v1/sitemap_documents_1.xml
 curl https://todolegal.app/api/v1/sitemap_documents_2.xml
 ```
 
-#### Step 3: Update Search Engines
+#### Step 2: Update Search Engines
 1. **Google Search Console**:
    - Go to [Google Search Console](https://search.google.com/search-console)
    - Select your property: `valid.todolegal.app`
@@ -433,7 +426,7 @@ curl https://todolegal.app/api/v1/sitemap_documents_2.xml
    - Remove old sitemap: `https://todolegal.app/api/v1/sitemap.xml`
    - Submit new sitemap: `https://todolegal.app/api/v1/sitemap_index.xml`
 
-#### Step 4: Monitor Transition
+#### Step 3: Monitor Transition
 ```bash
 # Verify all pages are being generated
 rails sitemap:cache_stats

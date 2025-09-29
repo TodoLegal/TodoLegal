@@ -61,7 +61,9 @@ class DocumentsController < ApplicationController
       end
       @documents = Document.where(publication_number: @query).order('publication_number DESC').page params[:page]
     else
-      @documents = Document.all.order('publication_number ASC').page params[:page]
+      @documents = Document.order('created_at DESC')
+                            .limit(50)
+                            .page params[:page]
     end
 
     if @show_only_judgements

@@ -63,12 +63,11 @@
       </div>
     <% end %>
   </div>
-  
   <!-- Laws Pagination -->
-  <% if @laws.respond_to?(:total_pages) && @laws.total_pages > 1 %>
-    <div class="d-flex justify-content-center mt-3">
-      <%= paginate @laws, param_name: :laws_page %>
-    </div>
+  <% if !current_user || !@user_is_premium %>
+    <a class="btn btn-outline-primary btn-block"  href="<%= wall_path %>" style="margin-top:2%;" >Ver más resultados</a>
+  <% else %>
+    <%= paginate @laws, param_name: :laws_page %>
   <% end %>
   <hr>
   <br>
@@ -113,10 +112,10 @@
   </div>
   
   <!-- Articles Pagination -->
-  <% if @grouped_laws.respond_to?(:total_pages) && @grouped_laws.total_pages > 1 %>
-    <div class="d-flex justify-content-center mt-3">
-      <%= paginate @grouped_laws, param_name: :articles_page %>
-    </div>
+  <% if !current_user || !@user_is_premium %>
+    <a class="btn btn-outline-primary btn-block"  href="<%= wall_path %>" style="margin-top:2%;" >Ver más resultados</a>
+  <% else %>
+    <%= paginate @grouped_laws, param_name: :articles_page %>
   <% end %>
   
 <% end %>

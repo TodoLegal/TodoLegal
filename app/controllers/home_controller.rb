@@ -158,8 +158,13 @@ class HomeController < ApplicationController
       # Update the result count and add the law ID to the set of legal documents
       @result_count += articles_count
       legal_documents.add(law_id)
-    end    # Sort the grouped laws by the count of articles in descending order
+    end    
+    
+    # Sort the grouped laws by the count of articles in descending order
     @grouped_laws.sort_by! { |k| -k[:count] }
+    
+    # Paginate the sorted grouped laws using Kaminari
+    @grouped_laws = Kaminari.paginate_array(@grouped_laws).page(params[:articles_page]).per(6)
   
     # Update the count of unique legal documents
     @legal_documents_count = legal_documents.size

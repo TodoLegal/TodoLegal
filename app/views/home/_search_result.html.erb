@@ -80,10 +80,8 @@
     <span class="resultinfo-articles"> <%= @articles_result_text %></span>
   </section>
   <div class="list-group">
-    <% i = 0 %>
     <% @grouped_laws.each do |grouped_law| %>
-      <% i += 1 %>
-      <div class="collapsable-specific-results-cards list-group-item col-sm-12" style="display:<%= i>6 ? 'none' : 'block' %>; margin-bottom: 10px; padding:20px">
+      <div class="list-group-item col-sm-12" style="margin-bottom: 10px; padding:20px">
         <% if !current_user || !@user_is_premium %>
           <a class="" href="<%= wall_path %>">
         <% else %>
@@ -113,65 +111,13 @@
       </div>
     <% end %>
   </div>
-  <% if !current_user || !@user_is_premium %>
-    <a class="" href="<%= wall_path %>" style="padding:20px">
-    <a class="btn btn-outline-primary btn-block"  href="<%= wall_path %>" style="margin-top:2%;" >Ver más resultados</a>
-  <% else %>
-    <button id="see_more_specific_results_link" class="btn btn-outline-primary btn-block" style="margin-top:2%;" onclick="showCollapsableSpecificResultsCards();return false;">Ver más resultados</button>
+  
+  <!-- Articles Pagination -->
+  <% if @grouped_laws.respond_to?(:total_pages) && @grouped_laws.total_pages > 1 %>
+    <div class="d-flex justify-content-center mt-3">
+      <%= paginate @grouped_laws, param_name: :articles_page %>
+    </div>
   <% end %>
   
 <% end %>
 
-<script>
-visible_collapsable_law_cards = 6
-visible_collapsable_specific_results_cards = 6
-
-collapsable_law_cards_elements = document.getElementsByClassName("collapsable-law-cards")
-collapsable_law_specific_results_elements = document.getElementsByClassName("collapsable-specific-results-cards")
-
-if(collapsable_law_cards_elements.length <= 6)
-{
-  hideSeeMoreLawsLink()
-}
-
-if(collapsable_law_specific_results_elements.length <= 6)
-{
-  hideSeeMoreSpecificResultsLink()
-}
-
-function showCards(cards, visible_cards)
-{
-  for(var i=0; i<visible_cards && i<cards.length; i++)
-  {
-    cards[i].style.display = "flex"
-  }
-}
-
-function showCollapsableLawCards() {
-  visible_collapsable_law_cards += 6
-  if(visible_collapsable_law_cards >= collapsable_law_cards_elements.length)
-  {
-    hideSeeMoreLawsLink()
-  }
-  showCards(collapsable_law_cards_elements, visible_collapsable_law_cards)
-}
-
-function showCollapsableSpecificResultsCards() {
-  visible_collapsable_specific_results_cards += 6
-  if(visible_collapsable_specific_results_cards >= collapsable_law_specific_results_elements.length)
-  {
-    hideSeeMoreSpecificResultsLink()
-  }
-  showCards(collapsable_law_specific_results_elements, visible_collapsable_specific_results_cards)
-}
-
-function hideSeeMoreLawsLink()
-{
-  document.getElementById("see_more_laws_link").style.display = "none"
-}
-
-function hideSeeMoreSpecificResultsLink()
-{
-  document.getElementById("see_more_specific_results_link").style.display = "none"
-}
-</script>

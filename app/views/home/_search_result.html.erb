@@ -33,10 +33,8 @@
     </section>
   <% end %>
   <div class="row">
-    <% i = 0 %>
     <% @laws.each do |law| %>
-      <% i+=1 %>
-      <div class="collapsable-law-cards col-sm-6 col-md-4 py-2" style="display:<%= i>6 ? 'none' : 'block' %>">
+      <div class="col-sm-6 col-md-4 py-2">
         <div class="card card-body h-100" style="padding:0px">
           <% if !current_user || !@user_is_premium %>
             <a class="" href="<%= wall_path %>" style="padding:20px">
@@ -64,8 +62,14 @@
         </div>
       </div>
     <% end %>
-    <button id="see_more_laws_link" class="btn btn-outline-primary btn-more-laws" style="margin-top:2%;" onclick="showCollapsableLawCards();return false;">Ver más documentos</button>
   </div>
+  
+  <!-- Laws Pagination -->
+  <% if @laws.respond_to?(:total_pages) && @laws.total_pages > 1 %>
+    <div class="d-flex justify-content-center mt-3">
+      <%= paginate @laws, param_name: :laws_page %>
+    </div>
+  <% end %>
   <hr>
   <br>
 <% end %>

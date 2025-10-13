@@ -66,19 +66,18 @@ class HomeController < ApplicationController
     @query = params[:query]
   
     # Find laws and articles based on the query with eager loading
-    # Use Kaminari pagination for laws with 6 results per page
-    @laws = findLaws(@query).page(params[:laws_page]).per(6)
+    # Force-load to avoid COUNT(*) on relation when calling size
+    @laws = findLaws(@query).limit(50).to_a
 
     # Cache user plan status once to avoid repeated Stripe API calls
     @user_plan_status = current_user ? return_user_plan_status(current_user) : "Basic"
     @user_is_premium = current_user && @user_plan_status != "Basic" && current_user.confirmed_at?
   
-    # Initialize result counts - use total_count for pagination info
-    @result_count = @laws.total_count
-    @current_page_laws_count = @laws.size
+    # Initialize result counts
+    @result_count = @laws.size
     @is_search_law = true
   
-    # Initialize a set to store unique law IDs from current page
+    # Initialize a set to store unique law IDs
     legal_documents = Set.new(@laws.map(&:id))
   
     # Initialize an array to store grouped laws
@@ -171,9 +170,9 @@ class HomeController < ApplicationController
   
     # Generate user-friendly result texts
     @result_info_text = "#{number_with_delimiter(@result_count, delimiter: ',')} resultado#{'s' if @result_count != 1} encontrado#{'s' if @result_count != 1}"
-    titles_result = number_with_delimiter(@laws.total_count, delimiter: ',')
-    @titles_result_text = "#{titles_result} resultado#{'s' if @laws.total_count != 1}"
-    articles_result = number_with_delimiter(@result_count - @laws.total_count, delimiter: ',')
+    titles_result = number_with_delimiter(@laws.size, delimiter: ',')
+    @titles_result_text = "#{titles_result} resultado#{'s' if @laws.size != 1}"
+    articles_result = number_with_delimiter(@result_count - @laws.size, delimiter: ',')
     @articles_result_text = "#{articles_result} resultado#{'s' if @result_count != 1}"
   
     # Track the search activity if a user is logged in

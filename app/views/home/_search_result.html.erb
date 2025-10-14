@@ -33,21 +33,19 @@
     </section>
   <% end %>
   <div class="row">
+    <% i = 0 %>
     <% @laws.each do |law| %>
-      <div class="col-sm-6 col-md-4 py-2">
+      <% i+=1 %>
+      <div class="collapsable-law-cards col-sm-6 col-md-4 py-2" style="display:<%= i>6 ? 'none' : 'block' %>">
         <div class="card card-body h-100" style="padding:0px">
-          <% if !current_user || !@user_is_premium %>
-            <a class="" href="<%= wall_path %>" style="padding:20px">
-          <% else %>
-            <a class="" href="<%= law_path(law) %>" style="padding:20px">
-          <% end %>
+          <a class="" href="<%= (current_user && @user_is_premium) ? law_path(law) : wall_path %>" style="padding:20px">
             <% if @is_search_law %>
               <p style="font-size: 15px">
                 <% law.materia_names.each do |materia_name| %>
                   <span class="badge badge--materia"><%= materia_name %></span>
                 <% end %>
               </p>
-              <% end %>
+            <% end %>
             <p style="font-size: 15px">
               <% if law.status && law.repealed? %>
                 <span class="badge badge--materia" style="background: #f25265; color: white;"><%= law.status %></span>
@@ -62,13 +60,14 @@
         </div>
       </div>
     <% end %>
-  </div>
-  <!-- Laws Pagination -->
-  <% if !current_user || !@user_is_premium %>
-    <a class="btn btn-outline-primary btn-block"  href="<%= wall_path %>" style="margin-top:2%;" >Ver más resultados</a>
-  <% else %>
-    <%= paginate @laws, param_name: :laws_page %>
-  <% end %>
+    <% if !current_user || !@user_is_premium %>
+      <a class="btn btn-outline-primary btn-more-laws"  href="<%= wall_path %>" style="margin-top:2%;" >Ver más resultados</a>
+    <% else %>
+      <button id="see_more_laws_link" class="btn btn-outline-primary btn-more-laws" style="margin-top:2%;" onclick="showCollapsableLawCards();return false;">
+          Ver más documentos
+      </button>
+    <% end %>
+  </div>  
   <hr>
   <br>
 <% end %>

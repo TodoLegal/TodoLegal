@@ -33,10 +33,8 @@
     </section>
   <% end %>
   <div class="row">
-    <% i = 0 %>
     <% @laws.each do |law| %>
-      <% i+=1 %>
-      <div class="collapsable-law-cards col-sm-6 col-md-4 py-2" style="display:<%= i>6 ? 'none' : 'block' %>">
+      <div class="col-sm-6 col-md-4 py-2">
         <div class="card card-body h-100" style="padding:0px">
           <a class="" href="<%= (current_user && @user_is_premium) ? law_path(law) : wall_path %>" style="padding:20px">
             <% if @is_search_law %>
@@ -78,7 +76,6 @@
     <span class="resultinfo-articles"> <%= @articles_result_text %></span>
   </section>
   <div class="list-group">
-    <% i = 0 %>
     <% @grouped_laws.each do |grouped_law| %>
       <% i+=1 %>
       <div class="collapsable-specific-results-cards list-group-item col-sm-12" style="display:<%= i>6 ? 'none' : 'block' %>; margin-bottom: 10px; padding:20px">

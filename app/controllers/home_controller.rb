@@ -66,8 +66,8 @@ class HomeController < ApplicationController
     @query = params[:query]
   
     # Find laws and articles based on the query with eager loading
-    # Use Kaminari pagination for laws with 6 results per page
-    @laws = findLaws(@query).page(params[:laws_page]).per(6)
+    # Force-load to avoid COUNT(*) on relation when calling size
+    @laws = findLaws(@query).limit(50).to_a
 
     # Cache user plan status once to avoid repeated Stripe API calls
     @user_plan_status = current_user ? return_user_plan_status(current_user) : "Basic"

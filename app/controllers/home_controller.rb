@@ -73,7 +73,7 @@ class HomeController < ApplicationController
     @user_plan_status = current_user ? return_user_plan_status(current_user) : "Basic"
     @user_is_premium = current_user && @user_plan_status != "Basic" && current_user.confirmed_at?
   
-    #Initialize result counts
+    # Initialize result counts
     @result_count = @laws.size
     @is_search_law = true
   
@@ -158,7 +158,6 @@ class HomeController < ApplicationController
       @result_count += articles_count
       legal_documents.add(law_id)
     end    
-    
     # Sort the grouped laws by the count of articles in descending order
     @grouped_laws.sort_by! { |k| -k[:count] }
     

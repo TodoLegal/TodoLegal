@@ -30,15 +30,15 @@ namespace :notifications do
         when :rescheduled
           rescheduled_count += 1
           delay_info = dry_run ? "" : " (scheduled in #{job_delay_minutes} minutes)"
-          puts "✓ #{dry_run ? 'Would reschedule' : 'Rescheduled'} notifications for user: #{user.email}#{delay_info}"
+          puts "✓ #{dry_run ? 'Would reschedule' : 'Rescheduled'} notifications for user ID: #{user.id}, Email: #{user.email}#{delay_info}"
           job_delay_minutes += 30 unless dry_run  # Increment delay for next job
         when :skipped
           skipped_count += 1
-          puts "- Skipped user: #{user.email} (#{result[:reason]})"
+          puts "- Skipped user ID: #{user.id}, Email: #{user.email} (#{result[:reason]})"
         end
       rescue => e
         error_count += 1
-        puts "✗ Error processing user #{user.email}: #{e.message}"
+        puts "✗ Error processing user ID: #{user.id}, Email: #{user.email}: #{e.message}"
         Rails.logger.error "Error rescheduling notifications for user #{user.id}: #{e.message}"
         Rails.logger.error e.backtrace.join("\n")
       end
@@ -101,10 +101,10 @@ namespace :notifications do
     user_preferences = UsersPreference.find_by(user_id: user.id)
     unless user_preferences
       if dry_run
-        puts "  Would create preferences for user: #{user.email}"
+        puts "  Would create preferences for user ID: #{user.id}, Email: #{user.email}"
       else
         user_preferences = create_preferences(user)
-        puts "  Created preferences for user: #{user.email}"
+        puts "  Created preferences for user ID: #{user.id}, Email: #{user.email}"
       end
       return { status: :rescheduled } if dry_run
     end
@@ -115,7 +115,7 @@ namespace :notifications do
     end
     
     if dry_run
-      puts "  Would reschedule job for user: #{user.email}"
+      puts "  Would reschedule job for user ID: #{user.id}, Email: #{user.email}"
       puts "  Current job ID: #{user_preferences.job_id || 'None'}"
       return { status: :rescheduled }
     end

@@ -29,7 +29,7 @@ namespace :notifications do
     puts "Users with ACTIVE Stripe plans: #{active_stripe_users.count}"
     if active_stripe_users.any?
       puts "  Active Stripe users:"
-      active_stripe_users.each { |user| puts "    - #{user.email}" }
+      active_stripe_users.each { |user| puts "    - ID: #{user.id}, Email: #{user.email}" }
     end
     puts "Stripe API errors: #{stripe_errors}" if stripe_errors > 0
     
@@ -40,7 +40,7 @@ namespace :notifications do
     puts "Users with Pro/Admin permissions: #{permission_users.count}"
     if permission_users.any?
       puts "  Permission-based Pro users:"
-      permission_users.each { |user| puts "    - #{user.email}" }
+      permission_users.each { |user| puts "    - ID: #{user.id}, Email: #{user.email}" }
     end
     
     # Combined (what the main task will process)
@@ -61,13 +61,13 @@ namespace :notifications do
     puts "Pro users with preferences: #{users_with_preferences.count}"
     if users_with_preferences.any?
       puts "  Users with preferences:"
-      users_with_preferences.each { |user| puts "    - #{user.email}" }
+      users_with_preferences.each { |user| puts "    - ID: #{user.id}, Email: #{user.email}" }
     end
     
     puts "Pro users without preferences: #{users_without_preferences.count}"
     if users_without_preferences.any?
       puts "  Users without preferences:"
-      users_without_preferences.each { |user| puts "    - #{user.email}" }
+      users_without_preferences.each { |user| puts "    - ID: #{user.id}, Email: #{user.email}" }
     end
     
     # Active notifications count
@@ -76,7 +76,7 @@ namespace :notifications do
     puts "Pro users with active notifications: #{users_with_active_notifications.count}"
     if users_with_active_notifications.any?
       puts "  Users with active notifications:"
-      users_with_active_notifications.each { |user| puts "    - #{user.email}" }
+      users_with_active_notifications.each { |user| puts "    - ID: #{user.id}, Email: #{user.email}" }
     end
     
     puts "=" * 40

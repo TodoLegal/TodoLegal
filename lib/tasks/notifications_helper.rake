@@ -27,6 +27,10 @@ namespace :notifications do
     
     puts "Users with Stripe customer ID: #{all_stripe_users.count}"
     puts "Users with ACTIVE Stripe plans: #{active_stripe_users.count}"
+    if active_stripe_users.any?
+      puts "  Active Stripe users:"
+      active_stripe_users.each { |user| puts "    - #{user.email}" }
+    end
     puts "Stripe API errors: #{stripe_errors}" if stripe_errors > 0
     
     # Users with Pro or Admin permissions
@@ -34,6 +38,10 @@ namespace :notifications do
                           .joins('JOIN permissions ON permissions.id = user_permissions.permission_id')
                           .where('permissions.name IN (?)', ['Pro', 'Admin'])
     puts "Users with Pro/Admin permissions: #{permission_users.count}"
+    if permission_users.any?
+      puts "  Permission-based Pro users:"
+      permission_users.each { |user| puts "    - #{user.email}" }
+    end
     
     # Combined (what the main task will process)
     active_stripe_user_ids = active_stripe_users.map(&:id)
@@ -45,19 +53,33 @@ namespace :notifications do
     
     # Break down by preferences status
     pro_users = User.where(id: all_pro_user_ids).includes(:users_preference)
-    with_preferences = pro_users.joins(:users_preference).count
-    without_preferences = pro_users.left_outer_joins(:users_preference)
-                                  .where(users_preferences: { id: nil }).count
     
-    puts "Pro users with preferences: #{with_preferences}"
-    puts "Pro users without preferences: #{without_preferences}"
+    users_with_preferences = pro_users.joins(:users_preference)
+    users_without_preferences = pro_users.left_outer_joins(:users_preference)
+                                        .where(users_preferences: { id: nil })
+    
+    puts "Pro users with preferences: #{users_with_preferences.count}"
+    if users_with_preferences.any?
+      puts "  Users with preferences:"
+      users_with_preferences.each { |user| puts "    - #{user.email}" }
+    end
+    
+    puts "Pro users without preferences: #{users_without_preferences.count}"
+    if users_without_preferences.any?
+      puts "  Users without preferences:"
+      users_without_preferences.each { |user| puts "    - #{user.email}" }
+    end
     
     # Active notifications count
-    active_notifications = pro_users.joins(:users_preference)
-                                   .where(users_preferences: { active_notifications: true }).count
-    puts "Pro users with active notifications: #{active_notifications}"
+    users_with_active_notifications = pro_users.joins(:users_preference)
+                                              .where(users_preferences: { active_notifications: true })
+    puts "Pro users with active notifications: #{users_with_active_notifications.count}"
+    if users_with_active_notifications.any?
+      puts "  Users with active notifications:"
+      users_with_active_notifications.each { |user| puts "    - #{user.email}" }
+    end
     
     puts "=" * 40
-    puts "Ready to reschedule #{active_notifications} notification jobs"
+    puts "Ready to reschedule #{users_with_active_notifications.count} notification jobs"
   end
 end

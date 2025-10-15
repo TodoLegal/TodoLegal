@@ -77,7 +77,7 @@ class HomeController < ApplicationController
     @result_count = @laws.size
     @is_search_law = true
   
-    # Initialize a set to store unique law IDs
+    # Initialize a set to store unique law IDs from current page
     legal_documents = Set.new(@laws.map(&:id))
   
     # Initialize an array to store grouped laws
@@ -160,15 +160,18 @@ class HomeController < ApplicationController
     end    
     # Sort the grouped laws by the count of articles in descending order
     @grouped_laws.sort_by! { |k| -k[:count] }
+    
+    # Paginate the sorted grouped laws using Kaminari
+    @grouped_laws = Kaminari.paginate_array(@grouped_laws).page(params[:articles_page]).per(6)
   
     # Update the count of unique legal documents
     @legal_documents_count = legal_documents.size
   
     # Generate user-friendly result texts
     @result_info_text = "#{number_with_delimiter(@result_count, delimiter: ',')} resultado#{'s' if @result_count != 1} encontrado#{'s' if @result_count != 1}"
-    titles_result = number_with_delimiter(@laws.size, delimiter: ',')
-    @titles_result_text = "#{titles_result} resultado#{'s' if @laws.size != 1}"
-    articles_result = number_with_delimiter(@result_count - @laws.size, delimiter: ',')
+    titles_result = number_with_delimiter(@laws.total_count, delimiter: ',')
+    @titles_result_text = "#{titles_result} resultado#{'s' if @laws.total_count != 1}"
+    articles_result = number_with_delimiter(@result_count - @laws.total_count, delimiter: ',')
     @articles_result_text = "#{articles_result} resultado#{'s' if @result_count != 1}"
   
     # Track the search activity if a user is logged in

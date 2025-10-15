@@ -17,7 +17,7 @@ namespace :notifications do
     if dry_run
       puts "DRY RUN MODE: No actual changes will be made"
     else
-      puts "Jobs will be staggered with 30-minute intervals to minimize resource consumption"
+      puts "Jobs will be scheduled with 12-hour buffer + 30-minute intervals to minimize resource consumption"
     end
     puts "=" * 60
     
@@ -129,7 +129,8 @@ namespace :notifications do
     # Schedule new job with staggered delay
     enqueue_new_job_with_delay(user, delay_minutes)
     user_preferences.reload
-    puts "  Enqueued new job with ID: #{user_preferences.job_id} (delay: #{delay_minutes} minutes)"
+    total_delay_hours = (user_preferences.mail_frequency * 24) + 12 + (delay_minutes / 60.0)
+    puts "  Enqueued new job with ID: #{user_preferences.job_id} (total delay: #{total_delay_hours.round(1)} hours)"
     
     { status: :rescheduled }
   end
@@ -154,8 +155,8 @@ namespace :notifications do
   def enqueue_new_job_with_delay(user, delay_minutes)
     @user_preferences = UsersPreference.find_by(user_id: user.id)
     
-    # Calculate the actual delay: user's frequency + staggering delay
-    total_delay = @user_preferences.mail_frequency.days + delay_minutes.minutes
+    # Calculate the actual delay: user's frequency + 12 hours buffer + staggering delay
+    total_delay = @user_preferences.mail_frequency.days + 12.hours + delay_minutes.minutes
     
     job = MailUserPreferencesJob.set(wait: total_delay).perform_later(user)
     @user_preferences.job_id = job.provider_job_id

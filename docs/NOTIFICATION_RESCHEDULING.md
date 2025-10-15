@@ -10,15 +10,16 @@ This document describes the rake tasks created to reschedule notification mailer
 rails notifications:reschedule_pro_users
 ```
 
-**Description:** Reschedules notification jobs for all Pro users (users with active Stripe subscriptions or Admin/Pro permissions). Jobs are scheduled with a 12-hour buffer plus 30-minute intervals between each user to minimize resource consumption.
+**Description:** Reschedules notification jobs for all Pro users (users with active Stripe subscriptions or Admin/Pro permissions). Jobs are scheduled with 30-minute intervals between each user to minimize resource consumption.
 
 **What it does:**
 - Identifies all Pro users (Stripe subscribers + Admin/Pro permission holders)
 - Validates each user's Pro status
 - Creates user preferences if missing
 - Skips users with disabled notifications
-- Removes existing scheduled jobs
-- Creates new notification jobs with 12-hour buffer + 30-minute staggered delays to reduce server load
+- **Skips users who already have valid scheduled jobs in Sidekiq**
+- Removes existing scheduled jobs (only for stale/invalid job IDs)
+- Creates new notification jobs with 30-minute staggered delays to reduce server load
 
 ### 2. Dry Run Mode
 
@@ -86,7 +87,7 @@ The task combines both groups and removes duplicates for comprehensive coverage.
 Starting to reschedule notification jobs for Pro users...
 ============================================================
 Found 4 Pro users to process
-Jobs will be scheduled with 12-hour buffer + 30-minute intervals to minimize resource consumption
+Jobs will be scheduled with 30-minute intervals to minimize resource consumption
 ============================================================
   Deleted existing job (f02dc41264d5a77fcfed8a96): Success
   Enqueued new job with ID: a1b2c3d4e5f6g7h8i9j0k1l2 (total delay: 180.0 hours)

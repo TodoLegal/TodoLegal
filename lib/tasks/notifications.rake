@@ -137,8 +137,8 @@ namespace :notifications do
     # Schedule new job with staggered delay
     enqueue_new_job_with_delay(user, delay_minutes)
     user_preferences.reload
-    total_delay_hours = (user_preferences.mail_frequency * 24) + (delay_minutes / 60.0)
-    puts "  Enqueued new job with ID: #{user_preferences.job_id} (total delay: #{total_delay_hours.round(1)} hours)"
+    stagger_delay_hours = delay_minutes / 60.0
+    puts "  Enqueued new job with ID: #{user_preferences.job_id} (stagger delay: #{stagger_delay_hours.round(1)} hours)"
     
     { status: :rescheduled }
   end
@@ -163,8 +163,8 @@ namespace :notifications do
   def enqueue_new_job_with_delay(user, delay_minutes)
     @user_preferences = UsersPreference.find_by(user_id: user.id)
     
-    # Calculate the actual delay: user's frequency + staggering delay
-    total_delay = @user_preferences.mail_frequency.days + delay_minutes.minutes
+    # Calculate the actual delay: only staggering delay (mail frequency handled elsewhere)
+    total_delay = delay_minutes.minutes
     
     job = MailUserPreferencesJob.set(wait: total_delay).perform_later(user)
     @user_preferences.job_id = job.provider_job_id

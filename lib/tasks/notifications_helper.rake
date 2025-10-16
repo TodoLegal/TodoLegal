@@ -79,7 +79,59 @@ namespace :notifications do
       users_with_active_notifications.each { |user| puts "    - ID: #{user.id}, Email: #{user.email}" }
     end
     
+    # Check for existing scheduled jobs
+    users_with_existing_jobs = 0
+    users_needing_rescheduling = 0
+    
+    if users_with_active_notifications.any?
+      puts "\n  Checking for existing Sidekiq jobs..."
+      users_with_active_notifications.each do |user|
+        job_id = user.users_preference.job_id
+        if job_id.present?
+          job_exists = check_if_job_exists_in_sidekiq(job_id)
+          if job_exists
+            users_with_existing_jobs += 1
+            puts "    - ID: #{user.id}, Email: #{user.email} (HAS existing job: #{job_id})"
+          else
+            users_needing_rescheduling += 1
+            puts "    - ID: #{user.id}, Email: #{user.email} (NEEDS rescheduling, job #{job_id} not found)"
+          end
+        else
+          users_needing_rescheduling += 1
+          puts "    - ID: #{user.id}, Email: #{user.email} (NEEDS rescheduling, no job ID)"
+        end
+      end
+    end
+    
     puts "=" * 40
-    puts "Ready to reschedule #{users_with_active_notifications.count} notification jobs"
+    puts "Users with existing valid jobs: #{users_with_existing_jobs}"
+    puts "Users needing rescheduling: #{users_needing_rescheduling}"
+    puts "Ready to reschedule #{users_needing_rescheduling} notification jobs"
+  end
+  
+  private
+  
+  def check_if_job_exists_in_sidekiq(job_id)
+    return false if job_id.blank?
+    
+    begin
+      # Check in scheduled jobs (where notification jobs would be)
+      scheduled_job = Sidekiq::ScheduledSet.new.find_job(job_id)
+      return true if scheduled_job
+      
+      # Check in retry queue (in case job failed and is retrying)
+      retry_job = Sidekiq::RetrySet.new.find_job(job_id)
+      return true if retry_job
+      
+      # Check in current queue (in case job is currently being processed)
+      Sidekiq::Queue.new.each do |job|
+        return true if job.jid == job_id
+      end
+      
+      return false
+    rescue => e
+      Rails.logger.warn "Error checking Sidekiq for job #{job_id}: #{e.message}"
+      return false  # If we can't check, assume job doesn't exist and proceed
+    end
   end
 end

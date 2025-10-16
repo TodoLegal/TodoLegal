@@ -17,7 +17,7 @@ namespace :notifications do
     if dry_run
       puts "DRY RUN MODE: No actual changes will be made"
     else
-      puts "Jobs will be scheduled with 12-hour buffer + 30-minute intervals to minimize resource consumption"
+      puts "Jobs will be scheduled with 30-minute intervals to minimize resource consumption"
     end
     puts "=" * 60
     
@@ -114,6 +114,14 @@ namespace :notifications do
       return { status: :skipped, reason: "Notifications disabled" }
     end
     
+    # Skip if user already has a valid scheduled job in Sidekiq
+    if user_preferences.job_id.present?
+      job_exists = check_if_job_exists_in_sidekiq(user_preferences.job_id)
+      if job_exists
+        return { status: :skipped, reason: "Already has scheduled job (ID: #{user_preferences.job_id})" }
+      end
+    end
+    
     if dry_run
       puts "  Would reschedule job for user ID: #{user.id}, Email: #{user.email}"
       puts "  Current job ID: #{user_preferences.job_id || 'None'}"
@@ -129,8 +137,8 @@ namespace :notifications do
     # Schedule new job with staggered delay
     enqueue_new_job_with_delay(user, delay_minutes)
     user_preferences.reload
-    total_delay_hours = (user_preferences.mail_frequency * 24) + 12 + (delay_minutes / 60.0)
-    puts "  Enqueued new job with ID: #{user_preferences.job_id} (total delay: #{total_delay_hours.round(1)} hours)"
+    stagger_delay_hours = delay_minutes / 60.0
+    puts "  Enqueued new job with ID: #{user_preferences.job_id} (stagger delay: #{stagger_delay_hours.round(1)} hours)"
     
     { status: :rescheduled }
   end
@@ -155,11 +163,35 @@ namespace :notifications do
   def enqueue_new_job_with_delay(user, delay_minutes)
     @user_preferences = UsersPreference.find_by(user_id: user.id)
     
-    # Calculate the actual delay: user's frequency + 12 hours buffer + staggering delay
-    total_delay = @user_preferences.mail_frequency.days + 12.hours + delay_minutes.minutes
+    # Calculate the actual delay: only staggering delay (mail frequency handled elsewhere)
+    total_delay = delay_minutes.minutes
     
     job = MailUserPreferencesJob.set(wait: total_delay).perform_later(user)
     @user_preferences.job_id = job.provider_job_id
     @user_preferences.save
+  end
+  
+  def check_if_job_exists_in_sidekiq(job_id)
+    return false if job_id.blank?
+    
+    begin
+      # Check in scheduled jobs (where notification jobs would be)
+      scheduled_job = Sidekiq::ScheduledSet.new.find_job(job_id)
+      return true if scheduled_job
+      
+      # Check in retry queue (in case job failed and is retrying)
+      retry_job = Sidekiq::RetrySet.new.find_job(job_id)
+      return true if retry_job
+      
+      # Check in current queue (in case job is currently being processed)
+      Sidekiq::Queue.new.each do |job|
+        return true if job.jid == job_id
+      end
+      
+      return false
+    rescue => e
+      Rails.logger.warn "Error checking Sidekiq for job #{job_id}: #{e.message}"
+      return false  # If we can't check, assume job doesn't exist and proceed
+    end
   end
 end

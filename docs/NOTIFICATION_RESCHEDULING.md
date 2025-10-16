@@ -10,15 +10,16 @@ This document describes the rake tasks created to reschedule notification mailer
 rails notifications:reschedule_pro_users
 ```
 
-**Description:** Reschedules notification jobs for all Pro users (users with active Stripe subscriptions or Admin/Pro permissions). Jobs are scheduled with a 12-hour buffer plus 30-minute intervals between each user to minimize resource consumption.
+**Description:** Reschedules notification jobs for all Pro users (users with active Stripe subscriptions or Admin/Pro permissions). Jobs are scheduled with 30-minute staggering intervals between each user to minimize resource consumption. The user's mail frequency is handled by the notification system itself.
 
 **What it does:**
 - Identifies all Pro users (Stripe subscribers + Admin/Pro permission holders)
 - Validates each user's Pro status
 - Creates user preferences if missing
 - Skips users with disabled notifications
-- Removes existing scheduled jobs
-- Creates new notification jobs with 12-hour buffer + 30-minute staggered delays to reduce server load
+- **Skips users who already have valid scheduled jobs in Sidekiq**
+- Removes existing scheduled jobs (only for stale/invalid job IDs)
+- Creates new notification jobs with 30-minute staggered delays (mail frequency handled by notification system)
 
 ### 2. Dry Run Mode
 
@@ -86,12 +87,12 @@ The task combines both groups and removes duplicates for comprehensive coverage.
 Starting to reschedule notification jobs for Pro users...
 ============================================================
 Found 4 Pro users to process
-Jobs will be scheduled with 12-hour buffer + 30-minute intervals to minimize resource consumption
+Jobs will be scheduled with 30-minute intervals to minimize resource consumption
 ============================================================
   Deleted existing job (f02dc41264d5a77fcfed8a96): Success
-  Enqueued new job with ID: a1b2c3d4e5f6g7h8i9j0k1l2 (total delay: 180.0 hours)
+  Enqueued new job with ID: a1b2c3d4e5f6g7h8i9j0k1l2 (stagger delay: 0.0 hours)
 ✓ Rescheduled notifications for user: user@example.com (scheduled in 0 minutes)
-  Enqueued new job with ID: b2c3d4e5f6g7h8i9j0k1l2m3 (total delay: 180.5 hours)
+  Enqueued new job with ID: b2c3d4e5f6g7h8i9j0k1l2m3 (stagger delay: 0.5 hours)
 ✓ Rescheduled notifications for user: user2@example.com (scheduled in 30 minutes)
 - Skipped user: user3@example.com (Notifications disabled)
 ✗ Error processing user user4@example.com: Connection timeout
@@ -120,6 +121,7 @@ Task completed!
 - Uses `find_each(batch_size: 30)` for memory efficiency
 - Preloads associations with `includes()` to prevent N+1 queries
 - **Staggers job scheduling with 30-minute intervals** to prevent resource spikes
+- **Mail frequency handled by notification system** when jobs execute (not in initial delay)
 - Processes users in small batches to avoid overwhelming Sidekiq
 - Efficient database queries combining Stripe and permission-based users
 

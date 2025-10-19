@@ -228,6 +228,11 @@ module DocumentsHelper
       if document_type
         return document_type.id
       end
+    elsif auto_process_type == "cnbs"
+      document_type = DocumentType.find_by_name("Circular CNBS")
+      if document_type
+        return document_type.id
+      end
     elsif auto_process_type == "others"
       document_type = DocumentType.find_by_name("Otro")
       if document_type

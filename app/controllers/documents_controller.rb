@@ -190,7 +190,7 @@ class DocumentsController < ApplicationController
           file = bucket.file @document.original_file.key
           file.download "tmp/avisos_legales.pdf"
           add_stamp_to_unprocessed_document @document, Rails.root.join("tmp") + "avisos_legales.pdf"
-          extract_text_from_document Rails.root.join("tmp") + "seccion_de_gaceta.pdf", "avisos"
+          extract_text_from_document Rails.root.join("tmp") + "avisos_legales.pdf", "Avisos Legales"
           if $discord_bot
             $discord_bot.send_message($discord_bot_document_upload, "Nuevos avisos legales subidos en Valid! :scroll:")
           end
@@ -200,7 +200,7 @@ class DocumentsController < ApplicationController
           file = bucket.file @document.original_file.key
           file.download "tmp/marcas.pdf"
           add_stamp_to_unprocessed_document @document, Rails.root.join("tmp") + "marcas.pdf"
-          extract_text_from_document @document, Rails.root.join("tmp") + "seccion_de_gaceta.pdf", "marcas"
+          extract_text_from_document @document, Rails.root.join("tmp") + "marcas.pdf", "Marcas de Fábrica"
           if $discord_bot
             $discord_bot.send_message($discord_bot_document_upload, "Nuevas Marcas de Fábrica subidas en Valid! :scroll:")
           end
@@ -232,12 +232,24 @@ class DocumentsController < ApplicationController
             $discord_bot.send_message($discord_bot_document_upload, "Nuevo comunicado subido a Valid! :scroll:")
           end
           format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido un nuevo comunicado.' }
+        elsif params["document"]["auto_process_type"] == "cnbs"
+          bucket = get_bucket
+          file = bucket.file @document.original_file.key
+          file.download "tmp/circular_cnbs.pdf"
+          add_stamp_to_unprocessed_document @document, Rails.root.join("tmp") + "circular_cnbs.pdf"
+          extract_text_from_document @document, Rails.root.join("tmp") + "circular_cnbs.pdf", "Circular CNBS"
+          if $discord_bot
+            document_id = @document.id
+            discord_message = "Nueva circular de la CNBS subida en Valid! [#{document_id}](https://todolegal.app/documents/#{document_id}) :scroll:"
+            $discord_bot.send_message($discord_bot_document_upload, discord_message)
+          end
+          format.html { redirect_to edit_document_path(@document), notice: 'Se han subido Avisos Legales.' }
         elsif params["document"]["auto_process_type"] == "others"
           bucket = get_bucket
           file = bucket.file @document.original_file.key
           file.download "tmp/documento.pdf"
           add_stamp_to_unprocessed_document @document, Rails.root.join("tmp") + "documento.pdf"
-          extract_text_from_document @document, Rails.root.join("tmp") + "seccion_de_gaceta.pdf", "otros"
+          extract_text_from_document @document, Rails.root.join("tmp") + "documento.pdf", "Otro"
           format.html { redirect_to edit_document_path(@document), notice: 'Se ha subido un documento.' }
           if $discord_bot
             $discord_bot.send_message($discord_bot_document_upload, "Nuevo documento subido a Valid! :scroll:")

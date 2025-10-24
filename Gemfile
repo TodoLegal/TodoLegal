@@ -24,6 +24,7 @@ gem 'mixpanel-ruby'
 gem "google-cloud-storage", "~> 1.11", require: false
 gem 'rack-cors'
 gem 'browser'
+gem 'rack-attack'
 gem 'kaminari'
 gem 'searchkick'
 gem 'capistrano'

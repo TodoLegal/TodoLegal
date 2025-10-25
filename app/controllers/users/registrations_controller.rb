@@ -31,6 +31,12 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # POST /resource
   def create
+    # Honeypot check - if bots fill the hidden 'website' field, reject
+    if params[:user][:website].present?
+      Rails.logger.warn "Suspected bot registration attempt from IP: #{request.remote_ip}"
+      render :new, status: :unprocessable_entity and return
+    end
+    
     validateOccupationParam (params)
     super
   end

@@ -7,7 +7,12 @@ class User < ApplicationRecord
            
   acts_as_token_authenticatable
 
+  # Honeypot fields - virtual attributes for bot detection (not stored in database)
+  attr_accessor :website, :company, :phone_backup, :address, :url
+
   # validate :email_uniqueness, on: create
+  validate :email_domain_allowed, on: :create
+  validate :name_not_suspicious, on: :create
 
   has_many :user_permissions, :dependent => :destroy
   has_many :permissions, through: :user_permissions
@@ -36,7 +41,42 @@ class User < ApplicationRecord
     else
       return false
     end
-   end
+  end
+
+  # Security validations for suspicious registrations
+  def email_domain_allowed
+    blocked_domains = [
+      'yopmail.com',
+      '10minutemail.com',
+      'tempmail.org',
+      'guerrillamail.com',
+      'mailinator.com',
+      'throwaway.email',
+      'temp-mail.org'
+    ]
+    
+    domain = email.split('@').last.downcase if email.present?
+    if blocked_domains.include?(domain)
+      errors.add(:email, 'Temporary email addresses are not allowed')
+    end
+  end
+
+  def name_not_suspicious
+    return unless first_name.present? && last_name.present?
+    
+    # Check for random character patterns (likely bot-generated)
+    random_pattern = /^[A-Za-z]{10,}$/
+    
+    if first_name.match?(random_pattern) && last_name.match?(random_pattern)
+      errors.add(:first_name, 'Invalid name format')
+    end
+    
+    # Check for URL patterns in names
+    if first_name.include?('http') || last_name.include?('http') ||
+       first_name.include?('www.') || last_name.include?('www.')
+      errors.add(:first_name, 'URLs not allowed in names')
+    end
+  end
 
   def self.ignore_users_whith_free_trial
   where.not("EXISTS(SELECT 1 from user_trials where users.id = user_trials.user_id)")
@@ -62,6 +102,8 @@ class User < ApplicationRecord
   
   protected
   def confirmation_required?
-    false
+    # Require email confirmation for new registrations
+    # Skip for OAuth signups which are already verified
+    !provider.present?
   end
 end

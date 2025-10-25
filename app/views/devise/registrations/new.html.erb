@@ -65,6 +65,15 @@
             <%= f.text_field :phone_number, autocomplete: "phone-number", class:"form-control", id:"phone"%>
           </div>
 
+          <!-- Honeypot fields  -->
+          <div style="position: absolute; left: -9999px;">
+            <%= f.text_field :website, tabindex: "-1", autocomplete: "off" %>
+            <%= f.text_field :company, tabindex: "-1", autocomplete: "off" %>
+            <%= f.text_field :phone_backup, tabindex: "-1", autocomplete: "off" %>
+            <%= f.text_field :address, tabindex: "-1", autocomplete: "off" %>
+            <%= f.text_field :url, tabindex: "-1", autocomplete: "off" %>
+          </div>
+
           <div class="form-group password-container">
             <%= f.label :Contraseña %><br />
             <%= f.password_field :password, autocomplete: "new-password", class: "form-control", id:"password"%>

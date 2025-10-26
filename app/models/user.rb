@@ -102,8 +102,6 @@ class User < ApplicationRecord
   
   protected
   def confirmation_required?
-    # Require email confirmation for new registrations
-    # Skip for OAuth signups which are already verified
-    !provider.present?
+    false
   end
 end

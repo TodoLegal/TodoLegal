@@ -109,9 +109,8 @@
     var lastName = document.getElementById("lastName").value;
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
-    var confirmPassword = document.getElementById("confirmPassword").value;
-    
-    if( name.includes("https") || name.includes("/") || (name.trim() == "") || (lastName.trim() == "") || (email.trim() == "") || (password.trim() == "") || (confirmPassword.trim() == "") || (isValid == false))
+
+    if( name.includes("https") || name.includes("/") || (name.trim() == "") || (lastName.trim() == "") || (email.trim() == "") || (password.trim() == "") || (isValid == false))
     {
         $('#nextButton').popover('show')
         event.preventDefault();
@@ -133,7 +132,6 @@
   }
   
   //triggers nextButton click on enter
-  //var input = document.getElementById("confirmPassword");
   addEventListener("keypress", function(event) {
     if ( event.keyCode === 13 ) {
       event.preventDefault();

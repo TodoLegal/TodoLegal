@@ -31,6 +31,27 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # POST /resource
   def create
+    # Enhanced honeypot check - if bots fill any hidden fields, reject
+    honeypot_fields = %w[website company phone_backup address url]
+    honeypot_filled = honeypot_fields.any? { |field| params[:user][field].present? }
+    
+    if honeypot_filled
+      filled_field = honeypot_fields.find { |field| params[:user][field].present? }
+      Rails.logger.warn "Suspected bot registration attempt from IP: #{request.remote_ip}, filled honeypot field: #{filled_field}"
+      
+      # Track bot attempts for analytics
+      if defined?($tracker) && $tracker
+        $tracker.track('bot_registration_attempt', {
+          ip: request.remote_ip,
+          user_agent: request.user_agent,
+          honeypot_field: filled_field,
+          email: params[:user][:email]
+        })
+      end
+      
+      render :new, status: :unprocessable_entity and return
+    end
+    
     validateOccupationParam (params)
     super
   end

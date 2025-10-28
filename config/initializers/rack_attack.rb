@@ -8,7 +8,7 @@
 # ==========================================
 
 class Rack::Attack
-  ### 🔹 Redis cache store (required for multi-instance consistency)
+  ### Redis cache store (required for multi-instance consistency)
   Rack::Attack.cache.store = ActiveSupport::Cache::RedisCacheStore.new(
     url: ENV.fetch('REDIS_URL', 'redis://localhost:6379/0')
   )

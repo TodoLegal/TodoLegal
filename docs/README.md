@@ -2,6 +2,17 @@
 
 This folder contains comprehensive documentation for TodoLegal systems and features.
 
+## Security & Bot Protection
+
+### 🛡️ [BOT_PROTECTION_IMPLEMENTATION.md](BOT_PROTECTION_IMPLEMENTATION.md)
+**Complete bot protection system implementation** with:
+- Executive summary of suspicious registration analysis (73% bot patterns)
+- Multi-layer defense architecture (Rack::Attack, honeypots, email validation, name detection)
+- Technical implementation details for all security layers
+- Testing procedures and monitoring guidelines
+- Performance analysis and scalability considerations
+- Production deployment checklist and troubleshooting guide
+
 ## Document Processing Documentation
 
 ### 📄 [DOCUMENT_PROCESSING_JOB.md](document_processing_job/DOCUMENT_PROCESSING_JOB.md)
@@ -46,10 +57,17 @@ This folder contains comprehensive documentation for TodoLegal systems and featu
 - Emergency procedures
 - Transition checklist
 
-## Other Documentation
+## Additional System Documentation
 
-- [DOCUMENT_BATCH_PROCESSING.md](DOCUMENT_BATCH_PROCESSING.md) - Document processing workflows
-- [DOCUMENT_RELATIONSHIPS_DOCUMENTATION.md](DOCUMENT_RELATIONSHIPS_DOCUMENTATION.md) - Document relationship system
+### Performance & Optimization
+- [Performance_Optimization_Report.md](Performance_Optimization_Report.md) - System performance analysis and optimization strategies
+
+### Document & Content Management  
+- [DOCUMENT_BATCH_PROCESSING.md](DOCUMENT_BATCH_PROCESSING.md) - Document processing workflows and batch operations
+- [DOCUMENT_RELATIONSHIPS_DOCUMENTATION.md](DOCUMENT_RELATIONSHIPS_DOCUMENTATION.md) - Document relationship system architecture
+
+### Notifications & User Management
+- [NOTIFICATION_RESCHEDULING.md](NOTIFICATION_RESCHEDULING.md) - Notification system scheduling and management
 
 ---
 

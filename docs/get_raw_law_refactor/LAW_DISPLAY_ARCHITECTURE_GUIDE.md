@@ -30,12 +30,12 @@ graph LR
         B3 --> C3[📱 Progressive Loading<br/>🎯 Smooth Scrolling]
     end
     
-    style B1 fill:#ffcccc
-    style C1 fill:#ffcccc
-    style B2 fill:#ffffcc
-    style C2 fill:#ccffcc
-    style B3 fill:#ccffcc
-    style C3 fill:#ccffcc
+    style B1 fill:#f5f5f5,stroke:#666666,color:#000000
+    style C1 fill:#f5f5f5,stroke:#666666,color:#000000
+    style B2 fill:#f0f8ff,stroke:#4682b4,color:#000000
+    style C2 fill:#f0fff0,stroke:#228b22,color:#000000
+    style B3 fill:#f0fff0,stroke:#228b22,color:#000000
+    style C3 fill:#f0fff0,stroke:#228b22,color:#000000
 ```
 
 ### Key Achievements - Phase 1
@@ -67,8 +67,8 @@ flowchart TD
         L2 --> L3[Database Loads Everything<br/>All 2,369 articles at once]
         L3 --> L4[User Waits 50+ Seconds<br/>Poor Experience]
         
-        style L2 fill:#ffcccc,stroke:#cc0000
-        style L4 fill:#ffcccc,stroke:#cc0000
+        style L2 fill:#f5f5f5,stroke:#666666,color:#000000
+        style L4 fill:#f5f5f5,stroke:#666666,color:#000000
     end
     
     subgraph "NEW SYSTEM - Phase 1 Complete"
@@ -77,8 +77,8 @@ flowchart TD
         N2 --> N3[Same Database Queries<br/>Still loads everything]
         N3 --> N4[User Still Waits 50+ Seconds<br/>But system is now optimizable]
         
-        style N2 fill:#ccffcc,stroke:#00aa00
-        style N4 fill:#ffffcc,stroke:#ccaa00
+        style N2 fill:#f0fff0,stroke:#228b22,color:#000000
+        style N4 fill:#f0f8ff,stroke:#4682b4,color:#000000
     end
     
     subgraph "FUTURE SYSTEM - Phase 2 Target"
@@ -87,9 +87,9 @@ flowchart TD
         F2 --> F3[Database Loads in Chunks<br/>20-50 articles at a time]
         F3 --> F4[User Sees Content in 2 Seconds<br/>Excellent Experience]
         
-        style F2 fill:#ccffcc,stroke:#00aa00
-        style F3 fill:#ccffff,stroke:#0088cc
-        style F4 fill:#ccffcc,stroke:#00aa00
+        style F2 fill:#f0fff0,stroke:#228b22,color:#000000
+        style F3 fill:#f0f8ff,stroke:#4682b4,color:#000000
+        style F4 fill:#f0fff0,stroke:#228b22,color:#000000
     end
 ```
 
@@ -111,12 +111,12 @@ graph TB
         B --> H[Error Handling<br/>Inconsistent]
         
         D --> I[Load ALL Articles<br/>⚠️ 2,369 at once]
-        E --> J[Complex Algorithm<br/>⚠️ Nested loops]
+        I --> J[Complex Algorithm<br/>⚠️ Nested loops]
         
-        style B fill:#ffcccc,stroke:#cc0000,stroke-width:3px
-        style E fill:#ffcccc,stroke:#cc0000
-        style H fill:#ffcccc,stroke:#cc0000
-        style I fill:#ffffcc,stroke:#cccc00
+        style B fill:#f5f5f5,stroke:#666666,stroke-width:3px,color:#000000
+        style E fill:#f5f5f5,stroke:#666666,color:#000000
+        style H fill:#f5f5f5,stroke:#666666,color:#000000
+        style I fill:#f0f8ff,stroke:#4682b4,color:#000000
     end
 ```
 
@@ -149,10 +149,10 @@ graph TB
         
         C --> K[ServiceResult<br/>✅ Success/Failure handling]
         
-        style B fill:#ccffcc,stroke:#00aa00,stroke-width:3px
-        style C fill:#ccffcc,stroke:#00aa00
-        style D fill:#ccffcc,stroke:#00aa00
-        style K fill:#ccffcc,stroke:#00aa00
+        style B fill:#f0fff0,stroke:#228b22,stroke-width:3px,color:#000000
+        style C fill:#f0fff0,stroke:#228b22,color:#000000
+        style D fill:#f0fff0,stroke:#228b22,color:#000000
+        style K fill:#f0fff0,stroke:#228b22,color:#000000
     end
 ```
 
@@ -384,10 +384,10 @@ flowchart TD
         I --> L
         D --> M
         
-        style C fill:#ccffcc,stroke:#00aa00
-        style D fill:#ccffcc,stroke:#00aa00
-        style G fill:#ccffff,stroke:#0088cc
-        style H fill:#ccffcc,stroke:#00aa00
+        style C fill:#f0fff0,stroke:#228b22,color:#000000
+        style D fill:#f0fff0,stroke:#228b22,color:#000000
+        style G fill:#f0f8ff,stroke:#4682b4,color:#000000
+        style H fill:#f0fff0,stroke:#228b22,color:#000000
     end
 ```
 
@@ -488,12 +488,12 @@ graph LR
         D --> E[Performance Baseline ✅]
         E --> F[Documentation ✅]
         
-        style A fill:#ccffcc
-        style B fill:#ccffcc
-        style C fill:#ccffcc
-        style D fill:#ccffcc
-        style E fill:#ccffcc
-        style F fill:#ccffcc
+        style A fill:#f0fff0,color:#000000
+        style B fill:#f0fff0,color:#000000
+        style C fill:#f0fff0,color:#000000
+        style D fill:#f0fff0,color:#000000
+        style E fill:#f0fff0,color:#000000
+        style F fill:#f0fff0,color:#000000
     end
     
     subgraph "Phase 2 🎯 READY TO START"
@@ -502,11 +502,11 @@ graph LR
         I --> J[Caching Layer 💾]
         J --> K[Testing & Rollout 🚀]
         
-        style G fill:#ffffcc
-        style H fill:#ffffcc
-        style I fill:#ffffcc
-        style J fill:#ffffcc
-        style K fill:#ffffcc
+        style G fill:#f0f8ff
+        style H fill:#f0f8ff
+        style I fill:#f0f8ff
+        style J fill:#f0f8ff
+        style K fill:#f0f8ff
     end
 ```
 
@@ -573,14 +573,14 @@ graph LR
         D3[Poor Error Handling<br/>❌ System crashes] --> R3[Robust Errors<br/>✅ Graceful degradation]
         D4[No Performance Path<br/>❌ Optimization impossible] --> R4[Optimization Ready<br/>✅ 96% improvement possible]
         
-        style D1 fill:#ffcccc
-        style D2 fill:#ffcccc
-        style D3 fill:#ffcccc
-        style D4 fill:#ffcccc
-        style R1 fill:#ccffcc
-        style R2 fill:#ccffcc
-        style R3 fill:#ccffcc
-        style R4 fill:#ccffcc
+        style D1 fill:#f5f5f5,color:#000000
+        style D2 fill:#f5f5f5,color:#000000
+        style D3 fill:#f5f5f5,color:#000000
+        style D4 fill:#f5f5f5,color:#000000
+        style R1 fill:#f0fff0,color:#000000
+        style R2 fill:#f0fff0,color:#000000
+        style R3 fill:#f0fff0,color:#000000
+        style R4 fill:#f0fff0,color:#000000
     end
 ```
 

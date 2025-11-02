@@ -20,7 +20,7 @@ module LawDisplayConfig
   # User access limits based on subscription status
   ACCESS_LIMITS = {
     basic: 5,           # Basic users see only first 5 articles
-    premium: nil,       # Premium users have unlimited access
+    pro: nil,       # Pro users have unlimited access
   }.freeze
 
   # Search configuration
@@ -56,7 +56,7 @@ module LawDisplayConfig
     def access_limit_for(user)
       # Simple check: authenticated users get unlimited in service, 
       # controller will apply law-specific restrictions
-      user ? ACCESS_LIMITS[:premium] : ACCESS_LIMITS[:basic]
+      user ? ACCESS_LIMITS[:pro] : ACCESS_LIMITS[:basic]
     end
 
     # Check if this is a mobile request

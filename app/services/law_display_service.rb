@@ -16,6 +16,10 @@ class LawDisplayService < ApplicationService
     @params = params.is_a?(ActionController::Parameters) ? params : params.with_indifferent_access
     @query = @params[:query]&.strip
     @articles_filter = @params[:articles]
+    
+    # Chunking parameters for progressive loading
+    @page = [@params[:page]&.to_i || 1, 1].max # Ensure page is at least 1
+    @chunk_size = determine_chunk_size
   end
 
   # Main service method - processes law display request
@@ -82,6 +86,19 @@ class LawDisplayService < ApplicationService
     @articles_filter.present?
   end
 
+  # Check if this is a chunked request (page parameter provided)
+  # @return [Boolean] True if requesting a specific page/chunk
+  def chunked_request?
+    @params[:page].present?
+  end
+
+  # Determine appropriate chunk size based on context
+  # @return [Integer] Chunk size to use
+  def determine_chunk_size
+    context = search_request? ? :search : :normal
+    chunk_size_for(user: @user, context: context)
+  end
+
   # Process search request with highlighting
   # @param display_data [Hash] Display data to populate
   def process_search_request(display_data)
@@ -123,7 +140,7 @@ class LawDisplayService < ApplicationService
       .search_by_body_highlighted(@query)
       .with_pg_search_highlight
       .order(:position)
-      .limit(SEARCH_CONFIG[:max_results])
+      .limit(SEARCH_CONFIG[:max_results]) #Analyze if I want to limit results when searching
 
     display_data[:highlight_enabled] = true
     display_data[:query] = @query
@@ -164,17 +181,21 @@ class LawDisplayService < ApplicationService
     display_data[:articles_count] = @law.cached_articles_count
   end
 
-  # Process normal law display (full law with chunking)
+  # Process normal law display (with progressive chunking)
   # @param display_data [Hash] Display data to populate
   def process_normal_display_request(display_data)
-    # For normal display, build the complete law stream
-    stream_result = build_law_stream
+    # Build law stream with chunking support
+    stream_result = build_chunked_law_stream
     
     display_data[:stream] = stream_result[:stream]
     display_data[:result_index_items] = stream_result[:index_items]
     display_data[:go_to_article] = stream_result[:go_to_article]
     display_data[:has_articles_only] = stream_result[:has_articles_only]
-    display_data[:articles_count] = @law.cached_articles_count
+    display_data[:articles_count] = stream_result[:displayed_articles_count]
+    display_data[:total_articles_count] = @law.cached_articles_count
+    
+    # Add chunk metadata if present (for chunked requests)
+    display_data[:chunk_metadata] = stream_result[:chunk_metadata] if stream_result[:chunk_metadata]
   end
 
   # Build the law stream with all components (books, titles, chapters, etc.)
@@ -182,7 +203,7 @@ class LawDisplayService < ApplicationService
   # @param go_to_position [Integer, nil] Position to scroll to
   # @return [Hash] Stream data with components
   def build_law_stream(go_to_position = nil)
-    # Load all law components - this is still the bottleneck we'll address in Phase 2
+    # Load all law components - legacy method for backward compatibility
     components = load_law_components
     
     # Build the interleaved stream
@@ -193,6 +214,34 @@ class LawDisplayService < ApplicationService
     )
     
     stream_builder.build
+  end
+
+  # Build chunked law stream with progressive loading
+  # @param go_to_position [Integer, nil] Position to scroll to
+  # @return [Hash] Stream data with components and chunk metadata
+  def build_chunked_law_stream(go_to_position = nil)
+    # Load components with chunking support (mixed approach)
+    components = load_chunked_law_components
+    chunk_metadata = calculate_chunk_metadata(components[:articles])
+    
+    # Build the interleaved stream
+    stream_builder = LawStreamBuilder.new(
+      law: @law,
+      components: components,
+      go_to_position: go_to_position
+    )
+    
+    result = stream_builder.build
+    
+    # Add chunk-specific metadata
+    result.merge!(
+      displayed_articles_count: components[:articles].size,
+      chunk_metadata: chunk_metadata,
+      current_page: @page,
+      chunk_size: @chunk_size
+    )
+    
+    result
   end
 
   # Load all law components (books, titles, chapters, etc.)
@@ -208,14 +257,65 @@ class LawDisplayService < ApplicationService
     }
   end
 
+  # Load law components with chunked articles (mixed approach)
+  # Structure components (books, titles, etc.) are always loaded for navigation
+  # Articles are loaded in chunks for performance
+  # @return [Hash] Hash of component arrays with chunked articles
+  def load_chunked_law_components
+    # Load articles in chunks first to determine position range
+    articles = load_chunked_articles
+    
+    if articles.any?
+      # Filter structure components to only include those within the article range
+      # This ensures proper interleaving without breaking the algorithm
+      max_position = articles.last.position
+      
+      {
+        books: @law.books.where('position <= ?', max_position).order(:position),
+        titles: @law.titles.where('position <= ?', max_position).order(:position),
+        chapters: @law.chapters.where('position <= ?', max_position).order(:position),
+        sections: @law.sections.where('position <= ?', max_position).order(:position),
+        subsections: @law.subsections.where('position <= ?', max_position).order(:position),
+        articles: articles
+      }
+    else
+      # No articles in chunk, return empty structure
+      {
+        books: @law.books.none,
+        titles: @law.titles.none,
+        chapters: @law.chapters.none,
+        sections: @law.sections.none,
+        subsections: @law.subsections.none,
+        articles: articles
+      }
+    end
+  end
+
+  # Load articles for the current chunk/page
+  # @return [ActiveRecord::Relation] Chunked articles
+  def load_chunked_articles
+    # Calculate offset based on page and chunk size
+    offset = (@page - 1) * @chunk_size
+    
+    @law.articles
+        .order(:position)
+        .limit(@chunk_size)
+        .offset(offset)
+  end
+
   # Apply basic access limitations based on user type
   # Note: The controller handles law-specific access with user_can_access_law method
   # @param display_data [Hash] Display data to modify
   def apply_access_limitations(display_data)
-    # Basic limitation for non-authenticated users only
-    # The controller will apply law-specific access rules
+    # For chunked requests, we handle access limitations differently
+    # We show the requested chunk but mark access as limited for the controller to handle
     if @user.nil?
-      display_data[:stream] = display_data[:stream].take(ACCESS_LIMITS[:basic]) if display_data[:stream].respond_to?(:take)
+      # For chunked requests (page > 1), don't limit the stream here
+      # Let the controller handle the access restriction
+      if !chunked_request? && !search_request? && !article_filter_request?
+        # Only apply basic limits for full law display on first page
+        display_data[:stream] = display_data[:stream].take(ACCESS_LIMITS[:basic]) if display_data[:stream].respond_to?(:take)
+      end
       display_data[:user_can_access_law] = false
     else
       display_data[:user_can_access_law] = true
@@ -237,20 +337,47 @@ class LawDisplayService < ApplicationService
     })
   end
 
+  # Calculate metadata for chunked loading
+  # @param articles [ActiveRecord::Relation] Current chunk of articles
+  # @return [Hash] Chunk metadata for pagination
+  def calculate_chunk_metadata(articles)
+    total_articles = @law.cached_articles_count
+    total_pages = (total_articles.to_f / @chunk_size).ceil
+    has_more = @page < total_pages
+    
+    {
+      current_page: @page,
+      total_pages: total_pages,
+      chunk_size: @chunk_size,
+      displayed_articles: articles.size,
+      total_articles: total_articles,
+      has_more_chunks: has_more,
+      is_first_chunk: @page == 1,
+      is_last_chunk: !has_more
+    }
+  end
+
   # Build metadata for the result
   # @param display_data [Hash] Display data
   # @return [Hash] Metadata hash
   def build_metadata(display_data)
-    {
+    base_metadata = {
       law_id: @law.id,
       law_name: @law.name,
       total_articles: @law.cached_articles_count,
-      displayed_articles: display_data[:articles_count],
+      displayed_articles: display_data[:articles_count] || display_data[:total_articles_count],
       is_search: display_data[:info_is_searched],
       has_query: display_data[:query].present?,
       user_type: @user ? 'authenticated' : 'anonymous',
       access_limited: !display_data[:user_can_access_law]
     }
+    
+    # Add chunk metadata if present
+    if display_data[:chunk_metadata]
+      base_metadata.merge!(display_data[:chunk_metadata])
+    end
+    
+    base_metadata
   end
 
   private

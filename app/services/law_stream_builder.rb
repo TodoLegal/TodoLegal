@@ -68,12 +68,12 @@ class LawStreamBuilder
   # Calculate total number of items in the stream
   # @return [Integer] Total stream size
   def calculate_total_stream_size
-    @law.cached_books_count +
-    @law.cached_titles_count +
-    @law.cached_chapters_count +
-    @law.cached_sections_count +
-    @law.cached_subsections_count +
-    @law.cached_articles_count
+    @books.size +
+    @titles.size +
+    @chapters.size +
+    @sections.size +
+    @subsections.size +
+    @articles.size
   end
 
   # Add the next component to the stream based on position ordering
@@ -96,7 +96,7 @@ class LawStreamBuilder
   # Check if book should be added next (based on position comparison)
   # @return [Boolean] True if book should be added
   def should_add_book?
-    return false unless @book_iterator < @law.cached_books_count
+    return false unless @book_iterator < @books.size
     
     current_book = @books[@book_iterator]
     return false unless current_book
@@ -104,69 +104,69 @@ class LawStreamBuilder
     # Check if book position is less than all other component positions
     book_position = current_book.position
     
-    (@law.cached_titles_count == 0 || position_less_than?(:title, book_position)) &&
-    (@law.cached_chapters_count == 0 || position_less_than?(:chapter, book_position)) &&
-    (@law.cached_sections_count == 0 || position_less_than?(:section, book_position)) &&
-    (@law.cached_subsections_count == 0 || position_less_than?(:subsection, book_position)) &&
-    (@law.cached_articles_count == 0 || position_less_than?(:article, book_position))
+    (@titles.size == 0 || position_less_than?(:title, book_position)) &&
+    (@chapters.size == 0 || position_less_than?(:chapter, book_position)) &&
+    (@sections.size == 0 || position_less_than?(:section, book_position)) &&
+    (@subsections.size == 0 || position_less_than?(:subsection, book_position)) &&
+    (@articles.size == 0 || position_less_than?(:article, book_position))
   end
 
   # Check if title should be added next
   # @return [Boolean] True if title should be added
   def should_add_title?
-    return false unless @title_iterator < @law.cached_titles_count
+    return false unless @title_iterator < @titles.size
     
     current_title = @titles[@title_iterator]
     return false unless current_title
     
     title_position = current_title.position
     
-    (@law.cached_chapters_count == 0 || position_less_than?(:chapter, title_position)) &&
-    (@law.cached_sections_count == 0 || position_less_than?(:section, title_position)) &&
-    (@law.cached_subsections_count == 0 || position_less_than?(:subsection, title_position)) &&
-    (@law.cached_articles_count == 0 || position_less_than?(:article, title_position))
+    (@chapters.size == 0 || position_less_than?(:chapter, title_position)) &&
+    (@sections.size == 0 || position_less_than?(:section, title_position)) &&
+    (@subsections.size == 0 || position_less_than?(:subsection, title_position)) &&
+    (@articles.size == 0 || position_less_than?(:article, title_position))
   end
 
   # Check if chapter should be added next
   # @return [Boolean] True if chapter should be added
   def should_add_chapter?
-    return false unless @chapter_iterator < @law.cached_chapters_count
+    return false unless @chapter_iterator < @chapters.size
     
     current_chapter = @chapters[@chapter_iterator]
     return false unless current_chapter
     
     chapter_position = current_chapter.position
     
-    (@law.cached_sections_count == 0 || position_less_than?(:section, chapter_position)) &&
-    (@law.cached_subsections_count == 0 || position_less_than?(:subsection, chapter_position)) &&
-    (@law.cached_articles_count == 0 || position_less_than?(:article, chapter_position))
+    (@sections.size == 0 || position_less_than?(:section, chapter_position)) &&
+    (@subsections.size == 0 || position_less_than?(:subsection, chapter_position)) &&
+    (@articles.size == 0 || position_less_than?(:article, chapter_position))
   end
 
   # Check if section should be added next
   # @return [Boolean] True if section should be added
   def should_add_section?
-    return false unless @section_iterator < @law.cached_sections_count
+    return false unless @section_iterator < @sections.size
     
     current_section = @sections[@section_iterator]
     return false unless current_section
     
     section_position = current_section.position
     
-    (@law.cached_subsections_count == 0 || position_less_than?(:subsection, section_position)) &&
-    (@law.cached_articles_count == 0 || position_less_than?(:article, section_position))
+    (@subsections.size == 0 || position_less_than?(:subsection, section_position)) &&
+    (@articles.size == 0 || position_less_than?(:article, section_position))
   end
 
   # Check if subsection should be added next
   # @return [Boolean] True if subsection should be added
   def should_add_subsection?
-    return false unless @subsection_iterator < @law.cached_subsections_count
+    return false unless @subsection_iterator < @subsections.size
     
     current_subsection = @subsections[@subsection_iterator]
     return false unless current_subsection
     
     subsection_position = current_subsection.position
     
-    (@law.cached_articles_count == 0 || position_less_than?(:article, subsection_position))
+    (@articles.size == 0 || position_less_than?(:article, subsection_position))
   end
 
   # Helper method to check if current component position is less than comparison position
@@ -176,19 +176,19 @@ class LawStreamBuilder
   def position_less_than?(component_type, comparison_position)
     case component_type
     when :title
-      return true unless @title_iterator < @law.cached_titles_count
+      return true unless @title_iterator < @titles.size
       @titles[@title_iterator]&.position && @titles[@title_iterator].position > comparison_position
     when :chapter
-      return true unless @chapter_iterator < @law.cached_chapters_count
+      return true unless @chapter_iterator < @chapters.size
       @chapters[@chapter_iterator]&.position && @chapters[@chapter_iterator].position > comparison_position
     when :section
-      return true unless @section_iterator < @law.cached_sections_count
+      return true unless @section_iterator < @sections.size
       @sections[@section_iterator]&.position && @sections[@section_iterator].position > comparison_position
     when :subsection
-      return true unless @subsection_iterator < @law.cached_subsections_count
+      return true unless @subsection_iterator < @subsections.size
       @subsections[@subsection_iterator]&.position && @subsections[@subsection_iterator].position > comparison_position
     when :article
-      return true unless @article_iterator < @law.cached_articles_count
+      return true unless @article_iterator < @articles.size
       @articles[@article_iterator]&.position && @articles[@article_iterator].position > comparison_position
     end
   end

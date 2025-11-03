@@ -41,7 +41,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       
       # Track bot attempts for analytics
       if defined?($tracker) && $tracker
-        $tracker.track('bot_registration_attempt', {
+        $tracker.track(request.remote_ip, 'bot_registration_attempt', {
           ip: request.remote_ip,
           user_agent: request.user_agent,
           honeypot_field: filled_field,

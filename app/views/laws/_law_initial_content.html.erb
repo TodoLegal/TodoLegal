@@ -1,0 +1,24 @@
+<%# 
+  Initial law content for the first page load
+  Includes the first chunk and sets up the progressive loading container
+%>
+<div id="law-content" 
+     class="law-content-container"
+     data-controller="law-infinite-scroll"
+     data-law-infinite-scroll-law-id-value="<%= law.id %>"
+     data-law-infinite-scroll-current-page-value="<%= current_page %>"
+     data-law-infinite-scroll-has-more-chunks-value="<%= has_more %>"
+     data-law-infinite-scroll-chunk-url-value="<%= load_chunk_law_path(law) %>">
+  
+  <!-- Initial chunk content -->
+  <%= render 'laws/law_chunk', 
+      stream: stream, 
+      chunk_metadata: { current_page: current_page, chunk_size: stream.size },
+      law: law %>
+</div>
+
+<!-- Loading state indicator -->
+<%= render 'laws/loading_state', 
+    has_more: has_more, 
+    current_page: current_page,
+    law: law %>

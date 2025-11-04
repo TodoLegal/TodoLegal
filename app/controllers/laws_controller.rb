@@ -1,6 +1,6 @@
 class LawsController < ApplicationController
   layout 'law', only: [:show, :new, :edit]
-  before_action :set_law, only: [:show, :edit, :update, :destroy, :insert_article]
+  before_action :set_law, only: [:show, :edit, :update, :destroy, :insert_article, :load_chunk]
   before_action :set_materias, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_editor_tl!, only: [:index, :new, :edit, :create, :update, :destroy, :laws_hyperlinks]
 
@@ -22,7 +22,38 @@ class LawsController < ApplicationController
     @hyperlinks = @law.law_hyperlinks
     @hyperlinks = @law.law_hyperlinks
     @hyperlinks = @hyperlinks.to_a.sort_by { |hyperlink| hyperlink.article.number.strip.to_i } if @hyperlinks.present?
+
+    # Process law display with chunking support
     get_raw_law
+    
+    # Handle different response formats
+    respond_to do |format|
+      format.html # Standard law display page
+      format.turbo_stream { render_chunk_turbo_stream } # Progressive chunk loading
+    end
+  end
+
+  # AJAX endpoint for loading law chunks progressively
+  # Supports Turbo Stream for seamless infinite scroll
+  def load_chunk
+    # Validate chunk parameter
+    unless params[:page].present? && params[:page].to_i > 0
+      return handle_chunk_error("Invalid page parameter")
+    end
+
+    # Use LawDisplayService for chunked loading
+    result = LawDisplayService.call(@law, user: current_user, params: chunk_params)
+    
+    if result.success?
+      extract_chunk_data(result)
+      
+      respond_to do |format|
+        format.turbo_stream { render_chunk_turbo_stream(result) }
+        format.json { render_chunk_json(result) } # Fallback for non-Turbo clients
+      end
+    else
+      handle_chunk_error(result.error_message)
+    end
   end
 
   # GET /laws/new
@@ -253,5 +284,109 @@ class LawsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def law_params
       params.require(:law).permit(:name, :modifications, :creation_number, :revision_status, :status, :revision_date)
+    end
+
+    # Parameters for chunk loading
+    def chunk_params
+      params.permit(:page, :query, :articles).merge(
+        format: request.format.symbol
+      )
+    end
+
+    # Extract chunk data from service result and set instance variables
+    def extract_chunk_data(result)
+      data = result.data
+      
+      # Set variables needed for chunk rendering
+      @chunk_stream = data[:stream]
+      @chunk_metadata = data[:chunk_metadata]
+      @articles_count = data[:articles_count]
+      @total_articles_count = data[:total_articles_count]
+      @current_page = data.dig(:chunk_metadata, :current_page) || params[:page].to_i
+      @has_more_chunks = data.dig(:chunk_metadata, :has_more_chunks) || false
+      
+      # Set user permissions for chunk access control
+      @user_can_access_law = user_can_access_law(@law, current_user)
+      
+      # Apply law-specific access limitations if needed
+      if !@user_can_access_law && @chunk_stream.respond_to?(:take)
+        @chunk_stream = @chunk_stream.take(5)
+      end
+    end
+
+    # Render Turbo Stream for chunk loading
+    def render_chunk_turbo_stream(result = nil)
+      if result && result.success?
+        # For successful chunk loads, render the chunk content
+        render turbo_stream: [
+          turbo_stream.append("law-content", 
+            partial: "laws/law_chunk", 
+            locals: { 
+              stream: @chunk_stream,
+              chunk_metadata: @chunk_metadata,
+              law: @law
+            }
+          ),
+          turbo_stream.replace("loading-indicator",
+            partial: "laws/loading_state",
+            locals: { 
+              has_more: @has_more_chunks,
+              current_page: @current_page,
+              law: @law
+            }
+          )
+        ]
+      else
+        # For the initial show action, render the initial content
+        render turbo_stream: turbo_stream.replace("law-content",
+          partial: "laws/law_initial_content",
+          locals: {
+            stream: @stream,
+            law: @law,
+            current_page: 1,
+            has_more: @chunk_metadata&.dig(:has_more_chunks) || false
+          }
+        )
+      end
+    end
+
+    # Render JSON response for non-Turbo clients
+    def render_chunk_json(result)
+      data = result.data
+      
+      render json: {
+        success: true,
+        chunk: {
+          stream_html: render_to_string(
+            partial: "laws/law_chunk",
+            locals: { 
+              stream: @chunk_stream,
+              chunk_metadata: @chunk_metadata,
+              law: @law
+            }
+          ),
+          metadata: @chunk_metadata,
+          current_page: @current_page,
+          has_more: @has_more_chunks
+        }
+      }
+    end
+
+    # Handle chunk loading errors
+    def handle_chunk_error(error_message)
+      Rails.logger.error "Chunk loading error: #{error_message}"
+      
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace("loading-indicator",
+            partial: "laws/error_state",
+            locals: { 
+              error: error_message,
+              law: @law
+            }
+          )
+        end
+        format.json { render json: { success: false, error: error_message }, status: :bad_request }
+      end
     end
 end

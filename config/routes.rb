@@ -33,6 +33,8 @@ Rails.application.routes.draw do
     get :laws_hyperlinks, path: 'hyperlinks', on: :collection
     patch :update_hyperlink_status, path: 'update_hyperlink_status' , on: :collection
     post :generate_hyperlinks, path: 'generate_hyperlinks', on: :collection
+    # Turbo Stream endpoint for progressive chunk loading
+    get :load_chunk, path: 'chunk', on: :member
   end
   resources :titles, only: [:edit, :update]
   resources :books, only: [:edit, :update]

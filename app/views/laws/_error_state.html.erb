@@ -1,0 +1,37 @@
+<%# 
+  Error state for chunk loading failures
+  Provides retry functionality and user-friendly error messages
+%>
+<div id="loading-indicator" class="error-container">
+  <div class="alert alert-warning border-0 shadow-sm" role="alert">
+    <div class="d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center">
+        <i class="fas fa-exclamation-triangle text-warning me-3"></i>
+        <div>
+          <div class="fw-bold">Error al cargar el contenido</div>
+          <small class="text-muted">
+            <%= error.present? ? error : "No se pudo cargar más contenido. Por favor, inténtalo de nuevo." %>
+          </small>
+        </div>
+      </div>
+      
+      <div class="ms-3">
+        <button class="btn btn-outline-primary btn-sm" 
+                data-action="click->law-infinite-scroll#retry"
+                data-law-infinite-scroll-target="retryButton">
+          <i class="fas fa-redo me-1"></i>
+          Reintentar
+        </button>
+      </div>
+    </div>
+    
+    <!-- Additional help text -->
+    <div class="mt-2 pt-2 border-top border-light">
+      <small class="text-muted">
+        <i class="fas fa-info-circle me-1"></i>
+        Si el problema persiste, puedes recargar la página o 
+        <a href="mailto:support@todolegal.app" class="text-decoration-none">contactar soporte</a>.
+      </small>
+    </div>
+  </div>
+</div>

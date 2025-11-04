@@ -100,7 +100,9 @@
         <div class="tab-pane fade show active" id="articulos" role="tabpanel" aria-labelledby="articulos-tab">
           <div class="law-header-mobile"><%= render 'law_header' %></div>
           <span class="resultinfo sticky-top d-inline-block text-truncate" style="width: 100%;" id="sticky_nav_header"></span>
-          <%= render  partial:'content', locals:{is_mobile: false} %>
+          
+          <!-- Keep existing DOM structure for CSS/JS compatibility -->
+          <%= render partial:'content', locals:{is_mobile: false} %>
         </div>
         <div class="tab-pane fade show" id="indice" role="tabpanel" aria-labelledby="indice-tab">
           <%= render 'indice' %>

@@ -121,6 +121,10 @@ class ApplicationController < ActionController::Base
     @result_index_items = display_data[:result_index_items]
     @go_to_article = display_data[:go_to_article]
     
+    # Add chunk metadata for Turbo integration
+    @chunk_metadata = display_data[:chunk_metadata]
+    @total_articles_count = display_data[:total_articles_count]
+    
     # Set user permissions using existing helper methods
     @user_can_edit_law = current_user_is_editor_tl
     @user_can_access_law = user_can_access_law(@law, current_user)

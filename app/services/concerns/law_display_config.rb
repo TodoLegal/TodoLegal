@@ -13,8 +13,8 @@ module LawDisplayConfig
   # Chunk sizes for different scenarios
   CHUNK_SIZES = {
     search: 100,        # Smaller chunks for search results (faster initial load)
-    normal: 200,        # Standard chunk size for regular law browsing
-    mobile: 50          # Smaller chunks for mobile devices
+    normal: 300,        # Standard chunk size for regular law browsing
+    mobile: 100         # Smaller chunks for mobile devices
   }.freeze
 
   # User access limits based on subscription status

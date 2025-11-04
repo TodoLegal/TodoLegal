@@ -1,13 +1,16 @@
 <%# 
   Loading state indicator for progressive chunk loading
   Shows loading spinner and manages "load more" state
+  Compatible with law-infinite-scroll Stimulus controller
 %>
 <div id="loading-indicator" class="loading-container">
   <% if has_more %>
     <div class="loading-trigger" 
          data-law-infinite-scroll-target="loading"
          data-current-page="<%= current_page %>"
-         data-law-id="<%= law.id %>">
+         data-law-id="<%= law.id %>"
+         data-has-more="<%= has_more %>"
+         style="min-height: 60px;">
       
       <div class="d-flex justify-content-center align-items-center p-4">
         <div class="spinner-border spinner-border-sm text-primary me-2" role="status" style="display: none;">
@@ -17,7 +20,7 @@
         <div class="loading-text">
           <span class="load-more-text">Cargando más artículos...</span>
           <small class="text-muted d-block">
-            Página <%= current_page %> cargada
+            Página <%= current_page %> cargada (<%= current_page * 200 %> artículos)
           </small>
         </div>
       </div>
@@ -38,9 +41,6 @@
         <i class="fas fa-check-circle me-2"></i>
         <span>Has llegado al final del documento</span>
       </div>
-      <small class="text-muted d-block mt-1">
-        Total de artículos mostrados: <%= current_page * 200 %>
-      </small>
     </div>
   <% end %>
 </div>

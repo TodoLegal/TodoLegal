@@ -319,7 +319,7 @@ class LawsController < ApplicationController
       if result && result.success?
         # For successful chunk loads, render the chunk content
         render turbo_stream: [
-          turbo_stream.append("law-content", 
+          turbo_stream.append("law-stream-content", 
             partial: "laws/law_chunk", 
             locals: { 
               stream: @chunk_stream,

@@ -257,19 +257,37 @@ class LawDisplayService < ApplicationService
     }
   end
 
-  # Load law components with chunked articles (mixed approach)
-  # Structure components (books, titles, etc.) are always loaded for navigation
-  # Articles are loaded in chunks for performance
-  # @return [Hash] Hash of component arrays with chunked articles
+  # Load law components with chunked loading support
+  # Uses mixed approach: all structure + chunked articles for efficient progressive loading
+  # @return [Hash] Hash of component arrays
   def load_chunked_law_components
-    # Load articles in chunks first to determine position range
+    # Get paginated articles for current chunk
     articles = load_chunked_articles
     
-    if articles.any?
-      # Filter structure components to only include those within the article range
-      # This ensures proper interleaving without breaking the algorithm
-      max_position = articles.last.position
+    return empty_components_hash(articles) unless articles.any?
+    
+    # Calculate position range for this chunk
+    min_position = articles.first.position
+    max_position = articles.last.position
+    
+    # For subsequent chunks (page > 1), only return NEW structure elements within this range
+    if chunked_request? && @page > 1
+      # Calculate the position range of previously loaded articles
+      previous_articles_count = (@page - 1) * @chunk_size
+      previous_max_position = @law.articles.order(:position).limit(previous_articles_count).last&.position || 0
       
+      # Return only structure elements that appear after the previous chunks
+      # but within the current chunk's article range
+      {
+        books: @law.books.where('position > ? AND position <= ?', previous_max_position, max_position).order(:position),
+        titles: @law.titles.where('position > ? AND position <= ?', previous_max_position, max_position).order(:position),
+        chapters: @law.chapters.where('position > ? AND position <= ?', previous_max_position, max_position).order(:position),
+        sections: @law.sections.where('position > ? AND position <= ?', previous_max_position, max_position).order(:position),
+        subsections: @law.subsections.where('position > ? AND position <= ?', previous_max_position, max_position).order(:position),
+        articles: articles
+      }
+    else
+      # For first page, include all structure components within the article range
       {
         books: @law.books.where('position <= ?', max_position).order(:position),
         titles: @law.titles.where('position <= ?', max_position).order(:position),
@@ -278,17 +296,21 @@ class LawDisplayService < ApplicationService
         subsections: @law.subsections.where('position <= ?', max_position).order(:position),
         articles: articles
       }
-    else
-      # No articles in chunk, return empty structure
-      {
-        books: @law.books.none,
-        titles: @law.titles.none,
-        chapters: @law.chapters.none,
-        sections: @law.sections.none,
-        subsections: @law.subsections.none,
-        articles: articles
-      }
     end
+  end
+
+  # Helper method to return empty components structure
+  # @param articles [ActiveRecord::Relation] Articles for this chunk
+  # @return [Hash] Empty components hash
+  def empty_components_hash(articles)
+    {
+      books: @law.books.none,
+      titles: @law.titles.none,
+      chapters: @law.chapters.none,
+      sections: @law.sections.none,
+      subsections: @law.subsections.none,
+      articles: articles
+    }
   end
 
   # Load articles for the current chunk/page

@@ -196,6 +196,9 @@ class LawDisplayService < ApplicationService
     
     # Add chunk metadata if present (for chunked requests)
     display_data[:chunk_metadata] = stream_result[:chunk_metadata] if stream_result[:chunk_metadata]
+    
+    # Add complete structure components for index (available on first chunk)
+    display_data[:all_structure_components] = stream_result[:all_structure_components] if stream_result[:all_structure_components]
   end
 
   # Build the law stream with all components (books, titles, chapters, etc.)
@@ -220,22 +223,28 @@ class LawDisplayService < ApplicationService
   # @param go_to_position [Integer, nil] Position to scroll to
   # @return [Hash] Stream data with components and chunk metadata
   def build_chunked_law_stream(go_to_position = nil)
-    # Load components with chunking support (mixed approach)
-    components = load_chunked_law_components
-    chunk_metadata = calculate_chunk_metadata(components[:articles])
+    # Load components with chunking support (new approach)
+    display_components = load_chunked_law_components
+    chunk_metadata = calculate_chunk_metadata(display_components[:articles])
     
-    # Build the interleaved stream
+    # Build the interleaved stream for display
     stream_builder = LawStreamBuilder.new(
       law: @law,
-      components: components,
+      components: display_components,
       go_to_position: go_to_position
     )
     
     result = stream_builder.build
     
+    # Add complete structure for index (only on first chunk)
+    if @page == 1
+      all_structure = load_all_structure_components
+      result[:all_structure_components] = all_structure
+    end
+    
     # Add chunk-specific metadata
     result.merge!(
-      displayed_articles_count: components[:articles].size,
+      displayed_articles_count: display_components[:articles].size,
       chunk_metadata: chunk_metadata,
       current_page: @page,
       chunk_size: @chunk_size
@@ -258,45 +267,20 @@ class LawDisplayService < ApplicationService
   end
 
   # Load law components with chunked loading support
-  # Uses mixed approach: all structure + chunked articles for efficient progressive loading
+  # New approach: Load ALL structure + filter for display based on current articles
   # @return [Hash] Hash of component arrays
   def load_chunked_law_components
-    # Get paginated articles for current chunk
+    # 1. Load ALL structure components once (fast, cacheable)
+    all_structure = load_all_structure_components
+    
+    # 2. Load only chunked articles
     articles = load_chunked_articles
     
-    return empty_components_hash(articles) unless articles.any?
+    # 3. Filter structure for display based on current articles
+    display_structure = filter_structure_for_display(all_structure, articles)
     
-    # Calculate position range for this chunk
-    min_position = articles.first.position
-    max_position = articles.last.position
-    
-    # For subsequent chunks (page > 1), only return NEW structure elements within this range
-    if chunked_request? && @page > 1
-      # Calculate the position range of previously loaded articles
-      previous_articles_count = (@page - 1) * @chunk_size
-      previous_max_position = @law.articles.order(:position).limit(previous_articles_count).last&.position || 0
-      
-      # Return only structure elements that appear after the previous chunks
-      # but within the current chunk's article range
-      {
-        books: @law.books.where('position > ? AND position <= ?', previous_max_position, max_position).order(:position),
-        titles: @law.titles.where('position > ? AND position <= ?', previous_max_position, max_position).order(:position),
-        chapters: @law.chapters.where('position > ? AND position <= ?', previous_max_position, max_position).order(:position),
-        sections: @law.sections.where('position > ? AND position <= ?', previous_max_position, max_position).order(:position),
-        subsections: @law.subsections.where('position > ? AND position <= ?', previous_max_position, max_position).order(:position),
-        articles: articles
-      }
-    else
-      # For first page, include all structure components within the article range
-      {
-        books: @law.books.where('position <= ?', max_position).order(:position),
-        titles: @law.titles.where('position <= ?', max_position).order(:position),
-        chapters: @law.chapters.where('position <= ?', max_position).order(:position),
-        sections: @law.sections.where('position <= ?', max_position).order(:position),
-        subsections: @law.subsections.where('position <= ?', max_position).order(:position),
-        articles: articles
-      }
-    end
+    # 4. Return filtered structure + articles
+    display_structure.merge(articles: articles)
   end
 
   # Helper method to return empty components structure
@@ -403,6 +387,62 @@ class LawDisplayService < ApplicationService
   end
 
   private
+
+  # Load all structure components once - fast and cacheable
+  # @return [Hash] Hash of all structure component arrays
+  def load_all_structure_components
+    {
+      books: @law.books.order(:position),
+      titles: @law.titles.order(:position),
+      chapters: @law.chapters.order(:position),
+      sections: @law.sections.order(:position),
+      subsections: @law.subsections.order(:position)
+    }
+  end
+
+  # Filter structure components for display based on current articles
+  # Chunk-aware filtering: returns only NEW structure for subsequent chunks
+  # @param all_structure [Hash] Complete structure components
+  # @param articles [ActiveRecord::Relation] Current chunk articles
+  # @return [Hash] Filtered structure components
+  def filter_structure_for_display(all_structure, articles)
+    return empty_structure_components if articles.empty?
+    
+    min_position = articles.first.position
+    max_position = articles.last.position
+    
+    if @page == 1
+      # First page: return all structure up to max_position (cumulative)
+      {
+        books: all_structure[:books].select { |b| b.position <= max_position },
+        titles: all_structure[:titles].select { |t| t.position <= max_position },
+        chapters: all_structure[:chapters].select { |c| c.position <= max_position },
+        sections: all_structure[:sections].select { |s| s.position <= max_position },
+        subsections: all_structure[:subsections].select { |ss| ss.position <= max_position }
+      }
+    else
+      # Subsequent pages: return ONLY NEW structure within this chunk's range
+      {
+        books: all_structure[:books].select { |b| b.position >= min_position && b.position <= max_position },
+        titles: all_structure[:titles].select { |t| t.position >= min_position && t.position <= max_position },
+        chapters: all_structure[:chapters].select { |c| c.position >= min_position && c.position <= max_position },
+        sections: all_structure[:sections].select { |s| s.position >= min_position && s.position <= max_position },
+        subsections: all_structure[:subsections].select { |ss| ss.position >= min_position && ss.position <= max_position }
+      }
+    end
+  end
+
+  # Helper method to return empty structure components
+  # @return [Hash] Empty structure hash
+  def empty_structure_components
+    {
+      books: [],
+      titles: [],
+      chapters: [],
+      sections: [],
+      subsections: []
+    }
+  end
 
 
 end

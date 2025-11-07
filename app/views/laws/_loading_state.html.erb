@@ -12,16 +12,16 @@
          data-has-more="<%= has_more %>"
          style="min-height: 60px;">
       
-      <div class="d-flex justify-content-center align-items-center p-4">
-        <div class="spinner-border spinner-border-sm text-primary me-2" role="status" style="display: none;">
-          <span class="visually-hidden">Cargando...</span>
+      <div class="d-flex flex-column justify-content-center align-items-center p-4">
+        <div class="law-loading-spinner" style="display: none;">
+          <div class="container-loader"> 
+            <div class="loader"></div>
+            <span class="sr-only">Loading...</span>
+          </div>
         </div>
         
         <div class="loading-text">
           <span class="load-more-text">Cargando más artículos...</span>
-          <small class="text-muted d-block">
-            Página <%= current_page %> cargada (<%= current_page * 200 %> artículos)
-          </small>
         </div>
       </div>
       

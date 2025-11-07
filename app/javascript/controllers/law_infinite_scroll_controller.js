@@ -150,6 +150,9 @@ export default class extends Controller {
       this.currentPageValue = nextPage
       this.retryCount = 0
       
+      // Re-setup observer for the new loading trigger element
+      this.reattachObserver()
+      
       console.log(`✅ Successfully loaded chunk ${nextPage}`)
       
     } catch (error) {
@@ -159,6 +162,48 @@ export default class extends Controller {
       this.loading = false
       this.hideLoadingState()
     }
+  }
+
+  // Re-attach intersection observer to new loading element after DOM update
+  reattachObserver() {
+    // Small delay to ensure DOM is fully updated by Turbo
+    setTimeout(() => {
+      if (this.hasMoreChunksValue && this.hasLoadingTarget) {
+        // Disconnect existing observer
+        if (this.observer) {
+          this.observer.disconnect()
+        }
+        
+        // Find the new loading trigger
+        const newLoadingTrigger = this.loadingTarget
+        
+        if (newLoadingTrigger) {
+          // Re-create and attach observer
+          const options = {
+            root: null,
+            rootMargin: '200px 0px',
+            threshold: 0.1
+          }
+
+          this.observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting && !this.loading && this.hasMoreChunksValue) {
+                console.log("👁️ New loading trigger visible, loading next chunk...")
+                this.loadNextChunk()
+              }
+            })
+          }, options)
+
+          this.observer.observe(newLoadingTrigger)
+          console.log("🔄 Observer re-attached to new loading trigger")
+        } else {
+          console.warn("⚠️ New loading trigger not found after DOM update")
+          this.showFallbackButton()
+        }
+      } else {
+        console.log("🏁 No more chunks or loading target not available")
+      }
+    }, 150) // Small delay for DOM update
   }
 
   // Manual retry action (triggered by retry button)
@@ -189,11 +234,11 @@ export default class extends Controller {
 
   // Show loading spinner and text
   showLoadingState() {
-    const spinner = document.querySelector('.spinner-border')
+    const spinner = document.querySelector('.law-loading-spinner')
     const loadMoreText = document.querySelector('.load-more-text')
     
     if (spinner) {
-      spinner.style.display = 'inline-block'
+      spinner.style.display = 'block'
     }
     
     if (loadMoreText) {
@@ -206,7 +251,7 @@ export default class extends Controller {
 
   // Hide loading spinner
   hideLoadingState() {
-    const spinner = document.querySelector('.spinner-border')
+    const spinner = document.querySelector('.law-loading-spinner')
     
     if (spinner) {
       spinner.style.display = 'none'

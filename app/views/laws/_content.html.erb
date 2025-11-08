@@ -42,6 +42,7 @@
      data-law-infinite-scroll-current-page-value="<%= (@chunk_metadata&.dig(:current_page) || 1) %>"
      data-law-infinite-scroll-has-more-chunks-value="<%= (@chunk_metadata&.dig(:has_more_chunks) || false) %>"
      data-law-infinite-scroll-chunk-url-value="<%= load_chunk_law_path(@law) %>">
+  <%# Phase 1 (Progressive Structure v2): Stable structure/article identifiers applied. %>
 
   <% if @articles_count == 0 %>
     <div class="container--empty-results">
@@ -57,11 +58,11 @@
   
   <!-- Main content area -->
   <div id="law-stream-content">
-    <% article_iterator = 0 %>
-    <% bigger_section_iterator = 0 %>
+  <%# Phase 1 (Progressive Structure v2): Replace ephemeral iterators with stable, position-based IDs %>
+  <% article_iterator = 0 %>
     <% @stream.each do |stream| %>
       <% if stream.instance_of? Book %>
-        <div class="bigger-section" id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
+        <div class="bigger-section" id="bs_book_<%= stream.position %>" data-structure-type="book" data-structure-position="<%= stream.position %>" data-last-article-index="<%= article_iterator - 1 %>" data-next-article-index="<%= article_iterator %>">
           <h2 id="book_<%= stream.position %>">
             Libro <%= stream.number %>
             <% if @user_can_edit_law && is_editor_mode_enabled %>
@@ -70,10 +71,9 @@
           </h2>
           <h3><%= stream.name %></h3>
         </div>
-        <% bigger_section_iterator += 1 %>
       <% end %>
       <% if stream.instance_of? Title %>
-        <div class="bigger-section" id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
+        <div class="bigger-section" id="bs_title_<%= stream.position %>" data-structure-type="title" data-structure-position="<%= stream.position %>" data-last-article-index="<%= article_iterator - 1 %>" data-next-article-index="<%= article_iterator %>">
           <h2 class="title" id="title_<%= stream.position %>">
             Título <%= stream.number %>
             <% if @user_can_edit_law && is_editor_mode_enabled %>
@@ -82,10 +82,9 @@
           </h2>
           <h3 class="title-name"><%= stream.name %></h3>
         </div>
-        <% bigger_section_iterator += 1 %>
       <% end %>
       <% if stream.instance_of? Chapter %>
-        <div class="bigger-section" id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
+        <div class="bigger-section" id="bs_chapter_<%= stream.position %>" data-structure-type="chapter" data-structure-position="<%= stream.position %>" data-last-article-index="<%= article_iterator - 1 %>" data-next-article-index="<%= article_iterator %>">
           <h3 class="chapter" id="chapter_<%= stream.position %>">
             Capítulo <%= stream.number %>
             <% if @user_can_edit_law && is_editor_mode_enabled %>
@@ -94,10 +93,9 @@
           </h3>
           <h4 class="chapter-name" ><%= stream.name %></h4>
         </div>
-        <% bigger_section_iterator += 1 %>
       <% end %>
       <% if stream.instance_of? Section %>
-        <div class="bigger-section" id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
+        <div class="bigger-section" id="bs_section_<%= stream.position %>" data-structure-type="section" data-structure-position="<%= stream.position %>" data-last-article-index="<%= article_iterator - 1 %>" data-next-article-index="<%= article_iterator %>">
           <h4 class="section" id="section_<%= stream.position %>">
             Sección <%= stream.number %>
             <% if @user_can_edit_law && is_editor_mode_enabled %>
@@ -106,10 +104,9 @@
           </h4>
           <h5 class="section-name"><%= stream.name %></h5>
         </div>
-        <% bigger_section_iterator += 1 %>
       <% end %>
       <% if stream.instance_of? Subsection %>
-        <div class="bigger-section" id="bigger_section_<%= bigger_section_iterator %>" last_article="<%= article_iterator - 1 %>" next_article="<%= article_iterator %>">
+        <div class="bigger-section" id="bs_subsection_<%= stream.position %>" data-structure-type="subsection" data-structure-position="<%= stream.position %>" data-last-article-index="<%= article_iterator - 1 %>" data-next-article-index="<%= article_iterator %>">
           <h5 class="subsection" id="subsection_<%= stream.position %>">
             <%= stream.number %>
             <% if @user_can_edit_law && is_editor_mode_enabled %>
@@ -118,7 +115,6 @@
           </h5>
           <h5 class="subsection-name"><%= stream.name %></h5>
         </div>
-        <% bigger_section_iterator += 1 %>
       <% end %>
       <% if stream.instance_of? Article %>
         <% if is_mobile == false %>
@@ -126,7 +122,7 @@
         <% end %>
         <!-- highlited search for serch results preview in mobile version -->
         <% if is_mobile %>
-          <div style="color: #444; padding: 10px" onclick="onClickArticle(<%= article_iterator %>)" class="article" article_id="<%= article_iterator %>" last_bigger_section="<%= bigger_section_iterator - 1 %>" next_bigger_section="<%= bigger_section_iterator %>" id="article_count_<%= article_iterator %>">
+          <div style="color: #444; padding: 10px" onclick="onClickArticle(<%= article_iterator %>)" class="article" data-article-global-index="<%= article_iterator %>" data-last-structure-wrapper-index="N/A" id="article_idx_<%= article_iterator %>" data-article-position="<%= stream.position %>">
             <a class="uncolored_link articles-preview" id="link_article_count_<%= article_iterator %>" href="<%= law_path(@law) + '?query=/'+@query+"/"+(stream.number.lstrip)%>"  aria-controls="articulos" aria-selected="true">
             <h6 class="article-name" style="color: #111;font-weight:bold; display: block;">Artículo <%= stream.number %><br>
               <% if @user_can_edit_law && is_editor_mode_enabled %>
@@ -144,7 +140,7 @@
             <% end %>
           </div>
         <% else %>
-          <div align="justify" onclick="onClickArticle(<%= article_iterator %>)" class="article-p" article_id="<%= article_iterator %>" last_bigger_section="<%= bigger_section_iterator - 1 %>" next_bigger_section="<%= bigger_section_iterator %>" id="article_count_<%= article_iterator %>">
+          <div align="justify" onclick="onClickArticle(<%= article_iterator %>)" class="article-p" data-article-global-index="<%= article_iterator %>" id="article_idx_<%= article_iterator %>" data-article-position="<%= stream.position %>">
             <b class="article-name" align="justify" style="color: #111;font-weight:bold; display: block;">Artículo <%= stream.number %><br>
               <% if @user_can_edit_law && is_editor_mode_enabled %>
                 <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_law_path(stream.law, article_number: stream.number ) %>

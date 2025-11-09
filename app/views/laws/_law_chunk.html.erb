@@ -1,84 +1,76 @@
-<%# 
+<!--
   Partial for rendering a single chunk of law content
   Used by Turbo Stream for progressive loading
   Matches EXACTLY the structure from _content.html.erb for CSS compatibility
-%>
+-->
 <% if stream.present? %>
-  <%# Phase 1 (Progressive Structure v2): Stable structure/article identifiers applied in incremental chunks. %>
-  <%# Phase 1 (Progressive Structure v2): Stable identifiers & corrected iterator math %>
+  <!-- Phase 1 (Progressive Structure v2): Cleaned & unified chunk rendering -->
   <% article_iterator = ((chunk_metadata&.dig(:current_page) || 1) - 1) * (chunk_metadata&.dig(:chunk_size) || 200) %>
-  
-  <% stream.each do |stream| %>
-    <% if stream.instance_of? Book %>
-      <div class="bigger-section" id="bs_book_<%= stream.position %>" data-structure-type="book" data-structure-position="<%= stream.position %>" data-last-article-index="<%= article_iterator - 1 %>" data-next-article-index="<%= article_iterator %>">
-        <h2 id="book_<%= stream.position %>">
-          Libro <%= stream.number %>
+
+  <% stream.each do |component| %>
+    <% case component %>
+    <% when Book %>
+      <div class="bigger-section" id="bs_book_<%= component.position %>" data-structure-type="book" data-structure-position="<%= component.position %>" data-last-article-index="<%= article_iterator - 1 %>" data-next-article-index="<%= article_iterator %>">
+        <h2 id="book_<%= component.position %>">
+          Libro <%= component.number %>
           <% if @user_can_edit_law && defined?(is_editor_mode_enabled) && is_editor_mode_enabled %>
-            <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_book_path(stream) %>
+            <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_book_path(component) %>
           <% end %>
         </h2>
-        <h3><%= stream.name %></h3>
+        <h3><%= component.name %></h3>
       </div>
-    <% end %>
-    <% if stream.instance_of? Title %>
-      <div class="bigger-section" id="bs_title_<%= stream.position %>" data-structure-type="title" data-structure-position="<%= stream.position %>" data-last-article-index="<%= article_iterator - 1 %>" data-next-article-index="<%= article_iterator %>">
-        <h2 class="title" id="title_<%= stream.position %>">
-          Título <%= stream.number %>
+    <% when Title %>
+      <div class="bigger-section" id="bs_title_<%= component.position %>" data-structure-type="title" data-structure-position="<%= component.position %>" data-last-article-index="<%= article_iterator - 1 %>" data-next-article-index="<%= article_iterator %>">
+        <h2 class="title" id="title_<%= component.position %>">
+          Título <%= component.number %>
           <% if @user_can_edit_law && defined?(is_editor_mode_enabled) && is_editor_mode_enabled %>
-            <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_title_path(stream) %>
+            <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_title_path(component) %>
           <% end %>
         </h2>
-        <h3 class="title-name"><%= stream.name %></h3>
+        <h3 class="title-name"><%= component.name %></h3>
       </div>
-    <% end %>
-    <% if stream.instance_of? Chapter %>
-      <div class="bigger-section" id="bs_chapter_<%= stream.position %>" data-structure-type="chapter" data-structure-position="<%= stream.position %>" data-last-article-index="<%= article_iterator - 1 %>" data-next-article-index="<%= article_iterator %>">
-        <h3 class="chapter" id="chapter_<%= stream.position %>">
-          Capítulo <%= stream.number %>
+    <% when Chapter %>
+      <div class="bigger-section" id="bs_chapter_<%= component.position %>" data-structure-type="chapter" data-structure-position="<%= component.position %>" data-last-article-index="<%= article_iterator - 1 %>" data-next-article-index="<%= article_iterator %>">
+        <h3 class="chapter" id="chapter_<%= component.position %>">
+          Capítulo <%= component.number %>
           <% if @user_can_edit_law && defined?(is_editor_mode_enabled) && is_editor_mode_enabled %>
-            <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_chapter_path(stream) %>
+            <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_chapter_path(component) %>
           <% end %>
         </h3>
-        <h3 class="chapter-name"><%= stream.name %></h3>
+        <h4 class="chapter-name"><%= component.name %></h4>
       </div>
-    <% end %>
-    <% if stream.instance_of? Section %>
-      <div class="bigger-section" id="bs_section_<%= stream.position %>" data-structure-type="section" data-structure-position="<%= stream.position %>" data-last-article-index="<%= article_iterator - 1 %>" data-next-article-index="<%= article_iterator %>">
-        <h4 class="section" id="section_<%= stream.position %>">
-          Sección <%= stream.number %>
+    <% when Section %>
+      <div class="bigger-section" id="bs_section_<%= component.position %>" data-structure-type="section" data-structure-position="<%= component.position %>" data-last-article-index="<%= article_iterator - 1 %>" data-next-article-index="<%= article_iterator %>">
+        <h4 class="section" id="section_<%= component.position %>">
+          Sección <%= component.number %>
           <% if @user_can_edit_law && defined?(is_editor_mode_enabled) && is_editor_mode_enabled %>
-            <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_section_path(stream) %>
+            <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_section_path(component) %>
           <% end %>
         </h4>
-        <h4 class="section-name"><%= stream.name %></h4>
+        <h5 class="section-name"><%= component.name %></h5>
       </div>
-    <% end %>
-    <% if stream.instance_of? Subsection %>
-      <div class="bigger-section" id="bs_subsection_<%= stream.position %>" data-structure-type="subsection" data-structure-position="<%= stream.position %>" data-last-article-index="<%= article_iterator - 1 %>" data-next-article-index="<%= article_iterator %>">
-        <h5 class="subsection" id="subsection_<%= stream.position %>">
-          Subsección <%= stream.number %>
+    <% when Subsection %>
+      <div class="bigger-section" id="bs_subsection_<%= component.position %>" data-structure-type="subsection" data-structure-position="<%= component.position %>" data-last-article-index="<%= article_iterator - 1 %>" data-next-article-index="<%= article_iterator %>">
+        <h5 class="subsection" id="subsection_<%= component.position %>">
+          <%= component.number %>
           <% if @user_can_edit_law && defined?(is_editor_mode_enabled) && is_editor_mode_enabled %>
-            <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_subsection_path(stream) %>
+            <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_subsection_path(component) %>
           <% end %>
         </h5>
-        <h5 class="subsection-name"><%= stream.name %></h5>
+        <h5 class="subsection-name"><%= component.name %></h5>
       </div>
-    <% end %>
-    <% if stream.instance_of? Article %>
-      <div id="article_wrapper_<%= stream.position %>" data-article-global-index="<%= article_iterator %>" data-article-position="<%= stream.position %>">
-        <div class="article-p" id="article_<%= stream.position %>" style="padding: .5rem 1.5rem" data-article-position="<%= stream.position %>">
-          <b>
-            Artículo <%= stream.number %>
-            <% if @user_can_edit_law && defined?(is_editor_mode_enabled) && is_editor_mode_enabled %>
-              <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_law_path(stream.law, article_number: stream.number ) %>
-            <% end %>
-          </b>
-          <% if @highlight_enabled %>
-            <%= stream.pg_search_highlight.gsub(/<(?!\/?b(?=>|\s.*>))\/?.*?>/, '').html_safe %>.
-          <% else %>
-            <%= stream.class.markdown.render(stream.body).html_safe %>
+    <% when Article %>
+      <div align="justify" class="article-p" id="article_idx_<%= article_iterator %>" data-article-global-index="<%= article_iterator %>" data-article-position="<%= component.position %>" onclick="onClickArticle(<%= article_iterator %>)">
+        <b class="article-name" align="justify" style="color: #111;font-weight:bold; display: block;">Artículo <%= component.number %><br>
+          <% if @user_can_edit_law && defined?(is_editor_mode_enabled) && is_editor_mode_enabled %>
+            <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_law_path(component.law, article_number: component.number ) %>
           <% end %>
-        </div>
+        </b>
+        <% if @highlight_enabled %>
+          <%= component.pg_search_highlight.gsub(/<(?!\/??b(?=>|\s.*>))\/??.*?>/, '').html_safe %>.
+        <% else %>
+          <%= component.class.markdown.render(component.body).html_safe %>
+        <% end %>
       </div>
       <% article_iterator += 1 %>
     <% end %>

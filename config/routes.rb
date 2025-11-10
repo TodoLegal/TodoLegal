@@ -35,6 +35,8 @@ Rails.application.routes.draw do
     post :generate_hyperlinks, path: 'generate_hyperlinks', on: :collection
     # Turbo Stream endpoint for progressive chunk loading
     get :load_chunk, path: 'chunk', on: :member
+    # Phase 2 manifest endpoint (JSON) for hierarchical/navigation data
+    get :manifest, on: :member
   end
   resources :titles, only: [:edit, :update]
   resources :books, only: [:edit, :update]

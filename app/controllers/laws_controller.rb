@@ -1,6 +1,7 @@
 class LawsController < ApplicationController
   layout 'law', only: [:show, :new, :edit]
-  before_action :set_law, only: [:show, :edit, :update, :destroy, :insert_article, :load_chunk]
+  before_action :set_law, only: [:show, :edit, :update, :destroy, :insert_article, :load_chunk, :manifest]
+  before_action :set_manifest_subset, only: [:show]
   before_action :set_materias, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_editor_tl!, only: [:index, :new, :edit, :create, :update, :destroy, :laws_hyperlinks]
 
@@ -17,12 +18,22 @@ class LawsController < ApplicationController
     # if params[:id] != @law.friendly_url
     #   redirect_to "/?error=Invalid+law+name"
     # end
-    @show_mercantil_related_podcast = LawTag.find_by(law: @law, tag: Tag.find_by_name("Mercantil")) != nil
-    @show_laboral_related_podcast = LawTag.find_by(law: @law, tag: Tag.find_by_name("Laboral")) != nil
-    @hyperlinks = @law.law_hyperlinks
-    @hyperlinks = @law.law_hyperlinks
-    @hyperlinks = @hyperlinks.to_a.sort_by { |hyperlink| hyperlink.article.number.strip.to_i } if @hyperlinks.present?
-
+    # Phase 2 optimization: single query for required podcast tags.
+    # Avoid multiple Tag.find_by_name + LawTag lookups (previously 4 queries).
+    # Eager pattern: fetch tag ids by name, then one LawTag query.
+    tag_names = %w[Mercantil Laboral]
+    tag_id_map = Tag.where(name: tag_names).pluck(:name, :id).to_h
+    if tag_id_map.empty?
+      @show_mercantil_related_podcast = false
+      @show_laboral_related_podcast = false
+    else
+      law_tag_ids = LawTag.where(law_id: @law.id, tag_id: tag_id_map.values).pluck(:tag_id)
+      @show_mercantil_related_podcast = law_tag_ids.include?(tag_id_map['Mercantil'])
+      @show_laboral_related_podcast   = law_tag_ids.include?(tag_id_map['Laboral'])
+    end
+    @hyperlinks = []
+    @hyperlinks = @law.law_hyperlinks.to_a.sort_by { |hyperlink| hyperlink.article.number.strip.to_i } if @law.law_hyperlinks.present?
+  
     # Process law display with chunking support
     get_raw_law
     
@@ -54,6 +65,21 @@ class LawsController < ApplicationController
     else
       handle_chunk_error(result.error_message)
     end
+  end
+
+  # GET /laws/:id/manifest
+  # Phase 2: Provides hierarchical + article index data for client-side navigation and prefetching.
+  # Caching strategy: cache per law version (updated_at) to avoid rebuild on every request.
+  def manifest
+    return render json: { error: 'Only JSON supported for manifest' }, status: :not_acceptable unless request.format.json?
+
+    manifest = Laws::ManifestCache.full(@law) # Delegated build + cache logic
+
+    # Rails freshness helper sets ETag + Last-Modified and handles 304 responses.
+    fresh_when(etag: [manifest[:law_id], manifest[:version]], last_modified: @law.updated_at, public: true)
+
+    # If response not already committed (i.e., not a 304), render JSON body.
+    render json: manifest if response.body.blank?
   end
 
   # GET /laws/new
@@ -260,6 +286,16 @@ class LawsController < ApplicationController
       @law = Law.find(params[:id])
     end
 
+    # Phase 2: prepare lightweight manifest subset (structure + chunking + version) for initial HTML render.
+    # Keeps view free of heavy logic and enables early client-side navigation setup.
+    def set_manifest_subset
+      return unless @law
+      @manifest_subset = Laws::ManifestCache.inline_subset(@law)
+    rescue => e
+      Rails.logger.error("Manifest inline subset failed for law #{@law&.id}: #{e.class}: #{e.message}")
+      @manifest_subset = nil
+    end
+
     def set_materias
       @law_materias = []
       materia_tag_type = TagType.find_by_name("materia")
@@ -352,8 +388,6 @@ class LawsController < ApplicationController
 
     # Render JSON response for non-Turbo clients
     def render_chunk_json(result)
-      data = result.data
-      
       render json: {
         success: true,
         chunk: {

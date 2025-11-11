@@ -154,6 +154,16 @@ export default class extends Controller {
       this.reattachObserver()
       
       console.log(`✅ Successfully loaded chunk ${nextPage}`)
+      // Dispatch custom events for other controllers (e.g., jump navigation) to track loaded pages
+      try {
+        const detail = { page: nextPage }
+        // Scoped event on element for local listeners
+        this.element.dispatchEvent(new CustomEvent('law:chunkLoaded', { detail }))
+        // Global event on document for decoupled listeners
+        document.dispatchEvent(new CustomEvent('law:chunkLoaded', { detail }))
+      } catch (e) {
+        console.warn('⚠️ Failed dispatching law:chunkLoaded event', e)
+      }
       
     } catch (error) {
       console.error('❌ Error loading chunk:', error)

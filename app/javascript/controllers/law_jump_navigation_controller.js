@@ -78,97 +78,80 @@ export default class extends Controller {
   }
 
   // Unified performJump using descriptor pattern
-  performJump(descriptor) {
+  async performJump(descriptor) {
     this.beginJump()
-    if (window.MANIFEST_DEBUG) console.debug('[law-jump-navigation] performJump', descriptor)
-    if (descriptor.kind === 'container') {
-      const { type, position } = descriptor
-      const headingId = `${type}_${position}`
-      const headingEl = document.getElementById(headingId)
-      if (headingEl) {
-        this.ensureArticlesTabActive().then(() => {
-          if (window.MANIFEST_DEBUG) console.debug('[law-jump-navigation] scrolling to existing container heading', headingId)
-          headingEl.scrollIntoView({ block: 'start' })
-          try { history.replaceState(null, '', `#${headingId}`) } catch(_) {}
-          this.pulseHighlight(headingEl)
-          this.finishJump(headingEl)
-        })
+    try {
+      if (window.MANIFEST_DEBUG) console.debug('[law-jump-navigation] performJump', descriptor)
+      if (descriptor.kind === 'container') {
+        const { type, position } = descriptor
+        const headingId = `${type}_${position}`
+        let headingEl = document.getElementById(headingId)
+        if (!headingEl) {
+          // Need chunk: compute from subset
+          const firstIdx = ManifestLoader.getFirstArticleIndexForContainer(type, position)
+          if (firstIdx == null) throw new Error('Rango no disponible')
+          const page = ManifestLoader.computeChunkPageForIndex(firstIdx)
+          await this.loadChunkIfNeeded(page)
+          headingEl = document.getElementById(headingId)
+          if (!headingEl) throw new Error('Encabezado no encontrado tras cargar chunk')
+        }
+        await this.ensureArticlesTabActive()
+        if (window.MANIFEST_DEBUG) console.debug('[law-jump-navigation] scrolling to container heading', headingId)
+        headingEl.scrollIntoView({ block: 'start' })
+        try { history.replaceState(null, '', `#${headingId}`) } catch(_) {}
+        this.pulseHighlight(headingEl)
+        this.finishJump(headingEl)
         return
       }
-      // Need chunk: compute from subset
-      const firstIdx = ManifestLoader.getFirstArticleIndexForContainer(type, position)
-      if (firstIdx == null) return this.failJump(new Error('Rango no disponible'))
-      const page = ManifestLoader.computeChunkPageForIndex(firstIdx)
-      return this.loadChunkIfNeeded(page)
-        .then(() => {
-          const el = document.getElementById(headingId)
-          if (!el) throw new Error('Encabezado no encontrado tras cargar chunk')
-          this.ensureArticlesTabActive().then(() => {
-            if (window.MANIFEST_DEBUG) console.debug('[law-jump-navigation] scrolling to loaded container heading', headingId)
-            el.scrollIntoView({ block: 'start' })
-            try { history.replaceState(null, '', `#${headingId}`) } catch(_) {}
-            this.pulseHighlight(el)
-            this.finishJump(el)
-          })
-        })
-        .catch(err => this.failJump(err))
-    } else if (descriptor.kind === 'article') {
-      const { index } = descriptor
-      const articleEl = document.getElementById(`article_idx_${index}`)
-      if (articleEl) {
-        const headingId = articleEl.id
-        this.ensureArticlesTabActive().then(() => {
-          articleEl.scrollIntoView({ block: 'start' })
-          try { history.replaceState(null, '', `#${headingId}`) } catch(_) {}
-          this.pulseHighlight(articleEl)
-          this.finishJump(articleEl)
-        })
-        return
-      }
-      // Need manifest to know chunk page
-      ManifestLoader.ensureFull()
-        .then(() => ManifestLoader.getArticleMeta(index))
-        .then(meta => {
+      if (descriptor.kind === 'article') {
+        const { index } = descriptor
+        let articleEl = document.getElementById(`article_idx_${index}`)
+        if (!articleEl) {
+          await ManifestLoader.ensureFull()
+          const meta = ManifestLoader.getArticleMeta(index)
           if (!meta) throw new Error('Artículo no encontrado')
           const page = meta.chunk_page
-          return this.loadChunkIfNeeded(page)
-            .then(() => document.getElementById(`article_idx_${index}`))
-        })
-        .then(el => {
-          if (!el) throw new Error('Artículo no disponible tras cargar chunk')
-          const headingId = el.id
-          this.ensureArticlesTabActive().then(() => {
-            el.scrollIntoView({ block: 'start', behavior: 'auto' })
-            try { history.replaceState(null, '', `#${headingId}`) } catch(_) {}
-            this.pulseHighlight(el)
-            this.finishJump(el)
-          })
-        })
-        .catch(err => this.failJump(err))
-    } else {
-      this.failJump(new Error('Descriptor inválido'))
+            ; // defensive semicolon before await
+          await this.loadChunkIfNeeded(page)
+          articleEl = document.getElementById(`article_idx_${index}`)
+          if (!articleEl) throw new Error('Artículo no disponible tras cargar chunk')
+        }
+        await this.ensureArticlesTabActive()
+        const headingId = articleEl.id
+        articleEl.scrollIntoView({ block: 'start' })
+        try { history.replaceState(null, '', `#${headingId}`) } catch(_) {}
+        this.pulseHighlight(articleEl)
+        this.finishJump(articleEl)
+        return
+      }
+      throw new Error('Descriptor inválido')
+    } catch (err) {
+      this.failJump(err)
     }
   }
 
   // Ensure the articles tab is active before performing an operation that depends on it being visible.
   ensureArticlesTabActive() {
+    // Memoize in-flight activation to avoid duplicate listeners.
+    if (this._articlesTabPromise) return this._articlesTabPromise
     const pane = document.querySelector('#articulos')
     const trigger = document.querySelector('#articulos-tab,[href="#articulos"],[data-bs-target="#articulos"]')
-    return new Promise(resolve => {
+    this._articlesTabPromise = new Promise(resolve => {
       if (!pane) return resolve()
       if (pane.classList.contains('active')) return resolve()
-      let resolved = false
-      const done = () => { if (resolved) return; resolved = true; resolve() }
+      let settled = false
+      const finish = () => { if (settled) return; settled = true; resolve() }
       if (trigger) {
-        const handler = () => { trigger.removeEventListener('shown.bs.tab', handler); done() }
+        const handler = () => { trigger.removeEventListener('shown.bs.tab', handler); finish() }
         trigger.addEventListener('shown.bs.tab', handler, { once: true })
         trigger.click()
-        setTimeout(done, 600) // fallback
+        setTimeout(finish, 600) // fallback ensures resolution
       } else {
         pane.classList.add('active')
-        done()
+        finish()
       }
-    })
+    }).finally(() => { this._articlesTabPromise = null })
+    return this._articlesTabPromise
   }
 
   // Load chunk via endpoint if page not loaded yet

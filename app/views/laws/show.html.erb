@@ -282,48 +282,11 @@
 </div>
 
 <script>
-  function onIndexElementClicked(section_id) {
-    console.log(section_id)
-    document.getElementById(section_id).scrollIntoView({block:'center'});
-
-  }
-
-  //This function handles the logic to show the highlited section and current_highlated word number, based on the preview element clicked
-  // function onPreviewElementClicked (section_id, highlited_section){
-  //   console.log("Id del articulo: " + section_id);
-  //   document.getElementById(section_id).scrollIntoView({block:'center'});
-  //   var c;
-  //   var elementId = "";
-  //   var acumulator = 0;
-
-  //   for (c = 0  ; c < highlited_section ; c++){
-  //     elementId = "article_count_" + c.toString();
-  //     var element = document.getElementById(elementId);
-  //     acumulator += element.getElementsByClassName('highlighted').length;
-      
-  //   }
-  //   currrent_highlighted = acumulator;
-  //   updateHighlightedView();
-  //   hideSearchContainer();
-  // }
-
-  //hides the search container using solution 1, using the 'onclick' attribute in the button to call this function
   function hideSearchContainer () {
-      document.getElementsByClassName("search--container")[0].style.display = "none";
-      document.getElementsByClassName("container--visualizador")[0].style.display = "block";
-      document.getElementById("topNavbar").style.display = "flex";
-  }
-
-  //hides the search container using solution 2, using an event listener on the 'click' event of the button
-  /*
-  const hide_search_container = document.getElementById('hideSearchContainer-button');
-  hide_search_container.addEventListener('click', (event) => {
-    console.log("hide search container");
     document.getElementsByClassName("search--container")[0].style.display = "none";
     document.getElementsByClassName("container--visualizador")[0].style.display = "block";
     document.getElementById("topNavbar").style.display = "flex";
-  })
-  */
+  }
 </script>
 
 

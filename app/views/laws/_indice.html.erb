@@ -1,6 +1,13 @@
 
 <!-- Start index accordion -->
-<div class="accordion" id="index-accordion">
+<div 
+  class="accordion" 
+  id="index-accordion" 
+  data-controller="law-jump-navigation law-index-collapse" 
+  data-law-jump-navigation-law-id-value="<%= @law.id %>" 
+  data-law-jump-navigation-chunk-url-value="<%= load_chunk_law_path(@law) %>" 
+  data-law-jump-navigation-articles-only-value="<%= @has_articles_only ? 'true' : 'false' %>"
+>
   <!-- Start index card -->
   <div>
     <!-- Article element -->
@@ -9,7 +16,13 @@
       <% @stream.each do |stream| %>
         <div class="card-header index-element" style="font-size: 20px;padding-right: 50px;">
           <section style="white-space: nowrap; text-align: center;">
-            <a class="uncolored_link" href="#article_<%= stream.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('article_count_<%= i %>')}, 500)" aria-controls="articulos" aria-selected="true">
+            <a 
+              class="uncolored_link" href="#article_idx_<%= i %>" 
+              data-action="click->law-jump-navigation#click" 
+              data-article-index="<%= i %>" 
+              aria-controls="articulos" 
+              aria-selected="true"
+            >
               <b>Artículo <%= stream.number %></b>
             </a>
           </section>
@@ -17,10 +30,10 @@
         <% i+=1 %>
       <% end %>
     <% else %>
-      <% book_index_position = 0%>
-      <% title_index_position = 0 %>
-      <% chapter_index_position = 0%>
-      <% section_index_position = 0%>
+  <% book_index_position = 0 %>
+  <% title_index_position = 0 %>
+  <% chapter_index_position = 0 %>
+  <% section_index_position = 0 %>
 
       <% title_display = 'block'%>
       <% chapter_display = 'block'%>
@@ -45,27 +58,35 @@
 
           <% title_display = 'none'%>
           
-          <div class="card-header book-element index-element">
+          <div class="card-header book-element index-element" data-group="book-<%= book_index_position %>">
             <section class="index-book" style="white-space: nowrap;">
-              <a class="uncolored_link" href="#book_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('book_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
+              <a 
+                class="uncolored_link" 
+                href="#book_<%= index_items.position %>" 
+                data-action="click->law-jump-navigation#click" 
+                data-container-type="book" 
+                data-container-position="<%= index_items.position %>" 
+                aria-controls="articulos" 
+                aria-selected="true"
+              >
                 <span>Libro <%= index_items.number %></span>
-              </a>
-              <a class="uncolored_link" href="#book_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('book_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
                 <h4 class="title--libro"><%= index_items.name %></h4>
               </a>
-              <button type="button" id="btn-collapse-<%= book_index_position %>" class="btn btn-light btn-collapse" onclick="collapseElements('btn-collapse-<%= book_index_position %>', 'index-element-<%= book_index_position %>' ); $(this).toggleClass('opened');">
+              <button 
+                type="button" 
+                id="btn-collapse-book-<%= book_index_position %>" 
+                class="btn btn-light btn-collapse" 
+                data-action="click->law-index-collapse#toggle" 
+                data-collapse-group="book-<%= book_index_position %>" 
+                aria-expanded="true" aria-controls="index-group-book-<%= book_index_position %>"
+              >
                 <i class="fas fa-chevron-down"></i>
               </button>
             </section>
           </div>
         <% end %>
         <!-- Level 2 Title -->
-        <% if is_title_blocked %>
-          <%if book_index_position == 0 %>
-              <% book_index_position += 12777 %>
-          <% end %>
-        <% end %>
-        <div class="index-element-<%= book_index_position %>" style="display: <%= title_display%>;">
+        <div class="index-group-book-<%= book_index_position %>" style="display: <%= title_display %>;" data-group-parent="book-<%= book_index_position %>">
           <% if index_items.instance_of? Title %>
             <% title_index_position = index_items.position %>
             <% chapter_index_position = index_items.position %>
@@ -75,27 +96,34 @@
             
             <div class="card-header title-element">
               <section class="index-title" style="white-space: nowrap;">
-                <a class="uncolored_link" href="#title_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('title_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
+                <a 
+                  class="uncolored_link" 
+                  href="#title_<%= index_items.position %>" 
+                  data-action="click->law-jump-navigation#click" 
+                  data-container-type="title" 
+                  data-container-position="<%= index_items.position %>" 
+                  aria-controls="articulos" 
+                  aria-selected="true"
+                >
                   Titulo <%= index_items.number %>
+                  <span class="index-title-name"><%= index_items.name %></span>
                 </a>
-                <button type="button" id="btn-collapse-<%= title_index_position %>" class="btn btn-light btn-collapse" onclick="collapseElements('btn-collapse-<%= title_index_position %>', 'index-element-<%= title_index_position %>' ); $(this).toggleClass('opened');">
+                <button 
+                  type="button" 
+                  id="btn-collapse-title-<%= title_index_position %>" 
+                  class="btn btn-light btn-collapse" 
+                  data-action="click->law-index-collapse#toggle" 
+                  data-collapse-group="title-<%= title_index_position %>" 
+                  aria-expanded="true" 
+                  aria-controls="index-group-title-<%= title_index_position %>"
+                >
                   <i class="fas fa-chevron-down"></i>
                 </button>
-              </section>
-              <section class="index-title-name">
-                <a class="uncolored_link" href="#title_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('title_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
-                  <%= index_items.name %>
-                </a>
               </section>
             </div>
           <% end %>
           <!-- Level 3 Chapter-->
-          <% if is_chapter_blocked %>
-            <%if title_index_position == 0 %>
-              <% title_index_position += 24855 %>
-            <% end %>
-          <% end %>
-          <div class="index-element-<%= title_index_position %>" style="display: <%= chapter_display%>;">
+          <div class="index-group-title-<%= title_index_position %>" style="display: <%= chapter_display %>;" data-group-parent="title-<%= title_index_position %>">
             <% if index_items.instance_of? Chapter %>
               <% chapter_index_position = index_items.position %>
               <% section_index_position = index_items.position %>
@@ -104,66 +132,81 @@
               
               <div class="card-header chapter-element">
                 <section class="index-chapter" style="white-space: nowrap;">
-                  <a class="uncolored_link" href="#chapter_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('chapter_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
-                    Capítulo <%= index_items.number %></b>
+                  <a 
+                    class="uncolored_link" 
+                    href="#chapter_<%= index_items.position %>" 
+                    data-action="click->law-jump-navigation#click" 
+                    data-container-type="chapter" 
+                    data-container-position="<%= index_items.position %>" 
+                    aria-controls="articulos" 
+                    aria-selected="true"
+                  >
+                    Capítulo <%= index_items.number %>
+                    <span class="index-chapter-name"><%= index_items.name %></span>
                   </a>
-                    <button type="button" id="btn-collapse-<%= chapter_index_position %>" class="btn btn-light btn-collapse" onclick="collapseElements('btn-collapse-<%= chapter_index_position %>', 'index-element-<%= chapter_index_position %>' ); $(this).toggleClass('opened');">
+                    <button 
+                      type="button" id="btn-collapse-chapter-<%= chapter_index_position %>" 
+                      class="btn btn-light btn-collapse" 
+                      data-action="click->law-index-collapse#toggle" 
+                      data-collapse-group="chapter-<%= chapter_index_position %>" 
+                      aria-expanded="true" 
+                      aria-controls="index-group-chapter-<%= chapter_index_position %>"
+                    >
                     <i class="fas fa-chevron-down"></i>
                   </button>
-                </section>
-                <section class="index-chapter-name">
-                  <a class="uncolored_link" href="#chapter_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('chapter_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
-                    <%= index_items.name %>
-                  </a>
                 </section>
               </div>
             <% end %>
 
             <!-- Level 4 Section -->
-            <% if is_section_blocked %>
-              <%if chapter_index_position == 0 %>
-                <% chapter_index_position = 32211 %>
-              <% end %>
-            <% end %>
-            <div class="index-element-<%= chapter_index_position %>" style="display: <%= section_display%>;">
+            <div class="index-group-chapter-<%= chapter_index_position %>" style="display: <%= section_display %>;" data-group-parent="chapter-<%= chapter_index_position %>">
               <% if index_items.instance_of? Section %>
                 <% section_index_position = index_items.position %>
                 <% is_subsection_blocked = false %>
                 <% subsection_display = 'none' %>
                 <div class="card-header section-element">
                   <section class="index-section" style="white-space: nowrap;">
-                    <a class="uncolored_link" href="#section_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('section_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
+                    <a 
+                      class="uncolored_link" 
+                      href="#section_<%= index_items.position %>" 
+                      data-action="click->law-jump-navigation#click" 
+                      data-container-type="section" data-container-position="<%= index_items.position %>" 
+                      aria-controls="articulos" 
+                      aria-selected="true"
+                    >
                       <span>Sección <%= index_items.number %></span>
+                      <span class="index-subsection-name"><%= index_items.name %></span>
                     </a>
-                    <button type="button" id="btn-collapse-<%= section_index_position %>" class="btn btn-light btn-collapse" onclick="collapseElements('btn-collapse-<%= section_index_position %>', 'index-element-<%= section_index_position %>' ); $(this).toggleClass('opened');">
+                    <button 
+                      type="button" 
+                      id="btn-collapse-section-<%= section_index_position %>" 
+                      class="btn btn-light btn-collapse" 
+                      data-action="click->law-index-collapse#toggle" 
+                      data-collapse-group="section-<%= section_index_position %>" 
+                      aria-expanded="true" aria-controls="index-group-section-<%= section_index_position %>"
+                    >
                       <i class="fas fa-chevron-down"></i>
                     </button>
-                  </section>
-                  <section class="index-subsection-name">
-                    <a class="uncolored_link" href="#section_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('section_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
-                      <%= index_items.name %>
-                    </a>
                   </section>
                 </div>
               <% end %>
 
               <!-- Level 5 Subsection -->
-              <% if is_subsection_blocked %>
-                <%if section_index_position == 0 %>
-                  <% section_index_position = 7947 %>
-                <% end %>
-              <% end %>
-              <div class="index-element-<%= section_index_position %>" style="display: <%= subsection_display %>;">
+              <div class="index-group-section-<%= section_index_position %>" style="display: <%= subsection_display %>;" data-group-parent="section-<%= section_index_position %>">
                 <% if index_items.instance_of? Subsection %>
                   <div class="card-header subsection-element">
                     <section class="index-subsection" style="white-space: nowrap;">
-                      <a class="uncolored_link" href="#subsection_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('subsection_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
+                      <a 
+                        class="uncolored_link" 
+                        href="#subsection_<%= index_items.position %>" 
+                        data-action="click->law-jump-navigation#click" 
+                        data-container-type="subsection" 
+                        data-container-position="<%= index_items.position %>" 
+                        aria-controls="articulos" 
+                        aria-selected="true"
+                      >
                         <span>Sección <%= index_items.number %></span>
-                      </a>
-                    </section>
-                    <section class="index-subsection-name">
-                      <a class="uncolored_link" href="#subsection_<%= index_items.position %>" onclick="$('.nav a:first').tab('show');setTimeout(function(){onIndexElementClicked('subsection_<%= index_items.position %>')}, 500)" aria-controls="articulos" aria-selected="true">
-                        <%= index_items.name %>
+                        <span class="index-subsection-name"><%= index_items.name %></span>
                       </a>
                     </section>
                   </div>
@@ -250,6 +293,7 @@
   }
 
   .index-title-name{
+    display: block;
     font-style: normal;
     font-weight: bold;
     font-size: 18px;
@@ -258,6 +302,7 @@
   }
 
   .index-chapter-name{
+    display: block;
     font-style: normal;
     font-weight: normal;
     font-size: 16px;

@@ -165,9 +165,5 @@
         current_page: (@chunk_metadata&.dig(:current_page) || 1),
         law: @law %>
   <% end %>
-  <%# Phase 2: lightweight manifest subset provided by controller (@manifest_subset) %>
-  <% if defined?(@manifest_subset) && @manifest_subset.present? %>
-    <script id="law-manifest-structure" type="application/json"><%= raw(@manifest_subset.to_json) %></script>
-  <% end %>
 </div> <!-- End law-content -->
 <%= javascript_import_module_tag "trim_articles_for_preview" %>

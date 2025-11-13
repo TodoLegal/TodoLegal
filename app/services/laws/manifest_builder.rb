@@ -24,7 +24,11 @@
 
 module Laws
   class ManifestBuilder
-    DEFAULT_CHUNK_SIZE = 200
+    # Unified chunk size: use LawDisplayConfig as single source of truth (normal context)
+    # Avoid divergence with LawDisplayService / infinite scroll chunking.
+    # Use LawDisplayConfig CHUNK_SIZES directly; class_methods from concern aren't available on module.
+    # Fallback to 100 if constant not loaded to avoid runtime NameError breaking manifest build.
+    DEFAULT_CHUNK_SIZE = (defined?(LawDisplayConfig::CHUNK_SIZES) && LawDisplayConfig::CHUNK_SIZES[:normal]) || 100
 
     # Build manifest for a given law.
     # Params:

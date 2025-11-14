@@ -36,6 +36,8 @@ class LawDisplayService < ApplicationService
         process_search_request(display_data)
       elsif article_filter_request?
         process_article_filter_request(display_data)
+      elsif focus_request? && chunked_request?
+        process_focus_window_request(display_data)
       else
         process_normal_display_request(display_data)
       end
@@ -92,9 +94,18 @@ class LawDisplayService < ApplicationService
     @params[:page].present?
   end
 
+  # Check if request is for focus mode
+  # @return [Boolean]
+  def focus_request?
+    @params[:mode].to_s == 'focus'
+  end
+
   # Determine appropriate chunk size based on context
   # @return [Integer] Chunk size to use
   def determine_chunk_size
+    # PERF: Chunk size adapts to context (search vs normal). Smaller size in search
+    # reduces payload when highlighting many fragments. Larger size for normal
+    # browsing minimizes number of round trips. See docs/PERFORMANCE.md (Chunking Strategy).
     context = search_request? ? :search : :normal
     chunk_size_for(user: @user, context: context)
   end
@@ -136,6 +147,7 @@ class LawDisplayService < ApplicationService
   # @param display_data [Hash] Display data to populate
   def perform_search_with_chunking(display_data)
     # Use pg_search for highlighted results
+    # PERF: Limit results to prevent large highlight rendering & memory growth.
     search_results = @law.articles
       .search_by_body_highlighted(@query)
       .with_pg_search_highlight
@@ -153,6 +165,8 @@ class LawDisplayService < ApplicationService
   # @param display_data [Hash] Display data to populate
   def process_article_filter_request(display_data)
     articles = @law.articles.order(:position)
+    # NOTE: If article number divergence mapping is added later, we can
+    # resolve filter tokens to positions first, then slice by index instead of LIKE.
     
     if @articles_filter.size == 1
       # Single article - find and position to it
@@ -170,6 +184,9 @@ class LawDisplayService < ApplicationService
   def process_single_article_request(display_data, articles)
     target_article = articles.where('number LIKE ?', "%#{@articles_filter.first}%").first
     go_to_position = target_article&.position
+    # PERF: We load full stream only for single-article direct positioning.
+    # Optimization candidate: use manifest mapping (number->index) to avoid
+    # building entire stream for large laws. See PERFORMANCE.md (Article Number Divergence).
     
     # Load full law stream and find position
     stream_result = build_law_stream(go_to_position)
@@ -240,6 +257,8 @@ class LawDisplayService < ApplicationService
     if @page == 1
       all_structure = load_all_structure_components
       result[:all_structure_components] = all_structure
+      # PERF: First page includes cumulative structure so index can render once.
+      # Subsequent pages send only NEW components (see filter_structure_for_display).
     end
     
     # Add chunk-specific metadata
@@ -272,9 +291,13 @@ class LawDisplayService < ApplicationService
   def load_chunked_law_components
     # 1. Load ALL structure components once (fast, cacheable)
     all_structure = load_all_structure_components
+    #    PERF: These queries should be covered by indexes on (law_id, position).
+    #    Consider selecting only required columns if memory footprint grows.
     
     # 2. Load only chunked articles
     articles = load_chunked_articles
+    #    PERF: OFFSET pagination acceptable with dense sequential positions.
+    #    For extremely large datasets consider keyset pagination.
     
     # 3. Filter structure for display based on current articles
     display_structure = filter_structure_for_display(all_structure, articles)
@@ -302,11 +325,22 @@ class LawDisplayService < ApplicationService
   def load_chunked_articles
     # Calculate offset based on page and chunk size
     offset = (@page - 1) * @chunk_size
+    # PERF: Ensure index on articles(law_id, position) to keep OFFSET scan bounded.
+    # If divergence mapping exists we still page by position; mapping is separate.
     
     @law.articles
         .order(:position)
         .limit(@chunk_size)
         .offset(offset)
+  end
+
+  # Load articles for an arbitrary page (helper for focus mode)
+  # @param page [Integer]
+  # @return [Array<Article>] Articles for the given page
+  def load_articles_for_page(page)
+    page = [page.to_i, 1].max
+    offset = (page - 1) * @chunk_size
+    @law.articles.order(:position).limit(@chunk_size).offset(offset).to_a
   end
 
   # Apply basic access limitations based on user type
@@ -321,6 +355,7 @@ class LawDisplayService < ApplicationService
       if !chunked_request? && !search_request? && !article_filter_request?
         # Only apply basic limits for full law display on first page
         display_data[:stream] = display_data[:stream].take(ACCESS_LIMITS[:basic]) if display_data[:stream].respond_to?(:take)
+        # PERF: Restricting first page for anonymous users reduces initial payload.
       end
       display_data[:user_can_access_law] = false
     else
@@ -350,6 +385,7 @@ class LawDisplayService < ApplicationService
     total_articles = @law.cached_articles_count
     total_pages = (total_articles.to_f / @chunk_size).ceil
     has_more = @page < total_pages
+    # PERF: cached_articles_count avoids COUNT(*) per request.
     
     {
       current_page: @page,
@@ -360,6 +396,65 @@ class LawDisplayService < ApplicationService
       has_more_chunks: has_more,
       is_first_chunk: @page == 1,
       is_last_chunk: !has_more
+    }
+  end
+
+  # Focus mode: build a window around the requested page and return combined stream
+  # @param display_data [Hash]
+  def process_focus_window_request(display_data)
+    total_articles = @law.cached_articles_count
+    total_pages = (total_articles.to_f / @chunk_size).ceil
+    center = @page
+    window_pages = [center - 1, center, center + 1].select { |p| p >= 1 && p <= total_pages }.uniq.sort
+
+    # Aggregate articles from pages in the window
+    articles = window_pages.flat_map { |p| load_articles_for_page(p) }
+    # Ensure sorted by position
+    articles.sort_by!(&:position)
+
+    # Load structure and filter cumulatively up to max position so headings exist
+    all_structure = load_all_structure_components
+    if articles.any?
+      max_pos = articles.last.position
+      display_structure = {
+        books: all_structure[:books].select { |b| b.position <= max_pos },
+        titles: all_structure[:titles].select { |t| t.position <= max_pos },
+        chapters: all_structure[:chapters].select { |c| c.position <= max_pos },
+        sections: all_structure[:sections].select { |s| s.position <= max_pos },
+        subsections: all_structure[:subsections].select { |ss| ss.position <= max_pos }
+      }
+    else
+      display_structure = empty_structure_components
+    end
+
+    # Build interleaved stream
+    stream_builder = LawStreamBuilder.new(
+      law: @law,
+      components: display_structure.merge(articles: articles),
+      go_to_position: nil
+    )
+    result = stream_builder.build
+
+    # Populate display_data
+    display_data[:stream] = result[:stream]
+    display_data[:result_index_items] = result[:index_items]
+    display_data[:go_to_article] = result[:go_to_article]
+    display_data[:has_articles_only] = result[:has_articles_only]
+    display_data[:articles_count] = articles.size
+    display_data[:total_articles_count] = total_articles
+
+    # Focus-specific chunk metadata
+    display_data[:chunk_metadata] = {
+      current_page: window_pages.first,
+      total_pages: total_pages,
+      chunk_size: @chunk_size,
+      displayed_articles: articles.size,
+      total_articles: total_articles,
+      has_more_chunks: false,
+      is_first_chunk: false,
+      is_last_chunk: false,
+      focus_mode: true,
+      pages_included: window_pages
     }
   end
 
@@ -413,6 +508,7 @@ class LawDisplayService < ApplicationService
     
     if @page == 1
       # First page: return all structure up to max_position (cumulative)
+      # PERF: This allows index panel to render all prior hierarchy once.
       {
         books: all_structure[:books].select { |b| b.position <= max_position },
         titles: all_structure[:titles].select { |t| t.position <= max_position },
@@ -422,6 +518,7 @@ class LawDisplayService < ApplicationService
       }
     else
       # Subsequent pages: return ONLY NEW structure within this chunk's range
+      # PERF: Minimizes redundant DOM inserts; avoids re-sending earlier hierarchy.
       {
         books: all_structure[:books].select { |b| b.position >= min_position && b.position <= max_position },
         titles: all_structure[:titles].select { |t| t.position >= min_position && t.position <= max_position },

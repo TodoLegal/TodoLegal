@@ -1,0 +1,10 @@
+<%# Focus mode toolbar replaces the loading indicator and offers a reset control %>
+<div id="loading-indicator" class="focus-mode-toolbar d-flex justify-content-between align-items-center p-3" data-focus-mode="true">
+  <div class="text-muted">
+    <i class="fas fa-bullseye me-2"></i>
+    <span>Modo enfoque activo</span>
+  </div>
+  <div>
+    <%= link_to "Ver ley completa", law_path(@law), class: "btn btn-outline-primary btn-sm" %>
+  </div>
+</div>

@@ -59,7 +59,27 @@ class LawsController < ApplicationController
       extract_chunk_data(result)
       
       respond_to do |format|
-        format.turbo_stream { render_chunk_turbo_stream(result) }
+        format.turbo_stream do
+          if params[:mode] == 'focus'
+            # Focus mode replaces the entire stream content and disables infinite scroll
+            render turbo_stream: [
+              turbo_stream.replace("law-stream-content",
+                partial: "laws/law_chunk",
+                locals: {
+                  stream: @chunk_stream,
+                  chunk_metadata: @chunk_metadata,
+                  law: @law
+                }
+              ),
+              turbo_stream.replace("loading-indicator",
+                partial: "laws/focus_toolbar",
+                locals: { law: @law }
+              )
+            ]
+          else
+            render_chunk_turbo_stream(result)
+          end
+        end
         format.json { render_chunk_json(result) } # Fallback for non-Turbo clients
       end
     else
@@ -324,7 +344,7 @@ class LawsController < ApplicationController
 
     # Parameters for chunk loading
     def chunk_params
-      params.permit(:page, :query, :articles).merge(
+      params.permit(:page, :query, :articles, :mode).merge(
         format: request.format.symbol
       )
     end

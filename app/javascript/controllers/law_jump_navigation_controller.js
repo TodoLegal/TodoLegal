@@ -57,26 +57,6 @@ export default class extends Controller {
     }
   }
 
-  // Action: jump to article index provided in articleIndexInput target
-  jumpToArticle(event) {
-    if (event) event.preventDefault()
-    if (this.loadingJump) return
-    const value = this.hasArticleIndexInputTarget ? parseInt(this.articleIndexInputTarget.value, 10) : NaN
-    if (Number.isNaN(value)) return this.reportFailure('Índice de artículo inválido')
-    this.performJump({ kind: 'article', index: value })
-  }
-
-  // Action: jump to container specified by type + position
-  jumpToContainer(event) {
-    if (event) event.preventDefault()
-    if (this.loadingJump) return
-    if (!this.hasContainerTypeSelectTarget || !this.hasContainerPositionInputTarget) return
-    const type = this.containerTypeSelectTarget.value
-    const position = parseInt(this.containerPositionInputTarget.value, 10)
-    if (!type || Number.isNaN(position)) return this.reportFailure('Datos de estructura inválidos')
-    this.performJump({ kind: 'container', type, position })
-  }
-
   // Unified performJump using descriptor pattern
   async performJump(descriptor) {
     this.beginJump()
@@ -93,7 +73,13 @@ export default class extends Controller {
           const page = ManifestLoader.computeChunkPageForIndex(firstIdx)
           await this.loadChunkIfNeeded(page)
           headingEl = document.getElementById(headingId)
-          if (!headingEl) throw new Error('Encabezado no encontrado tras cargar chunk')
+          if (!headingEl) {
+            // Fallback: enter focus mode (window of pages) and retry once
+            if (window.MANIFEST_DEBUG) console.debug('[law-jump-navigation] heading missing after single chunk load; entering focus mode')
+            await this.enterFocusMode(page)
+            headingEl = document.getElementById(headingId)
+          }
+          if (!headingEl) throw new Error('Encabezado no encontrado tras modo enfoque')
         }
         await this.ensureArticlesTabActive()
         if (window.MANIFEST_DEBUG) console.debug('[law-jump-navigation] scrolling to container heading', headingId)
@@ -160,21 +146,56 @@ export default class extends Controller {
     if (window.MANIFEST_DEBUG) console.debug('[law-jump-navigation] loading chunk', { chunkPage, highestLoadedPage: this.highestLoadedPage })
     const lawId = this.lawIdValue || ManifestLoader.lawId()
     if (!lawId) return Promise.reject(new Error('Ley no disponible para cargar chunk'))
-    const url = `${this.chunkUrlValue || `/laws/${lawId}/chunk`}?page=${chunkPage}`
-    return fetch(url, { headers: { 'Accept': 'text/vnd.turbo-stream.html' } })
+    const base = this.chunkUrlValue || `/laws/${lawId}/chunk`
+    const url = `${base}?page=${chunkPage}&format=turbo_stream`
+    return fetch(url, { headers: { 'Accept': 'text/vnd.turbo-stream.html', 'X-Requested-With': 'XMLHttpRequest' } })
       .then(resp => {
         if (!resp.ok) throw new Error(`Error HTTP ${resp.status}`)
         return resp.text()
       })
       .then(html => {
-        const template = document.createElement('template')
-        template.innerHTML = html.trim()
-        template.content.querySelectorAll('turbo-stream').forEach(stream => document.documentElement.appendChild(stream))
+        if (window.Turbo && typeof Turbo.renderStreamMessage === 'function') {
+          Turbo.renderStreamMessage(html)
+        } else {
+          const template = document.createElement('template')
+          template.innerHTML = html.trim()
+          template.content.querySelectorAll('turbo-stream').forEach(stream => document.documentElement.appendChild(stream))
+        }
         this.highestLoadedPage = Math.max(this.highestLoadedPage, chunkPage)
-        if (window.MANIFEST_DEBUG) console.debug('[law-jump-navigation] chunk appended; new highestLoadedPage', this.highestLoadedPage)
+        const detail = { page: chunkPage }
+        try {
+          this.element.dispatchEvent(new CustomEvent('law:chunkLoaded', { detail }))
+          document.dispatchEvent(new CustomEvent('law:chunkLoaded', { detail }))
+        } catch(_) {}
+        if (window.MANIFEST_DEBUG) console.debug('[law-jump-navigation] chunk processed; new highestLoadedPage', this.highestLoadedPage)
       })
   }
 
+  // Enter focus mode by requesting a window of pages around the target page
+  enterFocusMode(centerPage) {
+    const lawId = this.lawIdValue || ManifestLoader.lawId()
+    if (!lawId) return Promise.reject(new Error('Ley no disponible para modo enfoque'))
+    const base = this.chunkUrlValue || `/laws/${lawId}/chunk`
+    const url = `${base}?page=${centerPage}&mode=focus&format=turbo_stream`
+    return fetch(url, { headers: { 'Accept': 'text/vnd.turbo-stream.html', 'X-Requested-With': 'XMLHttpRequest' } })
+      .then(resp => {
+        if (!resp.ok) throw new Error(`Error HTTP ${resp.status}`)
+        return resp.text()
+      })
+      .then(html => {
+        if (window.Turbo && typeof Turbo.renderStreamMessage === 'function') {
+          Turbo.renderStreamMessage(html)
+        } else {
+          const template = document.createElement('template')
+          template.innerHTML = html.trim()
+          template.content.querySelectorAll('turbo-stream').forEach(stream => document.documentElement.appendChild(stream))
+        }
+        // In focus mode we treat loaded window as covering centerPage (neighbors not tracked individually)
+        this.highestLoadedPage = Math.max(this.highestLoadedPage, centerPage)
+        if (window.MANIFEST_DEBUG) console.debug('[law-jump-navigation] entered focus mode at page', centerPage)
+      })
+  }
+  
   // Jump lifecycle helpers
   beginJump() {
     this.loadingJump = true
@@ -238,5 +259,18 @@ export default class extends Controller {
     if (!el) return
     el.classList.add('jump-pulse')
     setTimeout(() => el.classList.remove('jump-pulse'), 1200)
+  }
+
+  // Removed synthetic heading approach per rollback request
+
+  labelFor(type, number) {
+    switch(type) {
+      case 'book': return `Libro ${number}`
+      case 'title': return `Titulo ${number}`
+      case 'chapter': return `Capítulo ${number}`
+      case 'section': return `Sección ${number}`
+      case 'subsection': return `Sección ${number}`
+      default: return `${type} ${number}`
+    }
   }
 }

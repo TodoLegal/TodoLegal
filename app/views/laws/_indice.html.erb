@@ -3,10 +3,11 @@
 <div 
   class="accordion" 
   id="index-accordion" 
-  data-controller="law-jump-navigation law-index-collapse" 
+  data-controller="law-index-render law-jump-navigation law-index-collapse" 
   data-law-jump-navigation-law-id-value="<%= @law.id %>" 
   data-law-jump-navigation-chunk-url-value="<%= load_chunk_law_path(@law) %>" 
-  data-law-jump-navigation-articles-only-value="<%= @has_articles_only ? 'true' : 'false' %>"
+  data-law-jump-navigation-articles-only-value="<%= @has_articles_only ? 'true' : 'false' %>" 
+  data-law-index-render-articles-only-value="<%= @has_articles_only ? 'true' : 'false' %>"
 >
   <!-- Start index card -->
   <div>
@@ -30,224 +31,13 @@
         <% i+=1 %>
       <% end %>
     <% else %>
-  <% book_index_position = 0 %>
-  <% title_index_position = 0 %>
-  <% chapter_index_position = 0 %>
-  <% section_index_position = 0 %>
-
-      <% title_display = 'block'%>
-      <% chapter_display = 'block'%>
-      <% section_display = 'block'%>
-      <% subsection_display = 'block' %>
-
-      <% is_title_blocked = true %>
-      <% is_chapter_blocked = true %>
-      <% is_section_blocked = true %>
-      <% is_subsection_blocked = true %>
-
-      <% @result_index_items.each do |index_items|%>
-          
-        <% if index_items.instance_of? Book %>
-          <!-- Level 1 Book -->
-          <% book_index_position = index_items.position %>
-          <% title_index_position = index_items.position %>
-          <% chapter_index_position = index_items.position %>
-          <% section_index_position = index_items.position %>
-
-          <% is_title_blocked = false%>
-
-          <% title_display = 'none'%>
-          
-          <div class="card-header book-element index-element" data-group="book-<%= book_index_position %>">
-            <section class="index-book" style="white-space: nowrap;">
-              <a 
-                class="uncolored_link" 
-                href="#book_<%= index_items.position %>" 
-                data-action="click->law-jump-navigation#click" 
-                data-container-type="book" 
-                data-container-position="<%= index_items.position %>" 
-                aria-controls="articulos" 
-                aria-selected="true"
-              >
-                <span>Libro <%= index_items.number %></span>
-                <h4 class="title--libro"><%= index_items.name %></h4>
-              </a>
-              <button 
-                type="button" 
-                id="btn-collapse-book-<%= book_index_position %>" 
-                class="btn btn-light btn-collapse" 
-                data-action="click->law-index-collapse#toggle" 
-                data-collapse-group="book-<%= book_index_position %>" 
-                aria-expanded="true" aria-controls="index-group-book-<%= book_index_position %>"
-              >
-                <i class="fas fa-chevron-down"></i>
-              </button>
-            </section>
-          </div>
-        <% end %>
-        <!-- Level 2 Title -->
-        <div class="index-group-book-<%= book_index_position %>" style="display: <%= title_display %>;" data-group-parent="book-<%= book_index_position %>">
-          <% if index_items.instance_of? Title %>
-            <% title_index_position = index_items.position %>
-            <% chapter_index_position = index_items.position %>
-            <% section_index_position = index_items.position %>
-            <% is_chapter_blocked = false %>
-            <% chapter_display = 'none'%>
-            
-            <div class="card-header title-element">
-              <section class="index-title" style="white-space: nowrap;">
-                <a 
-                  class="uncolored_link" 
-                  href="#title_<%= index_items.position %>" 
-                  data-action="click->law-jump-navigation#click" 
-                  data-container-type="title" 
-                  data-container-position="<%= index_items.position %>" 
-                  aria-controls="articulos" 
-                  aria-selected="true"
-                >
-                  Titulo <%= index_items.number %>
-                  <span class="index-title-name"><%= index_items.name %></span>
-                </a>
-                <button 
-                  type="button" 
-                  id="btn-collapse-title-<%= title_index_position %>" 
-                  class="btn btn-light btn-collapse" 
-                  data-action="click->law-index-collapse#toggle" 
-                  data-collapse-group="title-<%= title_index_position %>" 
-                  aria-expanded="true" 
-                  aria-controls="index-group-title-<%= title_index_position %>"
-                >
-                  <i class="fas fa-chevron-down"></i>
-                </button>
-              </section>
-            </div>
-          <% end %>
-          <!-- Level 3 Chapter-->
-          <div class="index-group-title-<%= title_index_position %>" style="display: <%= chapter_display %>;" data-group-parent="title-<%= title_index_position %>">
-            <% if index_items.instance_of? Chapter %>
-              <% chapter_index_position = index_items.position %>
-              <% section_index_position = index_items.position %>
-              <% is_section_blocked = false %>
-              <% section_display = 'none' %> 
-              
-              <div class="card-header chapter-element">
-                <section class="index-chapter" style="white-space: nowrap;">
-                  <a 
-                    class="uncolored_link" 
-                    href="#chapter_<%= index_items.position %>" 
-                    data-action="click->law-jump-navigation#click" 
-                    data-container-type="chapter" 
-                    data-container-position="<%= index_items.position %>" 
-                    aria-controls="articulos" 
-                    aria-selected="true"
-                  >
-                    Capítulo <%= index_items.number %>
-                    <span class="index-chapter-name"><%= index_items.name %></span>
-                  </a>
-                    <button 
-                      type="button" id="btn-collapse-chapter-<%= chapter_index_position %>" 
-                      class="btn btn-light btn-collapse" 
-                      data-action="click->law-index-collapse#toggle" 
-                      data-collapse-group="chapter-<%= chapter_index_position %>" 
-                      aria-expanded="true" 
-                      aria-controls="index-group-chapter-<%= chapter_index_position %>"
-                    >
-                    <i class="fas fa-chevron-down"></i>
-                  </button>
-                </section>
-              </div>
-            <% end %>
-
-            <!-- Level 4 Section -->
-            <div class="index-group-chapter-<%= chapter_index_position %>" style="display: <%= section_display %>;" data-group-parent="chapter-<%= chapter_index_position %>">
-              <% if index_items.instance_of? Section %>
-                <% section_index_position = index_items.position %>
-                <% is_subsection_blocked = false %>
-                <% subsection_display = 'none' %>
-                <div class="card-header section-element">
-                  <section class="index-section" style="white-space: nowrap;">
-                    <a 
-                      class="uncolored_link" 
-                      href="#section_<%= index_items.position %>" 
-                      data-action="click->law-jump-navigation#click" 
-                      data-container-type="section" data-container-position="<%= index_items.position %>" 
-                      aria-controls="articulos" 
-                      aria-selected="true"
-                    >
-                      <span>Sección <%= index_items.number %></span>
-                      <span class="index-subsection-name"><%= index_items.name %></span>
-                    </a>
-                    <button 
-                      type="button" 
-                      id="btn-collapse-section-<%= section_index_position %>" 
-                      class="btn btn-light btn-collapse" 
-                      data-action="click->law-index-collapse#toggle" 
-                      data-collapse-group="section-<%= section_index_position %>" 
-                      aria-expanded="true" aria-controls="index-group-section-<%= section_index_position %>"
-                    >
-                      <i class="fas fa-chevron-down"></i>
-                    </button>
-                  </section>
-                </div>
-              <% end %>
-
-              <!-- Level 5 Subsection -->
-              <div class="index-group-section-<%= section_index_position %>" style="display: <%= subsection_display %>;" data-group-parent="section-<%= section_index_position %>">
-                <% if index_items.instance_of? Subsection %>
-                  <div class="card-header subsection-element">
-                    <section class="index-subsection" style="white-space: nowrap;">
-                      <a 
-                        class="uncolored_link" 
-                        href="#subsection_<%= index_items.position %>" 
-                        data-action="click->law-jump-navigation#click" 
-                        data-container-type="subsection" 
-                        data-container-position="<%= index_items.position %>" 
-                        aria-controls="articulos" 
-                        aria-selected="true"
-                      >
-                        <span>Sección <%= index_items.number %></span>
-                        <span class="index-subsection-name"><%= index_items.name %></span>
-                      </a>
-                    </section>
-                  </div>
-                <% end %>
-              </div>
-              <!-- End level 5 -->
-            </div>
-            <!-- End level 4-->
-          </div>
-          <!-- End level 3  -->
-        </div>
-        <!-- End level 2-->
-      <% end %>
-      <!-- End level 1 -->
+      <!-- Client-rendered full índice from manifest subset -->
+      <div data-law-index-render-target="root"></div>
     <% end %>
   </div>
   <!-- End index card -->
 </div>
 <!-- End index accordion -->
-
-
-<script>
-
-  try {
-    function collapseElements(btnId, elementsClass){
-      var bntCollapse = document.getElementById(btnId);
-      var elements = document.getElementsByClassName(elementsClass);
-      for(let i = 0; i < elements.length; i++){
-        if (elements[i].style.display == "none"){
-          elements[i].style.display = "block";
-          
-        }else if (elements[i].style.display == "block"){
-          elements[i].style.display = "none";
-        }
-      }
-    }
-  } catch (error) {
-    //something?
-  }
-
-</script>
 
 <style>
   strong {font-weight:bold;}

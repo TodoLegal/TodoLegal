@@ -404,8 +404,8 @@ class LawDisplayService < ApplicationService
   def process_focus_window_request(display_data)
     total_articles = @law.cached_articles_count
     total_pages = (total_articles.to_f / @chunk_size).ceil
-    center = @page
-    window_pages = [center - 1, center, center + 1].select { |p| p >= 1 && p <= total_pages }.uniq.sort
+    center_page = @page
+    window_pages = [center_page - 1, center_page, center_page + 1].select { |p| p >= 1 && p <= total_pages }.uniq.sort
 
     # Aggregate articles from pages in the window
     articles = window_pages.flat_map { |p| load_articles_for_page(p) }
@@ -413,19 +413,7 @@ class LawDisplayService < ApplicationService
     articles.sort_by!(&:position)
 
     # Load structure and filter cumulatively up to max position so headings exist
-    all_structure = load_all_structure_components
-    if articles.any?
-      max_pos = articles.last.position
-      display_structure = {
-        books: all_structure[:books].select { |b| b.position <= max_pos },
-        titles: all_structure[:titles].select { |t| t.position <= max_pos },
-        chapters: all_structure[:chapters].select { |c| c.position <= max_pos },
-        sections: all_structure[:sections].select { |s| s.position <= max_pos },
-        subsections: all_structure[:subsections].select { |ss| ss.position <= max_pos }
-      }
-    else
-      display_structure = empty_structure_components
-    end
+    display_structure = filter_structure_for_display(load_all_structure_components, articles)
 
     # Build interleaved stream
     stream_builder = LawStreamBuilder.new(

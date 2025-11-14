@@ -99,6 +99,7 @@ class ApplicationController < ActionController::Base
       @highlight_enabled = false
       @query = ""
       @articles_count = 0
+      @total_articles_count = 0
       @has_articles_only = true
       @info_is_searched = false
       @result_index_items = []

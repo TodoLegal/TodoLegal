@@ -162,17 +162,16 @@
                       <div class="col-md-12">
                         <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, style:"font-size: 1.5rem; color:#505864;" %>
                         <h3 style="font-size:22px; text-align:center; margin-left: 8%;">
-                        Suscríbete y obtén acceso ilimitado
+                        Suscríbete y obten acceso ilimitado
                         </h3>
                       </div>
                       <div class="col-md-12">
                         <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
-                      Adquiere el <b>Plan Pro</b> por <b>$<%= BASE_PRICE_MONTHLY %> al mes</b> y podrás acceder a más de <%= (all_document_count/10)*10 %> leyes y documentos legales y a lo que continuamente agregamos.
-                        <p style="font-size:18px; text-align:center;">
-                          <i class="text-muted">Puedes cancelar la suscripción en cualquier momento.</i>
+                          Adquiere el <b>Plan Pro</b> por <b>$<%= BASE_PRICE_MONTHLY %> al mes</b> y podrás acceder a más de <%= (all_document_count/10)*10 %> leyes y documentos legales y a lo que continuamente agregamos.
+                          <p style="font-size:18px; text-align:center;">
+                            <i class="text-muted">Puedes cancelar la suscripción en cualquier momento.</i>
+                          </p>
                         </p>
-                        
-                      </p>
                       </div>
                       <div class="col-md-12">
                         <a href="<%= new_user_registration_path %>?go_to_law=<%=@law.id%>&go_to_checkout=true">

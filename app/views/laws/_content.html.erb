@@ -35,13 +35,13 @@
   }
   
 </style>
-<!-- Turbo-enabled content container -->
+<!-- Turbo-enabled law container -->
 <div id="law-content" 
   data-controller="law-infinite-scroll law-jump-navigation"
-     data-law-infinite-scroll-law-id-value="<%= @law.id %>"
-     data-law-infinite-scroll-current-page-value="<%= (@chunk_metadata&.dig(:current_page) || 1) %>"
-     data-law-infinite-scroll-has-more-chunks-value="<%= (@chunk_metadata&.dig(:has_more_chunks) || false) %>"
-     data-law-infinite-scroll-chunk-url-value="<%= load_chunk_law_path(@law) %>">
+  data-law-infinite-scroll-law-id-value="<%= @law.id %>"
+  data-law-infinite-scroll-current-page-value="<%= (@chunk_metadata&.dig(:current_page) || 1) %>"
+  data-law-infinite-scroll-has-more-chunks-value="<%= (@chunk_metadata&.dig(:has_more_chunks) || false) %>"
+  data-law-infinite-scroll-chunk-url-value="<%= load_chunk_law_path(@law) %>">
   <%# Phase 1 (Progressive Structure v2): Stable structure/article identifiers applied. %>
 
   <% if @articles_count == 0 %>

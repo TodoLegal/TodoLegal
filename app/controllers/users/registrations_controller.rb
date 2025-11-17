@@ -202,23 +202,5 @@ class Users::RegistrationsController < Devise::RegistrationsController
     if params[:user][:occupation] && params[:user][:occupation] == ""
       params[:user][:occupation].replace("Otro")
     end
-  end
-
-  #overrides application helper method
-  def update_mixpanel_user user
-    $tracker.people.set(user.id, {
-      '$email'            => user.email,
-      'first_name'      => user.first_name,
-      'last_name'      => user.last_name,
-      'phone_number'      => user.phone_number,
-      'current_sign_in_at'      => user.current_sign_in_at,
-      'last_sign_in_at'      => user.last_sign_in_at,
-      'current_sign_in_ip'      => user.current_sign_in_ip,
-      'last_sign_in_ip'      => user.last_sign_in_ip,
-      'receive_information_emails'      => user.receive_information_emails
-    }, ip = user.current_sign_in_ip, {'$ignore_time' => 'true'});
-  end
-
-
-  
+  end  
 end

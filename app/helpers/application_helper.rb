@@ -337,6 +337,7 @@ module ApplicationHelper
   end
 
   def update_mixpanel_user user
+    return unless user
     todolegal_status, stripe_status = return_user_plan_status(user)
     $tracker.people.set(user.id, {
       '$email'            => user.email,

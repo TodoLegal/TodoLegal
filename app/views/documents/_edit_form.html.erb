@@ -221,7 +221,6 @@
             <% else %>
               <%= form.label :descripcion_larga %>
             <% end %>
-            <%= form.label :descripcion_larga %>
             <%= form.text_area :description, class: "form-control", maxlength: "1250",
                 data: { action: "keyup->document-autosave#save", document_form_validator_target: "description" },
                 onkeyup:"charCountUpdate(this.value, 'longDescription', 1250)" %>

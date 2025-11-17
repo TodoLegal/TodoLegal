@@ -227,6 +227,18 @@ protected
       session[:return_to] = nil
       external_redirect_path(url: return_to_path)
     else
+      #updates user info in mixpanel
+      update_mixpanel_user current_user
+
+      #track session start in mixpanel
+      $tracker.track(current_user.id, 'TodoLegal Session', {
+        'user_type' => current_user_type_api(current_user),
+        'is_email_confirmed' =>  current_user.confirmed_at?,
+        'has_notifications_activated': UsersPreference.find_by(user_id: current_user.id) != nil,
+        'session_date' => DateTime.now - 6.hours,
+        'location' => "Sign in page"
+      })
+
       signed_in_path
     end
   end

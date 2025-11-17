@@ -40,7 +40,7 @@
       <div class="row">
         <div class="col-md-8">
           <div class="form-group">
-            <% if document.document_type.name == "Sentencia" %>
+            <% if @document_type == "Sentencia" %>
               <%= form.label :número_de_expediente %>
             <% else %>
               <%= form.label :identificador_de_Emisión %>
@@ -57,7 +57,7 @@
       <div class="row">
         <div class="col-md-8">
           <div class="form-group">
-            <% if document.document_type.name == "Sentencia" %>
+            <% if @document_type == "Sentencia" %>
               <%= form.label :número_de_expediente %>
             <% else %>
               <%= form.label :identificador_de_Emisión_Alternativo %>
@@ -98,7 +98,7 @@
       </div>
 
       <!-- TODO: Should we remove applicable_laws from database? -->
-      <% if false && document.document_type.name == "Sentencia" and document.judgement_auxiliary %>
+      <% if false && @document_type == "Sentencia" and document.judgement_auxiliary %>
         <div class="row">
           <div class="col-md-8">
             <div class="form-group">
@@ -111,7 +111,7 @@
         </div>
       <% end %>
 
-      <% if document.document_type.name != "Sentencia" %>
+      <% if @document_type != "Sentencia" %>
         <div class="row">
           <div class="col-md-8">
             <div class="form-group">
@@ -140,7 +140,7 @@
           </div>
         </div>
         
-        <% if document.document_type.name != "Sentencia" && document.document_type.name != "Auto Acordado" && document.document_type.name != "Formato" && document.document_type.name != "Otro"%>
+        <% if @document_type != "Sentencia" && @document_type != "Auto Acordado" && @document_type != "Formato" && @document_type != "Otro"%>
           <div class="form-group col-md-4">
             <%= form.label :número_de_gaceta %>
             <%= form.text_field :publication_number, class: "form-control", 
@@ -167,7 +167,7 @@
           <% end %>
         </div>
           <div class="form-group col-md-4">
-          <% if (document.document_type.name != "Sentencia" && document.document_type.name != "Auto Acordado" && document.document_type.name != "Formato" && document.document_type.name != "Otro") and document.position %>
+          <% if (@document_type != "Sentencia" && @document_type != "Auto Acordado" && @document_type != "Formato" && @document_type != "Otro") and document.position %>
             <label class="d-inline"> <strong> Posición en Gaceta </strong> </label>
             <nav aria-label="...">
               <ul class="pagination pagination-sm">
@@ -196,28 +196,32 @@
         </div>
       </div>
 
-      <div class="row">
-        <div class="col-md-8">
-          <div class="form-group">
-            <% if document.document_type.name == "Sentencia" %>
-              <%= form.label :objeto_de_la_demanda %>
-            <% else %>
-              <%= form.label :descripción_corta %>
-            <% end %>
-            <%= form.text_area :short_description, class: "form-control", maxlength: "250", 
-                data: { action: "keyup->document-autosave#save", document_form_validator_target: "shortDescription" },
-                onkeyup: "charCountUpdate(this.value, 'shortDescription', 250)" 
-            %>
-            <small id="shortDescription">0 de 250 caracteres</small>
+      <% unless @document_type == "Circular CNBS" %>
+        <div class="row">
+          <div class="col-md-8">
+            <div class="form-group">
+              <% if @document_type == "Sentencia" %>
+                <%= form.label :objeto_de_la_demanda %>
+              <% else %>
+                <%= form.label :descripción_corta %>
+              <% end %>
+              <%= form.text_area :short_description, class: "form-control", maxlength: "250", 
+                  data: { action: "keyup->document-autosave#save", document_form_validator_target: "shortDescription" },
+                  onkeyup: "charCountUpdate(this.value, 'shortDescription', 250)" 
+              %>
+              <small id="shortDescription">0 de 250 caracteres</small>
+            </div>
           </div>
         </div>
-      </div>
+      <% end %>
       
       <div class="row">
         <div class="col-md-8">
           <div class="form-group">
-            <% if document.document_type.name == "Sentencia" %>
+            <% if @document_type == "Sentencia" %>
               <%= form.label :fundamentos_del_derecho %>
+            <% elsif @document_type == "Circular CNBS"%>
+              <%= form.label :descripción %>
             <% else %>
               <%= form.label :descripcion_larga %>
             <% end %>
@@ -248,7 +252,7 @@
         <div class="row">
           <div class="col-md-5">
             <%= form.submit "Guardar cambios", class: "d-inline p-2 btn btn-primary" %>
-            <% if document.document_type.name == "Sentencia" %>
+            <% if @document_type == "Sentencia" %>
               <%= form.submit "Subir nueva sentencia", class: "d-inline p-2 btn btn-outline-secondary" %>
             <% else %>
               <% if @is_next_document_valid && (@redirect_url == nil) %>

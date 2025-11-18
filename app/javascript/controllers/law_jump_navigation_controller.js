@@ -281,7 +281,7 @@ export default class extends Controller {
   labelFor(type, number) {
     switch(type) {
       case 'book': return `Libro ${number}`
-  case 'title': return `Título ${number}`
+      case 'title': return `Título ${number}`
       case 'chapter': return `Capítulo ${number}`
       case 'section': return `Sección ${number}`
       case 'subsection': return `Subsección ${number}`

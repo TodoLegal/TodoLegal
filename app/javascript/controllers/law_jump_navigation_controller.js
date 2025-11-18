@@ -63,51 +63,37 @@ export default class extends Controller {
     try {
       if (window.MANIFEST_DEBUG) console.debug('[law-jump-navigation] performJump', descriptor)
       if (descriptor.kind === 'container') {
+        // Container jump: resolve heading id and page, load focus window if heading missing.
         const { type, position } = descriptor
         const headingId = `${type}_${position}`
-        let headingEl = document.getElementById(headingId)
-        if (!headingEl) {
-          // Need chunk: compute from subset
-          const firstIdx = ManifestLoader.getFirstArticleIndexForContainer(type, position)
-          if (firstIdx == null) throw new Error('Rango no disponible')
-          const page = ManifestLoader.computeChunkPageForIndex(firstIdx)
-          await this.loadChunkIfNeeded(page)
-          headingEl = document.getElementById(headingId)
-          if (!headingEl) {
-            // Fallback: enter focus mode (window of pages) and retry once
-            if (window.MANIFEST_DEBUG) console.debug('[law-jump-navigation] heading missing after single chunk load; entering focus mode')
-            await this.enterFocusMode(page)
-            headingEl = document.getElementById(headingId)
-          }
-          if (!headingEl) throw new Error('Encabezado no encontrado tras modo enfoque')
+        const firstIdx = ManifestLoader.getFirstArticleIndexForContainer(type, position)
+        if (firstIdx == null) throw new Error('Rango no disponible')
+        const page = ManifestLoader.computeChunkPageForIndex(firstIdx)
+        const headingElInitial = document.getElementById(headingId)
+        if (!headingElInitial || page > this.highestLoadedPage + 1) {
+          if (window.MANIFEST_DEBUG) console.debug('[law-jump-navigation] focus load for container', { type, position, page })
+          await this.enterFocusMode(page)
         }
         await this.ensureArticlesTabActive()
-        if (window.MANIFEST_DEBUG) console.debug('[law-jump-navigation] scrolling to container heading', headingId)
-        headingEl.scrollIntoView({ block: 'start' })
-        try { history.replaceState(null, '', `#${headingId}`) } catch(_) {}
-        this.pulseHighlight(headingEl)
-        this.finishJump(headingEl)
+        const headingEl = await this.waitForHeading(headingId)
+        if (!headingEl) throw new Error('Encabezado no encontrado')
+        this.finalizeJump(headingEl)
         return
       }
       if (descriptor.kind === 'article') {
         const { index } = descriptor
-        let articleEl = document.getElementById(`article_idx_${index}`)
-        if (!articleEl) {
+        const id = `article_idx_${index}`
+        let el = document.getElementById(id)
+        if (!el) {
           await ManifestLoader.ensureFull()
           const meta = ManifestLoader.getArticleMeta(index)
           if (!meta) throw new Error('Artículo no encontrado')
-          const page = meta.chunk_page
-            ; // defensive semicolon before await
-          await this.loadChunkIfNeeded(page)
-          articleEl = document.getElementById(`article_idx_${index}`)
-          if (!articleEl) throw new Error('Artículo no disponible tras cargar chunk')
+          await this.loadChunkIfNeeded(meta.chunk_page)
         }
         await this.ensureArticlesTabActive()
-        const headingId = articleEl.id
-        articleEl.scrollIntoView({ block: 'start' })
-        try { history.replaceState(null, '', `#${headingId}`) } catch(_) {}
-        this.pulseHighlight(articleEl)
-        this.finishJump(articleEl)
+        el = await this.waitForHeading(id)
+        if (!el) throw new Error('Artículo no disponible tras cargar chunk')
+        this.finalizeJump(el)
         return
       }
       throw new Error('Descriptor inválido')
@@ -176,24 +162,44 @@ export default class extends Controller {
     const lawId = this.lawIdValue || ManifestLoader.lawId()
     if (!lawId) return Promise.reject(new Error('Ley no disponible para modo enfoque'))
     const base = this.chunkUrlValue || `/laws/${lawId}/chunk`
-    const url = `${base}?page=${centerPage}&mode=focus&format=turbo_stream`
+    const params = new URLSearchParams({
+      page: centerPage,
+      mode: 'focus',
+      format: 'turbo_stream'
+    })
+    const url = `${base}?${params.toString()}`
     return fetch(url, { headers: { 'Accept': 'text/vnd.turbo-stream.html', 'X-Requested-With': 'XMLHttpRequest' } })
       .then(resp => {
         if (!resp.ok) throw new Error(`Error HTTP ${resp.status}`)
         return resp.text()
       })
       .then(html => {
-        if (window.Turbo && typeof Turbo.renderStreamMessage === 'function') {
+        if (window.Turbo?.renderStreamMessage) {
           Turbo.renderStreamMessage(html)
         } else {
           const template = document.createElement('template')
           template.innerHTML = html.trim()
           template.content.querySelectorAll('turbo-stream').forEach(stream => document.documentElement.appendChild(stream))
         }
-        // In focus mode we treat loaded window as covering centerPage (neighbors not tracked individually)
         this.highestLoadedPage = Math.max(this.highestLoadedPage, centerPage)
-        if (window.MANIFEST_DEBUG) console.debug('[law-jump-navigation] entered focus mode at page', centerPage)
+        if (window.MANIFEST_DEBUG) console.debug('[law-jump-navigation] focus mode stream applied', { centerPage })
       })
+  }
+
+  // Poll for heading element to appear after Turbo updated DOM.
+  // Prevents race where scroll executes before insertion.
+  waitForHeading(id, attempts = 20, intervalMs = 50) {
+    return new Promise(resolve => {
+      let tries = 0
+      const tick = () => {
+        const el = document.getElementById(id)
+        if (el) return resolve(el)
+        tries++
+        if (tries >= attempts) return resolve(null)
+        setTimeout(tick, intervalMs)
+      }
+      tick()
+    })
   }
   
   // Jump lifecycle helpers
@@ -263,13 +269,22 @@ export default class extends Controller {
 
   // Removed synthetic heading approach per rollback request
 
+  // Finalize jump: unified scroll + history + highlight + finish
+  finalizeJump(el) {
+    if (!el) return this.failJump(new Error('Elemento no encontrado'))
+    el.scrollIntoView({ block: 'start' })
+    try { history.replaceState(null, '', `#${el.id}`) } catch(_) {}
+    this.pulseHighlight(el)
+    this.finishJump(el)
+  }
+
   labelFor(type, number) {
     switch(type) {
       case 'book': return `Libro ${number}`
-      case 'title': return `Titulo ${number}`
+  case 'title': return `Título ${number}`
       case 'chapter': return `Capítulo ${number}`
       case 'section': return `Sección ${number}`
-      case 'subsection': return `Sección ${number}`
+      case 'subsection': return `Subsección ${number}`
       default: return `${type} ${number}`
     }
   }

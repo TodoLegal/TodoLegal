@@ -55,12 +55,14 @@ class LawsController < ApplicationController
     # Use LawDisplayService for chunked loading
     result = LawDisplayService.call(@law, user: current_user, params: chunk_params)
     
+    @active_focus_mode = params[:mode] == 'focus'
+
     if result.success?
       extract_chunk_data(result)
       
       respond_to do |format|
         format.turbo_stream do
-          if params[:mode] == 'focus'
+          if @active_focus_mode
             # Focus mode replaces the entire stream content and disables infinite scroll
             render turbo_stream: [
               turbo_stream.replace("law-stream-content",

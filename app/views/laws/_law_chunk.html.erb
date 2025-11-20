@@ -3,6 +3,14 @@
   Used by Turbo Stream for progressive loading
   Matches EXACTLY the structure from _content.html.erb for CSS compatibility
 -->
+
+<%if @active_focus_mode %>
+  <div class="row mt-2">
+    <div class="col-12">
+      <span style="font-size: 15px; padding: 0px;"><a class="btn btn-primary" style="font-size: 15px;" href="<%= law_path(@law) %>">Ver ley completa</a></span>
+    </div>
+  </div>
+<% end %>
 <% if stream.present? %>
   <!-- Phase 1 (Progressive Structure v2): Cleaned & unified chunk rendering -->
   <% article_iterator = ((chunk_metadata&.dig(:current_page) || 1) - 1) * (chunk_metadata&.dig(:chunk_size) || 200) %>

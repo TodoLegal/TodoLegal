@@ -8,13 +8,13 @@ module LawDisplayConfig
 
   # Default chunk size for loading articles in batches
   # Based on performance analysis - 200 articles balance memory vs queries
-  DEFAULT_CHUNK_SIZE = 200
+  DEFAULT_CHUNK_SIZE = 100
 
   # Chunk sizes for different scenarios
   CHUNK_SIZES = {
     search: 100,        # Smaller chunks for search results (faster initial load)
-    normal: 300,        # Standard chunk size for regular law browsing
-    mobile: 100         # Smaller chunks for mobile devices
+    normal: 100,        # Standard chunk size for regular law browsing
+    mobile: 50         # Smaller chunks for mobile devices
   }.freeze
 
   # User access limits based on subscription status

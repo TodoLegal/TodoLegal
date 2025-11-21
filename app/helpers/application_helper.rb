@@ -245,6 +245,11 @@ module ApplicationHelper
   def maximum_basic_monthly_documents
     MAXIMUM_BASIC_MONTHLY_DOCUMENTS
   end
+  
+  def is_number token
+    /\A[+-]?\d+(\.\d+)?\z/ === token
+  end
+  
 
   def law_count
     Law.count

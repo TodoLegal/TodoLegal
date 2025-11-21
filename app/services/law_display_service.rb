@@ -182,20 +182,82 @@ class LawDisplayService < ApplicationService
   # @param display_data [Hash] Display data to populate
   # @param articles [ActiveRecord::Relation] Articles relation
   def process_single_article_request(display_data, articles)
-    target_article = articles.where('number LIKE ?', "%#{@articles_filter.first}%").first
-    go_to_position = target_article&.position
-    # PERF: We load full stream only for single-article direct positioning.
-    # Optimization candidate: use manifest mapping (number->index) to avoid
-    # building entire stream for large laws. See PERFORMANCE.md (Article Number Divergence).
-    
-    # Load full law stream and find position
-    stream_result = build_law_stream(go_to_position)
-    
-    display_data[:stream] = stream_result[:stream]
-    display_data[:result_index_items] = stream_result[:index_items]
-    display_data[:go_to_article] = stream_result[:go_to_article]
-    display_data[:has_articles_only] = stream_result[:has_articles_only]
-    display_data[:articles_count] = @law.cached_articles_count
+    raw = @articles_filter.first
+    target_number = raw.to_s.strip
+    # Remove any leading slash if query came like "/894"
+    target_number = target_number.sub(%r{\A/}, '')
+    target_number = " " + target_number
+    # EXACT match instead of substring LIKE
+    target_article = articles.where(number: target_number).first
+    return unless target_article
+
+    # Determine center page for focus window around the target article
+    center_page = ((target_article.position - 1) / @chunk_size) + 1
+    total_articles = @law.cached_articles_count
+    total_pages    = (total_articles.to_f / @chunk_size).ceil
+    window_pages   = [center_page - 1, center_page, center_page + 1].select { |p| p >= 1 && p <= total_pages }.uniq.sort
+
+    # Load only articles for the window (avoid full stream)
+    window_articles = window_pages.flat_map { |p| load_articles_for_page(p) }.sort_by(&:position)
+    if window_articles.empty?
+      display_data[:stream] = []
+      display_data[:articles_count] = 0
+      display_data[:total_articles_count] = total_articles
+      display_data[:chunk_metadata] = {
+        current_page: center_page,
+        total_pages: total_pages,
+        chunk_size: @chunk_size,
+        displayed_articles: 0,
+        total_articles: total_articles,
+        has_more_chunks: false,
+        is_first_chunk: false,
+        is_last_chunk: false,
+        focus_mode: true,
+        pages_included: [center_page]
+      }
+      return
+    end
+
+    # Restrict structure strictly to headings whose position falls within the article range
+    min_pos = window_articles.first.position
+    max_pos = window_articles.last.position
+    all_structure = load_all_structure_components
+    display_structure = {
+      books:       all_structure[:books].select       { |b| b.position >= min_pos && b.position <= max_pos },
+      titles:      all_structure[:titles].select      { |t| t.position >= min_pos && t.position <= max_pos },
+      chapters:    all_structure[:chapters].select    { |c| c.position >= min_pos && c.position <= max_pos },
+      sections:    all_structure[:sections].select    { |s| s.position >= min_pos && s.position <= max_pos },
+      subsections: all_structure[:subsections].select { |ss| ss.position >= min_pos && ss.position <= max_pos }
+    }
+
+    # Build interleaved stream limited to window
+    stream_builder = LawStreamBuilder.new(
+      law: @law,
+      components: display_structure.merge(articles: window_articles),
+      go_to_position: target_article.position
+    )
+    result = stream_builder.build
+
+    # Populate display data
+    display_data[:stream]             = result[:stream]
+    display_data[:result_index_items] = result[:index_items]
+    display_data[:go_to_article]      = result[:go_to_article]
+    display_data[:has_articles_only]  = result[:has_articles_only]
+    display_data[:articles_count]     = window_articles.size
+    display_data[:total_articles_count] = total_articles
+
+    display_data[:chunk_metadata] = {
+      current_page: window_pages.first,
+      total_pages: total_pages,
+      chunk_size: @chunk_size,
+      displayed_articles: window_articles.size,
+      total_articles: total_articles,
+      has_more_chunks: false,
+      is_first_chunk: false,
+      is_last_chunk: false,
+      focus_mode: true,
+      pages_included: window_pages
+    }
   end
 
   # Process normal law display (with progressive chunking)

@@ -71,6 +71,7 @@ class LawDisplayService < ApplicationService
       info_is_searched: false,
       result_index_items: [],
       go_to_article: nil,
+      focus_mode_active: false,
       user_can_edit_law: false, # Will be set by controller
       user_can_access_law: true # Will be modified based on user access
     }
@@ -222,6 +223,7 @@ class LawDisplayService < ApplicationService
     display_data[:has_articles_only]  = result[:has_articles_only]
     display_data[:articles_count]     = window_articles.size
     display_data[:total_articles_count] = total_articles
+    display_data[:focus_mode_active]  = true
 
     display_data[:chunk_metadata] = {
       current_page: window_pages.first,
@@ -424,6 +426,7 @@ class LawDisplayService < ApplicationService
     display_data[:has_articles_only] = result[:has_articles_only]
     display_data[:articles_count] = articles.size
     display_data[:total_articles_count] = total_articles
+    display_data[:focus_mode_active] = true
 
     # Focus-specific chunk metadata
     display_data[:chunk_metadata] = {

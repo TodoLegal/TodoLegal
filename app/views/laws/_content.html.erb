@@ -58,8 +58,15 @@
   
   <!-- Main content area -->
   <div id="law-stream-content">
-  <%# Phase 1 (Progressive Structure v2): Replace ephemeral iterators with stable, position-based IDs %>
-  <% article_iterator = 0 %>
+    <%# Phase 1 (Progressive Structure v2): Replace ephemeral iterators with stable, position-based IDs %>
+    <% if @active_focus_mode %>
+      <div class="row mt-2" style="padding: 0 1.5rem;">
+        <div class="col-12">
+          <span style="font-size: 15px;"><a class="btn btn-primary" style="font-size: 15px;" href="<%= law_path(@law) %>">Ver ley completa</a></span>
+        </div>
+      </div>
+    <% end %>
+    <% article_iterator = 0 %>
     <% @stream.each do |stream| %>
       <% if stream.instance_of? Book %>
         <div class="bigger-section" id="bs_book_<%= stream.position %>" data-structure-type="book" data-structure-position="<%= stream.position %>" data-last-article-index="<%= article_iterator - 1 %>" data-next-article-index="<%= article_iterator %>">
@@ -159,7 +166,9 @@
   </div> <!-- End law-stream-content -->
   
   <!-- Loading state for progressive chunks -->
-  <% unless @info_is_searched %>
+  <% if @active_focus_mode %>
+    <%= render 'focus_toolbar', law: @law %>
+  <% elsif !@info_is_searched %>
     <%= render 'loading_state', 
         has_more: (@chunk_metadata&.dig(:has_more_chunks) || false), 
         current_page: (@chunk_metadata&.dig(:current_page) || 1),

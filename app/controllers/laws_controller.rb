@@ -54,8 +54,6 @@ class LawsController < ApplicationController
 
     # Use LawDisplayService for chunked loading
     result = LawDisplayService.call(@law, user: current_user, params: chunk_params)
-    
-    @active_focus_mode = params[:mode] == 'focus'
 
     if result.success?
       extract_chunk_data(result)
@@ -362,6 +360,7 @@ class LawsController < ApplicationController
       @total_articles_count = data[:total_articles_count]
       @current_page = data.dig(:chunk_metadata, :current_page) || params[:page].to_i
       @has_more_chunks = data.dig(:chunk_metadata, :has_more_chunks) || false
+      @active_focus_mode = !!data.dig(:chunk_metadata, :focus_mode)
       
       # Set user permissions for chunk access control
       @user_can_access_law = user_can_access_law(@law, current_user)

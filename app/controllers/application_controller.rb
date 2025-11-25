@@ -125,6 +125,7 @@ class ApplicationController < ActionController::Base
     # Add chunk metadata for Turbo integration
     @chunk_metadata = display_data[:chunk_metadata]
     @total_articles_count = display_data[:total_articles_count]
+    @active_focus_mode = !!display_data[:focus_mode_active]
     
     # Set user permissions using existing helper methods
     @user_can_edit_law = current_user_is_editor_tl

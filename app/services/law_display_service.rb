@@ -71,6 +71,7 @@ class LawDisplayService < ApplicationService
       info_is_searched: false,
       result_index_items: [],
       go_to_article: nil,
+      focus_mode_active: false,
       user_can_edit_law: false, # Will be set by controller
       user_can_access_law: true # Will be modified based on user access
     }
@@ -191,50 +192,27 @@ class LawDisplayService < ApplicationService
     target_article = articles.where(number: target_number).first
     return unless target_article
 
+    # Get article from cached manifest for global index, we need it to find the center page
+    target_article = Laws::ManifestCache.article_by_position(@law, target_article.position)
+    return unless target_article
+
     # Determine center page for focus window around the target article
-    center_page = ((target_article.position - 1) / @chunk_size) + 1
+    center_page = (target_article[:global_index]/@chunk_size) + 1
     total_articles = @law.cached_articles_count
     total_pages    = (total_articles.to_f / @chunk_size).ceil
     window_pages   = [center_page - 1, center_page, center_page + 1].select { |p| p >= 1 && p <= total_pages }.uniq.sort
 
     # Load only articles for the window (avoid full stream)
     window_articles = window_pages.flat_map { |p| load_articles_for_page(p) }.sort_by(&:position)
-    if window_articles.empty?
-      display_data[:stream] = []
-      display_data[:articles_count] = 0
-      display_data[:total_articles_count] = total_articles
-      display_data[:chunk_metadata] = {
-        current_page: center_page,
-        total_pages: total_pages,
-        chunk_size: @chunk_size,
-        displayed_articles: 0,
-        total_articles: total_articles,
-        has_more_chunks: false,
-        is_first_chunk: false,
-        is_last_chunk: false,
-        focus_mode: true,
-        pages_included: [center_page]
-      }
-      return
-    end
 
     # Restrict structure strictly to headings whose position falls within the article range
-    min_pos = window_articles.first.position
-    max_pos = window_articles.last.position
-    all_structure = load_all_structure_components
-    display_structure = {
-      books:       all_structure[:books].select       { |b| b.position >= min_pos && b.position <= max_pos },
-      titles:      all_structure[:titles].select      { |t| t.position >= min_pos && t.position <= max_pos },
-      chapters:    all_structure[:chapters].select    { |c| c.position >= min_pos && c.position <= max_pos },
-      sections:    all_structure[:sections].select    { |s| s.position >= min_pos && s.position <= max_pos },
-      subsections: all_structure[:subsections].select { |ss| ss.position >= min_pos && ss.position <= max_pos }
-    }
+    display_structure = filter_structure_for_display(load_all_structure_components, window_articles, is_cumulative: false)
 
     # Build interleaved stream limited to window
     stream_builder = LawStreamBuilder.new(
       law: @law,
       components: display_structure.merge(articles: window_articles),
-      go_to_position: target_article.position
+      go_to_position: target_article[:position]
     )
     result = stream_builder.build
 
@@ -245,6 +223,7 @@ class LawDisplayService < ApplicationService
     display_data[:has_articles_only]  = result[:has_articles_only]
     display_data[:articles_count]     = window_articles.size
     display_data[:total_articles_count] = total_articles
+    display_data[:focus_mode_active]  = true
 
     display_data[:chunk_metadata] = {
       current_page: window_pages.first,
@@ -278,24 +257,6 @@ class LawDisplayService < ApplicationService
     
     # Add complete structure components for index (available on first chunk)
     display_data[:all_structure_components] = stream_result[:all_structure_components] if stream_result[:all_structure_components]
-  end
-
-  # Build the law stream with all components (books, titles, chapters, etc.)
-  # This is a more maintainable version of the original get_law_stream method
-  # @param go_to_position [Integer, nil] Position to scroll to
-  # @return [Hash] Stream data with components
-  def build_law_stream(go_to_position = nil)
-    # Load all law components - legacy method for backward compatibility
-    components = load_law_components
-    
-    # Build the interleaved stream
-    stream_builder = LawStreamBuilder.new(
-      law: @law,
-      components: components,
-      go_to_position: go_to_position
-    )
-    
-    stream_builder.build
   end
 
   # Build chunked law stream with progressive loading
@@ -334,19 +295,6 @@ class LawDisplayService < ApplicationService
     result
   end
 
-  # Load all law components (books, titles, chapters, etc.)
-  # @return [Hash] Hash of component arrays
-  def load_law_components
-    {
-      books: @law.books.order(:position),
-      titles: @law.titles.order(:position),
-      chapters: @law.chapters.order(:position),
-      sections: @law.sections.order(:position),
-      subsections: @law.subsections.order(:position),
-      articles: @law.articles.order(:position)
-    }
-  end
-
   # Load law components with chunked loading support
   # New approach: Load ALL structure + filter for display based on current articles
   # @return [Hash] Hash of component arrays
@@ -366,20 +314,6 @@ class LawDisplayService < ApplicationService
     
     # 4. Return filtered structure + articles
     display_structure.merge(articles: articles)
-  end
-
-  # Helper method to return empty components structure
-  # @param articles [ActiveRecord::Relation] Articles for this chunk
-  # @return [Hash] Empty components hash
-  def empty_components_hash(articles)
-    {
-      books: @law.books.none,
-      titles: @law.titles.none,
-      chapters: @law.chapters.none,
-      sections: @law.sections.none,
-      subsections: @law.subsections.none,
-      articles: articles
-    }
   end
 
   # Load articles for the current chunk/page
@@ -492,6 +426,7 @@ class LawDisplayService < ApplicationService
     display_data[:has_articles_only] = result[:has_articles_only]
     display_data[:articles_count] = articles.size
     display_data[:total_articles_count] = total_articles
+    display_data[:focus_mode_active] = true
 
     # Focus-specific chunk metadata
     display_data[:chunk_metadata] = {
@@ -550,13 +485,13 @@ class LawDisplayService < ApplicationService
   # @param all_structure [Hash] Complete structure components
   # @param articles [ActiveRecord::Relation] Current chunk articles
   # @return [Hash] Filtered structure components
-  def filter_structure_for_display(all_structure, articles)
+  def filter_structure_for_display(all_structure, articles, is_cumulative: true)
     return empty_structure_components if articles.empty?
     
     min_position = articles.first.position
     max_position = articles.last.position
-    
-    if @page == 1
+
+    if @page == 1 && is_cumulative
       # First page: return all structure up to max_position (cumulative)
       # PERF: This allows index panel to render all prior hierarchy once.
       {
@@ -590,6 +525,4 @@ class LawDisplayService < ApplicationService
       subsections: []
     }
   end
-
-
 end

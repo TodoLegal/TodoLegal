@@ -183,13 +183,7 @@ class LawDisplayService < ApplicationService
   # @param display_data [Hash] Display data to populate
   # @param articles [ActiveRecord::Relation] Articles relation
   def process_single_article_request(display_data, articles)
-    raw = @articles_filter.first
-    target_number = raw.to_s.strip
-    # Remove any leading slash if query came like "/894"
-    target_number = target_number.sub(%r{\A/}, '')
-    target_number = " " + target_number
-    # EXACT match instead of substring LIKE
-    target_article = articles.where(number: target_number).first
+    target_article = articles.where('number LIKE ?', "%#{@articles_filter.first}%").first
     return unless target_article
 
     # Get article from cached manifest for global index, we need it to find the center page

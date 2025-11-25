@@ -21,6 +21,7 @@ pin "law_subbar_actions", preload: false
 pin "preferences_validator", preload: false
 pin "stripe_integration", preload: false
 pin "trim_articles_for_preview", preload: false
+pin "manifest_loader"
 
 pin "lodash.debounce" # @4.0.8
 pin "trix"

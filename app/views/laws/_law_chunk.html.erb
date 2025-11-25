@@ -1,0 +1,86 @@
+<!--
+  Partial for rendering a single chunk of law content
+  Used by Turbo Stream for progressive loading
+  Matches EXACTLY the structure from _content.html.erb for CSS compatibility
+-->
+
+<%if @active_focus_mode %>
+  <div class="row mt-2">
+    <div class="col-12">
+      <span style="font-size: 15px; padding: 0px;"><a class="btn btn-primary" style="font-size: 15px;" href="<%= law_path(@law) %>">Ver ley completa</a></span>
+    </div>
+  </div>
+<% end %>
+<% if stream.present? %>
+  <!-- Phase 1 (Progressive Structure v2): Cleaned & unified chunk rendering -->
+  <% article_iterator = ((chunk_metadata&.dig(:current_page) || 1) - 1) * (chunk_metadata&.dig(:chunk_size) || 200) %>
+
+  <% stream.each do |component| %>
+    <% case component %>
+    <% when Book %>
+      <div class="bigger-section" id="bs_book_<%= component.position %>" data-structure-type="book" data-structure-position="<%= component.position %>" data-last-article-index="<%= article_iterator - 1 %>" data-next-article-index="<%= article_iterator %>">
+        <h2 id="book_<%= component.position %>">
+          Libro <%= component.number %>
+          <% if @user_can_edit_law && defined?(is_editor_mode_enabled) && is_editor_mode_enabled %>
+            <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_book_path(component) %>
+          <% end %>
+        </h2>
+        <h3><%= component.name %></h3>
+      </div>
+    <% when Title %>
+      <div class="bigger-section" id="bs_title_<%= component.position %>" data-structure-type="title" data-structure-position="<%= component.position %>" data-last-article-index="<%= article_iterator - 1 %>" data-next-article-index="<%= article_iterator %>">
+        <h2 class="title" id="title_<%= component.position %>">
+          Título <%= component.number %>
+          <% if @user_can_edit_law && defined?(is_editor_mode_enabled) && is_editor_mode_enabled %>
+            <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_title_path(component) %>
+          <% end %>
+        </h2>
+        <h3 class="title-name"><%= component.name %></h3>
+      </div>
+    <% when Chapter %>
+      <div class="bigger-section" id="bs_chapter_<%= component.position %>" data-structure-type="chapter" data-structure-position="<%= component.position %>" data-last-article-index="<%= article_iterator - 1 %>" data-next-article-index="<%= article_iterator %>">
+        <h3 class="chapter" id="chapter_<%= component.position %>">
+          Capítulo <%= component.number %>
+          <% if @user_can_edit_law && defined?(is_editor_mode_enabled) && is_editor_mode_enabled %>
+            <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_chapter_path(component) %>
+          <% end %>
+        </h3>
+        <h4 class="chapter-name"><%= component.name %></h4>
+      </div>
+    <% when Section %>
+      <div class="bigger-section" id="bs_section_<%= component.position %>" data-structure-type="section" data-structure-position="<%= component.position %>" data-last-article-index="<%= article_iterator - 1 %>" data-next-article-index="<%= article_iterator %>">
+        <h4 class="section" id="section_<%= component.position %>">
+          Sección <%= component.number %>
+          <% if @user_can_edit_law && defined?(is_editor_mode_enabled) && is_editor_mode_enabled %>
+            <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_section_path(component) %>
+          <% end %>
+        </h4>
+        <h5 class="section-name"><%= component.name %></h5>
+      </div>
+    <% when Subsection %>
+      <div class="bigger-section" id="bs_subsection_<%= component.position %>" data-structure-type="subsection" data-structure-position="<%= component.position %>" data-last-article-index="<%= article_iterator - 1 %>" data-next-article-index="<%= article_iterator %>">
+        <h5 class="subsection" id="subsection_<%= component.position %>">
+          <%= component.number %>
+          <% if @user_can_edit_law && defined?(is_editor_mode_enabled) && is_editor_mode_enabled %>
+            <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_subsection_path(component) %>
+          <% end %>
+        </h5>
+        <h5 class="subsection-name"><%= component.name %></h5>
+      </div>
+    <% when Article %>
+      <div align="justify" class="article-p" id="article_idx_<%= article_iterator %>" data-article-global-index="<%= article_iterator %>" data-article-position="<%= component.position %>" onclick="onClickArticle(<%= article_iterator %>)">
+        <b class="article-name" align="justify" style="color: #111;font-weight:bold; display: block;">Artículo <%= component.number %><br>
+          <% if @user_can_edit_law && defined?(is_editor_mode_enabled) && is_editor_mode_enabled %>
+            <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_law_path(component.law, article_number: component.number ) %>
+          <% end %>
+        </b>
+        <% if @highlight_enabled %>
+          <%= component.pg_search_highlight.gsub(/<(?!\/??b(?=>|\s.*>))\/??.*?>/, '').html_safe %>.
+        <% else %>
+          <%= component.class.markdown.render(component.body).html_safe %>
+        <% end %>
+      </div>
+      <% article_iterator += 1 %>
+    <% end %>
+  <% end %>
+<% end %>

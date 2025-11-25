@@ -8,8 +8,46 @@ var sticky_header = null
 var active_tab = "#articulos"
 window.onscroll = function() {onScrollCallback()};
 
-var bigger_sections = document.getElementsByClassName("bigger-section");
+// Phase 1 adaptation: stable position-based structure IDs (bs_*). We now derive navigation indexes dynamically.
+var bigger_sections = [];
 var article_names = document.getElementsByClassName("article-name");
+
+function indexStructureAndArticles() {
+  // Collect and sort structure by data-structure-position (numeric)
+  bigger_sections = Array.from(document.querySelectorAll('.bigger-section'))
+    .sort(function(a, b) {
+      return parseInt(a.dataset.structurePosition || '0') - parseInt(b.dataset.structurePosition || '0');
+    });
+  // Assign navIndex to each bigger section
+  bigger_sections.forEach(function(el, idx){ el.dataset.navIndex = idx; });
+
+  // Map articles to nearest preceding bigger section
+  var allArticles = Array.from(document.querySelectorAll('.article, .article-p'));
+  var lastSectionIndex = null;
+  allArticles.forEach(function(a){
+    // Find previous sibling bigger section walking backwards
+    var prev = a.previousElementSibling;
+    while(prev && !prev.classList.contains('bigger-section')) {
+      prev = prev.previousElementSibling;
+    }
+    if(prev && prev.classList.contains('bigger-section')) {
+      lastSectionIndex = prev.dataset.navIndex;
+    }
+    // Persist mapping for navigation
+    if(lastSectionIndex !== null) {
+      a.dataset.sectionIndex = lastSectionIndex;
+    }
+  });
+}
+
+// Re-index on initial load and after any Turbo stream that appends structure/articles
+document.addEventListener('turbo:load', indexStructureAndArticles);
+document.addEventListener('turbo:before-stream-render', function(){
+  setTimeout(indexStructureAndArticles, 0);
+});
+document.addEventListener('turbo:render', function(){
+  setTimeout(indexStructureAndArticles, 0);
+});
 
 function setStickySectionHeading(header_text)
 {
@@ -136,24 +174,39 @@ function onClickBody()
   }
 }
 
-function onClickArticle(clicked_article_id)
-{
-  if(article_focused)
-  {
-    article_focused.style['background-color'] = "var(--c-original-background)"
-    article_focused.style['color'] = "var(--c-original-text)"
+function getArticleElementByIndex(idx) {
+  var el = document.getElementById('article_idx_' + idx);
+  if(el) return el;
+  return document.querySelector('[data-article-global-index="' + idx + '"]');
+}
+
+function safeSelectArticle(el) {
+  if(!el) return;
+  el.scrollIntoView({block: 'center'});
+  el.style['background-color'] = "var(--c-selected-article-background)";
+  el.style['color'] = "var(--c-selected-article-text)";
+}
+
+function restoreArticleStyles(el) {
+  if(!el) return;
+  el.style['background-color'] = "var(--c-original-background)";
+  el.style['color'] = "var(--c-original-text)";
+}
+
+function onClickArticle(clicked_article_id) {
+  var newEl = getArticleElementByIndex(clicked_article_id);
+  if(article_focused && article_focused !== newEl) {
+    restoreArticleStyles(article_focused);
   }
-  if(current_article != clicked_article_id)
-  {
-    current_article = clicked_article_id
-    article_focused = document.getElementById('article_count_' + current_article)
-    article_focused.style['background-color'] = "var(--c-selected-article-background)"
-    article_focused.style['color'] = "var(--c-selected-article-text)"
-  }else
-  {
-    unselectCurrentArticle()
+  if(current_article !== clicked_article_id) {
+    current_article = clicked_article_id;
+    article_focused = newEl;
+    safeSelectArticle(article_focused);
+  } else {
+    restoreArticleStyles(article_focused);
+    unselectCurrentArticle();
   }
-  article_clicked = true
+  article_clicked = true;
   return true;
 }
 
@@ -161,7 +214,8 @@ function gotoArticle(article_number)
 {
   if (bigger_section_focused)
   {
-    current_article = parseInt(bigger_section_focused.getAttribute("last_article"))
+    var lastIdx = parseInt(bigger_section_focused.dataset.lastArticleIndex || '-1')
+    current_article = lastIdx
     bigger_section_focused.style['background-color'] = "var(--c-original-background)"
     bigger_section_focused.style['color'] = "var(--c-original-text)"
     bigger_section_focused = null
@@ -173,7 +227,7 @@ function gotoArticle(article_number)
 
   current_article = article_number
   
-  article_focused = document.getElementById('article_count_' + current_article)
+  article_focused = getArticleElementByIndex(current_article)
   article_focused.scrollIntoView({block: 'center'})
   article_focused.style['background-color'] = "var(--c-selected-article-background)"
   article_focused.style['color'] = "var(--c-selected-article-text)"
@@ -183,7 +237,8 @@ function focusPreviousArticle()
 {
   if (bigger_section_focused)
   {
-    current_article = parseInt(bigger_section_focused.getAttribute("last_article"))
+    var lastIdx = parseInt(bigger_section_focused.dataset.lastArticleIndex || '-1')
+    current_article = lastIdx
     bigger_section_focused.style['background-color'] = "var(--c-original-background)"
     bigger_section_focused.style['color'] = "var(--c-original-text)"
     bigger_section_focused = null
@@ -197,7 +252,7 @@ function focusPreviousArticle()
     current_article -= 1
   }
   
-  article_focused = document.getElementById('article_count_' + current_article)
+  article_focused = getArticleElementByIndex(current_article)
   article_focused.scrollIntoView({block: 'center'})
   article_focused.style['background-color'] = "var(--c-selected-article-background)"
   article_focused.style['color'] = "var(--c-selected-article-text)"
@@ -207,7 +262,8 @@ function focusNextArticle()
 {
   if (bigger_section_focused)
   {
-    current_article = parseInt(bigger_section_focused.getAttribute("next_article"))
+    var nextIdx = parseInt(bigger_section_focused.dataset.nextArticleIndex || '-1')
+    current_article = nextIdx
     bigger_section_focused.style['background-color'] = "var(--c-original-background)"
     bigger_section_focused.style['color'] = "var(--c-original-text)"
     bigger_section_focused = null
@@ -221,7 +277,7 @@ function focusNextArticle()
     current_article += 1
   }
 
-  article_focused = document.getElementById('article_count_' + current_article)
+  article_focused = getArticleElementByIndex(current_article)
   article_focused.scrollIntoView({block: 'center'})
   article_focused.style['background-color'] = "var(--c-selected-article-background)"
   article_focused.style['color'] = "var(--c-selected-article-text)"
@@ -229,49 +285,34 @@ function focusNextArticle()
 
 /* Bigger section navigation */
 
-var current_bigger_section = 0;
+var current_bigger_section = -1;
 var bigger_section_focused = null;
 
-function focusPreviousBiggerSection()
-{
-  if(article_focused)
-  {
-    current_bigger_section = parseInt(article_focused.getAttribute("last_bigger_section"))
-    article_focused.style['background-color'] = "var(--c-original-background)"
-    article_focused.style['color'] = "var(--c-original-text)"
-    article_focused = null
-  } else if(bigger_section_focused)
-  {
-    bigger_section_focused.style['background-color'] = "var(--c-original-background)"
-    bigger_section_focused.style['color'] = "var(--c-original-text)"
-    current_bigger_section -= 1
+function focusPreviousBiggerSection() {
+  // Initialize if not set
+  if(current_bigger_section === -1 && bigger_sections.length > 0) {
+    current_bigger_section = bigger_sections.length - 1;
+  } else {
+    current_bigger_section -= 1;
+    if(current_bigger_section < 0) current_bigger_section = bigger_sections.length - 1;
   }
-
-  bigger_section_focused = document.getElementById('bigger_section_' + current_bigger_section)
-  bigger_section_focused.scrollIntoView({block: 'center'})
-  bigger_section_focused.style['background-color'] = "var(--c-selected-bigger-section-background)"
-  bigger_section_focused.style['color'] = "var(--c-selected-bigger-section-text)"
+  if(article_focused) { restoreArticleStyles(article_focused); unselectCurrentArticle(); }
+  if(bigger_section_focused) { restoreArticleStyles(bigger_section_focused); }
+  bigger_section_focused = bigger_sections[current_bigger_section];
+  safeSelectArticle(bigger_section_focused);
 }
 
-function focusNextBiggerSection()
-{
-  if(article_focused)
-  {
-    current_bigger_section = parseInt(article_focused.getAttribute("next_bigger_section"))
-    article_focused.style['background-color'] = "var(--c-original-background)"
-    article_focused.style['color'] = "var(--c-original-text)"
-    article_focused = null
-  } else if(bigger_section_focused)
-  {
-    bigger_section_focused.style['background-color'] = "var(--c-original-background)"
-    bigger_section_focused.style['color'] = "var(--c-original-text)"
-    current_bigger_section += 1
+function focusNextBiggerSection() {
+  if(current_bigger_section === -1 && bigger_sections.length > 0) {
+    current_bigger_section = 0;
+  } else {
+    current_bigger_section += 1;
+    if(current_bigger_section >= bigger_sections.length) current_bigger_section = 0;
   }
-  
-  bigger_section_focused = document.getElementById('bigger_section_' + current_bigger_section)
-  bigger_section_focused.scrollIntoView({block: 'center'})
-  bigger_section_focused.style['background-color'] = "var(--c-selected-bigger-section-background)"
-  bigger_section_focused.style['color'] = "var(--c-selected-bigger-section-text)"
+  if(article_focused) { restoreArticleStyles(article_focused); unselectCurrentArticle(); }
+  if(bigger_section_focused) { restoreArticleStyles(bigger_section_focused); }
+  bigger_section_focused = bigger_sections[current_bigger_section];
+  safeSelectArticle(bigger_section_focused);
 }
 
 var onkeydown = (function (ev) {

@@ -80,6 +80,13 @@
   }
 </style>
 
+<!-- Phase 2: lightweight manifest subset provided by controller (@manifest_subset) -->
+<% if defined?(@manifest_subset) && @manifest_subset.present? %>
+  <script id="law-manifest-structure" type="application/json">
+    <%= raw(@manifest_subset.to_json) %>
+  </script>
+<% end %>
+
 <div class="container container--visualizador" data-spy="scroll" data-target="#myScrollspy">
 
   <!-- Copied to clipboard alert -->
@@ -100,7 +107,9 @@
         <div class="tab-pane fade show active" id="articulos" role="tabpanel" aria-labelledby="articulos-tab">
           <div class="law-header-mobile"><%= render 'law_header' %></div>
           <span class="resultinfo sticky-top d-inline-block text-truncate" style="width: 100%;" id="sticky_nav_header"></span>
-          <%= render  partial:'content', locals:{is_mobile: false} %>
+          
+          <!-- Keep existing DOM structure for CSS/JS compatibility -->
+          <%= render partial:'content', locals:{is_mobile: false} %>
         </div>
         <div class="tab-pane fade show" id="indice" role="tabpanel" aria-labelledby="indice-tab">
           <%= render 'indice' %>
@@ -153,17 +162,16 @@
                       <div class="col-md-12">
                         <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, :back, style:"font-size: 1.5rem; color:#505864;" %>
                         <h3 style="font-size:22px; text-align:center; margin-left: 8%;">
-                        Suscríbete y obtén acceso ilimitado
+                        Suscríbete y obten acceso ilimitado
                         </h3>
                       </div>
                       <div class="col-md-12">
                         <p style="font-size:18px; text-align:center; padding-bottom: 22px; padding-top: 22px;">
-                      Adquiere el <b>Plan Pro</b> por <b>$<%= BASE_PRICE_MONTHLY %> al mes</b> y podrás acceder a más de <%= (all_document_count/10)*10 %> leyes y documentos legales y a lo que continuamente agregamos.
-                        <p style="font-size:18px; text-align:center;">
-                          <i class="text-muted">Puedes cancelar la suscripción en cualquier momento.</i>
+                          Adquiere el <b>Plan Pro</b> por <b>$<%= BASE_PRICE_MONTHLY %> al mes</b> y podrás acceder a más de <%= (all_document_count/10)*10 %> leyes y documentos legales y a lo que continuamente agregamos.
+                          <p style="font-size:18px; text-align:center;">
+                            <i class="text-muted">Puedes cancelar la suscripción en cualquier momento.</i>
+                          </p>
                         </p>
-                        
-                      </p>
                       </div>
                       <div class="col-md-12">
                         <a href="<%= new_user_registration_path %>?go_to_law=<%=@law.id%>&go_to_checkout=true">
@@ -280,48 +288,11 @@
 </div>
 
 <script>
-  function onIndexElementClicked(section_id) {
-    console.log(section_id)
-    document.getElementById(section_id).scrollIntoView({block:'center'});
-
-  }
-
-  //This function handles the logic to show the highlited section and current_highlated word number, based on the preview element clicked
-  // function onPreviewElementClicked (section_id, highlited_section){
-  //   console.log("Id del articulo: " + section_id);
-  //   document.getElementById(section_id).scrollIntoView({block:'center'});
-  //   var c;
-  //   var elementId = "";
-  //   var acumulator = 0;
-
-  //   for (c = 0  ; c < highlited_section ; c++){
-  //     elementId = "article_count_" + c.toString();
-  //     var element = document.getElementById(elementId);
-  //     acumulator += element.getElementsByClassName('highlighted').length;
-      
-  //   }
-  //   currrent_highlighted = acumulator;
-  //   updateHighlightedView();
-  //   hideSearchContainer();
-  // }
-
-  //hides the search container using solution 1, using the 'onclick' attribute in the button to call this function
   function hideSearchContainer () {
-      document.getElementsByClassName("search--container")[0].style.display = "none";
-      document.getElementsByClassName("container--visualizador")[0].style.display = "block";
-      document.getElementById("topNavbar").style.display = "flex";
-  }
-
-  //hides the search container using solution 2, using an event listener on the 'click' event of the button
-  /*
-  const hide_search_container = document.getElementById('hideSearchContainer-button');
-  hide_search_container.addEventListener('click', (event) => {
-    console.log("hide search container");
     document.getElementsByClassName("search--container")[0].style.display = "none";
     document.getElementsByClassName("container--visualizador")[0].style.display = "block";
     document.getElementById("topNavbar").style.display = "flex";
-  })
-  */
+  }
 </script>
 
 

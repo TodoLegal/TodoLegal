@@ -52,7 +52,12 @@ class User < ApplicationRecord
       'guerrillamail.com',
       'mailinator.com',
       'throwaway.email',
-      'temp-mail.org'
+      'temp-mail.org',
+      'dispostable.com',
+      'getnada.com',
+      'maildrop.cc',
+      'fakeinbox.com',
+      'canvect.com'
     ]
     
     domain = email.split('@').last.downcase if email.present?

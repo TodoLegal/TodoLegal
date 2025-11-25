@@ -1,0 +1,198 @@
+/* Progressive Loading CSS for Law Infinite Scroll */
+/* Smooth animations and loading states */
+
+.loading-container {
+  transition: all 0.3s ease-in-out;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  margin: 1rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.loading-trigger {
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.loading-trigger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Loading spinner animations - Custom TodoLegal spinner */
+.law-loading-spinner .container-loader {
+  width: 60px;
+  height: 60px;
+  margin: auto;
+}
+
+.law-loading-spinner .loader {
+  border: 8px solid #A6B9D3;
+  height: 50px;
+  width: 50px;
+  border-radius: 50px;
+  margin: auto;
+  animation: law-loader 1.2s cubic-bezier(0.17, 0.67, 0.61, 0.99) infinite;
+}
+
+@keyframes law-loader {
+  0% {
+    border-width: 25px;
+    opacity: 0;
+    transform: scale(0.1);
+  }
+  20% {
+    opacity: .5;
+    border-color: #A6B9D3;
+  }
+  40% {
+    border-width: 25px;
+    opacity: 1;
+  }
+  60% {
+    border-width: 8px;
+    opacity: 1;
+  }
+  75% {
+    opacity: .5;
+  }
+  85% {
+    opacity: .25;
+    transform: scale(0.4);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+}
+
+/* Fallback spinner for Bootstrap compatibility */
+.spinner-border {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Smooth fade-in for new chunks */
+.law-content-container .article-p {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Loading text animations */
+.load-more-text {
+  transition: color 0.3s ease;
+  font-weight: 500;
+}
+
+.loading-container:hover .load-more-text {
+  color: #007bff !important;
+}
+
+/* Manual load more button */
+.load-more-btn {
+  transition: all 0.3s ease;
+  border-radius: 20px;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+}
+
+.load-more-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 123, 255, 0.3);
+}
+
+/* Error states */
+.error-container {
+  background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+  border-left: 4px solid #f39c12;
+}
+
+.error-container .alert {
+  background: transparent;
+  border: none;
+  margin-bottom: 0;
+}
+
+/* End of content styling */
+.end-of-content {
+  background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+  border-radius: 8px;
+  color: #155724;
+  font-weight: 500;
+}
+
+.end-of-content i {
+  color: #28a745;
+}
+
+/* Progressive loading skeleton (optional enhancement) */
+.loading-skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: 4px;
+  height: 20px;
+  margin: 10px 0;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Responsive improvements for mobile */
+@media (max-width: 768px) {
+  .loading-container {
+    margin: 0.5rem 0;
+  }
+  
+  .loading-trigger {
+    padding: 1rem !important;
+  }
+  
+  .load-more-btn {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+  }
+}
+
+/* Focus states for accessibility */
+.loading-trigger:focus,
+.load-more-btn:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
+
+/* Smooth transitions for progressive content */
+.law-stream-content {
+  transition: min-height 0.3s ease;
+}
+
+/* Performance optimization - hardware acceleration */
+.loading-trigger,
+.load-more-btn,
+.spinner-border {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}

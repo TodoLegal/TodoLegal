@@ -4,18 +4,22 @@
   Matches EXACTLY the structure from _content.html.erb for CSS compatibility
 -->
 
-<%if @active_focus_mode %>
-  <div class="row mt-2">
-    <div class="col-12">
-      <span style="font-size: 15px; padding: 0px;"><a class="btn btn-primary" style="font-size: 15px;" href="<%= law_path(@law) %>">Ver ley completa</a></span>
-    </div>
-  </div>
-<% end %>
-<% if stream.present? %>
-  <!-- Phase 1 (Progressive Structure v2): Cleaned & unified chunk rendering -->
-  <% article_iterator = ((chunk_metadata&.dig(:current_page) || 1) - 1) * (chunk_metadata&.dig(:chunk_size) || 200) %>
+<% focus_mode = chunk_metadata&.dig(:focus_mode) || @active_focus_mode %>
+<% pages_included = Array(chunk_metadata&.dig(:pages_included)) %>
 
-  <% stream.each do |component| %>
+<% inner_stream = capture do %>
+  <% if @active_focus_mode %>
+    <div class="row mt-2" style="padding: 0 1.5rem;">
+      <div class="col-12">
+        <span style="font-size: 15px;"><a class="btn btn-primary" style="font-size: 15px;" href="<%= law_path(@law) %>">Ver ley completa</a></span>
+      </div>
+    </div>
+  <% end %>
+  <% if stream.present? %>
+    <!-- Phase 1 (Progressive Structure v2): Cleaned & unified chunk rendering -->
+    <% article_iterator = ((chunk_metadata&.dig(:current_page) || 1) - 1) * (chunk_metadata&.dig(:chunk_size) || 200) %>
+
+    <% stream.each do |component| %>
     <% case component %>
     <% when Book %>
       <div class="bigger-section" id="bs_book_<%= component.position %>" data-structure-type="book" data-structure-position="<%= component.position %>" data-last-article-index="<%= article_iterator - 1 %>" data-next-article-index="<%= article_iterator %>">
@@ -82,5 +86,14 @@
       </div>
       <% article_iterator += 1 %>
     <% end %>
+    <% end %>
   <% end %>
+<% end %>
+
+<% if focus_mode %>
+  <div id="law-stream-content" data-focus-mode="true" data-focus-pages="<%= pages_included.join(',') %>">
+    <%= inner_stream %>
+  </div>
+<% else %>
+  <%= inner_stream %>
 <% end %>

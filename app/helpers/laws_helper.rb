@@ -37,10 +37,15 @@ module LawsHelper
             article_text = @current_law.articles.select(:body).first&.body || ""
             if article_body
                 article_text = article_body
+                # clean html tags
+                article_text = ActionView::Base.full_sanitizer.sanitize(article_text)
             end
             return "Artículo " + "#{params[:articles].first}. " + article_text
         else
             article_body = @current_law&.articles&.select(:body)&.first&.body
+            
+            # clean html tags
+            article_body = ActionView::Base.full_sanitizer.sanitize(article_body)
             return "Artículo 1. " + (article_body || "")
         end
         # if @article_number

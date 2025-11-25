@@ -32,14 +32,6 @@ class HomeController < ApplicationController
     end
 
     if current_user
-      $tracker.track(current_user.id, 'TodoLegal Session', {
-        'user_type' => current_user_type_api(current_user),
-        'is_email_confirmed' =>  current_user.confirmed_at?,
-        'has_notifications_activated': UsersPreference.find_by(user_id: current_user.id) != nil,
-        'session_date' => DateTime.now - 6.hours,
-        'location' => "TL Home"
-      })
-
       $tracker.track(current_user.id, 'Site Visit (TL)', { 
         'utm_source' => params[:utm_source],
         'utm_medium' => params[:utm_medium],

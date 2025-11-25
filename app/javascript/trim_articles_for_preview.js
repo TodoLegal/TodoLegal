@@ -4,9 +4,9 @@ function trimArticlesforPreview() {
     var right = ""
     var nodes;
     var resultText = "";
-    for (i = 0 ; i < link_elements.length; i++){
+    for (let i = 0 ; i < link_elements.length; i++){
       nodes = link_elements[i].childNodes;
-      for( j = 0 ; j < nodes.length; j++){
+      for(let j = 0 ; j < nodes.length; j++){
         if(nodes[j].tagName == "H6") {
           resultText = "";
           break;

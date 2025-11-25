@@ -245,6 +245,11 @@ module ApplicationHelper
   def maximum_basic_monthly_documents
     MAXIMUM_BASIC_MONTHLY_DOCUMENTS
   end
+  
+  def is_number token
+    /\A[+-]?\d+(\.\d+)?\z/ === token
+  end
+  
 
   def law_count
     Law.count
@@ -337,6 +342,7 @@ module ApplicationHelper
   end
 
   def update_mixpanel_user user
+    return unless user
     todolegal_status, stripe_status = return_user_plan_status(user)
     $tracker.people.set(user.id, {
       '$email'            => user.email,

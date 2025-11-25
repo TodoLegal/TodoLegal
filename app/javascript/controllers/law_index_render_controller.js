@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
-import ManifestLoader from "../manifest_loader"
+import ManifestLoader from "manifest_loader"
 
 // Connects to data-controller="law-index-render"
 // Renders full hierarchical índice (books, titles, chapters, sections, subsections) from manifest subset.

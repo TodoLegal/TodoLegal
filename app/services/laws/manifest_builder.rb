@@ -150,12 +150,20 @@ module Laws
       section_nodes    = sections.map { |s| serialize.call(s, :section) }
       subsection_nodes = subsections.map { |s| serialize.call(s, :subsection) }
 
-      attach.call(book_nodes, title_nodes)
-      attach.call(title_nodes, chapter_nodes)
-      attach.call(chapter_nodes, section_nodes)
+      # Build hierarchy bottom-up (subsections attach to sections, etc.)
       attach.call(section_nodes, subsection_nodes)
+      attach.call(chapter_nodes, section_nodes)
+      attach.call(title_nodes, chapter_nodes)
+      attach.call(book_nodes, title_nodes)
 
-      book_nodes
+      # Return top-most non-empty level as root
+      # This ensures laws without books still have a valid structure
+      return book_nodes unless book_nodes.empty?
+      return title_nodes unless title_nodes.empty?
+      return chapter_nodes unless chapter_nodes.empty?
+      return section_nodes unless section_nodes.empty?
+      return subsection_nodes unless subsection_nodes.empty?
+      []
     end
 
     # Build flat article index referencing structure path by positions only (names resolvable from structure tree).

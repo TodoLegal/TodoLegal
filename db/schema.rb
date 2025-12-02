@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_11_29_045458) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_02_070448) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
   enable_extension "pg_trgm"
@@ -60,7 +60,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_29_045458) do
     t.integer "law_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index "to_tsvector('tl_config'::regconfig, body)", name: "index_articles_on_body_gin", using: :gin
+    t.tsvector "body_tsv"
+    t.index ["body_tsv"], name: "index_articles_on_body_tsv_gin", using: :gin
     t.index ["law_id"], name: "index_articles_on_law_id"
     t.index ["number"], name: "index_articles_on_number"
   end

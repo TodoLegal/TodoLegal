@@ -16,6 +16,7 @@ class Article < ApplicationRecord
                   using: {
                     tsearch: {
                       dictionary: "tl_config",
+                      tsvector_column: 'body_tsv',
                       highlight: {
                         StartSel: '<b style="color: var(--c-highlight); background-color: var(--c-highlight-background)" class="highlighted">',
                         StopSel: '</b>',
@@ -35,6 +36,7 @@ class Article < ApplicationRecord
                   using: {
                     tsearch: {
                       dictionary: "tl_config",
+                      tsvector_column: 'body_tsv',
                       highlight: {
                         StartSel: '<b>',
                         StopSel: '</b>',
@@ -54,6 +56,7 @@ class Article < ApplicationRecord
                   using: {
                     tsearch: {
                       dictionary: "tl_config",
+                      tsvector_column: 'body_tsv',
                       highlight: {
                         StartSel: '<b style="color: var(--c-highlight); background-color: var(--c-highlight-background)" class="highlighted">',
                         StopSel: '</b>',
@@ -71,6 +74,7 @@ class Article < ApplicationRecord
                   against: :body,
                   using: {
                     tsearch: {
+                      tsvector_column: 'body_tsv',
                       highlight: {
                         StartSel: '<b style="color: var(--c-highlight)">',
                         StopSel: '</b>',

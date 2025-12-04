@@ -339,7 +339,7 @@ protected
 
   def get_related_documents
     documents = []
-    if @document && @document&.document_type&.name == 'Auto Acordado'
+    if @document && (@document&.document_type&.name == 'Auto Acordado' || @document&.document_type&.name == 'Circular CNBS')
       #extract the year of the Auto Acordado date
       year_to_retrieve = @document.publication_date&.year
       #if year_to_retrieve if not nil, use that year, else use 2015

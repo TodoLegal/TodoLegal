@@ -11,27 +11,23 @@
   <% gazettes.each do |gazette| %>
     <tr>
       <td>
-        <% if gazette.first %>
-          <%= link_to gazette.first, gazette_path(gazette.first) %>
+        <% if gazette.publication_number %>
+          <%= link_to gazette.publication_number, gazette_path(gazette.publication_number) %>
         <% end %>
       </td>
       <td>
-        <% if gazette.second %>
-          <%= gazette.second.first.publication_date %>
+        <% if gazette.date %>
+          <%= gazette.date %>
         <% end %>
       </td>
       <td>
-        <% if gazette.third %>
-          <% if gazette.third[:has_original] %>
-            <i class="fas fa-check"></i>
-          <% end %>
+        <% if gazette.has_original %>
+          <i class="fas fa-check"></i>
         <% end %>
       </td>
       <td>
-        <% if gazette.third %>
-          <% if gazette.third[:is_sliced] %>
-            <i class="fas fa-check"></i>
-          <% end %>
+        <% if gazette.is_sliced %>
+          <i class="fas fa-check"></i>
         <% end %>
       </td>
     </tr>
@@ -42,7 +38,7 @@
   <td>
   </td>
   <td>
-    <%= @gazettes.count %> gacetas ingresadas
+    <%= @gazettes_count %> gacetas ingresadas
   </td>
   <td>
     <%= @sliced_count %> fraccionadas

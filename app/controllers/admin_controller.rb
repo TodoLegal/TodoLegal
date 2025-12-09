@@ -7,46 +7,12 @@ class AdminController < ApplicationController
 
   def gazettes
     @query = params["query"]
-    if !@query.blank?
-      if @query && @query.length == 5 && @query[1] != ','
-        @query.insert(2, ",")
-      end
-      @gazettes = Document.where(publication_number: @query)
-        .group_by(&:publication_number)
-        .sort_by { |x | [ x ] }.reverse
-      @gazettes_pagination = Kaminari.paginate_array(@gazettes).page(params[:page]).per(20)
-    else
-      @gazettes = Document.where.not(publication_number: nil).group_by(&:publication_number).sort_by { | x | [ x ] }.reverse
-      @gazettes_pagination = Kaminari.paginate_array(@gazettes).page(params[:page]).per(20)
-    end
-    gazette_temp = @gazettes.first
-    @missing_gazettes = []
-    @gazettes.drop(1).each do |gazette|
-      if gazette.first and gazette_temp.first and gazette.first.delete(',').to_i + 1 != gazette_temp.first.delete(',').to_i
-        for missing_gazette in gazette.first.delete(',').to_i+1..gazette_temp.first.delete(',').to_i-1
-          @missing_gazettes.push(missing_gazette)
-        end
-      end
-      gazette_temp = gazette
-    end
-    @has_original_gazette = []
-    @has_been_sliced = []
-    @sliced_count = 0
-    @gazettes.each do |gazette|
-      documents = gazette.second
-      has_original = false
-      is_sliced = false
-      documents.each do |document|
-        if document.name == "Gaceta"
-          has_original = true
-        else
-          is_sliced = true
-        end
-      end
-      @sliced_count += 1 if is_sliced
-      additional_data = {'has_original': has_original, 'is_sliced': is_sliced }
-      gazette.push(additional_data)
-    end
+    result = GazetteService.call(params)
+    
+    @gazettes_pagination = result[:gazettes]
+    @missing_gazettes = result[:missing_gazettes]
+    @sliced_count = result[:sliced_count]
+    @gazettes_count = result[:total_count]
   end
 
   def gazette

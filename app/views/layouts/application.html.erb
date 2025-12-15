@@ -57,26 +57,6 @@
   <!-- Animation CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
-  <script src="/js/tinymce/tinymce.min.js"></script>
-  <script src="/js/tinymce/langs/es_MX.js"></script>
-  <script>
-    tinymce.init({
-      selector: '.tinymce',
-      plugins: 'lists link table code help wordcount',
-      toolbar: 'undo redo | styleselect | bold italic | bullist numlist | alignleft aligncenter alignright alignjustify | outdent indent',
-      entity_encoding: 'raw',
-      language: 'es_MX',
-      setup: function(editor) {
-        editor.on('SkinLoaded', function() {
-          const css = document.createElement("style");
-          css.type = "text/css";
-          css.innerHTML = ".tox .tox-promotion-link, .tox .tox-statusbar__branding svg { display: none; }";
-          document.body.appendChild(css);
-        });
-      }
-    });
-  </script>
-
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
   <!-- importmap config -->

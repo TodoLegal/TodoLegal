@@ -1,4 +1,4 @@
-# Gazette Admin View Performance Optimization
+# Gazette Admin view Performance Optimization
 
 ## Overview
 

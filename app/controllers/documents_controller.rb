@@ -455,8 +455,13 @@ class DocumentsController < ApplicationController
     # Construct the new document name
     issue_id = document.issue_id || document.id
     issuer_document_tag = document.issuer_document_tags&.first&.tag&.name
-    new_document_name = "TodoLegal-#{issue_id}"
-    new_document_name += "-#{issuer_document_tag}" if issuer_document_tag.present?
+    
+    # Sanitize issue_id and issuer_document_tag
+    safe_issue_id = sanitize_filename(issue_id.to_s)
+    safe_issuer_tag = sanitize_filename(issuer_document_tag) if issuer_document_tag.present?
+    
+    new_document_name = "TodoLegal-#{safe_issue_id}"
+    new_document_name += "-#{safe_issuer_tag}" if safe_issuer_tag.present?
     new_document_name += ".pdf"
   
     # Rename the file

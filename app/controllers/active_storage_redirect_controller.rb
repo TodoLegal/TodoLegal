@@ -11,7 +11,6 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
     user_id = 0
     if params[:access_token]
       user = User.find_by_id(doorkeeper_token.resource_owner_id)
-      user_id_str = user.id.to_s
       user_id = user.id
     elsif current_user
       user = current_user
@@ -33,7 +32,7 @@ class ActiveStorageRedirectController < ActiveStorage::Blobs::RedirectController
     document_type = "document"
     if downloaded_document && downloaded_document.document_type
       document_type = downloaded_document.document_type.name.downcase.gsub(/\s+/, "-")
-      document_type = removeAccents document_type
+      document_type = remove_accents document_type
     end
 
     if user && can_access_document && current_user

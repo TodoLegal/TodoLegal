@@ -360,7 +360,7 @@ module ApplicationHelper
     }, ip = user.current_sign_in_ip, {'$ignore_time' => 'true'});
   end
 
-  def removeAccents(text)
+  def remove_accents(text)
     accents_map = {
       "A" => /[ÁÀÃÂÄ]/,
       "a" => /[áàãâä]/,

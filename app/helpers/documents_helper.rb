@@ -245,4 +245,25 @@ module DocumentsHelper
     return DocumentType.find_by_name("Ninguno").id
   end
 
+  def sanitize_filename(filename)
+    return "" if filename.blank?
+    
+    # Remove accents
+    sanitized = remove_accents(filename.dup)
+    
+    # Replace spaces with hyphens
+    sanitized.gsub!(/\s+/, '-')
+    
+    # Replace invalid filename characters with hyphens
+    sanitized.gsub!(/[\/\\:*?"<>|]/, '-')
+    
+    # Remove multiple consecutive hyphens
+    sanitized.gsub!(/-+/, '-')
+    
+    # Remove leading/trailing hyphens
+    sanitized.gsub!(/^-|-$/, '')
+    
+    sanitized
+  end
+
 end

@@ -1,4 +1,4 @@
-# Gazette Admin view Performance Optimization
+# Gazette Admin View Performance Optimization
 
 ## Overview
 
@@ -585,66 +585,6 @@ end
 ```
 
 **Expected Impact**: Reduce query count from 4 to 1 per page load
-
----
-
-## Troubleshooting
-
-### Common Issues
-
-#### 1. Slow Page Load After Update
-
-**Symptom**: Page loads slower than 2 seconds
-
-**Checklist**:
-- [ ] Verify `publication_number` index exists: `\d documents` in psql
-- [ ] Check for database locks: `SELECT * FROM pg_stat_activity WHERE state = 'active';`
-- [ ] Monitor query plans: `EXPLAIN ANALYZE` on main query
-- [ ] Check number of documents in database
-
-**Solution**: Review query plan and consider adding indexes
-
-#### 2. Missing Gazettes Not Showing
-
-**Symptom**: Gap detection not working
-
-**Checklist**:
-- [ ] Verify publication numbers are numeric format "XX,XXX"
-- [ ] Check regex filter: `publication_number ~ '^[0-9,]+$'`
-- [ ] Confirm gaps exist in sequence
-
-**Debug**:
-```ruby
-# Rails console
-GazetteService.new({}).send(:missing_gazettes)
-```
-
-#### 3. Pagination Not Working
-
-**Symptom**: All results showing on one page
-
-**Checklist**:
-- [ ] Verify Kaminari gem is installed
-- [ ] Check `.page()` and `.per()` are called on relation
-- [ ] Confirm params[:page] is being passed
-
-**Debug**:
-```ruby
-# Rails console
-result = GazetteService.call(page: 2)
-result[:gazettes].current_page  # Should be 2
-result[:gazettes].total_pages   # Should be > 1
-```
-
----
-
-## Changelog
-
-| Date | Version | Changes |
-|------|---------|---------|
-| 2025-12-09 | 1.0.0 | Initial implementation with 97% performance improvement |
-| 2025-12-09 | 1.0.1 | Added database indexes (later rolled back) |
-| 2025-12-10 | 1.0.2 | Documentation created |
 
 ---
 

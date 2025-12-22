@@ -142,15 +142,13 @@ class DocumentsController < ApplicationController
   def create
     @document = Document.new(document_params)
     @document.document_type_id = get_document_type(params["document"]["auto_process_type"])
+
+    #log the user that uploaded the document
+    if current_user
+      @document.uploaded_by = current_user.first_name + " " + current_user.last_name
+    end
     respond_to do |format|
       if @document.save
-
-        #add user that uploaded the document
-        if current_user
-          @document.uploaded_by = current_user.first_name + " " + current_user.last_name
-          @document.save
-        end
-
         # download file
         bucket = get_bucket
         file = bucket.file @document.original_file.key

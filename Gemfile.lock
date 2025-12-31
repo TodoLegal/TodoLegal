@@ -89,7 +89,7 @@ GEM
       public_suffix (>= 2.0.2, < 6.0)
     airbrussh (1.5.0)
       sshkit (>= 1.6.1, != 1.7.0)
-    base64 (0.3.0)
+    base64 (0.2.0)
     bcrypt (3.1.20)
     bcrypt_pbkdf (1.1.0)
     bigdecimal (3.1.4)
@@ -527,6 +527,7 @@ PLATFORMS
 DEPENDENCIES
   MailchimpMarketing!
   actionpack-page_caching
+  base64 (= 0.2.0)
   bcrypt_pbkdf
   bootsnap
   browser

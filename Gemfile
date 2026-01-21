@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.2.0'
 
 # My added gems
-gem 'newrelic_rpm'
+gem 'newrelic_rpm', '~> 9.24.0'
 gem 'pg'
 gem 'pg_search'
 gem 'thin'
@@ -17,11 +17,12 @@ gem 'whenever', require: false
 gem 'exception_notification'
 gem 'discordrb'
 gem 'stripe', '~>13.4.1'
-gem 'rack-mini-profiler'
+gem 'rack-mini-profiler', '~> 4.0.0'
 gem 'dalli'
 gem 'simple_token_authentication'
 gem 'mixpanel-ruby'
 gem "google-cloud-storage", "~> 1.11", require: false
+gem 'base64', '0.2.0'
 gem 'rack-cors'
 gem 'browser'
 gem 'rack-attack'

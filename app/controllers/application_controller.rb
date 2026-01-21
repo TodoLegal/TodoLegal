@@ -28,10 +28,6 @@ class ApplicationController < ActionController::Base
   def after_sign_in_remember_me(resource)
     remember_me resource
   end
-  
-  def current_user_is_admin
-    current_user != nil && current_user.permissions.find_by_name("Admin") != nil
-  end
 
   def current_user_is_editor
     current_user != nil && (current_user.permissions.find_by_name("Editor") != nil || current_user.permissions.find_by_name("Admin") != nil)

@@ -215,27 +215,26 @@ class AdminController < ApplicationController
     @pending = 0
     @archived = 0
 
-    begin
-      client = setup_mailchimp_client
-      members = get_list_members(client, ENV['MAILCHIMP_LIST_ID'])
+    client = setup_mailchimp_client
+    members = get_list_members(client, ENV['MAILCHIMP_LIST_ID'])
 
-      members.each do |member|
-        if member['status'] == 'subscribed'
-          @list_members << {id: member['id'], name: member['full_name'], email: member['email_address'], status: member['status']}
-          @suscribed += 1
-        elsif member['status'] == 'unsubscribed'
-          @list_members << {id: member['id'], name: member['full_name'], email: member['email_address'], status: member['status']}
-          @unsuscribed += 1
-        elsif member['status'] == 'archived'
-          @list_members << {id: member['id'], name: member['full_name'], email: member['email_address'], status: member['status']}
-          @archived += 1
-        elsif member['status'] == 'pending'
-          @pending += 1
-        end
+    members.each do |member|
+      if member['status'] == 'subscribed'
+        @list_members << {id: member['id'], name: member['full_name'], email: member['email_address'], status: member['status']}
+        @suscribed += 1
+      elsif member['status'] == 'unsubscribed'
+        @list_members << {id: member['id'], name: member['full_name'], email: member['email_address'], status: member['status']}
+        @unsuscribed += 1
+      elsif member['status'] == 'archived'
+        @list_members << {id: member['id'], name: member['full_name'], email: member['email_address'], status: member['status']}
+        @archived += 1
+      elsif member['status'] == 'pending'
+        @pending += 1
       end
-    rescue MailchimpMarketing::ApiError => e
-      puts "Error: #{e}"
     end
+  rescue MailchimpMarketing::ApiError => e
+    Rails.logger.error("Mailchimp error in AdminController#mailchimp: #{truncate_for_log(e.to_s)}")
+    flash.now[:alert] = mailchimp_error_message(e)
   end
 
   def active_users
@@ -248,73 +247,94 @@ class AdminController < ApplicationController
 
   #update mailchimp list with the users status
   def update_mailchimp
-    begin
-      client = setup_mailchimp_client
-      members = get_list_members(client, ENV['MAILCHIMP_LIST_ID'])
-      active_tl_users = active_users()
-    
-      # Convert members to a hash for quick lookup
-      members_hash = members.index_by { |member| member['email_address'] }
-    
-      # Check every active user
-      active_tl_users.each do |user|
-        begin
-          member = members_hash[user.email]
-          
-          if member
-            # If the user is in the members list, check their status
-            if member['status'] == 'subscribed'
-              # If the member is subscribed, update the user status to "subscribed"
-              user.update(status: "subscribed")
-            elsif member['status'] == 'unsubscribed'
-              # If the member is unsubscribed, update the user status to "unsubscribed"
-              user.update(status: "unsubscribed")
-            end
-          else
-            # If the user is not in the members list, add them to the list as "subscribed"
+    client = setup_mailchimp_client
+    members = get_list_members(client, ENV['MAILCHIMP_LIST_ID'])
+    active_tl_users = active_users()
 
-            if user.status != "unsubscribed"
-              new_member = client.lists.add_list_member(ENV['MAILCHIMP_LIST_ID'], {
-                email_address: user.email,
-                status: "subscribed"
-              })
-              user.update(status: "subscribed")
+    # Convert members to a hash for quick lookup
+    members_hash = members.index_by { |member| member['email_address'] }
 
-              # Add the current year as a tag
-              client.lists.update_list_member_tags(ENV['MAILCHIMP_LIST_ID'], new_member['id'], {
-                tags: [{ name: Time.now.year.to_s, status: 'active' }]
-              })
-            end
-          end
-        rescue => e
-          Rails.logger.error("Error in adding a user to the list: #{e}")
-        end
-      end
-    
-      # If a user is in the members list but not in the active users list, archive them
-      members.each do |member|
-        begin
-          user = User.find_by(email: member['email_address'])
-          next if user.nil?
-          plan_status = return_user_plan_status(user)
-          if plan_status != "Basic" && member['status'] == 'unsubscribed'
-            client.lists.delete_list_member(ENV['MAILCHIMP_LIST_ID'], member['id'])
-            #unsubscribe the user will prevent the user to receive any email from mailchimp
+    # Check every active user
+    active_tl_users.each do |user|
+      begin
+        member = members_hash[user.email]
+
+        if member
+          # If the user is in the members list, check their status
+          if member['status'] == 'subscribed'
+            # If the member is subscribed, update the user status to "subscribed"
+            user.update(status: "subscribed")
+          elsif member['status'] == 'unsubscribed'
+            # If the member is unsubscribed, update the user status to "unsubscribed"
             user.update(status: "unsubscribed")
-          elsif plan_status == "Basic" && member['status'] == 'subscribed'
-            client.lists.delete_list_member(ENV['MAILCHIMP_LIST_ID'], member['id'])
-            #archive the user will prevent the user to receive any email from mailchimp, but if the user is reactivated, it will be able to receive emails again
-            user.update(status: "archived")
           end
-        rescue => e
-          Rails.logger.error("Error in archiving a user: #{e}")
+        else
+          # If the user is not in the members list, add them to the list as "subscribed"
+
+          if user.status != "unsubscribed"
+            new_member = client.lists.add_list_member(ENV['MAILCHIMP_LIST_ID'], {
+              email_address: user.email,
+              status: "subscribed"
+            })
+            user.update(status: "subscribed")
+
+            # Add the current year as a tag
+            client.lists.update_list_member_tags(ENV['MAILCHIMP_LIST_ID'], new_member['id'], {
+              tags: [{ name: Time.now.year.to_s, status: 'active' }]
+            })
+          end
         end
+      rescue => e
+        Rails.logger.error("Error in adding a user to the list: #{e}")
       end
-    rescue MailchimpMarketing::ApiError => e
-      flash[:error] = "Error: #{e}"
     end
-    
+
+    # If a user is in the members list but not in the active users list, archive them
+    members.each do |member|
+      begin
+        user = User.find_by(email: member['email_address'])
+        next if user.nil?
+        plan_status = return_user_plan_status(user)
+        if plan_status != "Basic" && member['status'] == 'unsubscribed'
+          client.lists.delete_list_member(ENV['MAILCHIMP_LIST_ID'], member['id'])
+          #unsubscribe the user will prevent the user to receive any email from mailchimp
+          user.update(status: "unsubscribed")
+        elsif plan_status == "Basic" && member['status'] == 'subscribed'
+          client.lists.delete_list_member(ENV['MAILCHIMP_LIST_ID'], member['id'])
+          #archive the user will prevent the user to receive any email from mailchimp, but if the user is reactivated, it will be able to receive emails again
+          user.update(status: "archived")
+        end
+      rescue => e
+        Rails.logger.error("Error in archiving a user: #{e}")
+      end
+    end
+
     redirect_to admin_mailchimp_path, notice: "Se ha actualizado la lista en Mailchimp."
+  rescue MailchimpMarketing::ApiError => e
+    Rails.logger.error("Mailchimp error in AdminController#update_mailchimp: #{truncate_for_log(e.to_s)}")
+    redirect_to admin_mailchimp_path, alert: mailchimp_error_message(e)
+  end
+
+  private
+
+  def mailchimp_error_message(error)
+    status_code = error.respond_to?(:status_code) ? error.status_code : nil
+    title = error.respond_to?(:title) ? error.title : nil
+    detail = error.respond_to?(:detail) ? error.detail : nil
+
+    extra = [title, detail].compact.join(': ').to_s.strip
+    extra = extra[0, 200] if extra.length > 200
+    extra = nil if extra.blank?
+
+    base = status_code.present? ? "Error de Mailchimp (#{status_code})." : "Error de Mailchimp."
+    [base, extra].compact.join(' ')
+  end
+
+  def truncate_for_log(text, max_length = 2000)
+    value = text.to_s
+    return value if value.length <= max_length
+
+    "#{value[0, max_length]}... (truncated)"
   end
 
   def check_hyperlink(hyperlink)

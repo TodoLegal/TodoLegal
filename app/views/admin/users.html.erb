@@ -30,18 +30,24 @@
     <th>email</th>
     <th>created at</th>
     <th>last sign in</th>
+    <th>Stripe</th>
     <% @permissions.each do |permission| %>
-      <th><%= permission.name %></th>
+      <% if permission.name == "Pro"%>
+        <th><%= permission.name %> Manual</th>
+      <% else %>
+        <th><%= permission.name %></th> 
+      <% end %>
     <% end %>
     <th>Notificaciones</th>
-    <th>Stripe plan</th>
   </tr>
   <% @users.each do |user| %>
     <tr>
       <td><%= user.email %></td>
       <td><%= user.created_at %> ago</td>
       <td><%= user.last_sign_in_at ? time_ago_in_words(user.last_sign_in_at) : "" %> ago</td>
-
+      <td>
+        <%= check_if_user_has_active_stripe_plan(user) %>
+      </td>
       <% @permissions.each do |permission| %>
         <% if UserPermission.find_by(user: user, permission: permission) %>
           <td>yes
@@ -94,11 +100,6 @@
       <% else %>
         <td>Sin preferencias creadas</td>
       <% end %>
-
-      <td>
-        <%= check_if_user_has_active_stripe_plan(user) %>
-      </td>
-
     </tr>
   <% end %>
 </table>

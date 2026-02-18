@@ -1,14 +1,14 @@
 namespace :tags do
-  desc "Generate JSON with document count per tag for given tag type(s). Usage: rake tags:document_count['materia,institucion']"
-  task :document_count, [:tag_types] => :environment do |_task, args|
-    if args[:tag_types].blank?
+  desc "Generate JSON with document count per tag for given tag type(s). Usage: rake tags:document_count[materia,Tema]"
+  task :document_count, [:tag_type1, :tag_type2, :tag_type3, :tag_type4, :tag_type5] => :environment do |_task, args|
+    tag_type_names = args.to_a.compact.reject(&:blank?)
+
+    if tag_type_names.empty?
       puts "❌ Please provide at least one tag type name."
-      puts "Usage: rake tags:document_count['materia']"
-      puts "       rake tags:document_count['materia,institucion']"
+      puts "Usage: rake tags:document_count[materia]"
+      puts "       rake tags:document_count[materia,Tema]"
       exit 1
     end
-
-    tag_type_names = args[:tag_types].split(",").map(&:strip)
     results = []
 
     tag_type_names.each do |tag_type_name|

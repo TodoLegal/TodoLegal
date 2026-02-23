@@ -39,6 +39,7 @@ gem 'MailchimpMarketing', :git => 'https://github.com/mailchimp/mailchimp-market
 gem 'omniauth-google-oauth2'
 gem 'omniauth-microsoft-office365'
 gem 'omniauth-rails_csrf_protection'
+gem 'cloudflare-rails'
 #gem 'rack-cors'
 #Support for NewRelic
 

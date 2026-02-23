@@ -58,7 +58,7 @@ export default class extends Controller {
 
     const section = document.createElement('section')
     section.className = `index-${type}`
-    section.style.whiteSpace = 'nowrap'
+    section.style.wordBreak = 'break-word'
 
     const anchor = document.createElement('a')
     anchor.className = 'uncolored_link'

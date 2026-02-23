@@ -16,7 +16,7 @@
       <% i = 0 %>
       <% @stream.each do |stream| %>
         <div class="card-header index-element" style="font-size: 20px;padding-right: 50px;">
-          <section style="white-space: nowrap; text-align: center;">
+          <section style="text-align: center;">
             <a 
               class="uncolored_link" href="#article_idx_<%= i %>" 
               data-action="click->law-jump-navigation#click" 
@@ -80,6 +80,8 @@
     line-height: 17px;
     display: inline;
     color: #505864;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
 
   .index-title-name{
@@ -89,6 +91,8 @@
     font-size: 18px;
     line-height: 21px;
     color: #171F2A;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
 
   .index-chapter-name{
@@ -98,6 +102,14 @@
     font-size: 16px;
     line-height: 19px;
     color: #171F2A;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .index-element {
+    overflow: hidden;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
 
 </style>

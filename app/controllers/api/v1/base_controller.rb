@@ -30,7 +30,10 @@ class Api::V1::BaseController < ApplicationController
 
     # Bypass: Cloudflare Verified Bots (header set by Cloudflare Transform Rule
     # using cf.client.bot — cannot be spoofed, Cloudflare strips it from non-verified requests)
-    return if request.headers['X-Verified-Bot'] == 'true'
+    if request.headers['X-Verified-Bot'] == 'true'
+      Rails.logger.info "[Turnstile] Verified bot bypass: #{request.remote_ip} #{request.user_agent} #{request.path}"
+      return
+    end
 
     # Validate Turnstile token via TurnstileVerifier service
     result = TurnstileVerifier.call(

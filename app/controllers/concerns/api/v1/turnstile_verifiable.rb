@@ -19,7 +19,11 @@ module Api::V1::TurnstileVerifiable
 
   def verify_turnstile_token!
     return if doorkeeper_token.present?
-    return if request.headers['X-Verified-Bot'] == 'true'
+
+    if request.headers['X-Verified-Bot'] == 'true'
+      Rails.logger.info "[Turnstile] Verified bot bypass: #{request.remote_ip} #{request.user_agent} #{request.path}"
+      return
+    end
 
     result = TurnstileVerifier.call(
       token: request.headers['X-Turnstile-Token'],

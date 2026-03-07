@@ -20,19 +20,30 @@ class Api::V1::BaseController < ApplicationController
   # Three bypass paths:
   #   1. Valid Doorkeeper token present → authenticated user, skip
   #   2. Cloudflare Verified Bot header → Googlebot, Bingbot, etc., skip
-  #   3. Otherwise → validate X-Turnstile-Token header (enforced in API-SEC-05)
+  #   3. Otherwise → validate X-Turnstile-Token header via TurnstileVerifier
+  #
+  # Currently in log-only mode (TURNSTILE_ENABLED != 'true').
+  # Set TURNSTILE_ENABLED=true to enforce and return 403 on failure.
   def verify_turnstile_token!
     # Bypass: authenticated users already proved identity via Doorkeeper
     return if doorkeeper_token.present?
 
-    # Bypass: Cloudflare Verified Bots (header set by Cloudflare HTTP Request Header
-    # Modification Rule — cannot be spoofed, Cloudflare strips it from non-verified requests)
+    # Bypass: Cloudflare Verified Bots (header set by Cloudflare Transform Rule
+    # using cf.client.bot — cannot be spoofed, Cloudflare strips it from non-verified requests)
     return if request.headers['X-Verified-Bot'] == 'true'
 
-    # TODO [API-SEC-05]: Enforce Turnstile validation here.
-    # For now, log requests without a Turnstile token for observability.
-    unless request.headers['X-Turnstile-Token'].present?
-      Rails.logger.info "[Turnstile] Unauthenticated request without Turnstile token: #{request.ip} #{request.path}"
+    # Validate Turnstile token via TurnstileVerifier service
+    result = TurnstileVerifier.call(
+      token: request.headers['X-Turnstile-Token'],
+      remote_ip: request.remote_ip
+    )
+
+    unless result.success?
+      Rails.logger.info "[Turnstile] Verification failed: #{result.error_message} | IP: #{request.remote_ip} | Path: #{request.path}"
+
+      if ENV['TURNSTILE_ENABLED'] == 'true'
+        render json: { error: 'Forbidden' }, status: :forbidden
+      end
     end
   end
 end

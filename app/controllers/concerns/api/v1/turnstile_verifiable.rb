@@ -21,9 +21,17 @@ module Api::V1::TurnstileVerifiable
     return if doorkeeper_token.present?
     return if request.headers['X-Verified-Bot'] == 'true'
 
-    # TODO [API-SEC-05]: Enforce Turnstile validation here.
-    unless request.headers['X-Turnstile-Token'].present?
-      Rails.logger.info "[Turnstile] Unauthenticated request without Turnstile token: #{request.ip} #{request.path}"
+    result = TurnstileVerifier.call(
+      token: request.headers['X-Turnstile-Token'],
+      remote_ip: request.remote_ip
+    )
+
+    unless result.success?
+      Rails.logger.info "[Turnstile] Verification failed: #{result.error_message} | IP: #{request.remote_ip} | Path: #{request.path}"
+
+      if ENV['TURNSTILE_ENABLED'] == 'true'
+        render json: { error: 'Forbidden' }, status: :forbidden
+      end
     end
   end
 end

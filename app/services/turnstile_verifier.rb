@@ -34,8 +34,6 @@ class TurnstileVerifier < ApplicationService
     @remote_ip = remote_ip
   end
 
-  private
-
   def call
     # Check cache first — if this IP was recently verified, skip the HTTP call
     if cached_verification?
@@ -57,6 +55,8 @@ class TurnstileVerifier < ApplicationService
     # Call Cloudflare siteverify API
     verify_with_cloudflare(secret_key)
   end
+
+  private
 
   # Check if this IP has a cached successful verification
   # @return [Boolean]

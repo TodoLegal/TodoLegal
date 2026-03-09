@@ -686,7 +686,8 @@ footer p a {
     font-size: 1.4rem;
     font-weight: bold;
     display: block;
-    width: max-content;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 .btn-collapse {

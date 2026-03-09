@@ -17,8 +17,13 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins '*'
-    resource '*', headers: :any, methods: [:get, :post, :patch, :put]
+    allowed_origins = ENV.fetch('CORS_ALLOWED_ORIGINS', 'https://valid.todolegal.app').split(',')
+    origins(*allowed_origins)
+
+    resource '*',
+      headers: :any,
+      methods: [:get, :post, :put, :patch, :delete, :options, :head],
+      credentials: false
   end
 end
 

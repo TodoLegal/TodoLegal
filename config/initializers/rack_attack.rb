@@ -28,7 +28,7 @@ class Rack::Attack
     legitimate_patterns = %w[
       googlebot bingbot slurp duckduckbot baiduspider yandexbot
       facebookexternalhit twitterbot linkedinbot whatsapp telegrambot
-      slackbot discordbot applebot msnbot ia_archiver
+      slackbot discordbot msnbot
       lighthouse pagespeed mixpanel newrelic pingdom datadog
       uptimebot statuscake site24x7
     ]
@@ -133,6 +133,9 @@ class Rack::Attack
       python-requests curl/ wget/ httpclient libwww-perl http.rb go-http-client
       masscan nmap nikto sqlmap nuclei scrapy harvester extractor
       phantomjs slimerjs mechanize selenium headlesschrome puppeteer
+      claudebot gptbot chatgpt-user oai-searchbot bytespider ccbot
+      perplexitybot meta-externalfetcher meta-externalagent anthropic-ai
+      cohere-ai youbot nicecrawler applebot ia_archiver
     ]
 
     malicious_patterns.any? { |pattern| ua.include?(pattern) } &&

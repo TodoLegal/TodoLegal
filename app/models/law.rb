@@ -17,6 +17,10 @@ class Law < ApplicationRecord
   # Nueva relación para obtener documentos que modifican esta ley
   has_many :modifying_documents, through: :law_modifications, source: :document
 
+  # Warm manifest cache in background after create/update
+  # This ensures the first user doesn't hit cache-miss penalty
+  after_commit :warm_manifest_cache, on: [:create, :update]
+
   # Enum para los estados de la ley
   enum status: {
     vigente: 'vigente',
@@ -127,5 +131,12 @@ class Law < ApplicationRecord
 
   def cached_articles_count
     Rails.cache.fetch([self, "articles_count"]) { articles.size }
+  end
+
+  private
+
+  # Warm manifest cache in background to avoid cold-cache penalty for users
+  def warm_manifest_cache
+    WarmLawManifestJob.perform_later(id)
   end
 end

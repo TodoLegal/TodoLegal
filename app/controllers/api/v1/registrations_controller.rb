@@ -1,4 +1,6 @@
 class Api::V1::RegistrationsController < Devise::RegistrationsController
+  include Api::V1::TurnstileVerifiable
+
   def create
     @user = User.create(user_params)
     if @user.save

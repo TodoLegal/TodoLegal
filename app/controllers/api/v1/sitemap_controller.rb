@@ -1,6 +1,6 @@
-class Api::V1::SitemapController < ApplicationController
-  protect_from_forgery with: :null_session
-  include ApplicationHelper
+class Api::V1::SitemapController < Api::V1::BaseController
+  # Sitemaps are public by nature — search engine crawlers cannot solve Turnstile challenges
+  skip_before_action :verify_turnstile_token!
 
   # Disable MiniProfiler for sitemaps to prevent cache header interference
   before_action :disable_miniprofiler

@@ -1,6 +1,4 @@
-class Api::V1::DocumentsController < ApplicationController
-  protect_from_forgery with: :null_session
-  include ApplicationHelper
+class Api::V1::DocumentsController < Api::V1::BaseController
   before_action :document_exists!, only: [:get_document]
   before_action :doorkeeper_authorize!, only: [:get_document, :get_documents]
   skip_before_action :doorkeeper_authorize!, unless: :has_access_token?

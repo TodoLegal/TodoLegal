@@ -1,5 +1,4 @@
-class Api::V1::TagsController < ApplicationController
-    protect_from_forgery with: :null_session
+class Api::V1::TagsController < Api::V1::BaseController
   
     def get_tags
       tag_type = nil

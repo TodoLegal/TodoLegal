@@ -30,7 +30,9 @@ module Api::V1::TurnstileVerifiable
       remote_ip: request.remote_ip
     )
 
-    unless result.success?
+    if result.success?
+      Rails.logger.info "[Turnstile] OK: #{result.data[:source]} | IP: #{request.remote_ip} | Path: #{request.path}"
+    else
       Rails.logger.info "[Turnstile] Verification failed: #{result.error_message} | IP: #{request.remote_ip} | Path: #{request.path}"
 
       if ENV['TURNSTILE_ENABLED'] == 'true'

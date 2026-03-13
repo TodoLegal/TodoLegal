@@ -100,7 +100,7 @@ class TurnstileVerifier < ApplicationService
       success({ verified: true, source: :cloudflare })
     else
       error_codes = body['error-codes'] || []
-      Rails.logger.info "[Turnstile] Verification failed for #{@remote_ip}: #{error_codes.join(', ')}"
+      Rails.logger.error "[Turnstile] Cloudflare rejected token for #{@remote_ip}: #{error_codes.join(', ')}"
       failure('invalid_token', { error_codes: error_codes })
     end
   rescue Net::TimeoutError, Net::OpenTimeout => e

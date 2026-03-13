@@ -31,7 +31,7 @@ class Api::V1::BaseController < ApplicationController
     # Bypass: Cloudflare Verified Bots (header set by Cloudflare Transform Rule
     # using cf.client.bot — cannot be spoofed, Cloudflare strips it from non-verified requests)
     if request.headers['X-Verified-Bot'] == 'true'
-      Rails.logger.info "[Turnstile] Verified bot bypass: #{request.remote_ip} #{request.user_agent} #{request.path}"
+      Rails.logger.error "[Turnstile] Verified bot bypass: #{request.remote_ip} #{request.user_agent} #{request.path}"
       return
     end
 
@@ -42,9 +42,9 @@ class Api::V1::BaseController < ApplicationController
     )
 
     if result.success?
-      Rails.logger.info "[Turnstile] OK: #{result.data[:source]} | IP: #{request.remote_ip} | Path: #{request.path}"
+      Rails.logger.error "[Turnstile] OK: #{result.data[:source]} | IP: #{request.remote_ip} | Path: #{request.path}"
     else
-      Rails.logger.info "[Turnstile] Verification failed: #{result.error_message} | IP: #{request.remote_ip} | Path: #{request.path}"
+      Rails.logger.error "[Turnstile] Verification failed: #{result.error_message} | IP: #{request.remote_ip} | Path: #{request.path}"
 
       if ENV['TURNSTILE_ENABLED'] == 'true'
         render json: { error: 'Forbidden' }, status: :forbidden

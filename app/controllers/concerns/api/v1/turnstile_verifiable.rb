@@ -36,7 +36,10 @@ module Api::V1::TurnstileVerifiable
       Rails.logger.error "[Turnstile] Verification failed: #{result.error_message} | IP: #{request.remote_ip} | Path: #{request.path}"
 
       if ENV['TURNSTILE_ENABLED'] == 'true'
-        render json: { error: 'Forbidden' }, status: :forbidden
+        # reason: 'turnstile_failed' lets the React retry interceptor distinguish
+        # Turnstile rejections from other 403s (e.g. authorization failures),
+        # so it only auto-retries when a fresh Turnstile token can fix the issue.
+        render json: { error: 'Forbidden', reason: 'turnstile_failed' }, status: :forbidden
       end
     end
   end

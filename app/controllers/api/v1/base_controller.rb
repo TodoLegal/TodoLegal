@@ -28,6 +28,12 @@ class Api::V1::BaseController < ApplicationController
     # Bypass: authenticated users already proved identity via Doorkeeper
     return if doorkeeper_token.present?
 
+    # Bypass: OG preview Worker authenticates with a shared secret
+    if og_worker_secret_valid?
+      Rails.logger.error "[Turnstile] OG Worker bypass | IP: #{request.remote_ip} | Path: #{request.path}"
+      return
+    end
+
     # Bypass: Cloudflare Verified Bots (header set by Cloudflare Transform Rule
     # using cf.client.bot — cannot be spoofed, Cloudflare strips it from non-verified requests)
     if request.headers['X-Verified-Bot'] == 'true'
@@ -53,5 +59,15 @@ class Api::V1::BaseController < ApplicationController
         render json: { error: 'Forbidden', reason: 'turnstile_failed' }, status: :forbidden
       end
     end
+  end
+
+  # Timing-safe comparison of the OG Worker shared secret.
+  # Returns false if the env var is not configured (zero-length secret not allowed).
+  def og_worker_secret_valid?
+    secret = ENV['OG_WORKER_SECRET']
+    header = request.headers['X-OG-Worker-Secret']
+    return false if secret.blank? || header.blank?
+
+    ActiveSupport::SecurityUtils.secure_compare(header, secret)
   end
 end

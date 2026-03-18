@@ -20,6 +20,12 @@ module Api::V1::TurnstileVerifiable
   def verify_turnstile_token!
     return if doorkeeper_token.present?
 
+    # Bypass: OG preview Worker authenticates with a shared secret
+    if og_worker_secret_valid?
+      Rails.logger.error "[Turnstile] OG Worker bypass | IP: #{request.remote_ip} | Path: #{request.path}"
+      return
+    end
+
     if request.headers['X-Verified-Bot'] == 'true'
       Rails.logger.error "[Turnstile] Verified bot bypass: #{request.remote_ip} #{request.user_agent} #{request.path}"
       return
@@ -42,5 +48,15 @@ module Api::V1::TurnstileVerifiable
         render json: { error: 'Forbidden', reason: 'turnstile_failed' }, status: :forbidden
       end
     end
+  end
+
+  # Timing-safe comparison of the OG Worker shared secret.
+  # Returns false if the env var is not configured (zero-length secret not allowed).
+  def og_worker_secret_valid?
+    secret = ENV['OG_WORKER_SECRET']
+    header = request.headers['X-OG-Worker-Secret']
+    return false if secret.blank? || header.blank?
+
+    ActiveSupport::SecurityUtils.secure_compare(header, secret)
   end
 end

@@ -1,4 +1,5 @@
 class Api::V1::DocumentsController < Api::V1::BaseController
+  skip_before_action :verify_turnstile_token!, only: [:get_documents]
   before_action :document_exists!, only: [:get_document]
   before_action :doorkeeper_authorize!, only: [:get_document, :get_documents]
   skip_before_action :doorkeeper_authorize!, unless: :has_access_token?

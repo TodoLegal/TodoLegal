@@ -1,6 +1,4 @@
-class Api::V1::UsersPreferencesController < ApplicationController
-    protect_from_forgery with: :null_session
-    include ApplicationHelper
+class Api::V1::UsersPreferencesController < Api::V1::BaseController
     before_action :doorkeeper_authorize!, only: [:get_user_preferences, :update, :deactivate_notifications]
 
     def get_user_preferences

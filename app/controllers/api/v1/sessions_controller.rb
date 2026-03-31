@@ -2,6 +2,7 @@ class Api::V1::SessionsController < Devise::SessionsController
   #skip_before_action :verify_signed_out_user, only[:destroy]
   protect_from_forgery with: :null_session
   include ApplicationHelper
+  include Api::V1::TurnstileVerifiable
   before_action :doorkeeper_authorize!, only: [:me]
 
   def create

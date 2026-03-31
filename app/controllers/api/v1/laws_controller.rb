@@ -1,5 +1,4 @@
-class Api::V1::LawsController < ApplicationController
-  protect_from_forgery with: :null_session
+class Api::V1::LawsController < Api::V1::BaseController
 
   def get_law
     @law = Law.find_by_id(params[:id])

@@ -114,6 +114,9 @@ Rails.application.routes.draw do
         end
       end
       resource :laws do
+        collection do
+          get :search
+        end
         member do
           get "/:id", to: 'laws#get_law'
         end

@@ -11,16 +11,21 @@ class Api::V1::LawsController < Api::V1::BaseController
   # Authenticated via shared secret.
   # Expects keyword-style queries (the calling chatbot LLM extracts keywords).
   def search
+    log_search_request
+
     unless ENV['CHATBOT_API_ENABLED'] == 'true'
+      log_search_response(:service_unavailable, 0)
       return render json: { error: 'Service unavailable' }, status: :service_unavailable
     end
 
     unless chatbot_secret_valid?
+      log_search_response(:unauthorized, 0)
       return render json: { error: 'Unauthorized' }, status: :unauthorized
     end
 
     query = params[:query].to_s.strip
     if query.blank?
+      log_search_response(:bad_request, 0)
       return render json: { error: 'query parameter is required' }, status: :bad_request
     end
 
@@ -66,9 +71,18 @@ class Api::V1::LawsController < Api::V1::BaseController
     end
 
     render json: { results: results, query: query, total_articles: total_articles }
+    log_search_response(:ok, total_articles, query)
   end
 
   private
+
+  def log_search_request
+    Rails.logger.error "[ChatbotSearch] Request | IP: #{request.remote_ip} | Query: #{params[:query]} | UA: #{request.user_agent}"
+  end
+
+  def log_search_response(status, total_articles, query = nil)
+    Rails.logger.error "[ChatbotSearch] Response | IP: #{request.remote_ip} | Status: #{status} | Query: #{query} | Results: #{total_articles}"
+  end
 
   def chatbot_secret_valid?
     secret = ENV['CHATBOT_API_SECRET']

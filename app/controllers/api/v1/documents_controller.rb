@@ -9,7 +9,7 @@ class Api::V1::DocumentsController < Api::V1::BaseController
     can_access_document = true
     user = nil
     user_trial = nil
-    if params[:access_token]
+    if doorkeeper_token.present?
       user = User.find_by_id(doorkeeper_token.resource_owner_id)
     end
 
@@ -49,7 +49,7 @@ class Api::V1::DocumentsController < Api::V1::BaseController
 
   def get_documents
     user_id = 0
-    if params[:access_token]
+    if doorkeeper_token.present?
       user = User.find_by_id(doorkeeper_token.resource_owner_id)
       user_id = user.id
     end
@@ -211,7 +211,7 @@ class Api::V1::DocumentsController < Api::V1::BaseController
     can_access_document = true
     user = nil
     user_trial = nil
-    if params[:access_token]
+    if doorkeeper_token.present?
       user = User.find_by_id(doorkeeper_token.resource_owner_id)
     end
 
@@ -369,7 +369,7 @@ protected
   end
 
   def has_access_token?
-    return params[:access_token]
+    return doorkeeper_token.present?
   end
 
   def attach_file_to_documents(documents, can_access)

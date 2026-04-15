@@ -8,7 +8,7 @@ class Api::V1::UsersPreferencesController < Api::V1::BaseController
             active_notifications: false
         }
 
-        if params[:access_token]
+        if doorkeeper_token.present?
             @user = get_user_by_id
             @preferences = UsersPreference.find_by(user_id: @user.id)
             if @user && @preferences

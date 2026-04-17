@@ -39,7 +39,7 @@ class Api::V1::SessionsController < Devise::SessionsController
 
   def me
     user = User.find_by_id(doorkeeper_token.resource_owner_id)
-    render json: {"user": user,
+    render json: {"user": user.as_json(only: [:id, :first_name, :last_name, :email]),
       "user_type": current_user_type_api(user),
       "user_permission": user ? current_user_permission(user) : "",
       "confirmed_user": user ? user.confirmed_at? : false,

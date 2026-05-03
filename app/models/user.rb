@@ -4,8 +4,6 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :confirmable,
          :recoverable, :rememberable, :validatable, :trackable,
          :omniauthable, omniauth_providers: [:google_oauth2, :microsoft_office365]
-           
-  acts_as_token_authenticatable
 
   # Honeypot fields - virtual attributes for bot detection (not stored in database)
   attr_accessor :website, :company, :phone_backup, :address, :url

@@ -9,7 +9,6 @@ class ApplicationController < ActionController::Base
   before_action :miniprofiler
   before_action :set_newrelic_user_context
   
-  #acts_as_token_authentication_handler_for User, if: :json_request?
   skip_before_action :configure_devise_permitted_parameters, if: :json_request?
 
   def process_doorkeeper_redirect_to

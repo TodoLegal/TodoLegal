@@ -22,7 +22,6 @@ Rails.application.routes.draw do
     omniauth_callbacks: 'users/omniauth_callbacks', 
     passwords: "users/passwords" 
   }
-  get "/token_login/:authentication_token" => "home#token_login", as: "token_login"
   resources :law_tags
   resources :document_tags
   resources :issuer_document_tags

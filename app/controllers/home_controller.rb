@@ -42,17 +42,6 @@ class HomeController < ApplicationController
     end
   end
 
-  def token_login
-    user = User.find_by authentication_token: params[:authentication_token]
-    if user
-      sign_in(user)
-    end
-    respond_to do |format|
-      format.html { redirect_to root_path, notice: "Bienvenido " + current_user.first_name + ". Has iniciado sesión." }
-    end
-    return
-  end
-
   def search_law
     # Retrieve the search query from the request parameters
     @query = params[:query]

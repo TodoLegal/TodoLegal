@@ -9,9 +9,6 @@ class Api::V1::SessionsController < Devise::SessionsController
     user = warden.authenticate!({user: params[:user]})
     sign_in(resource_name, user)
 
-    current_user.authentication_token = nil
-    current_user.save
-
     respond_to do |format|
       format.json do
         render json: {
@@ -23,15 +20,13 @@ class Api::V1::SessionsController < Devise::SessionsController
 
   def destroy
     respond_to do |format|
-      user = User.find_by authentication_token: params[:authentication_token]
       format.json do
-        if user
-          user.authentication_token = nil
-          user.save
-          sign_out(user)
+        if doorkeeper_token.present?
+          doorkeeper_token.revoke
+          sign_out(current_user) if current_user
           render json: {'message': 'You are now logged out.'}, status: :ok
         else
-          render json: {'error': 'Invalid authentication token.'}, status: :unprocesable_entity
+          render json: {'error': 'No valid access token.'}, status: :unauthorized
         end
       end
     end

@@ -19,7 +19,6 @@ gem 'discordrb'
 gem 'stripe', '~>13.4.1'
 gem 'rack-mini-profiler', '~> 4.0.0'
 gem 'dalli'
-gem 'simple_token_authentication'
 gem 'mixpanel-ruby'
 gem "google-cloud-storage", "~> 1.11", require: false
 gem 'base64', '0.2.0'

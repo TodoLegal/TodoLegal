@@ -1,6 +1,6 @@
 class Document < ApplicationRecord
   include PgSearch
-  searchkick language: 'spanish'
+  searchkick language: 'spanish', callbacks: :async
 
   has_many :issuer_document_tags, :dependent => :destroy
 

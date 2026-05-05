@@ -1,5 +1,10 @@
 class Law < ApplicationRecord
   include PgSearch::Model
+  searchkick language: 'spanish', callbacks: :async, merge_mappings: true, mappings: {
+    properties: {
+      creation_number: { type: 'keyword' }
+    }
+  }
 
   belongs_to :law_access
   has_many :books, dependent: :destroy
@@ -17,9 +22,25 @@ class Law < ApplicationRecord
   # Nueva relación para obtener documentos que modifican esta ley
   has_many :modifying_documents, through: :law_modifications, source: :document
 
-  # Warm manifest cache in background after create/update
-  # This ensures the first user doesn't hit cache-miss penalty
-  after_commit :warm_manifest_cache, on: [:create, :update]
+  # Fields that represent meaningful law content changes.
+  # Used to guard after_commit callbacks against touch-only updates.
+  #
+  # Problem: Article belongs_to :law, touch: true causes every Article.create!
+  # to update the law's updated_at, firing all on: :update callbacks. Without
+  # this guard, creating N articles would enqueue N WarmLawManifestJob and
+  # N ReindexLawArticlesJob — a cascade of unnecessary work.
+  #
+  # Solution: Use Rails' previous_changes (available in after_commit) to check
+  # if any meaningful field actually changed. Touch-only updates only change
+  # updated_at, which is not in these lists, so the callbacks are skipped.
+  MEANINGFUL_FIELDS = %w[name creation_number status hierarchy].freeze
+
+  # Warm manifest on create (always — it's a new law, cache needs priming)
+  after_commit :warm_manifest_cache, on: :create
+  # Warm manifest on update only if meaningful fields changed (not touch-only)
+  after_commit :warm_manifest_cache_on_update, on: :update
+  # Reindex articles only if denormalized fields changed (not touch-only)
+  after_commit :enqueue_reindex_articles, on: :update
 
   # Enum para los estados de la ley
   enum status: {
@@ -133,10 +154,40 @@ class Law < ApplicationRecord
     Rails.cache.fetch([self, "articles_count"]) { articles.size }
   end
 
+  def search_data
+    {
+      name: name,
+      creation_number: creation_number,
+      status: status,
+      hierarchy: hierarchy,
+      tag_names: tags.map(&:name),
+      materia_names: materia_names
+    }
+  end
+
   private
 
   # Warm manifest cache in background to avoid cold-cache penalty for users
   def warm_manifest_cache
     WarmLawManifestJob.perform_later(id)
+  end
+
+  # Skip warming on touch-only updates (e.g. Article touch cascade).
+  # previous_changes.keys will only contain updated_at for touch-only,
+  # which is not in MEANINGFUL_FIELDS.
+  def warm_manifest_cache_on_update
+    return unless (previous_changes.keys & MEANINGFUL_FIELDS).any?
+    warm_manifest_cache
+  end
+
+  # Subset of MEANINGFUL_FIELDS that are denormalized into Article.search_data.
+  # When these change, articles must be reindexed in ES to reflect the new values.
+  DENORMALIZED_FIELDS = %w[name creation_number status].freeze
+
+  # Only reindex articles when denormalized fields actually changed.
+  # Skips touch-only updates to avoid N reindex jobs when loading N articles.
+  def enqueue_reindex_articles
+    return unless (previous_changes.keys & DENORMALIZED_FIELDS).any?
+    ReindexLawArticlesJob.perform_later(id)
   end
 end

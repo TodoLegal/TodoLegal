@@ -58,7 +58,7 @@ module Search
       @type = type
       @filters = (filters || {}).symbolize_keys
       @page = [page.to_i, 1].max
-      @per_page = per_page.to_i.clamp(1, MAX_PER_PAGE)
+      @per_page = (per_page.presence || DEFAULT_PER_PAGE).to_i.clamp(1, MAX_PER_PAGE)
     end
 
     def call
@@ -72,8 +72,13 @@ module Search
 
       content_type_facet = build_content_type_facet(aggs)
 
+      # with_highlights returns an Enumerator of [record, highlights_hash] pairs.
+      # With load: false, records are Searchkick::HashWrapper (ES _source).
+      # Convert to Array so it can be iterated multiple times by the controller.
+      results_with_highlights = results.with_highlights.to_a
+
       success({
-        results: results.results,
+        results_with_highlights: results_with_highlights,
         total: results.total_count,
         page: @page,
         per_page: @per_page,
@@ -104,6 +109,9 @@ module Search
         where: build_where,
         page: @page,
         per_page: @per_page,
+        # Read results directly from ES _source — no DB round-trip.
+        # Serializers work with Searchkick::HashWrapper instead of AR records.
+        load: false,
         misspellings: { edit_distance: 2, below: 2 },
         highlight: { fields: HIGHLIGHT_FIELDS, tag: '<mark>', fragment_size: 200 },
         aggs: { status: {}, tag_names: { limit: 20 } },

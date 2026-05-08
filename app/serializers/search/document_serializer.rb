@@ -13,6 +13,7 @@ module Search
     def serialize
       data = {
         _type: 'document',
+        _score: source._score,
         id: source.id,
         issue_id: source.issue_id,
         name: source.name,

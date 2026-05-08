@@ -15,6 +15,8 @@ class Article < ApplicationRecord
   belongs_to :law, touch: true
   has_many :law_hyperlinks, dependent: :destroy
 
+  scope :search_import, -> { includes(:law, law: :tags) }
+
   pg_search_scope :search_by_body_highlighted,
                   against: :body,
                   ignoring: :accents,
@@ -110,6 +112,7 @@ class Article < ApplicationRecord
       law_name: law&.name,
       law_creation_number: law&.creation_number,
       law_status: law&.status,
+      law_hierarchy: law&.hierarchy,
       law_tag_names: law&.tags&.map(&:name) || []
     }
   end

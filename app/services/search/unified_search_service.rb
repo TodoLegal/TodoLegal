@@ -1,19 +1,18 @@
 # frozen_string_literal: true
 
 module Search
-  # Single entry point for searching across all legal content (laws, articles, gazette documents).
-  # Replaces three separate search paths (DocumentsController/Searchkick, HomeController/pg_search,
-  # LawsController/pg_search) with one Elasticsearch query via Searchkick.
+  # Single entry point for searching across all legal content (articles and gazette documents).
+  # Articles carry denormalized law fields (law_name, law_creation_number, law_status,
+  # law_hierarchy, law_tag_names) so no separate Law index is needed.
   #
-  #   result = Search::UnifiedSearchService.call(query: "constitución", type: "law", filters: { status: "vigente" })
-  #   result.success?        # => true
-  #   result.data[:results]  # => [#<Law ...>, ...]
-  #   result.data[:facets]   # => { content_type: { law: 3, article: 12, document: 0 }, ... }
+  #   result = Search::UnifiedSearchService.call(query: "constitución", type: "article", filters: { status: "vigente" })
+  #   result.success?                          # => true
+  #   result.data[:results_with_highlights]    # => [[HashWrapper, highlights], ...]
+  #   result.data[:facets]                     # => { content_type: { article: 12, document: 5 }, ... }
   class UnifiedSearchService < ApplicationService
-    MODELS = [Law, Article, Document].freeze
+    MODELS = [Article, Document].freeze
 
     MODEL_MAP = {
-      'law' => Law,
       'article' => Article,
       'document' => Document
     }.freeze
@@ -25,33 +24,35 @@ module Search
     # model's index, so all fields can be listed together without conflict.
     # Boost values set relative ranking priority within and across models.
     SEARCH_FIELDS = [
-      # Law fields
-      "name^10",
-      "creation_number^8",
-      "tag_names^3",
-      "materia_names^3",
-      "hierarchy^2",
-      "status^1",
-      # Article fields
-      "body^5",
-      "number^3",
-      "law_name^2",
-      "law_tag_names^1",
-      # Document fields (name^10 shared with Law)
-      "issue_id^8",
-      "short_description^6",
-      "description^4",
-      "issuer_document_tags_name^3",
-      "document_type_name^2",
-      "document_type_alternative_name^2",
-      "publication_number^2",
-      "publication_date^1",
+      # --- Tier 1: Identity fields (exact-match oriented) ---
+      "law_name^15",                     # Article — law title (most important for articles)
+      "name^10",                         # Document — gazette document title
+      "issue_id^8",                      # Document — gazette issue identifier
+      "law_creation_number^8",           # Article — decree/law number (e.g. "Decreto 189-59")
+      "number^8",                        # Article — article number ("Artículo 15")
+      # --- Tier 2: Content fields (full-text search) ---
+      "body^5",                          # Article — article body text
+      "description^5",                   # Document — full description
+      "short_description^4",             # Document — summary
+      # --- Tier 3: Classification & metadata ---
+      "issuer_document_tags_name^3",     # Document — issuing entity
+      "law_tag_names^2",                 # Article — law topic tags
+      "document_tags_name^2",            # Document — document topic tags
+      "document_type_name^1",            # Document — type (decreto, acuerdo, etc.)
+      "document_type_alternative_name^1",# Document — alternative type name
+      "publication_number^1",            # Document — publication reference
+      "law_hierarchy^1",                 # Article — navigational (Poder Legislativo > ...)
+      "status^1",                        # Document — vigente/derogado
+      "publication_date^1",              # Document — date formats
       "publication_date_dashes^1",
-      "publication_date_slashes^1",
-      "document_tags_name^1"
+      "publication_date_slashes^1"
     ].freeze
 
-    HIGHLIGHT_FIELDS = %i[name body description short_description].freeze
+    HIGHLIGHT_FIELDS = %i[
+      name body description short_description
+      law_name law_creation_number law_hierarchy law_tag_names
+      issuer_document_tags_name document_tags_name
+    ].freeze
 
     def initialize(query:, type: nil, filters: {}, page: 1, per_page: DEFAULT_PER_PAGE)
       @query = query.presence || '*'
@@ -89,7 +90,6 @@ module Search
           tags: parse_agg_buckets(aggs['tag_names'])
         },
         metadata: {
-          laws_count: content_type_facet[:law],
           articles_count: content_type_facet[:article],
           documents_count: content_type_facet[:document]
         }
@@ -112,6 +112,12 @@ module Search
         # Read results directly from ES _source — no DB round-trip.
         # Serializers work with Searchkick::HashWrapper instead of AR records.
         load: false,
+        # Use "or" operator so partial matches on identity fields (law_name, name)
+        # still contribute to scoring. With "and" (Searchkick default), a query like
+        # "Articulo 4 ley tributaria" requires ALL terms in each field, so law_name
+        # "Ley de Equidad Tributaria" scores zero (missing "articulo" and "4").
+        # Tradeoff: "or" may return more results with partial matches. 
+        operator: 'or',
         misspellings: { edit_distance: 2, below: 2 },
         highlight: { fields: HIGHLIGHT_FIELDS, tag: '<mark>', fragment_size: 200 },
         aggs: { status: {}, tag_names: { limit: 20 } },
@@ -151,7 +157,14 @@ module Search
     def build_where
       where = {}
 
-      where[:status] = @filters[:status] if @filters[:status].present?
+      # Status filter matches both `status` (Documents) and `law_status` (Articles).
+      # Articles index law_status, Documents index status directly.
+      if @filters[:status].present?
+        where[:_or] = [
+          { status: @filters[:status] },
+          { law_status: @filters[:status] }
+        ]
+      end
 
       if @filters[:from].present? || @filters[:to].present?
         date_range = {}
@@ -160,28 +173,35 @@ module Search
         where[:publication_date] = date_range
       end
 
-      # Tags are stored under different field names per model (tag_names for Laws,
-      # law_tag_names for Articles, document_tags_name for Documents). _or matches
-      # across all of them so a single tag filter works regardless of content type.
+      # Tags are stored under different field names per model (law_tag_names for Articles,
+      # document_tags_name for Documents). When status filter is not active, use _or to
+      # match across all tag fields. When status is active, _or is already taken —
+      # fall back to matching each tag field individually (v1 tradeoff).
       if @filters[:tags].present?
         tag_list = Array(@filters[:tags])
-        where[:_or] = [
-          { tag_names: tag_list },
-          { materia_names: tag_list },
-          { law_tag_names: tag_list },
-          { document_tags_name: tag_list }
-        ]
+        if where[:_or]
+          # Status _or already in use — add tag conditions to it
+          where[:_or] += [
+            { law_tag_names: tag_list },
+            { document_tags_name: tag_list }
+          ]
+        else
+          where[:_or] = [
+            { law_tag_names: tag_list },
+            { document_tags_name: tag_list }
+          ]
+        end
       end
 
       # Exclude unpublished documents in all search modes.
-      # Laws/Articles don't index a publish field, so they never match publish: false.
+      # Articles don't index a publish field, so they never match publish: false.
       where[:_not] = { publish: false }
 
       where
     end
 
     def build_content_type_facet(aggs)
-      counts = { law: 0, article: 0, document: 0 }
+      counts = { article: 0, document: 0 }
       buckets = aggs.dig('content_type', 'buckets') || []
 
       buckets.each do |bucket|
@@ -192,11 +212,10 @@ module Search
       counts
     end
 
-    # Maps Searchkick index names (e.g. "laws_test_20260505034429503") back to
+    # Maps Searchkick index names (e.g. "articles_test_20260505034429503") back to
     # model type symbols for the content_type facet.
     def index_name_to_type(index_name)
       case index_name
-      when /\Alaws_/     then :law
       when /\Aarticles_/  then :article
       when /\Adocuments_/ then :document
       end
@@ -209,7 +228,5 @@ module Search
         hash[bucket['key']] = bucket['doc_count']
       end
     end
-
-
   end
 end

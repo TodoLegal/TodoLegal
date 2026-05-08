@@ -1,10 +1,5 @@
 class Law < ApplicationRecord
   include PgSearch::Model
-  searchkick language: 'spanish', callbacks: :async, merge_mappings: true, mappings: {
-    properties: {
-      creation_number: { type: 'keyword' }
-    }
-  }
 
   belongs_to :law_access
   has_many :books, dependent: :destroy
@@ -154,17 +149,6 @@ class Law < ApplicationRecord
     Rails.cache.fetch([self, "articles_count"]) { articles.size }
   end
 
-  def search_data
-    {
-      name: name,
-      creation_number: creation_number,
-      status: status,
-      hierarchy: hierarchy,
-      tag_names: tags.map(&:name),
-      materia_names: materia_names
-    }
-  end
-
   private
 
   # Warm manifest cache in background to avoid cold-cache penalty for users
@@ -182,7 +166,7 @@ class Law < ApplicationRecord
 
   # Subset of MEANINGFUL_FIELDS that are denormalized into Article.search_data.
   # When these change, articles must be reindexed in ES to reflect the new values.
-  DENORMALIZED_FIELDS = %w[name creation_number status].freeze
+  DENORMALIZED_FIELDS = %w[name creation_number status hierarchy].freeze
 
   # Only reindex articles when denormalized fields actually changed.
   # Skips touch-only updates to avoid N reindex jobs when loading N articles.

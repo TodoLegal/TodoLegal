@@ -7,9 +7,13 @@ class Api::V1::SearchController < Api::V1::BaseController
 
   # GET /api/v1/search
   #
-  # Unified search across laws, articles, and gazette documents.
+  # Unified search across articles and gazette documents.
   # Results are served from ES _source (load: false) — no DB round-trip
   # except for file_url on documents for paying/trial users.
+  #
+  # Supports two formats:
+  #   format=flat (default) — individual results in ES score order
+  #   format=grouped — articles grouped by law (first-seen positioning) + documents flat
   def search
     result = Search::UnifiedSearchService.call(
       query: params[:query],
@@ -23,11 +27,53 @@ class Api::V1::SearchController < Api::V1::BaseController
       return render json: { error: result.error_message }, status: :service_unavailable
     end
 
-    serialized_results = serialize_results(result.data[:results_with_highlights])
-
     track_search(result.data[:total])
 
-    render json: {
+    if grouped_format?
+      render_grouped(result)
+    else
+      render_flat(result)
+    end
+  end
+
+  private
+
+  def grouped_format?
+    params[:result_format].to_s.downcase == 'grouped'
+  end
+
+  def render_flat(result)
+    serialized = serialize_results(result.data[:results_with_highlights])
+
+    render json: response_envelope(result, serialized)
+  end
+
+  def render_grouped(result)
+    grouped = Search::ResultGrouper.call(
+      result.data[:results_with_highlights],
+      per_law: params[:per_law]
+    )
+
+    file_urls = batch_load_file_urls(result.data[:results_with_highlights])
+
+    serialized = grouped.map do |entry|
+      case entry[:type]
+      when :law_group
+        Search::GroupedLawSerializer.new(entry).serialize
+      when :document
+        Search::DocumentSerializer.new(
+          entry[:source],
+          highlights: entry[:highlights],
+          file_url: file_urls[entry[:source].id]
+        ).serialize
+      end
+    end
+
+    render json: response_envelope(result, serialized)
+  end
+
+  def response_envelope(result, serialized_results)
+    {
       results: serialized_results,
       total: result.data[:total],
       page: result.data[:page],
@@ -37,8 +83,6 @@ class Api::V1::SearchController < Api::V1::BaseController
       metadata: result.data[:metadata]
     }
   end
-
-  private
 
   def search_filters
     filters = {}
@@ -51,7 +95,7 @@ class Api::V1::SearchController < Api::V1::BaseController
     filters
   end
 
-  # Serializes ES _source results via per-type serializers.
+  # Serializes ES _source results via per-type serializers (flat format).
   # For documents, batch-loads file_url from DB only for paying/trial users.
   def serialize_results(results_with_highlights)
     file_urls = batch_load_file_urls(results_with_highlights)
@@ -118,6 +162,7 @@ class Api::V1::SearchController < Api::V1::BaseController
     $tracker.track(current_user_id, 'Unified Search', {
       'query' => params[:query],
       'type' => params[:type],
+      'format' => params[:result_format],
       'location' => 'API',
       'page' => params[:page],
       'per_page' => params[:per_page],

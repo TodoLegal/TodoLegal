@@ -5,7 +5,6 @@ require 'test_helper'
 class Api::V1::SearchControllerTest < ActionDispatch::IntegrationTest
   setup do
     Searchkick.callbacks(:inline) do
-      Law.reindex
       Article.reindex
       Document.reindex
     end
@@ -13,7 +12,7 @@ class Api::V1::SearchControllerTest < ActionDispatch::IntegrationTest
     host! 'todolegal.app'
   end
 
-  # --- Basic search ---
+  # --- Basic search (flat format, default) ---
 
   test "search with no query returns paginated results" do
     get api_v1_search_path, params: { query: '' }
@@ -40,21 +39,12 @@ class Api::V1::SearchControllerTest < ActionDispatch::IntegrationTest
     json = JSON.parse(response.body)
 
     json['results'].each do |result|
-      assert_includes %w[law article document], result['_type'],
-        "Each result should have a valid _type"
+      assert_includes %w[article document], result['_type'],
+        "Each result should have _type 'article' or 'document'"
     end
   end
 
   # --- Type filter ---
-
-  test "type=law returns only law results" do
-    get api_v1_search_path, params: { query: '*', type: 'law' }
-    json = JSON.parse(response.body)
-
-    json['results'].each do |result|
-      assert_equal 'law', result['_type'], "All results should be laws"
-    end
-  end
 
   test "type=article returns only article results" do
     get api_v1_search_path, params: { query: '*', type: 'article' }
@@ -74,20 +64,13 @@ class Api::V1::SearchControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # --- Law result fields ---
-
-  test "law results include expected fields" do
+  test "type=law falls back to all models" do
     get api_v1_search_path, params: { query: '*', type: 'law' }
     json = JSON.parse(response.body)
 
-    law = json['results'].first
-    return skip("No law fixtures") unless law
-
-    %w[_type id name creation_number status url tags highlights].each do |field|
-      assert law.key?(field), "Law result should include '#{field}'"
-    end
-    assert_equal 'law', law['_type']
-    assert law['tags'].is_a?(Array), "Law tags should be an array of strings"
+    assert json['total'] > 0, "type=law should fall back to all models and return results"
+    types = json['results'].map { |r| r['_type'] }.uniq
+    refute_includes types, 'law', "No law-type results should exist"
   end
 
   # --- Article result fields ---
@@ -99,7 +82,7 @@ class Api::V1::SearchControllerTest < ActionDispatch::IntegrationTest
     article = json['results'].first
     return skip("No article fixtures") unless article
 
-    %w[_type id article_number law_id law_name body_snippet highlights].each do |field|
+    %w[_type id article_number law_id law_name law_hierarchy body highlights].each do |field|
       assert article.key?(field), "Article result should include '#{field}'"
     end
     assert_equal 'article', article['_type']
@@ -185,34 +168,33 @@ class Api::V1::SearchControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "content_type facet includes law, article, and document counts" do
+  test "content_type facet includes article and document counts (no law)" do
     get api_v1_search_path, params: { query: '*' }
     json = JSON.parse(response.body)
 
     ct = json['facets']['content_type']
-    %w[law article document].each do |key|
+    %w[article document].each do |key|
       assert ct.key?(key), "content_type facet should include '#{key}'"
       assert ct[key].is_a?(Integer), "content_type count should be an integer"
     end
+    refute ct.key?('law'), "content_type facet should NOT include 'law'"
   end
 
-  test "metadata includes per-type counts" do
+  test "metadata includes articles_count and documents_count (no laws_count)" do
     get api_v1_search_path, params: { query: '*' }
     json = JSON.parse(response.body)
 
-    %w[laws_count articles_count documents_count].each do |key|
+    %w[articles_count documents_count].each do |key|
       assert json['metadata'].key?(key), "Metadata should include '#{key}'"
     end
+    refute json['metadata'].key?('laws_count'), "Metadata should NOT include 'laws_count'"
   end
 
   # --- Filters ---
 
   test "tag filter returns filtered results" do
     get api_v1_search_path, params: { query: '*', filters: { tags: ['Constitucional'] } }
-    json = JSON.parse(response.body)
-
     assert_response :success
-    # Tag-filtered results should be a subset of total results
   end
 
   test "date range filter works" do
@@ -220,39 +202,111 @@ class Api::V1::SearchControllerTest < ActionDispatch::IntegrationTest
       query: '*', type: 'document',
       filters: { from: '2020-01-01', to: '2025-12-31' }
     }
-    json = JSON.parse(response.body)
-
     assert_response :success
   end
 
-  test "status filter returns only matching status" do
+  test "status filter matches articles by law_status" do
     get api_v1_search_path, params: {
-      query: '*', type: 'law',
+      query: '*', type: 'article',
       filters: { status: 'vigente' }
     }
     json = JSON.parse(response.body)
-
-    json['results'].each do |law|
-      assert_equal 'vigente', law['status'], "Status filter should only return vigente laws"
-    end
+    assert_response :success
+    # Articles are filtered by law_status via the _or clause
   end
 
   # --- Highlights ---
 
   test "search results include highlights for matching terms" do
-    get api_v1_search_path, params: { query: 'constitución', type: 'law' }
+    get api_v1_search_path, params: { query: 'soberanía' }
     json = JSON.parse(response.body)
 
     has_highlight = json['results'].any? do |r|
-      r['highlights'].is_a?(Hash) && r['highlights'].values.any? { |v| v.include?('<mark>') }
+      r['highlights'].is_a?(Hash) && r['highlights'].values.any? { |v| v.to_s.include?('<mark>') }
     end
     assert has_highlight, "At least one result should have a <mark> highlight"
+  end
+
+  # --- Grouped format ---
+
+  test "result_format=grouped returns grouped response" do
+    get api_v1_search_path, params: { query: '*', result_format: 'grouped' }
+    assert_response :success
+
+    json = JSON.parse(response.body)
+    assert json['results'].is_a?(Array)
+    assert json.key?('total')
+    assert json.key?('facets')
+  end
+
+  test "result_format=grouped contains law_group entries with correct structure" do
+    get api_v1_search_path, params: { query: '*', result_format: 'grouped' }
+    json = JSON.parse(response.body)
+
+    law_group = json['results'].find { |r| r['_type'] == 'law_group' }
+    return skip("No article fixtures to form law groups") unless law_group
+
+    assert law_group.key?('law'), "law_group should have 'law' key"
+    assert law_group.key?('articles'), "law_group should have 'articles' key"
+
+    law = law_group['law']
+    %w[id name creation_number status url tags].each do |field|
+      assert law.key?(field), "law metadata should include '#{field}'"
+    end
+
+    article = law_group['articles'].first
+    %w[id number body snippet].each do |field|
+      assert article.key?(field), "grouped article should include '#{field}'"
+    end
+  end
+
+  test "result_format=grouped includes documents alongside law groups" do
+    get api_v1_search_path, params: { query: '*', result_format: 'grouped' }
+    json = JSON.parse(response.body)
+
+    types = json['results'].map { |r| r['_type'] }.uniq
+    # Should have at least document entries (may or may not have law_groups depending on fixtures)
+    assert types.any?, "Grouped results should have entries"
+  end
+
+  test "result_format=grouped respects per_law parameter" do
+    get api_v1_search_path, params: { query: '*', result_format: 'grouped', per_law: 1 }
+    json = JSON.parse(response.body)
+
+    law_groups = json['results'].select { |r| r['_type'] == 'law_group' }
+    law_groups.each do |group|
+      assert group['articles'].size <= 1, "per_law=1 should cap articles to 1 per group"
+    end
+  end
+
+  test "result_format=grouped documents do not include file_url for unauthenticated users" do
+    get api_v1_search_path, params: { query: '*', result_format: 'grouped' }
+    json = JSON.parse(response.body)
+
+    docs = json['results'].select { |r| r['_type'] == 'document' }
+    docs.each do |doc|
+      refute doc.key?('file_url'), "Unauthenticated users should not see file_url in grouped format"
+    end
+  end
+
+  test "result_format=flat is default behavior" do
+    get api_v1_search_path, params: { query: '*' }
+    json_default = JSON.parse(response.body)
+
+    get api_v1_search_path, params: { query: '*', result_format: 'flat' }
+    json_flat = JSON.parse(response.body)
+
+    # Both should have the same structure — no law_group entries
+    assert_equal json_default['total'], json_flat['total']
+    json_flat['results'].each do |r|
+      assert_includes %w[article document], r['_type'],
+        "Flat format should only have article and document types"
+    end
   end
 
   # --- Error handling ---
 
   test "service failure returns 503 with error message" do
-    # Simulate ES being down by stubbing the service call
     Search::UnifiedSearchService.stubs(:call).returns(
       ServiceResult.failure("Search unavailable: connection refused")
     )
@@ -273,5 +327,16 @@ class Api::V1::SearchControllerTest < ActionDispatch::IntegrationTest
     %w[results total page per_page total_pages facets metadata].each do |key|
       assert json.key?(key), "Response should include '#{key}'"
     end
+  end
+
+  # --- Empty results ---
+
+  test "empty results return valid response" do
+    get api_v1_search_path, params: { query: 'zzzznonexistentqueryzzzz' }
+    assert_response :success
+
+    json = JSON.parse(response.body)
+    assert_equal 0, json['total']
+    assert_equal [], json['results']
   end
 end

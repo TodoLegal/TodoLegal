@@ -2,7 +2,6 @@ require 'test_helper'
 
 class ArticleSearchTest < ActiveSupport::TestCase
   setup do
-    Law.reindex
     Article.reindex
   end
 

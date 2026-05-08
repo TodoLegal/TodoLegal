@@ -23,7 +23,6 @@ module Search
     def self.for(source, highlights: {})
       index = source._index.to_s
       case index
-      when /\Alaws_/      then LawSerializer.new(source, highlights: highlights)
       when /\Aarticles_/   then ArticleSerializer.new(source, highlights: highlights)
       when /\Adocuments_/  then DocumentSerializer.new(source, highlights: highlights)
       else raise ArgumentError, "No serializer for index #{index}"

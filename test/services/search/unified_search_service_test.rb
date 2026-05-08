@@ -9,6 +9,20 @@ class Search::UnifiedSearchServiceTest < ActiveSupport::TestCase
     end
   end
 
+  # Helper: extract flat result sources from the service result
+  def results_from(service_result)
+    service_result.data[:results_with_highlights].map { |source, _highlights| source }
+  end
+
+  # Helper: determine model type from ES _index name
+  def index_type(source)
+    case source._index.to_s
+    when /\Alaws_/      then :law
+    when /\Aarticles_/   then :article
+    when /\Adocuments_/  then :document
+    end
+  end
+
   # --- Multi-model search ---
 
   test "returns a successful ServiceResult" do
@@ -19,10 +33,11 @@ class Search::UnifiedSearchServiceTest < ActiveSupport::TestCase
 
   test "search returns results from multiple model types" do
     result = Search::UnifiedSearchService.call(query: "constitución")
-    assert result.data[:results].any?, "Should return at least one result"
-    classes = result.data[:results].map(&:class).uniq
-    assert classes.include?(Law) || classes.include?(Article),
-      "Results should include Law or Article records"
+    sources = results_from(result)
+    assert sources.any?, "Should return at least one result"
+    types = sources.map { |s| index_type(s) }.uniq
+    assert types.include?(:law) || types.include?(:article),
+      "Results should include law or article types"
   end
 
   test "wildcard query returns results from all indexed models" do
@@ -30,26 +45,34 @@ class Search::UnifiedSearchServiceTest < ActiveSupport::TestCase
     assert result.data[:total] > 0, "Wildcard should return results"
   end
 
+  test "results are Searchkick::HashWrapper (load: false)" do
+    result = Search::UnifiedSearchService.call(query: "*")
+    sources = results_from(result)
+    sources.each do |s|
+      assert_kind_of Searchkick::HashWrapper, s, "Results should be HashWrapper, not AR records"
+    end
+  end
+
   # --- Type filter ---
 
   test "type filter 'law' returns only Law results" do
     result = Search::UnifiedSearchService.call(query: "constitución", type: "law")
-    result.data[:results].each do |r|
-      assert_equal Law, r.class, "All results should be Laws when type=law"
+    results_from(result).each do |s|
+      assert_equal :law, index_type(s), "All results should be laws when type=law"
     end
   end
 
   test "type filter 'article' returns only Article results" do
     result = Search::UnifiedSearchService.call(query: "soberanía", type: "article")
-    result.data[:results].each do |r|
-      assert_equal Article, r.class, "All results should be Articles when type=article"
+    results_from(result).each do |s|
+      assert_equal :article, index_type(s), "All results should be articles when type=article"
     end
   end
 
   test "type filter 'document' returns only Document results" do
     result = Search::UnifiedSearchService.call(query: "*", type: "document")
-    result.data[:results].each do |r|
-      assert_equal Document, r.class, "All results should be Documents when type=document"
+    results_from(result).each do |s|
+      assert_equal :document, index_type(s), "All results should be documents when type=document"
     end
   end
 
@@ -62,15 +85,15 @@ class Search::UnifiedSearchServiceTest < ActiveSupport::TestCase
 
   test "status filter 'vigente' returns only vigente laws" do
     result = Search::UnifiedSearchService.call(query: "*", type: "law", filters: { status: "vigente" })
-    result.data[:results].each do |law|
-      assert_equal "vigente", law.status, "All laws should be vigente"
+    results_from(result).each do |s|
+      assert_equal "vigente", s.status, "All laws should be vigente"
     end
   end
 
   test "status filter 'derogado' returns only derogado laws" do
     result = Search::UnifiedSearchService.call(query: "*", type: "law", filters: { status: "derogado" })
-    result.data[:results].each do |law|
-      assert_equal "derogado", law.status, "All laws should be derogado"
+    results_from(result).each do |s|
+      assert_equal "derogado", s.status, "All laws should be derogado"
     end
   end
 
@@ -78,7 +101,7 @@ class Search::UnifiedSearchServiceTest < ActiveSupport::TestCase
 
   test "tag filter returns results matching the tag" do
     result = Search::UnifiedSearchService.call(query: "*", filters: { tags: ["Constitucional"] })
-    assert result.data[:results].any?, "Should find results tagged 'Constitucional'"
+    assert results_from(result).any?, "Should find results tagged 'Constitucional'"
   end
 
   # --- Date parsing integration ---
@@ -86,7 +109,7 @@ class Search::UnifiedSearchServiceTest < ActiveSupport::TestCase
   test "Spanish date query is parsed and used for search" do
     result = Search::UnifiedSearchService.call(query: "20 de abril del 2020")
     assert result.success?, "Should return a successful result"
-    assert result.data.key?(:results), "Should return a valid response"
+    assert result.data.key?(:results_with_highlights), "Should return a valid response"
   end
 
   # --- Pagination ---
@@ -118,7 +141,7 @@ class Search::UnifiedSearchServiceTest < ActiveSupport::TestCase
 
   test "response includes all expected top-level keys" do
     result = Search::UnifiedSearchService.call(query: "*")
-    %i[results total page per_page total_pages facets metadata].each do |key|
+    %i[results_with_highlights total page per_page total_pages facets metadata].each do |key|
       assert result.data.key?(key), "Data should include :#{key}"
     end
   end
@@ -149,8 +172,7 @@ class Search::UnifiedSearchServiceTest < ActiveSupport::TestCase
 
   test "search results include highlights for matching terms" do
     result = Search::UnifiedSearchService.call(query: "constitución", type: "law")
-    has_highlight = result.data[:results].any? do |r|
-      highlights = r.search_highlights
+    has_highlight = result.data[:results_with_highlights].any? do |_source, highlights|
       highlights.present? && highlights.values.any? { |v| v.include?("<mark>") }
     end
     assert has_highlight, "At least one result should have a <mark> highlight"
@@ -170,9 +192,9 @@ class Search::UnifiedSearchServiceTest < ActiveSupport::TestCase
 
   test "unpublished documents are excluded from mixed search results" do
     result = Search::UnifiedSearchService.call(query: "*")
-    document_results = result.data[:results].select { |r| r.is_a?(Document) }
-    document_results.each do |doc|
-      assert doc.publish, "Unpublished documents should not appear in results"
+    doc_sources = results_from(result).select { |s| index_type(s) == :document }
+    doc_sources.each do |s|
+      assert s.publish, "Unpublished documents should not appear in results"
     end
   end
 end

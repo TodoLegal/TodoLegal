@@ -1,7 +1,29 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
+  name: Constitución de la República
+  creation_number: "131-1982"
+  status: vigente
+  hierarchy: ""
+  law_access: one
 
 two:
-  name: MyString
+  name: Código Penal 130-2017
+  creation_number: "130-2017"
+  status: vigente
+  hierarchy: ""
+  law_access: two
+
+tarjetas_credito:
+  name: Ley de Tarjetas de Crédito
+  creation_number: "106-2006"
+  status: vigente
+  hierarchy: ""
+  law_access: one
+
+representantes:
+  name: Ley de Representantes, Distribuidores y Agentes de Empresas Nacionales y Extranjeras
+  creation_number: "549"
+  status: derogado
+  hierarchy: ""
+  law_access: two

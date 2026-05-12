@@ -1,13 +1,38 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+# Real article bodies from scraped Honduran laws
 
 one:
-  number: 1
-  body: MyText
+  number: "1"
+  body: "Honduras es un Estado de Derecho, soberano, constituido como República libre, democrática e independiente para asegurar a sus habitantes el goce de la justicia, la libertad, la cultura y el bienestar económico y social."
   position: 1
-  law_id: 1
+  law: one
 
 two:
-  number: 1
-  body: MyText
+  number: "2"
+  body: "La soberanía corresponde al pueblo del cual emanan todos los poderes del Estado que se ejercen por representación.\nLa suplantación de la soberanía popular y la usurpación de los poderes constituidos se tipifican como delitos de traición a la Patria. La responsabilidad en estos casos es imprescriptible y podrá ser deducida de oficio o a petición de cualquier ciudadano."
+  position: 2
+  law: one
+
+codigo_penal_art1:
+  number: "1"
+  body: "PRINCIPIO DE LEGALIDAD. Nadie\npuede ser castigado por acción u omisión que en el momento\nde su perpetración o comisión no está prevista como delito\no falta.\n\nNadie puede ser castigado con una pena o medida de seguridad\nque no ha sido previamente establecida por la Ley e impuesta\npor Órgano Jurisdiccional competente conforme a las leyes\nprocesales."
   position: 1
-  law_id: 1
+  law: two
+
+codigo_penal_art3:
+  number: "3"
+  body: "<p>PRINCIPIO DE HUMANIDAD DE LAS\nPENAS. Nadie debe ser condenado con penas ni medidas de\nseguridad que atentan contra la <em>dignidad humana</em> o suponen\ntratos crueles, inhumanos o degradantes.</p>\n\nLa Gaceta\n\nDIARIO OFICIAL DE LA REPÚBLICA DE HONDURAS\nDECANO DE LA PRENSA HONDUREÑA\nPARA MEJOR SEGURIDAD DE SUS PUBLICACIONES"
+  position: 3
+  law: two
+
+tarjetas_art1:
+  number: "1"
+  body: "Las **sociedades mercantiles** autorizadas como emisoras, procesadoras y comercializadoras de tarjetas de crédito, así como los establecimientos afiliados, se regularán en lo que concierne al giro de operaciones de crédito mediante tarjeta por las disposiciones establecidas en la presente Ley y su Reglamento."
+  position: 1
+  law: tarjetas_credito
+
+representantes_art4:
+  number: "4"
+  body: "Para ser concesionarios se requiere:\n\na) Ser hondureño o sociedad mercantil hondureña; y\nb) Estar afiliado a la correspondiente Cámara de Comercio.\n\nPara dedicarse a la representación, agencia o distribución, las personas naturales deberán estar constituídas como comerciante individual. Se tendrá por sociedad mercantil hondureña aquella en cuyo capital social predomine una inversión netamente hondureña, en una proporción no inferior al cincuenta y uno por ciento."
+  position: 4
+  law: representantes

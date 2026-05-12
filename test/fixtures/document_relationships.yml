@@ -1,11 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  document_1_id: 1
-  document_2_id: 1
-  relationship: MyString
+  source_document_id: 1
+  target_document_id: 1
+  modification_type: reforma
 
 two:
-  document_1_id: 1
-  document_2_id: 1
-  relationship: MyString
+  source_document_id: 1
+  target_document_id: 1
+  modification_type: reforma

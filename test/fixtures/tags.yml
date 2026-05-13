@@ -2,12 +2,32 @@
 
 one:
   name: Penal
+  tag_type: one
 
-two:
+civil:
   name: Civil
+  tag_type: materia
 
 conatel:
   name: Conatel
+  tag_type: Institución
 
 enag:
   name: ENAG
+  tag_type: Institución
+
+constitucional:
+  name: Constitucional
+  tag_type: materia
+
+penal_materia:
+  name: Penal
+  tag_type: materia
+
+bancario:
+  name: Bancario
+  tag_type: materia
+
+mercantil:
+  name: Mercantil
+  tag_type: materia

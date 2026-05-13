@@ -1,6 +1,6 @@
 class Document < ApplicationRecord
   include PgSearch
-  searchkick language: 'spanish'
+  searchkick language: 'spanish', callbacks: :async
 
   has_many :issuer_document_tags, :dependent => :destroy
 
@@ -63,8 +63,14 @@ class Document < ApplicationRecord
       document_type_name: document_type&.name,
       document_type_alternative_name: document_type&.alternative_name,
       publish: publish,
+      # Flat tag name arrays — used by ES for filtering/search (where clauses, field boosts)
       document_tags_name: document_tags.map { |dt| dt&.tag&.name }.compact,
       issuer_document_tags_name: issuer_document_tags.map { |idt| idt.tag&.name }.compact,
+      # Structured tag data — used by serializers to avoid DB round-trip via load: false
+      document_tags_data: document_tags.includes(tag: :tag_type).filter_map { |dt|
+        next unless dt.tag
+        { name: dt.tag.name, type: dt.tag.tag_type&.name || '' }
+      },
     }
 
     data

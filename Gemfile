@@ -4,6 +4,8 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.2.0'
 
 # My added gems
+gem 'connection_pool', '~> 2.4' # Pin to 2.x; connection_pool 3.0 breaks Rails 7.1 RedisCacheStore
+gem 'minitest', '~> 5.20'       # Pin to 5.x; minitest 6.0 breaks Rails 7.1 test runner
 gem 'newrelic_rpm', '~> 9.24.0'
 gem 'pg'
 gem 'pg_search'
@@ -26,7 +28,7 @@ gem 'rack-cors'
 gem 'browser'
 gem 'rack-attack'
 gem 'kaminari'
-gem 'searchkick'
+gem 'searchkick', '~> 5.5'
 gem 'capistrano'
 gem 'capistrano-rails'
 gem 'capistrano-passenger'

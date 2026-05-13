@@ -112,6 +112,8 @@ Rails.application.routes.draw do
           get "/", to: 'documents#get_documents'
         end
       end
+      # Unified search across laws, articles, and gazette documents (US-4)
+      get 'search', to: 'search#search'
       resource :laws do
         collection do
           get :search

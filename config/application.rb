@@ -25,5 +25,11 @@ module TodoLegal
     # config.eager_load_paths << Rails.root.join("extras")
     config.active_job.queue_adapter = :sidekiq
 
+    # Base URLs for search result links — set via env vars per environment.
+    # Staging: TODOLEGAL_BASE_URL=https://test.todolegal.app  VALID_BASE_URL=https://test.valid.todolegal.app
+    # Production: defaults below (or set env vars explicitly)
+    config.x.todolegal_base_url = ENV.fetch('TODOLEGAL_BASE_URL', 'https://todolegal.app')
+    config.x.valid_base_url = ENV.fetch('VALID_BASE_URL', 'https://valid.todolegal.app')
+
   end
 end

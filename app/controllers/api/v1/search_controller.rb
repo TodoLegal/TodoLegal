@@ -3,7 +3,7 @@
 class Api::V1::SearchController < Api::V1::BaseController
   skip_before_action :verify_turnstile_token!, only: [:search]
   before_action :doorkeeper_authorize!, only: [:search]
-  skip_before_action :doorkeeper_authorize!, unless: :has_access_token?
+  skip_before_action :doorkeeper_authorize!, if: :service_secret_valid?
 
   # GET /api/v1/search
   #
@@ -15,12 +15,21 @@ class Api::V1::SearchController < Api::V1::BaseController
   #   format=flat (default) — individual results in ES score order
   #   format=grouped — articles grouped by law (first-seen positioning) + documents flat
   def search
+    search_per_page = params[:per_page]
+
+    # In grouped mode, over-fetch from ES because article grouping collapses
+    # multiple raw results into single law_group entries.
+    if grouped_format? && search_per_page.present?
+      @requested_per_page = search_per_page.to_i
+      search_per_page = (search_per_page.to_i * 3).to_s
+    end
+
     result = Search::UnifiedSearchService.call(
       query: params[:query],
       type: params[:type],
       filters: search_filters,
       page: params[:page],
-      per_page: params[:per_page]
+      per_page: search_per_page
     )
 
     unless result.success?
@@ -54,6 +63,10 @@ class Api::V1::SearchController < Api::V1::BaseController
       per_law: params[:per_law]
     )
 
+    # Trim grouped output to the originally requested per_page
+    per_page = @requested_per_page || result.data[:per_page]
+    grouped = grouped.first(per_page)
+
     file_urls = batch_load_file_urls(result.data[:results_with_highlights])
 
     serialized = grouped.map do |entry|
@@ -69,7 +82,9 @@ class Api::V1::SearchController < Api::V1::BaseController
       end
     end
 
-    render json: response_envelope(result, serialized)
+    envelope = response_envelope(result, serialized)
+    envelope[:per_page] = per_page
+    render json: envelope
   end
 
   def response_envelope(result, serialized_results)
@@ -175,5 +190,19 @@ class Api::V1::SearchController < Api::V1::BaseController
 
   def has_access_token?
     doorkeeper_token.present?
+  end
+
+  # Allows chatbot and OG worker to bypass Doorkeeper via shared secrets.
+  # Temporary: chatbot will migrate to Doorkeeper user auth soon.
+  def service_secret_valid?
+    chatbot_secret_valid? || og_worker_secret_valid?
+  end
+
+  def chatbot_secret_valid?
+    secret = ENV['CHATBOT_API_SECRET']
+    header = request.headers['X-Chatbot-Secret']
+    return false if secret.blank? || header.blank?
+
+    ActiveSupport::SecurityUtils.secure_compare(header, secret)
   end
 end

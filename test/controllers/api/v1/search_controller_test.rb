@@ -3,6 +3,8 @@
 require 'test_helper'
 
 class Api::V1::SearchControllerTest < ActionDispatch::IntegrationTest
+  TEST_API_SECRET = 'test-chatbot-secret'
+
   setup do
     Searchkick.callbacks(:inline) do
       Article.reindex
@@ -10,6 +12,32 @@ class Api::V1::SearchControllerTest < ActionDispatch::IntegrationTest
     end
     # Use an allowed host for integration tests
     host! 'todolegal.app'
+    ENV['CHATBOT_API_SECRET'] = TEST_API_SECRET
+  end
+
+  teardown do
+    ENV.delete('CHATBOT_API_SECRET')
+  end
+
+  private
+
+  def auth_headers
+    { 'X-Chatbot-Secret' => TEST_API_SECRET }
+  end
+
+  # Auto-inject auth headers for all requests unless explicitly testing unauth.
+  def get(path, **kwargs)
+    kwargs[:headers] = (kwargs[:headers] || {}).merge(auth_headers) unless kwargs.delete(:skip_auth)
+    super(path, **kwargs)
+  end
+
+  public
+
+  # --- Authentication ---
+
+  test "unauthenticated request returns 401" do
+    get api_v1_search_path, params: { query: 'test' }, skip_auth: true
+    assert_response :unauthorized
   end
 
   # --- Basic search (flat format, default) ---
@@ -104,7 +132,7 @@ class Api::V1::SearchControllerTest < ActionDispatch::IntegrationTest
     assert doc['tags'].is_a?(Array), "Document tags should be an array"
   end
 
-  test "document results do not include file_url for unauthenticated users" do
+  test "document results do not include file_url for service-authenticated users" do
     get api_v1_search_path, params: { query: '*', type: 'document' }
     json = JSON.parse(response.body)
 
@@ -279,7 +307,7 @@ class Api::V1::SearchControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "result_format=grouped documents do not include file_url for unauthenticated users" do
+  test "result_format=grouped documents do not include file_url for service-authenticated users" do
     get api_v1_search_path, params: { query: '*', result_format: 'grouped' }
     json = JSON.parse(response.body)
 

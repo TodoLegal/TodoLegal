@@ -29,7 +29,7 @@ module Search
         creation_number: @first_source.law_creation_number,
         status: @first_source.law_status,
         hierarchy: @first_source.law_hierarchy,
-        url: "/leyes/#{@first_source.law_id}-#{@first_source.law_name.to_s.parameterize}",
+        url: "#{Rails.configuration.x.todolegal_base_url}/leyes/#{@first_source.law_id}-#{@first_source.law_name.to_s.parameterize}",
         tags: @first_source.law_tag_names || []
       }
     end

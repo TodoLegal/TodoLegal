@@ -2,4 +2,6 @@
 :logfile: ./log/sidekiq.log
 :queues:
   - default
+  - mailers
+  - active_storage_purge
   - searchkick

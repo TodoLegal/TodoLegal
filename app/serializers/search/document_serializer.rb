@@ -2,16 +2,8 @@
 
 module Search
   class DocumentSerializer < BaseSerializer
-    # @param source [Searchkick::HashWrapper] ES _source data
-    # @param highlights [Hash] highlight fragments
-    # @param file_url [String, nil] pre-resolved ActiveStorage URL (injected by controller)
-    def initialize(source, highlights: {}, file_url: nil)
-      super(source, highlights: highlights)
-      @file_url = file_url
-    end
-
     def serialize
-      data = {
+      {
         _type: 'document',
         _score: source._score,
         id: source.id,
@@ -26,12 +18,6 @@ module Search
         url: build_url,
         highlights: highlights
       }
-
-      # Only expose file URL for users with document access (pro plan / active trial).
-      # The URL is batch-loaded by the controller before serialization.
-      data[:file_url] = @file_url if @file_url
-
-      data
     end
 
     private

@@ -1,8 +1,10 @@
 Searchkick.client = Elasticsearch::Client.new(
-  hosts: ENV["ELASTICSEARCH_URL"],
+  hosts: "#{ENV['ELASTICSEARCH_SCHEME'] || 'https'}://#{ENV['ELASTICSEARCH_HOST']}:#{ENV['ELASTICSEARCH_PORT']}",
+  user: ENV["ELASTICSEARCH_USER"] || "elastic",
+  password: ENV["ELASTICSEARCH_PASSWORD"],
   retry_on_failure: true,
   transport_options: {
     request: { timeout: 250 },
-    ssl: { verify: false }  # ES uses self-signed certs; distribute CA cert + set verify: true for SOC 2 certification
+    ssl: { verify: ENV["ELASTICSEARCH_SSL_VERIFY"] != "false" }
   }
 )

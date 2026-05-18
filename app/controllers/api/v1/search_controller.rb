@@ -14,6 +14,7 @@ class Api::V1::SearchController < Api::V1::BaseController
   #   format=flat (default) — individual results in ES score order
   #   format=grouped — articles grouped by law (first-seen positioning) + documents flat
   def search
+    log_search_request
     search_per_page = params[:per_page]
 
     # In grouped mode, over-fetch from ES because article grouping collapses
@@ -32,6 +33,7 @@ class Api::V1::SearchController < Api::V1::BaseController
     )
 
     unless result.success?
+      log_search_response(:service_unavailable, 0, 0, params[:query])
       return render json: { error: result.error_message }, status: :service_unavailable
     end
 
@@ -42,6 +44,7 @@ class Api::V1::SearchController < Api::V1::BaseController
     else
       render_flat(result)
     end
+    log_search_response(:ok, result.data[:metadata][:articles_count], result.data[:metadata][:documents_count], params[:query])
   end
 
   private
@@ -147,5 +150,13 @@ class Api::V1::SearchController < Api::V1::BaseController
     return false if secret.blank? || header.blank?
 
     ActiveSupport::SecurityUtils.secure_compare(header, secret)
+  end
+
+  def log_search_request
+    Rails.logger.error "[ChatbotSearch] Request | IP: #{request.remote_ip} | Query: #{params[:query]} | UA: #{request.user_agent}"
+  end
+
+  def log_search_response(status, total_articles, total_documents, query = nil)
+    Rails.logger.error "[ChatbotSearch] Response | IP: #{request.remote_ip} | Status: #{status} | Query: #{query} | Articles: #{total_articles} | Documents: #{total_documents}"
   end
 end

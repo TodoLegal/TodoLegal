@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Api::V1::SearchController < Api::V1::BaseController
+  include MixpanelTrackable
+
   skip_before_action :verify_turnstile_token!, only: [:search]
   before_action :doorkeeper_authorize!, only: [:search]
   skip_before_action :doorkeeper_authorize!, if: :service_secret_valid?
@@ -115,16 +117,10 @@ class Api::V1::SearchController < Api::V1::BaseController
     end
   end
 
-  def current_user_id
-    return 0 unless doorkeeper_token.present?
-
-    doorkeeper_token.resource_owner_id || 0
-  end
-
   def track_search(total_count)
     return unless params[:query].present?
 
-    $tracker.track(current_user_id, 'Unified Search', {
+    $tracker_ai.track(pseudonymized_user_id, 'TodoLegal Search API', {
       'query' => params[:query],
       'type' => params[:type],
       'format' => params[:result_format],

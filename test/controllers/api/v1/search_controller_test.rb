@@ -132,13 +132,12 @@ class Api::V1::SearchControllerTest < ActionDispatch::IntegrationTest
     assert doc['tags'].is_a?(Array), "Document tags should be an array"
   end
 
-  test "document results do not include file_url for service-authenticated users" do
+  test "document results do not include file_url" do
     get api_v1_search_path, params: { query: '*', type: 'document' }
     json = JSON.parse(response.body)
 
     json['results'].each do |doc|
-      refute doc.key?('file_url'),
-        "Unauthenticated users should not see file_url"
+      refute doc.key?('file_url'), "file_url should not be in search results"
     end
   end
 
@@ -307,13 +306,13 @@ class Api::V1::SearchControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "result_format=grouped documents do not include file_url for service-authenticated users" do
+  test "result_format=grouped documents do not include file_url" do
     get api_v1_search_path, params: { query: '*', result_format: 'grouped' }
     json = JSON.parse(response.body)
 
     docs = json['results'].select { |r| r['_type'] == 'document' }
     docs.each do |doc|
-      refute doc.key?('file_url'), "Unauthenticated users should not see file_url in grouped format"
+      refute doc.key?('file_url'), "file_url should not be in grouped search results"
     end
   end
 

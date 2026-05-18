@@ -39,7 +39,7 @@ class Api::V1::SearchController < Api::V1::BaseController
       return render json: { error: result.error_message }, status: :service_unavailable
     end
 
-    track_search(result.data[:total])
+    track_search(result.data[:total], result.data[:metadata])
 
     if grouped_format?
       render_grouped(result)
@@ -117,7 +117,7 @@ class Api::V1::SearchController < Api::V1::BaseController
     end
   end
 
-  def track_search(total_count)
+  def track_search(total_count, metadata)
     return unless params[:query].present?
 
     $tracker_ai.track(pseudonymized_user_id, 'TodoLegal Search API', {
@@ -128,7 +128,9 @@ class Api::V1::SearchController < Api::V1::BaseController
       'page' => params[:page],
       'per_page' => params[:per_page],
       'filters' => params[:filters]&.to_unsafe_h,
-      'results' => total_count
+      'results' => total_count,
+      'articles_count' => metadata[:articles_count],
+      'documents_count' => metadata[:documents_count]
     })
   rescue StandardError
     # Don't let analytics failures break search

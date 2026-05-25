@@ -52,7 +52,7 @@ gem 'redis-namespace'
 gem 'ed25519'
 gem 'bcrypt_pbkdf'
 gem 'capistrano-env_config'
-gem 'elasticsearch'
+gem 'elasticsearch', '~> 8.19'
 #Just a session per account gem
 gem 'devise-security'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'

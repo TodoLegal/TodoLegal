@@ -65,3 +65,6 @@ config/database.yml
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
+
+# Ignore CSS file generated for todolegal_ai
+/public/css/todolegal_ai.css

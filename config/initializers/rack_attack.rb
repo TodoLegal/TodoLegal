@@ -62,6 +62,23 @@ class Rack::Attack
     req.ip if req.post? && ['/users/sign_in', '/api/v1/users/sign_in'].include?(req.path)
   end
 
+  # ── TodoLegal AI auth endpoints ──────────────────────────────────────────
+  # 5 sign-in attempts per minute per IP (matches typical Devise lockable window)
+  throttle('todolegal_ai/sign_in', limit: 5, period: 1.minute) do |req|
+    req.ip if req.post? && req.path == '/todolegal-ai/sign-in'
+  end
+
+  # 3 forgot-password requests per 5 minutes per IP (prevents email flooding)
+  throttle('todolegal_ai/forgot_password', limit: 3, period: 5.minutes) do |req|
+    req.ip if req.post? && req.path == '/todolegal-ai/forgot-password'
+  end
+
+  # 5 sign-up attempts per 10 minutes per IP (only relevant when self-registration is on)
+  throttle('todolegal_ai/sign_up', limit: 5, period: 10.minutes) do |req|
+    req.ip if req.post? && req.path == '/todolegal-ai/sign-up'
+  end
+  # ─────────────────────────────────────────────────────────────────────────
+
   # API protection for document endpoints (prevent scraping)
   throttle('api/documents/ip', limit: 200, period: 5.minutes) do |req|
     req.ip if req.path.match?(/^\/api\/v1\/documents/)

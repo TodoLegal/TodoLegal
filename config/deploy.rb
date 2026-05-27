@@ -38,6 +38,34 @@ end
 
 after "deploy", "link_relic:link_relic"
 
+# Tailwind CLI — builds isolated CSS for TodoLegal AI auth pages
+namespace :tailwind do
+  desc 'Download Tailwind standalone CLI if not already present'
+  task :install do
+    on roles(:web) do
+      within release_path do
+        unless test("[ -f #{release_path}/bin/tailwindcss ]")
+          execute :curl, '-sLo bin/tailwindcss https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.17/tailwindcss-linux-x64'
+          execute :chmod, '+x bin/tailwindcss'
+        end
+      end
+    end
+  end
+
+  desc 'Build TodoLegal AI Tailwind CSS'
+  task :build do
+    on roles(:web) do
+      within release_path do
+        execute :bash, 'bin/tailwind-build'
+      end
+    end
+  end
+end
+
+before 'tailwind:build', 'tailwind:install'
+before 'deploy:assets:precompile', 'tailwind:build'
+
+
 # after 'deploy:foo', 'deploy:link_relic'
 
 

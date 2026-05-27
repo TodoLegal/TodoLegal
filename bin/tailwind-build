@@ -1,0 +1,13 @@
+#!/bin/bash
+# Builds Tailwind CSS for the TodoLegal AI auth pages.
+# Output: public/css/todolegal_ai.css
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+exec "$ROOT/bin/tailwindcss" \
+  -c "$ROOT/config/tailwind.config.js" \
+  -i "$ROOT/app/assets/stylesheets/todolegal_ai.css" \
+  -o "$ROOT/public/css/todolegal_ai.css" \
+  --minify

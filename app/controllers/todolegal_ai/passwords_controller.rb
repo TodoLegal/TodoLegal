@@ -16,17 +16,20 @@ module TodolegalAi
       render 'todolegal_ai/passwords/edit'
     end
 
+    # Privacy by design: always redirect with a neutral flash, regardless of
+    # whether the email exists.  This is the Devise-recommended approach —
+    # override `create` so both the success and failure paths produce an
+    # identical response, eliminating the email-enumeration vector.
+    def create
+      resource_class.send_reset_password_instructions(resource_params)
+      flash[:notice] = "Si tu correo está registrado, recibirás instrucciones para restablecer tu contraseña."
+      redirect_to todolegal_ai_sign_in_path
+    end
+
     protected
 
     def after_resetting_password_path_for(_resource)
       safe_return_to(stored_todolegal_ai_return_to) || root_path
-    end
-
-    # Privacy by design: neutral response regardless of whether the email exists.
-    # This prevents email enumeration through timing or response differences.
-    def after_sending_reset_password_instructions_path_for(_resource_name)
-      flash[:notice] = "Si tu correo está registrado, recibirás instrucciones para restablecer tu contraseña."
-      todolegal_ai_sign_in_path
     end
   end
 end

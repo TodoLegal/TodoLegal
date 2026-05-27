@@ -37,8 +37,8 @@ module TodolegalAiAuth
   def safe_return_to(url)
     return nil if url.blank?
     uri = URI.parse(url)
-    # Allow only relative paths (no scheme/host) or paths to our own host
-    uri.relative? ? url : nil
+    # Allow only relative paths (no scheme/host) — reject protocol-relative URLs too
+    uri.relative? && uri.host.nil? ? url : nil
   rescue URI::InvalidURIError
     nil
   end

@@ -22,7 +22,8 @@ Devise.setup do |config|
   config.mailer_sender = 'TodoLegal <suscripciones@todolegal.app>'
 
   # Configure the class responsible to send e-mails.
-  # config.mailer = 'Devise::Mailer'
+  # Routes to branded templates based on user.source_app (todolegal_ai vs. default).
+  config.mailer = 'MultiAppDeviseMailer'
 
   # Configure the parent class responsible to send e-mails.
   # config.parent_mailer = 'ActionMailer::Base'
@@ -213,7 +214,9 @@ Devise.setup do |config|
   # Time interval you can reset your password with a reset password key.
   # Don't put a too small interval or your users won't have the time to
   # change their passwords.
-  config.reset_password_within = 6.hours
+  # 48 hours — applies to password resets and TodoLegal AI welcome invitations.
+  # 6h default is too aggressive; admins can always resend the invite link.
+  config.reset_password_within = 48.hours
 
   # When set to false, does not sign a user in automatically after their password is
   # reset. Defaults to true, so a user is signed in automatically after a reset.

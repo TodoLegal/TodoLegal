@@ -1,0 +1,22 @@
+<% content_for :subject, "Bienvenido a TodoLegal AI" %>
+<h1>Bienvenido a TodoLegal AI</h1>
+<p>
+  Tu cuenta ha sido creada. TodoLegal AI es el asistente legal inteligente que te ayuda
+  a investigar normativas, redactar documentos y gestionar tu práctica legal.
+</p>
+<p>Para activar tu cuenta y establecer tu contraseña, haz clic en el botón a continuación:</p>
+
+<a href="<%= @set_password_url %>" class="cta-btn">Configurar mi contraseña</a>
+
+<p style="font-size:12px;color:#94A3B8;">
+  Este enlace expira en 48 horas. Si no puedes hacer clic en el botón, copia y pega esta URL
+  en tu navegador:
+</p>
+<p class="url-fallback"><%= @set_password_url %></p>
+
+<hr class="divider">
+
+<p style="font-size:12px;color:#94A3B8;">
+  Si no esperabas este correo, puedes ignorarlo. Tu cuenta permanecerá inactiva hasta que
+  configures tu contraseña.
+</p>

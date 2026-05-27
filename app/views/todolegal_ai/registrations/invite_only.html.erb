@@ -1,0 +1,27 @@
+<% content_for :title, "Acceso por invitación" %>
+
+<div class="flex min-h-screen flex-col items-center justify-center px-4 py-12">
+
+  <div class="mb-8 flex flex-col items-center gap-2">
+    <svg class="h-9 w-9 text-ink" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
+      <rect width="32" height="32" rx="8"/>
+      <path fill="white" d="M8 10h16v2H8zm0 5h10v2H8zm0 5h12v2H8z"/>
+    </svg>
+    <span class="font-serif text-xl font-semibold text-ink tracking-tight">TodoLegal AI</span>
+  </div>
+
+  <div class="w-full max-w-md rounded-3xl border border-cream-200 bg-white px-8 py-10 shadow-[0_30px_80px_-30px_rgba(15,23,42,0.45)] text-center">
+    <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-brand-50">
+      <svg class="h-6 w-6 text-brand-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+      </svg>
+    </div>
+
+    <h1 class="font-serif text-2xl font-semibold text-ink mb-2">Solo por invitación</h1>
+    <p class="text-sm text-brand-300 leading-relaxed">
+      TodoLegal AI está disponible actualmente por invitación. Si ya tienes una cuenta,
+      <%= link_to "inicia sesión aquí", todolegal_ai_sign_in_path, class: "text-brand-500 hover:text-brand-600 transition-colors" %>.
+    </p>
+  </div>
+
+</div>

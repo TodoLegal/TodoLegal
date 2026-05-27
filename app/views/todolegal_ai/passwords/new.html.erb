@@ -1,0 +1,41 @@
+<% content_for :title, "Recuperar contraseña" %>
+
+<div class="flex min-h-screen flex-col items-center justify-center px-4 py-12">
+
+  <div class="mb-8 flex flex-col items-center gap-2">
+    <svg class="h-9 w-9 text-ink" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true">
+      <rect width="32" height="32" rx="8"/>
+      <path fill="white" d="M8 10h16v2H8zm0 5h10v2H8zm0 5h12v2H8z"/>
+    </svg>
+    <span class="font-serif text-xl font-semibold text-ink tracking-tight">TodoLegal AI</span>
+  </div>
+
+  <div class="w-full max-w-md rounded-3xl border border-cream-200 bg-white px-8 py-10 shadow-[0_30px_80px_-30px_rgba(15,23,42,0.45)]">
+    <h1 class="font-serif text-2xl font-semibold text-ink mb-1">Recuperar contraseña</h1>
+    <p class="text-sm text-brand-300 mb-8">
+      Ingresa tu correo y te enviaremos instrucciones para restablecer tu contraseña.
+    </p>
+
+    <%= form_for(resource, as: resource_name, url: todolegal_ai_forgot_password_path, html: { method: :post, class: 'space-y-5' }) do |f| %>
+      <%= render 'todolegal_ai/shared/flash' %>
+
+      <div>
+        <%= f.label :email, "Correo electrónico", class: "block text-sm font-medium text-ink mb-1.5" %>
+        <%= f.email_field :email,
+            autofocus: true,
+            autocomplete: "email",
+            placeholder: "tu@correo.com",
+            class: "block w-full rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-ink placeholder-brand-300 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition" %>
+      </div>
+
+      <%= f.submit "Enviar instrucciones",
+          class: "w-full rounded-2xl bg-ink px-4 py-2.5 text-sm font-semibold text-cream-50 hover:bg-warmdark focus:outline-none focus:ring-2 focus:ring-ink/30 transition cursor-pointer" %>
+    <% end %>
+
+    <p class="mt-6 text-center text-sm text-brand-300">
+      <%= link_to "← Volver al inicio de sesión", todolegal_ai_sign_in_path,
+          class: "text-brand-500 hover:text-brand-600 transition-colors" %>
+    </p>
+  </div>
+
+</div>

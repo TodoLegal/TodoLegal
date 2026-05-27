@@ -107,4 +107,20 @@ class User < ApplicationRecord
   def confirmation_required?
     false
   end
+
+  public
+
+  # Derived status for TodoLegal AI admin panel — no extra column needed.
+  # "pending" = account created but user has never signed in (invite not yet accepted).
+  # "active"  = user has signed in at least once.
+  def todolegal_ai_status
+    sign_in_count.to_i > 0 ? 'active' : 'pending'
+  end
+
+  # True when a legacy TodoLegal user was upgraded to TodoLegal AI.
+  # Heuristic: source_app is now todolegal_ai but the account was created
+  # before the TodoLegal AI launch (migration date).
+  def migrated_to_todolegal_ai?
+    source_app == 'todolegal_ai' && created_at < Date.new(2026, 5, 25)
+  end
 end

@@ -27,7 +27,7 @@ class MultiAppDeviseMailer < Devise::Mailer
     opts[:template_path] = 'todolegal_ai/mailer'
     mail(
       to: record.email,
-      subject: 'Bienvenido a TodoLegal AI',
+      subject: 'Activa tu cuenta TodoLegal AI',
       template_path: 'todolegal_ai/mailer',
       template_name: 'welcome_instructions'
     )

@@ -1,22 +1,29 @@
-<% content_for :subject, "Bienvenido a TodoLegal AI" %>
-<h1>Bienvenido a TodoLegal AI</h1>
-<p>
-  Tu cuenta ha sido creada. TodoLegal AI es el asistente legal inteligente que te ayuda
-  a investigar normativas, redactar documentos y gestionar tu práctica legal.
-</p>
-<p>Para activar tu cuenta y establecer tu contraseña, haz clic en el botón a continuación:</p>
+<% content_for :subject, "Activa tu cuenta TodoLegal AI" %>
 
-<a href="<%= @set_password_url %>" class="cta-btn">Configurar mi contraseña</a>
+<div style="display:inline-block;padding:4px 10px;border-radius:99px;background:#fef3c7;color:#92400e;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:20px">
+  TodoLegal AI · Programa de Acceso Anticipado
+</div>
+
+<h1>Bienvenid@ a TodoLegal AI</h1>
+<p style="font-size:13px;color:#334155;margin:0 0 6px">Hola<%= @user.first_name.present? ? " #{@user.first_name}," : "," %></p>
+<p>
+  Tu cuenta del Programa de Acceso Anticipado está lista. Activa tu acceso creando tu contraseña.
+</p>
+
+<a href="<%= @set_password_url %>" class="cta-btn">Crear mi contraseña →</a>
 
 <p style="font-size:12px;color:#94A3B8;">
-  Este enlace expira en 48 horas. Si no puedes hacer clic en el botón, copia y pega esta URL
-  en tu navegador:
+  Este enlace expira en 48 horas. Si caduca, escríbenos a
+  <a href="mailto:suscripciones@todolegal.app" style="color:#94A3B8;">suscripciones@todolegal.app</a>
+  para solicitar uno nuevo.
+</p>
+<p style="font-size:12px;color:#94A3B8;">
+  Si el botón no funciona, copia y pega este enlace en tu navegador:
 </p>
 <p class="url-fallback"><%= @set_password_url %></p>
 
 <hr class="divider">
 
-<p style="font-size:12px;color:#94A3B8;">
-  Si no esperabas este correo, puedes ignorarlo. Tu cuenta permanecerá inactiva hasta que
-  configures tu contraseña.
+<p style="font-size:11px;color:#94A3B8;">
+  Si no esperabas este correo, puedes ignorarlo. Tu cuenta no se activará hasta que abras el enlace.
 </p>

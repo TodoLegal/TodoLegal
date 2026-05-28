@@ -6,6 +6,7 @@
 # All other users fall through to the default Devise behavior.
 class MultiAppDeviseMailer < Devise::Mailer
   helper :application
+  layout 'todolegal_ai_mailer'
 
   def reset_password_instructions(record, token, opts = {})
     if record.source_app == 'todolegal_ai'

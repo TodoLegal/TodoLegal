@@ -1,0 +1,55 @@
+<% content_for :title, "Nueva contraseña" %>
+
+<div class="flex min-h-screen flex-col items-center justify-center px-4 py-10">
+
+  <div class="mb-6 flex items-center gap-2.5">
+    <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-900 text-white shadow-sm">
+      <span class="select-none text-[11px] font-black tracking-tighter">TL</span>
+    </div>
+    <div class="flex flex-col gap-0.5 leading-none">
+      <span class="text-[14px] font-bold tracking-tight text-slate-900">TodoLegal AI</span>
+      <span class="text-[9px] font-semibold uppercase tracking-[0.15em] text-slate-400">Legal Research</span>
+    </div>
+  </div>
+
+  <div class="w-full max-w-md rounded-3xl border border-cream-200 bg-white p-6 shadow-[0_30px_80px_-30px_rgba(15,23,42,0.45)] sm:p-8">
+    <h1 class="font-serif text-[22px] font-semibold leading-tight text-ink sm:text-[24px]">Nueva contraseña</h1>
+    <p class="mt-1 text-[13px] leading-relaxed text-slate-500 mb-6">Elige una contraseña segura para tu cuenta.</p>
+
+    <%= form_for(resource, as: resource_name, url: todolegal_ai_reset_password_path, html: { method: :patch, class: 'space-y-4' }) do |f| %>
+      <%= render 'todolegal_ai/shared/flash' %>
+
+      <%= f.hidden_field :reset_password_token %>
+
+      <div class="space-y-1.5">
+        <%= f.label :password, "Nueva contraseña", class: "block text-xs font-semibold uppercase tracking-wide text-slate-500" %>
+        <%= f.password_field :password,
+            autofocus: true,
+            autocomplete: "new-password",
+            placeholder: "Mínimo 8 caracteres",
+            class: "w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100 transition" %>
+      </div>
+
+      <div class="space-y-1.5">
+        <%= f.label :password_confirmation, "Confirmar contraseña", class: "block text-xs font-semibold uppercase tracking-wide text-slate-500" %>
+        <%= f.password_field :password_confirmation,
+            autocomplete: "new-password",
+            placeholder: "Repite tu nueva contraseña",
+            class: "w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100 transition" %>
+      </div>
+
+      <button type="submit"
+        class="flex w-full items-center justify-center gap-2 rounded-2xl bg-ink px-4 py-3 text-sm font-semibold text-cream-50 transition hover:bg-ink/90 focus:outline-none focus:ring-2 focus:ring-ink/30">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        Guardar contraseña
+      </button>
+    <% end %>
+
+    <p class="mt-4 text-center text-[12px] text-slate-500">
+      ¿El enlace expiró?
+      <%= link_to "Solicitar uno nuevo", todolegal_ai_forgot_password_path,
+          class: "font-semibold text-ink hover:underline" %>
+    </p>
+  </div>
+
+</div>

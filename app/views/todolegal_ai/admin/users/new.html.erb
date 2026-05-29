@@ -1,0 +1,60 @@
+<% content_for :title, "Nuevo usuario" %>
+
+<div class="flex min-h-screen flex-col items-center justify-center px-4 py-12">
+
+  <div class="w-full max-w-lg">
+    <div class="mb-6 flex items-center justify-between">
+      <h1 class="font-serif text-2xl font-semibold text-ink">Crear usuario</h1>
+      <%= link_to "← Volver", todolegal_ai_admin_users_path,
+          class: "text-sm text-brand-400 hover:text-brand-500 transition-colors" %>
+    </div>
+
+    <div class="rounded-3xl border border-cream-200 bg-white px-8 py-10 shadow-[0_30px_80px_-30px_rgba(15,23,42,0.45)]">
+      <p class="text-sm text-brand-300 mb-8">
+        Se creará la cuenta y se enviará un correo de bienvenida para que el usuario configure su contraseña.
+      </p>
+
+      <%= form_for [:todolegal_ai, :admin, @user], url: todolegal_ai_admin_users_path, html: { class: 'space-y-5' } do |f| %>
+
+        <% if @user.errors.any? %>
+          <div class="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+            <ul class="list-disc list-inside space-y-1">
+              <% @user.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <%= f.label :first_name, "Nombre", class: "block text-sm font-medium text-ink mb-1.5" %>
+            <%= f.text_field :first_name,
+                autocomplete: "given-name",
+                placeholder: "Nombre",
+                class: "block w-full rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-ink placeholder-brand-300 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition" %>
+          </div>
+          <div>
+            <%= f.label :last_name, "Apellido", class: "block text-sm font-medium text-ink mb-1.5" %>
+            <%= f.text_field :last_name,
+                autocomplete: "family-name",
+                placeholder: "Apellido",
+                class: "block w-full rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-ink placeholder-brand-300 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition" %>
+          </div>
+        </div>
+
+        <div>
+          <%= f.label :email, "Correo electrónico", class: "block text-sm font-medium text-ink mb-1.5" %>
+          <%= f.email_field :email,
+              autocomplete: "email",
+              placeholder: "usuario@firma.com",
+              class: "block w-full rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-ink placeholder-brand-300 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition" %>
+        </div>
+
+        <%= f.submit "Crear cuenta y enviar invitación",
+            class: "w-full rounded-2xl bg-ink px-4 py-2.5 text-sm font-semibold text-cream-50 hover:bg-warmdark focus:outline-none focus:ring-2 focus:ring-ink/30 transition cursor-pointer" %>
+      <% end %>
+    </div>
+  </div>
+
+</div>

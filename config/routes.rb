@@ -22,6 +22,45 @@ Rails.application.routes.draw do
     omniauth_callbacks: 'users/omniauth_callbacks', 
     passwords: "users/passwords" 
   }
+
+  # ── TodoLegal AI auth routes ──────────────────────────────────────────────
+  # Isolated from the existing TodoLegal/Valid flow.
+  # Uses devise_scope so Warden strategies + Devise helpers resolve correctly
+  # against the User model.
+  devise_scope :user do
+    # Sessions
+    get    '/todolegal-ai/sign-in',  to: 'todolegal_ai/sessions#new',     as: :todolegal_ai_sign_in
+    post   '/todolegal-ai/sign-in',  to: 'todolegal_ai/sessions#create',  as: :todolegal_ai_sessions_create
+    delete '/todolegal-ai/sign-out', to: 'todolegal_ai/sessions#destroy', as: :todolegal_ai_sign_out
+
+    # Registrations (gated by TODOLEGAL_AI_SELF_REGISTRATION_ENABLED feature flag)
+    get  '/todolegal-ai/sign-up', to: 'todolegal_ai/registrations#new',    as: :todolegal_ai_sign_up
+    post '/todolegal-ai/sign-up', to: 'todolegal_ai/registrations#create'
+
+    # Passwords
+    get   '/todolegal-ai/forgot-password', to: 'todolegal_ai/passwords#new',    as: :todolegal_ai_forgot_password
+    post  '/todolegal-ai/forgot-password', to: 'todolegal_ai/passwords#create'
+    get   '/todolegal-ai/reset-password',  to: 'todolegal_ai/passwords#edit',   as: :todolegal_ai_reset_password
+    patch '/todolegal-ai/reset-password',  to: 'todolegal_ai/passwords#update'
+
+    # Welcome link → set password (first-time account activation)
+    get   '/todolegal-ai/set-password', to: 'todolegal_ai/invitations#edit',   as: :todolegal_ai_set_password
+    patch '/todolegal-ai/set-password', to: 'todolegal_ai/invitations#update'
+
+  end
+
+  # TodoLegal AI admin routes (standard CRUD, behind admin auth — not Devise/Warden scope)
+  namespace :todolegal_ai, path: 'todolegal-ai' do
+    namespace :admin do
+      resources :users, only: [:index, :new, :create, :show] do
+        member do
+          post :resend_invite
+          post :upgrade
+        end
+      end
+    end
+  end
+  # ─────────────────────────────────────────────────────────────────────────
   resources :law_tags
   resources :document_tags
   resources :issuer_document_tags

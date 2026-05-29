@@ -1,0 +1,68 @@
+<% content_for :title, "Migrar usuario existente" %>
+
+<div class="flex min-h-screen flex-col items-center justify-center px-4 py-12">
+
+  <div class="w-full max-w-lg">
+    <div class="mb-6 flex items-center justify-between">
+      <h1 class="font-serif text-2xl font-semibold text-ink">Migrar usuario existente</h1>
+      <%= link_to "← Volver", new_todolegal_ai_admin_user_path,
+          class: "text-sm text-brand-400 hover:text-brand-500 transition-colors" %>
+    </div>
+
+    <div class="rounded-3xl border border-cream-200 bg-white px-8 py-10 shadow-[0_30px_80px_-30px_rgba(15,23,42,0.45)]">
+
+      <%# Existing user info card %>
+      <div class="rounded-2xl border border-blue-200 bg-blue-50 px-5 py-4 mb-8">
+        <div class="flex items-start justify-between">
+          <div>
+            <p class="text-sm font-medium text-blue-900">
+              <%= "#{@user.first_name} #{@user.last_name}".strip.presence || "Usuario sin nombre" %>
+            </p>
+            <p class="text-sm text-blue-700 mt-0.5"><%= @user.email %></p>
+          </div>
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-2.5 py-1 text-xs font-medium text-blue-800">
+            Usuario existente
+          </span>
+        </div>
+        <p class="text-xs text-blue-600 mt-3">
+          Este usuario ya tiene una cuenta en TodoLegal desde el
+          <%= @user.created_at.strftime("%d de %B de %Y") %>.
+          Se ha conectado <%= @user.sign_in_count || 0 %> veces.
+        </p>
+      </div>
+
+      <p class="text-sm text-brand-400 mb-6">
+        Al migrar este usuario, su cuenta será habilitada para TodoLegal AI.
+        Elige qué tipo de correo enviarle:
+      </p>
+
+      <%# Option A: Upgrade email (no password link) %>
+      <div class="rounded-2xl border border-cream-200 p-5 mb-4">
+        <h3 class="text-sm font-semibold text-ink mb-1">Email de bienvenida exclusivo</h3>
+        <p class="text-xs text-brand-300 mb-4">
+          Le informará que fue seleccionado para TodoLegal AI y que puede ingresar
+          con las mismas credenciales que ya utiliza. Sin link de contraseña.
+        </p>
+        <%= button_to "Enviar email exclusivo",
+            upgrade_todolegal_ai_admin_user_path(@user),
+            method: :post,
+            class: "w-full rounded-2xl bg-ink px-4 py-2.5 text-sm font-semibold text-cream-50 hover:bg-warmdark focus:outline-none focus:ring-2 focus:ring-ink/30 transition cursor-pointer" %>
+      </div>
+
+      <%# Option B: Welcome email with set-password link %>
+      <div class="rounded-2xl border border-cream-200 p-5">
+        <h3 class="text-sm font-semibold text-ink mb-1">Email con link de nueva contraseña</h3>
+        <p class="text-xs text-brand-300 mb-4">
+          Le enviará el mismo email de bienvenida que reciben los usuarios nuevos, con un
+          link para configurar una contraseña nueva. Útil si desea que inicie desde cero.
+        </p>
+        <%= button_to "Enviar email con contraseña",
+            upgrade_todolegal_ai_admin_user_path(@user, reset_password: 'true'),
+            method: :post,
+            class: "w-full rounded-2xl border border-ink bg-white px-4 py-2.5 text-sm font-semibold text-ink hover:bg-cream-50 focus:outline-none focus:ring-2 focus:ring-ink/30 transition cursor-pointer" %>
+      </div>
+
+    </div>
+  </div>
+
+</div>

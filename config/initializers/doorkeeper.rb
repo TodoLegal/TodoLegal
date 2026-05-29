@@ -7,14 +7,26 @@ Doorkeeper.configure do
 
   # This block will be called to check whether the resource owner is authenticated or not.
   resource_owner_authenticator do
-    # Put your resource owner authentication logic here.
-    # Example implementation:
-    if !current_user and params[:go_to_signup] == "true"
-      redirect_to pricing_path(return_to: request.fullpath)
-    elsif !current_user
-      redirect_to new_user_session_url(return_to: request.fullpath)
-    else
+    if current_user
       current_user
+    else
+      # Preserve the full authorize URL for post-login redirect
+      return_to = request.original_url
+
+      # Detect whether this OAuth request is from the TodoLegal AI client
+      oauth_client_uid = params[:client_id] ||
+                         request.env.dig('doorkeeper.pre_auth', 'client', 'uid')
+      todolegal_ai_client = oauth_client_uid.present? &&
+                            Doorkeeper::Application.exists?(uid: oauth_client_uid, name: "TodoLegal AI")
+
+      if todolegal_ai_client
+        redirect_to "/todolegal-ai/sign-in?return_to=#{CGI.escape(return_to)}"
+      elsif params[:go_to_signup] == "true"
+        redirect_to pricing_path(return_to: request.fullpath)
+      else
+        redirect_to new_user_session_url(return_to: request.fullpath)
+      end
+      nil
     end
   end
 

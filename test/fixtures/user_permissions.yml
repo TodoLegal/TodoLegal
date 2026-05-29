@@ -7,3 +7,8 @@ one:
 two:
   user_id: 1
   permission_id: 1
+
+# Grants the admin_user fixture the Admin permission
+admin_user_permission:
+  user_id: <%= ActiveRecord::FixtureSet.identify(:admin_user) %>
+  permission_id: <%= ActiveRecord::FixtureSet.identify(:admin_permission) %>

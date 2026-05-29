@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="robots" content="noindex, nofollow">
+
+  <title>
+    <% if content_for?(:title) %>
+      <%= yield(:title) %> — TodoLegal AI
+    <% else %>
+      TodoLegal AI
+    <% end %>
+  </title>
+
+  <!-- Google Fonts: Inter + Source Serif 4 (match Next.js typography) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:wght@600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind output (isolated — no Bootstrap, no jQuery) -->
+  <link rel="stylesheet" href="/css/todolegal_ai.css">
+</head>
+<body class="min-h-screen bg-cream-50 font-sans antialiased">
+
+  <%= yield %>
+
+</body>
+</html>

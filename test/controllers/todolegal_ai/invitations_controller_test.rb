@@ -69,5 +69,41 @@ module TodolegalAi
       # Without a stored return_to, falls back to root
       assert_redirected_to root_path
     end
+
+    test "after activation redirects to frontend login URL when env var is set" do
+      user = users(:ai_pending_user)
+      token = user.send(:set_reset_password_token)
+
+      ENV['TODOLEGAL_AI_FRONTEND_LOGIN_URL'] = 'https://frontend.example.test/api/auth/login'
+
+      patch '/todolegal-ai/set-password', params: {
+        user: {
+          reset_password_token: token,
+          password: 'NewPass123!',
+          password_confirmation: 'NewPass123!'
+        }
+      }
+
+      assert_redirected_to 'https://frontend.example.test/api/auth/login'
+    ensure
+      ENV.delete('TODOLEGAL_AI_FRONTEND_LOGIN_URL')
+    end
+
+    test "after activation falls back to root_path when frontend env var is absent" do
+      user = users(:ai_pending_user)
+      token = user.send(:set_reset_password_token)
+
+      ENV.delete('TODOLEGAL_AI_FRONTEND_LOGIN_URL')
+
+      patch '/todolegal-ai/set-password', params: {
+        user: {
+          reset_password_token: token,
+          password: 'NewPass123!',
+          password_confirmation: 'NewPass123!'
+        }
+      }
+
+      assert_redirected_to root_path
+    end
   end
 end

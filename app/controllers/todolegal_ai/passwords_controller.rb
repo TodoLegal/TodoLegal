@@ -26,6 +26,17 @@ module TodolegalAi
       redirect_to todolegal_ai_sign_in_path
     end
 
+    # PATCH /todolegal-ai/reset-password
+    # After success, redirects to the frontend login URL if the env var is set
+    # (using allow_other_host semantics via header override — the env var is a
+    # trusted server-side constant, not user input, so no open-redirect risk).
+    def update
+      super
+      return unless response.redirect? && resource.errors.empty?
+      return unless (frontend_url = todolegal_ai_frontend_login_url)
+      response.headers['Location'] = frontend_url
+    end
+
     protected
 
     def after_resetting_password_path_for(_resource)

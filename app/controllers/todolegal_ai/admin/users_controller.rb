@@ -39,6 +39,7 @@ module TodolegalAi
         @user.skip_confirmation! if @user.respond_to?(:skip_confirmation!)
 
         if @user.save
+          assign_pro_permission(@user)
           token = @user.send(:set_reset_password_token)
           MultiAppDeviseMailer.welcome_instructions(@user, token).deliver_later
 
@@ -65,6 +66,7 @@ module TodolegalAi
       def upgrade
         @user = User.find(params[:id])
         @user.update!(source_app: 'todolegal_ai')
+        assign_pro_permission(@user)
 
         if params[:reset_password] == 'true'
           token = @user.send(:set_reset_password_token)
@@ -82,6 +84,14 @@ module TodolegalAi
 
       def admin_user_params
         params.require(:user).permit(:first_name, :last_name, :email)
+      end
+
+      # Idempotently grants the Pro permission to a user.
+      # Pro access lets TodoLegal AI users access legacy apps (todolegal.app, valid.todolegal.app)
+      # without a Stripe subscription — same check as user_is_pro_api(user).
+      def assign_pro_permission(user)
+        pro_permission = Permission.find_or_create_by!(name: 'Pro')
+        user.user_permissions.find_or_create_by!(permission: pro_permission)
       end
 
       def authenticate_admin!

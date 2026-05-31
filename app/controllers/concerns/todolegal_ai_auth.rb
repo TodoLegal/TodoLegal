@@ -32,6 +32,14 @@ module TodolegalAiAuth
     session.delete(:todolegal_ai_return_to)
   end
 
+  # Returns the frontend login URL that starts the OAuth PKCE flow.
+  # Set TODOLEGAL_AI_FRONTEND_LOGIN_URL in the environment (e.g. https://ai.todolegal.app/api/auth/login).
+  # Safe to use with redirect_to because the target is a hardcoded server-side ENV var, never user input.
+  # Falls back to nil (caller should then redirect to root_path).
+  def todolegal_ai_frontend_login_url
+    ENV['TODOLEGAL_AI_FRONTEND_LOGIN_URL'].presence
+  end
+
   # Validate that the return_to URL is a relative path (prevent open redirect).
   # Returns nil if the value looks external or malicious.
   def safe_return_to(url)

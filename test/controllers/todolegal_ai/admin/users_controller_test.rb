@@ -121,6 +121,54 @@ module TodolegalAi
         assert_redirected_to todolegal_ai_admin_user_path(other_legacy)
         assert_match 'email de bienvenida exclusivo', flash[:notice]
       end
+
+      # ─── Pro permission auto-assignment ───────────────────────────────────
+
+      test "new user creation automatically assigns Pro permission" do
+        sign_in @admin
+
+        post todolegal_ai_admin_users_path, params: {
+          user: { first_name: 'Test', last_name: 'Pro', email: 'properm@fixtures.example.com' }
+        }
+
+        created_user = User.find_by(email: 'properm@fixtures.example.com')
+        assert_not_nil created_user
+        assert created_user.permissions.exists?(name: 'Pro'), 'Newly invited user should have Pro permission'
+      end
+
+      test "upgrade with reset_password assigns Pro permission" do
+        sign_in @admin
+        user = users(:legacy_user)
+
+        post upgrade_todolegal_ai_admin_user_path(user), params: { reset_password: 'true' }
+
+        user.reload
+        assert user.permissions.exists?(name: 'Pro'), 'Upgraded user should have Pro permission'
+      end
+
+      test "upgrade preserves existing permissions when granting Pro" do
+        sign_in @admin
+        user = users(:legacy_user)
+        editor_perm = Permission.find_or_create_by!(name: 'Editor')
+        user.user_permissions.find_or_create_by!(permission: editor_perm)
+
+        post upgrade_todolegal_ai_admin_user_path(user), params: { reset_password: 'true' }
+
+        user.reload
+        assert user.permissions.exists?(name: 'Editor'), 'Editor permission should be preserved after upgrade'
+        assert user.permissions.exists?(name: 'Pro'),    'Pro permission should also be granted after upgrade'
+      end
+
+      test "upgrade preserves stripe_customer_id" do
+        sign_in @admin
+        user = users(:legacy_user)
+        user.update_column(:stripe_customer_id, 'cus_test_legacy_preserved')
+
+        post upgrade_todolegal_ai_admin_user_path(user), params: { reset_password: 'true' }
+
+        user.reload
+        assert_equal 'cus_test_legacy_preserved', user.stripe_customer_id
+      end
     end
   end
 end

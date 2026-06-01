@@ -17,7 +17,9 @@ Doorkeeper.configure do
       oauth_client_uid = params[:client_id] ||
                          request.env.dig('doorkeeper.pre_auth', 'client', 'uid')
       todolegal_ai_client = oauth_client_uid.present? &&
-                            Doorkeeper::Application.exists?(uid: oauth_client_uid, name: "TodoLegal AI")
+                            Doorkeeper::Application.where(uid: oauth_client_uid)
+                                                    .where("name LIKE ?", "TodoLegal AI%")
+                                                    .exists?
 
       if todolegal_ai_client
         redirect_to "/todolegal-ai/sign-in?return_to=#{CGI.escape(return_to)}"

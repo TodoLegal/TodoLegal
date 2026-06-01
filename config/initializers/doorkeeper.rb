@@ -16,6 +16,7 @@ Doorkeeper.configure do
       # Detect whether this OAuth request is from the TodoLegal AI client
       oauth_client_uid = params[:client_id] ||
                          request.env.dig('doorkeeper.pre_auth', 'client', 'uid')
+      # If the client_id belongs to a TodoLegal AI OAuth application (different environments), redirect to the AI-specific login page with the return_to URL.
       todolegal_ai_client = oauth_client_uid.present? &&
                             Doorkeeper::Application.where(uid: oauth_client_uid)
                                                     .where("name LIKE ?", "TodoLegal AI%")

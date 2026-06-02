@@ -89,14 +89,18 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     user = User.find_by(email: email)
 
     if user.present? && user.source_app == 'todolegal_ai'
+      # Read session BEFORE sign_out_all_scopes — Warden resets the entire
+      # session on logout, so any value read after that call returns nil.
+      return_to = session.delete(:todolegal_ai_return_to)
+
       sign_out_all_scopes
       flash[:notice] = t 'devise.omniauth_callbacks.success', kind: provider
 
-      # Resume the Doorkeeper OAuth authorize URL that was stashed before the
-      # social-login detour.  sign_in_and_redirect would call
-      # ApplicationController#after_sign_in_path_for which checks a different
-      # session key (session[:return_to]) and falls through to the legacy app.
-      return_to = session.delete(:todolegal_ai_return_to)
+      # Use sign_in + explicit redirect rather than sign_in_and_redirect.
+      # sign_in_and_redirect dispatches through ApplicationController#after_sign_in_path_for,
+      # which checks session[:return_to] (the legacy app's key) and falls through
+      # to signed_in_path when that key is absent.
+      # The AI flow uses session[:todolegal_ai_return_to] — a separate key read above.
       sign_in(user, event: :authentication)
       redirect_to(return_to || '/todolegal-ai/sign-in')
     else

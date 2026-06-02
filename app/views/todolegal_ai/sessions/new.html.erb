@@ -18,7 +18,8 @@
     <h1 class="font-serif text-[22px] font-semibold leading-tight text-ink sm:text-[24px]">Inicia sesión</h1>
     <p class="mt-1 text-[13px] leading-relaxed text-slate-500 mb-6">Accede a tus chats, documentos y proyectos guardados.</p>
 
-    <%= form_for(resource, as: resource_name, url: todolegal_ai_sessions_create_path, html: { class: 'space-y-4' }) do |f| %>
+    <%# data-turbo="false" — prevents Turbo from intercepting this form as fetch. %>
+    <%= form_for(resource, as: resource_name, url: todolegal_ai_sessions_create_path, html: { class: 'space-y-4', data: { turbo: false } }) do |f| %>
       <%= render 'todolegal_ai/shared/flash' %>
 
       <div class="space-y-1.5">

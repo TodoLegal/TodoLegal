@@ -91,7 +91,14 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     if user.present? && user.source_app == 'todolegal_ai'
       sign_out_all_scopes
       flash[:notice] = t 'devise.omniauth_callbacks.success', kind: provider
-      sign_in_and_redirect user, event: :authentication
+
+      # Resume the Doorkeeper OAuth authorize URL that was stashed before the
+      # social-login detour.  sign_in_and_redirect would call
+      # ApplicationController#after_sign_in_path_for which checks a different
+      # session key (session[:return_to]) and falls through to the legacy app.
+      return_to = session.delete(:todolegal_ai_return_to)
+      sign_in(user, event: :authentication)
+      redirect_to(return_to || '/todolegal-ai/sign-in')
     else
       flash[:alert] = "No se encontró una cuenta de TodoLegal AI con este correo."
       redirect_to '/todolegal-ai/sign-in'

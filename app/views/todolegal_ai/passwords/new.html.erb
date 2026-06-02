@@ -13,7 +13,9 @@
   </div>
 
   <div class="w-full max-w-md rounded-3xl border border-cream-200 bg-white p-6 shadow-[0_30px_80px_-30px_rgba(15,23,42,0.45)] sm:p-8">
-    <%= form_for(resource, as: resource_name, url: todolegal_ai_forgot_password_path, html: { method: :post, class: 'space-y-4' }) do |f| %>
+    <%# data-turbo="false" — prevents Turbo from intercepting this form as fetch.
+        Consistent with other auth forms in this namespace. %>
+    <%= form_for(resource, as: resource_name, url: todolegal_ai_forgot_password_path, html: { method: :post, class: 'space-y-4', data: { turbo: false } }) do |f| %>
       <div>
         <h1 class="font-serif text-[22px] font-semibold leading-tight text-ink sm:text-[24px]">¿Olvidaste tu contraseña?</h1>
         <p class="mt-1 text-[13px] leading-relaxed text-slate-500">

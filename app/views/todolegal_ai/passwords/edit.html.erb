@@ -17,7 +17,9 @@
     <p class="mt-1 text-[13px] leading-relaxed text-slate-500 mb-6">Elige una contraseña segura para tu cuenta.</p>
 
     <div data-controller="password-validation">
-    <%= form_for(resource, as: resource_name, url: todolegal_ai_reset_password_path, html: { method: :patch, class: 'space-y-4' }) do |f| %>
+    <%# data-turbo="false" — prevents Turbo from intercepting this form as fetch.
+        Consistent with other auth forms in this namespace. %>
+    <%= form_for(resource, as: resource_name, url: todolegal_ai_reset_password_path, html: { method: :patch, class: 'space-y-4', data: { turbo: false } }) do |f| %>
       <%= render 'todolegal_ai/shared/flash' %>
 
       <%= f.hidden_field :reset_password_token %>

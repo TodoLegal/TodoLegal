@@ -21,8 +21,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:wght@600;700&display=swap" rel="stylesheet">
 
-  <!-- Tailwind output (isolated — no Bootstrap, no jQuery) -->
-  <link rel="stylesheet" href="/css/todolegal_ai.css">
+  <!-- Tailwind output (isolated — no Bootstrap, no jQuery).
+       Cache-busted with the Capistrano REVISION (git SHA) so browsers fetch
+       the new file on every deploy without aggressive no-cache headers. -->
+  <% css_version = File.read(Rails.root.join("REVISION")).strip rescue "0" %>
+  <link rel="stylesheet" href="/css/todolegal_ai.css?v=<%= css_version %>">
 
   <!-- Stimulus controllers (importmap — loads password-toggle + password-validation) -->
   <%= javascript_importmap_tags %>

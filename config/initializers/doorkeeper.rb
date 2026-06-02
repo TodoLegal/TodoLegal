@@ -10,13 +10,15 @@ Doorkeeper.configure do
     if current_user
       current_user
     else
-      # Preserve the full authorize URL for post-login redirect
-      return_to = request.original_url
+      # Use request.fullpath (relative: /oauth/authorize?...) rather than
+      # request.original_url (absolute: https://host/oauth/authorize?...).
+      return_to = request.fullpath
 
-      # Detect whether this OAuth request is from the TodoLegal AI client
+      # Detect whether this OAuth request is from the TodoLegal AI client.
+      # Supports multiple environments: "TodoLegal AI", "TodoLegal AI (Local)",
+      # "TodoLegal AI (Test)", etc. via the LIKE prefix match.
       oauth_client_uid = params[:client_id] ||
                          request.env.dig('doorkeeper.pre_auth', 'client', 'uid')
-      # If the client_id belongs to a TodoLegal AI OAuth application (different environments), redirect to the AI-specific login page with the return_to URL.
       todolegal_ai_client = oauth_client_uid.present? &&
                             Doorkeeper::Application.where(uid: oauth_client_uid)
                                                     .where("name LIKE ?", "TodoLegal AI%")

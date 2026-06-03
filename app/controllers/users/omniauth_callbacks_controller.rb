@@ -102,7 +102,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       # to signed_in_path when that key is absent.
       # The AI flow uses session[:todolegal_ai_return_to] — a separate key read above.
       sign_in(user, event: :authentication)
-      redirect_to(return_to || '/todolegal-ai/sign-in')
+      redirect_to(safe_todolegal_ai_return_to(return_to) || '/todolegal-ai/sign-in')
     else
       flash[:alert] = "No se encontró una cuenta de TodoLegal AI con este correo."
       redirect_to '/todolegal-ai/sign-in'
@@ -127,6 +127,18 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def todolegal_ai_origin?
     origin = request.env['omniauth.origin'].to_s
     origin.include?('todolegal-ai')
+  end
+
+  # Open-redirect guard — mirrors TodolegalAiAuth#safe_return_to.
+  # Rejects absolute URLs so only relative paths (e.g. /oauth/authorize?...)
+  # survive. Cannot include the full concern here because it would force
+  # the todolegal_ai layout on legacy OmniAuth callbacks.
+  def safe_todolegal_ai_return_to(url)
+    return nil if url.blank?
+    uri = URI.parse(url)
+    uri.relative? && uri.host.nil? ? url : nil
+  rescue URI::InvalidURIError
+    nil
   end
 end
 

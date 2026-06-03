@@ -31,14 +31,7 @@ class User < ApplicationRecord
   end
 
   def admin?
-    @permissionid = UserPermission.find_by(:user_id => self.id)
-    if !@permissionid
-      return false
-    elsif @permissionid.permission.name=="Admin" 
-      return true
-    else
-      return false
-    end
+    permissions.exists?(name: 'Admin')
   end
 
   # Security validations for suspicious registrations
@@ -55,7 +48,8 @@ class User < ApplicationRecord
       'getnada.com',
       'maildrop.cc',
       'fakeinbox.com',
-      'canvect.com'
+      'canvect.com',
+      'hilostar.com'
     ]
     
     domain = email.split('@').last.downcase if email.present?

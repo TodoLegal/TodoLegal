@@ -31,7 +31,7 @@ module TodolegalAi
     protected
 
     def after_resetting_password_path_for(_resource)
-      safe_return_to(stored_todolegal_ai_return_to) || root_path
+      root_path
     end
   end
 end

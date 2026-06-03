@@ -1,8 +1,19 @@
 class Api::V1::DocumentsController < Api::V1::BaseController
   skip_before_action :verify_turnstile_token!, only: [:get_documents]
   before_action :document_exists!, only: [:get_document]
-  before_action :doorkeeper_authorize!, only: [:get_document, :get_documents]
-  skip_before_action :doorkeeper_authorize!, unless: :has_access_token?
+  before_action :doorkeeper_authorize!, only: [:get_document, :get_documents, :download_url]
+  skip_before_action :doorkeeper_authorize!, only: [:get_document, :get_documents], unless: :has_access_token?
+
+  def download_url
+    user = User.find_by(id: doorkeeper_token.resource_owner_id)
+    result = Documents::DownloadService.call(document_id: params[:id], user: user)
+
+    if result.success?
+      render json: result.data, status: :ok
+    else
+      render json: { error: result.error_message }, status: result.metadata[:status] || :forbidden
+    end
+  end
 
   def get_document
     json_document = get_document_json

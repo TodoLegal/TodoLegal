@@ -22,7 +22,9 @@
         </p>
       </div>
 
-      <%= form_for [:todolegal_ai, :admin, @user], url: todolegal_ai_admin_users_path, html: { class: 'space-y-5' } do |f| %>
+      <%# data-turbo="false" — create action may render confirm_upgrade (200) for legacy users,
+          which Turbo rejects. Plain form submission avoids the issue entirely. %>
+      <%= form_for [:todolegal_ai, :admin, @user], url: todolegal_ai_admin_users_path, html: { class: 'space-y-5', data: { turbo: false } } do |f| %>
 
         <% if @user.errors.any? %>
           <div class="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">

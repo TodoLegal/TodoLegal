@@ -2,20 +2,11 @@
 
 <div class="flex min-h-screen flex-col items-center justify-center px-4 py-10">
 
-  <%# Logo — matches Next.js <Logo variant="light" /> %>
-  <div class="mb-6 flex items-center gap-2.5">
-    <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-900 text-white shadow-sm">
-      <span class="select-none text-[11px] font-black tracking-tighter">TL</span>
-    </div>
-    <div class="flex flex-col gap-0.5 leading-none">
-      <span class="text-[14px] font-bold tracking-tight text-slate-900">TodoLegal AI</span>
-      <span class="text-[9px] font-semibold uppercase tracking-[0.15em] text-slate-400">Legal Research</span>
-    </div>
-  </div>
-
   <%# Card %>
   <div class="w-full max-w-md rounded-3xl border border-cream-200 bg-white p-6 shadow-[0_30px_80px_-30px_rgba(15,23,42,0.45)] sm:p-8">
-    <h1 class="font-serif text-[22px] font-semibold leading-tight text-ink sm:text-[24px]">Inicia sesión</h1>
+    <%# Brand label — matches AuthModal header in Next.js (brand-600 = #1E3A8A) %>
+    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-brand-600">TodoLegal AI</p>
+    <h1 class="mt-2 text-2xl font-bold tracking-tight text-slate-950">Inicia sesión</h1>
     <p class="mt-1 text-[13px] leading-relaxed text-slate-500 mb-6">Accede a tus chats, documentos y proyectos guardados.</p>
 
     <%# data-turbo="false" — prevents Turbo from intercepting this form as fetch. %>
@@ -50,7 +41,7 @@
       <button type="submit"
         class="flex w-full items-center justify-center gap-2 rounded-2xl bg-ink px-4 py-3 text-sm font-semibold text-cream-50 transition hover:bg-ink/90 focus:outline-none focus:ring-2 focus:ring-ink/30">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-        Ingresar
+        Entrar
       </button>
     <% end %>
 

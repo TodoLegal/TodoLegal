@@ -151,7 +151,7 @@ Rails.application.configure do
   #host = 'todolegal.app'
   #config.action_mailer.default_url_options = { host: host }
   
-  config.action_mailer.default_url_options = { host: "todolegal.app" }
+  config.action_mailer.default_url_options = { host: ENV.fetch("MAILER_HOST", "todolegal.app") }
   config.action_controller.perform_caching = true
   config.action_controller.page_cache_directory = Rails.root.join("public", "cached_pages")
 

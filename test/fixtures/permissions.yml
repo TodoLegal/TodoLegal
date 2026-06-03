@@ -5,3 +5,10 @@ one:
 
 two:
   name: MyString
+
+# Used by admin_user_permission to test authenticate_admin!
+admin_permission:
+  name: Admin
+
+pro_permission:
+  name: Pro

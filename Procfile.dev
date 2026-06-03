@@ -1,1 +1,2 @@
+tailwind: bin/tailwindcss -c config/tailwind.config.js -i app/assets/stylesheets/todolegal_ai.css -o public/css/todolegal_ai.css --watch
 

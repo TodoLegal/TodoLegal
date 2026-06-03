@@ -31,14 +31,7 @@ class User < ApplicationRecord
   end
 
   def admin?
-    @permissionid = UserPermission.find_by(:user_id => self.id)
-    if !@permissionid
-      return false
-    elsif @permissionid.permission.name=="Admin" 
-      return true
-    else
-      return false
-    end
+    permissions.exists?(name: 'Admin')
   end
 
   # Security validations for suspicious registrations
@@ -55,7 +48,8 @@ class User < ApplicationRecord
       'getnada.com',
       'maildrop.cc',
       'fakeinbox.com',
-      'canvect.com'
+      'canvect.com',
+      'hilostar.com'
     ]
     
     domain = email.split('@').last.downcase if email.present?
@@ -106,5 +100,21 @@ class User < ApplicationRecord
   protected
   def confirmation_required?
     false
+  end
+
+  public
+
+  # Derived status for TodoLegal AI admin panel — no extra column needed.
+  # "pending" = account created but user has never signed in (invite not yet accepted).
+  # "active"  = user has signed in at least once.
+  def todolegal_ai_status
+    sign_in_count.to_i > 0 ? 'active' : 'pending'
+  end
+
+  # True when a legacy TodoLegal user was upgraded to TodoLegal AI.
+  # Heuristic: source_app is now todolegal_ai but the account was created
+  # before the TodoLegal AI launch (migration date).
+  def migrated_to_todolegal_ai?
+    source_app == 'todolegal_ai' && created_at < Date.new(2026, 5, 25)
   end
 end

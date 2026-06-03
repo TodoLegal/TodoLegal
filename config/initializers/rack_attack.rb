@@ -62,6 +62,34 @@ class Rack::Attack
     req.ip if req.post? && ['/users/sign_in', '/api/v1/users/sign_in'].include?(req.path)
   end
 
+  # ── TodoLegal AI auth endpoints ──────────────────────────────────────────
+  # 5 sign-in attempts per minute per IP (matches typical Devise lockable window)
+  throttle('todolegal_ai/sign_in', limit: 5, period: 1.minute) do |req|
+    req.ip if req.post? && req.path == '/todolegal-ai/sign-in'
+  end
+
+  # 3 forgot-password requests per 5 minutes per IP (prevents email flooding)
+  throttle('todolegal_ai/forgot_password', limit: 3, period: 5.minutes) do |req|
+    req.ip if req.post? && req.path == '/todolegal-ai/forgot-password'
+  end
+
+  # 5 sign-up attempts per 10 minutes per IP (only relevant when self-registration is on)
+  throttle('todolegal_ai/sign_up', limit: 5, period: 10.minutes) do |req|
+    req.ip if req.post? && req.path == '/todolegal-ai/sign-up'
+  end
+
+  # ── OAuth endpoints ────────────────────────────────────────────────────
+  # 10 token exchange attempts per minute per IP (prevent brute-force)
+  throttle('oauth/token', limit: 10, period: 1.minute) do |req|
+    req.ip if req.post? && req.path == '/oauth/token'
+  end
+
+  # 15 authorize requests per minute per IP (prevent abuse)
+  throttle('oauth/authorize', limit: 15, period: 1.minute) do |req|
+    req.ip if req.get? && req.path == '/oauth/authorize'
+  end
+  # ─────────────────────────────────────────────────────────────────────────
+
   # API protection for document endpoints (prevent scraping)
   throttle('api/documents/ip', limit: 200, period: 5.minutes) do |req|
     req.ip if req.path.match?(/^\/api\/v1\/documents/)
@@ -81,6 +109,18 @@ class Rack::Attack
   # Sitemap protection (prevent excessive crawling)
   throttle('sitemap/ip', limit: 10, period: 1.minute) do |req|
     req.ip if req.path.match?(/sitemap.*\.xml$/)
+  end
+
+  # Active Storage download protection (prevent bulk scraping via file downloads)
+  throttle('downloads/ip', limit: 40, period: 5.minutes) do |req|
+    req.ip if req.path.match?(/^\/rails\/active_storage\/blobs\/redirect/)
+  end
+
+  # Per-user API download rate limiting (by access_token)
+  throttle('downloads/user', limit: 30, period: 5.minutes) do |req|
+    if req.path.match?(/^\/rails\/active_storage\/blobs\/redirect/) && req.params['access_token'].present?
+      req.params['access_token']
+    end
   end
 
   # ------------------------------------------------------------
@@ -118,6 +158,7 @@ class Rack::Attack
           guerrillamail.com tempmail.org trashmail.com
           spam4.me mohmal.com sharklasers.com
           throwaway.email temp-mail.org disposableemailaddresses.com
+          hilostar.com
         ]
         suspicious_domains.include?(domain)
       end

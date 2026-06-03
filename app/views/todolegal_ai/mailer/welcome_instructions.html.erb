@@ -1,0 +1,31 @@
+<% content_for :subject, "Activa tu cuenta TodoLegal AI" %>
+
+<div style="display:inline-block;padding:4px 10px;border-radius:99px;background:#fef3c7;color:#92400e;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:20px">
+  TodoLegal AI · Programa de Acceso Anticipado
+</div>
+
+<h1 style="margin:0 0 14px;font-size:22px;color:#0f172a;letter-spacing:-0.01em">Bienvenid@ a TodoLegal AI</h1>
+<p style="margin:0 0 6px;font-size:15px;color:#334155">Hola<%= @user.first_name.present? ? " #{@user.first_name}," : "," %></p>
+<p style="margin:0 0 22px;font-size:15px;color:#334155">Tu cuenta del Programa de Acceso Anticipado está lista. Activa tu acceso creando tu contraseña.</p>
+
+<div style="margin:0 0 24px">
+  <a href="<%= @set_password_url %>"
+     style="display:inline-block;padding:13px 22px;border-radius:14px;background:#0f172a;color:#fffbeb;text-decoration:none;font-size:14px;font-weight:600;letter-spacing:-0.005em">
+    Crear mi contraseña →
+  </a>
+</div>
+
+<p style="margin:0 0 14px;font-size:12px;color:#64748b">
+  Este enlace expira en 48 horas. Si caduca, solicita uno nuevo escribiéndonos a
+  <a href="mailto:suscripciones@todolegal.app" style="color:#64748b">suscripciones@todolegal.app</a>.
+</p>
+<p style="margin:0 0 14px;font-size:12px;color:#64748b">
+  Si el botón no funciona, copia y pega este enlace en tu navegador:<br/>
+  <span style="word-break:break-all;color:#475569"><%= @set_password_url %></span>
+</p>
+
+<hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0"/>
+
+<p style="margin:0;font-size:11px;color:#94a3b8">
+  Si no esperabas este correo, puedes ignorarlo. Tu cuenta no se activará hasta que abras el enlace.
+</p>

@@ -1,0 +1,69 @@
+<% content_for :title, "Usuarios — Admin" %>
+
+<div class="min-h-screen bg-cream-50 p-8">
+  <div class="max-w-5xl mx-auto">
+
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h1 class="font-serif text-2xl font-semibold text-ink">Usuarios de TodoLegal AI</h1>
+        <p class="text-sm text-brand-300 mt-1">Cuentas gestionadas por el equipo de administración</p>
+      </div>
+      <%= link_to "Crear usuario", new_todolegal_ai_admin_user_path,
+          class: "rounded-2xl bg-ink px-5 py-2.5 text-sm font-semibold text-cream-50 hover:bg-warmdark transition-colors" %>
+    </div>
+
+    <div class="rounded-3xl border border-cream-200 bg-white overflow-hidden shadow-sm">
+      <table class="w-full text-sm">
+        <thead class="border-b border-cream-200 bg-cream-50">
+          <tr>
+            <th class="text-left px-6 py-3 font-medium text-brand-300">Nombre</th>
+            <th class="text-left px-6 py-3 font-medium text-brand-300">Correo</th>
+            <th class="text-left px-6 py-3 font-medium text-brand-300">Estado</th>
+            <th class="text-left px-6 py-3 font-medium text-brand-300">Creado</th>
+            <th class="px-6 py-3"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-cream-200">
+          <% @users.each do |user| %>
+            <tr class="hover:bg-cream-50/50 transition-colors">
+              <td class="px-6 py-4 font-medium text-ink">
+                <%= "#{user.first_name} #{user.last_name}".strip.presence || "—" %>
+                <% if user.migrated_to_todolegal_ai? %>
+                  <span class="ml-2 inline-flex items-center rounded-full bg-indigo-50 px-2 py-0.5 text-xs font-medium text-indigo-700">Migrado</span>
+                <% end %>
+              </td>
+              <td class="px-6 py-4 text-brand-400"><%= user.email %></td>
+              <td class="px-6 py-4">
+                <% if user.todolegal_ai_status == 'active' %>
+                  <span class="inline-flex items-center gap-1.5 rounded-full bg-green-50 px-2.5 py-1 text-xs font-medium text-green-700">
+                    <span class="h-1.5 w-1.5 rounded-full bg-green-500"></span>Activo
+                  </span>
+                <% else %>
+                  <span class="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-700">
+                    <span class="h-1.5 w-1.5 rounded-full bg-amber-400"></span>Pendiente
+                  </span>
+                <% end %>
+              </td>
+              <td class="px-6 py-4 text-brand-300 text-xs"><%= user.created_at.strftime("%d %b %Y") %></td>
+              <td class="px-6 py-4 text-right">
+                <%= link_to "Ver", todolegal_ai_admin_user_path(user),
+                    class: "text-brand-500 hover:text-brand-600 font-medium text-xs transition-colors" %>
+              </td>
+            </tr>
+          <% end %>
+
+          <% if @users.empty? %>
+            <tr>
+              <td colspan="5" class="px-6 py-12 text-center text-sm text-brand-300">
+                No hay usuarios aún.
+                <%= link_to "Crear el primero", new_todolegal_ai_admin_user_path,
+                    class: "text-brand-500 hover:text-brand-600 transition-colors" %>.
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

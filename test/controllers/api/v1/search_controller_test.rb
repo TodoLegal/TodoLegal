@@ -5,6 +5,8 @@ require 'test_helper'
 class Api::V1::SearchControllerTest < ActionDispatch::IntegrationTest
   TEST_API_SECRET = 'test-chatbot-secret'
 
+  parallelize(workers: 1) # ES reindex in setup is not safe with parallel workers — each worker deletes the previous index
+
   setup do
     Searchkick.callbacks(:inline) do
       Article.reindex

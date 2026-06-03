@@ -11,3 +11,47 @@ one:
 two:
   id: 2
   email: alejandro@todolegal.com
+
+# ── TodoLegal AI auth tests ─────────────────────────────────────────────────
+
+# A confirmed TodoLegal AI user who has signed in before → status = 'active'
+ai_user:
+  email: aiuser@fixtures.example.com
+  source_app: todolegal_ai
+  sign_in_count: 3
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'Test1234!') %>
+  confirmed_at: <%= 1.year.ago %>
+
+# A confirmed TodoLegal AI user who has never signed in → status = 'pending'
+ai_pending_user:
+  email: aipending@fixtures.example.com
+  source_app: todolegal_ai
+  sign_in_count: 0
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'Test1234!') %>
+  confirmed_at: <%= 1.year.ago %>
+
+# A legacy todolegal.com user (not allowed in TodoLegal AI)
+legacy_user:
+  email: legacy@fixtures.example.com
+  source_app: todolegal
+  sign_in_count: 5
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'Test1234!') %>
+  confirmed_at: <%= 1.year.ago %>
+
+# A legacy user who was migrated to todolegal_ai before launch → migrated = true
+migrated_user:
+  email: migrated@fixtures.example.com
+  source_app: todolegal_ai
+  sign_in_count: 2
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'Test1234!') %>
+  confirmed_at: <%= 1.year.ago %>
+  created_at: 2025-01-01 00:00:00
+  updated_at: 2025-01-01 00:00:00
+
+# An admin user (wired to Admin permission via user_permissions fixture)
+admin_user:
+  email: admin@fixtures.example.com
+  source_app: todolegal
+  sign_in_count: 10
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'Test1234!') %>
+  confirmed_at: <%= 1.year.ago %>

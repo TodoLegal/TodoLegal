@@ -38,8 +38,10 @@
                         <% end %>
                     </div>
                     <% if current_user_is_admin %>
-                        <%= link_to('Usuarios', admin_users_path, class:"dropdown-item") %>
+                        <%= link_to('TodoLegal Legacy — Usuarios', admin_users_path, class:"dropdown-item") %>
                         <%= link_to('Administrar temas de preferencia', users_preferences_tags_path, class:"dropdown-item")%>
+                        <%= link_to('TodoLegal AI — Usuarios', todolegal_ai_admin_users_path, class:"dropdown-item") %>
+                        <div class="dropdown-divider"></div>
                     <% end %>
 
                     <% if current_user_is_editor %>

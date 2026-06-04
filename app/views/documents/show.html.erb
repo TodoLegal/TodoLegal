@@ -75,9 +75,7 @@
           Editar
       <% end %>
       <% if @document.original_file.attached? %>
-        <%= button_to(url_for(@document.original_file), {class:"btn btn-outline-primary", method: :get}) do %>
-          Descargar archivo
-        <% end %>
+        <%= link_to "Descargar archivo", url_for(@document.original_file), class: "btn btn-outline-primary", target: "_blank", rel: "noopener noreferrer" %>
       <% end %>
     </div>
 

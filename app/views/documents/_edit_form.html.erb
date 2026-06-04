@@ -266,7 +266,7 @@
           </div>
           <div class="col-md-3 btns-section">
             <% if @document.original_file.attached? %>
-              <%= link_to "Descargar archivo", url_for(@document.original_file), {class:"btn btn-link download-btn", method: :get} %>
+              <%= link_to "Descargar archivo", url_for(@document.original_file), class: "btn btn-link download-btn", target: "_blank", rel: "noopener noreferrer" %>
             <% end %>
           </div>
         </div>

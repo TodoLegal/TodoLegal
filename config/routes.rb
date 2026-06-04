@@ -149,6 +149,7 @@ Rails.application.routes.draw do
         member do
           get "/:id", to: 'documents#get_document'
           get "/", to: 'documents#get_documents'
+          get "/:id/download_url", to: 'documents#download_url'
         end
       end
       # Unified search across laws, articles, and gazette documents (US-4)

@@ -11,20 +11,14 @@ class MultiAppDeviseMailer < Devise::Mailer
   def reset_password_instructions(record, token, opts = {})
     if record.source_app == 'todolegal_ai'
       opts[:template_path] = 'todolegal_ai/mailer'
-      @reset_url = Rails.application.routes.url_helpers.todolegal_ai_reset_password_url(
-        reset_password_token: token,
-        host: Rails.application.config.action_mailer.default_url_options[:host]
-      )
+      @reset_url = todolegal_ai_reset_password_url(reset_password_token: token)
     end
     super
   end
 
   def welcome_instructions(record, token, opts = {})
     @user = record
-    @set_password_url = Rails.application.routes.url_helpers.todolegal_ai_set_password_url(
-      reset_password_token: token,
-      host: Rails.application.config.action_mailer.default_url_options[:host]
-    )
+    @set_password_url = todolegal_ai_set_password_url(reset_password_token: token)
     opts[:template_path] = 'todolegal_ai/mailer'
     mail(
       from: Devise.mailer_sender,
@@ -39,9 +33,7 @@ class MultiAppDeviseMailer < Devise::Mailer
   # No password token — user keeps their existing credentials.
   def upgrade_instructions(record)
     @user = record
-    @sign_in_url = Rails.application.routes.url_helpers.todolegal_ai_sign_in_url(
-      host: Rails.application.config.action_mailer.default_url_options[:host]
-    )
+    @sign_in_url = todolegal_ai_sign_in_url
     mail(
       from: Devise.mailer_sender,
       to: record.email,

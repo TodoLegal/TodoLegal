@@ -119,11 +119,12 @@ class UsersPreferencesController < ApplicationController
       return
     end
 
+    valid_host = ENV.fetch('VALID_APP_URL', 'https://valid.todolegal.app')
     respond_to do |format|
       if @redirect_to_valid
-        format.html { redirect_to "https://valid.todolegal.app?preferences=true", allow_other_host: true }
+        format.html { redirect_to "#{valid_host}?preferences=true", allow_other_host: true }
       else
-        format.html { redirect_to "https://valid.todolegal.app?preferences=false", allow_other_host: true }
+        format.html { redirect_to "#{valid_host}?preferences=false", allow_other_host: true }
       end
     end
 

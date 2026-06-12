@@ -4,6 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.2.0'
 
 # My added gems
+gem 'valid_email2'              # Disposable email detection (replaces manual domain blocklist)
 gem 'connection_pool', '~> 2.4' # Pin to 2.x; connection_pool 3.0 breaks Rails 7.1 RedisCacheStore
 gem 'minitest', '~> 5.20'       # Pin to 5.x; minitest 6.0 breaks Rails 7.1 test runner
 gem 'newrelic_rpm', '~> 9.24.0'

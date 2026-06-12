@@ -9,7 +9,7 @@ class User < ApplicationRecord
   attr_accessor :website, :company, :phone_backup, :address, :url
 
   # validate :email_uniqueness, on: create
-  validate :email_domain_allowed, on: :create
+  validates :email, 'valid_email_2/email': { disposable: true, mx: true }, on: :create
   validate :name_not_suspicious, on: :create
 
   has_many :user_permissions, :dependent => :destroy
@@ -32,30 +32,6 @@ class User < ApplicationRecord
 
   def admin?
     permissions.exists?(name: 'Admin')
-  end
-
-  # Security validations for suspicious registrations
-  def email_domain_allowed
-    blocked_domains = [
-      'yopmail.com',
-      '10minutemail.com',
-      'tempmail.org',
-      'guerrillamail.com',
-      'mailinator.com',
-      'throwaway.email',
-      'temp-mail.org',
-      'dispostable.com',
-      'getnada.com',
-      'maildrop.cc',
-      'fakeinbox.com',
-      'canvect.com',
-      'hilostar.com'
-    ]
-    
-    domain = email.split('@').last.downcase if email.present?
-    if blocked_domains.include?(domain)
-      errors.add(:email, 'Temporary email addresses are not allowed')
-    end
   end
 
   def name_not_suspicious

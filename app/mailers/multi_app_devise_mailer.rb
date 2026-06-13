@@ -52,6 +52,9 @@ class MultiAppDeviseMailer < Devise::Mailer
   private
 
   def mailer_host
-    Rails.application.config.action_mailer.default_url_options[:host]
+    # Use TODOLEGAL_BASE_URL (confirmed available in Passenger) and extract
+    # just the host, falling back to the bare domain if not set.
+    base = ENV['TODOLEGAL_BASE_URL'] || 'https://todolegal.app'
+    URI.parse(base).host
   end
 end

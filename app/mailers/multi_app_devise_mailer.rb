@@ -8,23 +8,23 @@ class MultiAppDeviseMailer < Devise::Mailer
   helper :application
   layout 'todolegal_ai_mailer'
 
-  # Override evaluated at mail-send time (not at boot), so MAILER_HOST is
-  # always read fresh from the environment regardless of when Puma started.
-  def default_url_options
-    super.merge(host: ENV.fetch('MAILER_HOST', 'todolegal.app'))
-  end
-
   def reset_password_instructions(record, token, opts = {})
     if record.source_app == 'todolegal_ai'
       opts[:template_path] = 'todolegal_ai/mailer'
-      @reset_url = todolegal_ai_reset_password_url(reset_password_token: token)
+      @reset_url = todolegal_ai_reset_password_url(
+        reset_password_token: token,
+        host: mailer_host
+      )
     end
     super
   end
 
   def welcome_instructions(record, token, opts = {})
     @user = record
-    @set_password_url = todolegal_ai_set_password_url(reset_password_token: token)
+    @set_password_url = todolegal_ai_set_password_url(
+      reset_password_token: token,
+      host: mailer_host
+    )
     opts[:template_path] = 'todolegal_ai/mailer'
     mail(
       from: Devise.mailer_sender,
@@ -39,7 +39,7 @@ class MultiAppDeviseMailer < Devise::Mailer
   # No password token — user keeps their existing credentials.
   def upgrade_instructions(record)
     @user = record
-    @sign_in_url = todolegal_ai_sign_in_url
+    @sign_in_url = todolegal_ai_sign_in_url(host: mailer_host)
     mail(
       from: Devise.mailer_sender,
       to: record.email,
@@ -47,5 +47,11 @@ class MultiAppDeviseMailer < Devise::Mailer
       template_path: 'todolegal_ai/mailer',
       template_name: 'upgrade_instructions'
     )
+  end
+
+  private
+
+  def mailer_host
+    Rails.application.config.action_mailer.default_url_options[:host]
   end
 end

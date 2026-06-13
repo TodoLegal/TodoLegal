@@ -52,9 +52,7 @@ class MultiAppDeviseMailer < Devise::Mailer
   private
 
   def mailer_host
-    # Use TODOLEGAL_BASE_URL (confirmed available in Passenger) and extract
-    # just the host, falling back to the bare domain if not set.
-    base = Rails.configuration.x.todolegal_base_url || "https://todolegal.app"
-    URI.parse(base).host
+    # TODO: revert to 'todolegal.app' before deploying to production
+    'test.todolegal.app'
   end
 end

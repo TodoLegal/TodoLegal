@@ -8,6 +8,12 @@ class MultiAppDeviseMailer < Devise::Mailer
   helper :application
   layout 'todolegal_ai_mailer'
 
+  # Override evaluated at mail-send time (not at boot), so MAILER_HOST is
+  # always read fresh from the environment regardless of when Puma started.
+  def default_url_options
+    super.merge(host: ENV.fetch('MAILER_HOST', 'todolegal.app'))
+  end
+
   def reset_password_instructions(record, token, opts = {})
     if record.source_app == 'todolegal_ai'
       opts[:template_path] = 'todolegal_ai/mailer'

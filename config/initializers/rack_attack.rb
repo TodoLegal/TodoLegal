@@ -147,24 +147,6 @@ class Rack::Attack
     end
   end
 
-  # SUSPICIOUS EMAIL DOMAINS - Block temporary email services
-  blocklist('block-temporary-email-domains') do |req|
-    if req.post? && ['/users/sign_up', '/api/v1/users'].include?(req.path)
-      email = req.params.dig('user', 'email')
-      if email.present?
-        domain = email.split('@').last&.downcase
-        suspicious_domains = %w[
-          yopmail.com mailinator.com 10minutemail.com
-          guerrillamail.com tempmail.org trashmail.com
-          spam4.me mohmal.com sharklasers.com
-          throwaway.email temp-mail.org disposableemailaddresses.com
-          hilostar.com
-        ]
-        suspicious_domains.include?(domain)
-      end
-    end
-  end
-
   # Block clearly malicious or automated scanners (carefully tuned)
   blocklist('block-malicious-user-agents') do |req|
     ua = req.get_header('HTTP_USER_AGENT').to_s.downcase

@@ -6,33 +6,9 @@ Doorkeeper.configure do
   orm :active_record
 
   # This block will be called to check whether the resource owner is authenticated or not.
+  # Logic is in app/services/doorkeeper_ai_authenticator.rb.
   resource_owner_authenticator do
-    if current_user
-      current_user
-    else
-      # Use request.fullpath (relative: /oauth/authorize?...) rather than
-      # request.original_url (absolute: https://host/oauth/authorize?...).
-      return_to = request.fullpath
-
-      # Detect whether this OAuth request is from the TodoLegal AI client.
-      # Supports multiple environments: "TodoLegal AI", "TodoLegal AI (Local)",
-      # "TodoLegal AI (Test)", etc. via the LIKE prefix match.
-      oauth_client_uid = params[:client_id] ||
-                         request.env.dig('doorkeeper.pre_auth', 'client', 'uid')
-      todolegal_ai_client = oauth_client_uid.present? &&
-                            Doorkeeper::Application.where(uid: oauth_client_uid)
-                                                    .where("name LIKE ?", "TodoLegal AI%")
-                                                    .exists?
-
-      if todolegal_ai_client
-        redirect_to "/todolegal-ai/sign-in?return_to=#{CGI.escape(return_to)}"
-      elsif params[:go_to_signup] == "true"
-        redirect_to pricing_path(return_to: request.fullpath)
-      else
-        redirect_to new_user_session_url(return_to: request.fullpath)
-      end
-      nil
-    end
+    DoorkeeperAiAuthenticator.call(self)
   end
 
   # If you didn't skip applications controller from Doorkeeper routes in your application routes.rb

@@ -502,6 +502,9 @@ GEM
       concurrent-ruby (~> 1.0)
     uber (0.1.0)
     uri (1.1.1)
+    valid_email2 (7.0.15)
+      activemodel (>= 6.0)
+      mail (~> 2.5)
     version_gem (1.1.4)
     warden (1.2.9)
       rack (>= 2.0.9)
@@ -594,6 +597,7 @@ DEPENDENCIES
   thin
   turbo-rails
   tzinfo-data
+  valid_email2
   web-console
   webdrivers
   whenever
